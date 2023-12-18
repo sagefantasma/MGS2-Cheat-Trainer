@@ -111,10 +111,10 @@
             this.sensorALayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.sensorAPictureBox = new System.Windows.Forms.PictureBox();
             this.sensorACheckBox = new System.Windows.Forms.CheckBox();
-            this.camera2GroupBox = new System.Windows.Forms.GroupBox();
-            this.camera2LayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.camera2PictureBox = new System.Windows.Forms.PictureBox();
-            this.camera2CheckBox = new System.Windows.Forms.CheckBox();
+            this.digitalCameraGroupBox = new System.Windows.Forms.GroupBox();
+            this.digitalCameraLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.digitalCameraPictureBox = new System.Windows.Forms.PictureBox();
+            this.digitalCameraCheckBox = new System.Windows.Forms.CheckBox();
             this.dogTagsGroupBox = new System.Windows.Forms.GroupBox();
             this.dogTagsLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel10 = new System.Windows.Forms.TableLayoutPanel();
@@ -547,9 +547,9 @@
             this.sensorAGroupBox.SuspendLayout();
             this.sensorALayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sensorAPictureBox)).BeginInit();
-            this.camera2GroupBox.SuspendLayout();
-            this.camera2LayoutPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.camera2PictureBox)).BeginInit();
+            this.digitalCameraGroupBox.SuspendLayout();
+            this.digitalCameraLayoutPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.digitalCameraPictureBox)).BeginInit();
             this.dogTagsGroupBox.SuspendLayout();
             this.dogTagsLayoutPanel.SuspendLayout();
             this.tableLayoutPanel10.SuspendLayout();
@@ -829,7 +829,7 @@
             this.itemLayoutPanel.Controls.Add(this.box4GroupBox, 4, 3);
             this.itemLayoutPanel.Controls.Add(this.socomSupGroupBox, 3, 3);
             this.itemLayoutPanel.Controls.Add(this.sensorAGroupBox, 2, 3);
-            this.itemLayoutPanel.Controls.Add(this.camera2GroupBox, 1, 3);
+            this.itemLayoutPanel.Controls.Add(this.digitalCameraGroupBox, 1, 3);
             this.itemLayoutPanel.Controls.Add(this.dogTagsGroupBox, 0, 5);
             this.itemLayoutPanel.Controls.Add(this.infinityWigGroupBox, 5, 2);
             this.itemLayoutPanel.Controls.Add(this.box3GroupBox, 4, 2);
@@ -1882,53 +1882,53 @@
             this.sensorACheckBox.UseVisualStyleBackColor = true;
             this.sensorACheckBox.CheckedChanged += new System.EventHandler(this.SensorACheckBox_CheckedChanged);
             // 
-            // camera2GroupBox
+            // digitalCameraGroupBox
             // 
-            this.camera2GroupBox.Controls.Add(this.camera2LayoutPanel);
-            this.camera2GroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.camera2GroupBox.Location = new System.Drawing.Point(217, 291);
-            this.camera2GroupBox.Name = "camera2GroupBox";
-            this.camera2GroupBox.Size = new System.Drawing.Size(208, 90);
-            this.camera2GroupBox.TabIndex = 62;
-            this.camera2GroupBox.TabStop = false;
-            this.camera2GroupBox.Text = "Broken Camera?";
+            this.digitalCameraGroupBox.Controls.Add(this.digitalCameraLayoutPanel);
+            this.digitalCameraGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.digitalCameraGroupBox.Location = new System.Drawing.Point(217, 291);
+            this.digitalCameraGroupBox.Name = "digitalCameraGroupBox";
+            this.digitalCameraGroupBox.Size = new System.Drawing.Size(208, 90);
+            this.digitalCameraGroupBox.TabIndex = 62;
+            this.digitalCameraGroupBox.TabStop = false;
+            this.digitalCameraGroupBox.Text = "Digital Camera";
             // 
-            // camera2LayoutPanel
+            // digitalCameraLayoutPanel
             // 
-            this.camera2LayoutPanel.ColumnCount = 2;
-            this.camera2LayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 56.74157F));
-            this.camera2LayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 43.25843F));
-            this.camera2LayoutPanel.Controls.Add(this.camera2PictureBox, 0, 0);
-            this.camera2LayoutPanel.Controls.Add(this.camera2CheckBox, 1, 0);
-            this.camera2LayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.camera2LayoutPanel.Location = new System.Drawing.Point(3, 16);
-            this.camera2LayoutPanel.Name = "camera2LayoutPanel";
-            this.camera2LayoutPanel.RowCount = 2;
-            this.camera2LayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 42.22222F));
-            this.camera2LayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 57.77778F));
-            this.camera2LayoutPanel.Size = new System.Drawing.Size(202, 71);
-            this.camera2LayoutPanel.TabIndex = 41;
+            this.digitalCameraLayoutPanel.ColumnCount = 2;
+            this.digitalCameraLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 56.74157F));
+            this.digitalCameraLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 43.25843F));
+            this.digitalCameraLayoutPanel.Controls.Add(this.digitalCameraPictureBox, 0, 0);
+            this.digitalCameraLayoutPanel.Controls.Add(this.digitalCameraCheckBox, 1, 0);
+            this.digitalCameraLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.digitalCameraLayoutPanel.Location = new System.Drawing.Point(3, 16);
+            this.digitalCameraLayoutPanel.Name = "digitalCameraLayoutPanel";
+            this.digitalCameraLayoutPanel.RowCount = 2;
+            this.digitalCameraLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 42.22222F));
+            this.digitalCameraLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 57.77778F));
+            this.digitalCameraLayoutPanel.Size = new System.Drawing.Size(202, 71);
+            this.digitalCameraLayoutPanel.TabIndex = 41;
             // 
-            // camera2PictureBox
+            // digitalCameraPictureBox
             // 
-            this.camera2PictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.camera2PictureBox.Location = new System.Drawing.Point(3, 3);
-            this.camera2PictureBox.Name = "camera2PictureBox";
-            this.camera2PictureBox.Size = new System.Drawing.Size(108, 23);
-            this.camera2PictureBox.TabIndex = 0;
-            this.camera2PictureBox.TabStop = false;
+            this.digitalCameraPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.digitalCameraPictureBox.Location = new System.Drawing.Point(3, 3);
+            this.digitalCameraPictureBox.Name = "digitalCameraPictureBox";
+            this.digitalCameraPictureBox.Size = new System.Drawing.Size(108, 23);
+            this.digitalCameraPictureBox.TabIndex = 0;
+            this.digitalCameraPictureBox.TabStop = false;
             // 
-            // camera2CheckBox
+            // digitalCameraCheckBox
             // 
-            this.camera2CheckBox.AutoSize = true;
-            this.camera2CheckBox.Location = new System.Drawing.Point(117, 6);
-            this.camera2CheckBox.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
-            this.camera2CheckBox.Name = "camera2CheckBox";
-            this.camera2CheckBox.Size = new System.Drawing.Size(71, 17);
-            this.camera2CheckBox.TabIndex = 1;
-            this.camera2CheckBox.Text = "Enabled?";
-            this.camera2CheckBox.UseVisualStyleBackColor = true;
-            this.camera2CheckBox.CheckedChanged += new System.EventHandler(this.Camera2CheckBox_CheckedChanged);
+            this.digitalCameraCheckBox.AutoSize = true;
+            this.digitalCameraCheckBox.Location = new System.Drawing.Point(117, 6);
+            this.digitalCameraCheckBox.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
+            this.digitalCameraCheckBox.Name = "digitalCameraCheckBox";
+            this.digitalCameraCheckBox.Size = new System.Drawing.Size(71, 17);
+            this.digitalCameraCheckBox.TabIndex = 1;
+            this.digitalCameraCheckBox.Text = "Enabled?";
+            this.digitalCameraCheckBox.UseVisualStyleBackColor = true;
+            this.digitalCameraCheckBox.CheckedChanged += new System.EventHandler(this.DigitalCameraCheckBox_CheckedChanged);
             // 
             // dogTagsGroupBox
             // 
@@ -2336,6 +2336,8 @@
             // apSensorCheckBox
             // 
             this.apSensorCheckBox.AutoSize = true;
+            this.apSensorCheckBox.Checked = true;
+            this.apSensorCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.apSensorCheckBox.Location = new System.Drawing.Point(117, 6);
             this.apSensorCheckBox.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
             this.apSensorCheckBox.Name = "apSensorCheckBox";
@@ -2754,7 +2756,6 @@
             this.cigarettesCheckBox.AutoSize = true;
             this.cigarettesCheckBox.Checked = true;
             this.cigarettesCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cigarettesCheckBox.Enabled = false;
             this.cigarettesCheckBox.Location = new System.Drawing.Point(117, 6);
             this.cigarettesCheckBox.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
             this.cigarettesCheckBox.Name = "cigarettesCheckBox";
@@ -2821,7 +2822,7 @@
             this.scope2GroupBox.Size = new System.Drawing.Size(208, 90);
             this.scope2GroupBox.TabIndex = 48;
             this.scope2GroupBox.TabStop = false;
-            this.scope2GroupBox.Text = "Raiden\'s Binoculars";
+            this.scope2GroupBox.Text = "Binoculars";
             // 
             // scope2LayoutPanel
             // 
@@ -2851,9 +2852,6 @@
             // scope2CheckBox
             // 
             this.scope2CheckBox.AutoSize = true;
-            this.scope2CheckBox.Checked = true;
-            this.scope2CheckBox.CheckState = System.Windows.Forms.CheckState.Indeterminate;
-            this.scope2CheckBox.Enabled = false;
             this.scope2CheckBox.Location = new System.Drawing.Point(117, 6);
             this.scope2CheckBox.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
             this.scope2CheckBox.Name = "scope2CheckBox";
@@ -3526,7 +3524,7 @@
             this.scope1GroupBox.Size = new System.Drawing.Size(208, 90);
             this.scope1GroupBox.TabIndex = 41;
             this.scope1GroupBox.TabStop = false;
-            this.scope1GroupBox.Text = "Snake\'s Binoculars";
+            this.scope1GroupBox.Text = "Broken Binoculars";
             // 
             // scope1LayoutPanel
             // 
@@ -3556,9 +3554,6 @@
             // scope1CheckBox
             // 
             this.scope1CheckBox.AutoSize = true;
-            this.scope1CheckBox.Checked = true;
-            this.scope1CheckBox.CheckState = System.Windows.Forms.CheckState.Indeterminate;
-            this.scope1CheckBox.Enabled = false;
             this.scope1CheckBox.Location = new System.Drawing.Point(117, 6);
             this.scope1CheckBox.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
             this.scope1CheckBox.Name = "scope1CheckBox";
@@ -6934,10 +6929,10 @@
             this.sensorALayoutPanel.ResumeLayout(false);
             this.sensorALayoutPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sensorAPictureBox)).EndInit();
-            this.camera2GroupBox.ResumeLayout(false);
-            this.camera2LayoutPanel.ResumeLayout(false);
-            this.camera2LayoutPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.camera2PictureBox)).EndInit();
+            this.digitalCameraGroupBox.ResumeLayout(false);
+            this.digitalCameraLayoutPanel.ResumeLayout(false);
+            this.digitalCameraLayoutPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.digitalCameraPictureBox)).EndInit();
             this.dogTagsGroupBox.ResumeLayout(false);
             this.dogTagsLayoutPanel.ResumeLayout(false);
             this.dogTagsLayoutPanel.PerformLayout();
@@ -7280,7 +7275,7 @@
         private System.Windows.Forms.GroupBox box4GroupBox;
         private System.Windows.Forms.GroupBox socomSupGroupBox;
         private System.Windows.Forms.GroupBox sensorAGroupBox;
-        private System.Windows.Forms.GroupBox camera2GroupBox;
+        private System.Windows.Forms.GroupBox digitalCameraGroupBox;
         private System.Windows.Forms.GroupBox dogTagsGroupBox;
         private System.Windows.Forms.GroupBox infinityWigGroupBox;
         private System.Windows.Forms.GroupBox box3GroupBox;
@@ -7336,9 +7331,9 @@
         private System.Windows.Forms.TableLayoutPanel camera1LayoutPanel;
         private System.Windows.Forms.PictureBox camera1PictureBox;
         private System.Windows.Forms.CheckBox camera1CheckBox;
-        private System.Windows.Forms.TableLayoutPanel camera2LayoutPanel;
-        private System.Windows.Forms.PictureBox camera2PictureBox;
-        private System.Windows.Forms.CheckBox camera2CheckBox;
+        private System.Windows.Forms.TableLayoutPanel digitalCameraLayoutPanel;
+        private System.Windows.Forms.PictureBox digitalCameraPictureBox;
+        private System.Windows.Forms.CheckBox digitalCameraCheckBox;
         private System.Windows.Forms.TableLayoutPanel nvgLayoutPanel;
         private System.Windows.Forms.PictureBox nvgPictureBox;
         private System.Windows.Forms.CheckBox nvgCheckBox;

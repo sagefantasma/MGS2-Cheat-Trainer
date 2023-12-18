@@ -338,9 +338,9 @@ namespace MGS2_MC
             MGS2UsableObjects.Camera1.ToggleItem(camera1CheckBox.Checked);
         }
 
-        private void Camera2CheckBox_CheckedChanged(object sender, EventArgs e)
+        private void DigitalCameraCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Camera2.ToggleItem(camera2CheckBox.Checked);
+            MGS2UsableObjects.DigitalCamera.ToggleItem(digitalCameraCheckBox.Checked);
         }
 
         private void NvgCheckBox_CheckedChanged(object sender, EventArgs e)

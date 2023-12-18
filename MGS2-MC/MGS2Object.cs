@@ -10,8 +10,9 @@ namespace MGS2_MC
         internal IntPtr _nameOffset;
     }
 
-    public interface IMGS2Object
+    interface IMGS2Object
     {
+        void ToggleObject(bool shouldBeEnabled);
     }
 
     public abstract class MGS2Object : IMGS2Object
@@ -19,10 +20,12 @@ namespace MGS2_MC
         internal GameObject GameObject { get; set; }
         public string Name { get { return GameObject._name; } }
         public IntPtr NameMemoryOffset { get { return GameObject._nameOffset; } }
+        public int InventoryOffset { get; set; }
 
-        public MGS2Object(string name, IntPtr nameMemoryOffset)
+        public MGS2Object(string name, IntPtr nameMemoryOffset, int inventoryOffset)
         {
             GameObject = new GameObject { _name = name, _nameOffset = nameMemoryOffset };
+            InventoryOffset = inventoryOffset;
         }
 
         public void ChangeName(string name)
@@ -32,7 +35,16 @@ namespace MGS2_MC
             GameObject = newGameObject;
         }
 
-        internal abstract void ToggleObject(bool desiredEnabledState);
+        public void ToggleObject(bool shouldBeEnabled)
+        {
+            short currentObjectValue = BitConverter.ToInt16(MGS2MemoryManager.GetCurrentValue(InventoryOffset, sizeof(short)), 0);
+            bool isCurrentlyEnabled = currentObjectValue != 0 ? true : false; //this feels more readable as a ternary than the shorthand
+            //Toggle the object if it is currently disabled and needs enabling, or if it is currently enabled and needs disabling.
+            if (isCurrentlyEnabled != shouldBeEnabled)
+            {
+                MGS2MemoryManager.ToggleObject(this);
+            }
+        }
     }
     #endregion
 
@@ -40,23 +52,10 @@ namespace MGS2_MC
     public class BasicItem : MGS2Object
     {
         #region Internals & Constructor
-        internal int InventoryOffset { get; set; }
-        public BasicItem(string name, IntPtr nameMemoryOffset, int inventoryOffset) : base(name, nameMemoryOffset)
+        public BasicItem(string name, IntPtr nameMemoryOffset, int inventoryOffset) : base(name, nameMemoryOffset, inventoryOffset)
         {
-            InventoryOffset = inventoryOffset;
         }
         #endregion
-
-        internal override void ToggleObject(bool shouldBeEnabled)
-        {
-            short currentObjectValue = BitConverter.ToInt16(MGS2MemoryManager.GetCurrentValue(InventoryOffset, sizeof(short)), 0);
-            bool isCurrentlyEnabled = currentObjectValue > 0 ? true : false; //this feels more readable as a ternary than the shorthand
-            //Toggle the object if it is currently disabled and needs enabling, or if it is currently enabled and needs disabling.
-            if (isCurrentlyEnabled != shouldBeEnabled)
-            {
-                MGS2MemoryManager.ToggleObject(InventoryOffset);
-            }
-        }
 
         public void ToggleItem(bool shouldBeEnabled)
         {
@@ -116,7 +115,7 @@ namespace MGS2_MC
             }
         }
 
-        internal override void ToggleObject(bool shouldBeEnabled)
+        internal new void ToggleObject(bool shouldBeEnabled)
         {
             short currentDurability = BitConverter.ToInt16(MGS2MemoryManager.GetCurrentValue(DurabilityOffset, sizeof(short)), 0);
             
@@ -148,7 +147,7 @@ namespace MGS2_MC
         }
         #endregion
 
-        internal override void ToggleObject(bool shouldBeEnabled)
+        internal new void ToggleObject(bool shouldBeEnabled)
         {
             short currentCount = BitConverter.ToInt16(MGS2MemoryManager.GetCurrentValue(CurrentCountOffset, sizeof(short)), 0);
             if (currentCount == 0 && shouldBeEnabled)
@@ -195,23 +194,10 @@ namespace MGS2_MC
     public class BasicWeapon : MGS2Object
     {
         #region Internals & Constructor
-        public int InventoryOffset { get; set; }
-        public BasicWeapon(string name, IntPtr nameMemoryOffset, int inventoryOffset) : base(name, nameMemoryOffset)
+        public BasicWeapon(string name, IntPtr nameMemoryOffset, int inventoryOffset) : base(name, nameMemoryOffset, inventoryOffset)
         {
-            InventoryOffset = inventoryOffset;
         }
         #endregion
-
-        internal override void ToggleObject(bool shouldBeEnabled)
-        {
-            short currentObjectValue = BitConverter.ToInt16(MGS2MemoryManager.GetCurrentValue(InventoryOffset, sizeof(short)), 0);
-            bool isCurrentlyEnabled = currentObjectValue > 0 ? true : false;
-            //Toggle the object if it is currently disabled and needs enabling, or if it is currently enabled and needs disabling.
-            if (isCurrentlyEnabled != shouldBeEnabled)
-            {
-                MGS2MemoryManager.ToggleObject(InventoryOffset);
-            }
-        }
 
         public void ToggleWeapon(bool shouldBeEnabled)
         {
@@ -240,12 +226,13 @@ namespace MGS2_MC
         }
         #endregion
 
-        internal override void ToggleObject(bool shouldBeEnabled)
+        internal new void ToggleObject(bool shouldBeEnabled)
         {
             short currentAmmo = BitConverter.ToInt16(MGS2MemoryManager.GetCurrentValue(CurrentAmmoOffset, sizeof(short)), 0);
             //TODO: it would be cool to duplicate the "NO USE" functionality the Stinger gets when prone when disabled!
             //can't seem to easily find the bytes that control that though :(
-            if (currentAmmo < 0 && shouldBeEnabled)
+            //TODO: for some reason this just... doesn't work as intended for the first set of toggling. O_o
+            if (currentAmmo <= 0 && shouldBeEnabled)
             {
                 if (LastKnownCurrentAmmo != 0)
                     UpdateCurrentAmmoCount(LastKnownCurrentAmmo);

@@ -42,9 +42,50 @@ namespace MGS2_MC
 
         static IntPtr PROCESS_BASE_ADDRESS = IntPtr.Zero;
         static int[] LAST_KNOWN_PLAYER_OFFSETS = default;
+        private enum ActiveCharacter
+        {
+            Snake,
+            Raiden
+        }
+
         #endregion
 
         #region Private methods
+        private static ActiveCharacter DetermineActiveCharacter()
+        {
+            //TODO: verify for raiden, works for snake 100%
+            //also, this would inherently break down if you toggle camera1, so i should modify this logic
+            bool camera1Enabled = BitConverter.ToBoolean(GetCurrentValue(MGS2Constants.Camera1Offset, sizeof(short)), 0);
+
+            if (camera1Enabled) 
+            {
+                return ActiveCharacter.Snake;
+            }
+            else
+            {
+                return ActiveCharacter.Raiden;
+            }
+        }
+
+        private static void CheckIfUsable(MGS2Object mgs2Object)
+        {
+            switch (DetermineActiveCharacter())
+            {
+                case ActiveCharacter.Snake:
+                    if (!MGS2Constants.SnakeUsableObjects.Contains(mgs2Object))
+                    {
+                        throw new InvalidOperationException($"Snake cannot use {mgs2Object.Name}");
+                    }
+                    break;
+                case ActiveCharacter.Raiden:
+                    if (!MGS2Constants.RaidenUsableObjects.Contains(mgs2Object))
+                    {
+                        throw new InvalidOperationException($"Raiden cannot use {mgs2Object.Name}");
+                    }
+                    break;
+            }
+        }
+
         private static Process GetMGS2Process()
         {
             Process process = Process.GetProcessesByName(MGS2Constants.PROCESS_NAME).FirstOrDefault(); //looks like NET framework doesn't support the ? operator here
@@ -97,8 +138,9 @@ namespace MGS2_MC
                     //TODO: add logging :)
                     //we failed to look at the last known player offsets, which isn't fatal.
                 }
-            }            
+            }
 
+            LAST_KNOWN_PLAYER_OFFSETS = new int[2];
             int byteCount = 0;
             List<int> playerOffset = new List<int>();
             try
@@ -181,13 +223,23 @@ namespace MGS2_MC
             return bytesToRead;
         }
 
-        private static void ReadWriteBooleanValue(IntPtr processHandle, int playerOffset, int objectOffset)
+        private static void InvertBooleanValue(IntPtr processHandle, int playerOffset, int objectOffset)
         {
             int combinedOffset = playerOffset + objectOffset;
             IntPtr booleanAddress = IntPtr.Add(PROCESS_BASE_ADDRESS, combinedOffset);
             byte[] currentValue = ReadValueFromMemory(processHandle, booleanAddress, new byte[sizeof(short)]);
 
-            byte[] valueToWrite = currentValue == BitConverter.GetBytes((short)0) ? BitConverter.GetBytes((short)0) : BitConverter.GetBytes((short)1);
+            byte[] valueToWrite;
+            
+            if (Enumerable.SequenceEqual(currentValue, BitConverter.GetBytes((short)1)))
+            {
+                valueToWrite = BitConverter.GetBytes((short)0);
+            }
+            else
+            {
+                valueToWrite = BitConverter.GetBytes((short)1);
+            }
+             //= currentValue == BitConverter.GetBytes((short)0xFF) ? BitConverter.GetBytes((short)0xFF) : BitConverter.GetBytes((short)1);
 
             try
             {
@@ -288,6 +340,8 @@ namespace MGS2_MC
 
         public static void UpdateObjectBaseValue(MGS2Object mgs2Object, short value)
         {
+            CheckIfUsable(mgs2Object);
+
             switch (mgs2Object)
             {
                 case StackableItem stackableItem:
@@ -310,6 +364,8 @@ namespace MGS2_MC
 
         public static void UpdateObjectMaxValue(MGS2Object mgs2Object, short count)
         {
+            CheckIfUsable(mgs2Object);
+
             switch (mgs2Object)
             {
                 case StackableItem stackableItem:
@@ -321,8 +377,10 @@ namespace MGS2_MC
             }
         }
 
-        public static void ToggleObject(int objectOffset)
+        public static void ToggleObject(MGS2Object mgs2Object)
         {
+            CheckIfUsable(mgs2Object);
+            int objectOffset = mgs2Object.InventoryOffset;
             Process process;
 
             try
@@ -341,8 +399,7 @@ namespace MGS2_MC
                 processHandle = NativeMethods.OpenProcess(0x1F0FFF, false, process.Id);
                 int[] playerOffset = GetCurrentPlayerOffset(process, processHandle);
 
-                ReadWriteBooleanValue(processHandle, playerOffset[0], objectOffset); //set player
-                ReadWriteBooleanValue(processHandle, playerOffset[1], objectOffset); //set checkpoint
+                InvertBooleanValue(processHandle, playerOffset[0], objectOffset);
             }
             catch (Exception e)
             {

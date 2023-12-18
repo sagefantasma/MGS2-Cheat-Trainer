@@ -206,14 +206,13 @@ Knockout (normal) takes 9 punches
             MGS2UsableObjects.Bandage,
             MGS2UsableObjects.Bandana,
             MGS2UsableObjects.Box1,
-            MGS2UsableObjects.Box2, //TODO: verify if this is true, and if there are more
             MGS2UsableObjects.Camera1,
             MGS2UsableObjects.Camera2,
             MGS2UsableObjects.Card,
             MGS2UsableObjects.ChaffGrenade,
             MGS2UsableObjects.Cigarettes,
             MGS2UsableObjects.ColdMedicine,
-            MGS2UsableObjects.DigitalCamera, //TODO: verify
+            MGS2UsableObjects.DigitalCamera,
             MGS2UsableObjects.DogTags,
             MGS2UsableObjects.Grenade,
             MGS2UsableObjects.Magazine,

@@ -298,5 +298,4 @@ Knockout (normal) takes 9 punches
             MGS2UsableObjects.WetBox
         };
     };
-    }
 }

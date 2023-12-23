@@ -69,6 +69,7 @@ namespace MGS2_MC
 
         private static void CheckIfUsable(MGS2Object mgs2Object)
         {
+            return; //TODO: uncomment this once the logic for DAC is working
             switch (DetermineActiveCharacter())
             {
                 case ActiveCharacter.Snake:

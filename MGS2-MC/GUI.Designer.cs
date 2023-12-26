@@ -2356,7 +2356,7 @@
             this.camera1GroupBox.Size = new System.Drawing.Size(208, 90);
             this.camera1GroupBox.TabIndex = 55;
             this.camera1GroupBox.TabStop = false;
-            this.camera1GroupBox.Text = "Snake\'s Camera";
+            this.camera1GroupBox.Text = "Camera";
             // 
             // camera1LayoutPanel
             // 

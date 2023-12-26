@@ -11,8 +11,6 @@ namespace MGS2_MC
     {
         /*useful information from @ANTIBigBoss irt GoG port CT:
          * 
-         * Misc notes:
-         * You  can open menus bij clicking their active boxes left to them
 ______________________________
 Values to make some cheats work
 ----------------------------------------------------
@@ -100,6 +98,24 @@ Knockout (normal) takes 9 punches
          * 
          * Certain game stats are tracked GLOBALLY and reset on launch(kill count, shot count, holdups, choke outs, prolly more)
          * It looks like the memory accesses these counts AT LEAST once on game load, once on screen load and twice on gameplay
+         * 
+         * 
+         * 
+         * 12/23: More CE investigations - 
+         * (all of these findings are based off of a NG, Hard file. need to confirm it is consistent across difficulties/NG state
+         * Pullup count is stored -90 bytes from dynamic anchor
+         * SnakeHasCold is stored -128 bytes: cannot be changed after snake has already used cold meds, can change before
+         * Currently equipped weapon is -68 bytes
+         * Currently equipped item is -130 bytes
+         * Something related to sneezing is at -108(4bytes). Whenever snake sneezes, it changes to 2D 00, then changes to another value. maybe time for next sneeze?
+         * -154 and -146 seem to be related to player position? unsure.
+         * -134 seems to represent current stance(00 is standing, 01 is crouching, 02 is prone: not quite sure how to leverage these yet)
+         * 
+         * Things that might be interesting to find/mess around with:
+         * 
+         * - Can we change max health? On hard its set to 75, but i can't see _what_ is changing it
+         * - Can we manually modify boss health?
+         * - Are there any AOBs we can use to find static strings/values?
          */
 
         public const string PROCESS_NAME = "METAL GEAR SOLID2";
@@ -120,6 +136,7 @@ Knockout (normal) takes 9 punches
         public const int CHOKE_OUTS_GAME_LAUNCH_OFFSET = 0x1673DBC;
         public const int SHOT_COUNT_PLAYER_OFFSET = -96; //TODO: need to redetermine
         public const int HOLD_UP_PLAYER_OFFSET = 5108; //TODO: need to redetermine
+        //public const int PULL_UP_OFFSET = 
         //TODO: add more of the game stats here
 
 

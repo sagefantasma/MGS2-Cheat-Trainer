@@ -670,6 +670,92 @@
         </CheatEntry>
       </CheatEntries>
     </CheatEntry>
+    <CheatEntry>
+      <ID>89</ID>
+      <Description>"LIFE investigations"</Description>
+      <Options moHideChildren="1"/>
+      <GroupHeader>1</GroupHeader>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>83</ID>
+          <Description>"Current Health 1"</Description>
+          <VariableType>2 Bytes</VariableType>
+          <Address>"METAL GEAR SOLID2.exe"+16F3BBA</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>84</ID>
+          <Description>"Current Health 2"</Description>
+          <VariableType>2 Bytes</VariableType>
+          <Address>"METAL GEAR SOLID2.exe"+16F3BB8</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>85</ID>
+          <Description>"Current Health 3"</Description>
+          <VariableType>2 Bytes</VariableType>
+          <Address>"METAL GEAR SOLID2.exe"+17DF43E</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>86</ID>
+          <Description>"Current Health 4"</Description>
+          <VariableType>2 Bytes</VariableType>
+          <Address>"METAL GEAR SOLID2.exe"+16F3B88</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>88</ID>
+          <Description>"Modify Health param(STATIC)"</Description>
+          <ShowAsSigned>0</ShowAsSigned>
+          <VariableType>2 Bytes</VariableType>
+          <Address>"METAL GEAR SOLID2.exe"+16F3B14</Address>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>90</ID>
+          <Description>"Player Relative Offset(just in case)"</Description>
+          <ShowAsHex>1</ShowAsHex>
+          <VariableType>Array of byte</VariableType>
+          <ByteLength>3</ByteLength>
+          <Address>"METAL GEAR SOLID2.exe"+17DF4E8</Address>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>91</ID>
+      <Description>"CurrentPullupCount"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>Byte</VariableType>
+      <Address>7FF675A9132E</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>92</ID>
+      <Description>"Max Health?"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>Byte</VariableType>
+      <Address>7FF6759A3B8A</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>94</ID>
+      <Description>"SnakeHasCold?"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>Byte</VariableType>
+      <Address>7FF675A91308</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>95</ID>
+      <Description>"Stance"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>Byte</VariableType>
+      <Address>7FF675A91262</Address>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>96</ID>
+      <Description>"ration"</Description>
+      <ShowAsSigned>0</ShowAsSigned>
+      <VariableType>String</VariableType>
+      <Length>6</Length>
+      <Unicode>0</Unicode>
+      <CodePage>0</CodePage>
+      <ZeroTerminate>1</ZeroTerminate>
+      <Address>7FF6AD4116A4</Address>
+    </CheatEntry>
   </CheatEntries>
   <CheatCodes>
     <CodeEntry>
@@ -1675,6 +1761,60 @@
         <Byte>10</Byte>
         <Byte>0D</Byte>
         <Byte>97</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Code :mov ["METAL GEAR SOLID2.exe"+16F3B88],ax</Description>
+      <AddressString>METAL GEAR SOLID2.exe+56022D</AddressString>
+      <Before>
+        <Byte>01</Byte>
+        <Byte>0F</Byte>
+        <Byte>B7</Byte>
+        <Byte>43</Byte>
+        <Byte>18</Byte>
+      </Before>
+      <Actual>
+        <Byte>66</Byte>
+        <Byte>89</Byte>
+        <Byte>05</Byte>
+        <Byte>54</Byte>
+        <Byte>39</Byte>
+        <Byte>19</Byte>
+        <Byte>01</Byte>
+      </Actual>
+      <After>
+        <Byte>74</Byte>
+        <Byte>0E</Byte>
+        <Byte>66</Byte>
+        <Byte>03</Byte>
+        <Byte>05</Byte>
+      </After>
+    </CodeEntry>
+    <CodeEntry>
+      <Description>Code :mov ["METAL GEAR SOLID2.exe"+16F3B88],ax</Description>
+      <AddressString>METAL GEAR SOLID2.exe+56022D</AddressString>
+      <Before>
+        <Byte>01</Byte>
+        <Byte>0F</Byte>
+        <Byte>B7</Byte>
+        <Byte>43</Byte>
+        <Byte>18</Byte>
+      </Before>
+      <Actual>
+        <Byte>66</Byte>
+        <Byte>89</Byte>
+        <Byte>05</Byte>
+        <Byte>54</Byte>
+        <Byte>39</Byte>
+        <Byte>19</Byte>
+        <Byte>01</Byte>
+      </Actual>
+      <After>
+        <Byte>74</Byte>
+        <Byte>0E</Byte>
+        <Byte>66</Byte>
+        <Byte>03</Byte>
+        <Byte>05</Byte>
       </After>
     </CodeEntry>
   </CheatCodes>

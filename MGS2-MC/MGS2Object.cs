@@ -4,6 +4,11 @@ using System.Windows.Forms;
 namespace MGS2_MC
 {
     #region Internals
+    public class MemoryBytes
+    {
+        public int OffsetStart;
+        public int OffsetEnd;
+    }
     internal class GameObject
     {
         internal string _name = "";

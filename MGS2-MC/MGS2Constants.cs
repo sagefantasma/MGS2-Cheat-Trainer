@@ -93,8 +93,7 @@ Knockout (normal) takes 9 punches
          */
 
 
-        /*
-         * 12/10: Interesting CE learnings -
+        /* 12/10: Interesting CE learnings -
          * 
          * Certain game stats are tracked GLOBALLY and reset on launch(kill count, shot count, holdups, choke outs, prolly more)
          * It looks like the memory accesses these counts AT LEAST once on game load, once on screen load and twice on gameplay
@@ -118,25 +117,46 @@ Knockout (normal) takes 9 punches
          * - Are there any AOBs we can use to find static strings/values?
          */
 
+        #region True Constants
         public const string PROCESS_NAME = "METAL GEAR SOLID2";
+        #endregion
+
+        #region Offset Finders
+        //if the region is dynamic(i.e. PlayerOffsetAoB), it will change on area load. The others will only (possibly) change with game updates
+        #region Dynamic AoBs
         //these commented offsets are old possible anchors i found that weren't consistent/usable
         //public static byte[] PlayerOffsetBytes = new byte[6] { 104, 01, 100, 00, 100, 00 }; // the CURRENT player offset will be the second to last one in memory.
         //public static IntPtr PlayerOffsetPtr = (IntPtr)0x680164006400;
         //public static byte[] PlayerOffsetBytes = new byte[] { 82, 82, 74, 41, 37, 148, 82, 74, 41, 145, 66, 170, 148, 82, 74, 41, 1, 132, 18, 80, 74, 165, 144, 145, 145, 145, 82, 162, 164, 148, 145, 82, 74, 41, 165, 148, 82, 74, 41, 73, 72, 33 };
         //public static IntPtr PlayerOffsetPtr = (IntPtr)0x52524A292594524A299142AA94524A29018412504AA59092929252A2A49492524A29A594524A29494821;
-        public static byte[] OldPlayerOffsetBytes = new byte[] { 00, 00, 00, 00, 01, 00, 46, 00 };
-        public static byte[] PlayerOffsetBytes = new byte[] { 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 01, 00 };
-        //00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 00 
-        //it changes(if changing zones) THEN moves
+        //public static byte[] OldPlayerOffsetBytes = new byte[] { 00, 00, 00, 00, 01, 00, 46, 00 };
+        public static byte[] PlayerInfoFinderAoB = new byte[] { 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 01, 00 };
+        #endregion
+        #region Static AoBs
+        public static byte[] MenuNamesFinderAoB = new byte[] { 0x6D, 0x61, 0x70, 0x2E, 0x63 }; //TODO: prove this is valid
+        public static byte[] DifficultyAndAreaNamesAoB = new byte[] { 0x2F, 0x44, 0x2A }; //TODO: prove this is valid
+        #endregion
+        #endregion
 
-        public const int BASE_WEAPON_OFFSET = -42; //if a "new" "anchor" is chosen, only need to update this value and all others will update.
+        #region Offsets
+        #region Calculated From PlayerInfo
+        public const int BASE_WEAPON_OFFSET = -42; //if a "new" playerOffsetBytes is chosen, only need to update this value and the item offset will update.
         public const int BASE_ITEM_OFFSET = BASE_WEAPON_OFFSET + 144;
-        public const int TIMES_FOUND_GAME_LAUNCH_OFFSET = 0x17B786C;
-        public const int HOLD_UPS_GAME_LAUNCH_OFFSET = 0x1673DB0;
-        public const int CHOKE_OUTS_GAME_LAUNCH_OFFSET = 0x1673DBC;
-        public const int SHOT_COUNT_PLAYER_OFFSET = -96; //TODO: need to redetermine
-        public const int HOLD_UP_PLAYER_OFFSET = 5108; //TODO: need to redetermine
-        //public const int PULL_UP_OFFSET = 
+        public const int SHOT_COUNT_PLAYER_OFFSET = -96; //TODO: prove this is valid
+        public const int HOLD_UP_PLAYER_OFFSET = 5108; //TODO: prove this is valid, prolly isnt tbqh
+        public const int PULL_UP_OFFSET = -90; //TODO: prove this is valid 
+        public const int PLAYER_COLD_OFFSET = -128; //TODO: prove this is valid
+        public const int CURRENT_EQUIPPED_ITEM = -130; //TODO: prove this is valid
+        public const int CURRENT_EQUIPPED_WEAPON = -68; //TODO: prove this is valid
+        public const int PLAYER_STANCE = -134; //TODO: prove this is valid
+        public readonly MemoryBytes PLAYER_SNEEZING = new MemoryBytes { OffsetStart = -108, OffsetEnd = -105 }; //TODO: prove this is valid
+        #endregion
+
+        #region Calculated from Unknown Finder AoBs
+        public const int TIMES_FOUND_GAME_LAUNCH_OFFSET = 0x17B786C; //TODO: need to get an OffsetFinderAoB for this and perform offset calculations
+        public const int HOLD_UPS_GAME_LAUNCH_OFFSET = 0x1673DB0; //TODO: need to get an OffsetFinderAoB for this and perform offset calculations
+        public const int CHOKE_OUTS_GAME_LAUNCH_OFFSET = 0x1673DBC; //TODO: need to get an OffsetFinderAoB for this and perform offset calculations
+
         //TODO: add more of the game stats here
 
 
@@ -148,6 +168,8 @@ Knockout (normal) takes 9 punches
         //internal static IntPtr HudOffset = (IntPtr)0xADB40F;
         //internal static IntPtr CamOffset = (IntPtr)0xAE3B37;
         //internal static IntPtr AlertStatusOffset = (IntPtr)0x1D9C3D8;
+        #endregion
+        #endregion
 
         #region Item Table
         public const int RationOffset = 0;
@@ -216,6 +238,7 @@ Knockout (normal) takes 9 punches
         public const int BookOffset = 40;
         #endregion
 
+        #region Character Usable Object Lists
         public static List<MGS2Object> SnakeUsableObjects = new List<MGS2Object>
         {
             MGS2UsableObjects.AKSuppressor,
@@ -313,5 +336,6 @@ Knockout (normal) takes 9 punches
             MGS2UsableObjects.USPSuppressor,
             MGS2UsableObjects.WetBox
         };
+        #endregion
     };
 }

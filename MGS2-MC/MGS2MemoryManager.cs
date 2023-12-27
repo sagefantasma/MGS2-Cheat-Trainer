@@ -118,11 +118,11 @@ namespace MGS2_MC
                     bool offsetHasMoved = false;
                     foreach (int previousOffset in LAST_KNOWN_PLAYER_OFFSETS)
                     {
-                        byte[] previousOffsetBuffer = new byte[MGS2Constants.PlayerOffsetBytes.Length];
-                        Array.Copy(buffer, previousOffset, previousOffsetBuffer, 0, MGS2Constants.PlayerOffsetBytes.Length);
+                        byte[] previousOffsetBuffer = new byte[MGS2Constants.PlayerInfoFinderAoB.Length];
+                        Array.Copy(buffer, previousOffset, previousOffsetBuffer, 0, MGS2Constants.PlayerInfoFinderAoB.Length);
                         for (int i = 0; i < previousOffsetBuffer.Length; i++)
                         {
-                            if (previousOffsetBuffer[i] != MGS2Constants.PlayerOffsetBytes[i])
+                            if (previousOffsetBuffer[i] != MGS2Constants.PlayerInfoFinderAoB[i])
                             {
                                 //if ANY byte does not match exactly to the offsetBytes, we know the offset has moved
                                 offsetHasMoved = true;
@@ -149,7 +149,7 @@ namespace MGS2_MC
                 while (byteCount + 152 < buffer.Length) //this can _probably just be 144 or 148, but i want to be safe
                 {
                     bool mightBeValid = false;
-                    for (int position = 0; position < MGS2Constants.PlayerOffsetBytes.Length; position++)
+                    for (int position = 0; position < MGS2Constants.PlayerInfoFinderAoB.Length; position++)
                     {
                         //the "playerOffsetBytes" is very common within the game's memory. (~60-90 matches)
                         //HOWEVER, if we limit the playerOffset bytes by the _relative position_, we get VERY few results!
@@ -164,10 +164,10 @@ namespace MGS2_MC
                         if (buffer[byteCount + position + 72] != buffer[byteCount + position])
                             break;
                         //now filter any out that don't match with the playerOffsetBytes
-                        if (buffer[byteCount + position] != MGS2Constants.PlayerOffsetBytes[position])
+                        if (buffer[byteCount + position] != MGS2Constants.PlayerInfoFinderAoB[position])
                             break;
                         //if we get all the way through the scan without finding anything "wrong", we have a possible match
-                        else if (position == MGS2Constants.PlayerOffsetBytes.Length - 1)
+                        else if (position == MGS2Constants.PlayerInfoFinderAoB.Length - 1)
                         {
                             mightBeValid = true;
                         }
@@ -175,16 +175,16 @@ namespace MGS2_MC
 
                     if (mightBeValid)
                     {
-                        byte[] bufferBeingExamined = new byte[MGS2Constants.PlayerOffsetBytes.Length];
-                        Array.Copy(buffer, byteCount + 144, bufferBeingExamined, 0, MGS2Constants.PlayerOffsetBytes.Length);
+                        byte[] bufferBeingExamined = new byte[MGS2Constants.PlayerInfoFinderAoB.Length];
+                        Array.Copy(buffer, byteCount + 144, bufferBeingExamined, 0, MGS2Constants.PlayerInfoFinderAoB.Length);
 
                         //to filter out scenarios #1 and #2 above, for all of the possible matches, check 144 bytes ahead.
                         //ONLY if we are matching on a file with 0 shots OR 0 shots at last checkpoint can there be a full match
                         //144 bytes ahead. if at ANY point in the 144 bytes after each position in the offset array we're scanning
                         //there is a value that DOES NOT MATCH, then we know we have a real player offset.
-                        for (int position = 0; position < MGS2Constants.PlayerOffsetBytes.Length; position++)
+                        for (int position = 0; position < MGS2Constants.PlayerInfoFinderAoB.Length; position++)
                         {
-                            if (bufferBeingExamined[position] != MGS2Constants.PlayerOffsetBytes[position])
+                            if (bufferBeingExamined[position] != MGS2Constants.PlayerInfoFinderAoB[position])
                             {
                                 playerOffset.Add(byteCount);
                                 break;

@@ -168,9 +168,27 @@ Knockout (normal) takes 9 punches
         #endregion
 
         #region Calculated From RayNames
-        public static readonly MemoryBytes Ray_01 = new MemoryBytes(78, 85); //TODO: prove this is valid
-        //TODO: fill in the other 23 rays
-        public static readonly MemoryBytes Ray_25 = new MemoryBytes(462, 469); //TODO: prove this is valid
+        public static readonly MemoryBytes Ray_01 = new MemoryBytes(78, 85); //TODO: prove these are valid (these values are using the endByte, cuz im a fool)
+        public static readonly MemoryBytes Ray_02 = new MemoryBytes(Ray_01.OffsetStart + 16, Ray_01.OffsetEnd + 16);
+        public static readonly MemoryBytes Ray_03 = new MemoryBytes(Ray_02.OffsetStart + 16, Ray_02.OffsetEnd + 16);
+        public static readonly MemoryBytes Ray_04 = new MemoryBytes(Ray_03.OffsetStart + 16, Ray_03.OffsetEnd + 16);
+        public static readonly MemoryBytes Ray_05 = new MemoryBytes(Ray_04.OffsetStart + 16, Ray_04.OffsetEnd + 16);
+        public static readonly MemoryBytes Ray_06 = new MemoryBytes(Ray_05.OffsetStart + 16, Ray_05.OffsetEnd + 16);
+        public static readonly MemoryBytes Ray_07 = new MemoryBytes(Ray_06.OffsetStart + 16, Ray_06.OffsetEnd + 16);
+        public static readonly MemoryBytes Ray_08 = new MemoryBytes(Ray_07.OffsetStart + 16, Ray_07.OffsetEnd + 16);
+        public static readonly MemoryBytes Ray_09 = new MemoryBytes(Ray_08.OffsetStart + 16, Ray_08.OffsetEnd + 16);
+        public static readonly MemoryBytes Ray_10 = new MemoryBytes(Ray_09.OffsetStart + 16, Ray_09.OffsetEnd + 16);
+        public static readonly MemoryBytes Ray_11 = new MemoryBytes(Ray_10.OffsetStart + 16, Ray_10.OffsetEnd + 16);
+        public static readonly MemoryBytes Ray_12 = new MemoryBytes(Ray_11.OffsetStart + 16, Ray_11.OffsetEnd + 16);
+        public static readonly MemoryBytes Ray_13 = new MemoryBytes(Ray_12.OffsetStart + 16, Ray_12.OffsetEnd + 16);
+        public static readonly MemoryBytes Ray_14 = new MemoryBytes(Ray_13.OffsetStart + 16, Ray_13.OffsetEnd + 16);
+        public static readonly MemoryBytes Ray_15 = new MemoryBytes(Ray_14.OffsetStart + 16, Ray_14.OffsetEnd + 16);
+        public static readonly MemoryBytes Ray_16 = new MemoryBytes(Ray_15.OffsetStart + 16, Ray_15.OffsetEnd + 16);
+        public static readonly MemoryBytes Ray_17 = new MemoryBytes(Ray_16.OffsetStart + 16, Ray_16.OffsetEnd + 16);
+        public static readonly MemoryBytes Ray_18 = new MemoryBytes(Ray_17.OffsetStart + 16, Ray_17.OffsetEnd + 16);
+        public static readonly MemoryBytes Ray_19 = new MemoryBytes(Ray_18.OffsetStart + 16, Ray_18.OffsetEnd + 16);
+        //TODO: fill in the other rays
+        public static readonly MemoryBytes Ray_25 = new MemoryBytes(462, 469); 
         #endregion
 
         #region Calculated from Unknown Finder AoBs

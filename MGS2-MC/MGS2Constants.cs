@@ -106,7 +106,7 @@ Knockout (normal) takes 9 punches
          * SnakeHasCold is stored -128 bytes: cannot be changed after snake has already used cold meds, can change before
          * Currently equipped weapon is -68 bytes
          * Currently equipped item is -130 bytes
-         * Something related to sneezing is at -108(4bytes). Whenever snake sneezes, it changes to 2D 00, then changes to another value. maybe time for next sneeze?
+         * Something related to sneezing is at -108(2bytes). Whenever snake sneezes, it changes to 2D 00, then changes to another value. maybe time for next sneeze?
          * -154 and -146 seem to be related to player position? unsure.
          * -134 seems to represent current stance(00 is standing, 01 is crouching, 02 is prone: not quite sure how to leverage these yet)
          * 
@@ -130,26 +130,47 @@ Knockout (normal) takes 9 punches
         //public static byte[] PlayerOffsetBytes = new byte[] { 82, 82, 74, 41, 37, 148, 82, 74, 41, 145, 66, 170, 148, 82, 74, 41, 1, 132, 18, 80, 74, 165, 144, 145, 145, 145, 82, 162, 164, 148, 145, 82, 74, 41, 165, 148, 82, 74, 41, 73, 72, 33 };
         //public static IntPtr PlayerOffsetPtr = (IntPtr)0x52524A292594524A299142AA94524A29018412504AA59092929252A2A49492524A29A594524A29494821;
         //public static byte[] OldPlayerOffsetBytes = new byte[] { 00, 00, 00, 00, 01, 00, 46, 00 };
-        public static byte[] PlayerInfoFinderAoB = new byte[] { 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 01, 00 };
+        public static byte[] PlayerInfoFinderAoB = new byte[30] { 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 01, 00 }; //TODO: determine if this breaks when we have m9 max ammo >255
         #endregion
         #region Static AoBs
-        public static byte[] MenuNamesFinderAoB = new byte[] { 0x6D, 0x61, 0x70, 0x2E, 0x63 }; //TODO: prove this is valid
-        public static byte[] DifficultyAndAreaNamesAoB = new byte[] { 0x2F, 0x44, 0x2A }; //TODO: prove this is valid
+        public static byte[] MenuNamesFinderAoB = new byte[5] { 0x6D, 0x61, 0x70, 0x2E, 0x63 }; //TODO: prove this is valid
+        public static byte[] DifficultyAndAreaNamesAoB = new byte[3] { 0x2F, 0x44, 0x2A }; //TODO: prove this is valid
+        public static byte[] LifeAndGripNamesAoB = new byte[8] { 0x72, 0x61, 0x69, 0x64, 0x65, 0x6E, 0x2E, 0x63 }; //TODO: prove this is valid
+        public static byte[] RayNamesAoB = new byte[10] { 0x6D, 0x69, 0x6E, 0x69, 0x5F, 0x73, 0x63, 0x6E, 0x2E, 0x63 }; //TODO: prove this is valid
+        public static byte[] RationMedsBandagePentazeminDescriptionsAoB = new byte[17] { 0xA4, 0xE3, 0x81, 0xAF, 0xE3, 0x81, 0x9A, 0xE3, 0x81, 0xA0, 0xEE, 0x80, 0x80, 0xE3, 0x80, 0x82, 0x0A }; //TODO: prove this is valid
+        //weapon & item descriptions dispersed through out. seems to start around +00613CCB or so in the memory print?
         #endregion
         #endregion
 
         #region Offsets
         #region Calculated From PlayerInfo
-        public const int BASE_WEAPON_OFFSET = -42; //if a "new" playerOffsetBytes is chosen, only need to update this value and the item offset will update.
-        public const int BASE_ITEM_OFFSET = BASE_WEAPON_OFFSET + 144;
-        public const int SHOT_COUNT_PLAYER_OFFSET = -96; //TODO: prove this is valid
-        public const int HOLD_UP_PLAYER_OFFSET = 5108; //TODO: prove this is valid, prolly isnt tbqh
-        public const int PULL_UP_OFFSET = -90; //TODO: prove this is valid 
-        public const int PLAYER_COLD_OFFSET = -128; //TODO: prove this is valid
-        public const int CURRENT_EQUIPPED_ITEM = -130; //TODO: prove this is valid
-        public const int CURRENT_EQUIPPED_WEAPON = -68; //TODO: prove this is valid
-        public const int PLAYER_STANCE = -134; //TODO: prove this is valid
-        public readonly MemoryBytes PLAYER_SNEEZING = new MemoryBytes { OffsetStart = -108, OffsetEnd = -105 }; //TODO: prove this is valid
+        public static readonly MemoryBytes BASE_WEAPON = new MemoryBytes(-42, 0); //if a "new" playerOffsetBytes is chosen, only need to update this value and the item offset will update.
+        public static readonly MemoryBytes BASE_ITEM = new MemoryBytes(BASE_WEAPON.OffsetStart + 144, BASE_WEAPON.OffsetStart + 144 + 80);
+        public static readonly MemoryBytes SHOT_COUNT = new MemoryBytes(-96); //TODO: prove this is valid
+        public static readonly MemoryBytes HOLD_UP_COUNT = new MemoryBytes(5108); //TODO: prove this is valid, prolly isnt tbqh
+        public static readonly MemoryBytes PULL_UP_COUNT = new MemoryBytes(-90); //TODO: prove this is valid 
+        public static readonly MemoryBytes PLAYER_COLD = new MemoryBytes(-128); //TODO: prove this is valid
+        public static readonly MemoryBytes CURRENT_EQUIPPED_ITEM = new MemoryBytes(-130); //TODO: prove this is valid
+        public static readonly MemoryBytes CURRENT_EQUIPPED_WEAPON = new MemoryBytes(-68); //TODO: prove this is valid
+        public static readonly MemoryBytes PLAYER_STANCE = new MemoryBytes(-134); //TODO: prove this is valid
+        public static readonly MemoryBytes PLAYER_SNEEZING = new MemoryBytes(-108, -107); //TODO: prove this is valid
+        #endregion
+
+        #region Calculated From LifeAndGrip
+        public static readonly MemoryBytes LIFE_TEXT = new MemoryBytes(10, 13); //TODO: prove this is valid
+        public static readonly MemoryBytes GRIP_Lv1_TEXT = new MemoryBytes(22, 29); //TODO: prove this is valid
+        public static readonly MemoryBytes GRIP_Lv2_TEXT = new MemoryBytes(-156, -149); //TODO: prove this is valid
+        public static readonly MemoryBytes GRIP_Lv3_TEXT = new MemoryBytes(-172, -165); //TODO: prove this is valid
+        #endregion
+
+        #region Calculated From RationMedsBandagePentazeminDescriptions
+        //TODO: fill these out
+        #endregion
+
+        #region Calculated From RayNames
+        public static readonly MemoryBytes Ray_01 = new MemoryBytes(78, 85); //TODO: prove this is valid
+        //TODO: fill in the other 23 rays
+        public static readonly MemoryBytes Ray_25 = new MemoryBytes(462, 469); //TODO: prove this is valid
         #endregion
 
         #region Calculated from Unknown Finder AoBs

@@ -138,11 +138,12 @@ Knockout (normal) takes 9 punches
         public static byte[] LifeAndGripNamesAoB = new byte[8] { 0x72, 0x61, 0x69, 0x64, 0x65, 0x6E, 0x2E, 0x63 }; //TODO: prove this is valid
         public static byte[] RayNamesAoB = new byte[10] { 0x6D, 0x69, 0x6E, 0x69, 0x5F, 0x73, 0x63, 0x6E, 0x2E, 0x63 }; //TODO: prove this is valid
         public static byte[] RationMedsBandagePentazeminDescriptionsAoB = new byte[17] { 0xA4, 0xE3, 0x81, 0xAF, 0xE3, 0x81, 0x9A, 0xE3, 0x81, 0xA0, 0xEE, 0x80, 0x80, 0xE3, 0x80, 0x82, 0x0A }; //TODO: prove this is valid
-        //weapon & item descriptions dispersed through out. seems to start around +00613CCB or so in the memory print?
+                                                                                                                                                                                                 //weapon & item descriptions dispersed through out. seems to start around +00613CCB or so in the memory print?
         #endregion
         #endregion
 
         #region Offsets
+        #region Value offsets
         #region Calculated From PlayerInfo
         public static readonly MemoryBytes BASE_WEAPON = new MemoryBytes(-42, 0); //if a "new" playerOffsetBytes is chosen, only need to update this value and the item offset will update.
         public static readonly MemoryBytes BASE_ITEM = new MemoryBytes(BASE_WEAPON.OffsetStart + 144, BASE_WEAPON.OffsetStart + 144 + 80);
@@ -156,6 +157,26 @@ Knockout (normal) takes 9 punches
         public static readonly MemoryBytes PLAYER_SNEEZING = new MemoryBytes(-108, -107); //TODO: prove this is valid
         #endregion
 
+        #region Calculated from Unknown Finder AoBs
+        public const int TIMES_FOUND_GAME_LAUNCH_OFFSET = 0x17B786C; //TODO: need to get an OffsetFinderAoB for this and perform offset calculations
+        public const int HOLD_UPS_GAME_LAUNCH_OFFSET = 0x1673DB0; //TODO: need to get an OffsetFinderAoB for this and perform offset calculations
+        public const int CHOKE_OUTS_GAME_LAUNCH_OFFSET = 0x1673DBC; //TODO: need to get an OffsetFinderAoB for this and perform offset calculations
+
+        //TODO: add more of the game stats here
+
+
+        //These values are PRESENTLY unknown
+        //internal const int HealthPointerOffset = 0x00AE49D8; 
+        //internal const int CurrentHealthOffset = 0x684;
+        //internal const int MaxHealthOffset = 0x686;
+        //internal const int StaminaOffset = 0xA4A;
+        //internal static IntPtr HudOffset = (IntPtr)0xADB40F;
+        //internal static IntPtr CamOffset = (IntPtr)0xAE3B37;
+        //internal static IntPtr AlertStatusOffset = (IntPtr)0x1D9C3D8;
+        #endregion
+        #endregion
+
+        #region String offsets
         #region Calculated From LifeAndGrip
         public static readonly MemoryBytes LIFE_TEXT = new MemoryBytes(10, 13); //TODO: prove this is valid
         public static readonly MemoryBytes GRIP_Lv1_TEXT = new MemoryBytes(22, 29); //TODO: prove this is valid
@@ -193,25 +214,8 @@ Knockout (normal) takes 9 punches
         public static readonly MemoryBytes Ray_22 = new MemoryBytes(Ray_21.OffsetStart + 16, Ray_21.OffsetEnd + 16);
         public static readonly MemoryBytes Ray_23 = new MemoryBytes(Ray_22.OffsetStart + 16, Ray_22.OffsetEnd + 16);
         public static readonly MemoryBytes Ray_24 = new MemoryBytes(Ray_23.OffsetStart + 16, Ray_23.OffsetEnd + 16);
-        public static readonly MemoryBytes Ray_25 = new MemoryBytes(Ray_24.OffsetStart + 16, Ray_24.OffsetEnd + 16); 
+        public static readonly MemoryBytes Ray_25 = new MemoryBytes(Ray_24.OffsetStart + 16, Ray_24.OffsetEnd + 16);
         #endregion
-
-        #region Calculated from Unknown Finder AoBs
-        public const int TIMES_FOUND_GAME_LAUNCH_OFFSET = 0x17B786C; //TODO: need to get an OffsetFinderAoB for this and perform offset calculations
-        public const int HOLD_UPS_GAME_LAUNCH_OFFSET = 0x1673DB0; //TODO: need to get an OffsetFinderAoB for this and perform offset calculations
-        public const int CHOKE_OUTS_GAME_LAUNCH_OFFSET = 0x1673DBC; //TODO: need to get an OffsetFinderAoB for this and perform offset calculations
-
-        //TODO: add more of the game stats here
-
-
-        //These values are PRESENTLY unknown
-        //internal const int HealthPointerOffset = 0x00AE49D8; 
-        //internal const int CurrentHealthOffset = 0x684;
-        //internal const int MaxHealthOffset = 0x686;
-        //internal const int StaminaOffset = 0xA4A;
-        //internal static IntPtr HudOffset = (IntPtr)0xADB40F;
-        //internal static IntPtr CamOffset = (IntPtr)0xAE3B37;
-        //internal static IntPtr AlertStatusOffset = (IntPtr)0x1D9C3D8;
         #endregion
         #endregion
 

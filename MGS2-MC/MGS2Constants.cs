@@ -169,6 +169,7 @@ Knockout (normal) takes 9 punches
 
         #region Calculated From RayNames
         public static readonly MemoryBytes Ray_01 = new MemoryBytes(78, 85); //TODO: prove these are valid (these values are using the endByte, cuz im a fool)
+        //public static readonly MemoryBytes Ray_01 = new MemoryBytes(68, 75); //This should work if the uncommented one does not
         public static readonly MemoryBytes Ray_02 = new MemoryBytes(Ray_01.OffsetStart + 16, Ray_01.OffsetEnd + 16);
         public static readonly MemoryBytes Ray_03 = new MemoryBytes(Ray_02.OffsetStart + 16, Ray_02.OffsetEnd + 16);
         public static readonly MemoryBytes Ray_04 = new MemoryBytes(Ray_03.OffsetStart + 16, Ray_03.OffsetEnd + 16);
@@ -187,8 +188,12 @@ Knockout (normal) takes 9 punches
         public static readonly MemoryBytes Ray_17 = new MemoryBytes(Ray_16.OffsetStart + 16, Ray_16.OffsetEnd + 16);
         public static readonly MemoryBytes Ray_18 = new MemoryBytes(Ray_17.OffsetStart + 16, Ray_17.OffsetEnd + 16);
         public static readonly MemoryBytes Ray_19 = new MemoryBytes(Ray_18.OffsetStart + 16, Ray_18.OffsetEnd + 16);
-        //TODO: fill in the other rays
-        public static readonly MemoryBytes Ray_25 = new MemoryBytes(462, 469); 
+        public static readonly MemoryBytes Ray_20 = new MemoryBytes(Ray_19.OffsetStart + 16, Ray_19.OffsetEnd + 16);
+        public static readonly MemoryBytes Ray_21 = new MemoryBytes(Ray_20.OffsetStart + 16, Ray_20.OffsetEnd + 16);
+        public static readonly MemoryBytes Ray_22 = new MemoryBytes(Ray_21.OffsetStart + 16, Ray_21.OffsetEnd + 16);
+        public static readonly MemoryBytes Ray_23 = new MemoryBytes(Ray_22.OffsetStart + 16, Ray_22.OffsetEnd + 16);
+        public static readonly MemoryBytes Ray_24 = new MemoryBytes(Ray_23.OffsetStart + 16, Ray_23.OffsetEnd + 16);
+        public static readonly MemoryBytes Ray_25 = new MemoryBytes(Ray_24.OffsetStart + 16, Ray_24.OffsetEnd + 16); 
         #endregion
 
         #region Calculated from Unknown Finder AoBs

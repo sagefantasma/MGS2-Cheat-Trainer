@@ -122,39 +122,40 @@ Knockout (normal) takes 9 punches
         #endregion
 
         #region Offset Finders
-        //if the region is dynamic(i.e. PlayerOffsetAoB), it will change on area load. The others will only (possibly) change with game updates
+        //if the region is dynamic(i.e. PlayerOffsetAoB), it will change on area load. The others will only (possibly[hopefully]) change with game updates
         #region Dynamic AoBs
-        //these commented offsets are old possible anchors i found that weren't consistent/usable
-        //public static byte[] PlayerOffsetBytes = new byte[6] { 104, 01, 100, 00, 100, 00 }; // the CURRENT player offset will be the second to last one in memory.
-        //public static IntPtr PlayerOffsetPtr = (IntPtr)0x680164006400;
-        //public static byte[] PlayerOffsetBytes = new byte[] { 82, 82, 74, 41, 37, 148, 82, 74, 41, 145, 66, 170, 148, 82, 74, 41, 1, 132, 18, 80, 74, 165, 144, 145, 145, 145, 82, 162, 164, 148, 145, 82, 74, 41, 165, 148, 82, 74, 41, 73, 72, 33 };
-        //public static IntPtr PlayerOffsetPtr = (IntPtr)0x52524A292594524A299142AA94524A29018412504AA59092929252A2A49492524A29A594524A29494821;
-        //public static byte[] OldPlayerOffsetBytes = new byte[] { 00, 00, 00, 00, 01, 00, 46, 00 };
         public static byte[] PlayerInfoFinderAoB = new byte[30] { 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 01, 00 }; //TODO: determine if this breaks when we have m9 max ammo >255
         #endregion
         #region Static AoBs
         public static byte[] MenuNamesFinderAoB = new byte[5] { 0x6D, 0x61, 0x70, 0x2E, 0x63 }; //TODO: prove this is valid
-        public static byte[] DifficultyAndAreaNamesAoB = new byte[3] { 0x2F, 0x44, 0x2A }; //TODO: prove this is valid
+        public static byte[] DifficultyAndAreaNamesAoB = new byte[3] { 0x2F, 0x44, 0x2A }; //TODO: prove this is valid, also this is _concerningly_ short.
         public static byte[] LifeAndGripNamesAoB = new byte[8] { 0x72, 0x61, 0x69, 0x64, 0x65, 0x6E, 0x2E, 0x63 }; //TODO: prove this is valid
         public static byte[] RayNamesAoB = new byte[10] { 0x6D, 0x69, 0x6E, 0x69, 0x5F, 0x73, 0x63, 0x6E, 0x2E, 0x63 }; //TODO: prove this is valid
+        //weapon & item descriptions dispersed through out. seems to start around +00613CCB or so in the memory print?
         public static byte[] RationMedsBandagePentazeminDescriptionsAoB = new byte[17] { 0xA4, 0xE3, 0x81, 0xAF, 0xE3, 0x81, 0x9A, 0xE3, 0x81, 0xA0, 0xEE, 0x80, 0x80, 0xE3, 0x80, 0x82, 0x0A }; //TODO: prove this is valid
-                                                                                                                                                                                                 //weapon & item descriptions dispersed through out. seems to start around +00613CCB or so in the memory print?
+        public static byte[] SolidusNameAoB = new byte[10] { 0x69, 0x6E, 0x69, 0x74, 0x5F, 0x73, 0x6F, 0x6C, 0x2E, 0x63 }; //TODO: prove this is valid
+        public static byte[] EmmaO2AoB = new byte[16] { 0x65, 0x6D, 0x61, 0x5F, 0x72, 0x61, 0x69, 0x5F, 0x6F, 0x6E, 0x62, 0x75, 0x5F, 0x65, 0x6E, 0x64 }; //TODO: prove this is valid
+        public static byte[] FatmanNameAoB = new byte[15] { 0x77, 0x61, 0x74, 0x65, 0x72, 0x6C, 0x69, 0x6E, 0x65, 0x66, 0x61, 0x6C, 0x6C, 0x2E, 0x63 }; //TODO: prove this is valid
+        public static byte[] OlgaNameAoB = new byte[10] { 0x6F, 0x72, 0x67, 0x61, 0x5F, 0x6C, 0x6E, 0x7A, 0x2E, 0x63 }; //TODO: prove this is valid
+        public static byte[] HarrierNameAoB = new byte[10] { 0x68, 0x61, 0x72, 0x5F, 0x76, 0x75, 0x6C, 0x63, 0x2E, 0x63 }; //TODO: prove this is valid
+        public static byte[] KasatkaNameAoB = new byte[12] { 0x6B, 0x63, 0x6B, 0x5F, 0x70, 0x6C, 0x61, 0x6E, 0x74, 0x5F, 0x6D, 0x74 }; //TODO: prove this is valid
+        public static byte[] FortuneNameAoB = new byte[] { 0x66, 0x6F, 0x72, 0x74, 0x5F, 0x6F, 0x62, 0x6A, 0x5F, 0x69, 0x6E, 0x69, 0x2E, 0x63 }; //TODO: prove this is valid
         #endregion
         #endregion
 
         #region Offsets
         #region Value offsets
         #region Calculated From PlayerInfo
-        public static readonly MemoryBytes BASE_WEAPON = new MemoryBytes(-42, 0); //if a "new" playerOffsetBytes is chosen, only need to update this value and the item offset will update.
-        public static readonly MemoryBytes BASE_ITEM = new MemoryBytes(BASE_WEAPON.OffsetStart + 144, BASE_WEAPON.OffsetStart + 144 + 80);
-        public static readonly MemoryBytes SHOT_COUNT = new MemoryBytes(-96); //TODO: prove this is valid
-        public static readonly MemoryBytes HOLD_UP_COUNT = new MemoryBytes(5108); //TODO: prove this is valid, prolly isnt tbqh
-        public static readonly MemoryBytes PULL_UP_COUNT = new MemoryBytes(-90); //TODO: prove this is valid 
-        public static readonly MemoryBytes PLAYER_COLD = new MemoryBytes(-128); //TODO: prove this is valid
-        public static readonly MemoryBytes CURRENT_EQUIPPED_ITEM = new MemoryBytes(-130); //TODO: prove this is valid
-        public static readonly MemoryBytes CURRENT_EQUIPPED_WEAPON = new MemoryBytes(-68); //TODO: prove this is valid
-        public static readonly MemoryBytes PLAYER_STANCE = new MemoryBytes(-134); //TODO: prove this is valid
-        public static readonly MemoryBytes PLAYER_SNEEZING = new MemoryBytes(-108, -107); //TODO: prove this is valid
+        public static readonly MemoryOffset BASE_WEAPON = new MemoryOffset(-42, 0); //if a "new" playerOffsetBytes is chosen, only need to update this value and the item offset will update.
+        public static readonly MemoryOffset BASE_ITEM = new MemoryOffset(BASE_WEAPON.Start + 144, BASE_WEAPON.Start + 144 + 80);
+        public static readonly MemoryOffset SHOT_COUNT = new MemoryOffset(-96); //TODO: prove this is valid
+        public static readonly MemoryOffset HOLD_UP_COUNT = new MemoryOffset(5108); //TODO: prove this is valid, prolly isnt tbqh
+        public static readonly MemoryOffset PULL_UP_COUNT = new MemoryOffset(-90); //TODO: prove this is valid 
+        public static readonly MemoryOffset PLAYER_COLD = new MemoryOffset(-128); //TODO: prove this is valid
+        public static readonly MemoryOffset CURRENT_EQUIPPED_ITEM = new MemoryOffset(-130); //TODO: prove this is valid
+        public static readonly MemoryOffset CURRENT_EQUIPPED_WEAPON = new MemoryOffset(-68); //TODO: prove this is valid
+        public static readonly MemoryOffset PLAYER_STANCE = new MemoryOffset(-134); //TODO: prove this is valid
+        public static readonly MemoryOffset PLAYER_SNEEZING = new MemoryOffset(-108, -107); //TODO: prove this is valid
         #endregion
 
         #region Calculated from Unknown Finder AoBs
@@ -177,11 +178,11 @@ Knockout (normal) takes 9 punches
         #endregion
 
         #region String offsets
-        #region Calculated From LifeAndGrip
-        public static readonly MemoryBytes LIFE_TEXT = new MemoryBytes(10, 13); //TODO: prove this is valid
-        public static readonly MemoryBytes GRIP_Lv1_TEXT = new MemoryBytes(22, 29); //TODO: prove this is valid
-        public static readonly MemoryBytes GRIP_Lv2_TEXT = new MemoryBytes(-156, -149); //TODO: prove this is valid
-        public static readonly MemoryBytes GRIP_Lv3_TEXT = new MemoryBytes(-172, -165); //TODO: prove this is valid
+        #region Calculated From LifeAndGripNames
+        public static readonly MemoryOffset LIFE_TEXT = new MemoryOffset(10, 13); //TODO: prove this is valid
+        public static readonly MemoryOffset GRIP_Lv1_TEXT = new MemoryOffset(22, 29); //TODO: prove this is valid
+        public static readonly MemoryOffset GRIP_Lv2_TEXT = new MemoryOffset(-156, -149); //TODO: prove this is valid
+        public static readonly MemoryOffset GRIP_Lv3_TEXT = new MemoryOffset(-172, -165); //TODO: prove this is valid
         #endregion
 
         #region Calculated From RationMedsBandagePentazeminDescriptions
@@ -189,32 +190,62 @@ Knockout (normal) takes 9 punches
         #endregion
 
         #region Calculated From RayNames
-        public static readonly MemoryBytes Ray_01 = new MemoryBytes(78, 85); //TODO: prove these are valid (these values are using the endByte, cuz im a fool)
+        public static readonly MemoryOffset Ray_01 = new MemoryOffset(78, 85); //TODO: prove these are valid (these values are using the endByte, cuz im a fool)
         //public static readonly MemoryBytes Ray_01 = new MemoryBytes(68, 75); //This should work if the uncommented one does not
-        public static readonly MemoryBytes Ray_02 = new MemoryBytes(Ray_01.OffsetStart + 16, Ray_01.OffsetEnd + 16);
-        public static readonly MemoryBytes Ray_03 = new MemoryBytes(Ray_02.OffsetStart + 16, Ray_02.OffsetEnd + 16);
-        public static readonly MemoryBytes Ray_04 = new MemoryBytes(Ray_03.OffsetStart + 16, Ray_03.OffsetEnd + 16);
-        public static readonly MemoryBytes Ray_05 = new MemoryBytes(Ray_04.OffsetStart + 16, Ray_04.OffsetEnd + 16);
-        public static readonly MemoryBytes Ray_06 = new MemoryBytes(Ray_05.OffsetStart + 16, Ray_05.OffsetEnd + 16);
-        public static readonly MemoryBytes Ray_07 = new MemoryBytes(Ray_06.OffsetStart + 16, Ray_06.OffsetEnd + 16);
-        public static readonly MemoryBytes Ray_08 = new MemoryBytes(Ray_07.OffsetStart + 16, Ray_07.OffsetEnd + 16);
-        public static readonly MemoryBytes Ray_09 = new MemoryBytes(Ray_08.OffsetStart + 16, Ray_08.OffsetEnd + 16);
-        public static readonly MemoryBytes Ray_10 = new MemoryBytes(Ray_09.OffsetStart + 16, Ray_09.OffsetEnd + 16);
-        public static readonly MemoryBytes Ray_11 = new MemoryBytes(Ray_10.OffsetStart + 16, Ray_10.OffsetEnd + 16);
-        public static readonly MemoryBytes Ray_12 = new MemoryBytes(Ray_11.OffsetStart + 16, Ray_11.OffsetEnd + 16);
-        public static readonly MemoryBytes Ray_13 = new MemoryBytes(Ray_12.OffsetStart + 16, Ray_12.OffsetEnd + 16);
-        public static readonly MemoryBytes Ray_14 = new MemoryBytes(Ray_13.OffsetStart + 16, Ray_13.OffsetEnd + 16);
-        public static readonly MemoryBytes Ray_15 = new MemoryBytes(Ray_14.OffsetStart + 16, Ray_14.OffsetEnd + 16);
-        public static readonly MemoryBytes Ray_16 = new MemoryBytes(Ray_15.OffsetStart + 16, Ray_15.OffsetEnd + 16);
-        public static readonly MemoryBytes Ray_17 = new MemoryBytes(Ray_16.OffsetStart + 16, Ray_16.OffsetEnd + 16);
-        public static readonly MemoryBytes Ray_18 = new MemoryBytes(Ray_17.OffsetStart + 16, Ray_17.OffsetEnd + 16);
-        public static readonly MemoryBytes Ray_19 = new MemoryBytes(Ray_18.OffsetStart + 16, Ray_18.OffsetEnd + 16);
-        public static readonly MemoryBytes Ray_20 = new MemoryBytes(Ray_19.OffsetStart + 16, Ray_19.OffsetEnd + 16);
-        public static readonly MemoryBytes Ray_21 = new MemoryBytes(Ray_20.OffsetStart + 16, Ray_20.OffsetEnd + 16);
-        public static readonly MemoryBytes Ray_22 = new MemoryBytes(Ray_21.OffsetStart + 16, Ray_21.OffsetEnd + 16);
-        public static readonly MemoryBytes Ray_23 = new MemoryBytes(Ray_22.OffsetStart + 16, Ray_22.OffsetEnd + 16);
-        public static readonly MemoryBytes Ray_24 = new MemoryBytes(Ray_23.OffsetStart + 16, Ray_23.OffsetEnd + 16);
-        public static readonly MemoryBytes Ray_25 = new MemoryBytes(Ray_24.OffsetStart + 16, Ray_24.OffsetEnd + 16);
+        public static readonly MemoryOffset Ray_02 = new MemoryOffset(Ray_01.Start + 16, Ray_01.End + 16);
+        public static readonly MemoryOffset Ray_03 = new MemoryOffset(Ray_02.Start + 16, Ray_02.End + 16);
+        public static readonly MemoryOffset Ray_04 = new MemoryOffset(Ray_03.Start + 16, Ray_03.End + 16);
+        public static readonly MemoryOffset Ray_05 = new MemoryOffset(Ray_04.Start + 16, Ray_04.End + 16);
+        public static readonly MemoryOffset Ray_06 = new MemoryOffset(Ray_05.Start + 16, Ray_05.End + 16);
+        public static readonly MemoryOffset Ray_07 = new MemoryOffset(Ray_06.Start + 16, Ray_06.End + 16);
+        public static readonly MemoryOffset Ray_08 = new MemoryOffset(Ray_07.Start + 16, Ray_07.End + 16);
+        public static readonly MemoryOffset Ray_09 = new MemoryOffset(Ray_08.Start + 16, Ray_08.End + 16);
+        public static readonly MemoryOffset Ray_10 = new MemoryOffset(Ray_09.Start + 16, Ray_09.End + 16);
+        public static readonly MemoryOffset Ray_11 = new MemoryOffset(Ray_10.Start + 16, Ray_10.End + 16);
+        public static readonly MemoryOffset Ray_12 = new MemoryOffset(Ray_11.Start + 16, Ray_11.End + 16);
+        public static readonly MemoryOffset Ray_13 = new MemoryOffset(Ray_12.Start + 16, Ray_12.End + 16);
+        public static readonly MemoryOffset Ray_14 = new MemoryOffset(Ray_13.Start + 16, Ray_13.End + 16);
+        public static readonly MemoryOffset Ray_15 = new MemoryOffset(Ray_14.Start + 16, Ray_14.End + 16);
+        public static readonly MemoryOffset Ray_16 = new MemoryOffset(Ray_15.Start + 16, Ray_15.End + 16);
+        public static readonly MemoryOffset Ray_17 = new MemoryOffset(Ray_16.Start + 16, Ray_16.End + 16);
+        public static readonly MemoryOffset Ray_18 = new MemoryOffset(Ray_17.Start + 16, Ray_17.End + 16);
+        public static readonly MemoryOffset Ray_19 = new MemoryOffset(Ray_18.Start + 16, Ray_18.End + 16);
+        public static readonly MemoryOffset Ray_20 = new MemoryOffset(Ray_19.Start + 16, Ray_19.End + 16);
+        public static readonly MemoryOffset Ray_21 = new MemoryOffset(Ray_20.Start + 16, Ray_20.End + 16);
+        public static readonly MemoryOffset Ray_22 = new MemoryOffset(Ray_21.Start + 16, Ray_21.End + 16);
+        public static readonly MemoryOffset Ray_23 = new MemoryOffset(Ray_22.Start + 16, Ray_22.End + 16);
+        public static readonly MemoryOffset Ray_24 = new MemoryOffset(Ray_23.Start + 16, Ray_23.End + 16);
+        public static readonly MemoryOffset Ray_25 = new MemoryOffset(Ray_24.Start + 16, Ray_24.End + 16);
+        #endregion
+
+        #region Calculated From SolidusName
+        public static readonly MemoryOffset SOLIDUS_HP_TEXT = new MemoryOffset(61, 67); //TODO: prove this is valid
+        #endregion
+
+        #region Calculated From EmmaO2
+        public static readonly MemoryOffset EMMA_O2_TEXT = new MemoryOffset(25, 31); //TODO: prove this is valid
+        public static readonly MemoryOffset RAIDEN_O2_TEXT = new MemoryOffset(137, 138); //TODO: prove this is valid
+        #endregion
+
+        #region Calculated From FatmanName
+        public static readonly MemoryOffset FATMAN_HP_TEXT = new MemoryOffset(89, 94); //TODO: validate
+        #endregion
+
+        #region Calculated From OlgaName
+        public static readonly MemoryOffset OLGA_HP_TEXT = new MemoryOffset(293, 296); //TODO: validate
+                                                                                     //there is also a meryl string right next to OLGA... but idk what it is used for so i'm not bothering to add it atm
+        #endregion
+
+        #region Calculated From HarrierName
+        public static readonly MemoryOffset HARRIER_HP_TEXT = new MemoryOffset(-109, -103);
+        #endregion
+
+        #region Calculated From KasatkaName
+        public static readonly MemoryOffset KASATKA_HP_TEXT = new MemoryOffset(-8, -2);
+        #endregion
+
+        #region Calculated From FortuneName
+        public static readonly MemoryOffset FORTUNE_HP_TEXT = new MemoryOffset(1189, 1195); //TODO: validate
         #endregion
         #endregion
         #endregion

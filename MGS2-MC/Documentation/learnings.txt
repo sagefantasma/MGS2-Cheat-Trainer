@@ -1,0 +1,2 @@
+- having a `steam_appid.txt` file with the game's AppID as the contents will allow you to cut out the launcher entirely
+- if you don't want to totally cut out the launcher(idk why you would want this), you can start the MGS process w/ `-jump directGameStart`(w/ MG1 or MG2 appended for those 'uns)

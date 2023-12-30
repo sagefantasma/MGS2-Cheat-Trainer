@@ -61,16 +61,6 @@ namespace MGS2_MC
             return (short)dogTagsMaxUpDown.Value;
         }
 
-        private short CurrentColdMedsCount()
-        {
-            return (short)coldMedsCurrentUpDown.Value;
-        }
-
-        private short MaxColdMedsCount()
-        {
-            return (short)coldMedsMaxUpDown.Value;
-        }
-
         private short CardSecurityLevel()
         {
             return (short)cardUpDown.Value;
@@ -490,12 +480,14 @@ namespace MGS2_MC
 
         private void ColdMedsCurrentBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.ColdMedicine.UpdateCurrentCount(CurrentColdMedsCount());
+            //MGS2UsableObjects.ColdMedicine.UpdateCurrentCount(CurrentColdMedsCount());
+            //TODO: remove this function
         }
 
         private void ColdMedsMaxBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.ColdMedicine.UpdateMaxCount(MaxColdMedsCount());
+            //MGS2UsableObjects.ColdMedicine.UpdateMaxCount(MaxColdMedsCount());
+            //TODO: remove this function
         }
 
         private void box1Btn_Click(object sender, EventArgs e)

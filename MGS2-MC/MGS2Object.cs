@@ -391,6 +391,7 @@ namespace MGS2_MC
         public static readonly BasicItem OrangeWig = new BasicItem("Orange Wig", IntPtr.Zero, MGS2Constants.BASE_ITEM.Start + MGS2Constants.OrangeWigOffset);
         public static readonly BasicItem ColorWig = new BasicItem("Color Wig", IntPtr.Zero, MGS2Constants.BASE_ITEM.Start + MGS2Constants.ColorWigOffset); //unused
         public static readonly BasicItem ColorWig2 = new BasicItem("Color Wig 2", IntPtr.Zero, MGS2Constants.BASE_ITEM.Start + MGS2Constants.ColorWig2Offset); //unused
+        public static readonly BasicItem ColdMedicine = new BasicItem("Cold Medicine", IntPtr.Zero, MGS2Constants.BASE_ITEM.Start + MGS2Constants.ColdMedicineOffset);
         #endregion
         #region Durability Items
         public static readonly DurabilityItem Box1 = new DurabilityItem("Box1", IntPtr.Zero, MGS2Constants.BASE_ITEM.Start + MGS2Constants.Box1Offset);
@@ -402,7 +403,6 @@ namespace MGS2_MC
         #endregion
         #region Enumerable Items
         public static readonly StackableItem Ration = new StackableItem("Ration", IntPtr.Zero, MGS2Constants.BASE_ITEM.Start + MGS2Constants.RationOffset);
-        public static readonly StackableItem ColdMedicine = new StackableItem("Cold Medicine", IntPtr.Zero, MGS2Constants.BASE_ITEM.Start + MGS2Constants.ColdMedicineOffset);
         public static readonly StackableItem Bandage = new StackableItem("Bandage", IntPtr.Zero, MGS2Constants.BASE_ITEM.Start + MGS2Constants.BandageOffset);
         public static readonly StackableItem Pentazemin = new StackableItem("Pentazemin", IntPtr.Zero, MGS2Constants.BASE_ITEM.Start + MGS2Constants.PentazeminOffset);
         public static readonly StackableItem DogTags = new StackableItem("DogTags", IntPtr.Zero, MGS2Constants.BASE_ITEM.Start + MGS2Constants.DogTagsOffset);

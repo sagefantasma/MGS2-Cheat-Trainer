@@ -12,12 +12,32 @@ namespace MGS2_MC
 {
     public partial class GUI : Form
     {
+        private void BuildGroupBoxForObject(MGS2Object objectToEdit)
+        {
+            switch(objectToEdit)
+            {
+                case BasicWeapon basicItem:
+                case BasicItem basicItem:
+                    
+                    break;
+                case AmmoWeapon stackableItem:
+                case StackableItem stackableItem:
+
+                    break;
+                case DurabilityItem durabilityItem:
+
+                    break;
+                case SpecialWeapon specialWeapon:
+
+                    break;
+            }
+        }
+
         public GUI()
         {
             InitializeComponent();
             //removing the stats & strings pages for now since they're unfinished
             mgs2TabControl.TabPages.RemoveByKey(tabPageStats.Name);
-            mgs2TabControl.TabPages.RemoveByKey(tabPageStrings.Name);
         }
 
         #region GUI getters

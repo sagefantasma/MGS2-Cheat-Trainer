@@ -3,6 +3,8 @@
     internal class MGS2Constants
     {
         public const string MGS2_PROCESS_NAME = "METAL GEAR SOLID2";
+        internal const string SteamAppId = "2131640";
+        internal const string SteamAppIdFileName = "steam_appid.txt";
 
         #region Item Table
         public const int RATION = 0;

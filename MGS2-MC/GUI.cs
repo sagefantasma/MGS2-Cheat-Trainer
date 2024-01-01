@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MGS2_MC
@@ -14,21 +7,33 @@ namespace MGS2_MC
     {
         private void BuildGroupBoxForObject(MGS2Object objectToEdit)
         {
+            //envisioning a listbox on the left pane to choose item to edit
+            //then the item you select determines what shows up in the right pane
+            //eventually, this should dovetail well into the controller support
+
+            //all items need the enable checkbox & picture
             switch(objectToEdit)
             {
-                case BasicWeapon basicItem:
-                case BasicItem basicItem:
-                    
-                    break;
-                case AmmoWeapon stackableItem:
-                case StackableItem stackableItem:
-
-                    break;
-                case DurabilityItem durabilityItem:
-
+                case AmmoWeapon ammoWeapon:
+                    //need current ammo updown & set and max ammo updown & set
                     break;
                 case SpecialWeapon specialWeapon:
-
+                    //need lethal/stun buttons
+                    break;
+                case BasicWeapon basicWeapon:
+                    //don't need anything else
+                    break;
+                case StackableItem stackableItem:
+                    //need current count updown & set
+                    break;
+                case DurabilityItem durabilityItem:
+                    //need durability updown & set
+                    break;
+                case LevelableItem levelableItem:
+                    //need level updown & set
+                    break;
+                case BasicItem basicItem:
+                    //don't need anything else
                     break;
             }
         }
@@ -36,7 +41,9 @@ namespace MGS2_MC
         public GUI()
         {
             InitializeComponent();
-            //removing the stats & strings pages for now since they're unfinished
+            stringsListBox.DataSource = Strings.MGS2_STRINGS;
+            stringsListBox.DisplayMember = "Tag";
+            //removing the stats page for now since its unfinished
             mgs2TabControl.TabPages.RemoveByKey(tabPageStats.Name);
         }
 
@@ -827,5 +834,15 @@ namespace MGS2_MC
             MGS2UsableObjects.HighFrequencyBlade.ToggleWeapon(hfBladeCheckBox.Checked);
         }
         #endregion
+
+        private void StringsListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //TODO: update the name field, length & button functionality
+        }
+
+        private void setBasicNameBtn_Click(object sender, EventArgs e)
+        {
+            var mgs2Handle = Program.MGS2Process.Handle;
+        }
     }
 }

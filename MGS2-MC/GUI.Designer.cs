@@ -480,7 +480,7 @@
             this.timesFoundGameLaunchUpDown = new System.Windows.Forms.NumericUpDown();
             this.tabPageStrings = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel55 = new System.Windows.Forms.TableLayoutPanel();
-            this.stringsListBox = new System.Windows.Forms.CheckedListBox();
+            this.stringsListBox = new System.Windows.Forms.ListBox();
             this.basicNameGroupBox = new System.Windows.Forms.GroupBox();
             this.setBasicNameBtn = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
@@ -6755,22 +6755,12 @@
             // 
             this.stringsListBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.stringsListBox.FormattingEnabled = true;
-            this.stringsListBox.Items.AddRange(new object[] {
-            "LIFE",
-            "GRIP Lv1",
-            "GRIP Lv2",
-            "GRIP Lv3",
-            "EMMA O2",
-            "SOLIDUS",
-            "RAY 1->26",
-            "RATION",
-            "BANDAGE",
-            "SHAVER"});
             this.stringsListBox.Location = new System.Drawing.Point(3, 3);
             this.stringsListBox.Name = "stringsListBox";
             this.tableLayoutPanel55.SetRowSpan(this.stringsListBox, 2);
             this.stringsListBox.Size = new System.Drawing.Size(251, 571);
             this.stringsListBox.TabIndex = 0;
+            this.stringsListBox.SelectedIndexChanged += new System.EventHandler(this.StringsListBox_SelectedIndexChanged);
             // 
             // basicNameGroupBox
             // 
@@ -6793,6 +6783,7 @@
             this.setBasicNameBtn.TabIndex = 2;
             this.setBasicNameBtn.Text = "Set! (may require loading screen to register)";
             this.setBasicNameBtn.UseVisualStyleBackColor = true;
+            this.setBasicNameBtn.Click += new System.EventHandler(this.setBasicNameBtn_Click);
             // 
             // flowLayoutPanel1
             // 
@@ -7708,7 +7699,7 @@
         private System.Windows.Forms.NumericUpDown timesFoundGameLaunchUpDown;
         private System.Windows.Forms.TabPage tabPageStrings;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel55;
-        private System.Windows.Forms.CheckedListBox stringsListBox;
+        private System.Windows.Forms.ListBox stringsListBox;
         private System.Windows.Forms.GroupBox basicNameGroupBox;
         private System.Windows.Forms.GroupBox descriptionGroupBox;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;

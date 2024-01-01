@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text.Json;
 using System.Threading;
 using System.Windows.Forms;
@@ -35,10 +33,16 @@ namespace MGS2_MC
         {
             return JsonSerializer.Deserialize<TrainerConfig>(File.ReadAllText("TrainerConfig.json"));
         }
+        
+        private static void CloseMGS2(object sender, EventArgs e)
+        {
+            //!!!NOTE!!!: This _WILL NOT WORK_ if you are running this program in a debugger and use the "Stop Debugging" feature.
+            MGS2Process?.CloseMainWindow();
+            MGS2Process?.Dispose();
+        }
 
         private static void MGS2Runner(TrainerConfig config)
         {
-            //TODO: 
             MGS2Process = new Process();
             try
             {
@@ -54,10 +58,21 @@ namespace MGS2_MC
                 MGS2Process.StartInfo = mgs2StartInfo;
                 MGS2Process.Start();
 
+                if(config.CloseGameWithTrainer)
+                {
+                    Application.ApplicationExit += (sender, args) => CloseMGS2(sender, args);
+                }
+
                 while (!MGS2Process.HasExited)
                 {
-
+                    //this thread loops forever while MGS2 is running
                 }
+
+                if (config.CloseTrainerWithGame)
+                {
+                    Application.Exit();
+                }
+                        
             }
             catch(Exception e)
             {

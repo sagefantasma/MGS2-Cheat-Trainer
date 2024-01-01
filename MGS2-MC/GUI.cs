@@ -41,7 +41,7 @@ namespace MGS2_MC
         public GUI()
         {
             InitializeComponent();
-            stringsListBox.DataSource = Strings.MGS2_STRINGS;
+            stringsListBox.DataSource = MGS2Strings.MGS2_STRINGS;
             stringsListBox.DisplayMember = "Tag";
             //removing the stats page for now since its unfinished
             mgs2TabControl.TabPages.RemoveByKey(tabPageStats.Name);

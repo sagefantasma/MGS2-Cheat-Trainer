@@ -132,12 +132,12 @@
     </Compile>
     <Compile Include="MGS2Constants.cs" />
     <Compile Include="MGS2MemoryManager.cs" />
-    <Compile Include="Offsets.cs" />
+    <Compile Include="MGS2Offsets.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Raiden.cs" />
     <Compile Include="Snake.cs" />
-    <Compile Include="Strings.cs" />
+    <Compile Include="MGS2Strings.cs" />
     <Compile Include="TrainerConfigStructure.cs" />
     <EmbeddedResource Include="GUI.resx">
       <DependentUpon>GUI.cs</DependentUpon>
@@ -177,6 +177,7 @@
     <Content Include="Documentation\digital camera and wig names memory block.png" />
     <Content Include="Documentation\fortune and vamp names memory block.png" />
     <Content Include="Documentation\item and weapon box names.png" />
+    <Content Include="Documentation\learnings.txt" />
     <Content Include="Documentation\memoryDumps.txt" />
     <Content Include="Documentation\npc snake memory block.png" />
     <Content Include="Documentation\raiden hf blade stuff memory block.png" />

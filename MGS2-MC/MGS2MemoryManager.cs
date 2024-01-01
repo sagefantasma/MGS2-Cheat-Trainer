@@ -40,7 +40,7 @@ namespace MGS2_MC
             public static extern bool CloseHandle(IntPtr hObject);
         }
 
-        static Process mgs2Process = Program.MGS2Process;
+        static readonly Process mgs2Process = Program.MGS2Process;
         static IntPtr PROCESS_BASE_ADDRESS = IntPtr.Zero;
         static int[] LAST_KNOWN_PLAYER_OFFSETS = default;
 

@@ -20,18 +20,33 @@ namespace MGS2_MC
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            TrainerConfig trainerConfig = LoadConfig();
-            if (trainerConfig.AutoLaunchGame)
+            try
             {
-                Thread mgs2Thread = new Thread(() => MGS2Runner(trainerConfig));
-                mgs2Thread.Start();
+                TrainerConfig trainerConfig = LoadConfig();
+                if (trainerConfig.AutoLaunchGame)
+                {
+                    Thread mgs2Thread = new Thread(() => Mgs2Runner(trainerConfig));
+                    mgs2Thread.Start();
+                }
+            } 
+            catch (Exception e) 
+            { 
+                //TODO: add logging :)
             }
             Application.Run(new GUI());            
         }
 
         private static TrainerConfig LoadConfig()
         {
-            return JsonSerializer.Deserialize<TrainerConfig>(File.ReadAllText("TrainerConfig.json"));
+            try
+            {
+                return JsonSerializer.Deserialize<TrainerConfig>(File.ReadAllText("TrainerConfig.json"));
+            }
+            catch(Exception e)
+            {
+                //TODO: add logging :)
+                return null;
+            }
         }
         
         private static void CloseMGS2(object sender, EventArgs e)
@@ -41,42 +56,101 @@ namespace MGS2_MC
             MGS2Process?.Dispose();
         }
 
-        private static void MGS2Runner(TrainerConfig config)
+        private static bool IsDirectLaunchEnabled(FileInfo mgs2Executable, FileInfo steamAppIdFile)
+        {
+            if (steamAppIdFile.Exists)
+            {
+                try
+                {
+                    string steamAppIdFileContents = File.ReadAllText(steamAppIdFile.FullName);
+                    if (steamAppIdFileContents.Equals(MGS2Constants.SteamAppId))
+                    {
+                        //the steam_appid file exists and has the appropriate content
+                        return true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    //TODO: add logging :)
+                    return false;
+                }
+            }
+
+            return false;
+        }
+
+        private static void EnableDirectLaunch(FileInfo steamAppIdFile)
+        {
+            try
+            {
+                //the steam_appid file is either missing, or has incorrect contents. overwrite it so we can direct launch w/o issue.
+                using (StreamWriter writer = new StreamWriter(File.Open(steamAppIdFile.FullName, FileMode.Create)))
+                {
+                    writer.WriteLine(MGS2Constants.SteamAppId);
+                }
+            }
+            catch(Exception e)
+            {
+                //TODO: add logging :)
+            }
+        }
+
+        private static void StartMgs2(string mgs2Location, string mgs2Directory, TrainerConfig config)
+        {
+            ProcessStartInfo mgs2StartInfo = new ProcessStartInfo(mgs2Location)
+            {
+                WorkingDirectory = mgs2Directory,
+                UseShellExecute = false,
+                CreateNoWindow = false,
+            };
+            MGS2Process.StartInfo = mgs2StartInfo;
+            MGS2Process.Start();
+
+            if (config.CloseGameWithTrainer)
+            {
+                Application.ApplicationExit += (sender, args) => CloseMGS2(sender, args);
+            }
+
+            while (!MGS2Process.HasExited)
+            {
+                //this thread loops forever while MGS2 is running
+            }
+
+            if (config.CloseTrainerWithGame)
+            {
+                Application.Exit();
+            }
+        }
+
+        private static void Mgs2Runner(TrainerConfig config)
         {
             MGS2Process = new Process();
             try
             {
                 //mgs2.StartInfo = new ProcessStartInfo("steam://rungameid/2131640"); //leaving this here in case it makes sense to use this method instead for some reason
                 string mgs2Location = config.Mgs2ExePath;
-                FileInfo directoryInfo = new FileInfo(mgs2Location);
-                ProcessStartInfo mgs2StartInfo = new ProcessStartInfo(mgs2Location)
-                {
-                    WorkingDirectory = directoryInfo.DirectoryName,
-                    UseShellExecute = false,
-                    CreateNoWindow = false,
-                };
-                MGS2Process.StartInfo = mgs2StartInfo;
-                MGS2Process.Start();
+                FileInfo mgs2Executable = new FileInfo(mgs2Location);
+                FileInfo steamAppIdFile = new FileInfo(mgs2Executable.DirectoryName + MGS2Constants.SteamAppIdFileName);
 
-                if(config.CloseGameWithTrainer)
+                bool directLaunchEnabled = IsDirectLaunchEnabled(mgs2Executable, steamAppIdFile);                
+                if (!directLaunchEnabled)
                 {
-                    Application.ApplicationExit += (sender, args) => CloseMGS2(sender, args);
+                    try
+                    {
+                        EnableDirectLaunch(steamAppIdFile);
+                    }
+                    catch(Exception e)
+                    {
+                        //TODO: add logging :)
+                        //as of right now, I don't know if it will work without this shortcut, so i won't throw yet.
+                    }
                 }
 
-                while (!MGS2Process.HasExited)
-                {
-                    //this thread loops forever while MGS2 is running
-                }
-
-                if (config.CloseTrainerWithGame)
-                {
-                    Application.Exit();
-                }
-                        
+                StartMgs2(mgs2Location, mgs2Executable.DirectoryName, config);
             }
             catch(Exception e)
             {
-                Console.WriteLine(e.Message);
+                //TODO: add logging :)
             }
         }
     }

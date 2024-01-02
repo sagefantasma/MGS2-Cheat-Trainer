@@ -168,6 +168,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include=".editorconfig" />
     <None Include="packages.config" />
     <None Include="Properties\DataSources\Strings.StringDataSource.datasource" />
     <None Include="Properties\Settings.settings">

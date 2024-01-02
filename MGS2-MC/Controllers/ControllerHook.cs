@@ -10,8 +10,8 @@ namespace MGS2_MC
 {
     internal class ControllerHook
     {
-        XboxControllerManager xboxControllerManager = new XboxControllerManager();
-        Ps4ControllerManager ps4ControllerManager = new Ps4ControllerManager();
+        readonly XboxControllerManager xboxControllerManager = new XboxControllerManager();
+        readonly Ps4ControllerManager ps4ControllerManager = new Ps4ControllerManager();
         private bool activeControllerFound = false;
         private object activeController;
         public event EventHandler TrainerMenu;

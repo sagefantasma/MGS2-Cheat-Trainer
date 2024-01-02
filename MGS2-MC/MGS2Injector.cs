@@ -42,9 +42,9 @@ namespace MGS2_MC
 
         static readonly ControllerHook ControllerHook = new ControllerHook();
 
-        internal static async Task EnableInjector()
+        internal static void EnableInjector()
         {
-            await Task.Run(StartControllerHook);
+            Task.Run(StartControllerHook);
         }
 
         private static void StartControllerHook()

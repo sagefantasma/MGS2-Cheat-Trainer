@@ -134,6 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\ControllerHook.cs" />
+    <Compile Include="Controllers\ControllerInterpreter.cs" />
     <Compile Include="Controllers\IControllerManager.cs" />
     <Compile Include="Controllers\Ps4ControllerManager.cs" />
     <Compile Include="Controllers\XboxControllerManager.cs" />

@@ -77,5 +77,11 @@ namespace MGS2_MC.Controllers
 
             return false;
         }
+
+        public void NavigateGui(object state)
+        {
+            //TODO: implement
+            throw new NotImplementedException();
+        }
     }
 }

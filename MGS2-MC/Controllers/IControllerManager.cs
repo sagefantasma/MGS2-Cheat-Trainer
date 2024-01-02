@@ -15,5 +15,6 @@ namespace MGS2_MC.Controllers
         void CheckControllerInput(Action<object, EventArgs> action, object controller);
         bool IsMenuRequestCombination(object structure);
         bool HaveButtonInputsChanged(object previousState, object currentState);
+        void NavigateGui(object currentState);
     }
 }

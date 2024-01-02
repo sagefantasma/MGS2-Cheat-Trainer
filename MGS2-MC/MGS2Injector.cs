@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -33,6 +30,9 @@ namespace MGS2_MC
         static extern int ResumeThread(IntPtr hThread);
         [DllImport("kernel32", CharSet = CharSet.Auto, SetLastError = true)]
         static extern bool CloseHandle(IntPtr handle);
+
+        /*[DllImport("user32.dll", SetLastError = true)]
+        static extern bool GetWindowRect(IntPtr hWnd, out Rectangle lpRect);*/ //this may be useful for slapping the GUI on top of MGS2
         #endregion
 
         public class TrainerMenuArgs : EventArgs
@@ -55,15 +55,19 @@ namespace MGS2_MC
 
         private static void OpenTrainerMenuEventHandler(object o, EventArgs e)
         {
-            //TODO: open a GUI over MGS2 that lets the user do their desired modifications
+            
             TrainerMenuArgs trainerMenuArgs = (TrainerMenuArgs)e;
 
             if (trainerMenuArgs.ActivateMenu)
             {
                 SuspendMgs2();
+                //bool gotMgs2Window = GetWindowRect(Program.MGS2Process.MainWindowHandle, out Rectangle mgs2WindowRectangle);
+                //TODO: open a GUI over MGS2 that lets the user do their desired modifications... for now, just enable navigating the GUI w/ buttons
+                GUI.CanNavigateWithController = true;
             }
             else
             {
+                GUI.CanNavigateWithController = false;
                 ResumeMgs2();
             }
         }

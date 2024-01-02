@@ -7,6 +7,8 @@ namespace MGS2_MC
 {
     public partial class GUI : Form
     {
+        public static bool CanNavigateWithController = false;
+
         private void BuildGroupBoxForObject(MGS2Object objectToEdit)
         {
             //envisioning a listbox on the left pane to choose item to edit

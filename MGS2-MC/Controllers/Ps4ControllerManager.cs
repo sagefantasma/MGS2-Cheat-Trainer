@@ -10,16 +10,20 @@ namespace MGS2_MC.Controllers
 {
     internal class Ps4ControllerManager : IControllerManager
     {
+        private bool[] _heldButtons { get; set; }
         public bool[] HeldButtons 
         { 
             get 
-            { 
-                return (bool[]) HeldButtons.Clone(); //this is safe as booleans are value types, not references types
+            {
+                if (_heldButtons == null)
+                    _heldButtons = new bool[13];
+
+                return _heldButtons;
             } 
             set 
             {
-                if (HeldButtons == null)
-                    HeldButtons = new bool[13];
+                if (_heldButtons == null)
+                    _heldButtons = new bool[13];
                 else
                     return;
             } 

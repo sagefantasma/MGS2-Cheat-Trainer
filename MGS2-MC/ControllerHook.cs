@@ -28,7 +28,7 @@ namespace MGS2_MC
                     {
                         if (IsMenuRequestCombination(controllerState))
                         {
-                            OnTrainerMenu(EventArgs.Empty); //trigger the event for the injector to leverage
+                            TrainerMenuEventHandler(this, EventArgs.Empty); //trigger the event for the injector to leverage
                         }
                     }
                 }
@@ -47,9 +47,9 @@ namespace MGS2_MC
             return false;
         }       
 
-        protected virtual void OnTrainerMenu(EventArgs e)
+        protected virtual void TrainerMenuEventHandler(object sender, EventArgs e)
         {
-            TrainerMenu?.Invoke(this, e);
+            TrainerMenu?.Invoke(sender, e);
         }
     }
 }

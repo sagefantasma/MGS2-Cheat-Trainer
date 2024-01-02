@@ -17,11 +17,11 @@ namespace MGS2_MC
 
         private static void StartControllerHook()
         {
-            ControllerHook.TrainerMenu += OpenTrainerMenu;
+            ControllerHook.TrainerMenu += OpenTrainerMenuEventHandler;
             ControllerHook.Start(System.Threading.CancellationToken.None); //TODO: maybe do a proper cancellation token in the future?
         }
 
-        private static void OpenTrainerMenu(object o, EventArgs e)
+        private static void OpenTrainerMenuEventHandler(object o, EventArgs e)
         {
             //TODO: open a GUI over MGS2 that lets the user do their desired modifications
         }

@@ -133,7 +133,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ControllerHook.cs" />
+    <Compile Include="Controllers\ControllerHook.cs" />
+    <Compile Include="Controllers\IControllerManager.cs" />
+    <Compile Include="Controllers\Ps4ControllerManager.cs" />
+    <Compile Include="Controllers\XboxControllerManager.cs" />
     <Compile Include="MGS2Injector.cs" />
     <Compile Include="Logging.cs" />
     <Compile Include="MGS2Object.cs" />

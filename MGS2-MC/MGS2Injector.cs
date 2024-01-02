@@ -8,6 +8,11 @@ namespace MGS2_MC
 {
     internal static class MGS2Injector
     {
+        public class TrainerMenuArgs : EventArgs
+        {
+            public bool ActivateMenu;
+        }
+
         static ControllerHook ControllerHook = new ControllerHook();
 
         internal static async Task EnableInjector()

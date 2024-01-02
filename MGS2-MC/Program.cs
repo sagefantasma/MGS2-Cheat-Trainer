@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Serilog;
 using Serilog.Core;
@@ -41,6 +42,16 @@ namespace MGS2_MC
             catch (Exception e) 
             {
                 logger.Error($"Could not start MGS2 monitor: {e}");
+            }
+
+            try
+            {
+                Thread controllerThread = new Thread(() => ControllerMonitor());
+                controllerThread.Start();
+            }
+            catch(Exception e)
+            {
+                logger.Error($"Could not start controller monitor: {e}");
             }
             Application.Run(new GUI());            
         }
@@ -175,6 +186,11 @@ namespace MGS2_MC
             {
                 logger.Error($"Something went wrong inside the MGS2 monitor: {e}");
             }
+        }
+
+        private static async Task ControllerMonitor()
+        {
+            await MGS2Injector.EnableInjector();
         }
     }
 }

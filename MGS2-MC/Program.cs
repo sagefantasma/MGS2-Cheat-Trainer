@@ -4,12 +4,17 @@ using System.IO;
 using System.Text.Json;
 using System.Threading;
 using System.Windows.Forms;
+using Serilog;
+using Serilog.Core;
+using Serilog.Events;
 using static MGS2_MC.TrainerConfigStructure;
 
 namespace MGS2_MC
 {
     internal static class Program
     {
+        private static ILogger logger;
+        private const string loggerName = "MGS2CheatTrainerMainDebuglog.log";
         internal static Process MGS2Process;
 
         /// <summary>
@@ -18,6 +23,10 @@ namespace MGS2_MC
         [STAThread]
         static void Main()
         {
+            Logging.LogLocation = new FileInfo(Application.ExecutablePath).DirectoryName;
+            logger = Logging.InitializeLogger(loggerName);
+            MGS2MemoryManager.StartLogger();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             try
@@ -25,13 +34,13 @@ namespace MGS2_MC
                 TrainerConfig trainerConfig = LoadConfig();
                 if (trainerConfig.AutoLaunchGame)
                 {
-                    Thread mgs2Thread = new Thread(() => Mgs2Runner(trainerConfig));
+                    Thread mgs2Thread = new Thread(() => Mgs2Monitor(trainerConfig));
                     mgs2Thread.Start();
                 }
             } 
             catch (Exception e) 
-            { 
-                //TODO: add logging :)
+            {
+                logger.Error($"Could not start MGS2 monitor: {e}");
             }
             Application.Run(new GUI());            
         }
@@ -44,14 +53,18 @@ namespace MGS2_MC
             }
             catch(Exception e)
             {
-                //TODO: add logging :)
+                logger.Error($"Failed to load TrainerConfig.json: {e}");
                 return null;
             }
         }
-        
-        private static void CloseMGS2(object sender, EventArgs e)
+
+        /// <summary>
+        /// !!!NOTE!!! This WILL NOT WORK if you are running this program in a debugger and use the "Stop Debugging" feature.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private static void CloseMGS2EventHandler(object sender, EventArgs e)
         {
-            //!!!NOTE!!!: This _WILL NOT WORK_ if you are running this program in a debugger and use the "Stop Debugging" feature.
             MGS2Process?.CloseMainWindow();
             MGS2Process?.Dispose();
         }
@@ -69,9 +82,9 @@ namespace MGS2_MC
                         return true;
                     }
                 }
-                catch (Exception ex)
+                catch (Exception e)
                 {
-                    //TODO: add logging :)
+                    logger.Error($"Failed to read the {steamAppIdFile.Name} file in your MGS2 directory, cannot guarantee direct launch will work: {e}");
                     return false;
                 }
             }
@@ -91,12 +104,14 @@ namespace MGS2_MC
             }
             catch(Exception e)
             {
-                //TODO: add logging :)
+                logger.Error($"Failed to enable direct launch capabilities: {e}");
+                //as of right now, I don't know if it will work without this shortcut, so i won't throw yet.
             }
         }
 
         private static void StartMgs2(string mgs2Location, string mgs2Directory, TrainerConfig config)
         {
+            
             ProcessStartInfo mgs2StartInfo = new ProcessStartInfo(mgs2Location)
             {
                 WorkingDirectory = mgs2Directory,
@@ -104,25 +119,41 @@ namespace MGS2_MC
                 CreateNoWindow = false,
             };
             MGS2Process.StartInfo = mgs2StartInfo;
-            MGS2Process.Start();
+            try
+            {
+                MGS2Process.Start();
+            }
+            catch (Exception e)
+            {
+                logger.Error($"Failed to start MGS2: {e}");
+                throw new AggregateException("Failed to start MGS2.", e);
+            }
 
             if (config.CloseGameWithTrainer)
             {
-                Application.ApplicationExit += (sender, args) => CloseMGS2(sender, args);
+                Application.ApplicationExit += (sender, args) => CloseMGS2EventHandler(sender, args);
             }
 
-            while (!MGS2Process.HasExited)
+            try
             {
-                //this thread loops forever while MGS2 is running
+                while (!MGS2Process.HasExited)
+                {
+                    //this thread loops forever while MGS2 is running
+                }
+            }
+            catch(Exception e)
+            {
+                logger.Error($"Something went wrong with the MGS2 process: {e}");
             }
 
             if (config.CloseTrainerWithGame)
             {
                 Application.Exit();
             }
+            
         }
 
-        private static void Mgs2Runner(TrainerConfig config)
+        private static void Mgs2Monitor(TrainerConfig config)
         {
             MGS2Process = new Process();
             try
@@ -135,22 +166,14 @@ namespace MGS2_MC
                 bool directLaunchEnabled = IsDirectLaunchEnabled(mgs2Executable, steamAppIdFile);                
                 if (!directLaunchEnabled)
                 {
-                    try
-                    {
-                        EnableDirectLaunch(steamAppIdFile);
-                    }
-                    catch(Exception e)
-                    {
-                        //TODO: add logging :)
-                        //as of right now, I don't know if it will work without this shortcut, so i won't throw yet.
-                    }
+                    EnableDirectLaunch(steamAppIdFile);   
                 }
 
                 StartMgs2(mgs2Location, mgs2Executable.DirectoryName, config);
             }
             catch(Exception e)
             {
-                //TODO: add logging :)
+                logger.Error($"Something went wrong inside the MGS2 monitor: {e}");
             }
         }
     }

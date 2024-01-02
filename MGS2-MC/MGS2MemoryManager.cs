@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -43,11 +44,18 @@ namespace MGS2_MC
         static readonly Process mgs2Process = Program.MGS2Process;
         static IntPtr PROCESS_BASE_ADDRESS = IntPtr.Zero;
         static int[] LAST_KNOWN_PLAYER_OFFSETS = default;
+        private const string loggerName = "MGS2CheatTrainerMemoryManagerDebuglog.log";
+        private static ILogger logger;
 
         private enum ActiveCharacter
         {
             Snake,
             Raiden
+        }
+
+        internal static void StartLogger()
+        {
+            logger = Logging.InitializeLogger(loggerName);
         }
 
         #endregion
@@ -108,6 +116,7 @@ namespace MGS2_MC
 
         private static int[] GetCurrentPlayerOffset(Process mgs2Process, IntPtr processHandle)
         {
+            //TODO: this method is way too big, break it up.
             byte[] buffer = new byte[mgs2Process.PrivateMemorySize64];
             try
             {
@@ -115,7 +124,7 @@ namespace MGS2_MC
             }
             catch(Exception e)
             {
-                //TODO: add logging :)
+                logger.Error($"Failed to read memory of process {MGS2Constants.MGS2_PROCESS_NAME}");
                 throw new AggregateException($"Failed to read `{MGS2Constants.MGS2_PROCESS_NAME}`. Is it running?", e);
             }
 
@@ -145,7 +154,7 @@ namespace MGS2_MC
                 }
                 catch (Exception e)
                 {
-                    //TODO: add logging :)
+                    logger.Warning($"Something unexpected went wrong when looking at the last known player offsets: {e}");
                     //we failed to look at the last known player offsets, which isn't fatal.
                 }
             }
@@ -209,7 +218,7 @@ namespace MGS2_MC
             }
             catch(Exception e)
             {
-                //TODO: add logging :)
+                logger.Error($"Failed to find player offset: {e}");
                 throw new AggregateException($"Failed to find player offset: ", e);
             }
 
@@ -227,6 +236,14 @@ namespace MGS2_MC
             bool success = NativeMethods.ReadProcessMemory(processHandle, objectAddress, bytesToRead, (uint) bytesToRead.Length, out int bytesRead);
             if (!success || bytesRead != bytesToRead.Length)
             {
+                if (!success)
+                {
+                    logger.Debug("Failed to read memory...");
+                }
+                if(bytesRead != bytesToRead.Length)
+                {
+                    logger.Debug($"Expected to read {bytesToRead.Length}, but we actually read {bytesRead}");
+                }
                 throw new FileLoadException($"Failed to read value at offset {processHandle}+{objectAddress}.");
             }
 
@@ -257,6 +274,7 @@ namespace MGS2_MC
             }
             catch(Exception ex)
             {
+                logger.Error($"Failed to write boolean value at offset {processHandle}+{objectOffset}: {ex}");
                 throw new AggregateException($"Failed to write boolean value at offset {processHandle}+{objectOffset}", ex);
             }
         }
@@ -271,6 +289,7 @@ namespace MGS2_MC
             }
             catch
             {
+                logger.Error($"Failed to get process {MGS2Constants.MGS2_PROCESS_NAME}");
                 throw new AggregateException($"Cannot find process `{MGS2Constants.MGS2_PROCESS_NAME}` - is it running?");
             }
 
@@ -292,11 +311,24 @@ namespace MGS2_MC
 
                 if ((!playerSuccess && !checkpointSuccess) || bytesWritten != buffer.Length)
                 {
+                    if (!playerSuccess)
+                    {
+                        logger.Debug("Failed to write player's memory...");
+                    }
+                    if (!checkpointSuccess)
+                    {
+                        logger.Debug("Failed to write checkpoint memory...");
+                    }
+                    if(bytesWritten != buffer.Length)
+                    {
+                        logger.Debug($"We tried to write {buffer.Length} bytes, but ended up writing {bytesWritten}");
+                    }
                     throw new InvalidOperationException($"Failed to write memory at {objectOffset} with value {value}.");
                 }
             }
             catch (Exception e)
             {
+                logger.Error("Something went wrong when trying to modify the game's memory!");
                 throw new AggregateException($"Something unexpected went wrong when trying to modify the game's memory! {e}");
             }
             finally
@@ -319,6 +351,7 @@ namespace MGS2_MC
             }
             catch
             {
+                logger.Error($"Failed to get process {MGS2Constants.MGS2_PROCESS_NAME}");
                 throw new AggregateException($"Cannot find process `{MGS2Constants.MGS2_PROCESS_NAME}` - is it running?");
             }
 
@@ -337,6 +370,7 @@ namespace MGS2_MC
             }
             catch(Exception e)
             {
+                logger.Debug($"Failed to get current value at {PROCESS_BASE_ADDRESS}+{valueOffset}");
                 throw new AggregateException($"Something unexpected went wrong when trying to get current value! {e}");
             }
             finally
@@ -399,6 +433,7 @@ namespace MGS2_MC
             }
             catch
             {
+                logger.Error($"Failed to get process {MGS2Constants.MGS2_PROCESS_NAME}");
                 throw new AggregateException($"Cannot find process `{MGS2Constants.MGS2_PROCESS_NAME}` - is it running?");
             }
 
@@ -413,6 +448,7 @@ namespace MGS2_MC
             }
             catch (Exception e)
             {
+                logger.Debug($"Could not toggle {mgs2Object.Name}");
                 throw new AggregateException("Failed to toggle object.", e);
             }
             finally

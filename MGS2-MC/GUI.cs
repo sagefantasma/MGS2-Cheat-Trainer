@@ -1,7 +1,7 @@
 ﻿using MGS2_MC.Controllers;
-using Serilog;
-using Serilog.Core;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace MGS2_MC
@@ -9,6 +9,8 @@ namespace MGS2_MC
     public partial class GUI : Form
     {
         public static bool CanNavigateWithController = false;
+        private readonly List<GuiObject> itemGuiObjectList =  new List<GuiObject> ();
+        private readonly List<GuiObject> weaponGuiObjectList = new List<GuiObject> ();
 
         internal static void NavigateViaController(ControllerInterpreter.PressedButton pressedButton, 
             ControllerInterpreter.PressedButton modifierButton = ControllerInterpreter.PressedButton.None)
@@ -106,8 +108,68 @@ namespace MGS2_MC
             }
         }
 
+        private void BuildGuiObjectLists()
+        {
+            itemGuiObjectList.Add(new GuiObject("AK Suppressor", akSupGroupBox));
+            itemGuiObjectList.Add(new GuiObject("AP Sensor", apSensorGroupBox));
+            itemGuiObjectList.Add(new GuiObject("BDU", bduGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Bandage", bandageGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Blue Wig", blueWigGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Body Armor", bodyArmorGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Box 1", box1GroupBox));
+            itemGuiObjectList.Add(new GuiObject("Box 2", box2GroupBox));
+            itemGuiObjectList.Add(new GuiObject("Box 3", box3GroupBox));
+            itemGuiObjectList.Add(new GuiObject("Box 4", box4GroupBox));
+            itemGuiObjectList.Add(new GuiObject("Box 5", box5GroupBox));
+            itemGuiObjectList.Add(new GuiObject("Camera", camera1GroupBox));
+            itemGuiObjectList.Add(new GuiObject("Cigarettes", cigarettesGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Cold Medicine", coldMedsGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Digital Camera", digitalCameraGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Infinity Wig", infinityWigGroupBox));
+            itemGuiObjectList.Add(new GuiObject("MO Disc", moDiscGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Mine Detector", mineDetectorGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Night Vision Goggles", nvgGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Orange Wig", orangeWigGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Pentazemin", pentazeminGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Phone", phoneGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Ration", rationGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Scope", scope1GroupBox));
+            itemGuiObjectList.Add(new GuiObject("Security Card", cardGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Sensor A", sensorAGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Sensor B", sensorBGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Shaver", shaverGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Socom Suppressor", socomGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Stealth", stealthGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Thermal Goggles", thermalGroupBox));
+            itemGuiObjectList.Add(new GuiObject("USP Suppressor", uspSupGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Wet Box", wetBoxGroupBox));
+
+            weaponGuiObjectList.Add(new GuiObject("AKS-74u", akGroupBox));
+            weaponGuiObjectList.Add(new GuiObject("Book", bookGroupBox));
+            weaponGuiObjectList.Add(new GuiObject("C4", c4GroupBox));
+            weaponGuiObjectList.Add(new GuiObject("Chaff Grenade", chaffGroupBox));
+            weaponGuiObjectList.Add(new GuiObject("Claymore", claymoreGroupBox));
+            weaponGuiObjectList.Add(new GuiObject("Coolant", coolantGroupBox));
+            weaponGuiObjectList.Add(new GuiObject("Directional Mic", dmic1GroupBox));
+            weaponGuiObjectList.Add(new GuiObject("Directional Mic(Zoomed)", dmic2GroupBox));
+            weaponGuiObjectList.Add(new GuiObject("Grenade", grenadeGroupBox));
+            weaponGuiObjectList.Add(new GuiObject("High Frequency Blade", hfBladeGroupBox));
+            weaponGuiObjectList.Add(new GuiObject("M4", m4GroupBox));
+            weaponGuiObjectList.Add(new GuiObject("M9", m9GroupBox));
+            weaponGuiObjectList.Add(new GuiObject("Magazine", magazineGroupBox));
+            weaponGuiObjectList.Add(new GuiObject("Nikita", nikitaGroupBox));
+            weaponGuiObjectList.Add(new GuiObject("PSG1", psg1GroupBox));
+            weaponGuiObjectList.Add(new GuiObject("PSG1-T", psg1GroupBox));
+            weaponGuiObjectList.Add(new GuiObject("RGB6", rgb6GroupBox));
+            weaponGuiObjectList.Add(new GuiObject("SOCOM", socomGroupBox));
+            weaponGuiObjectList.Add(new GuiObject("Stinger", stingerGroupBox));
+            weaponGuiObjectList.Add(new GuiObject("Stun Grenade", stunGroupBox));
+            weaponGuiObjectList.Add(new GuiObject("USP", uspGroupBox));
+        }
+
         private void BuildGroupBoxForObject(MGS2Object objectToEdit)
         {
+            //TODO: i think this is all set to be removed
             //envisioning a listbox on the left pane to choose item to edit
             //then the item you select determines what shows up in the right pane
             //eventually, this should dovetail well into the controller support
@@ -142,6 +204,13 @@ namespace MGS2_MC
         public GUI()
         {
             InitializeComponent();
+            BuildGuiObjectLists();
+            itemListBox.DataSource = itemGuiObjectList;
+            itemListBox.DisplayMember = "Name";
+            itemListBox.SelectedIndex = -1;
+            weaponListBox.DataSource = weaponGuiObjectList;
+            weaponListBox.DisplayMember = "Name";
+            weaponListBox.SelectedIndex = -1;
             stringsListBox.DataSource = MGS2Strings.MGS2_STRINGS;
             stringsListBox.DisplayMember = "Tag";
             //removing the stats page for now since its unfinished
@@ -944,6 +1013,42 @@ namespace MGS2_MC
         private void setBasicNameBtn_Click(object sender, EventArgs e)
         {
             var mgs2Handle = Program.MGS2Process.Handle;
+        }
+
+        private void ItemListBox_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if(itemGroupBox.Controls.Count > 0)
+                itemGroupBox.Controls[0].Visible = false;
+            itemGroupBox.Controls.Clear();
+
+            GuiObject itemObject = itemGuiObjectList.First(guiObject => guiObject.Name == (itemListBox.SelectedItem as GuiObject).Name);
+
+            itemGroupBox.Controls.Add(itemObject.AssociatedControl);
+            itemObject.AssociatedControl.Visible = true;
+        }
+
+        private void weaponListBox_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (weaponGroupBox.Controls.Count > 0)
+                weaponGroupBox.Controls[0].Visible = false;
+            weaponGroupBox.Controls.Clear();
+
+            GuiObject weaponObject = weaponGuiObjectList.First(guiObject => guiObject.Name == (weaponListBox.SelectedItem as GuiObject).Name);
+
+            weaponGroupBox.Controls.Add(weaponObject.AssociatedControl);
+            weaponObject.AssociatedControl.Visible = true;
+        }
+    }
+
+    internal class GuiObject
+    {
+        public string Name { get; protected set; }
+        public Control AssociatedControl { get; protected set; }
+
+        internal GuiObject(string objectName, Control objectControl)
+        {
+            Name = objectName;
+            AssociatedControl = objectControl;
         }
     }
 }

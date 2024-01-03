@@ -133,7 +133,6 @@ namespace MGS2_MC.Controllers
                     {
                         ps4Joy.Acquire();
                         ps4Joy.Poll();
-                        ps4Joy.Unacquire(); //TODO: i don't THINK this is necessary, but i should determine this 100%
                         JoystickState currentState = ps4Joy.GetCurrentState();
                         UpdateHolds(previousState, currentState);
 

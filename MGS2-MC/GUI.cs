@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿using MGS2_MC.Controllers;
+using Serilog;
 using Serilog.Core;
 using System;
 using System.Windows.Forms;
@@ -8,6 +9,102 @@ namespace MGS2_MC
     public partial class GUI : Form
     {
         public static bool CanNavigateWithController = false;
+
+        internal static void NavigateViaController(ControllerInterpreter.PressedButton pressedButton, 
+            ControllerInterpreter.PressedButton modifierButton = ControllerInterpreter.PressedButton.None)
+        {
+            if (CanNavigateWithController)
+            {
+                switch (pressedButton)
+                {
+                    case ControllerInterpreter.PressedButton.Cross:
+                        //click on element
+                        break;
+
+                    case ControllerInterpreter.PressedButton.Circle:
+                        //cancel operation
+                        break;
+
+                    case ControllerInterpreter.PressedButton.Triangle:
+                        //enable/disable
+                        break;
+
+                    case ControllerInterpreter.PressedButton.Square:
+                        //change from current/max(if applicable)
+                        break;
+
+                    case ControllerInterpreter.PressedButton.L1:
+                        //? change items (go left)
+                        break;
+
+                    case ControllerInterpreter.PressedButton.L2:
+                        //change tabs (go left)
+                        break;
+
+                    case ControllerInterpreter.PressedButton.L3:
+                        //minimize value
+                        break;
+
+                    case ControllerInterpreter.PressedButton.R1:
+                        //? change items (go right)
+                        break;
+
+                    case ControllerInterpreter.PressedButton.R2:
+                        //change tabs (go right)
+                        break;
+
+                    case ControllerInterpreter.PressedButton.R3:
+                        //maximize value
+                        break;
+
+                    case ControllerInterpreter.PressedButton.Select:
+
+                        break;
+
+                    case ControllerInterpreter.PressedButton.Start:
+
+                        break;
+
+                    case ControllerInterpreter.PressedButton.UpDirectional:
+                        if (modifierButton == ControllerInterpreter.PressedButton.RightDirectional)
+                        {
+
+                        }
+                        else if (modifierButton == ControllerInterpreter.PressedButton.LeftDirectional)
+                        {
+
+                        }
+                        else
+                        {
+                            //increase value by 10
+                        }
+                        break;
+
+                    case ControllerInterpreter.PressedButton.RightDirectional:
+                        //increase value by 1
+                        break;
+
+                    case ControllerInterpreter.PressedButton.LeftDirectional:
+                        //decrease value by 1
+                        break;
+
+                    case ControllerInterpreter.PressedButton.DownDirectional:
+                        if (modifierButton == ControllerInterpreter.PressedButton.RightDirectional)
+                        {
+
+                        }
+                        else if (modifierButton == ControllerInterpreter.PressedButton.LeftDirectional)
+                        {
+
+                        }
+                        else
+                        {
+                            //decrease value by 10
+                        }
+                        break;
+                }
+            }
+        }
 
         private void BuildGroupBoxForObject(MGS2Object objectToEdit)
         {

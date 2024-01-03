@@ -1,113 +1,127 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MGS2_MC.Controllers
+﻿namespace MGS2_MC.Controllers
 {
     internal static class ControllerInterpreter
     {
         //using Playstation2 format as the "base" because MGS2 was originally a Ps2 game :^)
+        public enum PressedButton
+        {
+            Cross,
+            Circle,
+            Triangle,
+            Square,
+            L1,
+            L2,
+            L3,
+            R1,
+            R2,
+            R3,
+            Select,
+            Start,
+            UpDirectional,
+            RightDirectional,
+            LeftDirectional,
+            DownDirectional,
+            None
+        }
+
         internal static void CrossButtonPressed()
         {
-            //click on element
+            GUI.NavigateViaController(PressedButton.Cross);
         }
 
         internal static void CircleButtonPressed()
         {
-            //cancel operation
+            GUI.NavigateViaController(PressedButton.Circle);
         }
 
         internal static void SquareButtonPressed()
         {
-            //change from current/max(if applicable)
+            GUI.NavigateViaController(PressedButton.Square);
         }
 
         internal static void TriangleButtonPressed()
         {
-            //enable/disable
+            GUI.NavigateViaController(PressedButton.Triangle);
         }
 
         internal static void L1ButtonPressed()
         {
-            //? change items (go left)
+            GUI.NavigateViaController(PressedButton.L1);
         }
 
         internal static void L2ButtonPressed()
         {
-            //change tabs (go left)
-
+            GUI.NavigateViaController(PressedButton.L2);
         }
 
         internal static void L3ButtonPressed()
         {
-            //minimize value
+            GUI.NavigateViaController(PressedButton.L3);
         }
 
         internal static void R1ButtonPressed()
         {
-            //? change items (go right)
+            GUI.NavigateViaController(PressedButton.R1);
         }
 
         internal static void R2ButtonPressed()
         {
-            //change tabs (go right)
+            GUI.NavigateViaController(PressedButton.R2);
         }
 
         internal static void R3ButtonPressed()
         {
-            //maximize value
+            GUI.NavigateViaController(PressedButton.R3);
         }
 
         internal static void StartButtonPressed()
         {
-
+            GUI.NavigateViaController(PressedButton.Start);
         }
 
         internal static void SelectButtonPressed()
         {
-
+            GUI.NavigateViaController(PressedButton.Select);
         }
 
         internal static void UpDirectionalPressed()
         {
-            //increase value by 10
+            GUI.NavigateViaController(PressedButton.UpDirectional);
         }
 
         internal static void UpAndRightDirectionalPressed()
         {
-
+            GUI.NavigateViaController(PressedButton.UpDirectional, PressedButton.RightDirectional);
         }
 
         internal static void RightDirectionalPressed()
         {
-            //increase value by 1
+            GUI.NavigateViaController(PressedButton.RightDirectional);
         }
 
         internal static void DownAndRightDirectionalPressed()
         {
-
+            GUI.NavigateViaController(PressedButton.DownDirectional, PressedButton.RightDirectional);
         }
 
         internal static void DownDirectionalPressed()
         {
-            //decrease value by 10
+            GUI.NavigateViaController(PressedButton.DownDirectional);
         }
 
         internal static void DownAndLeftDirectionalPressed()
         {
-
+            GUI.NavigateViaController(PressedButton.DownDirectional, PressedButton.LeftDirectional);
         }
 
         internal static void LeftDirectionalPressed()
         {
-            //decrease value by 1
+            GUI.NavigateViaController(PressedButton.LeftDirectional);
         }
 
         internal static void UpAndLeftDirectionalPressed()
         {
-
+            GUI.NavigateViaController(PressedButton.UpDirectional, PressedButton.LeftDirectional);
         }
     }
 }

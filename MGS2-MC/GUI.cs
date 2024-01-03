@@ -1,6 +1,7 @@
 ﻿using MGS2_MC.Controllers;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -24,115 +25,85 @@ namespace MGS2_MC
         {
             if (CanNavigateWithController)
             {
-                if(CurrentlySelectedObject == null)
-                { 
-                    //we are navigating via controller for the first time or just switched tabs
-                    switch (CurrentTab) 
-                    {
-                        case 0:
-                            //Item tab
-                            CurrentlySelectedObject = StaticGuiReference.itemListBox;
-                            break;
-                        case 1:
-                            //Weapon tab
-                            CurrentlySelectedObject = StaticGuiReference.weaponListBox;
-                            break;
-                        default:
-                            MessageBox.Show("This tab isn't yet have controller support, please use mouse & keyboard for this tab :)");
-                            break;
-                    }
-                }
-                switch (pressedButton)
+                StaticGuiReference.Invoke(new Action(() =>
                 {
-                    case ControllerInterpreter.PressedButton.Cross:
-                        //click on element, set value if deep enough
-                        
-                        //first check to see if we're in a TableLayoutPanel(as deep as we can go)
-                        if (CurrentlySelectedObject is TableLayoutPanel)
+                    if (CurrentlySelectedObject == null)
+                    {
+                        //we are navigating via controller for the first time or just switched tabs
+                        switch (CurrentTab)
                         {
-                            if (CurrentCountSelected == true)
-                            {
-                                //foreach(Control (CurrentlySelectedObject as GroupBox).Controls[0].Controls
-                            }
+                            case 0:
+                                //Item tab
+                                CurrentlySelectedObject = StaticGuiReference.itemListBox;
+                                break;
+                            case 1:
+                                //Weapon tab
+                                CurrentlySelectedObject = StaticGuiReference.weaponListBox;
+                                break;
+                            default:
+                                MessageBox.Show("This tab isn't yet have controller support, please use mouse & keyboard for this tab :)");
+                                break;
                         }
+                    }
+                    switch (pressedButton)
+                    {
+                        case ControllerInterpreter.PressedButton.Cross:
+                            //click on element, set value if deep enough
 
-
-                        if (CurrentlySelectedObject == StaticGuiReference.itemListBox)
-                        {
-                            if (LastSelectedItemIndex == -1)
+                            //first check to see if we're in a TableLayoutPanel(as deep as we can go)
+                            if (CurrentlySelectedObject is TableLayoutPanel)
                             {
-                                //first time going into this tab, so auto-select first item
-                                CurrentlySelectedObject = StaticGuiReference.itemListBox.Items[0];
-                                StaticGuiReference.itemListBox.SelectedIndex = 0;
-                            }
-                            else
-                            {
-                                //otherwise, auto-select the last chosen item
-                                CurrentlySelectedObject = StaticGuiReference.itemListBox.Items[LastSelectedItemIndex];
-                                StaticGuiReference.itemListBox.SelectedIndex = LastSelectedItemIndex;
-                            }
-                        }
-                        else if (StaticGuiReference.itemListBox.Items.Contains(CurrentlySelectedObject))
-                        {
-                            //looking to select an item of the itemListBox
-                            LastSelectedItemIndex = StaticGuiReference.itemListBox.SelectedIndex;
-                            CurrentlySelectedObject = itemGuiObjectList[StaticGuiReference.itemListBox.SelectedIndex].AssociatedControl; //currently selecting a groupbox
-                            if((CurrentlySelectedObject as GroupBox).Controls[0] //this is the layoutpanel within the groupbox
-                                .Controls.Count > 2)
-                            {
-                                CurrentCountSelected = true; //always start at CurrentCount for anything with current count
-                                foreach (Control subControl in (CurrentlySelectedObject as GroupBox).Controls[0].Controls)
+                                if (CurrentCountSelected != null)
                                 {
-                                    if (subControl.Name.Contains("CurrentLayoutPanel"))
+                                    foreach (Control subControl in (CurrentlySelectedObject as TableLayoutPanel).Controls)
                                     {
-                                        CurrentlySelectedObject = subControl;
-                                    }
-                                    if (subControl.Name.Contains("MaxLayoutPanel"))
-                                    {
-                                        CurrentlySelectedOpposingObject = subControl; //for simplified switching later on
+                                        if (subControl is Button)
+                                        {
+                                            (subControl as Button).PerformClick();
+                                        }
                                     }
                                 }
+                                else
+                                {
+                                    //do nothing if we're on a button that can only be enabled or disabled and the cross button was pressed
+                                    break;
+                                }
                             }
-                            else
-                            {
-                                CurrentCountSelected = null; //null the boolean if we don't have counts
-                            }
-                            //now that item's groupBox is selected and the currentCount, if applicable, is "selected"
-                        }
 
-                        if (CurrentlySelectedObject == StaticGuiReference.weaponListBox)
-                        {
-                            if (LastSelectedWeaponIndex == -1)
+                            if (CurrentlySelectedObject == StaticGuiReference.itemListBox)
                             {
-                                CurrentlySelectedObject = StaticGuiReference.weaponListBox.Items[0];
-                                StaticGuiReference.weaponListBox.SelectedIndex = 0;
+                                if (LastSelectedItemIndex == -1)
+                                {
+                                    //first time going into this tab, so auto-select first item
+                                    CurrentlySelectedObject = StaticGuiReference.itemListBox.Items[0];
+                                    StaticGuiReference.itemListBox.SelectedIndex = 0;
+                                    break;
+                                }
+                                else
+                                {
+                                    //otherwise, auto-select the last chosen item
+                                    CurrentlySelectedObject = StaticGuiReference.itemListBox.Items[LastSelectedItemIndex];
+                                    StaticGuiReference.itemListBox.SelectedIndex = LastSelectedItemIndex;
+                                    break;
+                                }
                             }
-                            else
+                            else if (StaticGuiReference.itemListBox.Items.Contains(CurrentlySelectedObject))
                             {
-                                CurrentlySelectedObject = StaticGuiReference.weaponListBox.Items[LastSelectedWeaponIndex];
-                                StaticGuiReference.itemListBox.SelectedIndex = LastSelectedWeaponIndex;
-                            }
-                        }
-                        else if (StaticGuiReference.weaponListBox.Items.Contains(CurrentlySelectedObject))
-                        {
-                            //looking to select an item of the weaponListBox
-                            LastSelectedWeaponIndex = StaticGuiReference.weaponListBox.SelectedIndex;
-                            CurrentlySelectedObject = weaponGuiObjectList[StaticGuiReference.weaponListBox.SelectedIndex].AssociatedControl; //currently selecting a groupbox
-                            if (CurrentlySelectedObject == StaticGuiReference.hfBladeGroupBox)
-                            {
-                                //the HF blade needs to have it's own logic, when/if it gets done properly
-                            }
-                            else
-                            {
+                                //looking to select an item of the itemListBox
+                                LastSelectedItemIndex = StaticGuiReference.itemListBox.SelectedIndex;
+                                CurrentlySelectedObject = itemGuiObjectList[StaticGuiReference.itemListBox.SelectedIndex].AssociatedControl; //currently selecting a groupbox
+                                (CurrentlySelectedObject as Control).BackColor = Color.LightCyan;
                                 if ((CurrentlySelectedObject as GroupBox).Controls[0] //this is the layoutpanel within the groupbox
-                                .Controls.Count > 2)
+                                    .Controls.Count > 2)
                                 {
                                     CurrentCountSelected = true; //always start at CurrentCount for anything with current count
-                                    foreach(Control subControl in (CurrentlySelectedObject as GroupBox).Controls[0].Controls)
+                                    foreach (Control subControl in (CurrentlySelectedObject as GroupBox).Controls[0].Controls)
                                     {
                                         if (subControl.Name.Contains("CurrentLayoutPanel"))
                                         {
+                                            CurrentlySelectedObject = Color.Transparent;
                                             CurrentlySelectedObject = subControl;
+                                            subControl.BackColor = Color.LightCyan;
                                         }
                                         if (subControl.Name.Contains("MaxLayoutPanel"))
                                         {
@@ -144,93 +115,267 @@ namespace MGS2_MC
                                 {
                                     CurrentCountSelected = null; //null the boolean if we don't have counts
                                 }
+                                //now that item's groupBox is selected and the currentCount, if applicable, is "selected"
                             }
-                            //now that weapons's groupBox is selected and the currentCount, if applicable, is "selected"
-                        }
-                        break;
 
-                    case ControllerInterpreter.PressedButton.Circle:
-                        //cancel operation
-                        break;
+                            if (CurrentlySelectedObject == StaticGuiReference.weaponListBox)
+                            {
+                                if (LastSelectedWeaponIndex == -1)
+                                {
+                                    CurrentlySelectedObject = StaticGuiReference.weaponListBox.Items[0];
+                                    StaticGuiReference.weaponListBox.SelectedIndex = 0;
+                                    break;
+                                }
+                                else
+                                {
+                                    CurrentlySelectedObject = StaticGuiReference.weaponListBox.Items[LastSelectedWeaponIndex];
+                                    StaticGuiReference.itemListBox.SelectedIndex = LastSelectedWeaponIndex;
+                                    break;
+                                }
+                            }
+                            else if (StaticGuiReference.weaponListBox.Items.Contains(CurrentlySelectedObject))
+                            {
+                                //looking to select an item of the weaponListBox
+                                LastSelectedWeaponIndex = StaticGuiReference.weaponListBox.SelectedIndex;
+                                CurrentlySelectedObject = weaponGuiObjectList[StaticGuiReference.weaponListBox.SelectedIndex].AssociatedControl; //currently selecting a groupbox
+                                (CurrentlySelectedObject as Control).BackColor = Color.LightCyan;
+                                if (CurrentlySelectedObject == StaticGuiReference.hfBladeGroupBox)
+                                {
+                                    //the HF blade needs to have it's own logic, when/if it gets done properly
+                                }
+                                else
+                                {
+                                    if ((CurrentlySelectedObject as GroupBox).Controls[0] //this is the layoutpanel within the groupbox
+                                    .Controls.Count > 2)
+                                    {
+                                        CurrentCountSelected = true; //always start at CurrentCount for anything with current count
+                                        foreach (Control subControl in (CurrentlySelectedObject as GroupBox).Controls[0].Controls)
+                                        {
+                                            if (subControl.Name.Contains("CurrentLayoutPanel"))
+                                            {
+                                                CurrentlySelectedObject = Color.Transparent;
+                                                CurrentlySelectedObject = subControl;
+                                                subControl.BackColor = Color.LightCyan;
+                                            }
+                                            if (subControl.Name.Contains("MaxLayoutPanel"))
+                                            {
+                                                CurrentlySelectedOpposingObject = subControl; //for simplified switching later on
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        CurrentCountSelected = null; //null the boolean if we don't have counts
+                                    }
+                                }
+                                //now that weapons's groupBox is selected and the currentCount, if applicable, is "selected"
+                            }
+                            break;
 
-                    case ControllerInterpreter.PressedButton.Triangle:
-                        //enable/disable
-                        break;
+                        case ControllerInterpreter.PressedButton.Circle:
+                            //go up one level
+                            if (CurrentlySelectedObject is TableLayoutPanel || CurrentlySelectedObject is GroupBox)
+                            {
+                                switch (CurrentTab)
+                                {
+                                    case 0:
+                                        CurrentlySelectedObject = itemGuiObjectList[LastSelectedItemIndex];
+                                        break;
+                                    case 1:
+                                        CurrentlySelectedObject = weaponGuiObjectList[LastSelectedWeaponIndex];
+                                        break;
+                                }
+                            }
+                            break;
 
-                    case ControllerInterpreter.PressedButton.Square:
-                        //change from current/max(if applicable)
-                        break;
+                        case ControllerInterpreter.PressedButton.Triangle:
+                            //enable/disable
+                            if (CurrentlySelectedObject != null)
+                            {
+                                if (CurrentlySelectedObject is TableLayoutPanel)
+                                {
+                                    foreach (Control subControl in (CurrentlySelectedObject as TableLayoutPanel).Parent.Controls)
+                                    {
+                                        if (subControl is CheckBox enableCheckBox)
+                                        {
+                                            enableCheckBox.Checked = !enableCheckBox.Checked;
+                                        }
+                                    }
+                                }
+                            }
+                            break;
 
-                    case ControllerInterpreter.PressedButton.L1:
-                        //? change items (go left)
-                        break;
+                        case ControllerInterpreter.PressedButton.Square:
+                            //change from current/max(if applicable)
+                            if (CurrentlySelectedOpposingObject != null)
+                            {
+                                object tempObject = CurrentlySelectedObject;
+                                CurrentlySelectedObject = CurrentlySelectedOpposingObject;
+                                (CurrentlySelectedObject as Control).BackColor = Color.LightCyan;
+                                CurrentlySelectedOpposingObject = tempObject;
+                                (CurrentlySelectedOpposingObject as Control).BackColor = Color.Transparent;
+                            }
+                            break;
 
-                    case ControllerInterpreter.PressedButton.L2:
-                        //change tabs (go left)
-                        break;
+                        case ControllerInterpreter.PressedButton.L1:
+                            //? change items (go left)
+                            break;
 
-                    case ControllerInterpreter.PressedButton.L3:
-                        //minimize value
-                        break;
+                        case ControllerInterpreter.PressedButton.L2:
+                            //change tabs (go left)
+                            break;
 
-                    case ControllerInterpreter.PressedButton.R1:
-                        //? change items (go right)
-                        break;
+                        case ControllerInterpreter.PressedButton.L3:
+                            //minimize value
+                            break;
 
-                    case ControllerInterpreter.PressedButton.R2:
-                        //change tabs (go right)
-                        break;
+                        case ControllerInterpreter.PressedButton.R1:
+                            //? change items (go right)
+                            break;
 
-                    case ControllerInterpreter.PressedButton.R3:
-                        //maximize value
-                        break;
+                        case ControllerInterpreter.PressedButton.R2:
+                            //change tabs (go right)
+                            break;
 
-                    case ControllerInterpreter.PressedButton.Select:
+                        case ControllerInterpreter.PressedButton.R3:
+                            //maximize value
+                            break;
 
-                        break;
+                        case ControllerInterpreter.PressedButton.Select:
 
-                    case ControllerInterpreter.PressedButton.Start:
+                            break;
 
-                        break;
+                        case ControllerInterpreter.PressedButton.Start:
 
-                    case ControllerInterpreter.PressedButton.UpDirectional:
-                        if (modifierButton == ControllerInterpreter.PressedButton.RightDirectional)
-                        {
+                            break;
 
-                        }
-                        else if (modifierButton == ControllerInterpreter.PressedButton.LeftDirectional)
-                        {
+                        case ControllerInterpreter.PressedButton.UpDirectional:
+                            if (CurrentlySelectedObject is GuiObject)
+                            {
+                                switch (CurrentTab)
+                                {
+                                    case 0:
+                                        int currentItemIndex = StaticGuiReference.itemListBox.SelectedIndex;
+                                        if (currentItemIndex == 0)
+                                            StaticGuiReference.itemListBox.SelectedIndex = StaticGuiReference.itemListBox.Items.Count - 1;
+                                        else
+                                            StaticGuiReference.itemListBox.SelectedIndex--;
+                                        CurrentlySelectedObject = StaticGuiReference.itemListBox.SelectedItem;
+                                        break;
+                                    case 1:
+                                        int currentWeaponIndex = StaticGuiReference.weaponListBox.SelectedIndex;
+                                        if (currentWeaponIndex == 0)
+                                            StaticGuiReference.weaponListBox.SelectedIndex = StaticGuiReference.weaponListBox.Items.Count - 1;
+                                        else
+                                            StaticGuiReference.weaponListBox.SelectedIndex--;
+                                        CurrentlySelectedObject = StaticGuiReference.weaponListBox.SelectedItem;
+                                        break;
+                                }
+                                break;
+                            }
 
-                        }
-                        else
-                        {
-                            //increase value by 10
-                        }
-                        break;
+                            if (modifierButton == ControllerInterpreter.PressedButton.RightDirectional)
+                            {
 
-                    case ControllerInterpreter.PressedButton.RightDirectional:
-                        //increase value by 1
-                        break;
+                            }
+                            else if (modifierButton == ControllerInterpreter.PressedButton.LeftDirectional)
+                            {
 
-                    case ControllerInterpreter.PressedButton.LeftDirectional:
-                        //decrease value by 1
-                        break;
+                            }
+                            else
+                            {
+                                //increase value by 10
+                                if (CurrentlySelectedObject is TableLayoutPanel upTableLayoutPanel)
+                                {
+                                    foreach (Control control in upTableLayoutPanel.Controls)
+                                    {
+                                        if (control is NumericUpDown numericUpDown)
+                                        {
+                                            numericUpDown.Value += 10;
+                                        }
+                                    }
+                                }
+                            }
+                            break;
 
-                    case ControllerInterpreter.PressedButton.DownDirectional:
-                        if (modifierButton == ControllerInterpreter.PressedButton.RightDirectional)
-                        {
+                        case ControllerInterpreter.PressedButton.RightDirectional:
+                            //increase value by 1
+                            if (CurrentlySelectedObject is TableLayoutPanel rightTableLayoutPanel)
+                            {
+                                foreach (Control control in rightTableLayoutPanel.Controls)
+                                {
+                                    if (control is NumericUpDown numericUpDown)
+                                    {
+                                        numericUpDown.Value++;
+                                    }
+                                }
+                            }
+                            break;
 
-                        }
-                        else if (modifierButton == ControllerInterpreter.PressedButton.LeftDirectional)
-                        {
+                        case ControllerInterpreter.PressedButton.LeftDirectional:
+                            //decrease value by 1
+                            if (CurrentlySelectedObject is TableLayoutPanel leftTableLayoutPanel)
+                            {
+                                foreach (Control control in leftTableLayoutPanel.Controls)
+                                {
+                                    if (control is NumericUpDown numericUpDown)
+                                    {
+                                        numericUpDown.Value--;
+                                    }
+                                }
+                            }
+                            break;
 
-                        }
-                        else
-                        {
-                            //decrease value by 10
-                        }
-                        break;
-                }
+                        case ControllerInterpreter.PressedButton.DownDirectional:
+                            if (CurrentlySelectedObject is GuiObject)
+                            {
+                                switch (CurrentTab)
+                                {
+                                    case 0:
+                                        int currentItemIndex = StaticGuiReference.itemListBox.SelectedIndex;
+                                        if (currentItemIndex == StaticGuiReference.itemListBox.Items.Count - 1)
+                                            StaticGuiReference.itemListBox.SelectedIndex = 0;
+                                        else
+                                            StaticGuiReference.itemListBox.SelectedIndex++;
+                                        CurrentlySelectedObject = StaticGuiReference.itemListBox.SelectedItem;
+                                        break;
+                                    case 1:
+                                        int currentWeaponIndex = StaticGuiReference.weaponListBox.SelectedIndex;
+                                        if (currentWeaponIndex == StaticGuiReference.weaponListBox.Items.Count - 1)
+                                            StaticGuiReference.weaponListBox.SelectedIndex = 0;
+                                        else
+                                            StaticGuiReference.weaponListBox.SelectedIndex++;
+                                        CurrentlySelectedObject = StaticGuiReference.weaponListBox.SelectedItem;
+                                        break;
+                                }
+                                break;
+                            }
+
+                            if (modifierButton == ControllerInterpreter.PressedButton.RightDirectional)
+                            {
+
+                            }
+                            else if (modifierButton == ControllerInterpreter.PressedButton.LeftDirectional)
+                            {
+
+                            }
+                            else
+                            {
+                                //decrease value by 10
+                                if (CurrentlySelectedObject is TableLayoutPanel downTableLayoutPanel)
+                                {
+                                    foreach (Control control in downTableLayoutPanel.Controls)
+                                    {
+                                        if (control is NumericUpDown numericUpDown)
+                                        {
+                                            numericUpDown.Value -= 10;
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                    }
+                }));
             }
         }
 

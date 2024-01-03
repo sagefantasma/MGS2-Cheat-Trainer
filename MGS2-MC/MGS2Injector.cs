@@ -60,15 +60,29 @@ namespace MGS2_MC
 
             if (trainerMenuArgs.ActivateMenu)
             {
-                SuspendMgs2();
-                //bool gotMgs2Window = GetWindowRect(Program.MGS2Process.MainWindowHandle, out Rectangle mgs2WindowRectangle);
-                //TODO: open a GUI over MGS2 that lets the user do their desired modifications... for now, just enable navigating the GUI w/ buttons
-                GUI.CanNavigateWithController = true;
+                try
+                {
+                    SuspendMgs2();
+                    //bool gotMgs2Window = GetWindowRect(Program.MGS2Process.MainWindowHandle, out Rectangle mgs2WindowRectangle);
+                    //TODO: open a GUI over MGS2 that lets the user do their desired modifications... for now, just enable navigating the GUI w/ buttons
+                    GUI.CanNavigateWithController = true;
+                }
+                catch(Exception ex)
+                {
+                    //TODO: something
+                }
             }
             else
             {
-                GUI.CanNavigateWithController = false;
-                ResumeMgs2();
+                try
+                {
+                    GUI.CanNavigateWithController = false;
+                    ResumeMgs2();
+                }
+                catch(Exception ex)
+                {
+                    //TODO: something
+                }
             }
         }
 

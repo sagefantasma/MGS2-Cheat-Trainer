@@ -9,18 +9,144 @@ namespace MGS2_MC
     public partial class GUI : Form
     {
         public static bool CanNavigateWithController = false;
-        private readonly List<GuiObject> itemGuiObjectList =  new List<GuiObject> ();
-        private readonly List<GuiObject> weaponGuiObjectList = new List<GuiObject> ();
+        private static readonly List<GuiObject> itemGuiObjectList =  new List<GuiObject> ();
+        private static readonly List<GuiObject> weaponGuiObjectList = new List<GuiObject> ();
+        private static object CurrentlySelectedObject = null;
+        private static bool? CurrentCountSelected = true;
+        private static int CurrentTab = 0;
+        private static int LastSelectedItemIndex = -1;
+        private static int LastSelectedWeaponIndex = -1;
+        private static object CurrentlySelectedOpposingObject = null;
+        public static GUI StaticGuiReference = null;
 
         internal static void NavigateViaController(ControllerInterpreter.PressedButton pressedButton, 
             ControllerInterpreter.PressedButton modifierButton = ControllerInterpreter.PressedButton.None)
         {
             if (CanNavigateWithController)
             {
+                if(CurrentlySelectedObject == null)
+                { 
+                    //we are navigating via controller for the first time or just switched tabs
+                    switch (CurrentTab) 
+                    {
+                        case 0:
+                            //Item tab
+                            CurrentlySelectedObject = StaticGuiReference.itemListBox;
+                            break;
+                        case 1:
+                            //Weapon tab
+                            CurrentlySelectedObject = StaticGuiReference.weaponListBox;
+                            break;
+                        default:
+                            MessageBox.Show("This tab isn't yet have controller support, please use mouse & keyboard for this tab :)");
+                            break;
+                    }
+                }
                 switch (pressedButton)
                 {
                     case ControllerInterpreter.PressedButton.Cross:
-                        //click on element
+                        //click on element, set value if deep enough
+                        
+                        //first check to see if we're in a TableLayoutPanel(as deep as we can go)
+                        if (CurrentlySelectedObject is TableLayoutPanel)
+                        {
+                            if (CurrentCountSelected == true)
+                            {
+                                //foreach(Control (CurrentlySelectedObject as GroupBox).Controls[0].Controls
+                            }
+                        }
+
+
+                        if (CurrentlySelectedObject == StaticGuiReference.itemListBox)
+                        {
+                            if (LastSelectedItemIndex == -1)
+                            {
+                                //first time going into this tab, so auto-select first item
+                                CurrentlySelectedObject = StaticGuiReference.itemListBox.Items[0];
+                                StaticGuiReference.itemListBox.SelectedIndex = 0;
+                            }
+                            else
+                            {
+                                //otherwise, auto-select the last chosen item
+                                CurrentlySelectedObject = StaticGuiReference.itemListBox.Items[LastSelectedItemIndex];
+                                StaticGuiReference.itemListBox.SelectedIndex = LastSelectedItemIndex;
+                            }
+                        }
+                        else if (StaticGuiReference.itemListBox.Items.Contains(CurrentlySelectedObject))
+                        {
+                            //looking to select an item of the itemListBox
+                            LastSelectedItemIndex = StaticGuiReference.itemListBox.SelectedIndex;
+                            CurrentlySelectedObject = itemGuiObjectList[StaticGuiReference.itemListBox.SelectedIndex].AssociatedControl; //currently selecting a groupbox
+                            if((CurrentlySelectedObject as GroupBox).Controls[0] //this is the layoutpanel within the groupbox
+                                .Controls.Count > 2)
+                            {
+                                CurrentCountSelected = true; //always start at CurrentCount for anything with current count
+                                foreach (Control subControl in (CurrentlySelectedObject as GroupBox).Controls[0].Controls)
+                                {
+                                    if (subControl.Name.Contains("CurrentLayoutPanel"))
+                                    {
+                                        CurrentlySelectedObject = subControl;
+                                    }
+                                    if (subControl.Name.Contains("MaxLayoutPanel"))
+                                    {
+                                        CurrentlySelectedOpposingObject = subControl; //for simplified switching later on
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                CurrentCountSelected = null; //null the boolean if we don't have counts
+                            }
+                            //now that item's groupBox is selected and the currentCount, if applicable, is "selected"
+                        }
+
+                        if (CurrentlySelectedObject == StaticGuiReference.weaponListBox)
+                        {
+                            if (LastSelectedWeaponIndex == -1)
+                            {
+                                CurrentlySelectedObject = StaticGuiReference.weaponListBox.Items[0];
+                                StaticGuiReference.weaponListBox.SelectedIndex = 0;
+                            }
+                            else
+                            {
+                                CurrentlySelectedObject = StaticGuiReference.weaponListBox.Items[LastSelectedWeaponIndex];
+                                StaticGuiReference.itemListBox.SelectedIndex = LastSelectedWeaponIndex;
+                            }
+                        }
+                        else if (StaticGuiReference.weaponListBox.Items.Contains(CurrentlySelectedObject))
+                        {
+                            //looking to select an item of the weaponListBox
+                            LastSelectedWeaponIndex = StaticGuiReference.weaponListBox.SelectedIndex;
+                            CurrentlySelectedObject = weaponGuiObjectList[StaticGuiReference.weaponListBox.SelectedIndex].AssociatedControl; //currently selecting a groupbox
+                            if (CurrentlySelectedObject == StaticGuiReference.hfBladeGroupBox)
+                            {
+                                //the HF blade needs to have it's own logic, when/if it gets done properly
+                            }
+                            else
+                            {
+                                if ((CurrentlySelectedObject as GroupBox).Controls[0] //this is the layoutpanel within the groupbox
+                                .Controls.Count > 2)
+                                {
+                                    CurrentCountSelected = true; //always start at CurrentCount for anything with current count
+                                    foreach(Control subControl in (CurrentlySelectedObject as GroupBox).Controls[0].Controls)
+                                    {
+                                        if (subControl.Name.Contains("CurrentLayoutPanel"))
+                                        {
+                                            CurrentlySelectedObject = subControl;
+                                        }
+                                        if (subControl.Name.Contains("MaxLayoutPanel"))
+                                        {
+                                            CurrentlySelectedOpposingObject = subControl; //for simplified switching later on
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    CurrentCountSelected = null; //null the boolean if we don't have counts
+                                }
+                            }
+                            //now that weapons's groupBox is selected and the currentCount, if applicable, is "selected"
+                        }
                         break;
 
                     case ControllerInterpreter.PressedButton.Circle:
@@ -203,6 +329,7 @@ namespace MGS2_MC
 
         public GUI()
         {
+            StaticGuiReference = this;
             InitializeComponent();
             BuildGuiObjectLists();
             itemListBox.DataSource = itemGuiObjectList;
@@ -1037,6 +1164,12 @@ namespace MGS2_MC
 
             weaponGroupBox.Controls.Add(weaponObject.AssociatedControl);
             weaponObject.AssociatedControl.Visible = true;
+        }
+
+        private void mgs2TabControl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            CurrentTab = mgs2TabControl.SelectedIndex;
+            CurrentlySelectedObject = null;
         }
     }
 

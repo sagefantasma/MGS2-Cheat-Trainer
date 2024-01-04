@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Text.Json;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Serilog;
 using Serilog.Core;
@@ -53,6 +52,7 @@ namespace MGS2_MC
             {
                 logger.Error($"Could not start controller monitor: {e}");
             }
+
             Application.Run(new GUI());            
         }
 
@@ -80,7 +80,8 @@ namespace MGS2_MC
             MGS2Process?.Dispose();
         }
 
-        private static bool IsDirectLaunchEnabled(FileInfo steamAppIdFile)
+
+        private static bool IsDirectLaunchEnabled(FileInfo mgs2Executable, FileInfo steamAppIdFile)
         {
             if (steamAppIdFile.Exists)
             {
@@ -173,8 +174,8 @@ namespace MGS2_MC
                 string mgs2Executable = trainerConfig.Mgs2ExePath;
                 string mgs2Directory = new FileInfo(mgs2Executable).DirectoryName;
                 FileInfo steamAppIdFile = new FileInfo(mgs2Directory + MGS2Constants.SteamAppIdFileName);
+                bool directLaunchEnabled = IsDirectLaunchEnabled(mgs2Executable, steamAppIdFile);                
 
-                bool directLaunchEnabled = IsDirectLaunchEnabled(steamAppIdFile);                
                 if (!directLaunchEnabled)
                 {
                     EnableDirectLaunch(steamAppIdFile);   

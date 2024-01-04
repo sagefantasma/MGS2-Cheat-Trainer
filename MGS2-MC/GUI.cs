@@ -1,4 +1,4 @@
-﻿using MGS2_MC.Controllers;
+using MGS2_MC.Controllers;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -578,9 +578,7 @@ namespace MGS2_MC
             weaponListBox.SelectedIndex = -1;
             stringsListBox.DataSource = MGS2Strings.MGS2_STRINGS;
             stringsListBox.DisplayMember = "Tag";
-            //removing the stats & strings pages for now since they're unfinished
             mgs2TabControl.TabPages.RemoveByKey(tabPageStats.Name);
-            mgs2TabControl.TabPages.RemoveByKey(tabPageStrings.Name);
         }
 
         #region GUI getters

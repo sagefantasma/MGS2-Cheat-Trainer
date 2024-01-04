@@ -549,7 +549,6 @@
             this.basicNameGroupBox.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.tabPageStats = new System.Windows.Forms.TabPage();
-            this.tableLayoutPanel54 = new System.Windows.Forms.TableLayoutPanel();
             this.timesFoundGroupBox = new System.Windows.Forms.GroupBox();
             this.timesFoundLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.label51 = new System.Windows.Forms.Label();
@@ -559,7 +558,6 @@
             this.label49 = new System.Windows.Forms.Label();
             this.timesFoundGameLaunchUpDown = new System.Windows.Forms.NumericUpDown();
             this.tabPageStrings = new System.Windows.Forms.TabPage();
-            this.tableLayoutPanel55 = new System.Windows.Forms.TableLayoutPanel();
             this.stringsListBox = new System.Windows.Forms.ListBox();
             this.basicNameGroupBox = new System.Windows.Forms.GroupBox();
             this.setBasicNameBtn = new System.Windows.Forms.Button();
@@ -576,7 +574,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.stealthPictureBox)).BeginInit();
             this.wetBoxGroupBox.SuspendLayout();
             this.wetBoxLayoutPanel.SuspendLayout();
-            this.tableLayoutPanel53.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.wetBoxUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.wetBoxPictureBox)).BeginInit();
             this.akSupGroupBox.SuspendLayout();
@@ -590,7 +587,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.thermalPictureBox)).BeginInit();
             this.cardGroupBox.SuspendLayout();
             this.cardLayoutPanel.SuspendLayout();
-            this.tableLayoutPanel13.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.cardUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cardPictureBox)).BeginInit();
             this.orangeWigGroupBox.SuspendLayout();
@@ -598,7 +594,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.orangeWigPictureBox)).BeginInit();
             this.box5GroupBox.SuspendLayout();
             this.box5LayoutPanel.SuspendLayout();
-            this.tableLayoutPanel52.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.box5UpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.box5PictureBox)).BeginInit();
             this.uspSupGroupBox.SuspendLayout();
@@ -618,7 +613,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.blueWigPictureBox)).BeginInit();
             this.box4GroupBox.SuspendLayout();
             this.box4LayoutPanel.SuspendLayout();
-            this.tableLayoutPanel51.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.box4UpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.box4PictureBox)).BeginInit();
             this.socomSupGroupBox.SuspendLayout();
@@ -632,9 +626,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.digitalCameraPictureBox)).BeginInit();
             this.dogTagsGroupBox.SuspendLayout();
             this.dogTagsLayoutPanel.SuspendLayout();
-            this.tableLayoutPanel10.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dogTagsCurrentUpDown)).BeginInit();
-            this.tableLayoutPanel7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dogTagsMaxUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dogTagsPictureBox)).BeginInit();
             this.infinityWigGroupBox.SuspendLayout();
@@ -642,7 +634,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.infinityWigPictureBox)).BeginInit();
             this.box3GroupBox.SuspendLayout();
             this.box3LayoutPanel.SuspendLayout();
-            this.tableLayoutPanel50.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.box3UpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.box3PictureBox)).BeginInit();
             this.moDiscGroupBox.SuspendLayout();
@@ -656,9 +647,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.camera1PictureBox)).BeginInit();
             this.pentazeminGroupBox.SuspendLayout();
             this.pentazeminLayoutPanel.SuspendLayout();
-            this.tableLayoutPanel6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pentazeminCurrentUpDown)).BeginInit();
-            this.tableLayoutPanel5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pentazeminMaxUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pentazeminPictureBox)).BeginInit();
             this.bandanaGroupBox.SuspendLayout();
@@ -666,7 +655,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.bandanaPictureBox)).BeginInit();
             this.box2GroupBox.SuspendLayout();
             this.box2LayoutPanel.SuspendLayout();
-            this.tableLayoutPanel12.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.box2UpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.box2PictureBox)).BeginInit();
             this.cigarettesGroupBox.SuspendLayout();
@@ -680,9 +668,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.scope2PictureBox)).BeginInit();
             this.bandageGroupBox.SuspendLayout();
             this.bandageLayoutPanel.SuspendLayout();
-            this.tableLayoutPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bandageCurrentUpDown)).BeginInit();
-            this.tableLayoutPanel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bandageMaxUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bandagePictureBox)).BeginInit();
             this.bduGroupBox.SuspendLayout();
@@ -690,22 +676,17 @@
             ((System.ComponentModel.ISupportInitialize)(this.bduPictureBox)).BeginInit();
             this.box1GroupBox.SuspendLayout();
             this.box1LayoutPanel.SuspendLayout();
-            this.tableLayoutPanel11.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.box1UpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.box1PictureBox)).BeginInit();
             this.coldMedsGroupBox.SuspendLayout();
             this.coldMedsLayoutPanel.SuspendLayout();
-            this.tableLayoutPanel9.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.coldMedsMaxUpDown)).BeginInit();
-            this.tableLayoutPanel8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.coldMedsCurrentUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.coldMedsPictureBox)).BeginInit();
             this.rationGroupBox.SuspendLayout();
             this.rationLayoutPanel.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.rationMaxUpDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rationPictureBox)).BeginInit();
-            this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.rationCurrentUpDown)).BeginInit();
             this.scope1GroupBox.SuspendLayout();
             this.scope1LayoutPanel.SuspendLayout();
@@ -714,7 +695,6 @@
             this.bodyArmorLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bodyArmorPictureBox)).BeginInit();
             this.tabPageWeapon.SuspendLayout();
-            this.weaponsLayoutPanel.SuspendLayout();
             this.hfBladeGroupBox.SuspendLayout();
             this.hfBladeLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.hfBladePictureBox)).BeginInit();
@@ -1002,7 +982,7 @@
             this.mgs2TabControl.SelectedIndex = 0;
             this.mgs2TabControl.Size = new System.Drawing.Size(584, 486);
             this.mgs2TabControl.TabIndex = 0;
-            this.mgs2TabControl.SelectedIndexChanged += new System.EventHandler(this.mgs2TabControl_SelectedIndexChanged)
+            this.mgs2TabControl.SelectedIndexChanged += new System.EventHandler(this.mgs2TabControl_SelectedIndexChanged);
             // 
             // tabPageItem
             // 

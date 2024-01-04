@@ -8,7 +8,8 @@ namespace MGS2_MC
 {
     internal class Logging
     {
-        private const int MegabyteInBytes = 1000;
+        private const int KilobyteInBytes = 1000;
+        private const int MegabyteInKilobytes = 1000 * KilobyteInBytes;
         public static string LogLocation;
 
         internal static ILogger InitializeLogger(string logFileName, string loggingLevel = "Information")
@@ -36,7 +37,7 @@ namespace MGS2_MC
                     eventLevel = LogEventLevel.Fatal;
                     break;
             }
-            return new LoggerConfiguration().WriteTo.File(Path.Combine(LogLocation, logFileName), rollOnFileSizeLimit: false, fileSizeLimitBytes: 50 * MegabyteInBytes)
+            return new LoggerConfiguration().WriteTo.File(Path.Combine(LogLocation, logFileName), rollOnFileSizeLimit: false, fileSizeLimitBytes: 50 * MegabyteInKilobytes)
                                               .MinimumLevel.Is(eventLevel).CreateLogger();
         }
     }

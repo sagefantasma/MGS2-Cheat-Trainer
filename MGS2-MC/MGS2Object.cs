@@ -219,7 +219,7 @@ namespace MGS2_MC
         public int CurrentAmmoOffset { get { return InventoryOffset; } set { InventoryOffset = value; } } //TODO: make this a MemoryOffset
         public int MaxAmmoOffset { get; set; } //TODO: make this a MemoryOffset
 
-        private int MIN_MAX_COUNT_DIFF = 72;
+        const int MIN_MAX_COUNT_DIFF = 72;
         private short LastKnownCurrentAmmo = 1;
         public AmmoWeapon(string name, IntPtr nameMemoryOffset, int inventoryOffset) : base(name, nameMemoryOffset, inventoryOffset)
         {

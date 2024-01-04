@@ -42,6 +42,17 @@ namespace MGS2_MC
             {
                 logger.Error($"Could not start MGS2 monitor: {e}");
             }
+
+            try
+            {
+                Thread controllerThread = new Thread(() => MGS2Injector.EnableInjector());
+                controllerThread.Start();
+            }
+            catch(Exception e)
+            {
+                logger.Error($"Could not start controller monitor: {e}");
+            }
+
             Application.Run(new GUI());            
         }
 
@@ -68,6 +79,7 @@ namespace MGS2_MC
             MGS2Process?.CloseMainWindow();
             MGS2Process?.Dispose();
         }
+
 
         private static bool IsDirectLaunchEnabled(FileInfo mgs2Executable, FileInfo steamAppIdFile)
         {
@@ -153,23 +165,23 @@ namespace MGS2_MC
             
         }
 
-        private static void Mgs2Monitor(TrainerConfig config)
+        private static void Mgs2Monitor(TrainerConfig trainerConfig)
         {
             MGS2Process = new Process();
             try
             {
                 //mgs2.StartInfo = new ProcessStartInfo("steam://rungameid/2131640"); //leaving this here in case it makes sense to use this method instead for some reason
-                string mgs2Location = config.Mgs2ExePath;
-                FileInfo mgs2Executable = new FileInfo(mgs2Location);
-                FileInfo steamAppIdFile = new FileInfo(mgs2Executable.DirectoryName + MGS2Constants.SteamAppIdFileName);
-
+                string mgs2Executable = trainerConfig.Mgs2ExePath;
+                string mgs2Directory = new FileInfo(mgs2Executable).DirectoryName;
+                FileInfo steamAppIdFile = new FileInfo(mgs2Directory + MGS2Constants.SteamAppIdFileName);
                 bool directLaunchEnabled = IsDirectLaunchEnabled(mgs2Executable, steamAppIdFile);                
+
                 if (!directLaunchEnabled)
                 {
                     EnableDirectLaunch(steamAppIdFile);   
                 }
 
-                StartMgs2(mgs2Location, mgs2Executable.DirectoryName, config);
+                StartMgs2(mgs2Executable, mgs2Directory, trainerConfig);
             }
             catch(Exception e)
             {

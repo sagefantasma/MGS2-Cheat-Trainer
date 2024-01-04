@@ -69,7 +69,7 @@ namespace MGS2_MC.Controllers
             return false;
         }
 
-        public bool HaveButtonInputsChanged(object previous, object current)
+        public bool HaveInputsChanged(object previous, object current)
         {
             //TODO: implement
             State previousState = (State) previous;

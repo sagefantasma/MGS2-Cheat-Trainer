@@ -90,7 +90,7 @@ namespace MGS2_MC.Controllers
             return ps4Controllers;
         }
 
-        public bool HaveButtonInputsChanged(object previous, object current)
+        public bool HaveInputsChanged(object previous, object current)
         {
             JoystickState previousState = previous as JoystickState;
             JoystickState currentState = current as JoystickState;
@@ -98,6 +98,14 @@ namespace MGS2_MC.Controllers
             for (int i = 0; i < previousState.Buttons.Count(); i++)
             {
                 if (previousState.Buttons[i] != currentState.Buttons[i])
+                {
+                    return true;
+                }
+            }
+
+            for(int i = 0; i < previousState.PointOfViewControllers.Length; i++)
+            {
+                if (previousState.PointOfViewControllers[i] != currentState.PointOfViewControllers[i])
                 {
                     return true;
                 }
@@ -136,7 +144,7 @@ namespace MGS2_MC.Controllers
                         JoystickState currentState = ps4Joy.GetCurrentState();
                         UpdateHolds(previousState, currentState);
 
-                        if (HaveButtonInputsChanged(previousState, currentState))
+                        if (HaveInputsChanged(previousState, currentState))
                         {
                             if (IsMenuRequestCombination(currentState))
                             {

@@ -66,6 +66,7 @@ namespace MGS2_MC
                     //bool gotMgs2Window = GetWindowRect(Program.MGS2Process.MainWindowHandle, out Rectangle mgs2WindowRectangle);
                     //TODO: open a GUI over MGS2 that lets the user do their desired modifications... for now, just enable navigating the GUI w/ buttons
                     GUI.CanNavigateWithController = true;
+                    GUI.ShowGui();
                 }
                 catch(Exception ex)
                 {
@@ -77,6 +78,7 @@ namespace MGS2_MC
                 try
                 {
                     GUI.CanNavigateWithController = false;
+                    GUI.HideGui();
                     ResumeMgs2();
                 }
                 catch(Exception ex)

@@ -865,6 +865,7 @@
             // 
             // itemListBox
             // 
+            this.itemListBox.BackColor = System.Drawing.Color.LightCyan;
             this.itemListBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.itemListBox.FormattingEnabled = true;
             this.itemListBox.Location = new System.Drawing.Point(3, 3);
@@ -1073,6 +1074,7 @@
             // 
             // weaponListBox
             // 
+            this.weaponListBox.BackColor = System.Drawing.Color.LightCyan;
             this.weaponListBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.weaponListBox.FormattingEnabled = true;
             this.weaponListBox.Location = new System.Drawing.Point(3, 3);

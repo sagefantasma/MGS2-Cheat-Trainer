@@ -24,12 +24,12 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>https://raw.githubusercontent.com/sagefantasma/MGS2-Cheat-Trainer/dev/published/</InstallUrl>
+    <InstallUrl>https://raw.githubusercontent.com/sagefantasma/MGS2-Cheat-Trainer/dev/MGS2-MC/published/</InstallUrl>
     <SupportUrl>https://github.com/sagefantasma/MGS2-Cheat-Trainer/wiki</SupportUrl>
     <ErrorReportUrl>https://github.com/sagefantasma/MGS2-Cheat-Trainer/issues</ErrorReportUrl>
     <ProductName>MGS2 Master Collection Cheat Trainer</ProductName>
     <PublisherName>SageFantasma</PublisherName>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>2</ApplicationRevision>
     <ApplicationVersion>0.1.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>

@@ -4,10 +4,11 @@ using System.Windows.Forms;
 namespace MGS2_MC
 {
     #region Internals
+
     internal class GameObject
     {
         internal string _name = "";
-        internal IntPtr _nameOffset;
+        internal IntPtr _nameOffset; //TODO: make this a MemoryOffset
     }
 
     interface IMGS2Object
@@ -17,10 +18,10 @@ namespace MGS2_MC
 
     public abstract class MGS2Object : IMGS2Object
     {
-        internal GameObject GameObject { get; set; }
+        internal GameObject GameObject { get; set; } //replace with MGS2 string?
         public string Name { get { return GameObject._name; } }
-        public IntPtr NameMemoryOffset { get { return GameObject._nameOffset; } }
-        public int InventoryOffset { get; set; }
+        public IntPtr NameMemoryOffset { get { return GameObject._nameOffset; } } //TODO: make this a MemoryOffset
+        public int InventoryOffset { get; set; } //TODO: make this a MemoryOffset
 
         public MGS2Object(string name, IntPtr nameMemoryOffset, int inventoryOffset)
         {
@@ -72,7 +73,7 @@ namespace MGS2_MC
 
     public class LevelableItem : BasicItem
     {
-        internal int LevelOffset { get { return InventoryOffset; } set { InventoryOffset = value; } }
+        internal int LevelOffset { get { return InventoryOffset; } set { InventoryOffset = value; } } //TODO: make this a MemoryOffset
         //TODO: remember last known level?
 
         public LevelableItem(string name, IntPtr nameMemoryOffset, int inventoryOffset) : base(name, nameMemoryOffset, inventoryOffset)
@@ -95,7 +96,7 @@ namespace MGS2_MC
     public class DurabilityItem : BasicItem
     {
         #region Internals & Constructor
-        internal int DurabilityOffset { get { return InventoryOffset; } set { InventoryOffset = value; } }
+        internal int DurabilityOffset { get { return InventoryOffset; } set { InventoryOffset = value; } } //TODO: make this a MemoryOffset
 
         public DurabilityItem(string name, IntPtr nameMemoryOffset, int inventoryOffset) : base(name, nameMemoryOffset, inventoryOffset)
         {
@@ -135,8 +136,8 @@ namespace MGS2_MC
     public class StackableItem : BasicItem
     {
         #region Internals & Constructor
-        internal int CurrentCountOffset { get { return InventoryOffset; } set { InventoryOffset = value; } }
-        internal int MaxCountOffset { get; set; }
+        internal int CurrentCountOffset { get { return InventoryOffset; } set { InventoryOffset = value; } } //TODO: make this a MemoryOffset
+        internal int MaxCountOffset { get; set; } //TODO: make this a MemoryOffset
 
         const int MIN_MAX_COUNT_DIFF = 96;
         private short LastKnownCurrentCount = 1;
@@ -215,10 +216,10 @@ namespace MGS2_MC
     public class AmmoWeapon : BasicWeapon
     {
         #region Internals & Constructor
-        public int CurrentAmmoOffset { get { return InventoryOffset; } set { InventoryOffset = value; } }
-        public int MaxAmmoOffset { get; set; }
+        public int CurrentAmmoOffset { get { return InventoryOffset; } set { InventoryOffset = value; } } //TODO: make this a MemoryOffset
+        public int MaxAmmoOffset { get; set; } //TODO: make this a MemoryOffset
 
-        private int MIN_MAX_COUNT_DIFF = 72;
+        const int MIN_MAX_COUNT_DIFF = 72;
         private short LastKnownCurrentAmmo = 1;
         public AmmoWeapon(string name, IntPtr nameMemoryOffset, int inventoryOffset) : base(name, nameMemoryOffset, inventoryOffset)
         {
@@ -276,7 +277,7 @@ namespace MGS2_MC
     public class SpecialWeapon : BasicWeapon
     {
         #region Internals & Constructor
-        public int SpecialOffset { get { return InventoryOffset; } set { InventoryOffset = value; } }
+        public int SpecialOffset { get { return InventoryOffset; } set { InventoryOffset = value; } } //TODO: make this a MemoryOffset
         short count = 0;
         public SpecialWeapon(string name, IntPtr nameMemoryOffset, int inventoryOffset) : base(name, nameMemoryOffset, inventoryOffset)
         {
@@ -314,84 +315,84 @@ namespace MGS2_MC
         //TODO: update name pointers to, you know, real values :)
         #region Weapons
         #region Basic Weapons
-        public static readonly BasicWeapon DMic1 = new BasicWeapon("Directional Microphone", IntPtr.Zero, MGS2Constants.BASE_WEAPON_OFFSET + MGS2Constants.DMicOffset); //GUI'd -- causes crash with Snake
-        public static readonly BasicWeapon DMic2 = new BasicWeapon("Directional Microphone", IntPtr.Zero, MGS2Constants.BASE_WEAPON_OFFSET + MGS2Constants.DMic2Offset); //GUI'd -- causes crash with Snake
-        public static readonly BasicWeapon Coolant = new BasicWeapon("Coolant Spray", IntPtr.Zero, MGS2Constants.BASE_WEAPON_OFFSET + MGS2Constants.CoolantOffset); //GUI'd -- causes crash with Snake
+        public static readonly BasicWeapon DMic1 = new BasicWeapon("Directional Microphone", IntPtr.Zero, MGS2Offsets.BASE_WEAPON.Start + MGS2Constants.D_MIC);
+        public static readonly BasicWeapon DMic2 = new BasicWeapon("Directional Microphone", IntPtr.Zero, MGS2Offsets.BASE_WEAPON.Start + MGS2Constants.D_MIC_ZOOMED);
+        public static readonly BasicWeapon Coolant = new BasicWeapon("Coolant Spray", IntPtr.Zero, MGS2Offsets.BASE_WEAPON.Start + MGS2Constants.COOLANT);
         #endregion
         #region Ammo Weapons
-        public static readonly AmmoWeapon M9 = new AmmoWeapon("M9", IntPtr.Zero, MGS2Constants.BASE_WEAPON_OFFSET + MGS2Constants.M9Offset); //GUI'd
-        public static readonly AmmoWeapon USP = new AmmoWeapon("USP", IntPtr.Zero, MGS2Constants.BASE_WEAPON_OFFSET + MGS2Constants.USPOffset); //GUI'd
-        public static readonly AmmoWeapon SOCOM = new AmmoWeapon("SOCOM", IntPtr.Zero, MGS2Constants.BASE_WEAPON_OFFSET + MGS2Constants.SOCOMOffset); //GUI'd -- causes crash with Snake
-        public static readonly AmmoWeapon PSG1 = new AmmoWeapon("PSG1", IntPtr.Zero, MGS2Constants.BASE_WEAPON_OFFSET + MGS2Constants.PSG1Offset); //GUI'd -- causes crash with Snake
-        public static readonly AmmoWeapon RGB6 = new AmmoWeapon("RGB6", IntPtr.Zero, MGS2Constants.BASE_WEAPON_OFFSET + MGS2Constants.RGB6Offset); //GUI'd -- causes crash with Snake
-        public static readonly AmmoWeapon Nikita = new AmmoWeapon("Nikita", IntPtr.Zero, MGS2Constants.BASE_WEAPON_OFFSET + MGS2Constants.NikitaOffset); //GUI'd -- causes crash with Snake
-        public static readonly AmmoWeapon Stinger = new AmmoWeapon("Stinger", IntPtr.Zero, MGS2Constants.BASE_WEAPON_OFFSET + MGS2Constants.StingerOffset); //GUI'd -- causes crash with Snake
-        public static readonly AmmoWeapon Claymore = new AmmoWeapon("Claymore", IntPtr.Zero, MGS2Constants.BASE_WEAPON_OFFSET + MGS2Constants.ClaymoreOffset); //GUI'd -- causes crash with Snake
-        public static readonly AmmoWeapon C4 = new AmmoWeapon("C4", IntPtr.Zero, MGS2Constants.BASE_WEAPON_OFFSET + MGS2Constants.C4Offset); //GUI'd -- causes crash with Snake
-        public static readonly AmmoWeapon ChaffGrenade = new AmmoWeapon("Chaff Grenade", IntPtr.Zero, MGS2Constants.BASE_WEAPON_OFFSET + MGS2Constants.ChaffGrenadeOffset); //GUI'd
-        public static readonly AmmoWeapon StunGrenade = new AmmoWeapon("Stun Grenade", IntPtr.Zero, MGS2Constants.BASE_WEAPON_OFFSET + MGS2Constants.StunGrenadeOffset); //GUI'd
-        public static readonly AmmoWeapon AKS74u = new AmmoWeapon("AKS74u", IntPtr.Zero, MGS2Constants.BASE_WEAPON_OFFSET + MGS2Constants.AKS74uOffset); //GUI'd -- causes crash with Snake
-        public static readonly AmmoWeapon Magazine = new AmmoWeapon("Magazine", IntPtr.Zero, MGS2Constants.BASE_WEAPON_OFFSET + MGS2Constants.MagazineOffset); //GUI'd
-        public static readonly AmmoWeapon Grenade = new AmmoWeapon("Grenade", IntPtr.Zero, MGS2Constants.BASE_WEAPON_OFFSET + MGS2Constants.GrenadeOffset); //GUI'd
-        public static readonly AmmoWeapon M4 = new AmmoWeapon("M4", IntPtr.Zero, MGS2Constants.BASE_WEAPON_OFFSET + MGS2Constants.M4Offset); //GUI'd -- causes crash with Snake
-        public static readonly AmmoWeapon PSG1T = new AmmoWeapon("PGS1-T", IntPtr.Zero, MGS2Constants.BASE_WEAPON_OFFSET + MGS2Constants.PSG1TOffset); //GUI'd -- causes crash with Snake
-        public static readonly AmmoWeapon Book = new AmmoWeapon("Book", IntPtr.Zero, MGS2Constants.BASE_WEAPON_OFFSET + MGS2Constants.BookOffset); //GUI'd -- causes crash with Snake
+        public static readonly AmmoWeapon M9 = new AmmoWeapon("M9", IntPtr.Zero, MGS2Offsets.BASE_WEAPON.Start + MGS2Constants.M9);
+        public static readonly AmmoWeapon USP = new AmmoWeapon("USP", IntPtr.Zero, MGS2Offsets.BASE_WEAPON.Start + MGS2Constants.USP);
+        public static readonly AmmoWeapon SOCOM = new AmmoWeapon("SOCOM", IntPtr.Zero, MGS2Offsets.BASE_WEAPON.Start + MGS2Constants.SOCOM);
+        public static readonly AmmoWeapon PSG1 = new AmmoWeapon("PSG1", IntPtr.Zero, MGS2Offsets.BASE_WEAPON.Start + MGS2Constants.PSG1);
+        public static readonly AmmoWeapon RGB6 = new AmmoWeapon("RGB6", IntPtr.Zero, MGS2Offsets.BASE_WEAPON.Start + MGS2Constants.RGB6);
+        public static readonly AmmoWeapon Nikita = new AmmoWeapon("Nikita", IntPtr.Zero, MGS2Offsets.BASE_WEAPON.Start + MGS2Constants.NIKITA);
+        public static readonly AmmoWeapon Stinger = new AmmoWeapon("Stinger", IntPtr.Zero, MGS2Offsets.BASE_WEAPON.Start + MGS2Constants.STINGER);
+        public static readonly AmmoWeapon Claymore = new AmmoWeapon("Claymore", IntPtr.Zero, MGS2Offsets.BASE_WEAPON.Start + MGS2Constants.CLAYMORE);
+        public static readonly AmmoWeapon C4 = new AmmoWeapon("C4", IntPtr.Zero, MGS2Offsets.BASE_WEAPON.Start + MGS2Constants.C4);
+        public static readonly AmmoWeapon ChaffGrenade = new AmmoWeapon("Chaff Grenade", IntPtr.Zero, MGS2Offsets.BASE_WEAPON.Start + MGS2Constants.CHAFF_GRENADE);
+        public static readonly AmmoWeapon StunGrenade = new AmmoWeapon("Stun Grenade", IntPtr.Zero, MGS2Offsets.BASE_WEAPON.Start + MGS2Constants.STUN_GRENADE);
+        public static readonly AmmoWeapon AKS74u = new AmmoWeapon("AKS74u", IntPtr.Zero, MGS2Offsets.BASE_WEAPON.Start + MGS2Constants.AKS74U);
+        public static readonly AmmoWeapon Magazine = new AmmoWeapon("Magazine", IntPtr.Zero, MGS2Offsets.BASE_WEAPON.Start + MGS2Constants.MAGAZINE);
+        public static readonly AmmoWeapon Grenade = new AmmoWeapon("Grenade", IntPtr.Zero, MGS2Offsets.BASE_WEAPON.Start + MGS2Constants.GRENADE);
+        public static readonly AmmoWeapon M4 = new AmmoWeapon("M4", IntPtr.Zero, MGS2Offsets.BASE_WEAPON.Start + MGS2Constants.M4);
+        public static readonly AmmoWeapon PSG1T = new AmmoWeapon("PGS1-T", IntPtr.Zero, MGS2Offsets.BASE_WEAPON.Start + MGS2Constants.PSG1T);
+        public static readonly AmmoWeapon Book = new AmmoWeapon("Book", IntPtr.Zero, MGS2Offsets.BASE_WEAPON.Start + MGS2Constants.BOOK);
         #endregion
         #region Special Weapons
-        public static readonly SpecialWeapon HighFrequencyBlade = new SpecialWeapon("HF Blade", IntPtr.Zero, MGS2Constants.BASE_WEAPON_OFFSET + MGS2Constants.HighFrequencyBladeOffset); //GUI'd -- causes crash with Snake
+        public static readonly SpecialWeapon HighFrequencyBlade = new SpecialWeapon("HF Blade", IntPtr.Zero, MGS2Offsets.BASE_WEAPON.Start + MGS2Constants.HIGH_FREQUENCY_BLADE);
         #endregion
         #endregion
 
         #region Items
         #region Basic Items
-        public static readonly BasicItem SnakeScope = new BasicItem("Binoculars", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.SnakeScopeOffset);
-        public static readonly BasicItem BodyArmor = new BasicItem("Body Armor", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.BodyArmorOffset);
-        public static readonly BasicItem Stealth = new BasicItem("Stealth", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.StealthOffset);
-        public static readonly BasicItem MineDetector = new BasicItem("Mine Detector", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.MineDetectorOffset);
-        public static readonly BasicItem SensorA = new BasicItem("Sensor A", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.SensorAOffset);
-        public static readonly BasicItem SensorB = new BasicItem("Sensor B", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.SensorBOffset);
-        public static readonly BasicItem NightVisionGoggles = new BasicItem("NVG", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.NightVisionGogglesOffset);
-        public static readonly BasicItem ThermalGoggles = new BasicItem("ThermalG", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.ThermalGogglesOffset);
-        public static readonly BasicItem RaidenScope = new BasicItem("Binoculars", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.RaidenScopeOffset);
-        public static readonly BasicItem DigitalCamera = new BasicItem("Digital Camera", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.DigitalCameraOffset);
-        public static readonly BasicItem Cigarettes = new BasicItem("Cigs", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.CigarettesOffset);
-        public static readonly BasicItem Shaver = new BasicItem("Shaver", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.ShaverOffset);
-        public static readonly BasicItem Phone = new BasicItem("Phone", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.PhoneOffset);
-        public static readonly BasicItem Camera1 = new BasicItem("Camera", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.Camera1Offset);
-        public static readonly BasicItem APSensor = new BasicItem("AP Sensor", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.APSensorOffset);
-        public static readonly BasicItem UnknownItem = new BasicItem("Unknown Item", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.UnknownItemOffset); //TODO: unused? need to confirm
-        public static readonly BasicItem SocomSuppressor = new BasicItem("SOCOM Suppressor", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.SocomSuppressorOffset);
-        public static readonly BasicItem AKSuppressor = new BasicItem("AK Suppressor", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.AKSuppressorOffset);
-        public static readonly BasicItem Camera2 = new BasicItem("Camera", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.Camera2Offset);
-        public static readonly BasicItem Bandana = new BasicItem("Bandana", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.BandanaOffset);
-        public static readonly BasicItem MODisc = new BasicItem("MODisc", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.MODiscOffset);
-        public static readonly BasicItem USPSuppressor = new BasicItem("USP Suppressor", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.USPSuppressorOffset);
-        public static readonly BasicItem InfinityWig = new BasicItem("Infinity Wig", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.InfinityWigOffset);
-        public static readonly BasicItem BlueWig = new BasicItem("Blue Wig", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.BlueWigOffset);
-        public static readonly BasicItem OrangeWig = new BasicItem("Orange Wig", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.OrangeWigOffset);
-        public static readonly BasicItem ColorWig = new BasicItem("Color Wig", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.ColorWigOffset); //unused
-        public static readonly BasicItem ColorWig2 = new BasicItem("Color Wig 2", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.ColorWig2Offset); //unused
+        public static readonly BasicItem SnakeScope = new BasicItem("Binoculars", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.BROKEN_SCOPE);
+        public static readonly BasicItem BodyArmor = new BasicItem("Body Armor", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.BODY_ARMOR);
+        public static readonly BasicItem Stealth = new BasicItem("Stealth", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.STEALTH);
+        public static readonly BasicItem MineDetector = new BasicItem("Mine Detector", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.MINE_DETECTOR);
+        public static readonly BasicItem SensorA = new BasicItem("Sensor A", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.SENSOR_A);
+        public static readonly BasicItem SensorB = new BasicItem("Sensor B", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.SENSOR_B);
+        public static readonly BasicItem NightVisionGoggles = new BasicItem("NVG", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.NVG);
+        public static readonly BasicItem ThermalGoggles = new BasicItem("ThermalG", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.THERMAL_GOGGLES);
+        public static readonly BasicItem RaidenScope = new BasicItem("Binoculars", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start   + MGS2Constants.SCOPE);
+        public static readonly BasicItem DigitalCamera = new BasicItem("Digital Camera", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.DIGITAL_CAMERA);
+        public static readonly BasicItem Cigarettes = new BasicItem("Cigs", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.CIGARETTES);
+        public static readonly BasicItem Shaver = new BasicItem("Shaver", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.SHAVER);
+        public static readonly BasicItem Phone = new BasicItem("Phone", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.PHONE);
+        public static readonly BasicItem Camera1 = new BasicItem("Camera", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.CAMERA);
+        public static readonly BasicItem APSensor = new BasicItem("AP Sensor", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.AP_SENSOR);
+        public static readonly BasicItem UnknownItem = new BasicItem("Unknown Item", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.UNKNOWN_ITEM); //TODO: unused? need to confirm
+        public static readonly BasicItem SocomSuppressor = new BasicItem("SOCOM Suppressor", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.SOCOM_SUPPRESSOR);
+        public static readonly BasicItem AKSuppressor = new BasicItem("AK Suppressor", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.AK_SUPPRESSOR);
+        public static readonly BasicItem Camera2 = new BasicItem("Camera", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.BROKEN_CAMERA);
+        public static readonly BasicItem Bandana = new BasicItem("Bandana", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.BANDANA);
+        public static readonly BasicItem MODisc = new BasicItem("MODisc", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.MO_DISC);
+        public static readonly BasicItem USPSuppressor = new BasicItem("USP Suppressor", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.USP_SUPPRESSOR);
+        public static readonly BasicItem InfinityWig = new BasicItem("Infinity Wig", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.INFINITY_WIG);
+        public static readonly BasicItem BlueWig = new BasicItem("Blue Wig", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.BLUE_WIG);
+        public static readonly BasicItem OrangeWig = new BasicItem("Orange Wig", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.ORANGE_WIG);
+        public static readonly BasicItem ColorWig = new BasicItem("Color Wig", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.COLOR_WIG_1); //unused
+        public static readonly BasicItem ColorWig2 = new BasicItem("Color Wig 2", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.COLOR_WIG_2); //unused
+        public static readonly BasicItem ColdMedicine = new BasicItem("Cold Medicine", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.COLD_MEDICINE);
         #endregion
         #region Durability Items
-        public static readonly DurabilityItem Box1 = new DurabilityItem("Box1", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.Box1Offset);
-        public static readonly DurabilityItem Box2 = new DurabilityItem("Box2", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.Box2Offset);
-        public static readonly DurabilityItem Box3 = new DurabilityItem("Box3", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.Box3Offset);
-        public static readonly DurabilityItem WetBox = new DurabilityItem("WetBox", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.WetBoxOffset);
-        public static readonly DurabilityItem Box4 = new DurabilityItem("Box4", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.Box4Offset);
-        public static readonly DurabilityItem Box5 = new DurabilityItem("Box5", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.Box5Offset);
+        public static readonly DurabilityItem Box1 = new DurabilityItem("Box1", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.BOX_1);
+        public static readonly DurabilityItem Box2 = new DurabilityItem("Box2", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.BOX_2);
+        public static readonly DurabilityItem Box3 = new DurabilityItem("Box3", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.BOX_3);
+        public static readonly DurabilityItem WetBox = new DurabilityItem("WetBox", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.WET_BOX);
+        public static readonly DurabilityItem Box4 = new DurabilityItem("Box4", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.BOX_4);
+        public static readonly DurabilityItem Box5 = new DurabilityItem("Box5", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.BOX_5);
         #endregion
         #region Enumerable Items
-        public static readonly StackableItem Ration = new StackableItem("Ration", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.RationOffset);
-        public static readonly StackableItem ColdMedicine = new StackableItem("Cold Medicine", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.ColdMedicineOffset);
-        public static readonly StackableItem Bandage = new StackableItem("Bandage", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.BandageOffset);
-        public static readonly StackableItem Pentazemin = new StackableItem("Pentazemin", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.PentazeminOffset);
-        public static readonly StackableItem DogTags = new StackableItem("DogTags", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.DogTagsOffset);
+        public static readonly StackableItem Ration = new StackableItem("Ration", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.RATION);
+        public static readonly StackableItem Bandage = new StackableItem("Bandage", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.BANDAGE);
+        public static readonly StackableItem Pentazemin = new StackableItem("Pentazemin", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.PENTAZEMIN);
+        public static readonly StackableItem DogTags = new StackableItem("DogTags", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.DOG_TAGS);
         #endregion
         #region Levelable Items
-        public static readonly LevelableItem Card = new LevelableItem("Card", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.CardOffset);
+        public static readonly LevelableItem Card = new LevelableItem("Card", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.CARD);
         #endregion
         #region Unknown Items
-        public static readonly BasicItem BDU = new DurabilityItem("BDU", IntPtr.Zero, MGS2Constants.BASE_ITEM_OFFSET + MGS2Constants.BDUOffset);
+        public static readonly BasicItem BDU = new DurabilityItem("BDU", IntPtr.Zero, MGS2Offsets.BASE_ITEM.Start + MGS2Constants.BDU);
         #endregion
         #endregion
     }

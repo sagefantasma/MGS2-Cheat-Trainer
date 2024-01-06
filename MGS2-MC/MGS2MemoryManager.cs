@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -40,12 +41,21 @@ namespace MGS2_MC
             public static extern bool CloseHandle(IntPtr hObject);
         }
 
+        static readonly Process mgs2Process = Program.MGS2Process;
         static IntPtr PROCESS_BASE_ADDRESS = IntPtr.Zero;
         static int[] LAST_KNOWN_PLAYER_OFFSETS = default;
+        private const string loggerName = "MGS2CheatTrainerMemoryManagerDebuglog.log";
+        private static ILogger logger;
+
         private enum ActiveCharacter
         {
             Snake,
             Raiden
+        }
+
+        internal static void StartLogger()
+        {
+            logger = Logging.InitializeLogger(loggerName);
         }
 
         #endregion
@@ -55,8 +65,8 @@ namespace MGS2_MC
         {
             //TODO: verify for raiden, works for snake 100%
             //also, this would inherently break down if you toggle camera1, so i should modify this logic
-            bool camera1Enabled = BitConverter.ToBoolean(GetCurrentValue(MGS2Constants.Camera1Offset, sizeof(short)), 0);
-
+            bool camera1Enabled = BitConverter.ToBoolean(GetCurrentValue(MGS2Constants.CAMERA, sizeof(short)), 0);
+            
             if (camera1Enabled) 
             {
                 return ActiveCharacter.Snake;
@@ -73,13 +83,13 @@ namespace MGS2_MC
             switch (DetermineActiveCharacter())
             {
                 case ActiveCharacter.Snake:
-                    if (!MGS2Constants.SnakeUsableObjects.Contains(mgs2Object))
+                    if (!Snake.UsableObjects.Contains(mgs2Object))
                     {
                         throw new InvalidOperationException($"Snake cannot use {mgs2Object.Name}");
                     }
                     break;
                 case ActiveCharacter.Raiden:
-                    if (!MGS2Constants.RaidenUsableObjects.Contains(mgs2Object))
+                    if (!Raiden.UsableObjects.Contains(mgs2Object))
                     {
                         throw new InvalidOperationException($"Raiden cannot use {mgs2Object.Name}");
                     }
@@ -89,16 +99,24 @@ namespace MGS2_MC
 
         private static Process GetMGS2Process()
         {
-            Process process = Process.GetProcessesByName(MGS2Constants.PROCESS_NAME).FirstOrDefault(); //looks like NET framework doesn't support the ? operator here
-            if (process == default)
+            if (mgs2Process == null || mgs2Process.HasExited) //if MGS2 was started separately from the trainer, get the process.
             {
-                throw new NullReferenceException();
+                Process process = Process.GetProcessesByName(MGS2Constants.MGS2_PROCESS_NAME).FirstOrDefault();
+                if (process == default)
+                {
+                    throw new NullReferenceException();
+                }
+                return process;
             }
-            return process;
+            else 
+            { 
+                return mgs2Process; 
+            }
         }
 
         private static int[] GetCurrentPlayerOffset(Process mgs2Process, IntPtr processHandle)
         {
+            //TODO: this method is way too big, break it up.
             byte[] buffer = new byte[mgs2Process.PrivateMemorySize64];
             try
             {
@@ -106,8 +124,8 @@ namespace MGS2_MC
             }
             catch(Exception e)
             {
-                //TODO: add logging :)
-                throw new AggregateException($"Failed to read `{MGS2Constants.PROCESS_NAME}`. Is it running?", e);
+                logger.Error($"Failed to read memory of process {MGS2Constants.MGS2_PROCESS_NAME}");
+                throw new AggregateException($"Failed to read `{MGS2Constants.MGS2_PROCESS_NAME}`. Is it running?", e);
             }
 
             //if we've retrieved a player offset before, check the old one first
@@ -118,11 +136,11 @@ namespace MGS2_MC
                     bool offsetHasMoved = false;
                     foreach (int previousOffset in LAST_KNOWN_PLAYER_OFFSETS)
                     {
-                        byte[] previousOffsetBuffer = new byte[MGS2Constants.PlayerOffsetBytes.Length];
-                        Array.Copy(buffer, previousOffset, previousOffsetBuffer, 0, MGS2Constants.PlayerOffsetBytes.Length);
+                        byte[] previousOffsetBuffer = new byte[MGS2Offsets.PlayerInfoFinderAoB.Length];
+                        Array.Copy(buffer, previousOffset, previousOffsetBuffer, 0, MGS2Offsets.PlayerInfoFinderAoB.Length);
                         for (int i = 0; i < previousOffsetBuffer.Length; i++)
                         {
-                            if (previousOffsetBuffer[i] != MGS2Constants.PlayerOffsetBytes[i])
+                            if (previousOffsetBuffer[i] != MGS2Offsets.PlayerInfoFinderAoB[i])
                             {
                                 //if ANY byte does not match exactly to the offsetBytes, we know the offset has moved
                                 offsetHasMoved = true;
@@ -136,7 +154,7 @@ namespace MGS2_MC
                 }
                 catch (Exception e)
                 {
-                    //TODO: add logging :)
+                    logger.Warning($"Something unexpected went wrong when looking at the last known player offsets: {e}");
                     //we failed to look at the last known player offsets, which isn't fatal.
                 }
             }
@@ -149,7 +167,7 @@ namespace MGS2_MC
                 while (byteCount + 152 < buffer.Length) //this can _probably just be 144 or 148, but i want to be safe
                 {
                     bool mightBeValid = false;
-                    for (int position = 0; position < MGS2Constants.PlayerOffsetBytes.Length; position++)
+                    for (int position = 0; position < MGS2Offsets.PlayerInfoFinderAoB.Length; position++)
                     {
                         //the "playerOffsetBytes" is very common within the game's memory. (~60-90 matches)
                         //HOWEVER, if we limit the playerOffset bytes by the _relative position_, we get VERY few results!
@@ -164,10 +182,10 @@ namespace MGS2_MC
                         if (buffer[byteCount + position + 72] != buffer[byteCount + position])
                             break;
                         //now filter any out that don't match with the playerOffsetBytes
-                        if (buffer[byteCount + position] != MGS2Constants.PlayerOffsetBytes[position])
+                        if (buffer[byteCount + position] != MGS2Offsets.PlayerInfoFinderAoB[position])
                             break;
                         //if we get all the way through the scan without finding anything "wrong", we have a possible match
-                        else if (position == MGS2Constants.PlayerOffsetBytes.Length - 1)
+                        else if (position == MGS2Offsets.PlayerInfoFinderAoB.Length - 1)
                         {
                             mightBeValid = true;
                         }
@@ -175,16 +193,16 @@ namespace MGS2_MC
 
                     if (mightBeValid)
                     {
-                        byte[] bufferBeingExamined = new byte[MGS2Constants.PlayerOffsetBytes.Length];
-                        Array.Copy(buffer, byteCount + 144, bufferBeingExamined, 0, MGS2Constants.PlayerOffsetBytes.Length);
+                        byte[] bufferBeingExamined = new byte[MGS2Offsets.PlayerInfoFinderAoB.Length];
+                        Array.Copy(buffer, byteCount + 144, bufferBeingExamined, 0, MGS2Offsets.PlayerInfoFinderAoB.Length);
 
                         //to filter out scenarios #1 and #2 above, for all of the possible matches, check 144 bytes ahead.
                         //ONLY if we are matching on a file with 0 shots OR 0 shots at last checkpoint can there be a full match
                         //144 bytes ahead. if at ANY point in the 144 bytes after each position in the offset array we're scanning
                         //there is a value that DOES NOT MATCH, then we know we have a real player offset.
-                        for (int position = 0; position < MGS2Constants.PlayerOffsetBytes.Length; position++)
+                        for (int position = 0; position < MGS2Offsets.PlayerInfoFinderAoB.Length; position++)
                         {
-                            if (bufferBeingExamined[position] != MGS2Constants.PlayerOffsetBytes[position])
+                            if (bufferBeingExamined[position] != MGS2Offsets.PlayerInfoFinderAoB[position])
                             {
                                 playerOffset.Add(byteCount);
                                 break;
@@ -200,7 +218,7 @@ namespace MGS2_MC
             }
             catch(Exception e)
             {
-                //TODO: add logging :)
+                logger.Error($"Failed to find player offset: {e}");
                 throw new AggregateException($"Failed to find player offset: ", e);
             }
 
@@ -218,6 +236,14 @@ namespace MGS2_MC
             bool success = NativeMethods.ReadProcessMemory(processHandle, objectAddress, bytesToRead, (uint) bytesToRead.Length, out int bytesRead);
             if (!success || bytesRead != bytesToRead.Length)
             {
+                if (!success)
+                {
+                    logger.Debug("Failed to read memory...");
+                }
+                if(bytesRead != bytesToRead.Length)
+                {
+                    logger.Debug($"Expected to read {bytesToRead.Length}, but we actually read {bytesRead}");
+                }
                 throw new FileLoadException($"Failed to read value at offset {processHandle}+{objectAddress}.");
             }
 
@@ -248,6 +274,7 @@ namespace MGS2_MC
             }
             catch(Exception ex)
             {
+                logger.Error($"Failed to write boolean value at offset {processHandle}+{objectOffset}: {ex}");
                 throw new AggregateException($"Failed to write boolean value at offset {processHandle}+{objectOffset}", ex);
             }
         }
@@ -262,7 +289,8 @@ namespace MGS2_MC
             }
             catch
             {
-                throw new AggregateException($"Cannot find process `{MGS2Constants.PROCESS_NAME}` - is it running?");
+                logger.Error($"Failed to get process {MGS2Constants.MGS2_PROCESS_NAME}");
+                throw new AggregateException($"Cannot find process `{MGS2Constants.MGS2_PROCESS_NAME}` - is it running?");
             }
 
             PROCESS_BASE_ADDRESS = process.MainModule.BaseAddress;
@@ -283,11 +311,24 @@ namespace MGS2_MC
 
                 if ((!playerSuccess && !checkpointSuccess) || bytesWritten != buffer.Length)
                 {
+                    if (!playerSuccess)
+                    {
+                        logger.Debug("Failed to write player's memory...");
+                    }
+                    if (!checkpointSuccess)
+                    {
+                        logger.Debug("Failed to write checkpoint memory...");
+                    }
+                    if(bytesWritten != buffer.Length)
+                    {
+                        logger.Debug($"We tried to write {buffer.Length} bytes, but ended up writing {bytesWritten}");
+                    }
                     throw new InvalidOperationException($"Failed to write memory at {objectOffset} with value {value}.");
                 }
             }
             catch (Exception e)
             {
+                logger.Error("Something went wrong when trying to modify the game's memory!");
                 throw new AggregateException($"Something unexpected went wrong when trying to modify the game's memory! {e}");
             }
             finally
@@ -310,7 +351,8 @@ namespace MGS2_MC
             }
             catch
             {
-                throw new AggregateException($"Cannot find process `{MGS2Constants.PROCESS_NAME}` - is it running?");
+                logger.Error($"Failed to get process {MGS2Constants.MGS2_PROCESS_NAME}");
+                throw new AggregateException($"Cannot find process `{MGS2Constants.MGS2_PROCESS_NAME}` - is it running?");
             }
 
             PROCESS_BASE_ADDRESS = process.MainModule.BaseAddress;
@@ -328,6 +370,7 @@ namespace MGS2_MC
             }
             catch(Exception e)
             {
+                logger.Debug($"Failed to get current value at {PROCESS_BASE_ADDRESS}+{valueOffset}");
                 throw new AggregateException($"Something unexpected went wrong when trying to get current value! {e}");
             }
             finally
@@ -390,7 +433,8 @@ namespace MGS2_MC
             }
             catch
             {
-                throw new AggregateException($"Cannot find process `{MGS2Constants.PROCESS_NAME}` - is it running?");
+                logger.Error($"Failed to get process {MGS2Constants.MGS2_PROCESS_NAME}");
+                throw new AggregateException($"Cannot find process `{MGS2Constants.MGS2_PROCESS_NAME}` - is it running?");
             }
 
             PROCESS_BASE_ADDRESS = process.MainModule.BaseAddress;
@@ -404,6 +448,7 @@ namespace MGS2_MC
             }
             catch (Exception e)
             {
+                logger.Debug($"Could not toggle {mgs2Object.Name}");
                 throw new AggregateException("Failed to toggle object.", e);
             }
             finally

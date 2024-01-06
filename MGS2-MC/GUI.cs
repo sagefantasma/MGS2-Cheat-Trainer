@@ -1,23 +1,584 @@
-﻿using System;
+using MGS2_MC.Controllers;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MGS2_MC
 {
     public partial class GUI : Form
     {
+        public static bool CanNavigateWithController = false;
+        private static readonly List<GuiObject> itemGuiObjectList =  new List<GuiObject> ();
+        private static readonly List<GuiObject> weaponGuiObjectList = new List<GuiObject> ();
+        private static object CurrentlySelectedObject = null;
+        private static bool? CurrentCountSelected = true;
+        private static int CurrentTab = 0;
+        private static int LastSelectedItemIndex = -1;
+        private static int LastSelectedWeaponIndex = -1;
+        private static object CurrentlySelectedOpposingObject = null;
+        public static GUI StaticGuiReference = null;
+
+        internal static void ShowGui()
+        {
+            StaticGuiReference.Invoke(new Action(() => 
+            {
+                StaticGuiReference.WindowState = FormWindowState.Normal;
+                StaticGuiReference.FindForm().Activate();                
+            }
+            ));
+        }
+
+        internal static void HideGui()
+        {
+            StaticGuiReference.Invoke(new Action(() => StaticGuiReference.WindowState = FormWindowState.Minimized));
+        }
+
+        internal static void NavigateViaController(ControllerInterpreter.PressedButton pressedButton, 
+            ControllerInterpreter.PressedButton modifierButton = ControllerInterpreter.PressedButton.None)
+        {
+            if (CanNavigateWithController)
+            {
+                StaticGuiReference.Invoke(new Action(() =>
+                {
+                    if (CurrentlySelectedObject == null)
+                    {
+                        //we are navigating via controller for the first time or just switched tabs
+                        switch (CurrentTab)
+                        {
+                            case 0:
+                                //Item tab
+                                CurrentlySelectedObject = StaticGuiReference.itemListBox.Name;
+                                StaticGuiReference.itemListBox.BackColor = Color.LightCyan;
+                                StaticGuiReference.itemListBox.SelectedIndex = LastSelectedItemIndex == -1 ? 0 : LastSelectedItemIndex;
+                                break;
+                            case 1:
+                                //Weapon tab
+                                CurrentlySelectedObject = StaticGuiReference.weaponListBox.Name;
+                                StaticGuiReference.weaponListBox.BackColor = Color.LightCyan;
+                                StaticGuiReference.weaponListBox.SelectedIndex = LastSelectedWeaponIndex == -1 ? 0 : LastSelectedWeaponIndex;
+                                break;
+                            default:
+                                MessageBox.Show("This tab isn't yet have controller support, please use mouse & keyboard for this tab :)");
+                                break;
+                        }
+                        NavigateViaController(ControllerInterpreter.PressedButton.Cross);
+                        return;
+                    }
+                    switch (pressedButton)
+                    {
+                        case ControllerInterpreter.PressedButton.Cross:
+                            //click on element, set value if deep enough
+
+                            //first check to see if we're in a TableLayoutPanel(as deep as we can go)
+                            if (CurrentlySelectedObject is TableLayoutPanel)
+                            {
+                                if (CurrentCountSelected != null)
+                                {
+                                    foreach (Control subControl in (CurrentlySelectedObject as TableLayoutPanel).Controls)
+                                    {
+                                        if (subControl is Button sendButton)
+                                        {
+                                            Color previousColor = sendButton.BackColor;
+                                            sendButton.BackColor = Color.Green;
+                                            sendButton.PerformClick();
+                                            sendButton.BackColor = previousColor;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    //do nothing if we're on a button that can only be enabled or disabled and the cross button was pressed
+                                    break;
+                                }
+                            }
+
+                            if (CurrentlySelectedObject.ToString() == StaticGuiReference.itemListBox.Name) //TODO: determine if working as expected now
+                            {
+                                if (LastSelectedItemIndex == -1)
+                                {
+                                    //first time going into this tab, so auto-select first item
+                                    CurrentlySelectedObject = StaticGuiReference.itemListBox.Items[0];
+                                    StaticGuiReference.itemListBox.SelectedIndex = 0;
+                                    break;
+                                }
+                                else
+                                {
+                                    //otherwise, auto-select the last chosen item
+                                    CurrentlySelectedObject = StaticGuiReference.itemListBox.Items[LastSelectedItemIndex];
+                                    StaticGuiReference.itemListBox.SelectedIndex = LastSelectedItemIndex;
+                                    break;
+                                }
+                            }
+                            else if (StaticGuiReference.itemListBox.Items.Contains(CurrentlySelectedObject))
+                            {
+                                //looking to select an item of the itemListBox
+                                SelectObjectFromList(ref LastSelectedItemIndex, StaticGuiReference.itemListBox, itemGuiObjectList, ItemListBox_Click);
+                                //now that item's groupBox is selected and the currentCount, if applicable, is "selected"
+                            }
+
+                            if (CurrentlySelectedObject.ToString() == StaticGuiReference.weaponListBox.Name)
+                            {
+                                if (LastSelectedWeaponIndex == -1)
+                                {
+                                    CurrentlySelectedObject = StaticGuiReference.weaponListBox.Items[0];
+                                    StaticGuiReference.weaponListBox.SelectedIndex = 0;
+                                    break;
+                                }
+                                else
+                                {
+                                    CurrentlySelectedObject = StaticGuiReference.weaponListBox.Items[LastSelectedWeaponIndex];
+                                    StaticGuiReference.itemListBox.SelectedIndex = LastSelectedWeaponIndex;
+                                    break;
+                                }
+                            }
+                            else if (StaticGuiReference.weaponListBox.Items.Contains(CurrentlySelectedObject))
+                            {
+                                //looking to select an item of the weaponListBox
+                                if (CurrentlySelectedObject == StaticGuiReference.hfBladeGroupBox)
+                                {
+                                    //the HF blade needs to have it's own logic, when/if it gets done properly
+                                }
+                                else
+                                {
+                                    SelectObjectFromList(ref LastSelectedWeaponIndex, StaticGuiReference.weaponListBox, weaponGuiObjectList, WeaponListBox_Click);
+                                }
+                                //now that weapons's groupBox is selected and the currentCount, if applicable, is "selected"
+                            }
+                            break;
+
+                        case ControllerInterpreter.PressedButton.Circle:
+                            //go back to list
+                            if (CurrentlySelectedObject is TableLayoutPanel || CurrentlySelectedObject is GroupBox)
+                            {
+                                (CurrentlySelectedObject as Control).BackColor = Color.Transparent;
+                                switch (CurrentTab)
+                                {
+                                    case 0:
+                                        CurrentlySelectedObject = itemGuiObjectList[LastSelectedItemIndex];
+                                        StaticGuiReference.itemListBox.BackColor = Color.LightCyan;
+                                        break;
+                                    case 1:
+                                        CurrentlySelectedObject = weaponGuiObjectList[LastSelectedWeaponIndex];
+                                        StaticGuiReference.weaponListBox.BackColor = Color.LightCyan;
+                                        break;
+                                }
+                                //(CurrentlySelectedObject as Control).BackColor = Color.LightCyan;
+                            }
+                            break;
+
+                        case ControllerInterpreter.PressedButton.Triangle:
+                            //enable/disable(no need to go into item i think)
+                            /*if (CurrentlySelectedObject != null)
+                            {
+                                if (CurrentlySelectedObject is GroupBox currentGroupBox)
+                                {
+                                    foreach (Control subControl in currentGroupBox.Controls[0].Controls)
+                                    {
+                                        if (subControl is CheckBox enableItemCheckBox)
+                                        {
+                                            enableItemCheckBox.Checked = !enableItemCheckBox.Checked;
+                                        }
+                                    }
+                                }
+                                else if(CurrentlySelectedObject is TableLayoutPanel activeLayoutPanel)
+                                {
+                                    foreach (Control subControl in activeLayoutPanel.Controls)
+                                    {
+                                        if (subControl is CheckBox enableItemCheckBox)
+                                        {
+                                            enableItemCheckBox.Checked = !enableItemCheckBox.Checked;
+                                        }
+                                    }
+                                }
+                            }*/
+                            switch (CurrentTab)
+                            {
+                                case 0:
+                                    foreach(Control subControl in itemGuiObjectList[StaticGuiReference.itemListBox.SelectedIndex].AssociatedControl.Controls[0].Controls)
+                                    {
+                                        if(subControl is CheckBox enableItemCheckBox)
+                                        {
+                                            enableItemCheckBox.Checked = !enableItemCheckBox.Checked;
+                                        }
+                                    }
+                                    break;
+                                case 1:
+                                    foreach(Control subControl in weaponGuiObjectList[StaticGuiReference.weaponListBox.SelectedIndex].AssociatedControl.Controls[0].Controls)
+                                    {
+                                        if (subControl is CheckBox enableWeaponCheckBox)
+                                        {
+                                            enableWeaponCheckBox.Checked = !enableWeaponCheckBox.Checked;
+                                        }
+                                    }
+                                    break;
+                            }
+                            break;
+
+                        case ControllerInterpreter.PressedButton.Square:
+                            //change from current/max(if applicable)
+                            if (CurrentlySelectedOpposingObject != null)
+                            {
+                                object tempObject = CurrentlySelectedObject;
+                                CurrentlySelectedObject = CurrentlySelectedOpposingObject;
+                                (CurrentlySelectedObject as Control).BackColor = Color.LightCyan;
+                                CurrentlySelectedOpposingObject = tempObject;
+                                (CurrentlySelectedOpposingObject as Control).BackColor = Color.Transparent;
+                            }
+                            break;
+
+                        case ControllerInterpreter.PressedButton.L1:
+                            // move to tab on left
+                            if (StaticGuiReference.mgs2TabControl.TabIndex == 0)
+                                StaticGuiReference.mgs2TabControl.TabIndex = StaticGuiReference.mgs2TabControl.TabCount - 1;
+                            else
+                                StaticGuiReference.mgs2TabControl.TabIndex--;
+                            StaticGuiReference.mgs2TabControl.SelectTab(StaticGuiReference.mgs2TabControl.TabIndex);
+                            StaticGuiReference.mgs2TabControl_SelectedIndexChanged(null, null);
+                            break;
+
+                        case ControllerInterpreter.PressedButton.L2:
+                            //??
+                            break;
+
+                        case ControllerInterpreter.PressedButton.L3:
+                            //minimize value
+                            break;
+
+                        case ControllerInterpreter.PressedButton.R1:
+                            // move to tab on right
+                            if (StaticGuiReference.mgs2TabControl.TabIndex == StaticGuiReference.mgs2TabControl.TabCount - 1)
+                                StaticGuiReference.mgs2TabControl.TabIndex = 0;
+                            else
+                                StaticGuiReference.mgs2TabControl.TabIndex++;
+                            StaticGuiReference.mgs2TabControl.SelectTab(StaticGuiReference.mgs2TabControl.TabIndex);
+                            StaticGuiReference.mgs2TabControl_SelectedIndexChanged(null, null);
+                            break;
+
+                        case ControllerInterpreter.PressedButton.R2:
+                            //??
+                            break;
+
+                        case ControllerInterpreter.PressedButton.R3:
+                            //maximize value
+                            break;
+
+                        case ControllerInterpreter.PressedButton.Select:
+
+                            break;
+
+                        case ControllerInterpreter.PressedButton.Start:
+
+                            break;
+
+                        case ControllerInterpreter.PressedButton.UpDirectional:
+                            if (CurrentlySelectedObject is GuiObject)
+                            {
+                                switch (CurrentTab)
+                                {
+                                    case 0:
+                                        int currentItemIndex = StaticGuiReference.itemListBox.SelectedIndex;
+                                        if (currentItemIndex == 0)
+                                            StaticGuiReference.itemListBox.SelectedIndex = StaticGuiReference.itemListBox.Items.Count - 1;
+                                        else
+                                            StaticGuiReference.itemListBox.SelectedIndex--;
+                                        CurrentlySelectedObject = StaticGuiReference.itemListBox.SelectedItem;
+                                        PreviewObjectFromList(ItemListBox_Click);
+                                        break;
+                                    case 1:
+                                        int currentWeaponIndex = StaticGuiReference.weaponListBox.SelectedIndex;
+                                        if (currentWeaponIndex == 0)
+                                            StaticGuiReference.weaponListBox.SelectedIndex = StaticGuiReference.weaponListBox.Items.Count - 1;
+                                        else
+                                            StaticGuiReference.weaponListBox.SelectedIndex--;
+                                        CurrentlySelectedObject = StaticGuiReference.weaponListBox.SelectedItem;
+                                        PreviewObjectFromList(WeaponListBox_Click);
+                                        break;
+                                }
+                                break;
+                            }
+
+                            if (modifierButton == ControllerInterpreter.PressedButton.RightDirectional)
+                            {
+
+                            }
+                            else if (modifierButton == ControllerInterpreter.PressedButton.LeftDirectional)
+                            {
+
+                            }
+                            else
+                            {
+                                //increase value by 10
+                                if (CurrentlySelectedObject is TableLayoutPanel upTableLayoutPanel)
+                                {
+                                    foreach (Control control in upTableLayoutPanel.Controls)
+                                    {
+                                        if (control is NumericUpDown numericUpDown)
+                                        {
+                                            try
+                                            {
+                                                numericUpDown.Value += 10;
+                                            }
+                                            catch
+                                            {
+                                                numericUpDown.Value = numericUpDown.Maximum;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+
+                        case ControllerInterpreter.PressedButton.RightDirectional:
+                            //increase value by 1
+                            if (CurrentlySelectedObject is TableLayoutPanel rightTableLayoutPanel)
+                            {
+                                foreach (Control control in rightTableLayoutPanel.Controls)
+                                {
+                                    if (control is NumericUpDown numericUpDown)
+                                    {
+                                        try
+                                        {
+                                            numericUpDown.Value++;
+                                        }
+                                        catch
+                                        {
+                                            numericUpDown.Value = numericUpDown.Maximum;
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+
+                        case ControllerInterpreter.PressedButton.LeftDirectional:
+                            //decrease value by 1
+                            if (CurrentlySelectedObject is TableLayoutPanel leftTableLayoutPanel)
+                            {
+                                foreach (Control control in leftTableLayoutPanel.Controls)
+                                {
+                                    if (control is NumericUpDown numericUpDown)
+                                    {
+                                        try
+                                        {
+                                            numericUpDown.Value--;
+                                        }
+                                        catch
+                                        {
+                                            numericUpDown.Value = numericUpDown.Minimum;
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+
+                        case ControllerInterpreter.PressedButton.DownDirectional:
+                            if (CurrentlySelectedObject is GuiObject)
+                            {
+                                switch (CurrentTab)
+                                {
+                                    case 0:
+                                        int currentItemIndex = StaticGuiReference.itemListBox.SelectedIndex;
+                                        if (currentItemIndex == StaticGuiReference.itemListBox.Items.Count - 1)
+                                            StaticGuiReference.itemListBox.SelectedIndex = 0;
+                                        else
+                                            StaticGuiReference.itemListBox.SelectedIndex++;
+                                        CurrentlySelectedObject = StaticGuiReference.itemListBox.SelectedItem;
+                                        PreviewObjectFromList(ItemListBox_Click);
+                                        break;
+                                    case 1:
+                                        int currentWeaponIndex = StaticGuiReference.weaponListBox.SelectedIndex;
+                                        if (currentWeaponIndex == StaticGuiReference.weaponListBox.Items.Count - 1)
+                                            StaticGuiReference.weaponListBox.SelectedIndex = 0;
+                                        else
+                                            StaticGuiReference.weaponListBox.SelectedIndex++;
+                                        CurrentlySelectedObject = StaticGuiReference.weaponListBox.SelectedItem;
+                                        PreviewObjectFromList(WeaponListBox_Click);
+                                        break;
+                                }
+                                break;
+                            }
+
+                            if (modifierButton == ControllerInterpreter.PressedButton.RightDirectional)
+                            {
+
+                            }
+                            else if (modifierButton == ControllerInterpreter.PressedButton.LeftDirectional)
+                            {
+
+                            }
+                            else
+                            {
+                                //decrease value by 10
+                                if (CurrentlySelectedObject is TableLayoutPanel downTableLayoutPanel)
+                                {
+                                    foreach (Control control in downTableLayoutPanel.Controls)
+                                    {
+                                        if (control is NumericUpDown numericUpDown)
+                                        {
+                                            try
+                                            {
+                                                numericUpDown.Value -= 10;
+                                            }
+                                            catch
+                                            {
+                                                numericUpDown.Value = numericUpDown.Minimum;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                    }
+                }));
+            }
+        }
+
+        private static void PreviewObjectFromList(Action StaticFunction)
+        {
+            StaticFunction.Invoke();
+        }
+
+        private static void SelectObjectFromList(ref int lastSelectedIndex, ListBox desiredListBox, List<GuiObject> desiredObjectList, Action StaticFunction)
+        {
+            lastSelectedIndex = desiredListBox.SelectedIndex;
+            (CurrentlySelectedObject as GuiObject).AssociatedControl.BackColor = Color.Transparent;
+            desiredListBox.BackColor = Color.White;
+            CurrentlySelectedObject = desiredObjectList[desiredListBox.SelectedIndex].AssociatedControl; //currently selecting a groupbox
+            StaticFunction.Invoke();
+            (CurrentlySelectedObject as Control).BackColor = Color.LightCyan;
+            
+            if ((CurrentlySelectedObject as GroupBox).Controls[0] //this is the layoutpanel within the groupbox
+            .Controls.Count > 2)
+            {
+                CurrentCountSelected = true; //always start at CurrentCount for anything with current count
+                foreach (Control subControl in (CurrentlySelectedObject as GroupBox).Controls[0].Controls)
+                {
+                    if (subControl.Name.Contains("CurrentLayoutPanel"))
+                    {
+                        (CurrentlySelectedObject as Control).BackColor = Color.Transparent;
+                        CurrentlySelectedObject = subControl;
+                        subControl.BackColor = Color.LightCyan;
+                    }
+                    if (subControl.Name.Contains("MaxLayoutPanel"))
+                    {
+                        CurrentlySelectedOpposingObject = subControl; //for simplified switching later on
+                    }
+                }
+            }
+            else
+            {
+                CurrentCountSelected = null; //null the boolean if we don't have counts
+            }
+        }
+
+        private void BuildGuiObjectLists()
+        {
+            itemGuiObjectList.Add(new GuiObject("AK Suppressor", akSupGroupBox));
+            itemGuiObjectList.Add(new GuiObject("AP Sensor", apSensorGroupBox));
+            itemGuiObjectList.Add(new GuiObject("BDU", bduGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Bandage", bandageGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Blue Wig", blueWigGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Body Armor", bodyArmorGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Box 1", box1GroupBox));
+            itemGuiObjectList.Add(new GuiObject("Box 2", box2GroupBox));
+            itemGuiObjectList.Add(new GuiObject("Box 3", box3GroupBox));
+            itemGuiObjectList.Add(new GuiObject("Box 4", box4GroupBox));
+            itemGuiObjectList.Add(new GuiObject("Box 5", box5GroupBox));
+            itemGuiObjectList.Add(new GuiObject("Camera", camera1GroupBox));
+            itemGuiObjectList.Add(new GuiObject("Cigarettes", cigarettesGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Cold Medicine", coldMedsGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Digital Camera", digitalCameraGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Infinity Wig", infinityWigGroupBox));
+            itemGuiObjectList.Add(new GuiObject("MO Disc", moDiscGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Mine Detector", mineDetectorGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Night Vision Goggles", nvgGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Orange Wig", orangeWigGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Pentazemin", pentazeminGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Phone", phoneGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Ration", rationGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Scope", scope1GroupBox));
+            itemGuiObjectList.Add(new GuiObject("Security Card", cardGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Sensor A", sensorAGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Sensor B", sensorBGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Shaver", shaverGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Socom Suppressor", socomGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Stealth", stealthGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Thermal Goggles", thermalGroupBox));
+            itemGuiObjectList.Add(new GuiObject("USP Suppressor", uspSupGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Wet Box", wetBoxGroupBox));
+
+            weaponGuiObjectList.Add(new GuiObject("AKS-74u", akGroupBox));
+            weaponGuiObjectList.Add(new GuiObject("Book", bookGroupBox));
+            weaponGuiObjectList.Add(new GuiObject("C4", c4GroupBox));
+            weaponGuiObjectList.Add(new GuiObject("Chaff Grenade", chaffGroupBox));
+            weaponGuiObjectList.Add(new GuiObject("Claymore", claymoreGroupBox));
+            weaponGuiObjectList.Add(new GuiObject("Coolant", coolantGroupBox));
+            weaponGuiObjectList.Add(new GuiObject("Directional Mic", dmic1GroupBox));
+            weaponGuiObjectList.Add(new GuiObject("Directional Mic(Zoomed)", dmic2GroupBox));
+            weaponGuiObjectList.Add(new GuiObject("Grenade", grenadeGroupBox));
+            weaponGuiObjectList.Add(new GuiObject("High Frequency Blade", hfBladeGroupBox));
+            weaponGuiObjectList.Add(new GuiObject("M4", m4GroupBox));
+            weaponGuiObjectList.Add(new GuiObject("M9", m9GroupBox));
+            weaponGuiObjectList.Add(new GuiObject("Magazine", magazineGroupBox));
+            weaponGuiObjectList.Add(new GuiObject("Nikita", nikitaGroupBox));
+            weaponGuiObjectList.Add(new GuiObject("PSG1", psg1GroupBox));
+            weaponGuiObjectList.Add(new GuiObject("PSG1-T", psg1GroupBox));
+            weaponGuiObjectList.Add(new GuiObject("RGB6", rgb6GroupBox));
+            weaponGuiObjectList.Add(new GuiObject("SOCOM", socomGroupBox));
+            weaponGuiObjectList.Add(new GuiObject("Stinger", stingerGroupBox));
+            weaponGuiObjectList.Add(new GuiObject("Stun Grenade", stunGroupBox));
+            weaponGuiObjectList.Add(new GuiObject("USP", uspGroupBox));
+        }
+
+        private void BuildGroupBoxForObject(MGS2Object objectToEdit)
+        {
+            //TODO: i think this is all set to be removed
+            //envisioning a listbox on the left pane to choose item to edit
+            //then the item you select determines what shows up in the right pane
+            //eventually, this should dovetail well into the controller support
+
+            //all items need the enable checkbox & picture
+            switch(objectToEdit)
+            {
+                case AmmoWeapon ammoWeapon:
+                    //need current ammo updown & set and max ammo updown & set
+                    break;
+                case SpecialWeapon specialWeapon:
+                    //need lethal/stun buttons
+                    break;
+                case BasicWeapon basicWeapon:
+                    //don't need anything else
+                    break;
+                case StackableItem stackableItem:
+                    //need current count updown & set
+                    break;
+                case DurabilityItem durabilityItem:
+                    //need durability updown & set
+                    break;
+                case LevelableItem levelableItem:
+                    //need level updown & set
+                    break;
+                case BasicItem basicItem:
+                    //don't need anything else
+                    break;
+            }
+        }
+
         public GUI()
         {
+            StaticGuiReference = this;
             InitializeComponent();
-            //removing the stats & strings pages for now since they're unfinished
+            BuildGuiObjectLists();
+            itemListBox.DataSource = itemGuiObjectList;
+            itemListBox.DisplayMember = "Name";
+            itemListBox.SelectedIndex = -1;
+            weaponListBox.DataSource = weaponGuiObjectList;
+            weaponListBox.DisplayMember = "Name";
+            weaponListBox.SelectedIndex = -1;
+            stringsListBox.DataSource = MGS2Strings.MGS2_STRINGS;
+            stringsListBox.DisplayMember = "Tag";
             mgs2TabControl.TabPages.RemoveByKey(tabPageStats.Name);
-            mgs2TabControl.TabPages.RemoveByKey(tabPageStrings.Name);
         }
 
         #region GUI getters
@@ -59,16 +620,6 @@ namespace MGS2_MC
         private short MaxDogTagCount()
         {
             return (short)dogTagsMaxUpDown.Value;
-        }
-
-        private short CurrentColdMedsCount()
-        {
-            return (short)coldMedsCurrentUpDown.Value;
-        }
-
-        private short MaxColdMedsCount()
-        {
-            return (short)coldMedsMaxUpDown.Value;
         }
 
         private short CardSecurityLevel()
@@ -490,12 +1041,14 @@ namespace MGS2_MC
 
         private void ColdMedsCurrentBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.ColdMedicine.UpdateCurrentCount(CurrentColdMedsCount());
+            //MGS2UsableObjects.ColdMedicine.UpdateCurrentCount(CurrentColdMedsCount());
+            //TODO: remove this function
         }
 
         private void ColdMedsMaxBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.ColdMedicine.UpdateMaxCount(MaxColdMedsCount());
+            //MGS2UsableObjects.ColdMedicine.UpdateMaxCount(MaxColdMedsCount());
+            //TODO: remove this function
         }
 
         private void box1Btn_Click(object sender, EventArgs e)
@@ -815,5 +1368,73 @@ namespace MGS2_MC
             MGS2UsableObjects.HighFrequencyBlade.ToggleWeapon(hfBladeCheckBox.Checked);
         }
         #endregion
+
+        private void StringsListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //TODO: update the name field, length & button functionality
+        }
+
+        private void setBasicNameBtn_Click(object sender, EventArgs e)
+        {
+            var mgs2Handle = Program.MGS2Process.Handle;
+        }
+
+        private void ItemListBox_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            ItemListBox_Click();
+        }
+
+        private static void ItemListBox_Click()
+        {
+            StaticGuiReference.Invoke(new Action(() =>
+            {
+                if (StaticGuiReference.itemGroupBox.Controls.Count > 0)
+                    StaticGuiReference.itemGroupBox.Controls[0].Visible = false;
+                StaticGuiReference.itemGroupBox.Controls.Clear();
+
+                GuiObject itemObject = itemGuiObjectList.First(guiObject => guiObject.Name == (StaticGuiReference.itemListBox.SelectedItem as GuiObject).Name);
+
+                StaticGuiReference.itemGroupBox.Controls.Add(itemObject.AssociatedControl);
+                itemObject.AssociatedControl.Visible = true;
+            }));
+        }
+
+        private void weaponListBox_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            WeaponListBox_Click();
+        }
+
+        private static void WeaponListBox_Click()
+        {
+            StaticGuiReference.Invoke(new Action(() =>
+            {
+                if (StaticGuiReference.weaponGroupBox.Controls.Count > 0)
+                    StaticGuiReference.weaponGroupBox.Controls[0].Visible = false;
+                StaticGuiReference.weaponGroupBox.Controls.Clear();
+
+                GuiObject weaponObject = weaponGuiObjectList.First(guiObject => guiObject.Name == (StaticGuiReference.weaponListBox.SelectedItem as GuiObject).Name);
+
+                StaticGuiReference.weaponGroupBox.Controls.Add(weaponObject.AssociatedControl);
+                weaponObject.AssociatedControl.Visible = true;
+            }));
+        }
+
+        private void mgs2TabControl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            CurrentTab = mgs2TabControl.SelectedIndex;
+            CurrentlySelectedObject = null;
+        }
+    }
+
+    internal class GuiObject
+    {
+        public string Name { get; protected set; }
+        public Control AssociatedControl { get; protected set; }
+
+        internal GuiObject(string objectName, Control objectControl)
+        {
+            Name = objectName;
+            AssociatedControl = objectControl;
+        }
     }
 }

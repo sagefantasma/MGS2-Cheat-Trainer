@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MGS2-MC")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("MGS2: MC - Cheat Trainer")]
+[assembly: AssemblyDescription("A tool used to manipulate MGS2's memory to enable cool things :^)")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("SageFantasma")]
 [assembly: AssemblyProduct("MGS2-MC")]
-[assembly: AssemblyCopyright("Copyright ©  2023")]
+[assembly: AssemblyCopyright("Copyright ©  2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

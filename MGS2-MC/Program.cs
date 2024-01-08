@@ -5,8 +5,6 @@ using System.Text.Json;
 using System.Threading;
 using System.Windows.Forms;
 using Serilog;
-using Serilog.Core;
-using Serilog.Events;
 using static MGS2_MC.TrainerConfigStructure;
 
 namespace MGS2_MC
@@ -23,6 +21,7 @@ namespace MGS2_MC
         [STAThread]
         static void Main()
         {
+
             Logging.LogLocation = new FileInfo(Application.ExecutablePath).DirectoryName;
             logger = Logging.InitializeLogger(loggerName);
             MGS2MemoryManager.StartLogger();

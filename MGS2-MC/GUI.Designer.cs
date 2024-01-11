@@ -3096,7 +3096,7 @@
             // m4PictureBox
             // 
             this.m4PictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m4PictureBox.ImageLocation = "Resources/images/m4a_alp_ovl.bmp.bmp";
+            this.m4PictureBox.ImageLocation = "Resources/images/m4a_nm_alp_ovl.bmp.bmp";
             this.m4PictureBox.Location = new System.Drawing.Point(3, 3);
             this.m4PictureBox.Name = "m4PictureBox";
             this.m4PictureBox.Size = new System.Drawing.Size(35, 31);
@@ -6451,7 +6451,7 @@
             // box4PictureBox
             // 
             this.box4PictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.box4PictureBox.ImageLocation = "Resources/images/box_d_alp_ovl.bmp.bmp";
+            this.box4PictureBox.ImageLocation = "Resources/images/cbx_d_alp_ovl.bmp.bmp";
             this.box4PictureBox.Location = new System.Drawing.Point(3, 3);
             this.box4PictureBox.Name = "box4PictureBox";
             this.box4PictureBox.Size = new System.Drawing.Size(108, 23);

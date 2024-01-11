@@ -61,6 +61,7 @@ namespace MGS2_MC
                                 break;
                             default:
                                 MessageBox.Show("This tab isn't yet have controller support, please use mouse & keyboard for this tab :)");
+                                CurrentlySelectedObject = StaticGuiReference.stringsListBox.Name;
                                 break;
                         }
                         NavigateViaController(ControllerInterpreter.PressedButton.Cross);
@@ -523,7 +524,7 @@ namespace MGS2_MC
             weaponGuiObjectList.Add(new GuiObject("Magazine", magazineGroupBox));
             weaponGuiObjectList.Add(new GuiObject("Nikita", nikitaGroupBox));
             weaponGuiObjectList.Add(new GuiObject("PSG1", psg1GroupBox));
-            weaponGuiObjectList.Add(new GuiObject("PSG1-T", psg1GroupBox));
+            weaponGuiObjectList.Add(new GuiObject("PSG1-T", psg1TGroupBox));
             weaponGuiObjectList.Add(new GuiObject("RGB6", rgb6GroupBox));
             weaponGuiObjectList.Add(new GuiObject("SOCOM", socomGroupBox));
             weaponGuiObjectList.Add(new GuiObject("Stinger", stingerGroupBox));

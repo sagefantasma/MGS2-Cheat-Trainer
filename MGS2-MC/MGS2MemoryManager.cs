@@ -41,10 +41,10 @@ namespace MGS2_MC
             public static extern bool CloseHandle(IntPtr hObject);
         }
 
-        static readonly Process mgs2Process = Program.MGS2Process;
+        static readonly Process mgs2Process = MGS2Monitor.MGS2Process;
         static IntPtr PROCESS_BASE_ADDRESS = IntPtr.Zero;
         static int[] LAST_KNOWN_PLAYER_OFFSETS = default;
-        private const string loggerName = "MGS2CheatTrainerMemoryManagerDebuglog.log";
+        private const string loggerName = "MemoryManagerDebuglog.log";
         private static ILogger logger;
 
         private enum ActiveCharacter
@@ -55,7 +55,9 @@ namespace MGS2_MC
 
         internal static void StartLogger()
         {
-            logger = Logging.InitializeLogger(loggerName);
+            logger = Logging.InitializeNewLogger(loggerName);
+            logger.Information($"Memory Manager for version {Program.AppVersion} initialized...");
+            logger.Verbose($"Instance ID: {Program.InstanceID}");
         }
 
         #endregion
@@ -65,7 +67,7 @@ namespace MGS2_MC
         {
             //TODO: verify for raiden, works for snake 100%
             //also, this would inherently break down if you toggle camera1, so i should modify this logic
-            bool camera1Enabled = BitConverter.ToBoolean(GetCurrentValue(MGS2Constants.CAMERA, sizeof(short)), 0);
+            bool camera1Enabled = BitConverter.ToBoolean(GetCurrentValue(Constants.CAMERA, sizeof(short)), 0);
             
             if (camera1Enabled) 
             {
@@ -101,7 +103,7 @@ namespace MGS2_MC
         {
             if (mgs2Process == null || mgs2Process.HasExited) //if MGS2 was started separately from the trainer, get the process.
             {
-                Process process = Process.GetProcessesByName(MGS2Constants.MGS2_PROCESS_NAME).FirstOrDefault();
+                Process process = Process.GetProcessesByName(Constants.MGS2_PROCESS_NAME).FirstOrDefault();
                 if (process == default)
                 {
                     throw new NullReferenceException();
@@ -124,8 +126,8 @@ namespace MGS2_MC
             }
             catch(Exception e)
             {
-                logger.Error($"Failed to read memory of process {MGS2Constants.MGS2_PROCESS_NAME}");
-                throw new AggregateException($"Failed to read `{MGS2Constants.MGS2_PROCESS_NAME}`. Is it running?", e);
+                logger.Error($"Failed to read memory of process {Constants.MGS2_PROCESS_NAME}");
+                throw new AggregateException($"Failed to read `{Constants.MGS2_PROCESS_NAME}`. Is it running?", e);
             }
 
             //if we've retrieved a player offset before, check the old one first
@@ -289,8 +291,8 @@ namespace MGS2_MC
             }
             catch
             {
-                logger.Error($"Failed to get process {MGS2Constants.MGS2_PROCESS_NAME}");
-                throw new AggregateException($"Cannot find process `{MGS2Constants.MGS2_PROCESS_NAME}` - is it running?");
+                logger.Error($"Failed to get process {Constants.MGS2_PROCESS_NAME}");
+                throw new AggregateException($"Cannot find process `{Constants.MGS2_PROCESS_NAME}` - is it running?");
             }
 
             PROCESS_BASE_ADDRESS = process.MainModule.BaseAddress;
@@ -351,8 +353,8 @@ namespace MGS2_MC
             }
             catch
             {
-                logger.Error($"Failed to get process {MGS2Constants.MGS2_PROCESS_NAME}");
-                throw new AggregateException($"Cannot find process `{MGS2Constants.MGS2_PROCESS_NAME}` - is it running?");
+                logger.Error($"Failed to get process {Constants.MGS2_PROCESS_NAME}");
+                throw new AggregateException($"Cannot find process `{Constants.MGS2_PROCESS_NAME}` - is it running?");
             }
 
             PROCESS_BASE_ADDRESS = process.MainModule.BaseAddress;
@@ -433,8 +435,8 @@ namespace MGS2_MC
             }
             catch
             {
-                logger.Error($"Failed to get process {MGS2Constants.MGS2_PROCESS_NAME}");
-                throw new AggregateException($"Cannot find process `{MGS2Constants.MGS2_PROCESS_NAME}` - is it running?");
+                logger.Error($"Failed to get process {Constants.MGS2_PROCESS_NAME}");
+                throw new AggregateException($"Cannot find process `{Constants.MGS2_PROCESS_NAME}` - is it running?");
             }
 
             PROCESS_BASE_ADDRESS = process.MainModule.BaseAddress;

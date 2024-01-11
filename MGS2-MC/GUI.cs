@@ -1,7 +1,9 @@
 using MGS2_MC.Controllers;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -1377,7 +1379,7 @@ namespace MGS2_MC
 
         private void setBasicNameBtn_Click(object sender, EventArgs e)
         {
-            var mgs2Handle = Program.MGS2Process.Handle;
+            var mgs2Handle = MGS2Monitor.MGS2Process.Handle;
         }
 
         private void ItemListBox_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -1425,17 +1427,37 @@ namespace MGS2_MC
             CurrentTab = mgs2TabControl.SelectedIndex;
             CurrentlySelectedObject = null;
         }
-    }
 
-    internal class GuiObject
-    {
-        public string Name { get; protected set; }
-        public Control AssociatedControl { get; protected set; }
-
-        internal GuiObject(string objectName, Control objectControl)
+        private void githubMenuItem_Click(object sender, EventArgs e)
         {
-            Name = objectName;
-            AssociatedControl = objectControl;
+            Process.Start("https://github.com/sagefantasma/MGS2-Cheat-Trainer");
+        }
+
+        private void viewLogsMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start(Logging.LogLocation);
+        }
+
+        private void modifyConfigMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void attachMgs2MenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void launchMgs2MenuItem_Click(object sender, EventArgs e)
+        {
+            if (Program.MGS2Thread.IsAlive)
+            {
+                MessageBox.Show("MGS2 is already running, please exit MGS2 before attempting to launch it again.");
+            }
+            else
+            {
+                Program.MGS2Thread.Start();
+            }
         }
     }
 }

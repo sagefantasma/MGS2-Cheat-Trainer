@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MGS2: MC - Cheat Trainer")]
-[assembly: AssemblyDescription("A tool used to manipulate MGS2's memory to enable cool things :^)")]
+[assembly: AssemblyTitle("MGS2 MC - Cheat Trainer")]
+[assembly: AssemblyDescription("A tool used to enable you to do cool things in MGS2 :^)")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("SageFantasma")]
-[assembly: AssemblyProduct("MGS2-MC")]
+[assembly: AssemblyProduct("MGS2 MC - Cheat Trainer")]
 [assembly: AssemblyCopyright("Copyright ©  2024")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.1.0.0")]
-[assembly: AssemblyFileVersion("0.1.0.0")]
+[assembly: AssemblyVersion("0.7.0.0")]
+[assembly: AssemblyFileVersion("0.7.0.0")]

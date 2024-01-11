@@ -33,7 +33,7 @@
     <ProductName>MGS2 Master Collection Cheat Trainer</ProductName>
     <PublisherName>SageFantasma</PublisherName>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>0.5.0.0</ApplicationVersion>
+    <ApplicationVersion>0.7.0.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -121,6 +121,9 @@
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\images\AIColonel.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.8.0.0\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
@@ -186,8 +189,11 @@
     <Compile Include="Controllers\IControllerManager.cs" />
     <Compile Include="Controllers\Ps4ControllerManager.cs" />
     <Compile Include="Controllers\XboxControllerManager.cs" />
-    <Compile Include="MGS2Injector.cs" />
+    <Compile Include="GuiObject.cs" />
+    <Compile Include="ControllerInterface.cs" />
+    <Compile Include="InstanceIdentifier.cs" />
     <Compile Include="Logging.cs" />
+    <Compile Include="MGS2Monitor.cs" />
     <Compile Include="MGS2Object.cs" />
     <Compile Include="GUI.cs">
       <SubType>Form</SubType>
@@ -195,7 +201,7 @@
     <Compile Include="GUI.Designer.cs">
       <DependentUpon>GUI.cs</DependentUpon>
     </Compile>
-    <Compile Include="MGS2Constants.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="MGS2MemoryManager.cs" />
     <Compile Include="MGS2Offsets.cs" />
     <Compile Include="Program.cs" />
@@ -254,6 +260,8 @@
     <Content Include="Resources\images\acd_alp_ovl.bmp.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\images\AIColonel.ico" />
+    <Content Include="Resources\images\AIColonel.ico.jpg" />
     <Content Include="Resources\images\aks_alp_ovl.bmp.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

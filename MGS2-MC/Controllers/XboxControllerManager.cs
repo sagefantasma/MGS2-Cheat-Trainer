@@ -3,7 +3,7 @@ using SharpDX.XInput;
 using System;
 using System.Collections;
 using System.Linq;
-using static MGS2_MC.MGS2Injector;
+using static MGS2_MC.ControllerInterface;
 
 namespace MGS2_MC.Controllers
 {

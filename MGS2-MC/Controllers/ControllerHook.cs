@@ -16,7 +16,7 @@ namespace MGS2_MC
         private object activeController;
         public event EventHandler TrainerMenu;
         private static ILogger logger;
-        private const string loggerName = "MGS2CheatTrainerControllerDebuglog.log";
+        private const string loggerName = "ControllerDebuglog.log";
 
         //TODO: realistically, we shouldn't have separate controller managers with the interface, so do that.
 
@@ -55,10 +55,11 @@ namespace MGS2_MC
 
         internal void Start(CancellationToken cancellationToken)
         {
-            logger = Logging.InitializeLogger(loggerName, "Verbose");
+            logger = Logging.InitializeNewLogger(loggerName);
             ps4ControllerManager.Logger = logger;
             xboxControllerManager.Logger = logger;
-            logger.Information("Controller hook starting...");
+            logger.Information($"Controller hook for version {Program.AppVersion} initialized...");
+            logger.Verbose($"Instance ID: {Program.InstanceID}");
             while (!cancellationToken.IsCancellationRequested)
             {
                 if (!activeControllerFound)

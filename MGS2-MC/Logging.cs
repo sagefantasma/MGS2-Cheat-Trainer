@@ -11,34 +11,17 @@ namespace MGS2_MC
         private const int KilobyteInBytes = 1000;
         private const int MegabyteInKilobytes = 1000 * KilobyteInBytes;
         public static string LogLocation;
+        public static LogEventLevel MainLogEventLevel = LogEventLevel.Information;
 
-        internal static ILogger InitializeLogger(string logFileName, string loggingLevel = "Information")
+        internal static ILogger InitializeNewLogger(string logFileName)
         {
-            LogEventLevel eventLevel;
-            switch (loggingLevel)
-            {
-                case "Verbose":
-                    eventLevel = LogEventLevel.Verbose;
-                    break;
-                default:
-                case "Information":
-                    eventLevel = LogEventLevel.Information;
-                    break;
-                case "Debug":
-                    eventLevel = LogEventLevel.Debug;
-                    break;
-                case "Warning":
-                    eventLevel = LogEventLevel.Warning;
-                    break;
-                case "Error":
-                    eventLevel = LogEventLevel.Error;
-                    break;
-                case "Fatal":
-                    eventLevel = LogEventLevel.Fatal;
-                    break;
-            }
+            return InitializeNewLogger(logFileName, MainLogEventLevel);
+        }
+
+        internal static ILogger InitializeNewLogger(string logFileName, LogEventLevel loggingLevel)
+        {
             return new LoggerConfiguration().WriteTo.File(Path.Combine(LogLocation, logFileName), rollOnFileSizeLimit: false, fileSizeLimitBytes: 50 * MegabyteInKilobytes)
-                                              .MinimumLevel.Is(eventLevel).CreateLogger();
+                                              .MinimumLevel.Is(loggingLevel).CreateLogger();
         }
     }
 }

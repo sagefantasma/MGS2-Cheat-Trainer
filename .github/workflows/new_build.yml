@@ -27,4 +27,4 @@ jobs:
 
       - name: Build Solution
         run: |
-          msbuild.exe "MGS2 Cheat Trainer GUI.sln" /p:platform="Any CPU" /p:configuration="Release"
+          msbuild.exe "MGS2 Cheat Trainer GUI.sln" /p:platform="x64" /p:configuration="Release"

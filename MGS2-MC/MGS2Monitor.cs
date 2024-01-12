@@ -58,7 +58,7 @@ namespace MGS2_MC
         private static readonly ILogger logger;
         private static bool initialLaunch = true;
 
-        private static TrainerConfig LoadConfig()
+        internal static TrainerConfig LoadConfig()
         {
             try
             {

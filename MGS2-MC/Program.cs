@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Configuration;
 using System.Deployment.Application;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
 using Serilog;
+using Serilog.Events;
 
 namespace MGS2_MC
 {
@@ -21,7 +23,46 @@ namespace MGS2_MC
         [STAThread]
         static void Main()
         {
-            if(ApplicationDeployment.IsNetworkDeployed)
+            SetAppVersion();
+            InitializeLogs();
+
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            
+            StartMonitoringThread();
+            StartControllerThread();
+
+            Application.Run(new GUI(logger));            
+        }
+
+        private static void StartMonitoringThread()
+        {
+            try
+            {
+                MGS2Thread.Start();
+            }
+            catch (Exception e)
+            {
+                logger.Error($"Could not start MGS2 monitor: {e}");
+            }
+        }
+
+        private static void StartControllerThread()
+        {
+            try
+            {
+                Thread controllerThread = new Thread(ControllerInterface.EnableInjector);
+                controllerThread.Start();
+            }
+            catch (Exception e)
+            {
+                logger.Error($"Could not start controller monitor: {e}");
+            }
+        }
+
+        private static void SetAppVersion()
+        {
+            if (ApplicationDeployment.IsNetworkDeployed)
             {
                 AppVersion = ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString();
             }
@@ -29,36 +70,45 @@ namespace MGS2_MC
             {
                 AppVersion = $"MANUAL_INSTALL-{Application.ProductVersion}";
             }
+        }
 
-            Logging.MainLogEventLevel = Serilog.Events.LogEventLevel.Information;
+        private static void InitializeLogs()
+        {
+            string logLevel;
+            try
+            {
+                logLevel = ConfigurationManager.AppSettings.Get("LogLevel");
+            }
+            catch
+            {
+                logLevel = "Information";
+            }
+            Logging.MainLogEventLevel = ParseLogEventLevel(logLevel);
             Logging.LogLocation = Path.Combine(new FileInfo(Application.ExecutablePath).DirectoryName, "logs");
             logger = Logging.InitializeNewLogger(loggerName);
             logger.Information($"MGS2 MC Cheat Trainer v.{AppVersion} initialized...");
             logger.Verbose($"Instance ID: {InstanceID}");
             MGS2MemoryManager.StartLogger();
+        }
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            try
+        private static LogEventLevel ParseLogEventLevel(string logLevel)
+        {
+            switch (logLevel)
             {
-                MGS2Thread.Start();
-            } 
-            catch (Exception e) 
-            {
-                logger.Error($"Could not start MGS2 monitor: {e}");
+                case "Verbose":
+                    return LogEventLevel.Verbose;
+                default:
+                case "Information":
+                    return LogEventLevel.Information;
+                case "Debug":
+                    return LogEventLevel.Debug;
+                case "Error":
+                    return LogEventLevel.Error;
+                case "Warning":
+                    return LogEventLevel.Warning;
+                case "Fatal":
+                    return LogEventLevel.Fatal;
             }
-
-            try
-            {
-                Thread controllerThread = new Thread(ControllerInterface.EnableInjector);
-                controllerThread.Start();
-            }
-            catch(Exception e)
-            {
-                logger.Error($"Could not start controller monitor: {e}");
-            }
-
-            Application.Run(new GUI());            
         }
     }
 }

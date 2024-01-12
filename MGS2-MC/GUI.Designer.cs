@@ -520,7 +520,6 @@
             this.mainMenuStrip = new System.Windows.Forms.MenuStrip();
             this.optionsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.modifyConfigMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.attachMgs2MenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.launchMgs2MenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewLogsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -845,7 +844,7 @@
             this.mgs2TabControl.SelectedIndex = 0;
             this.mgs2TabControl.Size = new System.Drawing.Size(584, 462);
             this.mgs2TabControl.TabIndex = 0;
-            this.mgs2TabControl.SelectedIndexChanged += new System.EventHandler(this.mgs2TabControl_SelectedIndexChanged);
+            this.mgs2TabControl.SelectedIndexChanged += new System.EventHandler(this.Mgs2TabControl_SelectedIndexChanged);
             // 
             // tabPageItem
             // 
@@ -7348,7 +7347,6 @@
             // 
             this.optionsMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.modifyConfigMenuItem,
-            this.attachMgs2MenuItem,
             this.launchMgs2MenuItem});
             this.optionsMenuItem.Name = "optionsMenuItem";
             this.optionsMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.O)));
@@ -7360,22 +7358,14 @@
             this.modifyConfigMenuItem.Name = "modifyConfigMenuItem";
             this.modifyConfigMenuItem.Size = new System.Drawing.Size(180, 22);
             this.modifyConfigMenuItem.Text = "Modify Config";
-            this.modifyConfigMenuItem.Click += new System.EventHandler(this.modifyConfigMenuItem_Click);
-            // 
-            // attachMgs2MenuItem
-            // 
-            this.attachMgs2MenuItem.Name = "attachMgs2MenuItem";
-            this.attachMgs2MenuItem.Size = new System.Drawing.Size(180, 22);
-            this.attachMgs2MenuItem.Text = "Attach to MGS2";
-            this.attachMgs2MenuItem.Click += new System.EventHandler(this.attachMgs2MenuItem_Click);
+            this.modifyConfigMenuItem.Click += new System.EventHandler(this.ModifyConfigMenuItem_Click);
             // 
             // launchMgs2MenuItem
             // 
-            this.launchMgs2MenuItem.Enabled = false;
             this.launchMgs2MenuItem.Name = "launchMgs2MenuItem";
             this.launchMgs2MenuItem.Size = new System.Drawing.Size(180, 22);
             this.launchMgs2MenuItem.Text = "Launch MGS2";
-            this.launchMgs2MenuItem.Click += new System.EventHandler(this.launchMgs2MenuItem_Click);
+            this.launchMgs2MenuItem.Click += new System.EventHandler(this.LaunchMgs2MenuItem_Click);
             // 
             // helpMenuItem
             // 
@@ -7391,14 +7381,14 @@
             this.viewLogsMenuItem.Name = "viewLogsMenuItem";
             this.viewLogsMenuItem.Size = new System.Drawing.Size(180, 22);
             this.viewLogsMenuItem.Text = "View Logs";
-            this.viewLogsMenuItem.Click += new System.EventHandler(this.viewLogsMenuItem_Click);
+            this.viewLogsMenuItem.Click += new System.EventHandler(this.ViewLogsMenuItem_Click);
             // 
             // githubMenuItem
             // 
             this.githubMenuItem.Name = "githubMenuItem";
             this.githubMenuItem.Size = new System.Drawing.Size(180, 22);
             this.githubMenuItem.Text = "Open GitHub Page";
-            this.githubMenuItem.Click += new System.EventHandler(this.githubMenuItem_Click);
+            this.githubMenuItem.Click += new System.EventHandler(this.GithubMenuItem_Click);
             // 
             // GUI
             // 
@@ -8336,7 +8326,6 @@
         private System.Windows.Forms.ToolStripMenuItem optionsMenuItem;
         private System.Windows.Forms.ToolStripMenuItem modifyConfigMenuItem;
         private System.Windows.Forms.ToolStripMenuItem launchMgs2MenuItem;
-        private System.Windows.Forms.ToolStripMenuItem attachMgs2MenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewLogsMenuItem;
         private System.Windows.Forms.ToolStripMenuItem githubMenuItem;

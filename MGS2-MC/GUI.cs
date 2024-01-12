@@ -1,7 +1,10 @@
 using MGS2_MC.Controllers;
+using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -19,6 +22,7 @@ namespace MGS2_MC
         private static int LastSelectedWeaponIndex = -1;
         private static object CurrentlySelectedOpposingObject = null;
         public static GUI StaticGuiReference = null;
+        private readonly ILogger _logger;
 
         internal static void ShowGui()
         {
@@ -236,7 +240,7 @@ namespace MGS2_MC
                             else
                                 StaticGuiReference.mgs2TabControl.TabIndex--;
                             StaticGuiReference.mgs2TabControl.SelectTab(StaticGuiReference.mgs2TabControl.TabIndex);
-                            StaticGuiReference.mgs2TabControl_SelectedIndexChanged(null, null);
+                            StaticGuiReference.Mgs2TabControl_SelectedIndexChanged(null, null);
                             break;
 
                         case ControllerInterpreter.PressedButton.L2:
@@ -254,7 +258,7 @@ namespace MGS2_MC
                             else
                                 StaticGuiReference.mgs2TabControl.TabIndex++;
                             StaticGuiReference.mgs2TabControl.SelectTab(StaticGuiReference.mgs2TabControl.TabIndex);
-                            StaticGuiReference.mgs2TabControl_SelectedIndexChanged(null, null);
+                            StaticGuiReference.Mgs2TabControl_SelectedIndexChanged(null, null);
                             break;
 
                         case ControllerInterpreter.PressedButton.R2:
@@ -566,8 +570,9 @@ namespace MGS2_MC
             }
         }
 
-        public GUI()
+        public GUI(ILogger logger)
         {
+            _logger = logger;
             StaticGuiReference = this;
             InitializeComponent();
             BuildGuiObjectLists();
@@ -1377,7 +1382,7 @@ namespace MGS2_MC
 
         private void setBasicNameBtn_Click(object sender, EventArgs e)
         {
-            var mgs2Handle = Program.MGS2Process.Handle;
+            var mgs2Handle = MGS2Monitor.MGS2Process.Handle;
         }
 
         private void ItemListBox_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -1420,22 +1425,42 @@ namespace MGS2_MC
             }));
         }
 
-        private void mgs2TabControl_SelectedIndexChanged(object sender, EventArgs e)
+        private void Mgs2TabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
             CurrentTab = mgs2TabControl.SelectedIndex;
             CurrentlySelectedObject = null;
         }
-    }
 
-    internal class GuiObject
-    {
-        public string Name { get; protected set; }
-        public Control AssociatedControl { get; protected set; }
-
-        internal GuiObject(string objectName, Control objectControl)
+        private void GithubMenuItem_Click(object sender, EventArgs e)
         {
-            Name = objectName;
-            AssociatedControl = objectControl;
+            Process.Start("https://github.com/sagefantasma/MGS2-Cheat-Trainer");
+        }
+
+        private void ViewLogsMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start(Logging.LogLocation);
+        }
+
+        private void ModifyConfigMenuItem_Click(object sender, EventArgs e)
+        {
+            ConfigEditorForm configEditorForm = new ConfigEditorForm(_logger);
+            
+            if(configEditorForm.ShowDialog() == DialogResult.OK)
+            {
+                MGS2Monitor.LoadConfig();
+            }            
+        }
+
+        private void LaunchMgs2MenuItem_Click(object sender, EventArgs e)
+        {
+            if (Program.MGS2Thread.IsAlive)
+            {
+                MessageBox.Show("MGS2 is already running, please exit MGS2 before attempting to launch it again.");
+            }
+            else
+            {
+                Program.MGS2Thread.Start();
+            }
         }
     }
 }

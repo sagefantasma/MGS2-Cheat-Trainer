@@ -33,7 +33,7 @@
     <ProductName>MGS2 Master Collection Cheat Trainer</ProductName>
     <PublisherName>SageFantasma</PublisherName>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>0.5.0.0</ApplicationVersion>
+    <ApplicationVersion>0.7.0.0</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -112,7 +112,7 @@
   </PropertyGroup>
   <PropertyGroup />
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -120,6 +120,16 @@
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\images\AIColonel.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -144,6 +154,7 @@
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
     </Reference>
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Diagnostics.DiagnosticSource, Version=7.0.0.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Diagnostics.DiagnosticSource.7.0.2\lib\net462\System.Diagnostics.DiagnosticSource.dll</HintPath>
@@ -181,13 +192,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConfigEditorForm.Designer.cs">
+      <DependentUpon>ConfigEditorForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\ControllerHook.cs" />
     <Compile Include="Controllers\ControllerInterpreter.cs" />
     <Compile Include="Controllers\IControllerManager.cs" />
     <Compile Include="Controllers\Ps4ControllerManager.cs" />
     <Compile Include="Controllers\XboxControllerManager.cs" />
-    <Compile Include="MGS2Injector.cs" />
+    <Compile Include="GuiObject.cs" />
+    <Compile Include="ControllerInterface.cs" />
+    <Compile Include="InstanceIdentifier.cs" />
     <Compile Include="Logging.cs" />
+    <Compile Include="MGS2Monitor.cs" />
     <Compile Include="MGS2Object.cs" />
     <Compile Include="GUI.cs">
       <SubType>Form</SubType>
@@ -195,7 +215,7 @@
     <Compile Include="GUI.Designer.cs">
       <DependentUpon>GUI.cs</DependentUpon>
     </Compile>
-    <Compile Include="MGS2Constants.cs" />
+    <Compile Include="Constants.cs" />
     <Compile Include="MGS2MemoryManager.cs" />
     <Compile Include="MGS2Offsets.cs" />
     <Compile Include="Program.cs" />
@@ -204,6 +224,9 @@
     <Compile Include="Snake.cs" />
     <Compile Include="MGS2Strings.cs" />
     <Compile Include="TrainerConfigStructure.cs" />
+    <EmbeddedResource Include="ConfigEditorForm.resx">
+      <DependentUpon>ConfigEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI.resx">
       <DependentUpon>GUI.cs</DependentUpon>
     </EmbeddedResource>
@@ -254,6 +277,8 @@
     <Content Include="Resources\images\acd_alp_ovl.bmp.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\images\AIColonel.ico" />
+    <Content Include="Resources\images\AIColonel.ico.jpg" />
     <Content Include="Resources\images\aks_alp_ovl.bmp.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

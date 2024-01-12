@@ -1,6 +1,6 @@
 ﻿namespace MGS2_MC
 {
-    internal class MGS2Constants
+    internal class Constants
     {
         public const string MGS2_PROCESS_NAME = "METAL GEAR SOLID2";
         internal const string SteamAppId = "2131640";

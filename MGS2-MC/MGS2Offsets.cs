@@ -8,7 +8,7 @@ namespace MGS2_MC
     /// End determines the byte where the object stops being defined.
     /// Length is automatically calculated, and determines how many bytes of memory comprise the object.
     /// </summary>
-    public class MemoryOffset
+    public struct MemoryOffset
     {
         public int Start { get; set; }
         public int End { get; set; }
@@ -26,7 +26,7 @@ namespace MGS2_MC
         }
     }
 
-    internal static class MGS2Offsets
+    internal struct MGS2Offsets
     {
         #region Offset Finders
         //if the region is dynamic(i.e. PlayerOffsetAoB), it will change on area load. The others will only (possibly[hopefully]) change with game updates

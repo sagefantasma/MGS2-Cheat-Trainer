@@ -152,9 +152,13 @@ namespace MGS2_MC
             {
                 Application.ApplicationExit += (sender, args) => CloseMGS2EventHandler(sender, args);
             }
-
+            while(GUI.GuiLoaded != true)
+            {
+                //if the GUI is loading, wait until it is fully loaded until we continue as we need to modify it
+            }
             try
             {
+                GUI.ToggleLaunchMGS2Option();
                 while (!MGS2Process.HasExited)
                 {
                     //this thread loops forever while MGS2 is running
@@ -169,6 +173,15 @@ namespace MGS2_MC
             {
                 Application.Exit();
             }
+
+            try
+            {
+                GUI.ToggleLaunchMGS2Option();
+            }
+            catch(Exception e)
+            {
+                logger.Error($"Failed to toggle Launch MGS2 menu option: {e}");
+            }
         }
 
         internal static void EnableMonitor()
@@ -178,8 +191,9 @@ namespace MGS2_MC
             if (!TrainerConfig.AutoLaunchGame && initialLaunch)
             {
                 initialLaunch = false;
-                Thread.CurrentThread.Abort();
+                return;
             }
+            initialLaunch = false;
 
             MGS2Process = new Process();
             try

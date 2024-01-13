@@ -7379,14 +7379,14 @@
             // viewLogsMenuItem
             // 
             this.viewLogsMenuItem.Name = "viewLogsMenuItem";
-            this.viewLogsMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.viewLogsMenuItem.Size = new System.Drawing.Size(173, 22);
             this.viewLogsMenuItem.Text = "View Logs";
             this.viewLogsMenuItem.Click += new System.EventHandler(this.ViewLogsMenuItem_Click);
             // 
             // githubMenuItem
             // 
             this.githubMenuItem.Name = "githubMenuItem";
-            this.githubMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.githubMenuItem.Size = new System.Drawing.Size(173, 22);
             this.githubMenuItem.Text = "Open GitHub Page";
             this.githubMenuItem.Click += new System.EventHandler(this.GithubMenuItem_Click);
             // 

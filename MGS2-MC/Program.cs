@@ -47,6 +47,19 @@ namespace MGS2_MC
             }
         }
 
+        public static void RestartMonitoringThread()
+        {
+            try
+            {
+                MGS2Thread = new Thread(MGS2Monitor.EnableMonitor);
+                MGS2Thread.Start();
+            }
+            catch(Exception e)
+            {
+                logger.Error($"Could not restart MGS2 monitor: {e}");
+            }
+        }
+
         private static void StartControllerThread()
         {
             try

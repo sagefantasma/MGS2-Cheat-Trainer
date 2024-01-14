@@ -47,6 +47,12 @@ namespace MGS2_MC
         internal static byte[] HarrierNameAoB = new byte[10] { 0x68, 0x61, 0x72, 0x5F, 0x76, 0x75, 0x6C, 0x63, 0x2E, 0x63 }; //TODO: prove this is valid
         internal static byte[] KasatkaNameAoB = new byte[12] { 0x6B, 0x63, 0x6B, 0x5F, 0x70, 0x6C, 0x61, 0x6E, 0x74, 0x5F, 0x6D, 0x74 }; //TODO: prove this is valid
         internal static byte[] FortuneNameAoB = new byte[] { 0x66, 0x6F, 0x72, 0x74, 0x5F, 0x6F, 0x62, 0x6A, 0x5F, 0x69, 0x6E, 0x69, 0x2E, 0x63 }; //TODO: prove this is valid
+        //00 00 00 78 00 08 00 <-- possibly an AoB for HP/Magazine modificaitons? might have to key off of LIFE?(or at least whatever it is called at that moment, within the games memory block)
+        internal static byte[] HealthModAoB = new byte[] { 0x00, 0x00, 0x00, 0x78, 0x00, 0x08, 0x00 }; //TODO: prove this is valid
+        //clipcurrentCount == -114 from the above AoB, 4bytes long. HP mod is DIRECTLY after, it seems?
+        //10 0E 18 15 20 1C <-- use to find currently active character
+        internal static byte[] StageInfoAoB = new byte[] { 0x10, 0x0E, 0x18, 0x15, 0x20, 0x1C }; //TODO: prove this is valid(may need to always take the last value?)
+        //current "stage" == -267 from the above AoB, 5 bytes long. If it has r_tnk, it is Snake. if it is r_plt, it is raiden :)
         #endregion
         #endregion
 
@@ -108,6 +114,7 @@ namespace MGS2_MC
         #region Calculated From OlgaName
         public static readonly MemoryOffset OLGA_HP_TEXT = new MemoryOffset(293, 296); //TODO: validate
                                                                                        //there is also a meryl string right next to OLGA... but idk what it is used for so i'm not bothering to add it atm
+                                                                                       //guessing the meryl^^ string is related to the OLGA boss fight!
         #endregion
 
         #region Calculated From HarrierName
@@ -135,6 +142,11 @@ namespace MGS2_MC
         public static readonly MemoryOffset CURRENT_EQUIPPED_WEAPON = new MemoryOffset(-68); //TODO: prove this is valid
         public static readonly MemoryOffset PLAYER_STANCE = new MemoryOffset(-134); //TODO: prove this is valid
         public static readonly MemoryOffset PLAYER_SNEEZING = new MemoryOffset(-108, -107); //TODO: prove this is valid
+        #endregion
+
+        #region Calculated From HealthMod
+        public static readonly MemoryOffset MODIFY_PLAYER_HP = new MemoryOffset(-110, -107); //TODO: prove this is valid
+        public static readonly MemoryOffset MODIFY_CLIP_SIZE = new MemoryOffset(-114, -111); //TODO: prove this is valid
         #endregion
 
         #region Calculated from Unknown Finder AoBs

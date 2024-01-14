@@ -1,4 +1,5 @@
 ﻿using Serilog;
+using SharpDX;
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
@@ -67,21 +68,25 @@ namespace MGS2_MC
         {
             //TODO: verify for raiden, works for snake 100%
             //also, this would inherently break down if you toggle camera1, so i should modify this logic
-            bool camera1Enabled = BitConverter.ToBoolean(GetCurrentValue(Constants.CAMERA, sizeof(short)), 0);
+            byte[] stageNameBytes = GetStageName();
+            string stageName = Encoding.UTF8.GetString(stageNameBytes);
             
-            if (camera1Enabled) 
+            if (stageName.Contains("tnk")) 
             {
                 return ActiveCharacter.Snake;
             }
-            else
+            else if(stageName.Contains("plt"))
             {
                 return ActiveCharacter.Raiden;
+            }
+            else
+            {
+                throw new NotImplementedException("Unknown stage! Can't safely determine what the active character is");
             }
         }
 
         private static void CheckIfUsable(MGS2Object mgs2Object)
         {
-            return; //TODO: uncomment this once the logic for DAC is working
             switch (DetermineActiveCharacter())
             {
                 case ActiveCharacter.Snake:
@@ -342,6 +347,48 @@ namespace MGS2_MC
             }
         }
         #endregion
+
+        public static byte[] GetStageName()
+        {
+            //TODO: make these methods more extensible so we dont need to do all this code duplication
+            Process process;
+
+            try
+            {
+                process = GetMGS2Process();
+            }
+            catch
+            {
+                logger.Error($"Failed to get process {Constants.MGS2_PROCESS_NAME}");
+                throw new AggregateException($"Cannot find process `{Constants.MGS2_PROCESS_NAME}` - is it running?");
+            }
+
+            PROCESS_BASE_ADDRESS = process.MainModule.BaseAddress;
+            IntPtr processHandle = default;
+            try
+            {
+                processHandle = NativeMethods.OpenProcess(0x1F0FFF, false, process.Id);
+                int[] stageOffset = GetSpecificOffset(process, processHandle, MGS2Offsets.StageInfoAoB);
+                IntPtr stageAddress = IntPtr.Add(PROCESS_BASE_ADDRESS, stageOffset[0] + MGS2Offsets.CURRENT_STAGE.Start); //Adjusted to add base address
+
+                byte[] bytesRead = new byte[MGS2Offsets.CURRENT_STAGE.Length];
+                ReadValueFromMemory(processHandle, stageAddress, bytesRead);
+
+                return bytesRead;
+            }
+            catch(Exception e)
+            {
+                logger.Debug($"Failed to get current value at {PROCESS_BASE_ADDRESS}+{MGS2Offsets.CURRENT_STAGE.Start}");
+                throw new AggregateException($"Something unexpected went wrong when trying to get current value! {e}");
+            }
+            finally
+            {
+                if (processHandle != default)
+                {
+                    NativeMethods.CloseHandle(processHandle);
+                }
+            }
+        }
 
         public static byte[] GetCurrentValue(int valueOffset, int sizeToRead)
         {

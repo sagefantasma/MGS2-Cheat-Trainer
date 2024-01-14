@@ -149,6 +149,10 @@ namespace MGS2_MC
         public static readonly MemoryOffset MODIFY_CLIP_SIZE = new MemoryOffset(-114, -111); //TODO: prove this is valid
         #endregion
 
+        #region Calculated From StageInfo
+        public static readonly MemoryOffset CURRENT_STAGE = new MemoryOffset(-267, 263); //TODO: prove this is valid
+        #endregion
+
         #region Calculated from Unknown Finder AoBs
         public const int TIMES_FOUND_GAME_LAUNCH_OFFSET = 0x17B786C; //TODO: need to get an OffsetFinderAoB for this and perform offset calculations
         public const int HOLD_UPS_GAME_LAUNCH_OFFSET = 0x1673DB0; //TODO: need to get an OffsetFinderAoB for this and perform offset calculations

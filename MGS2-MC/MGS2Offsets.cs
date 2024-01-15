@@ -150,7 +150,7 @@ namespace MGS2_MC
         #endregion
 
         #region Calculated From StageInfo
-        public static readonly MemoryOffset CURRENT_STAGE = new MemoryOffset(-267, 263); //TODO: prove this is valid
+        public static readonly MemoryOffset CURRENT_STAGE = new MemoryOffset(-266, -262); //TODO: prove this is valid
         #endregion
 
         #region Calculated from Unknown Finder AoBs

@@ -38,7 +38,7 @@ namespace MGS2_MC
 
         public void ToggleObject(bool shouldBeEnabled)
         {
-            short currentObjectValue = BitConverter.ToInt16(MGS2MemoryManager.GetCurrentValue(InventoryOffset, sizeof(short)), 0);
+            short currentObjectValue = BitConverter.ToInt16(MGS2MemoryManager.GetPlayerInfoBasedValue(InventoryOffset, sizeof(short)), 0);
             bool isCurrentlyEnabled = currentObjectValue != 0 ? true : false; //this feels more readable as a ternary than the shorthand
             //Toggle the object if it is currently disabled and needs enabling, or if it is currently enabled and needs disabling.
             if (isCurrentlyEnabled != shouldBeEnabled)
@@ -118,7 +118,7 @@ namespace MGS2_MC
 
         internal new void ToggleObject(bool shouldBeEnabled)
         {
-            short currentDurability = BitConverter.ToInt16(MGS2MemoryManager.GetCurrentValue(DurabilityOffset, sizeof(short)), 0);
+            short currentDurability = BitConverter.ToInt16(MGS2MemoryManager.GetPlayerInfoBasedValue(DurabilityOffset, sizeof(short)), 0);
             
             if (currentDurability == 0 && shouldBeEnabled)
             {
@@ -150,7 +150,7 @@ namespace MGS2_MC
 
         internal new void ToggleObject(bool shouldBeEnabled)
         {
-            short currentCount = BitConverter.ToInt16(MGS2MemoryManager.GetCurrentValue(CurrentCountOffset, sizeof(short)), 0);
+            short currentCount = BitConverter.ToInt16(MGS2MemoryManager.GetPlayerInfoBasedValue(CurrentCountOffset, sizeof(short)), 0);
             if (currentCount == 0 && shouldBeEnabled)
             {
                 if (LastKnownCurrentCount != 0)
@@ -229,7 +229,7 @@ namespace MGS2_MC
 
         internal new void ToggleObject(bool shouldBeEnabled)
         {
-            short currentAmmo = BitConverter.ToInt16(MGS2MemoryManager.GetCurrentValue(CurrentAmmoOffset, sizeof(short)), 0);
+            short currentAmmo = BitConverter.ToInt16(MGS2MemoryManager.GetPlayerInfoBasedValue(CurrentAmmoOffset, sizeof(short)), 0);
             //TODO: it would be cool to duplicate the "NO USE" functionality the Stinger gets when prone when disabled!
             //can't seem to easily find the bytes that control that though :(
             //TODO: for some reason this just... doesn't work as intended for the first set of toggling. O_o

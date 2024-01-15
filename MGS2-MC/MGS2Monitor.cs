@@ -131,6 +131,12 @@ namespace MGS2_MC
 
         private static void RunMGS2(string mgs2Location, string mgs2Directory)
         {
+            //TODO: it seems like this is resulting in MGS2 taking up TWICE the CPU load, which does kind of make sense...
+            //the BIG problem though is that Windows Antivirus is now flagging the Cheat Trainer as malware and also wrapping
+            //the cheat trainer & mgs2 up in CPU cycles... which essentially means starting MGS2 through the CT is resulting
+            //in your processor going under the load of 3 copies of MGS2... Not great. Can be fixed through adjusting malware
+            //settings, but that's not a great solution. i need to reevaluate whether or not i absolutely NEED to be monitoring
+            //MGS2 like a hawk like we are now, simply for the closing events...
             ProcessStartInfo mgs2StartInfo = new ProcessStartInfo(mgs2Location)
             {
                 WorkingDirectory = mgs2Directory,

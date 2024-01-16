@@ -558,6 +558,12 @@
   <ItemGroup>
     <Folder Include="Documentation\assets\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Simplified Memory Manager\Simplified Memory Manager.csproj">
+      <Project>{cb33ce2b-2350-4a4f-a417-e71e840a3ea1}</Project>
+      <Name>Simplified Memory Manager</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions />
 </Project>

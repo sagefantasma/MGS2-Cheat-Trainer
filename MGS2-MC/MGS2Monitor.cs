@@ -52,7 +52,7 @@ namespace MGS2_MC
             logger.Verbose($"Instance ID: {Program.InstanceID}");
         }
 
-        internal static Process MGS2Process;
+        public static Process MGS2Process;
         internal static TrainerConfig TrainerConfig;
         private const string loggerName = "MGS2MonitorDebuglog.log";
         private static readonly ILogger logger;

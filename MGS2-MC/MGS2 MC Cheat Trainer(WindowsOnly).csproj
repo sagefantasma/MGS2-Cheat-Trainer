@@ -192,21 +192,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConfigEditorForm.cs">
+    <Compile Include="Helpers\ConfigEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ConfigEditorForm.Designer.cs">
+    <Compile Include="Helpers\ConfigEditorForm.Designer.cs">
       <DependentUpon>ConfigEditorForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controllers\ControllerHook.cs" />
-    <Compile Include="Controllers\ControllerInterpreter.cs" />
-    <Compile Include="Controllers\IControllerManager.cs" />
-    <Compile Include="Controllers\Ps4ControllerManager.cs" />
-    <Compile Include="Controllers\XboxControllerManager.cs" />
+    <Compile Include="ControllerSupport\ControllerHook.cs" />
+    <Compile Include="ControllerSupport\ControllerInterpreter.cs" />
+    <Compile Include="ControllerSupport\IControllerManager.cs" />
+    <Compile Include="ControllerSupport\Ps4ControllerManager.cs" />
+    <Compile Include="ControllerSupport\XboxControllerManager.cs" />
     <Compile Include="GuiObject.cs" />
-    <Compile Include="ControllerInterface.cs" />
-    <Compile Include="InstanceIdentifier.cs" />
-    <Compile Include="Logging.cs" />
+    <Compile Include="Helpers\ControllerInterface.cs" />
+    <Compile Include="Helpers\InstanceIdentifier.cs" />
+    <Compile Include="Helpers\PlayableCharacters\PlayableCharacter.cs" />
+    <Compile Include="Helpers\Logging.cs" />
     <Compile Include="MGS2Monitor.cs" />
     <Compile Include="MGS2Object.cs" />
     <Compile Include="GUI.cs">
@@ -215,16 +216,16 @@
     <Compile Include="GUI.Designer.cs">
       <DependentUpon>GUI.cs</DependentUpon>
     </Compile>
-    <Compile Include="Constants.cs" />
+    <Compile Include="Helpers\Constants.cs" />
     <Compile Include="MGS2MemoryManager.cs" />
     <Compile Include="MGS2Offsets.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Raiden.cs" />
-    <Compile Include="Snake.cs" />
+    <Compile Include="Helpers\PlayableCharacters\Raiden.cs" />
+    <Compile Include="Helpers\PlayableCharacters\Snake.cs" />
     <Compile Include="MGS2Strings.cs" />
-    <Compile Include="TrainerConfigStructure.cs" />
-    <EmbeddedResource Include="ConfigEditorForm.resx">
+    <Compile Include="Helpers\TrainerConfigStructure.cs" />
+    <EmbeddedResource Include="Helpers\ConfigEditorForm.resx">
       <DependentUpon>ConfigEditorForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI.resx">
@@ -241,7 +242,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include=".editorconfig" />
-    <None Include="Documentation\mgs2_memory_print.CEM" />
+    <None Include="Resources\Documentation\mgs2_memory_print.CEM" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\DataSources\Strings.StringDataSource.datasource" />
@@ -256,7 +257,7 @@
     </Compile>
     <None Include="Resources\METAL GEAR SOLID 2 SONS OF LIBERTY.CT" />
     <None Include="Resources\mgs2_sse_hackzinglyhack7.CT" />
-    <None Include="TrainerConfig.json">
+    <None Include="Helpers\TrainerConfig.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -264,16 +265,16 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Documentation\deployment_notes.md" />
-    <Content Include="Documentation\difficulties and area name memory block.png" />
-    <Content Include="Documentation\digital camera and wig names memory block.png" />
-    <Content Include="Documentation\fortune and vamp names memory block.png" />
-    <Content Include="Documentation\item and weapon box names.png" />
-    <Content Include="Documentation\learnings.txt" />
-    <Content Include="Documentation\memoryDumps.txt" />
-    <Content Include="Documentation\npc snake memory block.png" />
-    <Content Include="Documentation\raiden hf blade stuff memory block.png" />
-    <Content Include="Documentation\stage names memory block.png" />
+    <None Include="Resources\Documentation\deployment_notes.md" />
+    <Content Include="Resources\Documentation\difficulties and area name memory block.png" />
+    <Content Include="Resources\Documentation\digital camera and wig names memory block.png" />
+    <Content Include="Resources\Documentation\fortune and vamp names memory block.png" />
+    <Content Include="Resources\Documentation\item and weapon box names.png" />
+    <Content Include="Resources\Documentation\learnings.txt" />
+    <Content Include="Resources\Documentation\memoryDumps.txt" />
+    <Content Include="Resources\Documentation\npc snake memory block.png" />
+    <Content Include="Resources\Documentation\raiden hf blade stuff memory block.png" />
+    <Content Include="Resources\Documentation\stage names memory block.png" />
     <Content Include="Resources\images\acd_alp_ovl.bmp.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -556,7 +557,7 @@
     </PublishFile>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Documentation\assets\" />
+    <Folder Include="Resources\Documentation\assets\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Simplified Memory Manager\Simplified Memory Manager.csproj">

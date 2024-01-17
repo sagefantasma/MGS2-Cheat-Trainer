@@ -5,22 +5,17 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using SimplifiedMemoryManager;
+using static MGS2_MC.Constants;
 
 namespace MGS2_MC
 {
-    internal class MGS2MemoryManager
+    internal static class MGS2MemoryManager
     {
         #region Internals
         static int[] LAST_KNOWN_PLAYER_OFFSETS = default;
         static int[] LAST_KNOWN_STAGE_OFFSETS = default;
         private const string loggerName = "MemoryManagerDebuglog.log";
         private static ILogger logger;
-
-        private enum ActiveCharacter
-        {
-            Snake,
-            Raiden
-        }
 
         internal static void StartLogger()
         {
@@ -32,17 +27,17 @@ namespace MGS2_MC
         #endregion
 
         #region Private methods
-        private static ActiveCharacter DetermineActiveCharacter()
+        private static Constants.PlayableCharacter DetermineActiveCharacter()
         {
             string stageName = GetStageName();
 
             if (stageName.Contains("tnk")) 
             {
-                return ActiveCharacter.Snake;
+                return Constants.PlayableCharacter.Snake;
             }
             else if(stageName.Contains("plt"))
             {
-                return ActiveCharacter.Raiden;
+                return Constants.PlayableCharacter.Raiden;
             }
             else
             {
@@ -54,13 +49,13 @@ namespace MGS2_MC
         {
             switch (DetermineActiveCharacter())
             {
-                case ActiveCharacter.Snake:
+                case Constants.PlayableCharacter.Snake:
                     if (!Snake.UsableObjects.Contains(mgs2Object))
                     {
                         throw new InvalidOperationException($"Snake cannot use {mgs2Object.Name}");
                     }
                     break;
-                case ActiveCharacter.Raiden:
+                case Constants.PlayableCharacter.Raiden:
                     if (!Raiden.UsableObjects.Contains(mgs2Object))
                     {
                         throw new InvalidOperationException($"Raiden cannot use {mgs2Object.Name}");
@@ -293,20 +288,12 @@ namespace MGS2_MC
                 throw new AggregateException("Could not invert boolean", e);
             }
         }
-        #endregion
 
         private static string GetStageName()
         {
             int[] stageMemoryOffsets = GetStageOffsets();
 
             return Encoding.UTF8.GetString(ReadValueFromMemory(stageMemoryOffsets.Last() + MGS2Offsets.CURRENT_STAGE.Start, MGS2Offsets.CURRENT_STAGE.Length));
-        }
-
-        public static byte[] GetPlayerInfoBasedValue(int valueOffset, int sizeToRead)
-        {
-            int[] playerMemoryOffsets = GetPlayerOffsets();
-
-            return ReadValueFromMemory(playerMemoryOffsets[0] + valueOffset, sizeToRead);
         }
 
         private static void SetByteValueObject(int objectOffset, byte[] valueToSet)
@@ -320,11 +307,19 @@ namespace MGS2_MC
                     proxy.ModifyProcessOffset(playerOffsets[1] + objectOffset, valueToSet);
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 logger.Error($"Failed to set memory at offset {objectOffset}: {e}");
                 throw new AggregateException($"Could not set memory at offset {objectOffset}", e);
             }
+        }
+        #endregion
+
+        public static byte[] GetPlayerInfoBasedValue(int valueOffset, int sizeToRead)
+        {
+            int[] playerMemoryOffsets = GetPlayerOffsets();
+
+            return ReadValueFromMemory(playerMemoryOffsets[0] + valueOffset, sizeToRead);
         }
 
         public static void UpdateObjectBaseValue(MGS2Object mgs2Object, short value)

@@ -1,12 +1,10 @@
 ﻿using Serilog.Events;
 using Serilog;
-using System.Threading;
-using System.Windows.Forms;
 using System.IO;
 
 namespace MGS2_MC
 {
-    internal class Logging
+    internal abstract class Logging
     {
         private const int KilobyteInBytes = 1000;
         private const int MegabyteInKilobytes = 1000 * KilobyteInBytes;

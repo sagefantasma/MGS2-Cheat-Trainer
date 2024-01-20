@@ -150,6 +150,9 @@
     <Reference Include="Serilog.Sinks.File, Version=5.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.Sinks.File.5.0.0\lib\net45\Serilog.Sinks.File.dll</HintPath>
     </Reference>
+    <Reference Include="Simplified Memory Manager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SimplifiedMemoryManager.1.0.0\lib\netstandard2.0\Simplified Memory Manager.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
@@ -558,12 +561,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\Documentation\assets\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Simplified Memory Manager\Simplified Memory Manager.csproj">
-      <Project>{cb33ce2b-2350-4a4f-a417-e71e840a3ea1}</Project>
-      <Name>Simplified Memory Manager</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions />

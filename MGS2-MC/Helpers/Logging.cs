@@ -8,8 +8,8 @@ namespace MGS2_MC
     {
         private const int KilobyteInBytes = 1000;
         private const int MegabyteInKilobytes = 1000 * KilobyteInBytes;
-        public static string LogLocation;
-        public static LogEventLevel MainLogEventLevel = LogEventLevel.Information;
+        public static string LogLocation { get; set; }
+        public static LogEventLevel MainLogEventLevel { get; set; } = LogEventLevel.Information;
 
         internal static ILogger InitializeNewLogger(string logFileName)
         {

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Simplified_Memory_Manager;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -7,6 +9,7 @@ namespace SimplifiedMemoryManager
 {
     public class SimpleProcessProxy : IDisposable
     {
+        #region Internals
         private const int AllAccess = 0x1F0FFF;
         private bool disposedValue;
 
@@ -41,6 +44,39 @@ namespace SimplifiedMemoryManager
             }
         }
 
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects)
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
+                ProcessName = null;
+                ProcessToProxy = null; //TODO: determine if this does what I want
+                // TODO: set large fields to null
+                disposedValue = true;
+            }
+        }
+
+        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+        // ~SimpleProcessProxy()
+        // {
+        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        //     Dispose(disposing: false);
+        // }
+
+        void IDisposable.Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
+        #endregion
+
+        #region Private (support) methods
         private byte[] GetProcessSnapshot(long processSize)
         {
             byte[] buffer = new byte[processSize];
@@ -57,7 +93,7 @@ namespace SimplifiedMemoryManager
             return buffer;
         }
 
-        private byte[] GetMemoryValue(int offset, long valueSize)
+        private byte[] GetMemory(int offset, long valueSize)
         {
             try
             {
@@ -80,7 +116,7 @@ namespace SimplifiedMemoryManager
             }
         }
 
-        private void SetMemoryValue(int desiredOffset, byte[] value)
+        private void SetMemory(int desiredOffset, byte[] value)
         {
             try
             {
@@ -141,7 +177,9 @@ namespace SimplifiedMemoryManager
 
             return bytesToRead;
         }
+        #endregion
 
+        #region Public methods
         /// <summary>
         /// Opens the proxied process, gets the current value of the designated offset, and attempts to invert its state.
         /// 
@@ -152,7 +190,7 @@ namespace SimplifiedMemoryManager
         /// <exception cref="SimpleProcessProxyException"></exception>
         public void InvertBooleanValue(int memoryOffset, int booleanSize = 1)
         {
-            byte[] currentValue = GetMemoryValue(memoryOffset, booleanSize);
+            byte[] currentValue = GetMemory(memoryOffset, booleanSize);
 
             byte[] valueToWrite = new byte[booleanSize];
 
@@ -169,7 +207,7 @@ namespace SimplifiedMemoryManager
 
             try
             {
-                SetMemoryValue(memoryOffset, valueToWrite);
+                SetMemory(memoryOffset, valueToWrite);
             }
             catch (Exception e)
             {
@@ -177,6 +215,7 @@ namespace SimplifiedMemoryManager
             }
         }
 
+        #region ModifyProcessOffset methods
         /// <summary>
         /// Opens the proxied process and attempts to modify its memory at the designated offset with the provided value.
         /// 
@@ -189,7 +228,7 @@ namespace SimplifiedMemoryManager
         {
             try
             {
-                SetMemoryValue(memoryOffset, BitConverter.GetBytes(offsetValueToWrite));
+                SetMemory(memoryOffset, BitConverter.GetBytes(offsetValueToWrite));
             }
             catch(Exception e)
             {
@@ -209,7 +248,7 @@ namespace SimplifiedMemoryManager
         {
             try
             {
-                SetMemoryValue(memoryOffset, BitConverter.GetBytes(offsetValueToWrite));
+                SetMemory(memoryOffset, BitConverter.GetBytes(offsetValueToWrite));
             }
             catch (Exception e)
             {
@@ -229,7 +268,7 @@ namespace SimplifiedMemoryManager
         {
             try
             {
-                SetMemoryValue(memoryOffset, BitConverter.GetBytes(offsetValueToWrite));
+                SetMemory(memoryOffset, BitConverter.GetBytes(offsetValueToWrite));
             }
             catch (Exception e)
             {
@@ -249,7 +288,7 @@ namespace SimplifiedMemoryManager
         {
             try
             {
-                SetMemoryValue(memoryOffset, BitConverter.GetBytes(offsetValueToWrite));
+                SetMemory(memoryOffset, BitConverter.GetBytes(offsetValueToWrite));
             }
             catch (Exception e)
             {
@@ -269,7 +308,7 @@ namespace SimplifiedMemoryManager
         {
             try
             {
-                SetMemoryValue(memoryOffset, BitConverter.GetBytes(offsetValueToWrite));
+                SetMemory(memoryOffset, BitConverter.GetBytes(offsetValueToWrite));
             }
             catch (Exception e)
             {
@@ -289,7 +328,7 @@ namespace SimplifiedMemoryManager
         {
             try
             {
-                SetMemoryValue(memoryOffset, BitConverter.GetBytes(offsetValueToWrite));
+                SetMemory(memoryOffset, BitConverter.GetBytes(offsetValueToWrite));
             }
             catch (Exception e)
             {
@@ -309,7 +348,7 @@ namespace SimplifiedMemoryManager
         {
             try
             {
-                SetMemoryValue(memoryOffset, BitConverter.GetBytes(offsetValueToWrite));
+                SetMemory(memoryOffset, BitConverter.GetBytes(offsetValueToWrite));
             }
             catch (Exception e)
             {
@@ -329,7 +368,7 @@ namespace SimplifiedMemoryManager
         {
             try
             {
-                SetMemoryValue(memoryOffset, offsetValueToWrite);
+                SetMemory(memoryOffset, offsetValueToWrite);
             }
             catch(Exception e)
             {
@@ -349,13 +388,14 @@ namespace SimplifiedMemoryManager
         {
             try
             {
-                SetMemoryValue(memoryOffset, Encoding.Default.GetBytes(offsetValueToWrite));
+                SetMemory(memoryOffset, Encoding.Default.GetBytes(offsetValueToWrite));
             }
             catch (Exception e)
             {
                 throw new SimpleProcessProxyException($"Failed to write int value at {OpenedProcessHandle}+{memoryOffset}", e);
             }
         }
+        #endregion
 
         /// <summary>
         /// Returns the bytes found at the provided offset within the proxied process.
@@ -370,7 +410,7 @@ namespace SimplifiedMemoryManager
         {
             try
             {
-                return GetMemoryValue(memoryOffset, bytesToRead);
+                return GetMemory(memoryOffset, bytesToRead);
             }
             catch(Exception e)
             {
@@ -395,35 +435,19 @@ namespace SimplifiedMemoryManager
             }
         }
 
-        protected virtual void Dispose(bool disposing)
+        public List<IntPtr> ScanMemoryForPattern(SimplePattern pattern, byte[] memoryToScan = null)
         {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    // TODO: dispose managed state (managed objects)
-                }
+            List<IntPtr> results = new List<IntPtr>();
 
-                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-                ProcessName = null;
-                ProcessToProxy = null; //TODO: determine if this does what I want
-                // TODO: set large fields to null
-                disposedValue = true;
-            }
+            if(memoryToScan == null)
+                memoryToScan = GetProcessSnapshot();
+
+            
+
+            return results;
         }
 
-        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
-        // ~SimpleProcessProxy()
-        // {
-        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-        //     Dispose(disposing: false);
-        // }
 
-        void IDisposable.Dispose()
-        {
-            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
-        }
+        #endregion
     }
 }

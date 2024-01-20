@@ -5,23 +5,23 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using SimplifiedMemoryManager;
-using static MGS2_MC.Constants;
 
 namespace MGS2_MC
 {
     internal static class MGS2MemoryManager
     {
         #region Internals
-        static int[] LAST_KNOWN_PLAYER_OFFSETS = default;
-        static int[] LAST_KNOWN_STAGE_OFFSETS = default;
         private const string loggerName = "MemoryManagerDebuglog.log";
-        private static ILogger logger;
+
+        private static int[] _lastKnownPlayerOffsets { get; set; } = default;
+        private static int[] _lastKnownStageOffsets { get; set; } = default;
+        private static ILogger _logger { get; set; }
 
         internal static void StartLogger()
         {
-            logger = Logging.InitializeNewLogger(loggerName);
-            logger.Information($"Memory Manager for version {Program.AppVersion} initialized...");
-            logger.Verbose($"Instance ID: {Program.InstanceID}");
+            _logger = Logging.InitializeNewLogger(loggerName);
+            _logger.Information($"Memory Manager for version {Program.AppVersion} initialized...");
+            _logger.Verbose($"Instance ID: {Program.InstanceID}");
         }
 
         #endregion
@@ -70,23 +70,23 @@ namespace MGS2_MC
             {
                 byte[] gameMemoryBuffer = proxy.GetProcessSnapshot();
                 //if we've retrieved a stage offset before, check the old one first
-                if (LAST_KNOWN_STAGE_OFFSETS != default)
+                if (_lastKnownStageOffsets != default)
                 {
-                    if (ValidateLastKnownOffsets(gameMemoryBuffer, LAST_KNOWN_STAGE_OFFSETS, MGS2Offsets.StageInfoAoB))
+                    if (ValidateLastKnownOffsets(gameMemoryBuffer, _lastKnownStageOffsets, MGS2Offsets.StageInfoAoB))
                     {
-                        return LAST_KNOWN_STAGE_OFFSETS;
+                        return _lastKnownStageOffsets;
                     }
                 }
 
-                LAST_KNOWN_STAGE_OFFSETS = new int[2];
+                _lastKnownStageOffsets = new int[2];
 
                 List<int> stageOffset = FindUniqueOffset(gameMemoryBuffer, MGS2Offsets.StageInfoAoB);
 
                 //most of the time we only get 2 results, but sometimes we may get 3. we always want the final two.
                 stageOffset = stageOffset.GetRange(stageOffset.Count - 2, 2);
 
-                Array.Copy(stageOffset.ToArray(), LAST_KNOWN_STAGE_OFFSETS, 2);
-                return LAST_KNOWN_STAGE_OFFSETS;
+                Array.Copy(stageOffset.ToArray(), _lastKnownStageOffsets, 2);
+                return _lastKnownStageOffsets;
             }
         }
 
@@ -113,7 +113,7 @@ namespace MGS2_MC
             }
             catch (Exception e)
             {
-                logger.Warning($"Something unexpected went wrong when looking at the last known player offsets: {e}");
+                _logger.Warning($"Something unexpected went wrong when looking at the last known player offsets: {e}");
                 //we failed to look at the last known player offsets, which isn't fatal.
                 return false;
             }
@@ -147,7 +147,7 @@ namespace MGS2_MC
             }
             catch (Exception e)
             {
-                logger.Error($"Failed to find stage offset: {e}");
+                _logger.Error($"Failed to find stage offset: {e}");
                 throw new AggregateException($"Failed to find stage offset: ", e);
             }
 
@@ -216,7 +216,7 @@ namespace MGS2_MC
             }
             catch (Exception e)
             {
-                logger.Error($"Failed to find player offset: {e}");
+                _logger.Error($"Failed to find player offset: {e}");
                 throw new AggregateException($"Failed to find player offset: ", e);
             }
         }
@@ -228,19 +228,19 @@ namespace MGS2_MC
                 byte[] gameMemoryBuffer = proxy.GetProcessSnapshot();
 
                 //if we've retrieved a player offset before, check the old one first
-                if (LAST_KNOWN_PLAYER_OFFSETS != default)
+                if (_lastKnownPlayerOffsets != default)
                 {
-                    if (ValidateLastKnownOffsets(gameMemoryBuffer, LAST_KNOWN_PLAYER_OFFSETS, MGS2Offsets.PlayerInfoFinderAoB))
+                    if (ValidateLastKnownOffsets(gameMemoryBuffer, _lastKnownPlayerOffsets, MGS2Offsets.PlayerInfoFinderAoB))
                     {
-                        return LAST_KNOWN_PLAYER_OFFSETS;
+                        return _lastKnownPlayerOffsets;
                     }
                 }
 
-                LAST_KNOWN_PLAYER_OFFSETS = new int[2];
+                _lastKnownPlayerOffsets = new int[2];
                 List<int> playerOffsets = FindNewPlayerOffsets(gameMemoryBuffer);
 
-                Array.Copy(playerOffsets.ToArray(), LAST_KNOWN_PLAYER_OFFSETS, 2);
-                return LAST_KNOWN_PLAYER_OFFSETS;
+                Array.Copy(playerOffsets.ToArray(), _lastKnownPlayerOffsets, 2);
+                return _lastKnownPlayerOffsets;
             }
         }
 
@@ -258,7 +258,7 @@ namespace MGS2_MC
                     byte[] bytesRead = proxy.ReadProcessOffset(offset, bytesToRead);
                     if (bytesRead.Length != bytesToRead)
                     {
-                        logger.Warning($"Expected to read {bytesToRead}, but we actually read {bytesRead.Length}");
+                        _logger.Warning($"Expected to read {bytesToRead}, but we actually read {bytesRead.Length}");
                         throw new FileLoadException($"Failed to read value at offset {offset}.");
                     }
 
@@ -266,7 +266,7 @@ namespace MGS2_MC
                 }
                 catch(SimpleProcessProxyException e)
                 {
-                    logger.Error($"Failed to read memory: {e}");
+                    _logger.Error($"Failed to read memory: {e}");
                     throw e;
                 }
             }
@@ -284,7 +284,7 @@ namespace MGS2_MC
             }
             catch (Exception e)
             {
-                logger.Error($"Failed to invert boolean at offset {playerOffset}+{objectOffset}: {e}");
+                _logger.Error($"Failed to invert boolean at offset {playerOffset}+{objectOffset}: {e}");
                 throw new AggregateException("Could not invert boolean", e);
             }
         }
@@ -309,7 +309,7 @@ namespace MGS2_MC
             }
             catch (Exception e)
             {
-                logger.Error($"Failed to set memory at offset {objectOffset}: {e}");
+                _logger.Error($"Failed to set memory at offset {objectOffset}: {e}");
                 throw new AggregateException($"Could not set memory at offset {objectOffset}", e);
             }
         }

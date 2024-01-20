@@ -8,10 +8,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static MGS2_MC.ControllerInterface;
 using static MGS2_MC.TrainerConfigStructure;
 
 namespace MGS2_MC
@@ -45,18 +42,19 @@ namespace MGS2_MC
         static extern bool GetWindowRect(IntPtr hWnd, out Rectangle lpRect);*/ //this may be useful for slapping the GUI on top of MGS2
         #endregion
 
+        private const string loggerName = "MGS2MonitorDebuglog.log";
+
         static MGS2Monitor()
         {
-            logger = Logging.InitializeNewLogger(loggerName);
-            logger.Information($"MGS2 Monitor for version {Program.AppVersion} initialized...");
-            logger.Verbose($"Instance ID: {Program.InstanceID}");
+            _logger = Logging.InitializeNewLogger(loggerName);
+            _logger.Information($"MGS2 Monitor for version {Program.AppVersion} initialized...");
+            _logger.Verbose($"Instance ID: {Program.InstanceID}");
         }
 
-        public static Process MGS2Process;
-        internal static TrainerConfig TrainerConfig;
-        private const string loggerName = "MGS2MonitorDebuglog.log";
-        private static readonly ILogger logger;
-        private static bool initialLaunch = true;
+        public static Process MGS2Process { get; set; }
+        internal static TrainerConfig TrainerConfig { get; set; }
+        private static ILogger _logger { get; set; }
+        private static bool _initialLaunch { get; set; } = true;
 
         internal static TrainerConfig LoadConfig()
         {
@@ -66,7 +64,7 @@ namespace MGS2_MC
             }
             catch (Exception e)
             {
-                logger.Error($"Failed to load TrainerConfig.json: {e}");
+                _logger.Error($"Failed to load TrainerConfig.json: {e}");
                 return null;
             }
         }
@@ -85,7 +83,7 @@ namespace MGS2_MC
             }
             catch(Exception ex)
             {
-                logger.Error($"Failed to close MGS2: {ex}");
+                _logger.Error($"Failed to close MGS2: {ex}");
             }
         }
 
@@ -104,7 +102,7 @@ namespace MGS2_MC
                 }
                 catch (Exception e)
                 {
-                    logger.Error($"Failed to read the {steamAppIdFile.Name} file in your MGS2 directory, cannot guarantee direct launch will work: {e}");
+                    _logger.Error($"Failed to read the {steamAppIdFile.Name} file in your MGS2 directory, cannot guarantee direct launch will work: {e}");
                     return false;
                 }
             }
@@ -124,7 +122,7 @@ namespace MGS2_MC
             }
             catch (Exception e)
             {
-                logger.Error($"Failed to enable direct launch capabilities: {e}");
+                _logger.Error($"Failed to enable direct launch capabilities: {e}");
                 //as of right now, I don't know if it will work without this shortcut, so i won't throw yet.
             }
         }
@@ -150,7 +148,7 @@ namespace MGS2_MC
             }
             catch (Exception e)
             {
-                logger.Error($"Failed to start MGS2: {e}");
+                _logger.Error($"Failed to start MGS2: {e}");
                 throw new AggregateException("Failed to start MGS2.", e);
             }
 
@@ -172,7 +170,7 @@ namespace MGS2_MC
             }
             catch (Exception e)
             {
-                logger.Error($"Something went wrong with the MGS2 process: {e}");
+                _logger.Error($"Something went wrong with the MGS2 process: {e}");
             }
 
             if (TrainerConfig.CloseTrainerWithGame)
@@ -186,7 +184,7 @@ namespace MGS2_MC
             }
             catch(Exception e)
             {
-                logger.Error($"Failed to toggle Launch MGS2 menu option: {e}");
+                _logger.Error($"Failed to toggle Launch MGS2 menu option: {e}");
             }
         }
 
@@ -194,12 +192,12 @@ namespace MGS2_MC
         {
             TrainerConfig = LoadConfig();
 
-            if (!TrainerConfig.AutoLaunchGame && initialLaunch)
+            if (!TrainerConfig.AutoLaunchGame && _initialLaunch)
             {
-                initialLaunch = false;
+                _initialLaunch = false;
                 return;
             }
-            initialLaunch = false;
+            _initialLaunch = false;
 
             MGS2Process = new Process();
             try
@@ -219,7 +217,7 @@ namespace MGS2_MC
             }
             catch (Exception e)
             {
-                logger.Error($"Something went wrong inside the MGS2 monitor: {e}");
+                _logger.Error($"Something went wrong inside the MGS2 monitor: {e}");
             }
         }
 
@@ -243,7 +241,7 @@ namespace MGS2_MC
             }
             catch(Exception e)
             {
-                logger.Error($"Failed to suspend MGS2: {e}");
+                _logger.Error($"Failed to suspend MGS2: {e}");
             }
         }
 
@@ -272,7 +270,7 @@ namespace MGS2_MC
             }
             catch(Exception e)
             {
-                logger.Error($"Failed to resume MGS2: {e}");
+                _logger.Error($"Failed to resume MGS2: {e}");
             }
         }
     }

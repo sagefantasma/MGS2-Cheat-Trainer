@@ -10,59 +10,60 @@ namespace MGS2_MC
 {
     internal class ControllerHook
     {
-        readonly XboxControllerManager xboxControllerManager = new XboxControllerManager();
-        readonly Ps4ControllerManager ps4ControllerManager = new Ps4ControllerManager();
-        private bool activeControllerFound = false;
-        private object activeController;
         public event EventHandler TrainerMenu;
-        private static ILogger logger;
         private const string loggerName = "ControllerDebuglog.log";
+
+        static XboxControllerManager _xboxControllerManager { get; set; } = new XboxControllerManager();
+        static Ps4ControllerManager _ps4ControllerManager { get; set; } = new Ps4ControllerManager();
+        private bool _activeControllerFound { get; set; } = false;
+        private object _activeController { get; set; }
+        private static ILogger _logger { get; set; }
 
         //TODO: realistically, we shouldn't have separate controller managers with the interface, so do that.
 
         private object FindActiveController()
         {
-            List<XboxControllerManager.Controller> activeXboxControllers = (List<XboxControllerManager.Controller>) xboxControllerManager.ScanForControllers();
-            List<Ps4ControllerManager.Controller> activePs4Controllers = (List<Ps4ControllerManager.Controller>) ps4ControllerManager.ScanForControllers();
+            List<XboxControllerManager.Controller> activeXboxControllers = (List<XboxControllerManager.Controller>) _xboxControllerManager.ScanForControllers();
+            List<Ps4ControllerManager.Controller> activePs4Controllers = (List<Ps4ControllerManager.Controller>) _ps4ControllerManager.ScanForControllers();
 
             if(activeXboxControllers.Count == 0 && activePs4Controllers.Count == 0)
             {
-                logger.Information("No controllers connected");
+                _logger.Information("No controllers connected");
                 return null;
             }
             else if(activeXboxControllers.Count == 1 && activePs4Controllers.Count < 1)
             {
-                logger.Information("One Xbox controller connected, using that as the active controller");
+                _logger.Information("One Xbox controller connected, using that as the active controller");
                 return activeXboxControllers[0];
             }
             else if(activePs4Controllers.Count == 1 && activeXboxControllers.Count < 1)
             {
-                logger.Information("One PS4 controller connected, using that as the active controller");
+                _logger.Information("One PS4 controller connected, using that as the active controller");
                 return activePs4Controllers[0];
             }
             else
             {
                 if(activePs4Controllers.Any(controller => controller.Name == "Wireless Controller"))
                 {
-                    logger.Information("Multiple DirectInput controllers detected, using the one named 'Wireless Controller' as the active controller");
+                    _logger.Information("Multiple DirectInput controllers detected, using the one named 'Wireless Controller' as the active controller");
                     return activePs4Controllers.FirstOrDefault(controller => controller.Name == "Wireless Controller");
                 }
                 //do something to figure out the "active" controller??
-                logger.Debug("We see multiple controllers(but no Ps4 controller) connected and don't know what to do yet. Connect a Ps4 controller or connect only 1 controller");
+                _logger.Debug("We see multiple controllers(but no Ps4 controller) connected and don't know what to do yet. Connect a Ps4 controller or connect only 1 controller");
                 return null;
             }
         }
 
         internal void Start(CancellationToken cancellationToken)
         {
-            logger = Logging.InitializeNewLogger(loggerName);
-            ps4ControllerManager.Logger = logger;
-            xboxControllerManager.Logger = logger;
-            logger.Information($"Controller hook for version {Program.AppVersion} initialized...");
-            logger.Verbose($"Instance ID: {Program.InstanceID}");
+            _logger = Logging.InitializeNewLogger(loggerName);
+            _ps4ControllerManager.Logger = _logger;
+            _xboxControllerManager.Logger = _logger;
+            _logger.Information($"Controller hook for version {Program.AppVersion} initialized...");
+            _logger.Verbose($"Instance ID: {Program.InstanceID}");
             while (!cancellationToken.IsCancellationRequested)
             {
-                if (!activeControllerFound)
+                if (!_activeControllerFound)
                 {
                     object controller = FindActiveController();
                     if (controller == null)
@@ -71,23 +72,23 @@ namespace MGS2_MC
                     }
                     else
                     {
-                        activeControllerFound = true;
-                        activeController = controller;
+                        _activeControllerFound = true;
+                        _activeController = controller;
                     }
                 }
                 else
                 {
-                    if (activeController.GetType() == typeof(XboxControllerManager.Controller))
+                    if (_activeController.GetType() == typeof(XboxControllerManager.Controller))
                     {
-                        xboxControllerManager.CheckControllerInput(TrainerMenuEventHandler, activeController);
+                        _xboxControllerManager.CheckControllerInput(TrainerMenuEventHandler, _activeController);
                     }
                     else
                     {
-                        ps4ControllerManager.CheckControllerInput(TrainerMenuEventHandler, activeController);
+                        _ps4ControllerManager.CheckControllerInput(TrainerMenuEventHandler, _activeController);
                     }
                 }
             }
-            logger.Information("Controller hook ending...");
+            _logger.Information("Controller hook ending...");
         }              
 
         protected virtual void TrainerMenuEventHandler(object sender, EventArgs e)

@@ -6,7 +6,7 @@ namespace MGS2_MC
 {
     internal class TrainerConfigStructure
     {
-        public static string TrainerConfigFileLocation = "TrainerConfig.json";
+        public static string TrainerConfigFileLocation = $"Helpers{Path.DirectorySeparatorChar}TrainerConfig.json";
         public readonly static TrainerConfig DefaultConfig = new TrainerConfig
         {
             AutoLaunchGame = true,

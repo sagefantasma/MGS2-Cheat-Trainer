@@ -21,12 +21,19 @@ namespace MGS2_MC
 
         private void BrowseButton_Click(object sender, EventArgs e)
         {
+            string executableLocation = mgs2ExeTextBox.Text;
+
+            if (string.IsNullOrWhiteSpace(executableLocation) || !File.Exists(executableLocation))
+            {
+                executableLocation = Environment.CurrentDirectory;
+            }
+
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
                 Multiselect = false,
                 Title = "Where is 'METAL GEAR SOLID2.exe' on your machine?",
                 DefaultExt = ".exe",
-                InitialDirectory = Path.GetDirectoryName(mgs2ExeTextBox.Text)
+                InitialDirectory = Path.GetDirectoryName(executableLocation)
             };
             if(openFileDialog.ShowDialog() == DialogResult.OK)
             {

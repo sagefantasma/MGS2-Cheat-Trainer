@@ -1,7 +1,6 @@
 ﻿using Serilog;
 using System;
 using System.Collections;
-using static MGS2_MC.ControllerInterface;
 
 namespace MGS2_MC.Controllers
 {

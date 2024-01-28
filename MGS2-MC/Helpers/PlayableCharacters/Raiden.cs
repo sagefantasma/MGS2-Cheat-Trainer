@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace MGS2_MC
 {
-    internal class Raiden
-    {
-        public static readonly List<MGS2Object> UsableObjects = new List<MGS2Object>
+    internal class Raiden : PlayableCharacter
+    {        
+        public new static readonly List<MGS2Object> UsableObjects = new List<MGS2Object>
         {
             MGS2UsableObjects.AKS74u,
             MGS2UsableObjects.AKSuppressor,

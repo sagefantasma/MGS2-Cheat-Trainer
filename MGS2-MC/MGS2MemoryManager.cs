@@ -1,96 +1,61 @@
 ﻿using Serilog;
 using System;
-using System.CodeDom;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using SimplifiedMemoryManager;
 
 namespace MGS2_MC
 {
-    internal class MGS2MemoryManager
+    internal static class MGS2MemoryManager
     {
         #region Internals
-        // PInvoke declarations
-        public static class NativeMethods
-        {
-            // Declare OpenProcess
-            [DllImport("kernel32.dll", SetLastError = true)]
-            public static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
-
-            // Declare WriteProcessMemory with short
-            [DllImport("kernel32.dll", SetLastError = true)]
-            public static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, ref short lpBuffer, uint nSize, out int lpNumberOfBytesWritten);
-            // and with bytes
-            [DllImport("kernel32.dll", SetLastError = true)]
-            public static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, uint nSize, out int lpNumberOfBytesWritten);
-
-            // Declare ReadProcessMemory
-            [DllImport("kernel32.dll", SetLastError = true)]
-            public static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, out short lpBuffer, uint size, out int lpNumberOfBytesRead);
-            // and with bytes
-            [DllImport("kernel32.dll")]
-            public static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, uint nSize, out int lpNumberOfBytesRead);
-
-            // Declare CloseHandle
-            [DllImport("kernel32.dll", SetLastError = true)]
-            public static extern bool CloseHandle(IntPtr hObject);
-        }
-
-        static readonly Process mgs2Process = MGS2Monitor.MGS2Process;
-        static IntPtr PROCESS_BASE_ADDRESS = IntPtr.Zero;
-        static int[] LAST_KNOWN_PLAYER_OFFSETS = default;
         private const string loggerName = "MemoryManagerDebuglog.log";
-        private static ILogger logger;
 
-        private enum ActiveCharacter
-        {
-            Snake,
-            Raiden
-        }
+        private static int[] _lastKnownPlayerOffsets { get; set; } = default;
+        private static int[] _lastKnownStageOffsets { get; set; } = default;
+        private static ILogger _logger { get; set; }
 
         internal static void StartLogger()
         {
-            logger = Logging.InitializeNewLogger(loggerName);
-            logger.Information($"Memory Manager for version {Program.AppVersion} initialized...");
-            logger.Verbose($"Instance ID: {Program.InstanceID}");
+            _logger = Logging.InitializeNewLogger(loggerName);
+            _logger.Information($"Memory Manager for version {Program.AppVersion} initialized...");
+            _logger.Verbose($"Instance ID: {Program.InstanceID}");
         }
 
         #endregion
 
         #region Private methods
-        private static ActiveCharacter DetermineActiveCharacter()
+        private static Constants.PlayableCharacter DetermineActiveCharacter()
         {
-            //TODO: verify for raiden, works for snake 100%
-            //also, this would inherently break down if you toggle camera1, so i should modify this logic
-            bool camera1Enabled = BitConverter.ToBoolean(GetCurrentValue(Constants.CAMERA, sizeof(short)), 0);
-            
-            if (camera1Enabled) 
+            string stageName = GetStageName();
+
+            if (stageName.Contains("tnk")) 
             {
-                return ActiveCharacter.Snake;
+                return Constants.PlayableCharacter.Snake;
+            }
+            else if(stageName.Contains("plt"))
+            {
+                return Constants.PlayableCharacter.Raiden;
             }
             else
             {
-                return ActiveCharacter.Raiden;
+                throw new NotImplementedException("Unknown stage! Can't safely determine what the active character is");
             }
         }
 
         private static void CheckIfUsable(MGS2Object mgs2Object)
         {
-            return; //TODO: uncomment this once the logic for DAC is working
             switch (DetermineActiveCharacter())
             {
-                case ActiveCharacter.Snake:
+                case Constants.PlayableCharacter.Snake:
                     if (!Snake.UsableObjects.Contains(mgs2Object))
                     {
                         throw new InvalidOperationException($"Snake cannot use {mgs2Object.Name}");
                     }
                     break;
-                case ActiveCharacter.Raiden:
+                case Constants.PlayableCharacter.Raiden:
                     if (!Raiden.UsableObjects.Contains(mgs2Object))
                     {
                         throw new InvalidOperationException($"Raiden cannot use {mgs2Object.Name}");
@@ -99,71 +64,100 @@ namespace MGS2_MC
             }
         }
 
-        private static Process GetMGS2Process()
+        private static int[] GetStageOffsets()
         {
-            if (mgs2Process == null || mgs2Process.HasExited) //if MGS2 was started separately from the trainer, get the process.
+            using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
             {
-                Process process = Process.GetProcessesByName(Constants.MGS2_PROCESS_NAME).FirstOrDefault();
-                if (process == default)
+                byte[] gameMemoryBuffer = proxy.GetProcessSnapshot();
+                //if we've retrieved a stage offset before, check the old one first
+                if (_lastKnownStageOffsets != default)
                 {
-                    throw new NullReferenceException();
+                    if (ValidateLastKnownOffsets(gameMemoryBuffer, _lastKnownStageOffsets, MGS2Offsets.StageInfoAoB))
+                    {
+                        return _lastKnownStageOffsets;
+                    }
                 }
-                return process;
-            }
-            else 
-            { 
-                return mgs2Process; 
+
+                _lastKnownStageOffsets = new int[2];
+
+                List<int> stageOffset = FindUniqueOffset(gameMemoryBuffer, MGS2Offsets.StageInfoAoB);
+
+                //most of the time we only get 2 results, but sometimes we may get 3. we always want the final two.
+                stageOffset = stageOffset.GetRange(stageOffset.Count - 2, 2);
+
+                Array.Copy(stageOffset.ToArray(), _lastKnownStageOffsets, 2);
+                return _lastKnownStageOffsets;
             }
         }
 
-        private static int[] GetCurrentPlayerOffset(Process mgs2Process, IntPtr processHandle)
+        private static bool ValidateLastKnownOffsets(byte[] memoryBuffer, int[] lastKnownOffsets, byte[] finderAoB)
         {
-            //TODO: this method is way too big, break it up.
-            byte[] buffer = new byte[mgs2Process.PrivateMemorySize64];
             try
             {
-                NativeMethods.ReadProcessMemory(processHandle, PROCESS_BASE_ADDRESS, buffer, (uint)buffer.Length, out int numBytesRead);
-            }
-            catch(Exception e)
-            {
-                logger.Error($"Failed to read memory of process {Constants.MGS2_PROCESS_NAME}");
-                throw new AggregateException($"Failed to read `{Constants.MGS2_PROCESS_NAME}`. Is it running?", e);
-            }
-
-            //if we've retrieved a player offset before, check the old one first
-            if (LAST_KNOWN_PLAYER_OFFSETS != default)
-            {
-                try
+                bool offsetIsValid = true;
+                foreach (int previousOffset in lastKnownOffsets)
                 {
-                    bool offsetHasMoved = false;
-                    foreach (int previousOffset in LAST_KNOWN_PLAYER_OFFSETS)
+                    byte[] previousOffsetBuffer = new byte[finderAoB.Length];
+                    Array.Copy(memoryBuffer, previousOffset, previousOffsetBuffer, 0, finderAoB.Length);
+                    for (int i = 0; i < previousOffsetBuffer.Length; i++)
                     {
-                        byte[] previousOffsetBuffer = new byte[MGS2Offsets.PlayerInfoFinderAoB.Length];
-                        Array.Copy(buffer, previousOffset, previousOffsetBuffer, 0, MGS2Offsets.PlayerInfoFinderAoB.Length);
-                        for (int i = 0; i < previousOffsetBuffer.Length; i++)
+                        if (previousOffsetBuffer[i] != finderAoB[i])
                         {
-                            if (previousOffsetBuffer[i] != MGS2Offsets.PlayerInfoFinderAoB[i])
-                            {
-                                //if ANY byte does not match exactly to the offsetBytes, we know the offset has moved
-                                offsetHasMoved = true;
-                            }
+                            //if ANY byte does not match exactly to the offsetBytes, we know the offset has moved
+                            offsetIsValid = false;
                         }
                     }
-                    if (!offsetHasMoved)
-                    {
-                        return LAST_KNOWN_PLAYER_OFFSETS;
-                    }
                 }
-                catch (Exception e)
+
+                return offsetIsValid;
+            }
+            catch (Exception e)
+            {
+                _logger.Warning($"Something unexpected went wrong when looking at the last known player offsets: {e}");
+                //we failed to look at the last known player offsets, which isn't fatal.
+                return false;
+            }
+        }
+
+        private static List<int> FindUniqueOffset(byte[] gameMemoryBuffer, byte[] finderAoB, int resultLimit = -1)
+        {
+            int byteCount = 0;
+            List<int> stageOffsets = new List<int>();
+            try
+            {
+                while (byteCount + 2 < gameMemoryBuffer.Length)
                 {
-                    logger.Warning($"Something unexpected went wrong when looking at the last known player offsets: {e}");
-                    //we failed to look at the last known player offsets, which isn't fatal.
+                    for (int position = 0; position < finderAoB.Length; position++)
+                    {
+                        //now filter any out that don't match with the StageInfo bytes
+                        if (gameMemoryBuffer[byteCount + position] != finderAoB[position])
+                            break;
+                        //if we get all the way through the scan without finding anything "wrong", we have a match
+                        else if (position == finderAoB.Length - 1)
+                        {
+                            stageOffsets.Add(byteCount);
+                        }
+                    }
+
+                    if (stageOffsets.Count == resultLimit)
+                        return stageOffsets;
+
+                    byteCount += 2; //2 bytes seems to be the maximum we can reliably go without missing offsets
                 }
             }
+            catch (Exception e)
+            {
+                _logger.Error($"Failed to find stage offset: {e}");
+                throw new AggregateException($"Failed to find stage offset: ", e);
+            }
 
-            LAST_KNOWN_PLAYER_OFFSETS = new int[2];
+            return stageOffsets;
+        }
+
+        private static List<int> FindNewPlayerOffsets(byte[] buffer)
+        {
             int byteCount = 0;
-            List<int> playerOffset = new List<int>();
+            List<int> playerOffsets = new List<int>();
             try
             {
                 while (byteCount + 152 < buffer.Length) //this can _probably just be 144 or 148, but i want to be safe
@@ -172,7 +166,7 @@ namespace MGS2_MC
                     for (int position = 0; position < MGS2Offsets.PlayerInfoFinderAoB.Length; position++)
                     {
                         //the "playerOffsetBytes" is very common within the game's memory. (~60-90 matches)
-                        //HOWEVER, if we limit the playerOffset bytes by the _relative position_, we get VERY few results!
+                        //HOWEVER, if we limit the playerOffsets bytes by the _relative position_, we get VERY few results!
                         //#1 if you have fired 0 shots, you will have 4 of these blocks of memory.
                         //#2 if you have fired 1+ shots but HAVE NOT checkpointed, you will have 3 blocks
                         //#3 if you have fired 1+ shots and HAVE checkpointed, you will have 2 blocks
@@ -206,182 +200,126 @@ namespace MGS2_MC
                         {
                             if (bufferBeingExamined[position] != MGS2Offsets.PlayerInfoFinderAoB[position])
                             {
-                                playerOffset.Add(byteCount);
+                                playerOffsets.Add(byteCount);
                                 break;
                             }
                         }
                     }
 
-                    if (playerOffset.Count == 2) //if we have found 2 offsets, then we have found the player offset & the checkpoint
+                    if (playerOffsets.Count == 2) //if we have found 2 offsets, then we have found the player offset & the checkpoint
                         break;
 
                     byteCount += 4; //8 bytes can result in missed offsets, 4 bytes is sufficient in accuracy & speed.
                 }
+
+                return playerOffsets;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                logger.Error($"Failed to find player offset: {e}");
+                _logger.Error($"Failed to find player offset: {e}");
                 throw new AggregateException($"Failed to find player offset: ", e);
             }
-
-            Array.Copy(playerOffset.ToArray(), LAST_KNOWN_PLAYER_OFFSETS, 2);
-            return LAST_KNOWN_PLAYER_OFFSETS;
         }
 
-        private static byte[] ReadValueFromMemory(IntPtr processHandle, IntPtr objectAddress, byte[] bytesToRead = null)
+        private static int[] GetPlayerOffsets()
         {
-            if(bytesToRead == null)
+            using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
             {
-                bytesToRead = new byte[2];
-            }
+                byte[] gameMemoryBuffer = proxy.GetProcessSnapshot();
 
-            bool success = NativeMethods.ReadProcessMemory(processHandle, objectAddress, bytesToRead, (uint) bytesToRead.Length, out int bytesRead);
-            if (!success || bytesRead != bytesToRead.Length)
-            {
-                if (!success)
+                //if we've retrieved a player offset before, check the old one first
+                if (_lastKnownPlayerOffsets != default)
                 {
-                    logger.Debug("Failed to read memory...");
+                    if (ValidateLastKnownOffsets(gameMemoryBuffer, _lastKnownPlayerOffsets, MGS2Offsets.PlayerInfoFinderAoB))
+                    {
+                        return _lastKnownPlayerOffsets;
+                    }
                 }
-                if(bytesRead != bytesToRead.Length)
-                {
-                    logger.Debug($"Expected to read {bytesToRead.Length}, but we actually read {bytesRead}");
-                }
-                throw new FileLoadException($"Failed to read value at offset {processHandle}+{objectAddress}.");
-            }
 
-            return bytesToRead;
+                _lastKnownPlayerOffsets = new int[2];
+                List<int> playerOffsets = FindNewPlayerOffsets(gameMemoryBuffer);
+
+                Array.Copy(playerOffsets.ToArray(), _lastKnownPlayerOffsets, 2);
+                return _lastKnownPlayerOffsets;
+            }
         }
 
-        private static void InvertBooleanValue(IntPtr processHandle, int playerOffset, int objectOffset)
+        private static byte[] ReadValueFromMemory(int offset, long bytesToRead = default)
+        {
+            if(bytesToRead == default)
+            {
+                bytesToRead = 2;
+            }
+
+            using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+            {
+                try
+                {
+                    byte[] bytesRead = proxy.ReadProcessOffset(offset, bytesToRead);
+                    if (bytesRead.Length != bytesToRead)
+                    {
+                        _logger.Warning($"Expected to read {bytesToRead}, but we actually read {bytesRead.Length}");
+                        throw new FileLoadException($"Failed to read value at offset {offset}.");
+                    }
+
+                    return bytesRead;
+                }
+                catch(SimpleProcessProxyException e)
+                {
+                    _logger.Error($"Failed to read memory: {e}");
+                    throw e;
+                }
+            }
+        }
+
+        private static void InvertBooleanValue(int playerOffset, int objectOffset)
         {
             int combinedOffset = playerOffset + objectOffset;
-            IntPtr booleanAddress = IntPtr.Add(PROCESS_BASE_ADDRESS, combinedOffset);
-            byte[] currentValue = ReadValueFromMemory(processHandle, booleanAddress, new byte[sizeof(short)]);
-
-            byte[] valueToWrite;
-            
-            if (Enumerable.SequenceEqual(currentValue, BitConverter.GetBytes((short)1)))
-            {
-                valueToWrite = BitConverter.GetBytes((short)0);
-            }
-            else
-            {
-                valueToWrite = BitConverter.GetBytes((short)1);
-            }
-             //= currentValue == BitConverter.GetBytes((short)0xFF) ? BitConverter.GetBytes((short)0xFF) : BitConverter.GetBytes((short)1);
-
             try
             {
-                ModifyByteValueObject(objectOffset, valueToWrite);
-            }
-            catch(Exception ex)
-            {
-                logger.Error($"Failed to write boolean value at offset {processHandle}+{objectOffset}: {ex}");
-                throw new AggregateException($"Failed to write boolean value at offset {processHandle}+{objectOffset}", ex);
-            }
-        }
-
-        private static void ModifyByteValueObject(int objectOffset, byte[] value)
-        {
-            Process process;
-
-            try
-            {
-                process = GetMGS2Process();
-            }
-            catch
-            {
-                logger.Error($"Failed to get process {Constants.MGS2_PROCESS_NAME}");
-                throw new AggregateException($"Cannot find process `{Constants.MGS2_PROCESS_NAME}` - is it running?");
-            }
-
-            PROCESS_BASE_ADDRESS = process.MainModule.BaseAddress;
-            IntPtr processHandle = default;
-            try
-            {
-                processHandle = NativeMethods.OpenProcess(0x1F0FFF, false, process.Id);
-                int[] playerOffset = GetCurrentPlayerOffset(process, processHandle);
-                int bytesWritten;
-
-                byte[] buffer = value; // Value to write
-                // Adjust offsets to add base address
-                IntPtr playerAddress = IntPtr.Add(PROCESS_BASE_ADDRESS, playerOffset[0] + objectOffset);
-                IntPtr checkpointAddress = IntPtr.Add(PROCESS_BASE_ADDRESS, playerOffset[1] + objectOffset);
-
-                bool playerSuccess = NativeMethods.WriteProcessMemory(processHandle, playerAddress, buffer, (uint)buffer.Length, out bytesWritten);
-                bool checkpointSuccess = NativeMethods.WriteProcessMemory(processHandle, checkpointAddress, buffer, (uint)buffer.Length, out bytesWritten);
-
-                if ((!playerSuccess && !checkpointSuccess) || bytesWritten != buffer.Length)
+                using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                 {
-                    if (!playerSuccess)
-                    {
-                        logger.Debug("Failed to write player's memory...");
-                    }
-                    if (!checkpointSuccess)
-                    {
-                        logger.Debug("Failed to write checkpoint memory...");
-                    }
-                    if(bytesWritten != buffer.Length)
-                    {
-                        logger.Debug($"We tried to write {buffer.Length} bytes, but ended up writing {bytesWritten}");
-                    }
-                    throw new InvalidOperationException($"Failed to write memory at {objectOffset} with value {value}.");
+                    proxy.InvertBooleanValue(combinedOffset, sizeof(short));
                 }
             }
             catch (Exception e)
             {
-                logger.Error("Something went wrong when trying to modify the game's memory!");
-                throw new AggregateException($"Something unexpected went wrong when trying to modify the game's memory! {e}");
+                _logger.Error($"Failed to invert boolean at offset {playerOffset}+{objectOffset}: {e}");
+                throw new AggregateException("Could not invert boolean", e);
             }
-            finally
+        }
+
+        private static string GetStageName()
+        {
+            int[] stageMemoryOffsets = GetStageOffsets();
+
+            return Encoding.UTF8.GetString(ReadValueFromMemory(stageMemoryOffsets.Last() + MGS2Offsets.CURRENT_STAGE.Start, MGS2Offsets.CURRENT_STAGE.Length));
+        }
+
+        private static void SetByteValueObject(int objectOffset, byte[] valueToSet)
+        {
+            try
             {
-                if(processHandle != default)
+                using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                 {
-                    NativeMethods.CloseHandle(processHandle);
+                    int[] playerOffsets = GetPlayerOffsets();
+                    proxy.ModifyProcessOffset(playerOffsets[0] + objectOffset, valueToSet);
+                    proxy.ModifyProcessOffset(playerOffsets[1] + objectOffset, valueToSet);
                 }
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Failed to set memory at offset {objectOffset}: {e}");
+                throw new AggregateException($"Could not set memory at offset {objectOffset}", e);
             }
         }
         #endregion
 
-        public static byte[] GetCurrentValue(int valueOffset, int sizeToRead)
+        public static byte[] GetPlayerInfoBasedValue(int valueOffset, int sizeToRead)
         {
-            Process process;
+            int[] playerMemoryOffsets = GetPlayerOffsets();
 
-            try
-            {
-                process = GetMGS2Process();
-            }
-            catch
-            {
-                logger.Error($"Failed to get process {Constants.MGS2_PROCESS_NAME}");
-                throw new AggregateException($"Cannot find process `{Constants.MGS2_PROCESS_NAME}` - is it running?");
-            }
-
-            PROCESS_BASE_ADDRESS = process.MainModule.BaseAddress;
-            IntPtr processHandle = default;
-            try
-            {
-                processHandle = NativeMethods.OpenProcess(0x1F0FFF, false, process.Id);
-                int[] playerOffset = GetCurrentPlayerOffset(process, processHandle);
-                IntPtr playerAddress = IntPtr.Add(PROCESS_BASE_ADDRESS, playerOffset[0] + valueOffset); // Adjusted to add base address
-
-                byte[] bytesRead = new byte[sizeToRead];
-                ReadValueFromMemory(processHandle, playerAddress, bytesRead);
-
-                return bytesRead;
-            }
-            catch(Exception e)
-            {
-                logger.Debug($"Failed to get current value at {PROCESS_BASE_ADDRESS}+{valueOffset}");
-                throw new AggregateException($"Something unexpected went wrong when trying to get current value! {e}");
-            }
-            finally
-            {
-                if (processHandle != default)
-                {
-                    NativeMethods.CloseHandle(processHandle);
-                }
-            }
+            return ReadValueFromMemory(playerMemoryOffsets[0] + valueOffset, sizeToRead);
         }
 
         public static void UpdateObjectBaseValue(MGS2Object mgs2Object, short value)
@@ -391,19 +329,19 @@ namespace MGS2_MC
             switch (mgs2Object)
             {
                 case StackableItem stackableItem:
-                    ModifyByteValueObject(stackableItem.CurrentCountOffset, BitConverter.GetBytes(value));
+                    SetByteValueObject(stackableItem.CurrentCountOffset, BitConverter.GetBytes(value));
                     break;
                 case DurabilityItem durabilityItem:
-                    ModifyByteValueObject(durabilityItem.DurabilityOffset, BitConverter.GetBytes(value));
+                    SetByteValueObject(durabilityItem.DurabilityOffset, BitConverter.GetBytes(value));
                     break;
                 case AmmoWeapon ammoWeapon:
-                    ModifyByteValueObject(ammoWeapon.CurrentAmmoOffset, BitConverter.GetBytes(value));
+                    SetByteValueObject(ammoWeapon.CurrentAmmoOffset, BitConverter.GetBytes(value));
                     break;
                 case SpecialWeapon specialWeapon:
-                    ModifyByteValueObject(specialWeapon.SpecialOffset, BitConverter.GetBytes(value));
+                    SetByteValueObject(specialWeapon.SpecialOffset, BitConverter.GetBytes(value));
                     break;
                 case LevelableItem levelableItem:
-                    ModifyByteValueObject(levelableItem.LevelOffset, BitConverter.GetBytes(value));
+                    SetByteValueObject(levelableItem.LevelOffset, BitConverter.GetBytes(value));
                     break;
             }
         }
@@ -415,10 +353,10 @@ namespace MGS2_MC
             switch (mgs2Object)
             {
                 case StackableItem stackableItem:
-                    ModifyByteValueObject(stackableItem.MaxCountOffset, BitConverter.GetBytes(count)); 
+                    SetByteValueObject(stackableItem.MaxCountOffset, BitConverter.GetBytes(count)); 
                     break;
                 case AmmoWeapon ammoWeapon:
-                    ModifyByteValueObject(ammoWeapon.MaxAmmoOffset, BitConverter.GetBytes(count));
+                    SetByteValueObject(ammoWeapon.MaxAmmoOffset, BitConverter.GetBytes(count));
                     break;
             }
         }
@@ -427,39 +365,10 @@ namespace MGS2_MC
         {
             CheckIfUsable(mgs2Object);
             int objectOffset = mgs2Object.InventoryOffset;
-            Process process;
+            int[] playerOffsets = GetPlayerOffsets();
 
-            try
-            {
-                process = GetMGS2Process();
-            }
-            catch
-            {
-                logger.Error($"Failed to get process {Constants.MGS2_PROCESS_NAME}");
-                throw new AggregateException($"Cannot find process `{Constants.MGS2_PROCESS_NAME}` - is it running?");
-            }
-
-            PROCESS_BASE_ADDRESS = process.MainModule.BaseAddress;
-            IntPtr processHandle = default;
-            try
-            {
-                processHandle = NativeMethods.OpenProcess(0x1F0FFF, false, process.Id);
-                int[] playerOffset = GetCurrentPlayerOffset(process, processHandle);
-
-                InvertBooleanValue(processHandle, playerOffset[0], objectOffset);
-            }
-            catch (Exception e)
-            {
-                logger.Debug($"Could not toggle {mgs2Object.Name}");
-                throw new AggregateException("Failed to toggle object.", e);
-            }
-            finally
-            {
-                if (processHandle != default)
-                {
-                    NativeMethods.CloseHandle(processHandle);
-                }
-            }
+            InvertBooleanValue(playerOffsets[0], objectOffset);
+            InvertBooleanValue(playerOffsets[1], objectOffset);
         }
     }
 }

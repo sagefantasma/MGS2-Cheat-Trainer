@@ -6,6 +6,12 @@
         internal const string SteamAppId = "2131640";
         internal const string SteamAppIdFileName = "steam_appid.txt";
 
+        public enum PlayableCharacter
+        {
+            Snake,
+            Raiden
+        }
+
         #region Item Table
         public const int RATION = 0;
         public const int BROKEN_SCOPE = 2; //verify

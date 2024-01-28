@@ -22,6 +22,7 @@ namespace MGS2_MC
         private static int LastSelectedWeaponIndex = -1;
         private static object CurrentlySelectedOpposingObject = null;
         public static GUI StaticGuiReference = null;
+        public static bool? GuiLoaded = false;
         private readonly ILogger _logger;
 
         internal static void ShowGui()
@@ -585,6 +586,7 @@ namespace MGS2_MC
             stringsListBox.DataSource = MGS2Strings.MGS2_STRINGS;
             stringsListBox.DisplayMember = "Tag";
             mgs2TabControl.TabPages.RemoveByKey(tabPageStats.Name);
+            GuiLoaded = true;
         }
 
         #region GUI getters
@@ -1459,8 +1461,23 @@ namespace MGS2_MC
             }
             else
             {
-                Program.MGS2Thread.Start();
+                try
+                {
+                    Program.RestartMonitoringThread();
+                }
+                catch(Exception ex)
+                {
+                    _logger.Error($"Failed to start MGS2 thread: {ex}");
+                }
             }
+        }
+
+        public static void ToggleLaunchMGS2Option()
+        {
+            StaticGuiReference.Invoke(new Action(() =>
+            {
+                StaticGuiReference.launchMgs2MenuItem.Enabled = !StaticGuiReference.launchMgs2MenuItem.Enabled;
+            }));
         }
     }
 }

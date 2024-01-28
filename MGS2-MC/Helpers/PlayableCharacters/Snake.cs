@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace MGS2_MC
 {
-    internal class Snake
+    internal class Snake : PlayableCharacter
     {
-        public static readonly List<MGS2Object> UsableObjects = new List<MGS2Object>
+        public static new readonly List<MGS2Object> UsableObjects = new List<MGS2Object>
         {
             MGS2UsableObjects.AKSuppressor,
             MGS2UsableObjects.APSensor,

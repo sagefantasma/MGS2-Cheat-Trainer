@@ -17,35 +17,37 @@ namespace MGS2_MC
 
         static readonly List<string> Patriot_Agents = new List<string>()
         {
-            "Ocelot",
-            "Houseman",
             "Ames",
-            "Fatman",
-            "Rosemary",
             "Drebin",
-            "Sears",
-            "Johnson",
+            "Fatman",
             "Gurlukovich",
-            "Silverburgh"
+            "Houseman",
+            "Johnson",
+            "Ocelot",
+            "Raiden",
+            "Rosemary",
+            "Sears",
+            "Silverburgh",
+            "Snake"
         };
 
         static readonly List<string> Patriot_AIs = new List<string>()
         {
-            "JD",
+            "AL",
             "GW",
+            "JD",
             "TJ",
-            "TR",
-            "AL"
+            "TR"
         };
 
         static readonly List<string> Patriot_Founders = new List<string>()
         {
-            "Oh",
             "Adamska",
-            "John",
-            "Anderson",
-            "Clark",
-            "Mama"
+            "David",
+            "Donald",
+            "EVA",
+            "Jane",
+            "John"
         };
     }
 }

@@ -11,11 +11,12 @@ namespace MGS2_MC
 {
     internal static class Program
     {
-        internal static Thread MGS2Thread = new Thread(MGS2Monitor.EnableMonitor);
-        private static ILogger logger;
         private const string loggerName = "MainDebuglog.log";
-        public static string AppVersion;
-        public static string InstanceID = InstanceIdentifier.CreateInstanceIdentifier();
+
+        public static string InstanceID { get; } = InstanceIdentifier.CreateInstanceIdentifier();
+        internal static Thread MGS2Thread { get; set; } = new Thread(MGS2Monitor.EnableMonitor);
+        public static string AppVersion { get; set; }
+        private static ILogger _logger { get; set; }
 
         /// <summary>
         /// The main entry point for the application.
@@ -32,7 +33,7 @@ namespace MGS2_MC
             StartMonitoringThread();
             StartControllerThread();
 
-            Application.Run(new GUI(logger));            
+            Application.Run(new GUI(_logger));            
         }
 
         private static void StartMonitoringThread()
@@ -43,7 +44,20 @@ namespace MGS2_MC
             }
             catch (Exception e)
             {
-                logger.Error($"Could not start MGS2 monitor: {e}");
+                _logger.Error($"Could not start MGS2 monitor: {e}");
+            }
+        }
+
+        public static void RestartMonitoringThread()
+        {
+            try
+            {
+                MGS2Thread = new Thread(MGS2Monitor.EnableMonitor);
+                MGS2Thread.Start();
+            }
+            catch(Exception e)
+            {
+                _logger.Error($"Could not restart MGS2 monitor: {e}");
             }
         }
 
@@ -56,7 +70,7 @@ namespace MGS2_MC
             }
             catch (Exception e)
             {
-                logger.Error($"Could not start controller monitor: {e}");
+                _logger.Error($"Could not start controller monitor: {e}");
             }
         }
 
@@ -85,9 +99,9 @@ namespace MGS2_MC
             }
             Logging.MainLogEventLevel = ParseLogEventLevel(logLevel);
             Logging.LogLocation = Path.Combine(new FileInfo(Application.ExecutablePath).DirectoryName, "logs");
-            logger = Logging.InitializeNewLogger(loggerName);
-            logger.Information($"MGS2 MC Cheat Trainer v.{AppVersion} initialized...");
-            logger.Verbose($"Instance ID: {InstanceID}");
+            _logger = Logging.InitializeNewLogger(loggerName);
+            _logger.Information($"MGS2 MC Cheat Trainer v.{AppVersion} initialized...");
+            _logger.Verbose($"Instance ID: {InstanceID}");
             MGS2MemoryManager.StartLogger();
         }
 

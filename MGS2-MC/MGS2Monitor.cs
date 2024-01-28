@@ -60,7 +60,7 @@ namespace MGS2_MC
         {
             try
             {
-                return JsonSerializer.Deserialize<TrainerConfig>(File.ReadAllText("TrainerConfig.json"));
+                return JsonSerializer.Deserialize<TrainerConfig>(File.ReadAllText(TrainerConfigFileLocation));
             }
             catch (Exception e)
             {

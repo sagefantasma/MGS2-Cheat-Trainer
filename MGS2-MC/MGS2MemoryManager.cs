@@ -300,9 +300,10 @@ namespace MGS2_MC
         {
             try
             {
+                int[] playerOffsets = GetPlayerOffsets();
+
                 using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                 {
-                    int[] playerOffsets = GetPlayerOffsets();
                     proxy.ModifyProcessOffset(playerOffsets[0] + objectOffset, valueToSet);
                     proxy.ModifyProcessOffset(playerOffsets[1] + objectOffset, valueToSet);
                 }

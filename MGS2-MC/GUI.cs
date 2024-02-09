@@ -482,6 +482,7 @@ namespace MGS2_MC
         {
             itemGuiObjectList.Add(new GuiObject("AK Suppressor", akSupGroupBox));
             itemGuiObjectList.Add(new GuiObject("AP Sensor", apSensorGroupBox));
+            itemGuiObjectList.Add(new GuiObject("Bandana", bandanaGroupBox));
             itemGuiObjectList.Add(new GuiObject("BDU", bduGroupBox));
             itemGuiObjectList.Add(new GuiObject("Bandage", bandageGroupBox));
             itemGuiObjectList.Add(new GuiObject("Blue Wig", blueWigGroupBox));

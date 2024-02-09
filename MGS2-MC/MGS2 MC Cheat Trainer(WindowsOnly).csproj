@@ -26,14 +26,14 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <InstallUrl>https://raw.githubusercontent.com/sagefantasma/MGS2-Cheat-Trainer/release/clickonce_releases/</InstallUrl>
-    <UpdateUrl>https://raw.githubusercontent.com/sagefantasma/MGS2-Cheat-Trainer/release/clickonce_releases/</UpdateUrl>
+    <InstallUrl>https://raw.githubusercontent.com/sagefantasma/MGS2-Cheat-Trainer/main/clickonce_releases/</InstallUrl>
+    <UpdateUrl>https://raw.githubusercontent.com/sagefantasma/MGS2-Cheat-Trainer/main/clickonce_releases/</UpdateUrl>
     <SupportUrl>https://github.com/sagefantasma/MGS2-Cheat-Trainer/wiki</SupportUrl>
     <ErrorReportUrl>https://github.com/sagefantasma/MGS2-Cheat-Trainer/issues</ErrorReportUrl>
     <ProductName>MGS2 Master Collection Cheat Trainer</ProductName>
     <PublisherName>SageFantasma</PublisherName>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>0.7.0.0</ApplicationVersion>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>1.0.1.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -260,9 +260,9 @@
     </Compile>
     <None Include="Resources\METAL GEAR SOLID 2 SONS OF LIBERTY.CT" />
     <None Include="Resources\mgs2_sse_hackzinglyhack7.CT" />
-    <None Include="Helpers\TrainerConfig.json">
+    <Content Include="Helpers\TrainerConfig.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

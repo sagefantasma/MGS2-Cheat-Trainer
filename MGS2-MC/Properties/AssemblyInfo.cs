@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("MGS2 MC - Cheat Trainer")]
 [assembly: AssemblyDescription("A tool used to enable you to do cool things in MGS2 :^)")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("SageFantasma")]
+[assembly: AssemblyCompany("ANTIBigBoss")]
 [assembly: AssemblyProduct("MGS2 MC - Cheat Trainer")]
 [assembly: AssemblyCopyright("Copyright ©  2024")]
 [assembly: AssemblyTrademark("")]

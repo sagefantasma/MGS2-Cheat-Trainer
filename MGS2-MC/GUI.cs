@@ -585,6 +585,7 @@ namespace MGS2_MC
             weaponListBox.SelectedIndex = -1;
             stringsListBox.DataSource = MGS2Strings.MGS2_STRINGS;
             stringsListBox.DisplayMember = "Tag";
+            stringsListBox.SelectedIndex = -1;
             mgs2TabControl.TabPages.RemoveByKey(tabPageStats.Name);
             GuiLoaded = true;
         }
@@ -1379,12 +1380,20 @@ namespace MGS2_MC
 
         private void StringsListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //TODO: update the name field, length & button functionality
+            StaticGuiReference.Invoke(new Action(() =>
+            {
+                MGS2Strings.MGS2String selectedString = stringsListBox.SelectedItem as MGS2Strings.MGS2String;
+                StaticGuiReference.basicNameTextBox.Text = selectedString.CurrentText;
+                StaticGuiReference.characterLimitLabel.Text = selectedString.MemoryOffset.Length.ToString();
+                StaticGuiReference.basicNameGroupBox.Text = selectedString.Tag;
+            }));
         }
 
         private void setBasicNameBtn_Click(object sender, EventArgs e)
         {
-            var mgs2Handle = MGS2Monitor.MGS2Process.Handle;
+            //TODO: verify
+            MGS2Strings.MGS2String selectedString = stringsListBox.SelectedItem as MGS2Strings.MGS2String;
+            MGS2MemoryManager.UpdateGameString(selectedString, basicNameTextBox.Text);
         }
 
         private void ItemListBox_MouseDoubleClick(object sender, MouseEventArgs e)

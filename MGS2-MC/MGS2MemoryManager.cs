@@ -122,36 +122,36 @@ namespace MGS2_MC
         private static List<int> FindUniqueOffset(byte[] gameMemoryBuffer, byte[] finderAoB, int resultLimit = -1)
         {
             int byteCount = 0;
-            List<int> stageOffsets = new List<int>();
+            List<int> foundOffsets = new List<int>();
             try
             {
                 while (byteCount + 2 < gameMemoryBuffer.Length)
                 {
                     for (int position = 0; position < finderAoB.Length; position++)
                     {
-                        //now filter any out that don't match with the StageInfo bytes
+                        //now filter any out that don't match with the finderAoB
                         if (gameMemoryBuffer[byteCount + position] != finderAoB[position])
                             break;
                         //if we get all the way through the scan without finding anything "wrong", we have a match
                         else if (position == finderAoB.Length - 1)
                         {
-                            stageOffsets.Add(byteCount);
+                            foundOffsets.Add(byteCount);
                         }
                     }
 
-                    if (stageOffsets.Count == resultLimit)
-                        return stageOffsets;
+                    if (foundOffsets.Count == resultLimit)
+                        return foundOffsets;
 
                     byteCount += 2; //2 bytes seems to be the maximum we can reliably go without missing offsets
                 }
             }
             catch (Exception e)
             {
-                _logger.Error($"Failed to find stage offset: {e}");
-                throw new AggregateException($"Failed to find stage offset: ", e);
+                _logger.Error($"Failed to find unique offset: {e}");
+                throw new AggregateException($"Failed to find unique offset: ", e);
             }
 
-            return stageOffsets;
+            return foundOffsets;
         }
 
         private static List<int> FindNewPlayerOffsets(byte[] buffer)
@@ -315,6 +315,17 @@ namespace MGS2_MC
             }
         }
         #endregion
+
+        public static void UpdateGameString(MGS2Strings.MGS2String gameString, string newValue)
+        {
+            using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+            {
+                byte[] gameMemoryBuffer = proxy.GetProcessSnapshot();
+                var offset = FindUniqueOffset(gameMemoryBuffer, gameString.FinderAoB);
+
+                SetByteValueObject(offset[0] + gameString.MemoryOffset.Start, Encoding.UTF8.GetBytes(newValue));
+            }
+        }
 
         public static byte[] GetPlayerInfoBasedValue(int valueOffset, int sizeToRead)
         {

@@ -80,7 +80,7 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.label52 = new System.Windows.Forms.Label();
             this.characterLimitLabel = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.basicNameTextBox = new System.Windows.Forms.TextBox();
             this.descriptionGroupBox = new System.Windows.Forms.GroupBox();
             this.hfBladeGroupBox = new System.Windows.Forms.GroupBox();
             this.hfBladeLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
@@ -1431,7 +1431,7 @@
             // 
             this.basicNameGroupBox.Controls.Add(this.setBasicNameBtn);
             this.basicNameGroupBox.Controls.Add(this.flowLayoutPanel1);
-            this.basicNameGroupBox.Controls.Add(this.textBox1);
+            this.basicNameGroupBox.Controls.Add(this.basicNameTextBox);
             this.basicNameGroupBox.Location = new System.Drawing.Point(117, 3);
             this.basicNameGroupBox.Name = "basicNameGroupBox";
             this.basicNameGroupBox.Size = new System.Drawing.Size(234, 208);
@@ -1480,13 +1480,13 @@
             this.characterLimitLabel.TabIndex = 1;
             this.characterLimitLabel.Text = "0";
             // 
-            // textBox1
+            // basicNameTextBox
             // 
-            this.textBox1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.textBox1.Location = new System.Drawing.Point(3, 16);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(228, 20);
-            this.textBox1.TabIndex = 0;
+            this.basicNameTextBox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.basicNameTextBox.Location = new System.Drawing.Point(3, 16);
+            this.basicNameTextBox.Name = "basicNameTextBox";
+            this.basicNameTextBox.Size = new System.Drawing.Size(228, 20);
+            this.basicNameTextBox.TabIndex = 0;
             // 
             // descriptionGroupBox
             // 
@@ -7356,14 +7356,14 @@
             // modifyConfigMenuItem
             // 
             this.modifyConfigMenuItem.Name = "modifyConfigMenuItem";
-            this.modifyConfigMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.modifyConfigMenuItem.Size = new System.Drawing.Size(151, 22);
             this.modifyConfigMenuItem.Text = "Modify Config";
             this.modifyConfigMenuItem.Click += new System.EventHandler(this.ModifyConfigMenuItem_Click);
             // 
             // launchMgs2MenuItem
             // 
             this.launchMgs2MenuItem.Name = "launchMgs2MenuItem";
-            this.launchMgs2MenuItem.Size = new System.Drawing.Size(180, 22);
+            this.launchMgs2MenuItem.Size = new System.Drawing.Size(151, 22);
             this.launchMgs2MenuItem.Text = "Launch MGS2";
             this.launchMgs2MenuItem.Click += new System.EventHandler(this.LaunchMgs2MenuItem_Click);
             // 
@@ -8077,7 +8077,7 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Label label52;
         private System.Windows.Forms.Label characterLimitLabel;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox basicNameTextBox;
         private System.Windows.Forms.Button setBasicNameBtn;
         private System.Windows.Forms.TableLayoutPanel itemLayoutPanel;
         private System.Windows.Forms.GroupBox stealthGroupBox;

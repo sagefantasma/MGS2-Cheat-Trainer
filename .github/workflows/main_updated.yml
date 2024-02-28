@@ -16,6 +16,9 @@ jobs:
       - name: Navigate to Workspace
         run: cd $GITHUB_WORKSPACE
 
+      - name: Pull dev
+        run: git pull origin dev
+
       - name: Rebase from main
         run: git pull --rebase origin main
 

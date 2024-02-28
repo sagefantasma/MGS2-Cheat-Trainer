@@ -1380,20 +1380,31 @@ namespace MGS2_MC
 
         private void StringsListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            StaticGuiReference.Invoke(new Action(() =>
+            if (GuiLoaded == true)
             {
-                MGS2Strings.MGS2String selectedString = stringsListBox.SelectedItem as MGS2Strings.MGS2String;
-                StaticGuiReference.basicNameTextBox.Text = selectedString.CurrentText;
-                StaticGuiReference.characterLimitLabel.Text = selectedString.MemoryOffset.Length.ToString();
-                StaticGuiReference.basicNameGroupBox.Text = selectedString.Tag;
-            }));
+                StaticGuiReference.Invoke(new Action(() =>
+                {
+                    MGS2Strings.MGS2String selectedString = stringsListBox.SelectedItem as MGS2Strings.MGS2String;
+                    StaticGuiReference.basicNameTextBox.Text = selectedString.CurrentText;
+                    StaticGuiReference.basicNameTextBox.MaxLength = selectedString.MemoryOffset.Length;
+                    StaticGuiReference.characterLimitLabel.Text = selectedString.MemoryOffset.Length.ToString();
+                    StaticGuiReference.basicNameGroupBox.Text = selectedString.Tag;
+                }));
+            }
         }
 
         private void setBasicNameBtn_Click(object sender, EventArgs e)
         {
-            //TODO: verify
-            MGS2Strings.MGS2String selectedString = stringsListBox.SelectedItem as MGS2Strings.MGS2String;
-            MGS2MemoryManager.UpdateGameString(selectedString, basicNameTextBox.Text);
+            try
+            {
+                MGS2Strings.MGS2String selectedString = stringsListBox.SelectedItem as MGS2Strings.MGS2String;
+                MGS2MemoryManager.UpdateGameString(selectedString, basicNameTextBox.Text);
+            }
+            catch(Exception ex)
+            {
+                _logger.Error($"Failed to update game string: {ex}");
+                MessageBox.Show($"Failed to update game string");
+            }
         }
 
         private void ItemListBox_MouseDoubleClick(object sender, MouseEventArgs e)

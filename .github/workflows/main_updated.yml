@@ -10,7 +10,7 @@ jobs:
 
     steps:
       - name: Checkout dev
-        run: git checkout dev
+        run: git checkout origin dev
 
       - name: Rebase from main
         run: git pull --rebase origin main

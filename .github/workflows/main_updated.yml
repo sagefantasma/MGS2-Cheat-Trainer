@@ -9,11 +9,21 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Checkout dev
-        run: git checkout origin dev
+      - uses: actions/checkout@v4
+        with:
+          ref: dev
+
+      - name: Navigate to Workspace
+        run: cd $GITHUB_WORKSPACE
 
       - name: Rebase from main
         run: git pull --rebase origin main
 
-      - name: Push to origin
-        run: git push origin dev
+      - uses: actions/checkout@v4
+      - run: |
+          date > generated.txt
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "pulling in changes from main"
+          git push

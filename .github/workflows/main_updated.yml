@@ -1,0 +1,19 @@
+name: Update dev with main changes
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  update_dev:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout dev
+        run: git checkout dev
+
+      - name: Rebase from main
+        run: git pull --rebase origin main
+
+      - name: Push to origin
+        run: git push origin dev

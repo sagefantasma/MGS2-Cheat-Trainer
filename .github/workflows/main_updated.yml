@@ -26,4 +26,4 @@ jobs:
           git config user.email github-actions@github.com
           git add .
           git commit -m "pulling in changes from main"
-          git push
+          git push origin dev

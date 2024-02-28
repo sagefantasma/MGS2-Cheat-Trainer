@@ -72,7 +72,7 @@ namespace MGS2_MC
                 //if we've retrieved a stage offset before, check the old one first
                 if (_lastKnownStageOffsets != default)
                 {
-                    if (ValidateLastKnownOffsets(gameMemoryBuffer, _lastKnownStageOffsets, MGS2Offsets.StageInfoAoB))
+                    if (ValidateLastKnownOffsets(gameMemoryBuffer, _lastKnownStageOffsets, MGS2AoB.StageInfo))
                     {
                         return _lastKnownStageOffsets;
                     }
@@ -80,7 +80,7 @@ namespace MGS2_MC
 
                 _lastKnownStageOffsets = new int[2];
 
-                List<int> stageOffset = FindUniqueOffset(gameMemoryBuffer, MGS2Offsets.StageInfoAoB);
+                List<int> stageOffset = FindUniqueOffset(gameMemoryBuffer, MGS2AoB.StageInfo);
 
                 //most of the time we only get 2 results, but sometimes we may get 3. we always want the final two.
                 stageOffset = stageOffset.GetRange(stageOffset.Count - 2, 2);
@@ -122,36 +122,36 @@ namespace MGS2_MC
         private static List<int> FindUniqueOffset(byte[] gameMemoryBuffer, byte[] finderAoB, int resultLimit = -1)
         {
             int byteCount = 0;
-            List<int> stageOffsets = new List<int>();
+            List<int> foundOffsets = new List<int>();
             try
             {
-                while (byteCount + 2 < gameMemoryBuffer.Length)
+                while (byteCount + 1 < gameMemoryBuffer.Length)
                 {
                     for (int position = 0; position < finderAoB.Length; position++)
                     {
-                        //now filter any out that don't match with the StageInfo bytes
+                        //now filter any out that don't match with the finderAoB
                         if (gameMemoryBuffer[byteCount + position] != finderAoB[position])
                             break;
                         //if we get all the way through the scan without finding anything "wrong", we have a match
                         else if (position == finderAoB.Length - 1)
                         {
-                            stageOffsets.Add(byteCount);
+                            foundOffsets.Add(byteCount);
                         }
                     }
 
-                    if (stageOffsets.Count == resultLimit)
-                        return stageOffsets;
+                    if (foundOffsets.Count == resultLimit)
+                        return foundOffsets;
 
-                    byteCount += 2; //2 bytes seems to be the maximum we can reliably go without missing offsets
+                    byteCount ++; //2 bytes seems to be the maximum we can reliably go without missing offsets
                 }
             }
             catch (Exception e)
             {
-                _logger.Error($"Failed to find stage offset: {e}");
-                throw new AggregateException($"Failed to find stage offset: ", e);
+                _logger.Error($"Failed to find unique offset: {e}");
+                throw new AggregateException($"Failed to find unique offset: ", e);
             }
 
-            return stageOffsets;
+            return foundOffsets;
         }
 
         private static List<int> FindNewPlayerOffsets(byte[] buffer)
@@ -163,7 +163,7 @@ namespace MGS2_MC
                 while (byteCount + 152 < buffer.Length) //this can _probably just be 144 or 148, but i want to be safe
                 {
                     bool mightBeValid = false;
-                    for (int position = 0; position < MGS2Offsets.PlayerInfoFinderAoB.Length; position++)
+                    for (int position = 0; position < MGS2AoB.PlayerInfoFinder.Length; position++)
                     {
                         //the "playerOffsetBytes" is very common within the game's memory. (~60-90 matches)
                         //HOWEVER, if we limit the playerOffsets bytes by the _relative position_, we get VERY few results!
@@ -178,10 +178,10 @@ namespace MGS2_MC
                         if (buffer[byteCount + position + 72] != buffer[byteCount + position])
                             break;
                         //now filter any out that don't match with the playerOffsetBytes
-                        if (buffer[byteCount + position] != MGS2Offsets.PlayerInfoFinderAoB[position])
+                        if (buffer[byteCount + position] != MGS2AoB.PlayerInfoFinder[position])
                             break;
                         //if we get all the way through the scan without finding anything "wrong", we have a possible match
-                        else if (position == MGS2Offsets.PlayerInfoFinderAoB.Length - 1)
+                        else if (position == MGS2AoB.PlayerInfoFinder.Length - 1)
                         {
                             mightBeValid = true;
                         }
@@ -189,16 +189,16 @@ namespace MGS2_MC
 
                     if (mightBeValid)
                     {
-                        byte[] bufferBeingExamined = new byte[MGS2Offsets.PlayerInfoFinderAoB.Length];
-                        Array.Copy(buffer, byteCount + 144, bufferBeingExamined, 0, MGS2Offsets.PlayerInfoFinderAoB.Length);
+                        byte[] bufferBeingExamined = new byte[MGS2AoB.PlayerInfoFinder.Length];
+                        Array.Copy(buffer, byteCount + 144, bufferBeingExamined, 0, MGS2AoB.PlayerInfoFinder.Length);
 
                         //to filter out scenarios #1 and #2 above, for all of the possible matches, check 144 bytes ahead.
                         //ONLY if we are matching on a file with 0 shots OR 0 shots at last checkpoint can there be a full match
                         //144 bytes ahead. if at ANY point in the 144 bytes after each position in the offset array we're scanning
                         //there is a value that DOES NOT MATCH, then we know we have a real player offset.
-                        for (int position = 0; position < MGS2Offsets.PlayerInfoFinderAoB.Length; position++)
+                        for (int position = 0; position < MGS2AoB.PlayerInfoFinder.Length; position++)
                         {
-                            if (bufferBeingExamined[position] != MGS2Offsets.PlayerInfoFinderAoB[position])
+                            if (bufferBeingExamined[position] != MGS2AoB.PlayerInfoFinder[position])
                             {
                                 playerOffsets.Add(byteCount);
                                 break;
@@ -230,7 +230,7 @@ namespace MGS2_MC
                 //if we've retrieved a player offset before, check the old one first
                 if (_lastKnownPlayerOffsets != default)
                 {
-                    if (ValidateLastKnownOffsets(gameMemoryBuffer, _lastKnownPlayerOffsets, MGS2Offsets.PlayerInfoFinderAoB))
+                    if (ValidateLastKnownOffsets(gameMemoryBuffer, _lastKnownPlayerOffsets, MGS2AoB.PlayerInfoFinder))
                     {
                         return _lastKnownPlayerOffsets;
                     }
@@ -293,11 +293,28 @@ namespace MGS2_MC
         {
             int[] stageMemoryOffsets = GetStageOffsets();
 
-            return Encoding.UTF8.GetString(ReadValueFromMemory(stageMemoryOffsets.Last() + MGS2Offsets.CURRENT_STAGE.Start, MGS2Offsets.CURRENT_STAGE.Length));
+            return Encoding.UTF8.GetString(ReadValueFromMemory(stageMemoryOffsets.Last() + MGS2Offset.CURRENT_STAGE.Start, MGS2Offset.CURRENT_STAGE.Length));
         }
 
-        private static void SetByteValueObject(int objectOffset, byte[] valueToSet)
+        private static void SetStringValue(int stringOffset, string valueToSet)
         {
+            try
+            {
+                using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                {
+                    proxy.ModifyProcessOffset(stringOffset, valueToSet, true);
+                }
+            }
+            catch(Exception e)
+            {
+                _logger.Error($"Failed to set string at offset {stringOffset}: {e}");
+                throw new AggregateException($"Could not set string at offset {stringOffset}", e);
+            }
+        }
+
+        private static void SetPlayerOffsetBasedByteValueObject(int objectOffset, byte[] valueToSet)
+        {
+            //TODO: this is kind of gross that this is hardcoded to be playeroffset only... i would like to fix that.
             try
             {
                 int[] playerOffsets = GetPlayerOffsets();
@@ -316,6 +333,18 @@ namespace MGS2_MC
         }
         #endregion
 
+        public static void UpdateGameString(MGS2Strings.MGS2String gameString, string newValue)
+        {
+            using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+            {
+                byte[] gameMemoryBuffer = proxy.GetProcessSnapshot();
+
+                List<int> offsets = FindUniqueOffset(gameMemoryBuffer, gameString.FinderAoB);
+
+                SetStringValue(offsets[0] + gameString.MemoryOffset.Start, newValue);
+            }
+        }
+
         public static byte[] GetPlayerInfoBasedValue(int valueOffset, int sizeToRead)
         {
             int[] playerMemoryOffsets = GetPlayerOffsets();
@@ -330,19 +359,19 @@ namespace MGS2_MC
             switch (mgs2Object)
             {
                 case StackableItem stackableItem:
-                    SetByteValueObject(stackableItem.CurrentCountOffset, BitConverter.GetBytes(value));
+                    SetPlayerOffsetBasedByteValueObject(stackableItem.CurrentCountOffset, BitConverter.GetBytes(value));
                     break;
                 case DurabilityItem durabilityItem:
-                    SetByteValueObject(durabilityItem.DurabilityOffset, BitConverter.GetBytes(value));
+                    SetPlayerOffsetBasedByteValueObject(durabilityItem.DurabilityOffset, BitConverter.GetBytes(value));
                     break;
                 case AmmoWeapon ammoWeapon:
-                    SetByteValueObject(ammoWeapon.CurrentAmmoOffset, BitConverter.GetBytes(value));
+                    SetPlayerOffsetBasedByteValueObject(ammoWeapon.CurrentAmmoOffset, BitConverter.GetBytes(value));
                     break;
                 case SpecialWeapon specialWeapon:
-                    SetByteValueObject(specialWeapon.SpecialOffset, BitConverter.GetBytes(value));
+                    SetPlayerOffsetBasedByteValueObject(specialWeapon.SpecialOffset, BitConverter.GetBytes(value));
                     break;
                 case LevelableItem levelableItem:
-                    SetByteValueObject(levelableItem.LevelOffset, BitConverter.GetBytes(value));
+                    SetPlayerOffsetBasedByteValueObject(levelableItem.LevelOffset, BitConverter.GetBytes(value));
                     break;
             }
         }
@@ -354,10 +383,10 @@ namespace MGS2_MC
             switch (mgs2Object)
             {
                 case StackableItem stackableItem:
-                    SetByteValueObject(stackableItem.MaxCountOffset, BitConverter.GetBytes(count)); 
+                    SetPlayerOffsetBasedByteValueObject(stackableItem.MaxCountOffset, BitConverter.GetBytes(count)); 
                     break;
                 case AmmoWeapon ammoWeapon:
-                    SetByteValueObject(ammoWeapon.MaxAmmoOffset, BitConverter.GetBytes(count));
+                    SetPlayerOffsetBasedByteValueObject(ammoWeapon.MaxAmmoOffset, BitConverter.GetBytes(count));
                     break;
             }
         }

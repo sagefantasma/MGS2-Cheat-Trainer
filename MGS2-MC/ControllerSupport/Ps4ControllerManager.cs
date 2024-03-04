@@ -129,6 +129,8 @@ namespace MGS2_MC.Controllers
 
         public void CheckControllerInput(Action<object, EventArgs> TrainerMenu, object activeController)
         {
+
+            //TODO: this thread doesn't cleanly end with the GUI. fix
             Controller ps4Controller = (Controller)activeController;
             try
             {

@@ -1476,11 +1476,11 @@ namespace MGS2_MC
 
         private void LaunchMgs2MenuItem_Click(object sender, EventArgs e)
         {
-            if (Program.MGS2Thread.IsAlive)
+            if (MGS2Monitor.MGS2Process != null)
             {
                 MessageBox.Show("MGS2 is already running, please exit MGS2 before attempting to launch it again.");
             }
-            else
+            else if(!Program.MGS2Thread.IsAlive)
             {
                 try
                 {
@@ -1490,6 +1490,12 @@ namespace MGS2_MC
                 {
                     _logger.Error($"Failed to start MGS2 thread: {ex}");
                 }
+            }
+            else
+            {
+                Program.MGS2Thread.Abort(); 
+                Program.RestartMonitoringThread();
+                //Program.MGS2Thread.
             }
         }
 

@@ -28,7 +28,7 @@ namespace MGS2_MC
 
             if(activeXboxControllers.Count == 0 && activePs4Controllers.Count == 0)
             {
-                _logger.Information("No controllers connected");
+                _logger.Verbose("No controllers connected");
                 return null;
             }
             else if(activeXboxControllers.Count == 1 && activePs4Controllers.Count < 1)

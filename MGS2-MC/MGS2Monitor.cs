@@ -8,6 +8,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Windows.Forms;
 using static MGS2_MC.TrainerConfigStructure;
 
@@ -43,6 +44,7 @@ namespace MGS2_MC
         #endregion
 
         private const string loggerName = "MGS2MonitorDebuglog.log";
+        private const string MGS2ProcessName = "METAL GEAR SOLID2";
 
         static MGS2Monitor()
         {
@@ -51,10 +53,44 @@ namespace MGS2_MC
             _logger.Verbose($"Instance ID: {Program.InstanceID}");
         }
 
-        public static Process MGS2Process { get; set; }
+        public static Process _mgs2Process;
+
+        public static Process MGS2Process
+        {
+            get 
+            {
+                if (_mgs2Process != null && _mgs2Process.HasExited == false)
+                {
+                    return _mgs2Process;
+                }
+                else if (_scanningSemaphore.CurrentCount == 1)
+                {
+                    _scanningSemaphore.Wait();
+                    ScanForMGS2();
+                }
+
+                return null;
+            }
+            set
+            {
+                var a = value;
+                _mgs2Process = value;
+                if (value != null)
+                {
+                    //TODO: this doesn't cleanly end with the GUI. fix.
+                    _scanningSemaphore.Release();
+                }
+                else
+                {
+                    _scanningSemaphore.Wait();
+                    ScanForMGS2();
+                }
+            }
+        }
         internal static TrainerConfig TrainerConfig { get; set; }
         private static ILogger _logger { get; set; }
         private static bool _initialLaunch { get; set; } = true;
+        private static readonly SemaphoreSlim _scanningSemaphore = new SemaphoreSlim(0, 1);
 
         internal static TrainerConfig LoadConfig()
         {
@@ -141,10 +177,11 @@ namespace MGS2_MC
                 UseShellExecute = false,
                 CreateNoWindow = false,
             };
-            MGS2Process.StartInfo = mgs2StartInfo;
+            //MGS2Process.StartInfo = mgs2StartInfo;
             try
             {
-                MGS2Process.Start();
+                //MGS2Process.Start();
+                MGS2Process = Process.Start(mgs2StartInfo);
             }
             catch (Exception e)
             {
@@ -188,6 +225,25 @@ namespace MGS2_MC
             }
         }
 
+        private static void ScanForMGS2()
+        {
+            while (_scanningSemaphore.CurrentCount == 0)
+            {
+                if(MGS2Process == null)
+                {
+                    Process process = Process.GetProcessesByName(MGS2ProcessName).FirstOrDefault();
+                    if(process != null)
+                    {
+                        MGS2Process = process;
+                    }
+                    else
+                    {
+                        Thread.Sleep(10 * 1000); //only scan every 10 seconds
+                    }
+                }
+            }
+        }
+
         internal static void EnableMonitor()
         {
             TrainerConfig = LoadConfig();
@@ -195,11 +251,11 @@ namespace MGS2_MC
             if (!TrainerConfig.AutoLaunchGame && _initialLaunch)
             {
                 _initialLaunch = false;
+                ScanForMGS2();
                 return;
             }
             _initialLaunch = false;
 
-            MGS2Process = new Process();
             try
             {
                 //mgs2.StartInfo = new ProcessStartInfo("steam://rungameid/2131640"); //leaving this here in case it makes sense to use this method instead for some reason

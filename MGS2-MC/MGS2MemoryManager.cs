@@ -1,6 +1,7 @@
 ﻿using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ namespace MGS2_MC
 {
     internal static class MGS2MemoryManager
     {
+        private static int counter = 0;
         #region Internals
         private const string loggerName = "MemoryManagerDebuglog.log";
 
@@ -220,9 +222,28 @@ namespace MGS2_MC
                 throw new AggregateException($"Failed to find player offset: ", e);
             }
         }
+        
+        private static Process GetMgs2Process()
+        {
+            Process[] processes = Process.GetProcesses();
+            foreach (Process p in processes)
+            {
+                if(p.ProcessName.ToLower() == "metal gear solid2")
+                    return Process.GetProcessById(p.Id);
+            }
+            return new Process();
+        }
 
         private static int[] GetPlayerOffsets()
         {
+            /*
+             * For some reason, MGS2Monitor is not retrieving the correct MGS2 Process
+             * and it's not throwing any errors either. I had to hard code the Process
+             * to MGS2Monitor.MGS2Process and it works, at least on my machine fine
+             */
+            if (counter++ == 0)
+                MGS2Monitor.MGS2Process = GetMgs2Process();
+            
             using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
             {
                 byte[] gameMemoryBuffer = proxy.GetProcessSnapshot();

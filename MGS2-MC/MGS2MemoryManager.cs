@@ -228,7 +228,7 @@ namespace MGS2_MC
             Process[] processes = Process.GetProcesses();
             foreach (Process p in processes)
             {
-                if(p.ProcessName.ToLower() == "metal gear solid2")
+                if(string.Equals(p.ProcessName, Constants.MGS2_PROCESS_NAME, StringComparison.CurrentCultureIgnoreCase))
                     return Process.GetProcessById(p.Id);
             }
             return new Process();

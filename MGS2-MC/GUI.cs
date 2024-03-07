@@ -65,7 +65,7 @@ namespace MGS2_MC
                                 StaticGuiReference.weaponListBox.SelectedIndex = LastSelectedWeaponIndex == -1 ? 0 : LastSelectedWeaponIndex;
                                 break;
                             default:
-                                MessageBox.Show("This tab isn't yet have controller support, please use mouse & keyboard for this tab :)");
+                                MessageBox.Show(@"This tab isn't yet have controller support, please use mouse & keyboard for this tab :)");
                                 CurrentlySelectedObject = StaticGuiReference.stringsListBox.Name;
                                 break;
                         }
@@ -499,7 +499,7 @@ namespace MGS2_MC
             itemGuiObjectList.Add(new GuiObject("Infinity Wig", infinityWigGroupBox));
             itemGuiObjectList.Add(new GuiObject("MO Disc", moDiscGroupBox));
             itemGuiObjectList.Add(new GuiObject("Mine Detector", mineDetectorGroupBox));
-            itemGuiObjectList.Add(new GuiObject("Night Vision Goggles", nvgGroupBox));
+            itemGuiObjectList.Add(new GuiObject("NVGs", nvgGroupBox));
             itemGuiObjectList.Add(new GuiObject("Orange Wig", orangeWigGroupBox));
             itemGuiObjectList.Add(new GuiObject("Pentazemin", pentazeminGroupBox));
             itemGuiObjectList.Add(new GuiObject("Phone", phoneGroupBox));
@@ -509,10 +509,10 @@ namespace MGS2_MC
             itemGuiObjectList.Add(new GuiObject("Sensor A", sensorAGroupBox));
             itemGuiObjectList.Add(new GuiObject("Sensor B", sensorBGroupBox));
             itemGuiObjectList.Add(new GuiObject("Shaver", shaverGroupBox));
-            itemGuiObjectList.Add(new GuiObject("Socom Suppressor", socomGroupBox));
+            itemGuiObjectList.Add(new GuiObject("SOCOM Supp", socomSupGroupBox));
             itemGuiObjectList.Add(new GuiObject("Stealth", stealthGroupBox));
             itemGuiObjectList.Add(new GuiObject("Thermal Goggles", thermalGroupBox));
-            itemGuiObjectList.Add(new GuiObject("USP Suppressor", uspSupGroupBox));
+            itemGuiObjectList.Add(new GuiObject("USP Supp", uspSupGroupBox));
             itemGuiObjectList.Add(new GuiObject("Wet Box", wetBoxGroupBox));
 
             weaponGuiObjectList.Add(new GuiObject("AKS-74u", akGroupBox));
@@ -1404,7 +1404,7 @@ namespace MGS2_MC
             catch(Exception ex)
             {
                 _logger.Error($"Failed to update game string: {ex}");
-                MessageBox.Show($"Failed to update game string");
+                MessageBox.Show($@"Failed to update game string");
             }
         }
 
@@ -1478,7 +1478,7 @@ namespace MGS2_MC
         {
             if (Program.MGS2Thread.IsAlive)
             {
-                MessageBox.Show("MGS2 is already running, please exit MGS2 before attempting to launch it again.");
+                MessageBox.Show(@"MGS2 is already running, please exit MGS2 before attempting to launch it again.");
             }
             else
             {

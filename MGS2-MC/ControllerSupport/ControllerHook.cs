@@ -18,6 +18,7 @@ namespace MGS2_MC
         private bool _activeControllerFound { get; set; } = false;
         private object _activeController { get; set; }
         private static ILogger _logger { get; set; }
+        internal static CancellationToken CancellationToken { get; set; }
 
         //TODO: realistically, we shouldn't have separate controller managers with the interface, so do that.
 
@@ -61,7 +62,8 @@ namespace MGS2_MC
             _xboxControllerManager.Logger = _logger;
             _logger.Information($"Controller hook for version {Program.AppVersion} initialized...");
             _logger.Verbose($"Instance ID: {Program.InstanceID}");
-            while (!cancellationToken.IsCancellationRequested)
+            CancellationToken = cancellationToken;
+            while (!CancellationToken.IsCancellationRequested)
             {
                 if (!_activeControllerFound)
                 {

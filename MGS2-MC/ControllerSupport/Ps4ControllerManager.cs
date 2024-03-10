@@ -139,7 +139,7 @@ namespace MGS2_MC.Controllers
                     ps4Joy.Acquire();
                     ps4Joy.Poll();
                     JoystickState previousState = ps4Joy.GetCurrentState();
-                    while (true)
+                    while (!ControllerHook.CancellationToken.IsCancellationRequested)
                     {
                         ps4Joy.Acquire();
                         ps4Joy.Poll();

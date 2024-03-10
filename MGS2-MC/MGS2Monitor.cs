@@ -63,34 +63,18 @@ namespace MGS2_MC
                 {
                     return _mgs2Process;
                 }
-                else if (_scanningSemaphore.CurrentCount == 1)
-                {
-                    _scanningSemaphore.Wait();
-                    ScanForMGS2();
-                }
 
                 return null;
             }
             set
             {
-                var a = value;
                 _mgs2Process = value;
-                if (value != null)
-                {
-                    //TODO: this doesn't cleanly end with the GUI. fix.
-                    _scanningSemaphore.Release();
-                }
-                else
-                {
-                    _scanningSemaphore.Wait();
-                    ScanForMGS2();
-                }
             }
         }
         internal static TrainerConfig TrainerConfig { get; set; }
         private static ILogger _logger { get; set; }
         private static bool _initialLaunch { get; set; } = true;
-        private static readonly SemaphoreSlim _scanningSemaphore = new SemaphoreSlim(0, 1);
+        private static CancellationToken CancellationToken { get; set; }
 
         internal static TrainerConfig LoadConfig()
         {
@@ -182,6 +166,7 @@ namespace MGS2_MC
             {
                 //MGS2Process.Start();
                 MGS2Process = Process.Start(mgs2StartInfo);
+                MGS2Process.Exited += (sender, args) => ScanForMGS2();
             }
             catch (Exception e)
             {
@@ -200,7 +185,7 @@ namespace MGS2_MC
             try
             {
                 GUI.ToggleLaunchMGS2Option();
-                while (!MGS2Process.HasExited)
+                while (!MGS2Process.HasExited || !CancellationToken.IsCancellationRequested)
                 {
                     //this thread loops forever while MGS2 is running
                 }
@@ -217,7 +202,8 @@ namespace MGS2_MC
 
             try
             {
-                GUI.ToggleLaunchMGS2Option();
+                if(MGS2Process == null || MGS2Process.HasExited)
+                    GUI.ToggleLaunchMGS2Option();
             }
             catch(Exception e)
             {
@@ -227,14 +213,16 @@ namespace MGS2_MC
 
         private static void ScanForMGS2()
         {
-            while (_scanningSemaphore.CurrentCount == 0)
+            while (!CancellationToken.IsCancellationRequested)
             {
-                if(MGS2Process == null)
+                //if(MGS2Process == null)
                 {
                     Process process = Process.GetProcessesByName(MGS2ProcessName).FirstOrDefault();
                     if(process != null)
                     {
-                        MGS2Process = process;
+                        if(MGS2Process != process)
+                            MGS2Process = process;
+                        Thread.Sleep(60 * 1000); //only scan every 60 seconds to see if MGS2 is still running
                     }
                     else
                     {
@@ -244,8 +232,9 @@ namespace MGS2_MC
             }
         }
 
-        internal static void EnableMonitor()
+        internal static void EnableMonitor(CancellationToken cancellationToken)
         {
+            CancellationToken = cancellationToken;
             TrainerConfig = LoadConfig();
 
             if (!TrainerConfig.AutoLaunchGame && _initialLaunch)

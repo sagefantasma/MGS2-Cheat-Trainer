@@ -13,15 +13,15 @@ namespace MGS2_MC
 
         static readonly ControllerHook ControllerHook = new ControllerHook();
 
-        internal static void EnableInjector()
+        internal static void EnableInjector(CancellationToken cancellationToken)
         {
-            Task.Run(StartControllerHook);
+            Task.Run(() => StartControllerHook(cancellationToken));
         }
 
-        private static void StartControllerHook()
+        private static void StartControllerHook(CancellationToken cancellationToken)
         {
             ControllerHook.TrainerMenu += OpenTrainerMenuEventHandler;
-            ControllerHook.Start(CancellationToken.None); //TODO: maybe do a proper cancellation token in the future?
+            ControllerHook.Start(cancellationToken); //TODO: maybe do a proper cancellation token in the future?
         }
 
         private static void OpenTrainerMenuEventHandler(object o, EventArgs e)

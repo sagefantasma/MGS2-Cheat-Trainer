@@ -16,6 +16,7 @@ namespace MGS2_MC
 {
     internal static class MGS2Monitor
     {
+        #region Internals
         #region Native Methods
         [Flags]
         public enum ThreadAccess : int
@@ -41,54 +42,76 @@ namespace MGS2_MC
 
         /*[DllImport("user32.dll", SetLastError = true)]
         static extern bool GetWindowRect(IntPtr hWnd, out Rectangle lpRect);*/ //this may be useful for slapping the GUI on top of MGS2
-        #endregion
 
-        private const string loggerName = "MGS2MonitorDebuglog.log";
-        private const string MGS2ProcessName = "METAL GEAR SOLID2";
-
-        static MGS2Monitor()
+        internal static void SuspendMGS2()
         {
-            _logger = Logging.InitializeNewLogger(loggerName);
-            _logger.Information($"MGS2 Monitor for version {Program.AppVersion} initialized...");
-            _logger.Verbose($"Instance ID: {Program.InstanceID}");
-        }
-
-        public static Process _mgs2Process;
-
-        public static Process MGS2Process
-        {
-            get 
-            {
-                if (_mgs2Process != null && _mgs2Process.HasExited == false)
-                {
-                    return _mgs2Process;
-                }
-
-                return null;
-            }
-            set
-            {
-                _mgs2Process = value;
-            }
-        }
-        internal static TrainerConfig TrainerConfig { get; set; }
-        private static ILogger _logger { get; set; }
-        private static bool _initialLaunch { get; set; } = true;
-        private static CancellationToken CancellationToken { get; set; }
-
-        internal static TrainerConfig LoadConfig()
-        {
+            //https://stackoverflow.com/a/71457 for how to do this
             try
             {
-                return JsonSerializer.Deserialize<TrainerConfig>(File.ReadAllText(TrainerConfigFileLocation));
+                foreach (ProcessThread mgs2Thread in MGS2Process?.Threads)
+                {
+                    IntPtr mgs2OpenThread = OpenThread(ThreadAccess.SUSPEND_RESUME, false, (uint)mgs2Thread.Id);
+
+                    if (mgs2OpenThread == IntPtr.Zero)
+                    {
+                        continue;
+                    }
+
+                    SuspendThread(mgs2OpenThread);
+                    CloseHandle(mgs2OpenThread);
+                }
             }
             catch (Exception e)
             {
-                _logger.Error($"Failed to load TrainerConfig.json: {e}");
-                return null;
+                _logger.Error($"Failed to suspend MGS2: {e}");
             }
         }
 
+        internal static void ResumeMGS2()
+        {
+            try
+            {
+                //https://stackoverflow.com/a/71457 for how to do this
+                foreach (ProcessThread mgs2Thread in MGS2Process?.Threads)
+                {
+                    IntPtr mgs2OpenThread = OpenThread(ThreadAccess.SUSPEND_RESUME, false, (uint)mgs2Thread.Id);
+
+                    if (mgs2OpenThread == IntPtr.Zero)
+                    {
+                        continue;
+                    }
+
+                    int suspendCount;
+                    do
+                    {
+                        suspendCount = ResumeThread(mgs2OpenThread);
+                    } while (suspendCount > 0);
+
+                    CloseHandle(mgs2OpenThread);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Failed to resume MGS2: {e}");
+            }
+        }
+        #endregion
+
+        #region Private members, fields, and functions
+        #region Members & fields
+        private const string loggerName = "MGS2MonitorDebuglog.log";
+        private const string MGS2ProcessName = "METAL GEAR SOLID2";
+
+        private static Process _mgs2Process;
+
+        private static bool _initialLaunch { get; set; } = true;
+        private static CancellationToken _cancellationToken { get; set; }
+        private static ILogger _logger { get; set; }
+        private static Thread _scanningThread { get; set; }
+        #endregion
+
+        #region Functions
+        #region Event Handlers & Delegates
         /// <summary>
         /// !!!NOTE!!! This WILL NOT WORK if you are running this program in a debugger and use the "Stop Debugging" feature.
         /// </summary>
@@ -101,12 +124,19 @@ namespace MGS2_MC
                 MGS2Process?.CloseMainWindow();
                 MGS2Process?.Dispose();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.Error($"Failed to close MGS2: {ex}");
             }
         }
 
+        private static void TearDownMonitor()
+        { 
+            _scanningThread.Abort();
+        }
+        #endregion
+
+        #region Launch-related Functions
         private static bool IsDirectLaunchEnabled(FileInfo steamAppIdFile)
         {
             if (steamAppIdFile.Exists)
@@ -146,105 +176,9 @@ namespace MGS2_MC
                 //as of right now, I don't know if it will work without this shortcut, so i won't throw yet.
             }
         }
-
-        private static void RunMGS2(string mgs2Location, string mgs2Directory)
+        
+        private static void PrepareAndRunMGS2()
         {
-            //TODO: it seems like this is resulting in MGS2 taking up TWICE the CPU load, which does kind of make sense...
-            //the BIG problem though is that Windows Antivirus is now flagging the Cheat Trainer as malware and also wrapping
-            //the cheat trainer & mgs2 up in CPU cycles... which essentially means starting MGS2 through the CT is resulting
-            //in your processor going under the load of 3 copies of MGS2... Not great. Can be fixed through adjusting malware
-            //settings, but that's not a great solution. i need to reevaluate whether or not i absolutely NEED to be monitoring
-            //MGS2 like a hawk like we are now, simply for the closing events...
-            ProcessStartInfo mgs2StartInfo = new ProcessStartInfo(mgs2Location)
-            {
-                WorkingDirectory = mgs2Directory,
-                UseShellExecute = false,
-                CreateNoWindow = false,
-            };
-            //MGS2Process.StartInfo = mgs2StartInfo;
-            try
-            {
-                //MGS2Process.Start();
-                MGS2Process = Process.Start(mgs2StartInfo);
-                MGS2Process.Exited += (sender, args) => ScanForMGS2();
-            }
-            catch (Exception e)
-            {
-                _logger.Error($"Failed to start MGS2: {e}");
-                throw new AggregateException("Failed to start MGS2.", e);
-            }
-
-            if (TrainerConfig.CloseGameWithTrainer)
-            {
-                Application.ApplicationExit += (sender, args) => CloseMGS2EventHandler(sender, args);
-            }
-            while(GUI.GuiLoaded != true)
-            {
-                //if the GUI is loading, wait until it is fully loaded until we continue as we need to modify it
-            }
-            try
-            {
-                GUI.ToggleLaunchMGS2Option();
-                while (!MGS2Process.HasExited || !CancellationToken.IsCancellationRequested)
-                {
-                    //this thread loops forever while MGS2 is running
-                }
-            }
-            catch (Exception e)
-            {
-                _logger.Error($"Something went wrong with the MGS2 process: {e}");
-            }
-
-            if (TrainerConfig.CloseTrainerWithGame)
-            {
-                Application.Exit();
-            }
-
-            try
-            {
-                if(MGS2Process == null || MGS2Process.HasExited)
-                    GUI.ToggleLaunchMGS2Option();
-            }
-            catch(Exception e)
-            {
-                _logger.Error($"Failed to toggle Launch MGS2 menu option: {e}");
-            }
-        }
-
-        private static void ScanForMGS2()
-        {
-            while (!CancellationToken.IsCancellationRequested)
-            {
-                //if(MGS2Process == null)
-                {
-                    Process process = Process.GetProcessesByName(MGS2ProcessName).FirstOrDefault();
-                    if(process != null)
-                    {
-                        if(MGS2Process != process)
-                            MGS2Process = process;
-                        Thread.Sleep(60 * 1000); //only scan every 60 seconds to see if MGS2 is still running
-                    }
-                    else
-                    {
-                        Thread.Sleep(10 * 1000); //only scan every 10 seconds
-                    }
-                }
-            }
-        }
-
-        internal static void EnableMonitor(CancellationToken cancellationToken)
-        {
-            CancellationToken = cancellationToken;
-            TrainerConfig = LoadConfig();
-
-            if (!TrainerConfig.AutoLaunchGame && _initialLaunch)
-            {
-                _initialLaunch = false;
-                ScanForMGS2();
-                return;
-            }
-            _initialLaunch = false;
-
             try
             {
                 //mgs2.StartInfo = new ProcessStartInfo("steam://rungameid/2131640"); //leaving this here in case it makes sense to use this method instead for some reason
@@ -266,57 +200,152 @@ namespace MGS2_MC
             }
         }
 
-        internal static void SuspendMGS2()
+        private static void RunMGS2(string mgs2Location, string mgs2Directory)
         {
-            //https://stackoverflow.com/a/71457 for how to do this
+            ProcessStartInfo mgs2StartInfo = new ProcessStartInfo(mgs2Location)
+            {
+                WorkingDirectory = mgs2Directory,
+                UseShellExecute = false,
+                CreateNoWindow = false,
+            };
+            
             try
             {
-                foreach (ProcessThread mgs2Thread in MGS2Process?.Threads)
+                MGS2Process = Process.Start(mgs2StartInfo);
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Failed to start MGS2: {e}");
+                throw new AggregateException("Failed to start MGS2.", e);
+            }
+
+            if (TrainerConfig.CloseGameWithTrainer)
+            {
+                Application.ApplicationExit += (sender, args) => CloseMGS2EventHandler(sender, args);
+            }
+            while (GUI.GuiLoaded != true)
+            {
+                //if the GUI is loading, wait until it is fully loaded until we continue as we need to modify it
+            }
+            try
+            {
+                GUI.EnableLaunchMGS2Option(false);
+                while (!MGS2Process.HasExited || !_cancellationToken.IsCancellationRequested)
                 {
-                    IntPtr mgs2OpenThread = OpenThread(ThreadAccess.SUSPEND_RESUME, false, (uint)mgs2Thread.Id);
-
-                    if (mgs2OpenThread == IntPtr.Zero)
-                    {
-                        continue;
-                    }
-
-                    SuspendThread(mgs2OpenThread);
-                    CloseHandle(mgs2OpenThread);
+                    //this thread loops forever while MGS2 is running
                 }
             }
-            catch(Exception e)
+            catch (NullReferenceException)
             {
-                _logger.Error($"Failed to suspend MGS2: {e}");
+                _logger.Error($"The MGS2 process was successfully launched by the trainer, but seems to have exited.");
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Something went wrong with the MGS2 process: {e}");
+            }
+
+            if (TrainerConfig.CloseTrainerWithGame)
+            {
+                Application.Exit();
+            }
+
+            try
+            {
+                if (MGS2Process == null || MGS2Process.HasExited)
+                    GUI.EnableLaunchMGS2Option(true);
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Failed to enable Launch MGS2 menu option: {e}");
             }
         }
+        #endregion
 
-        internal static void ResumeMGS2()
+        #region Threads
+        private static void ScanForMGS2()
+        {
+            while (!_cancellationToken.IsCancellationRequested)
+            {
+                Process process = Process.GetProcessesByName(MGS2ProcessName).FirstOrDefault();
+                if (process != null)
+                {
+                    if (MGS2Process != process)
+                        MGS2Process = process;
+                    Thread.Sleep(60 * Constants.MillisecondsInSecond); //scan every 60 seconds to see if MGS2 is still running
+                }
+                else
+                {
+                    MGS2Process = null;
+                    Thread.Sleep(10 * Constants.MillisecondsInSecond); //scan every 10 seconds if we know MGS2 IS NOT running
+                }
+            }
+        }
+        #endregion
+        #endregion
+        #endregion
+
+        #region Constructor & Process Encapsulator
+        static MGS2Monitor()
+        {
+            _logger = Logging.InitializeNewLogger(loggerName);
+            _logger.Information($"MGS2 Monitor for version {Program.AppVersion} initialized...");
+            _logger.Verbose($"Instance ID: {Program.InstanceID}");
+        }
+
+        public static Process MGS2Process
+        {
+            get 
+            {
+                if (_mgs2Process != null && _mgs2Process.HasExited == false)
+                {
+                    return _mgs2Process;
+                }
+
+                _mgs2Process = null;
+                return null;
+            }
+            set
+            {
+                if(GUI.GuiLoaded == true)
+                    GUI.EnableLaunchMGS2Option(value == null); //enable when process is null, disable otherwise
+                _mgs2Process = value;
+            }
+        }
+        #endregion
+
+        #region Config
+        internal static TrainerConfig TrainerConfig { get; set; }        
+
+        internal static TrainerConfig LoadConfig()
         {
             try
             {
-                //https://stackoverflow.com/a/71457 for how to do this
-                foreach (ProcessThread mgs2Thread in MGS2Process?.Threads)
-                {
-                    IntPtr mgs2OpenThread = OpenThread(ThreadAccess.SUSPEND_RESUME, false, (uint)mgs2Thread.Id);
-
-                    if (mgs2OpenThread == IntPtr.Zero)
-                    {
-                        continue;
-                    }
-
-                    int suspendCount;
-                    do
-                    {
-                        suspendCount = ResumeThread(mgs2OpenThread);
-                    } while (suspendCount > 0);
-
-                    CloseHandle(mgs2OpenThread);
-                }
+                return JsonSerializer.Deserialize<TrainerConfig>(File.ReadAllText(TrainerConfigFileLocation));
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                _logger.Error($"Failed to resume MGS2: {e}");
+                _logger.Error($"Failed to load TrainerConfig.json: {e}");
+                return null;
             }
+        }
+        #endregion
+        #endregion
+
+        internal static void EnableMonitor(CancellationToken cancellationToken)
+        {
+            _cancellationToken = cancellationToken;
+            _cancellationToken.Register(TearDownMonitor);
+            _scanningThread = new Thread(() => ScanForMGS2());
+            _scanningThread.Start();
+            TrainerConfig = LoadConfig();
+
+            if ((TrainerConfig.AutoLaunchGame && _initialLaunch) || (!_initialLaunch))
+            {
+                //Launch if first launch and AutoLaunch is enabled
+                //Otherwise, launch if this is not the initial launch.
+                PrepareAndRunMGS2();
+            }
+            _initialLaunch = false;            
         }
     }
 }

@@ -1499,11 +1499,11 @@ namespace MGS2_MC
             }
         }
 
-        public static void ToggleLaunchMGS2Option()
+        public static void EnableLaunchMGS2Option(bool enable)
         {
             StaticGuiReference.Invoke(new Action(() =>
             {
-                StaticGuiReference.launchMgs2MenuItem.Enabled = !StaticGuiReference.launchMgs2MenuItem.Enabled;
+                StaticGuiReference.launchMgs2MenuItem.Enabled = enable;
             }));
         }
     }

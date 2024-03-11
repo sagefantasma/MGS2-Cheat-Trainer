@@ -15,13 +15,13 @@ namespace MGS2_MC
 
         internal static void EnableInjector(CancellationToken cancellationToken)
         {
-            Task.Run(() => StartControllerHook(cancellationToken));
+            Task.Run(() => StartControllerHook(cancellationToken)); //TODO: is this necessary to be its own task?
         }
 
         private static void StartControllerHook(CancellationToken cancellationToken)
         {
             ControllerHook.TrainerMenu += OpenTrainerMenuEventHandler;
-            ControllerHook.Start(cancellationToken); //TODO: maybe do a proper cancellation token in the future?
+            ControllerHook.Start(cancellationToken);
         }
 
         private static void OpenTrainerMenuEventHandler(object o, EventArgs e)

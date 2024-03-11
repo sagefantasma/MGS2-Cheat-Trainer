@@ -18,7 +18,7 @@ namespace MGS2_MC
         internal static Thread ControllerThread { get; set; }
         public static string AppVersion { get; set; }
         private static ILogger _logger { get; set; }
-        private static CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
+        private static readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
         /// <summary>
         /// The main entry point for the application.
@@ -53,6 +53,8 @@ namespace MGS2_MC
         {
             try
             {
+                MGS2Thread.Name = "Initial MGS2 Monitor";
+                _logger.Information("Initializing MGS2 monitor for the first time");
                 MGS2Thread.Start();
             }
             catch (Exception e)
@@ -65,7 +67,11 @@ namespace MGS2_MC
         {
             try
             {
-                MGS2Thread = new Thread(() => MGS2Monitor.EnableMonitor(_cancellationTokenSource.Token));
+                MGS2Thread = new Thread(() => MGS2Monitor.EnableMonitor(_cancellationTokenSource.Token))
+                {
+                    Name = "Restarted MGS2 Monitor"
+                };
+                _logger.Information("Re-initializing MGS2 monitor");
                 MGS2Thread.Start();
             }
             catch(Exception e)

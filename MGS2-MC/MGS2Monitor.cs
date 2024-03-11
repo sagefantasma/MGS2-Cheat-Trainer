@@ -232,7 +232,7 @@ namespace MGS2_MC
                 GUI.EnableLaunchMGS2Option(false);
                 while (!MGS2Process.HasExited || !_cancellationToken.IsCancellationRequested)
                 {
-                    //this thread loops forever while MGS2 is running
+                    //this thread loops forever while MGS2 is running, but can be cancelled by the master cancellation token
                 }
             }
             catch (NullReferenceException)
@@ -264,7 +264,7 @@ namespace MGS2_MC
         #region Threads
         private static void ScanForMGS2()
         {
-            while (!_cancellationToken.IsCancellationRequested)
+            while (!_cancellationToken.IsCancellationRequested) //this loop should only end when the program ends.
             {
                 Process process = Process.GetProcessesByName(MGS2ProcessName).FirstOrDefault();
                 if (process != null)
@@ -335,7 +335,11 @@ namespace MGS2_MC
         {
             _cancellationToken = cancellationToken;
             _cancellationToken.Register(TearDownMonitor);
-            _scanningThread = new Thread(() => ScanForMGS2());
+            _logger.Information("Starting MGS2 scanning thread...");
+            _scanningThread = new Thread(() => ScanForMGS2())
+            {
+                Name = "MGS2 Scanning Thread"
+            };
             _scanningThread.Start();
             TrainerConfig = LoadConfig();
 

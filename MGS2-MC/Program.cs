@@ -14,9 +14,11 @@ namespace MGS2_MC
         private const string loggerName = "MainDebuglog.log";
 
         public static string InstanceID { get; } = InstanceIdentifier.CreateInstanceIdentifier();
-        internal static Thread MGS2Thread { get; set; } = new Thread(MGS2Monitor.EnableMonitor);
+        internal static Thread MGS2Thread { get; set; } = new Thread(() => MGS2Monitor.EnableMonitor(_cancellationTokenSource.Token));
+        internal static Thread ControllerThread { get; set; }
         public static string AppVersion { get; set; }
         private static ILogger _logger { get; set; }
+        private static readonly CancellationTokenSource _cancellationTokenSource = new CancellationTokenSource();
 
         /// <summary>
         /// The main entry point for the application.
@@ -33,13 +35,26 @@ namespace MGS2_MC
             StartMonitoringThread();
             StartControllerThread();
 
-            Application.Run(new GUI(_logger));            
+            Application.ApplicationExit += AppEnding;
+            Application.Run(new GUI(_logger));
+        }
+
+        private static void AppEnding(object sender, EventArgs e)
+        {
+            _cancellationTokenSource.Cancel();
+            if (MGS2Monitor.TrainerConfig.CloseGameWithTrainer)
+            {
+                MGS2Thread.Abort();
+            }
+            ControllerThread.Abort();
         }
 
         private static void StartMonitoringThread()
         {
             try
             {
+                MGS2Thread.Name = "Initial MGS2 Monitor";
+                _logger.Information("Initializing MGS2 monitor for the first time");
                 MGS2Thread.Start();
             }
             catch (Exception e)
@@ -52,7 +67,11 @@ namespace MGS2_MC
         {
             try
             {
-                MGS2Thread = new Thread(MGS2Monitor.EnableMonitor);
+                MGS2Thread = new Thread(() => MGS2Monitor.EnableMonitor(_cancellationTokenSource.Token))
+                {
+                    Name = "Restarted MGS2 Monitor"
+                };
+                _logger.Information("Re-initializing MGS2 monitor");
                 MGS2Thread.Start();
             }
             catch(Exception e)
@@ -65,8 +84,8 @@ namespace MGS2_MC
         {
             try
             {
-                Thread controllerThread = new Thread(ControllerInterface.EnableInjector);
-                controllerThread.Start();
+                ControllerThread = new Thread(() => ControllerInterface.EnableInjector(_cancellationTokenSource.Token));
+                ControllerThread.Start();
             }
             catch (Exception e)
             {

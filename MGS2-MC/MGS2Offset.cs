@@ -30,27 +30,26 @@ namespace MGS2_MC
     {
         //if the region is dynamic(i.e. PlayerOffsetAoB), it will change on area load. The others will only (possibly[hopefully]) change with game updates
         #region Dynamic AoBs
-        internal static byte[] PlayerInfoFinder = new byte[30] { 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 01, 00 }; //TODO: determine if this breaks when we have m9 max ammo >255
+        internal static byte[] PlayerInfoFinder = new byte[] { 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 01, 00 }; //TODO: determine if this breaks when we have m9 max ammo >255
         #endregion
         #region Static AoBs
-        internal static byte[] MenuNamesFinder = new byte[5] { 0x6D, 0x61, 0x70, 0x2E, 0x63 }; //TODO: prove this is valid
-        internal static byte[] DifficultyAndAreaNames = new byte[3] { 0x2F, 0x44, 0x2A }; //TODO: prove this is valid, also this is _concerningly_ short.
-        internal static byte[] LifeAndGripNames = new byte[8] { 0x72, 0x61, 0x69, 0x64, 0x65, 0x6E, 0x2E, 0x63 }; //TODO: prove this is valid
-        internal static byte[] RayNames = new byte[10] { 0x6D, 0x69, 0x6E, 0x69, 0x5F, 0x73, 0x63, 0x6E, 0x2E, 0x63 }; //TODO: prove this is valid
+        internal static byte[] MenuNamesFinder = new byte[] { 0x6D, 0x61, 0x70, 0x2E, 0x63 }; //TODO: prove this is valid
+        internal static byte[] DifficultyAndAreaNames = new byte[] { 0x2F, 0x44, 0x2A }; //TODO: prove this is valid, also this is _concerningly_ short.
+        internal static byte[] LifeAndGripNames = new byte[] { 0x72, 0x61, 0x69, 0x64, 0x65, 0x6E, 0x2E, 0x63 };
+        internal static byte[] RayNames = new byte[] { 0x6D, 0x69, 0x6E, 0x69, 0x5F, 0x73, 0x63, 0x6E, 0x2E, 0x63 }; //TODO: prove this is valid
         //weapon & item descriptions dispersed through out. seems to start around +00613CCB or so in the memory print?
-        internal static byte[] RationMedsBandagePentazeminDescriptions = new byte[17] { 0xA4, 0xE3, 0x81, 0xAF, 0xE3, 0x81, 0x9A, 0xE3, 0x81, 0xA0, 0xEE, 0x80, 0x80, 0xE3, 0x80, 0x82, 0x0A }; //TODO: prove this is valid
-        internal static byte[] SolidusName = new byte[10] { 0x69, 0x6E, 0x69, 0x74, 0x5F, 0x73, 0x6F, 0x6C, 0x2E, 0x63 }; //TODO: prove this is valid
-        internal static byte[] EmmaO2 = new byte[16] { 0x65, 0x6D, 0x61, 0x5F, 0x72, 0x61, 0x69, 0x5F, 0x6F, 0x6E, 0x62, 0x75, 0x5F, 0x65, 0x6E, 0x64 }; //TODO: prove this is valid
-        internal static byte[] FatmanName = new byte[15] { 0x77, 0x61, 0x74, 0x65, 0x72, 0x6C, 0x69, 0x6E, 0x65, 0x66, 0x61, 0x6C, 0x6C, 0x2E, 0x63 }; //TODO: prove this is valid
-        internal static byte[] OlgaName = new byte[10] { 0x6F, 0x72, 0x67, 0x61, 0x5F, 0x6C, 0x6E, 0x7A, 0x2E, 0x63 }; //TODO: prove this is valid
-        internal static byte[] HarrierName = new byte[10] { 0x68, 0x61, 0x72, 0x5F, 0x76, 0x75, 0x6C, 0x63, 0x2E, 0x63 }; //TODO: prove this is valid
-        internal static byte[] KasatkaName = new byte[12] { 0x6B, 0x63, 0x6B, 0x5F, 0x70, 0x6C, 0x61, 0x6E, 0x74, 0x5F, 0x6D, 0x74 }; //TODO: prove this is valid
+        internal static byte[] RationMedsBandagePentazeminDescriptions = new byte[] { 0xA4, 0xE3, 0x81, 0xAF, 0xE3, 0x81, 0x9A, 0xE3, 0x81, 0xA0, 0xEE, 0x80, 0x80, 0xE3, 0x80, 0x82, 0x0A }; //TODO: prove this is valid
+        internal static byte[] SolidusName = new byte[] { 0x69, 0x6E, 0x69, 0x74, 0x5F, 0x73, 0x6F, 0x6C, 0x2E, 0x63 }; //TODO: prove this is valid
+        internal static byte[] EmmaO2 = new byte[] { 0x65, 0x6D, 0x61, 0x5F, 0x72, 0x61, 0x69, 0x5F, 0x6F, 0x6E, 0x62, 0x75, 0x5F, 0x65, 0x6E, 0x64 }; //TODO: prove this is valid
+        internal static byte[] FatmanName = new byte[] { 0x77, 0x61, 0x74, 0x65, 0x72, 0x6C, 0x69, 0x6E, 0x65, 0x66, 0x61, 0x6C, 0x6C, 0x2E, 0x63 }; //TODO: prove this is valid
+        internal static byte[] OlgaName = new byte[] { 0x6F, 0x72, 0x67, 0x61, 0x5F, 0x6C, 0x6E, 0x7A, 0x2E, 0x63 };
+        internal static byte[] HarrierName = new byte[] { 0x68, 0x61, 0x72, 0x5F, 0x76, 0x75, 0x6C, 0x63, 0x2E, 0x63 }; //TODO: prove this is valid
+        internal static byte[] KasatkaName = new byte[] { 0x6B, 0x63, 0x6B, 0x5F, 0x70, 0x6C, 0x61, 0x6E, 0x74, 0x5F, 0x6D, 0x74 }; //TODO: prove this is valid
         internal static byte[] FortuneName = new byte[] { 0x66, 0x6F, 0x72, 0x74, 0x5F, 0x6F, 0x62, 0x6A, 0x5F, 0x69, 0x6E, 0x69, 0x2E, 0x63 }; //TODO: prove this is valid
         //00 00 00 78 00 08 00 <-- possibly an AoB for HP/Magazine modificaitons? might have to key off of LIFE?(or at least whatever it is called at that moment, within the games memory block)
         internal static byte[] HealthMod = new byte[] { 0x00, 0x00, 0x00, 0x78, 0x00, 0x08, 0x00 }; //TODO: prove this is valid
         //clipcurrentCount == -114 from the above AoB, 4bytes long. HP mod is DIRECTLY after, it seems?
-        //10 0E 18 15 20 1C <-- use to find currently active character
-        internal static byte[] StageInfo = new byte[] { 0x10, 0x0E, 0x18, 0x15, 0x20, 0x1C }; //TODO: prove this is valid(may need to always take the last value?)
+        internal static byte[] StageInfo = new byte[] { 0x10, 0x0E, 0x18, 0x15, 0x20, 0x1C };
         //current "stage" == -267 from the above AoB, 5 bytes long. If it has r_tnk, it is Snake. if it is r_plt, it is raiden :)
         #endregion
     }
@@ -60,8 +59,8 @@ namespace MGS2_MC
         #region Offsets
         #region String offsets
         #region Calculated From LifeAndGripNames
-        public static readonly MemoryOffset LIFE_TEXT = new MemoryOffset(9, 12); //TODO: prove this is valid
-        public static readonly MemoryOffset GRIP_Lv1_TEXT = new MemoryOffset(22, 29); //TODO: prove this is valid
+        public static readonly MemoryOffset LIFE_TEXT = new MemoryOffset(9, 12); 
+        public static readonly MemoryOffset GRIP_Lv1_TEXT = new MemoryOffset(21, 28); //TODO: prove this is valid
         public static readonly MemoryOffset GRIP_Lv2_TEXT = new MemoryOffset(-156, -149); //TODO: prove this is valid
         public static readonly MemoryOffset GRIP_Lv3_TEXT = new MemoryOffset(-172, -165); //TODO: prove this is valid
         #endregion

@@ -65,7 +65,7 @@ namespace MGS2_MC
                                 StaticGuiReference.weaponListBox.SelectedIndex = LastSelectedWeaponIndex == -1 ? 0 : LastSelectedWeaponIndex;
                                 break;
                             default:
-                                MessageBox.Show("This tab isn't yet have controller support, please use mouse & keyboard for this tab :)");
+                                MessageBox.Show(@"This tab doesn't yet have controller support, please use mouse & keyboard for this tab :)");
                                 CurrentlySelectedObject = StaticGuiReference.stringsListBox.Name;
                                 break;
                         }
@@ -509,7 +509,7 @@ namespace MGS2_MC
             itemGuiObjectList.Add(new GuiObject("Sensor A", sensorAGroupBox));
             itemGuiObjectList.Add(new GuiObject("Sensor B", sensorBGroupBox));
             itemGuiObjectList.Add(new GuiObject("Shaver", shaverGroupBox));
-            itemGuiObjectList.Add(new GuiObject("Socom Suppressor", socomGroupBox));
+            itemGuiObjectList.Add(new GuiObject("SOCOM Suppressor", socomSupGroupBox));
             itemGuiObjectList.Add(new GuiObject("Stealth", stealthGroupBox));
             itemGuiObjectList.Add(new GuiObject("Thermal Goggles", thermalGroupBox));
             itemGuiObjectList.Add(new GuiObject("USP Suppressor", uspSupGroupBox));
@@ -1404,7 +1404,7 @@ namespace MGS2_MC
             catch(Exception ex)
             {
                 _logger.Error($"Failed to update game string: {ex}");
-                MessageBox.Show($"Failed to update game string");
+                MessageBox.Show($@"Failed to update game string");
             }
         }
 
@@ -1476,11 +1476,11 @@ namespace MGS2_MC
 
         private void LaunchMgs2MenuItem_Click(object sender, EventArgs e)
         {
-            if (Program.MGS2Thread.IsAlive)
+            if (MGS2Monitor.MGS2Process != null)
             {
-                MessageBox.Show("MGS2 is already running, please exit MGS2 before attempting to launch it again.");
+                MessageBox.Show(@"MGS2 is already running, please exit MGS2 before attempting to launch it again.");
             }
-            else
+            else if(!Program.MGS2Thread.IsAlive)
             {
                 try
                 {
@@ -1491,13 +1491,19 @@ namespace MGS2_MC
                     _logger.Error($"Failed to start MGS2 thread: {ex}");
                 }
             }
+            else
+            {
+                Program.MGS2Thread.Abort(); 
+                Program.RestartMonitoringThread();
+                //Program.MGS2Thread.
+            }
         }
 
-        public static void ToggleLaunchMGS2Option()
+        public static void EnableLaunchMGS2Option(bool enable)
         {
             StaticGuiReference.Invoke(new Action(() =>
             {
-                StaticGuiReference.launchMgs2MenuItem.Enabled = !StaticGuiReference.launchMgs2MenuItem.Enabled;
+                StaticGuiReference.launchMgs2MenuItem.Enabled = enable;
             }));
         }
     }

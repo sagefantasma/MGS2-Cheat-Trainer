@@ -18,6 +18,7 @@ namespace MGS2_MC
         private bool _activeControllerFound { get; set; } = false;
         private object _activeController { get; set; }
         private static ILogger _logger { get; set; }
+        internal static CancellationToken CancellationToken { get; set; }
 
         //TODO: realistically, we shouldn't have separate controller managers with the interface, so do that.
 
@@ -28,7 +29,7 @@ namespace MGS2_MC
 
             if(activeXboxControllers.Count == 0 && activePs4Controllers.Count == 0)
             {
-                _logger.Information("No controllers connected");
+                _logger.Verbose("No controllers connected");
                 return null;
             }
             else if(activeXboxControllers.Count == 1 && activePs4Controllers.Count < 1)
@@ -61,7 +62,8 @@ namespace MGS2_MC
             _xboxControllerManager.Logger = _logger;
             _logger.Information($"Controller hook for version {Program.AppVersion} initialized...");
             _logger.Verbose($"Instance ID: {Program.InstanceID}");
-            while (!cancellationToken.IsCancellationRequested)
+            CancellationToken = cancellationToken;
+            while (!CancellationToken.IsCancellationRequested)
             {
                 if (!_activeControllerFound)
                 {

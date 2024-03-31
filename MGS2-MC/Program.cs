@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Deployment.Application;
 using System.IO;
+using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 using Serilog;
@@ -101,7 +102,7 @@ namespace MGS2_MC
             }
             else
             {
-                AppVersion = $"MANUAL_INSTALL-{Application.ProductVersion}";
+                AppVersion = $"Manual install of {Assembly.GetExecutingAssembly().GetName().Version}";
             }
         }
 

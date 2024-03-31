@@ -577,6 +577,7 @@ namespace MGS2_MC
             _logger = logger;
             StaticGuiReference = this;
             InitializeComponent();
+            this.Text += $" - v.{Program.AppVersion}";
             BuildGuiObjectLists();
             itemListBox.DataSource = itemGuiObjectList;
             itemListBox.DisplayMember = "Name";

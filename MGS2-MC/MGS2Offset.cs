@@ -60,9 +60,9 @@ namespace MGS2_MC
         #region String offsets
         #region Calculated From LifeAndGripNames
         public static readonly MemoryOffset LIFE_TEXT = new MemoryOffset(9, 12); 
-        public static readonly MemoryOffset GRIP_Lv1_TEXT = new MemoryOffset(21, 28); //TODO: prove this is valid
-        public static readonly MemoryOffset GRIP_Lv2_TEXT = new MemoryOffset(-156, -149); //TODO: prove this is valid
-        public static readonly MemoryOffset GRIP_Lv3_TEXT = new MemoryOffset(-172, -165); //TODO: prove this is valid
+        public static readonly MemoryOffset GRIP_Lv1_TEXT = new MemoryOffset(21, 28);
+        public static readonly MemoryOffset GRIP_Lv2_TEXT = new MemoryOffset(-156, -149);
+        public static readonly MemoryOffset GRIP_Lv3_TEXT = new MemoryOffset(-172, -165);
         #endregion
 
         #region Calculated From RationMedsBandagePentazeminDescriptions
@@ -99,20 +99,20 @@ namespace MGS2_MC
         #endregion
 
         #region Calculated From SolidusName
-        public static readonly MemoryOffset SOLIDUS_HP_TEXT = new MemoryOffset(61, 67); //TODO: prove this is valid
+        public static readonly MemoryOffset SOLIDUS_HP_TEXT = new MemoryOffset(60, 66);
         #endregion
 
         #region Calculated From EmmaO2
-        public static readonly MemoryOffset EMMA_O2_TEXT = new MemoryOffset(25, 31); //TODO: prove this is valid
-        public static readonly MemoryOffset RAIDEN_O2_TEXT = new MemoryOffset(137, 138); //TODO: prove this is valid
+        public static readonly MemoryOffset EMMA_O2_TEXT = new MemoryOffset(24, 30); //TODO: prove this is valid
+        public static readonly MemoryOffset RAIDEN_O2_TEXT = new MemoryOffset(136, 137); 
         #endregion
 
         #region Calculated From FatmanName
-        public static readonly MemoryOffset FATMAN_HP_TEXT = new MemoryOffset(89, 94); //TODO: validate
+        public static readonly MemoryOffset FATMAN_HP_TEXT = new MemoryOffset(88, 93);
         #endregion
 
         #region Calculated From OlgaName
-        public static readonly MemoryOffset OLGA_HP_TEXT = new MemoryOffset(293, 296); //TODO: validate
+        public static readonly MemoryOffset OLGA_HP_TEXT = new MemoryOffset(292, 295);
                                                                                        //there is also a meryl string right next to OLGA... but idk what it is used for so i'm not bothering to add it atm
                                                                                        //guessing the meryl^^ string is related to the OLGA boss fight!
         #endregion
@@ -126,7 +126,7 @@ namespace MGS2_MC
         #endregion
 
         #region Calculated From FortuneName
-        public static readonly MemoryOffset FORTUNE_HP_TEXT = new MemoryOffset(1189, 1195); //TODO: validate
+        public static readonly MemoryOffset FORTUNE_HP_TEXT = new MemoryOffset(1188, 1194);
         #endregion
         #endregion
 

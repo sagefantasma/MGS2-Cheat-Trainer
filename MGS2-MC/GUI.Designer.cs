@@ -524,6 +524,7 @@
             this.helpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewLogsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.githubMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.joinOurDiscordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mgs2TabControl.SuspendLayout();
             this.tabPageItem.SuspendLayout();
             this.itemLayoutPanel.SuspendLayout();
@@ -7371,7 +7372,8 @@
             // 
             this.helpMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.viewLogsMenuItem,
-            this.githubMenuItem});
+            this.githubMenuItem,
+            this.joinOurDiscordToolStripMenuItem});
             this.helpMenuItem.Name = "helpMenuItem";
             this.helpMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpMenuItem.Text = "Help";
@@ -7379,16 +7381,23 @@
             // viewLogsMenuItem
             // 
             this.viewLogsMenuItem.Name = "viewLogsMenuItem";
-            this.viewLogsMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.viewLogsMenuItem.Size = new System.Drawing.Size(180, 22);
             this.viewLogsMenuItem.Text = "View Logs";
             this.viewLogsMenuItem.Click += new System.EventHandler(this.ViewLogsMenuItem_Click);
             // 
             // githubMenuItem
             // 
             this.githubMenuItem.Name = "githubMenuItem";
-            this.githubMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.githubMenuItem.Size = new System.Drawing.Size(180, 22);
             this.githubMenuItem.Text = "Open GitHub Page";
             this.githubMenuItem.Click += new System.EventHandler(this.GithubMenuItem_Click);
+            // 
+            // joinOurDiscordToolStripMenuItem
+            // 
+            this.joinOurDiscordToolStripMenuItem.Name = "joinOurDiscordToolStripMenuItem";
+            this.joinOurDiscordToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.joinOurDiscordToolStripMenuItem.Text = "Join Our Discord";
+            this.joinOurDiscordToolStripMenuItem.Click += new System.EventHandler(this.JoinOurDiscordToolStripMenuItem_Click);
             // 
             // GUI
             // 
@@ -8329,6 +8338,7 @@
         private System.Windows.Forms.ToolStripMenuItem helpMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewLogsMenuItem;
         private System.Windows.Forms.ToolStripMenuItem githubMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem joinOurDiscordToolStripMenuItem;
     }
 }
 

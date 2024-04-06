@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Windows.Forms;
 
 namespace MGS2_MC
@@ -1382,16 +1383,24 @@ namespace MGS2_MC
 
         private void StringsListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (GuiLoaded == true)
+            try
             {
-                StaticGuiReference.Invoke(new Action(() =>
+                if (GuiLoaded == true)
                 {
-                    MGS2Strings.MGS2String selectedString = stringsListBox.SelectedItem as MGS2Strings.MGS2String;
-                    StaticGuiReference.basicNameTextBox.Text = selectedString.CurrentText;
-                    StaticGuiReference.basicNameTextBox.MaxLength = selectedString.MemoryOffset.Length;
-                    StaticGuiReference.characterLimitLabel.Text = selectedString.MemoryOffset.Length.ToString();
-                    StaticGuiReference.basicNameGroupBox.Text = selectedString.Tag;
-                }));
+                    StaticGuiReference?.Invoke(new Action(() =>
+                    {
+                        MGS2Strings.MGS2String selectedString = stringsListBox.SelectedItem as MGS2Strings.MGS2String;
+                        StaticGuiReference.basicNameTextBox.Text = selectedString.CurrentText;
+                        StaticGuiReference.basicNameTextBox.MaxLength = selectedString.MemoryOffset.Length;
+                        StaticGuiReference.characterLimitLabel.Text = selectedString.MemoryOffset.Length.ToString();
+                        StaticGuiReference.basicNameGroupBox.Text = selectedString.Tag;
+                    }));
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Failed to select string from sender {JsonSerializer.Serialize(sender)} and args {JsonSerializer.Serialize(e)}: {ex}");
+                MessageBox.Show(@"Failed to select string. If this error persists, please restart the application.");
             }
         }
 
@@ -1411,22 +1420,30 @@ namespace MGS2_MC
 
         private void ItemListBox_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            ItemListBox_Click();
+           ItemListBox_Click();            
         }
 
         private static void ItemListBox_Click()
         {
-            StaticGuiReference.Invoke(new Action(() =>
+            try
             {
-                if (StaticGuiReference.itemGroupBox.Controls.Count > 0)
-                    StaticGuiReference.itemGroupBox.Controls[0].Visible = false;
-                StaticGuiReference.itemGroupBox.Controls.Clear();
+                StaticGuiReference.Invoke(new Action(() =>
+                    {
+                        if (StaticGuiReference.itemGroupBox.Controls.Count > 0)
+                            StaticGuiReference.itemGroupBox.Controls[0].Visible = false;
+                        StaticGuiReference.itemGroupBox.Controls.Clear();
 
-                GuiObject itemObject = itemGuiObjectList.First(guiObject => guiObject.Name == (StaticGuiReference.itemListBox.SelectedItem as GuiObject).Name);
+                        GuiObject itemObject = itemGuiObjectList.First(guiObject => guiObject.Name == (StaticGuiReference.itemListBox.SelectedItem as GuiObject).Name);
 
-                StaticGuiReference.itemGroupBox.Controls.Add(itemObject.AssociatedControl);
-                itemObject.AssociatedControl.Visible = true;
-            }));
+                        StaticGuiReference.itemGroupBox.Controls.Add(itemObject.AssociatedControl);
+                        itemObject.AssociatedControl.Visible = true;
+                    }));
+            }
+            catch (Exception ex)
+            {
+                StaticGuiReference._logger.Error($"Failed to select item from itemListBox: {ex}");
+                MessageBox.Show(@"Failed to select item from itemListBox. If this error persists, please restart the application.");
+            }
         }
 
         private void weaponListBox_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -1436,33 +1453,65 @@ namespace MGS2_MC
 
         private static void WeaponListBox_Click()
         {
-            StaticGuiReference.Invoke(new Action(() =>
+            try
             {
-                if (StaticGuiReference.weaponGroupBox.Controls.Count > 0)
-                    StaticGuiReference.weaponGroupBox.Controls[0].Visible = false;
-                StaticGuiReference.weaponGroupBox.Controls.Clear();
+                StaticGuiReference.Invoke(new Action(() =>
+                {
+                    if (StaticGuiReference.weaponGroupBox.Controls.Count > 0)
+                        StaticGuiReference.weaponGroupBox.Controls[0].Visible = false;
+                    StaticGuiReference.weaponGroupBox.Controls.Clear();
 
-                GuiObject weaponObject = weaponGuiObjectList.First(guiObject => guiObject.Name == (StaticGuiReference.weaponListBox.SelectedItem as GuiObject).Name);
+                    GuiObject weaponObject = weaponGuiObjectList.First(guiObject => guiObject.Name == (StaticGuiReference.weaponListBox.SelectedItem as GuiObject).Name);
 
-                StaticGuiReference.weaponGroupBox.Controls.Add(weaponObject.AssociatedControl);
-                weaponObject.AssociatedControl.Visible = true;
-            }));
+                    StaticGuiReference.weaponGroupBox.Controls.Add(weaponObject.AssociatedControl);
+                    weaponObject.AssociatedControl.Visible = true;
+                }));
+            }
+            catch (Exception ex)
+            {
+                StaticGuiReference._logger.Error($"Failed to select weapon from weaponListBox: {ex}");
+                MessageBox.Show(@"Failed to select weapon from weaponListBox. If this error persists, please restart the application.");
+            }
         }
 
         private void Mgs2TabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
-            CurrentTab = mgs2TabControl.SelectedIndex;
-            CurrentlySelectedObject = null;
+            try
+            {
+                CurrentTab = mgs2TabControl.SelectedIndex;
+                CurrentlySelectedObject = null;
+            }
+            catch(Exception ex) 
+            {
+                _logger.Error($"Failed to change tabs from sender {JsonSerializer.Serialize(sender)} and args {JsonSerializer.Serialize(e)}: {ex}");
+                MessageBox.Show(@"Failed to change tabs. If this error persists, please restart the application.");
+            }
         }
 
         private void GithubMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("https://github.com/sagefantasma/MGS2-Cheat-Trainer");
+            try
+            {
+                Process.Start("https://github.com/sagefantasma/MGS2-Cheat-Trainer");
+            }
+            catch(Exception ex)
+            {
+                _logger.Error($"Failed to launch Github page from sender {JsonSerializer.Serialize(sender)} and args {JsonSerializer.Serialize(e)}: {ex}");
+                MessageBox.Show(@"Failed to launch Github page. If this error persists, please restart the application.");
+            }
         }
 
         private void ViewLogsMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start(Logging.LogLocation);
+            try
+            {
+                Process.Start(Logging.LogLocation);
+            }
+            catch(Exception ex)
+            {
+                _logger.Error($"Failed to open logs from sender {JsonSerializer.Serialize(sender)} and args {JsonSerializer.Serialize(e)}: {ex}");
+                MessageBox.Show(@"Failed to open log location. If this error persists, please restart the application.");
+            }
         }
 
         private void ModifyConfigMenuItem_Click(object sender, EventArgs e)
@@ -1502,10 +1551,31 @@ namespace MGS2_MC
 
         public static void EnableLaunchMGS2Option(bool enable)
         {
-            StaticGuiReference.Invoke(new Action(() =>
+            try
             {
-                StaticGuiReference.launchMgs2MenuItem.Enabled = enable;
-            }));
+                StaticGuiReference.Invoke(new Action(() =>
+                {
+                    StaticGuiReference.launchMgs2MenuItem.Enabled = enable;
+                }));
+            }
+            catch(Exception e)
+            {
+                StaticGuiReference._logger.Error($"Failed to set Launch MGS2 Option to {enable}: {e}");
+                //this isn't a user-facing error, so dont bother them with a message box here
+            }
+        }
+
+        private void JoinOurDiscordToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Process.Start("https://discord.gg/XUh58VfqDu");
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Failed to launch Github page from sender {JsonSerializer.Serialize(sender)} and args {JsonSerializer.Serialize(e)}: {ex}");
+                MessageBox.Show(@"Failed to launch Github page. If this error persists, please restart the application.");
+            }
         }
     }
 }

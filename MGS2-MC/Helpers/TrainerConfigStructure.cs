@@ -23,6 +23,8 @@ namespace MGS2_MC
             public bool CloseGameWithTrainer { get; set; }
             [JsonPropertyName("closeTrainerWithGame")]
             public bool CloseTrainerWithGame { get; set; }
+            [JsonPropertyName("enableControllerSupport")]
+            public bool EnableControllerSupport { get; set; }
             [JsonPropertyName("mgs2ExePath")]
             public string Mgs2ExePath { get; set; }
 
@@ -33,6 +35,7 @@ namespace MGS2_MC
                 AutoLaunchGame = config.AutoLaunchGame;
                 CloseGameWithTrainer = config.CloseGameWithTrainer;
                 CloseTrainerWithGame = config.CloseTrainerWithGame;
+                EnableControllerSupport = config.EnableControllerSupport;
                 Mgs2ExePath = config.Mgs2ExePath;
             }
         }

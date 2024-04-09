@@ -62,6 +62,14 @@ namespace MGS2_MC
             _xboxControllerManager.Logger = _logger;
             _logger.Information($"Controller hook for version {Program.AppVersion} initialized...");
             _logger.Verbose($"Instance ID: {Program.InstanceID}");
+
+            MGS2Monitor.LoadConfig();
+            if (!MGS2Monitor.TrainerConfig.EnableControllerSupport)
+            {
+                _logger.Information("The current trainer config has controller support disabled, ending monitoring thread.");
+                return;
+            }
+            
             CancellationToken = cancellationToken;
             while (!CancellationToken.IsCancellationRequested)
             {

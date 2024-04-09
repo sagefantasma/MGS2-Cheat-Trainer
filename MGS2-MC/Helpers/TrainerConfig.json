@@ -2,5 +2,6 @@
   "autoLaunchGame": false,
   "closeGameWithTrainer": false,
   "closeTrainerWithGame": false,
+  "enableControllerSupport": false,
   "mgs2ExePath": "C:/Program Files (x86)/Steam/steamapps/common/MGS2/METAL GEAR SOLID2.exe"
 }

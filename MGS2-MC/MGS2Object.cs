@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Serilog;
+using Serilog.Core;
+using System;
 using System.Windows.Forms;
 
 namespace MGS2_MC
@@ -13,7 +15,7 @@ namespace MGS2_MC
 
     interface IMGS2Object
     {
-        void ToggleObject(bool shouldBeEnabled);
+        void ToggleObject(bool shouldBeEnabled, ILogger logger, ToolStripStatusLabel statusLabel);
     }
 
     public abstract class MGS2Object : IMGS2Object
@@ -36,8 +38,10 @@ namespace MGS2_MC
             GameObject = newGameObject;
         }
 
-        public void ToggleObject(bool shouldBeEnabled)
+        public void ToggleObject(bool shouldBeEnabled, ILogger logger, ToolStripStatusLabel statusLabel)
         {
+            logger.Verbose($"Toggling {Name}...");
+            statusLabel.Text = $"Finding {Name} in memory...";
             short currentObjectValue = BitConverter.ToInt16(MGS2MemoryManager.GetPlayerInfoBasedValue(InventoryOffset, sizeof(short)), 0);
             bool isCurrentlyEnabled = currentObjectValue != 0 ? true : false; //this feels more readable as a ternary than the shorthand
             //Toggle the object if it is currently disabled and needs enabling, or if it is currently enabled and needs disabling.
@@ -45,6 +49,8 @@ namespace MGS2_MC
             {
                 MGS2MemoryManager.ToggleObject(this);
             }
+            statusLabel.Text = $"Toggled {Name}!";
+            logger.Verbose($"Toggle was successful");
         }
     }
     #endregion
@@ -58,11 +64,11 @@ namespace MGS2_MC
         }
         #endregion
 
-        public void ToggleItem(bool shouldBeEnabled)
+        public void ToggleItem(bool shouldBeEnabled, ILogger logger, ToolStripStatusLabel statusLabel)
         {
             try
             {
-                ToggleObject(shouldBeEnabled);
+                ToggleObject(shouldBeEnabled, logger, statusLabel);
             }
             catch(Exception e)
             {
@@ -80,11 +86,15 @@ namespace MGS2_MC
         {
         }
 
-        public void SetLevel(short level)
+        public void SetLevel(short level, ILogger logger, ToolStripStatusLabel statusLabel)
         {
             try
             {
+                logger.Verbose($"Setting {Name} to {level}...");
+                statusLabel.Text = $"Finding {Name} in memory...";
                 MGS2MemoryManager.UpdateObjectBaseValue(this, level);
+                statusLabel.Text = $"{Name} level updated to {level}";
+                logger.Verbose($"Level set");
             }
             catch(Exception e)
             {
@@ -103,12 +113,16 @@ namespace MGS2_MC
         }
         #endregion
 
-        public void SetDurability(short value)
+        public void SetDurability(short value, ILogger logger, ToolStripStatusLabel statusLabel)
         {
             //Boxes have a durability of 21(perfect condition) -> 1(nearly destroyed)
             try
             {
+                logger.Verbose($"Setting durability {value} for {Name}...");
+                statusLabel.Text = $"Finding {Name} in memory...";
                 MGS2MemoryManager.UpdateObjectBaseValue(this, value);
+                statusLabel.Text = $"{Name} durability updated to {value}";
+                logger.Verbose($"Durability set successfully");
             }
             catch(Exception e)
             {
@@ -116,19 +130,19 @@ namespace MGS2_MC
             }
         }
 
-        internal new void ToggleObject(bool shouldBeEnabled)
+        internal new void ToggleObject(bool shouldBeEnabled, ILogger logger, ToolStripStatusLabel statusLabel)
         {
             short currentDurability = BitConverter.ToInt16(MGS2MemoryManager.GetPlayerInfoBasedValue(DurabilityOffset, sizeof(short)), 0);
             
             if (currentDurability == 0 && shouldBeEnabled)
             {
                 //if the box is destroyed/disabled and should be enabled, set to "max" durability
-                SetDurability(21);
+                SetDurability(21, logger, statusLabel);
             }
             else if(currentDurability != 0 && !shouldBeEnabled)
             {
                 //if the box is in-tact/enabled and should be disabled, set to 0 durability
-                SetDurability(0);
+                SetDurability(0, logger, statusLabel);
             }
         }
     }
@@ -148,28 +162,32 @@ namespace MGS2_MC
         }
         #endregion
 
-        internal new void ToggleObject(bool shouldBeEnabled)
+        internal new void ToggleObject(bool shouldBeEnabled, ILogger logger, ToolStripStatusLabel statusLabel)
         {
             short currentCount = BitConverter.ToInt16(MGS2MemoryManager.GetPlayerInfoBasedValue(CurrentCountOffset, sizeof(short)), 0);
             if (currentCount == 0 && shouldBeEnabled)
             {
                 if (LastKnownCurrentCount != 0)
-                    UpdateCurrentCount(LastKnownCurrentCount);
+                    UpdateCurrentCount(LastKnownCurrentCount, logger, statusLabel);
                 else
-                    UpdateCurrentCount(1);
+                    UpdateCurrentCount(1, logger, statusLabel);
             }
             else if(!shouldBeEnabled)
             {
                 LastKnownCurrentCount = currentCount;
-                UpdateCurrentCount(0);
+                UpdateCurrentCount(0, logger, statusLabel); 
             }
         }
 
-        public void UpdateCurrentCount(short count)
+        public void UpdateCurrentCount(short count, ILogger logger, ToolStripStatusLabel statusLabel)
         {
             try
             {
+                logger.Verbose($"Setting current count to {count} for {Name}...");
+                statusLabel.Text = $"Finding {Name} in memory...";
                 MGS2MemoryManager.UpdateObjectBaseValue(this, count);
+                statusLabel.Text = $"Current count for {Name} updated to {count}";
+                logger.Verbose($"Current count set successfully");
             }
             catch(Exception e)
             {
@@ -177,11 +195,15 @@ namespace MGS2_MC
             }
         }
 
-        public void UpdateMaxCount(short count)
+        public void UpdateMaxCount(short count, ILogger logger, ToolStripStatusLabel statusLabel)
         {
             try
             {
+                logger.Verbose($"Setting max count to {count} for {Name}...");
+                statusLabel.Text = $"Finding {Name} in memory...";
                 MGS2MemoryManager.UpdateObjectMaxValue(this, count);
+                statusLabel.Text = $"Max count for {Name} updated to {count}";
+                logger.Verbose($"Max count set successfully");
             }
             catch(Exception e)
             {
@@ -200,11 +222,11 @@ namespace MGS2_MC
         }
         #endregion
 
-        public void ToggleWeapon(bool shouldBeEnabled)
+        public void ToggleWeapon(bool shouldBeEnabled, ILogger logger, ToolStripStatusLabel statusLabel)
         {
             try
             {
-                ToggleObject(shouldBeEnabled);
+                ToggleObject(shouldBeEnabled, logger, statusLabel);
             }
             catch(Exception e)
             {
@@ -227,7 +249,7 @@ namespace MGS2_MC
         }
         #endregion
 
-        internal new void ToggleObject(bool shouldBeEnabled)
+        internal new void ToggleObject(bool shouldBeEnabled, ILogger logger, ToolStripStatusLabel statusLabel)
         {
             short currentAmmo = BitConverter.ToInt16(MGS2MemoryManager.GetPlayerInfoBasedValue(CurrentAmmoOffset, sizeof(short)), 0);
             //TODO: it would be cool to duplicate the "NO USE" functionality the Stinger gets when prone when disabled!
@@ -236,23 +258,27 @@ namespace MGS2_MC
             if (currentAmmo <= 0 && shouldBeEnabled)
             {
                 if (LastKnownCurrentAmmo != 0)
-                    UpdateCurrentAmmoCount(LastKnownCurrentAmmo);
+                    UpdateCurrentAmmoCount(LastKnownCurrentAmmo, logger, statusLabel);
                 else
-                    UpdateCurrentAmmoCount(1);
+                    UpdateCurrentAmmoCount(1, logger, statusLabel);
             }
             else if(!shouldBeEnabled)
             {
                 LastKnownCurrentAmmo = currentAmmo;
-                UpdateCurrentAmmoCount(-1);
+                UpdateCurrentAmmoCount(-1, logger, statusLabel);
             }
         }
 
-        public void UpdateCurrentAmmoCount(int count)
+        public void UpdateCurrentAmmoCount(int count, ILogger logger, ToolStripStatusLabel statusLabel)
         {
             short shortCount = (short)count;
             try
             {
+                logger?.Verbose($"Setting current ammo to {count} for {Name}...");
+                statusLabel.Text = $"Finding {Name} in memory...";
                 MGS2MemoryManager.UpdateObjectBaseValue(this, shortCount);
+                statusLabel.Text = $"Current ammo count for {Name} updated to {count}";
+                logger.Verbose($"Current ammo set successfully");
             }
             catch(Exception e)
             {
@@ -260,12 +286,16 @@ namespace MGS2_MC
             }
         }
 
-        public void UpdateMaxAmmoCount(int count)
+        public void UpdateMaxAmmoCount(int count, ILogger logger, ToolStripStatusLabel statusLabel)
         {
             short shortCount = (short)count;
             try
             {
+                logger.Verbose($"Setting max ammo to {count} for {Name}...");
+                statusLabel.Text = $"Finding {Name} in memory...";
                 MGS2MemoryManager.UpdateObjectMaxValue(this, shortCount);
+                statusLabel.Text = $"Max ammo count for {Name} updated to {count}";
+                logger.Verbose($"Max ammo set successfully");
             }
             catch(Exception e)
             {

@@ -1409,7 +1409,13 @@ namespace MGS2_MC
             try
             {
                 MGS2Strings.MGS2String selectedString = stringsListBox.SelectedItem as MGS2Strings.MGS2String;
+                _logger.Verbose($"Changing {selectedString.Tag} in memory...");
+                toolStripStatusLabel.Text = $"Finding {selectedString.Tag} in memory...";
+                selectedString.CurrentText = MGS2MemoryManager.ReadGameString(selectedString);
                 MGS2MemoryManager.UpdateGameString(selectedString, basicNameTextBox.Text);
+                toolStripStatusLabel.Text = $"Set {selectedString.Tag} from {selectedString.CurrentText} to {basicNameTextBox.Text} successfully!";
+                selectedString.CurrentText = basicNameTextBox.Text;
+                _logger.Verbose($"Successfully changed {selectedString.Tag} in memory");
             }
             catch(Exception ex)
             {
@@ -1478,6 +1484,7 @@ namespace MGS2_MC
         {
             try
             {
+                _logger.Verbose($"Switching to tab #{mgs2TabControl.SelectedIndex}...");
                 CurrentTab = mgs2TabControl.SelectedIndex;
                 CurrentlySelectedObject = null;
             }
@@ -1492,6 +1499,7 @@ namespace MGS2_MC
         {
             try
             {
+                _logger.Verbose("Opening github link in web-browser");
                 Process.Start("https://github.com/sagefantasma/MGS2-Cheat-Trainer");
             }
             catch(Exception ex)
@@ -1516,11 +1524,14 @@ namespace MGS2_MC
 
         private void ModifyConfigMenuItem_Click(object sender, EventArgs e)
         {
+            _logger.Verbose("Opening modify config form...");
             ConfigEditorForm configEditorForm = new ConfigEditorForm(_logger);
             
             if(configEditorForm.ShowDialog() == DialogResult.OK)
             {
+                _logger.Verbose("Finished modifying config, loading new config");
                 MGS2Monitor.LoadConfig();
+                _logger.Verbose($"Config loaded");
             }            
         }
 
@@ -1534,7 +1545,9 @@ namespace MGS2_MC
             {
                 try
                 {
+                    _logger.Verbose("MGS2 thread is dead, restarting MGS2 thread...");
                     Program.RestartMonitoringThread();
+                    _logger.Verbose("MGS2 thread restarted successfully!");
                 }
                 catch(Exception ex)
                 {
@@ -1543,8 +1556,10 @@ namespace MGS2_MC
             }
             else
             {
+                _logger.Verbose("MGS2 thread isn't dead, but we don't see the MGS2 process. Killing MGS2 thread and restarting");
                 Program.MGS2Thread.Abort(); 
                 Program.RestartMonitoringThread();
+                _logger.Verbose("MGS2 thread killed and restarted successfully!");
                 //Program.MGS2Thread.
             }
         }
@@ -1555,6 +1570,7 @@ namespace MGS2_MC
             {
                 StaticGuiReference.Invoke(new Action(() =>
                 {
+                    StaticGuiReference._logger.Verbose($"Setting LaunchMgs2MenuItem.Enabled to {enable}");
                     StaticGuiReference.launchMgs2MenuItem.Enabled = enable;
                 }));
             }
@@ -1569,12 +1585,13 @@ namespace MGS2_MC
         {
             try
             {
+                _logger.Verbose("Opening discord link in web-browser");
                 Process.Start("https://discord.gg/XUh58VfqDu");
             }
             catch (Exception ex)
             {
-                _logger.Error($"Failed to launch Github page from sender {JsonSerializer.Serialize(sender)} and args {JsonSerializer.Serialize(e)}: {ex}");
-                MessageBox.Show(@"Failed to launch Github page. If this error persists, please restart the application.");
+                _logger.Error($"Failed to launch Discord page from sender {JsonSerializer.Serialize(sender)} and args {JsonSerializer.Serialize(e)}: {ex}");
+                MessageBox.Show(@"Failed to launch Discord page. If this error persists, please restart the application.");
             }
         }
     }

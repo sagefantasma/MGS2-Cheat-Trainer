@@ -345,6 +345,20 @@ namespace MGS2_MC
             }
         }
 
+        public static string ReadGameString(MGS2Strings.MGS2String gameString)
+        {
+            using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+            {
+                byte[] gameMemoryBuffer = proxy.GetProcessSnapshot();
+
+                List<int> offsets = FindUniqueOffset(gameMemoryBuffer, gameString.FinderAoB);
+
+                byte[] memoryValue = ReadValueFromMemory(offsets[0] + gameString.MemoryOffset.Start, gameString.MemoryOffset.Length);
+
+                return Encoding.UTF8.GetString(memoryValue);
+            }
+        }
+
         public static byte[] GetPlayerInfoBasedValue(int valueOffset, int sizeToRead)
         {
             int[] playerMemoryOffsets = GetPlayerOffsets();

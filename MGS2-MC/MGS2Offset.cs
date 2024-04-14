@@ -30,22 +30,24 @@ namespace MGS2_MC
     {
         //if the region is dynamic(i.e. PlayerOffsetAoB), it will change on area load. The others will only (possibly[hopefully]) change with game updates
         #region Dynamic AoBs
-        internal static byte[] PlayerInfoFinder = new byte[] { 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 01, 00 }; //TODO: determine if this breaks when we have m9 max ammo >255
+        internal static byte[] PlayerInfoFinder = new byte[] { 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 01, 00 };
         #endregion
         #region Static AoBs
         internal static byte[] MenuNamesFinder = new byte[] { 0x6D, 0x61, 0x70, 0x2E, 0x63 }; //TODO: prove this is valid
         internal static byte[] DifficultyAndAreaNames = new byte[] { 0x2F, 0x44, 0x2A }; //TODO: prove this is valid, also this is _concerningly_ short.
         internal static byte[] LifeAndGripNames = new byte[] { 0x72, 0x61, 0x69, 0x64, 0x65, 0x6E, 0x2E, 0x63 };
-        internal static byte[] RayNames = new byte[] { 0x6D, 0x69, 0x6E, 0x69, 0x5F, 0x73, 0x63, 0x6E, 0x2E, 0x63 }; //TODO: prove this is valid
+        internal static byte[] RayNames = new byte[] { 0x6D, 0x69, 0x6E, 0x69, 0x5F, 0x73, 0x63, 0x6E, 0x2E, 0x63 };
         //weapon & item descriptions dispersed through out. seems to start around +00613CCB or so in the memory print?
         internal static byte[] RationMedsBandagePentazeminDescriptions = new byte[] { 0xA4, 0xE3, 0x81, 0xAF, 0xE3, 0x81, 0x9A, 0xE3, 0x81, 0xA0, 0xEE, 0x80, 0x80, 0xE3, 0x80, 0x82, 0x0A }; //TODO: prove this is valid
-        internal static byte[] SolidusName = new byte[] { 0x69, 0x6E, 0x69, 0x74, 0x5F, 0x73, 0x6F, 0x6C, 0x2E, 0x63 }; //TODO: prove this is valid
-        internal static byte[] EmmaO2 = new byte[] { 0x65, 0x6D, 0x61, 0x5F, 0x72, 0x61, 0x69, 0x5F, 0x6F, 0x6E, 0x62, 0x75, 0x5F, 0x65, 0x6E, 0x64 }; //TODO: prove this is valid
-        internal static byte[] FatmanName = new byte[] { 0x77, 0x61, 0x74, 0x65, 0x72, 0x6C, 0x69, 0x6E, 0x65, 0x66, 0x61, 0x6C, 0x6C, 0x2E, 0x63 }; //TODO: prove this is valid
+        internal static byte[] SolidusName = new byte[] { 0x69, 0x6E, 0x69, 0x74, 0x5F, 0x73, 0x6F, 0x6C, 0x2E, 0x63 };
+        internal static byte[] EmmaName = new byte[] { 0x62, 0x72, 0x6B, 0x5F, 0x67, 0x6C, 0x73, 0x5F, 0x69, 0x6E, 0x69, 0x2E, 0x63 };
+        internal static byte[] EmmaO2 = new byte[] { 0x65, 0x6D, 0x61, 0x5F, 0x72, 0x61, 0x69, 0x5F, 0x6F, 0x6E, 0x62, 0x75, 0x5F, 0x65, 0x6E, 0x64 };
+        internal static byte[] FatmanName = new byte[] { 0x77, 0x61, 0x74, 0x65, 0x72, 0x6C, 0x69, 0x6E, 0x65, 0x66, 0x61, 0x6C, 0x6C, 0x2E, 0x63 }; 
         internal static byte[] OlgaName = new byte[] { 0x6F, 0x72, 0x67, 0x61, 0x5F, 0x6C, 0x6E, 0x7A, 0x2E, 0x63 };
-        internal static byte[] HarrierName = new byte[] { 0x68, 0x61, 0x72, 0x5F, 0x76, 0x75, 0x6C, 0x63, 0x2E, 0x63 }; //TODO: prove this is valid
-        internal static byte[] KasatkaName = new byte[] { 0x6B, 0x63, 0x6B, 0x5F, 0x70, 0x6C, 0x61, 0x6E, 0x74, 0x5F, 0x6D, 0x74 }; //TODO: prove this is valid
-        internal static byte[] FortuneName = new byte[] { 0x66, 0x6F, 0x72, 0x74, 0x5F, 0x6F, 0x62, 0x6A, 0x5F, 0x69, 0x6E, 0x69, 0x2E, 0x63 }; //TODO: prove this is valid
+        internal static byte[] HarrierName = new byte[] { 0x68, 0x61, 0x72, 0x5F, 0x76, 0x75, 0x6C, 0x63, 0x2E, 0x63 };
+        internal static byte[] KasatkaName = new byte[] { 0x6B, 0x63, 0x6B, 0x5F, 0x70, 0x6C, 0x61, 0x6E, 0x74, 0x5F, 0x6D, 0x74 };
+        internal static byte[] FortuneName = new byte[] { 0x66, 0x6F, 0x72, 0x74, 0x5F, 0x6F, 0x62, 0x6A, 0x5F, 0x69, 0x6E, 0x69, 0x2E, 0x63 };
+        internal static byte[] Vamp02 = new byte[] { 0x76, 0x61, 0x6D, 0x70, 0x2E, 0x63 };
         //00 00 00 78 00 08 00 <-- possibly an AoB for HP/Magazine modificaitons? might have to key off of LIFE?(or at least whatever it is called at that moment, within the games memory block)
         internal static byte[] HealthMod = new byte[] { 0x00, 0x00, 0x00, 0x78, 0x00, 0x08, 0x00 }; //TODO: prove this is valid
         //clipcurrentCount == -114 from the above AoB, 4bytes long. HP mod is DIRECTLY after, it seems?
@@ -70,8 +72,7 @@ namespace MGS2_MC
         #endregion
 
         #region Calculated From RayNames
-        public static readonly MemoryOffset RAY_01 = new MemoryOffset(78, 85); //TODO: prove these are valid (these values are using the endByte, cuz im a fool)
-        //public static readonly MemoryBytes RAY_01 = new MemoryBytes(68, 75); //This should work if the uncommented one does not
+        public static readonly MemoryOffset RAY_01 = new MemoryOffset(70, 77);
         public static readonly MemoryOffset RAY_02 = new MemoryOffset(RAY_01.Start + 16, RAY_01.End + 16);
         public static readonly MemoryOffset RAY_03 = new MemoryOffset(RAY_02.Start + 16, RAY_02.End + 16);
         public static readonly MemoryOffset RAY_04 = new MemoryOffset(RAY_03.Start + 16, RAY_03.End + 16);
@@ -103,8 +104,12 @@ namespace MGS2_MC
         #endregion
 
         #region Calculated From EmmaO2
-        public static readonly MemoryOffset EMMA_O2_TEXT = new MemoryOffset(24, 30); //TODO: prove this is valid
-        public static readonly MemoryOffset RAIDEN_O2_TEXT = new MemoryOffset(136, 137); 
+        public static readonly MemoryOffset EMMA_O2_TEXT = new MemoryOffset(24, 30);
+        public static readonly MemoryOffset RAIDEN_O2_TEXT = new MemoryOffset(136, 137);
+        #endregion
+
+        #region Calculated From EmmaName
+        public static readonly MemoryOffset EMMA_HP_TEXT = new MemoryOffset(390, 393);
         #endregion
 
         #region Calculated From FatmanName
@@ -127,6 +132,11 @@ namespace MGS2_MC
 
         #region Calculated From FortuneName
         public static readonly MemoryOffset FORTUNE_HP_TEXT = new MemoryOffset(1188, 1194);
+        public static readonly MemoryOffset VAMP_HP_TEXT = new MemoryOffset(1908, 1911);
+        #endregion
+
+        #region Calculated From Vamp02
+        public static readonly MemoryOffset VAMP_02_TEXT = new MemoryOffset(8, 14);
         #endregion
         #endregion
 

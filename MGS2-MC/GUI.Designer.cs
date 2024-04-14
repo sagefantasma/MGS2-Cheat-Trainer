@@ -46,6 +46,7 @@
             this.label54 = new System.Windows.Forms.Label();
             this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
             this.button2 = new System.Windows.Forms.Button();
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.tabPageWeapon = new System.Windows.Forms.TabPage();
             this.weaponTabLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.weaponListBox = new System.Windows.Forms.ListBox();
@@ -525,6 +526,7 @@
             this.viewLogsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.githubMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.joinOurDiscordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.mgs2TabControl.SuspendLayout();
             this.tabPageItem.SuspendLayout();
             this.itemLayoutPanel.SuspendLayout();
@@ -536,6 +538,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.itemTabTestPictureBox)).BeginInit();
             this.itemTabTestCurrentLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
+            this.statusStrip.SuspendLayout();
             this.tabPageWeapon.SuspendLayout();
             this.weaponTabLayoutPanel.SuspendLayout();
             this.weaponGroupBox.SuspendLayout();
@@ -870,7 +873,7 @@
             this.itemLayoutPanel.Name = "itemLayoutPanel";
             this.itemLayoutPanel.RowCount = 1;
             this.itemLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.itemLayoutPanel.Size = new System.Drawing.Size(570, 430);
+            this.itemLayoutPanel.Size = new System.Drawing.Size(570, 408);
             this.itemLayoutPanel.TabIndex = 0;
             // 
             // itemListBox
@@ -880,7 +883,7 @@
             this.itemListBox.FormattingEnabled = true;
             this.itemListBox.Location = new System.Drawing.Point(3, 3);
             this.itemListBox.Name = "itemListBox";
-            this.itemListBox.Size = new System.Drawing.Size(108, 424);
+            this.itemListBox.Size = new System.Drawing.Size(108, 402);
             this.itemListBox.TabIndex = 0;
             this.itemListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ItemListBox_MouseDoubleClick);
             // 
@@ -891,7 +894,7 @@
             this.itemGroupBox.Location = new System.Drawing.Point(117, 3);
             this.itemGroupBox.Name = "itemGroupBox";
             this.itemGroupBox.Padding = new System.Windows.Forms.Padding(10);
-            this.itemGroupBox.Size = new System.Drawing.Size(450, 424);
+            this.itemGroupBox.Size = new System.Drawing.Size(450, 402);
             this.itemGroupBox.TabIndex = 1;
             this.itemGroupBox.TabStop = false;
             this.itemGroupBox.Text = "Select an Item From the List to the Left";
@@ -902,7 +905,7 @@
             this.itemTabTestGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.itemTabTestGroupBox.Location = new System.Drawing.Point(10, 23);
             this.itemTabTestGroupBox.Name = "itemTabTestGroupBox";
-            this.itemTabTestGroupBox.Size = new System.Drawing.Size(430, 391);
+            this.itemTabTestGroupBox.Size = new System.Drawing.Size(430, 369);
             this.itemTabTestGroupBox.TabIndex = 54;
             this.itemTabTestGroupBox.TabStop = false;
             this.itemTabTestGroupBox.Text = "TESTING PURPOSES ONLY";
@@ -923,7 +926,7 @@
             this.itemTabTestLayoutPanel.RowCount = 2;
             this.itemTabTestLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 42.22222F));
             this.itemTabTestLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 57.77778F));
-            this.itemTabTestLayoutPanel.Size = new System.Drawing.Size(424, 372);
+            this.itemTabTestLayoutPanel.Size = new System.Drawing.Size(424, 350);
             this.itemTabTestLayoutPanel.TabIndex = 41;
             // 
             // itemTabTestMaxLayoutPanel
@@ -935,12 +938,12 @@
             this.itemTabTestMaxLayoutPanel.Controls.Add(this.numericUpDown1, 0, 1);
             this.itemTabTestMaxLayoutPanel.Controls.Add(this.button1, 1, 1);
             this.itemTabTestMaxLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.itemTabTestMaxLayoutPanel.Location = new System.Drawing.Point(215, 160);
+            this.itemTabTestMaxLayoutPanel.Location = new System.Drawing.Point(215, 150);
             this.itemTabTestMaxLayoutPanel.Name = "itemTabTestMaxLayoutPanel";
             this.itemTabTestMaxLayoutPanel.RowCount = 2;
             this.itemTabTestMaxLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 38.88889F));
             this.itemTabTestMaxLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 61.11111F));
-            this.itemTabTestMaxLayoutPanel.Size = new System.Drawing.Size(206, 209);
+            this.itemTabTestMaxLayoutPanel.Size = new System.Drawing.Size(206, 197);
             this.itemTabTestMaxLayoutPanel.TabIndex = 3;
             // 
             // label53
@@ -951,14 +954,14 @@
             this.label53.Location = new System.Drawing.Point(0, 0);
             this.label53.Margin = new System.Windows.Forms.Padding(0);
             this.label53.Name = "label53";
-            this.label53.Size = new System.Drawing.Size(206, 81);
+            this.label53.Size = new System.Drawing.Size(206, 76);
             this.label53.TabIndex = 0;
             this.label53.Text = "Max Count";
             // 
             // numericUpDown1
             // 
             this.numericUpDown1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numericUpDown1.Location = new System.Drawing.Point(3, 82);
+            this.numericUpDown1.Location = new System.Drawing.Point(3, 77);
             this.numericUpDown1.Margin = new System.Windows.Forms.Padding(3, 1, 0, 0);
             this.numericUpDown1.Maximum = new decimal(new int[] {
             32767,
@@ -972,7 +975,7 @@
             // button1
             // 
             this.button1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.button1.Location = new System.Drawing.Point(166, 81);
+            this.button1.Location = new System.Drawing.Point(166, 76);
             this.button1.Margin = new System.Windows.Forms.Padding(0);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(40, 22);
@@ -986,7 +989,7 @@
             this.itemTabTestPictureBox.ImageLocation = "Resources/images/niki_alp_ovl.bmp.bmp";
             this.itemTabTestPictureBox.Location = new System.Drawing.Point(3, 3);
             this.itemTabTestPictureBox.Name = "itemTabTestPictureBox";
-            this.itemTabTestPictureBox.Size = new System.Drawing.Size(206, 151);
+            this.itemTabTestPictureBox.Size = new System.Drawing.Size(206, 141);
             this.itemTabTestPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.itemTabTestPictureBox.TabIndex = 0;
             this.itemTabTestPictureBox.TabStop = false;
@@ -1011,12 +1014,12 @@
             this.itemTabTestCurrentLayoutPanel.Controls.Add(this.numericUpDown2, 0, 1);
             this.itemTabTestCurrentLayoutPanel.Controls.Add(this.button2, 1, 1);
             this.itemTabTestCurrentLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.itemTabTestCurrentLayoutPanel.Location = new System.Drawing.Point(3, 160);
+            this.itemTabTestCurrentLayoutPanel.Location = new System.Drawing.Point(3, 150);
             this.itemTabTestCurrentLayoutPanel.Name = "itemTabTestCurrentLayoutPanel";
             this.itemTabTestCurrentLayoutPanel.RowCount = 2;
             this.itemTabTestCurrentLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 38.88889F));
             this.itemTabTestCurrentLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 61.11111F));
-            this.itemTabTestCurrentLayoutPanel.Size = new System.Drawing.Size(206, 209);
+            this.itemTabTestCurrentLayoutPanel.Size = new System.Drawing.Size(206, 197);
             this.itemTabTestCurrentLayoutPanel.TabIndex = 2;
             // 
             // label54
@@ -1027,14 +1030,14 @@
             this.label54.Location = new System.Drawing.Point(0, 0);
             this.label54.Margin = new System.Windows.Forms.Padding(0);
             this.label54.Name = "label54";
-            this.label54.Size = new System.Drawing.Size(206, 81);
+            this.label54.Size = new System.Drawing.Size(206, 76);
             this.label54.TabIndex = 0;
             this.label54.Text = "Current Count";
             // 
             // numericUpDown2
             // 
             this.numericUpDown2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numericUpDown2.Location = new System.Drawing.Point(3, 82);
+            this.numericUpDown2.Location = new System.Drawing.Point(3, 77);
             this.numericUpDown2.Margin = new System.Windows.Forms.Padding(3, 1, 0, 0);
             this.numericUpDown2.Maximum = new decimal(new int[] {
             32767,
@@ -1048,13 +1051,24 @@
             // button2
             // 
             this.button2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.button2.Location = new System.Drawing.Point(166, 81);
+            this.button2.Location = new System.Drawing.Point(166, 76);
             this.button2.Margin = new System.Windows.Forms.Padding(0);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(40, 22);
             this.button2.TabIndex = 2;
             this.button2.Text = "Set!";
             this.button2.UseVisualStyleBackColor = true;
+            // 
+            // statusStrip
+            // 
+            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel});
+            this.statusStrip.Location = new System.Drawing.Point(3, 411);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.Size = new System.Drawing.Size(570, 22);
+            this.statusStrip.SizingGrip = false;
+            this.statusStrip.TabIndex = 1;
+            this.statusStrip.Text = "statusStrip1";
             // 
             // tabPageWeapon
             // 
@@ -7381,23 +7395,28 @@
             // viewLogsMenuItem
             // 
             this.viewLogsMenuItem.Name = "viewLogsMenuItem";
-            this.viewLogsMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.viewLogsMenuItem.Size = new System.Drawing.Size(173, 22);
             this.viewLogsMenuItem.Text = "View Logs";
             this.viewLogsMenuItem.Click += new System.EventHandler(this.ViewLogsMenuItem_Click);
             // 
             // githubMenuItem
             // 
             this.githubMenuItem.Name = "githubMenuItem";
-            this.githubMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.githubMenuItem.Size = new System.Drawing.Size(173, 22);
             this.githubMenuItem.Text = "Open GitHub Page";
             this.githubMenuItem.Click += new System.EventHandler(this.GithubMenuItem_Click);
             // 
             // joinOurDiscordToolStripMenuItem
             // 
             this.joinOurDiscordToolStripMenuItem.Name = "joinOurDiscordToolStripMenuItem";
-            this.joinOurDiscordToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.joinOurDiscordToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.joinOurDiscordToolStripMenuItem.Text = "Join Our Discord";
             this.joinOurDiscordToolStripMenuItem.Click += new System.EventHandler(this.JoinOurDiscordToolStripMenuItem_Click);
+            // 
+            // toolStripStatusLabel
+            // 
+            this.toolStripStatusLabel.Name = "toolStripStatusLabel";
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(0, 17);
             // 
             // GUI
             // 
@@ -7407,6 +7426,7 @@
             this.ClientSize = new System.Drawing.Size(584, 486);
             this.Controls.Add(this.mgs2TabControl);
             this.Controls.Add(this.mainMenuStrip);
+            this.Controls.Add(this.statusStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.mainMenuStrip;
             this.Name = "GUI";
@@ -7414,6 +7434,7 @@
             this.Text = "MGS2 Cheat Trainer";
             this.mgs2TabControl.ResumeLayout(false);
             this.tabPageItem.ResumeLayout(false);
+            this.tabPageItem.PerformLayout();
             this.itemLayoutPanel.ResumeLayout(false);
             this.itemGroupBox.ResumeLayout(false);
             this.itemTabTestGroupBox.ResumeLayout(false);
@@ -7426,6 +7447,8 @@
             this.itemTabTestCurrentLayoutPanel.ResumeLayout(false);
             this.itemTabTestCurrentLayoutPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
+            this.statusStrip.ResumeLayout(false);
+            this.statusStrip.PerformLayout();
             this.tabPageWeapon.ResumeLayout(false);
             this.weaponTabLayoutPanel.ResumeLayout(false);
             this.weaponGroupBox.ResumeLayout(false);
@@ -8339,6 +8362,8 @@
         private System.Windows.Forms.ToolStripMenuItem viewLogsMenuItem;
         private System.Windows.Forms.ToolStripMenuItem githubMenuItem;
         private System.Windows.Forms.ToolStripMenuItem joinOurDiscordToolStripMenuItem;
+        private System.Windows.Forms.StatusStrip statusStrip;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
     }
 }
 

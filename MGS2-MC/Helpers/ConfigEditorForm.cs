@@ -108,5 +108,10 @@ namespace MGS2_MC
         {
             _logger.Verbose($"Config editor closing. Cancelling?: {e.Cancel} -- CloseReason: {e.CloseReason}");
         }
+
+        private void ControllerNavigationCheckBox_MouseHover(object sender, EventArgs e)
+        {
+            hoverToolTip.Show("If checked, you can use the 'START' and 'SELECT'(or your controller's equivalent) to pause MGS2 and use the trainer with your controller!", controllerNavigationCheckBox);
+        }
     }
 }

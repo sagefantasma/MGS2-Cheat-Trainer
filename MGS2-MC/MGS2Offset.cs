@@ -30,27 +30,50 @@ namespace MGS2_MC
     {
         //if the region is dynamic(i.e. PlayerOffsetAoB), it will change on area load. The others will only (possibly[hopefully]) change with game updates
         #region Dynamic AoBs
-        internal static byte[] PlayerInfoFinder = new byte[] { 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 01, 00 }; //TODO: determine if this breaks when we have m9 max ammo >255
+        internal static byte[] PlayerInfoFinder = new byte[] { 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 01, 00 };
         #endregion
         #region Static AoBs
         internal static byte[] MenuNamesFinder = new byte[] { 0x6D, 0x61, 0x70, 0x2E, 0x63 }; //TODO: prove this is valid
         internal static byte[] DifficultyAndAreaNames = new byte[] { 0x2F, 0x44, 0x2A }; //TODO: prove this is valid, also this is _concerningly_ short.
         internal static byte[] LifeAndGripNames = new byte[] { 0x72, 0x61, 0x69, 0x64, 0x65, 0x6E, 0x2E, 0x63 };
-        internal static byte[] RayNames = new byte[] { 0x6D, 0x69, 0x6E, 0x69, 0x5F, 0x73, 0x63, 0x6E, 0x2E, 0x63 }; //TODO: prove this is valid
+        internal static byte[] RayNames = new byte[] { 0x6D, 0x69, 0x6E, 0x69, 0x5F, 0x73, 0x63, 0x6E, 0x2E, 0x63 };
         //weapon & item descriptions dispersed through out. seems to start around +00613CCB or so in the memory print?
         internal static byte[] RationMedsBandagePentazeminDescriptions = new byte[] { 0xA4, 0xE3, 0x81, 0xAF, 0xE3, 0x81, 0x9A, 0xE3, 0x81, 0xA0, 0xEE, 0x80, 0x80, 0xE3, 0x80, 0x82, 0x0A }; //TODO: prove this is valid
-        internal static byte[] SolidusName = new byte[] { 0x69, 0x6E, 0x69, 0x74, 0x5F, 0x73, 0x6F, 0x6C, 0x2E, 0x63 }; //TODO: prove this is valid
-        internal static byte[] EmmaO2 = new byte[] { 0x65, 0x6D, 0x61, 0x5F, 0x72, 0x61, 0x69, 0x5F, 0x6F, 0x6E, 0x62, 0x75, 0x5F, 0x65, 0x6E, 0x64 }; //TODO: prove this is valid
-        internal static byte[] FatmanName = new byte[] { 0x77, 0x61, 0x74, 0x65, 0x72, 0x6C, 0x69, 0x6E, 0x65, 0x66, 0x61, 0x6C, 0x6C, 0x2E, 0x63 }; //TODO: prove this is valid
+        internal static byte[] SolidusName = new byte[] { 0x69, 0x6E, 0x69, 0x74, 0x5F, 0x73, 0x6F, 0x6C, 0x2E, 0x63 };
+        internal static byte[] EmmaName = new byte[] { 0x62, 0x72, 0x6B, 0x5F, 0x67, 0x6C, 0x73, 0x5F, 0x69, 0x6E, 0x69, 0x2E, 0x63 };
+        internal static byte[] EmmaO2 = new byte[] { 0x65, 0x6D, 0x61, 0x5F, 0x72, 0x61, 0x69, 0x5F, 0x6F, 0x6E, 0x62, 0x75, 0x5F, 0x65, 0x6E, 0x64 };
+        internal static byte[] FatmanName = new byte[] { 0x77, 0x61, 0x74, 0x65, 0x72, 0x6C, 0x69, 0x6E, 0x65, 0x66, 0x61, 0x6C, 0x6C, 0x2E, 0x63 }; 
         internal static byte[] OlgaName = new byte[] { 0x6F, 0x72, 0x67, 0x61, 0x5F, 0x6C, 0x6E, 0x7A, 0x2E, 0x63 };
-        internal static byte[] HarrierName = new byte[] { 0x68, 0x61, 0x72, 0x5F, 0x76, 0x75, 0x6C, 0x63, 0x2E, 0x63 }; //TODO: prove this is valid
-        internal static byte[] KasatkaName = new byte[] { 0x6B, 0x63, 0x6B, 0x5F, 0x70, 0x6C, 0x61, 0x6E, 0x74, 0x5F, 0x6D, 0x74 }; //TODO: prove this is valid
-        internal static byte[] FortuneName = new byte[] { 0x66, 0x6F, 0x72, 0x74, 0x5F, 0x6F, 0x62, 0x6A, 0x5F, 0x69, 0x6E, 0x69, 0x2E, 0x63 }; //TODO: prove this is valid
+        internal static byte[] HarrierName = new byte[] { 0x68, 0x61, 0x72, 0x5F, 0x76, 0x75, 0x6C, 0x63, 0x2E, 0x63 };
+        internal static byte[] KasatkaName = new byte[] { 0x6B, 0x63, 0x6B, 0x5F, 0x70, 0x6C, 0x61, 0x6E, 0x74, 0x5F, 0x6D, 0x74 };
+        internal static byte[] FortuneName = new byte[] { 0x66, 0x6F, 0x72, 0x74, 0x5F, 0x6F, 0x62, 0x6A, 0x5F, 0x69, 0x6E, 0x69, 0x2E, 0x63 };
+        internal static byte[] Vamp02 = new byte[] { 0x76, 0x61, 0x6D, 0x70, 0x2E, 0x63 };
         //00 00 00 78 00 08 00 <-- possibly an AoB for HP/Magazine modificaitons? might have to key off of LIFE?(or at least whatever it is called at that moment, within the games memory block)
         internal static byte[] HealthMod = new byte[] { 0x00, 0x00, 0x00, 0x78, 0x00, 0x08, 0x00 }; //TODO: prove this is valid
         //clipcurrentCount == -114 from the above AoB, 4bytes long. HP mod is DIRECTLY after, it seems?
         internal static byte[] StageInfo = new byte[] { 0x10, 0x0E, 0x18, 0x15, 0x20, 0x1C };
         //current "stage" == -267 from the above AoB, 5 bytes long. If it has r_tnk, it is Snake. if it is r_plt, it is raiden :)
+
+
+        /*new offsets and shit found 4/17/24:
+        * Offsets from AoBs:
+        * MaxLife is -140 bytes from PlayerInfoFinder (2bytes)
+        * Current(unmodifiable) health is -142 bytes from PlayerInfoFinder (2bytes)
+        * Player o2 is -138 bytes from PlayerInfoFinder (2 bytes)
+        * Snake grip level is -91~(0A) bytes from PlayerInfoFinder (2 bytes)
+        * Raiden grip level is -89~ bytes from PlayerInfoFinder (2 bytes)
+        * 
+        * New AoBs:
+        * ED 26 61 F7 7F 00 00 <--- current health + grip AoB? (this is also outside of the MGS2.exe, so idk if it will work)
+        *               - ED 26 61 F7 7F 00 00 E0 C5 53 6D 01 02 00 00 E6 DC 28 for NG Hard as Snake at start of game
+        *               - ED 26 61 F7 7F 00 00 00 29 36 6D 01 02 00 00 E6 DC 28 for NG Hard as Snake in Hold 2
+        *               - ED 26 61 F7 7F 00 00 F0 29 36 6D 01 02 00 00 E6 DC 28 for NG Hard as Snake in Hold 2 after reentering once
+        *               - ED 26 61 F7 7F 00 00 80 A0 5E 6D 01 02 00 00 27 15 9B for NG++ Normal as Raiden at Shell 1-2 Connecting Bridge
+        *               - ED 26 61 F7 7F 00 00 70 C8 64 6D 01 02 00 00 27 15 9B for NG Easy as Raiden at Shell A Roof(Plant only)
+        *               
+        *      current health is either + 41 or 42 bytes from the above AoB
+        *      current grip value is either -1169 or -1168 above the above aob
+        */
         #endregion
     }
 
@@ -60,9 +83,9 @@ namespace MGS2_MC
         #region String offsets
         #region Calculated From LifeAndGripNames
         public static readonly MemoryOffset LIFE_TEXT = new MemoryOffset(9, 12); 
-        public static readonly MemoryOffset GRIP_Lv1_TEXT = new MemoryOffset(21, 28); //TODO: prove this is valid
-        public static readonly MemoryOffset GRIP_Lv2_TEXT = new MemoryOffset(-156, -149); //TODO: prove this is valid
-        public static readonly MemoryOffset GRIP_Lv3_TEXT = new MemoryOffset(-172, -165); //TODO: prove this is valid
+        public static readonly MemoryOffset GRIP_Lv1_TEXT = new MemoryOffset(21, 28);
+        public static readonly MemoryOffset GRIP_Lv2_TEXT = new MemoryOffset(-156, -149);
+        public static readonly MemoryOffset GRIP_Lv3_TEXT = new MemoryOffset(-172, -165);
         #endregion
 
         #region Calculated From RationMedsBandagePentazeminDescriptions
@@ -70,8 +93,7 @@ namespace MGS2_MC
         #endregion
 
         #region Calculated From RayNames
-        public static readonly MemoryOffset RAY_01 = new MemoryOffset(78, 85); //TODO: prove these are valid (these values are using the endByte, cuz im a fool)
-        //public static readonly MemoryBytes RAY_01 = new MemoryBytes(68, 75); //This should work if the uncommented one does not
+        public static readonly MemoryOffset RAY_01 = new MemoryOffset(70, 77);
         public static readonly MemoryOffset RAY_02 = new MemoryOffset(RAY_01.Start + 16, RAY_01.End + 16);
         public static readonly MemoryOffset RAY_03 = new MemoryOffset(RAY_02.Start + 16, RAY_02.End + 16);
         public static readonly MemoryOffset RAY_04 = new MemoryOffset(RAY_03.Start + 16, RAY_03.End + 16);
@@ -99,20 +121,24 @@ namespace MGS2_MC
         #endregion
 
         #region Calculated From SolidusName
-        public static readonly MemoryOffset SOLIDUS_HP_TEXT = new MemoryOffset(61, 67); //TODO: prove this is valid
+        public static readonly MemoryOffset SOLIDUS_HP_TEXT = new MemoryOffset(60, 66);
         #endregion
 
         #region Calculated From EmmaO2
-        public static readonly MemoryOffset EMMA_O2_TEXT = new MemoryOffset(25, 31); //TODO: prove this is valid
-        public static readonly MemoryOffset RAIDEN_O2_TEXT = new MemoryOffset(137, 138); //TODO: prove this is valid
+        public static readonly MemoryOffset EMMA_O2_TEXT = new MemoryOffset(24, 30);
+        public static readonly MemoryOffset RAIDEN_O2_TEXT = new MemoryOffset(136, 137);
+        #endregion
+
+        #region Calculated From EmmaName
+        public static readonly MemoryOffset EMMA_HP_TEXT = new MemoryOffset(390, 393);
         #endregion
 
         #region Calculated From FatmanName
-        public static readonly MemoryOffset FATMAN_HP_TEXT = new MemoryOffset(89, 94); //TODO: validate
+        public static readonly MemoryOffset FATMAN_HP_TEXT = new MemoryOffset(88, 93);
         #endregion
 
         #region Calculated From OlgaName
-        public static readonly MemoryOffset OLGA_HP_TEXT = new MemoryOffset(293, 296); //TODO: validate
+        public static readonly MemoryOffset OLGA_HP_TEXT = new MemoryOffset(292, 295);
                                                                                        //there is also a meryl string right next to OLGA... but idk what it is used for so i'm not bothering to add it atm
                                                                                        //guessing the meryl^^ string is related to the OLGA boss fight!
         #endregion
@@ -126,7 +152,12 @@ namespace MGS2_MC
         #endregion
 
         #region Calculated From FortuneName
-        public static readonly MemoryOffset FORTUNE_HP_TEXT = new MemoryOffset(1189, 1195); //TODO: validate
+        public static readonly MemoryOffset FORTUNE_HP_TEXT = new MemoryOffset(1188, 1194);
+        public static readonly MemoryOffset VAMP_HP_TEXT = new MemoryOffset(1908, 1911);
+        #endregion
+
+        #region Calculated From Vamp02
+        public static readonly MemoryOffset VAMP_02_TEXT = new MemoryOffset(8, 14);
         #endregion
         #endregion
 
@@ -134,14 +165,6 @@ namespace MGS2_MC
         #region Calculated From PlayerInfo
         public static readonly MemoryOffset BASE_WEAPON = new MemoryOffset(-42, 0); //if a "new" playerOffsetBytes is chosen, only need to update this value and the item offset will update.
         public static readonly MemoryOffset BASE_ITEM = new MemoryOffset(BASE_WEAPON.Start + 144, BASE_WEAPON.Start + 144 + 80);
-        public static readonly MemoryOffset SHOT_COUNT = new MemoryOffset(-96); //TODO: prove this is valid
-        public static readonly MemoryOffset HOLD_UP_COUNT = new MemoryOffset(5108); //TODO: prove this is valid, prolly isnt tbqh
-        public static readonly MemoryOffset PULL_UP_COUNT = new MemoryOffset(-90); //TODO: prove this is valid 
-        public static readonly MemoryOffset PLAYER_COLD = new MemoryOffset(-128); //TODO: prove this is valid
-        public static readonly MemoryOffset CURRENT_EQUIPPED_ITEM = new MemoryOffset(-130); //TODO: prove this is valid
-        public static readonly MemoryOffset CURRENT_EQUIPPED_WEAPON = new MemoryOffset(-68); //TODO: prove this is valid
-        public static readonly MemoryOffset PLAYER_STANCE = new MemoryOffset(-134); //TODO: prove this is valid
-        public static readonly MemoryOffset PLAYER_SNEEZING = new MemoryOffset(-108, -107); //TODO: prove this is valid
         #endregion
 
         #region Calculated From HealthMod
@@ -150,17 +173,27 @@ namespace MGS2_MC
         #endregion
 
         #region Calculated From StageInfo
-        public static readonly MemoryOffset CURRENT_STAGE = new MemoryOffset(-266, -262); //TODO: prove this is valid
+        public static readonly MemoryOffset CURRENT_STAGE = new MemoryOffset(-266, -262);
+        public static readonly MemoryOffset CURRENT_EQUIPPED_ITEM = new MemoryOffset(-32); //TODO: prove this is valid
+        public static readonly MemoryOffset CURRENT_EQUIPPED_WEAPON = new MemoryOffset(-34); //TODO: prove this is valid
+        public static readonly MemoryOffset SHOT_COUNT = new MemoryOffset(26); //TODO: prove this is valid
+        public static readonly MemoryOffset PULL_UP_COUNT = new MemoryOffset(8); //TODO: prove this is valid
+        public static readonly MemoryOffset DAMAGE_TAKEN = new MemoryOffset(32); //TODO: prove this is valid
+        public static readonly MemoryOffset KILL_COUNT = new MemoryOffset(30); //TODO: prove this is valid
+        public static readonly MemoryOffset ALERT_COUNT = new MemoryOffset(28); //TODO: prove this is valid
+        public static readonly MemoryOffset PLAY_TIME = new MemoryOffset(20, 23); //TODO: prove this is valid
+        public static readonly MemoryOffset SAVE_COUNT = new MemoryOffset(16); //TODO: prove this is valid
+        public static readonly MemoryOffset CONTINUE_COUNT = new MemoryOffset(12); //TODO: prove this is valid
+        public static readonly MemoryOffset SPECIAL_ITEMS_USED = new MemoryOffset(5232); //TODO: prove this is valid
+        public static readonly MemoryOffset RATIONS_USED = new MemoryOffset(5226); //TODO: prove this is valid(i really, really doubt it...)
         #endregion
 
-        #region Calculated from Unknown Finder AoBs
-        public const int TIMES_FOUND_GAME_LAUNCH_OFFSET = 0x17B786C; //TODO: need to get an OffsetFinderAoB for this and perform offset calculations
-        public const int HOLD_UPS_GAME_LAUNCH_OFFSET = 0x1673DB0; //TODO: need to get an OffsetFinderAoB for this and perform offset calculations
-        public const int CHOKE_OUTS_GAME_LAUNCH_OFFSET = 0x1673DBC; //TODO: need to get an OffsetFinderAoB for this and perform offset calculations
+        #region Calculated from Unknown Finder AoBs    
+        public static readonly MemoryOffset PLAYER_COLD = new MemoryOffset(-128); //TODO: prove this is valid, if even useful        
+        public static readonly MemoryOffset PLAYER_STANCE = new MemoryOffset(-134); //TODO: prove this is valid, if even useful
+        public static readonly MemoryOffset PLAYER_SNEEZING = new MemoryOffset(-108, -107); //TODO: prove this is valid, if even useful
 
         //TODO: add more of the game stats here
-
-
         //These values are PRESENTLY unknown
         //internal const int HealthPointerOffset = 0x00AE49D8; 
         //internal const int CurrentHealthOffset = 0x684;
@@ -169,6 +202,10 @@ namespace MGS2_MC
         //internal static IntPtr HudOffset = (IntPtr)0xADB40F;
         //internal static IntPtr CamOffset = (IntPtr)0xAE3B37;
         //internal static IntPtr AlertStatusOffset = (IntPtr)0x1D9C3D8;
+        
+
+        
+
         #endregion
         #endregion
         #endregion

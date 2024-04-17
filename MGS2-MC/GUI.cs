@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Windows.Forms;
 
 namespace MGS2_MC
@@ -832,182 +833,182 @@ namespace MGS2_MC
         #region Items Button Functions
         private void RationCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Ration.ToggleItem(rationCheckBox.Checked);
+            MGS2UsableObjects.Ration.ToggleItem(rationCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void RationCurrentBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Ration.UpdateCurrentCount(CurrentRationValue());
+            MGS2UsableObjects.Ration.UpdateCurrentCount(CurrentRationValue(), _logger, toolStripStatusLabel);
         }
 
         private void RationMaxBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Ration.UpdateMaxCount(MaxRationValue());
+            MGS2UsableObjects.Ration.UpdateMaxCount(MaxRationValue(), _logger, toolStripStatusLabel);
         }
 
         private void BandageCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Bandage.ToggleItem(bandageCheckBox.Checked);
+            MGS2UsableObjects.Bandage.ToggleItem(bandageCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void BandageCurrentBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Bandage.UpdateCurrentCount(CurrentBandageValue());
+            MGS2UsableObjects.Bandage.UpdateCurrentCount(CurrentBandageValue(), _logger, toolStripStatusLabel);
         }
 
         private void BandageMaxBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Bandage.UpdateMaxCount(MaxBandageValue());
+            MGS2UsableObjects.Bandage.UpdateMaxCount(MaxBandageValue(), _logger, toolStripStatusLabel);
         }
 
         private void PentazeminCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Pentazemin.ToggleItem(pentazeminCheckBox.Checked);
+            MGS2UsableObjects.Pentazemin.ToggleItem(pentazeminCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void PentazeminCurrentBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Pentazemin.UpdateCurrentCount(CurrentPentazeminCount());
+            MGS2UsableObjects.Pentazemin.UpdateCurrentCount(CurrentPentazeminCount(), _logger, toolStripStatusLabel);
         }
 
         private void PentazeminMaxBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Pentazemin.UpdateMaxCount(MaxPentazeminCount());
+            MGS2UsableObjects.Pentazemin.UpdateMaxCount(MaxPentazeminCount(), _logger, toolStripStatusLabel);
         }
 
         private void CardBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Card.SetLevel(CardSecurityLevel());
+            MGS2UsableObjects.Card.SetLevel(CardSecurityLevel(), _logger, toolStripStatusLabel);
         }
 
         private void CardCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Card.ToggleItem(cardCheckBox.Checked);
+            MGS2UsableObjects.Card.ToggleItem(cardCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void Binos1CheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.SnakeScope.ToggleItem(scope1CheckBox.Checked);
+            MGS2UsableObjects.SnakeScope.ToggleItem(scope1CheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void Binos2CheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.RaidenScope.ToggleItem(scope2CheckBox.Checked);
+            MGS2UsableObjects.RaidenScope.ToggleItem(scope2CheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void Camera1CheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Camera1.ToggleItem(camera1CheckBox.Checked);
+            MGS2UsableObjects.Camera1.ToggleItem(camera1CheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void DigitalCameraCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.DigitalCamera.ToggleItem(digitalCameraCheckBox.Checked);
+            MGS2UsableObjects.DigitalCamera.ToggleItem(digitalCameraCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void NvgCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.NightVisionGoggles.ToggleItem(nvgCheckBox.Checked);
+            MGS2UsableObjects.NightVisionGoggles.ToggleItem(nvgCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void ThermalCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.ThermalGoggles.ToggleItem(thermalCheckBox.Checked);
+            MGS2UsableObjects.ThermalGoggles.ToggleItem(thermalCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void BodyArmorCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.BodyArmor.ToggleItem(bodyArmorCheckBox.Checked);
+            MGS2UsableObjects.BodyArmor.ToggleItem(bodyArmorCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void MineDetectorCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.MineDetector.ToggleItem(mineDetectorCheckBox.Checked);
+            MGS2UsableObjects.MineDetector.ToggleItem(mineDetectorCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void ApSensorCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.APSensor.ToggleItem(apSensorCheckBox.Checked);
+            MGS2UsableObjects.APSensor.ToggleItem(apSensorCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void SensorACheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.SensorA.ToggleItem(sensorACheckBox.Checked);
+            MGS2UsableObjects.SensorA.ToggleItem(sensorACheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void SensorBCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.SensorB.ToggleItem(sensorBCheckBox.Checked);
+            MGS2UsableObjects.SensorB.ToggleItem(sensorBCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void PhoneCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Phone.ToggleItem(phoneCheckBox.Checked);
+            MGS2UsableObjects.Phone.ToggleItem(phoneCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void ColdMedsCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.ColdMedicine.ToggleItem(coldMedsCheckBox.Checked);
+            MGS2UsableObjects.ColdMedicine.ToggleItem(coldMedsCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void CigarettesCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Cigarettes.ToggleItem(cigarettesCheckBox.Checked);
+            MGS2UsableObjects.Cigarettes.ToggleItem(cigarettesCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void MoDiscCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.MODisc.ToggleItem(moDiscCheckBox.Checked);
+            MGS2UsableObjects.MODisc.ToggleItem(moDiscCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void SocomSupCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.SocomSuppressor.ToggleItem(socomSupCheckBox.Checked);
+            MGS2UsableObjects.SocomSuppressor.ToggleItem(socomSupCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void UspSupCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.USPSuppressor.ToggleItem(uspSupCheckBox.Checked);
+            MGS2UsableObjects.USPSuppressor.ToggleItem(uspSupCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void AkSupCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.AKSuppressor.ToggleItem(akSupCheckBox.Checked);
+            MGS2UsableObjects.AKSuppressor.ToggleItem(akSupCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void Box1CheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Box1.ToggleItem(box1CheckBox.Checked);
+            MGS2UsableObjects.Box1.ToggleItem(box1CheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void Box2CheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Box2.ToggleItem(box2CheckBox.Checked);
+            MGS2UsableObjects.Box2.ToggleItem(box2CheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void Box3CheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Box3.ToggleItem(box3CheckBox.Checked);
+            MGS2UsableObjects.Box3.ToggleItem(box3CheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void Box4CheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Box4.ToggleItem(box4CheckBox.Checked);
+            MGS2UsableObjects.Box4.ToggleItem(box4CheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void Box5CheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Box5.ToggleItem(box5CheckBox.Checked);
+            MGS2UsableObjects.Box5.ToggleItem(box5CheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void WetBoxCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.WetBox.ToggleItem(wetBoxCheckBox.Checked);
+            MGS2UsableObjects.WetBox.ToggleItem(wetBoxCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void BduCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.BDU.ToggleItem(bduCheckBox.Checked);
+            MGS2UsableObjects.BDU.ToggleItem(bduCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void BduMaskCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -1017,37 +1018,37 @@ namespace MGS2_MC
 
         private void BandanaCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Bandana.ToggleItem(bandanaCheckBox.Checked);
+            MGS2UsableObjects.Bandana.ToggleItem(bandanaCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void InfinityWigCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.InfinityWig.ToggleItem(infinityWigCheckBox.Checked);
+            MGS2UsableObjects.InfinityWig.ToggleItem(infinityWigCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void BlueWigCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.BlueWig.ToggleItem(blueWigCheckBox.Checked);
+            MGS2UsableObjects.BlueWig.ToggleItem(blueWigCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void OrangeWigCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.OrangeWig.ToggleItem(orangeWigCheckBox.Checked);
+            MGS2UsableObjects.OrangeWig.ToggleItem(orangeWigCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void StealthCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Stealth.ToggleItem(stealthCheckBox.Checked);
+            MGS2UsableObjects.Stealth.ToggleItem(stealthCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void DogTagsCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.DogTags.ToggleItem(dogTagsCheckBox.Checked);
+            MGS2UsableObjects.DogTags.ToggleItem(dogTagsCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void ShaverCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Shaver.ToggleItem(shaverCheckBox.Checked);
+            MGS2UsableObjects.Shaver.ToggleItem(shaverCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void ColdMedsCurrentBtn_Click(object sender, EventArgs e)
@@ -1064,204 +1065,204 @@ namespace MGS2_MC
 
         private void box1Btn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Box1.SetDurability((short)box1UpDown.Value);
+            MGS2UsableObjects.Box1.SetDurability((short)box1UpDown.Value, _logger, toolStripStatusLabel);
         }
 
         private void box2Btn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Box2.SetDurability((short)box2UpDown.Value);
+            MGS2UsableObjects.Box2.SetDurability((short)box2UpDown.Value, _logger, toolStripStatusLabel);
         }
 
         private void box3Btn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Box3.SetDurability((short)box3UpDown.Value);
+            MGS2UsableObjects.Box3.SetDurability((short)box3UpDown.Value, _logger, toolStripStatusLabel);
         }
 
         private void box4Btn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Box4.SetDurability((short)box4UpDown.Value);
+            MGS2UsableObjects.Box4.SetDurability((short)box4UpDown.Value, _logger, toolStripStatusLabel);
         }
 
         private void box5Btn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Box5.SetDurability((short)box5UpDown.Value);
+            MGS2UsableObjects.Box5.SetDurability((short)box5UpDown.Value, _logger, toolStripStatusLabel);
         }
 
         private void wetBoxBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.WetBox.SetDurability((short)wetBoxUpDown.Value);
+            MGS2UsableObjects.WetBox.SetDurability((short)wetBoxUpDown.Value, _logger, toolStripStatusLabel);
         }
         #endregion
 
         #region Weapons Button Functions
         private void AkMaxBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.AKS74u.UpdateMaxAmmoCount(AKMaxAmmoCount());
+            MGS2UsableObjects.AKS74u.UpdateMaxAmmoCount(AKMaxAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void M9CurrentBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.M9.UpdateCurrentAmmoCount(M9CurrentAmmoCount());
+            MGS2UsableObjects.M9.UpdateCurrentAmmoCount(M9CurrentAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void M9MaxBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.M9.UpdateMaxAmmoCount(M9MaxAmmoCount());
+            MGS2UsableObjects.M9.UpdateMaxAmmoCount(M9MaxAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void SocomCurrentBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.SOCOM.UpdateCurrentAmmoCount(SOCOMCurrentAmmoCount());
+            MGS2UsableObjects.SOCOM.UpdateCurrentAmmoCount(SOCOMCurrentAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void SocomMaxBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.SOCOM.UpdateMaxAmmoCount(SOCOMMaxAmmoCount());
+            MGS2UsableObjects.SOCOM.UpdateMaxAmmoCount(SOCOMMaxAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void UspCurrentBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.USP.UpdateCurrentAmmoCount(USPCurrentAmmoCount());
+            MGS2UsableObjects.USP.UpdateCurrentAmmoCount(USPCurrentAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void UspMaxBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.USP.UpdateMaxAmmoCount(USPMaxAmmoCount());
+            MGS2UsableObjects.USP.UpdateMaxAmmoCount(USPMaxAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void ChaffCurrentBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.ChaffGrenade.UpdateCurrentAmmoCount(ChaffCurrentAmmoCount());
+            MGS2UsableObjects.ChaffGrenade.UpdateCurrentAmmoCount(ChaffCurrentAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void ChaffMaxBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.ChaffGrenade.UpdateMaxAmmoCount(ChaffMaxAmmoCount());
+            MGS2UsableObjects.ChaffGrenade.UpdateMaxAmmoCount(ChaffMaxAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void StunCurrentBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.StunGrenade.UpdateCurrentAmmoCount(StunCurrentAmmoCount());
+            MGS2UsableObjects.StunGrenade.UpdateCurrentAmmoCount(StunCurrentAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void StunMaxBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.StunGrenade.UpdateMaxAmmoCount(StunMaxAmmoCount());
+            MGS2UsableObjects.StunGrenade.UpdateMaxAmmoCount(StunMaxAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void GrenadeCurrentBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Grenade.UpdateCurrentAmmoCount(GrenadeCurrentAmmoCount());
+            MGS2UsableObjects.Grenade.UpdateCurrentAmmoCount(GrenadeCurrentAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void GrenadeMaxBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Grenade.UpdateMaxAmmoCount(GrenadeMaxAmmoCount());
+            MGS2UsableObjects.Grenade.UpdateMaxAmmoCount(GrenadeMaxAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void MagazineCurrentBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Magazine.UpdateCurrentAmmoCount(MagazineCurrentAmmoCount());
+            MGS2UsableObjects.Magazine.UpdateCurrentAmmoCount(MagazineCurrentAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void MagazineMaxBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Magazine.UpdateMaxAmmoCount(MagazineMaxAmmoCount());
+            MGS2UsableObjects.Magazine.UpdateMaxAmmoCount(MagazineMaxAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void AkCurrentBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.AKS74u.UpdateCurrentAmmoCount(AKCurrentAmmoCount());
+            MGS2UsableObjects.AKS74u.UpdateCurrentAmmoCount(AKCurrentAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void M4CurrentBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.M4.UpdateCurrentAmmoCount(M4CurrentAmmoCount());
+            MGS2UsableObjects.M4.UpdateCurrentAmmoCount(M4CurrentAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void M4MaxBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.M4.UpdateMaxAmmoCount(M4MaxAmmoCount());
+            MGS2UsableObjects.M4.UpdateMaxAmmoCount(M4MaxAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void Psg1CurrentBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.PSG1.UpdateCurrentAmmoCount(PSG1CurrentAmmoCount());
+            MGS2UsableObjects.PSG1.UpdateCurrentAmmoCount(PSG1CurrentAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void Psg1MaxBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.PSG1.UpdateMaxAmmoCount(PSG1MaxAmmoCount());
+            MGS2UsableObjects.PSG1.UpdateMaxAmmoCount(PSG1MaxAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void Psg1TCurrentBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.PSG1T.UpdateCurrentAmmoCount(PSG1TCurrentAmmoCount());
+            MGS2UsableObjects.PSG1T.UpdateCurrentAmmoCount(PSG1TCurrentAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void Psg1TMaxBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.PSG1T.UpdateMaxAmmoCount(PSG1TMaxAmmoCount());
+            MGS2UsableObjects.PSG1T.UpdateMaxAmmoCount(PSG1TMaxAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void Rgb6CurrentBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.RGB6.UpdateCurrentAmmoCount(RGB6CurrentAmmoCount());
+            MGS2UsableObjects.RGB6.UpdateCurrentAmmoCount(RGB6CurrentAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void Rgb6MaxBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.RGB6.UpdateMaxAmmoCount(RGB6MaxAmmoCount());
+            MGS2UsableObjects.RGB6.UpdateMaxAmmoCount(RGB6MaxAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void NikitaCurrentBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Nikita.UpdateCurrentAmmoCount(NikitaCurrentAmmoCount());
+            MGS2UsableObjects.Nikita.UpdateCurrentAmmoCount(NikitaCurrentAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void NikitaMaxBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Nikita.UpdateMaxAmmoCount(NikitaMaxAmmoCount());
+            MGS2UsableObjects.Nikita.UpdateMaxAmmoCount(NikitaMaxAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void StingerCurrentBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Stinger.UpdateCurrentAmmoCount(StingerCurrentAmmoCount());
+            MGS2UsableObjects.Stinger.UpdateCurrentAmmoCount(StingerCurrentAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void StingerMaxBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Stinger.UpdateMaxAmmoCount(StingerMaxAmmoCount());
+            MGS2UsableObjects.Stinger.UpdateMaxAmmoCount(StingerMaxAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void ClaymoreCurrentBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Claymore.UpdateCurrentAmmoCount(ClaymoreCurrentAmmoCount());
+            MGS2UsableObjects.Claymore.UpdateCurrentAmmoCount(ClaymoreCurrentAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void ClaymoreMaxBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Claymore.UpdateMaxAmmoCount(ClaymoreMaxAmmoCount());
+            MGS2UsableObjects.Claymore.UpdateMaxAmmoCount(ClaymoreMaxAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void C4CurrentBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.C4.UpdateCurrentAmmoCount(ClaymoreCurrentAmmoCount());
+            MGS2UsableObjects.C4.UpdateCurrentAmmoCount(ClaymoreCurrentAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void C4MaxBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.C4.UpdateMaxAmmoCount(ClaymoreMaxAmmoCount());
+            MGS2UsableObjects.C4.UpdateMaxAmmoCount(ClaymoreMaxAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void BookCurrentBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Book.UpdateCurrentAmmoCount(BookCurrentAmmoCount());
+            MGS2UsableObjects.Book.UpdateCurrentAmmoCount(BookCurrentAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void BookMaxBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Book.UpdateMaxAmmoCount(BookMaxAmmoCount());
+            MGS2UsableObjects.Book.UpdateMaxAmmoCount(BookMaxAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void HfBladeLethalBtn_Click(object sender, EventArgs e)
@@ -1276,122 +1277,130 @@ namespace MGS2_MC
 
         private void M9CheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.M9.ToggleWeapon(m9CheckBox.Checked);
+            MGS2UsableObjects.M9.ToggleWeapon(m9CheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void SocomCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.SOCOM.ToggleWeapon(socomCheckBox.Checked);
+            MGS2UsableObjects.SOCOM.ToggleWeapon(socomCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void UspCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.USP.ToggleWeapon(uspCheckBox.Checked);
+            MGS2UsableObjects.USP.ToggleWeapon(uspCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void ChaffCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.ChaffGrenade.ToggleWeapon(chaffCheckBox.Checked);
+            MGS2UsableObjects.ChaffGrenade.ToggleWeapon(chaffCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void StunCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.StunGrenade.ToggleWeapon(stunCheckBox.Checked);
+            MGS2UsableObjects.StunGrenade.ToggleWeapon(stunCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void GrenadeCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Grenade.ToggleWeapon(grenadeCheckBox.Checked);
+            MGS2UsableObjects.Grenade.ToggleWeapon(grenadeCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void MagazineCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Magazine.ToggleWeapon(magazineCheckBox.Checked);
+            MGS2UsableObjects.Magazine.ToggleWeapon(magazineCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void AkCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.AKS74u.ToggleWeapon(akCheckBox.Checked);
+            MGS2UsableObjects.AKS74u.ToggleWeapon(akCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void M4CheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.M4.ToggleWeapon(m4CheckBox.Checked);
+            MGS2UsableObjects.M4.ToggleWeapon(m4CheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void Psg1CheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.PSG1.ToggleWeapon(psg1CheckBox.Checked);
+            MGS2UsableObjects.PSG1.ToggleWeapon(psg1CheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void Psg1TCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.PSG1T.ToggleWeapon(psg1TCheckBox.Checked);
+            MGS2UsableObjects.PSG1T.ToggleWeapon(psg1TCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void Rgb6CheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.RGB6.ToggleWeapon(rgb6CheckBox.Checked);
+            MGS2UsableObjects.RGB6.ToggleWeapon(rgb6CheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void NikitaCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Nikita.ToggleWeapon(nikitaCheckBox.Checked);
+            MGS2UsableObjects.Nikita.ToggleWeapon(nikitaCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void StingerCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Stinger.ToggleWeapon(stingerCheckBox.Checked);
+            MGS2UsableObjects.Stinger.ToggleWeapon(stingerCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void ClaymoreCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Claymore.ToggleWeapon(claymoreCheckBox.Checked);
+            MGS2UsableObjects.Claymore.ToggleWeapon(claymoreCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void C4CheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.C4.ToggleWeapon(c4CheckBox.Checked);
+            MGS2UsableObjects.C4.ToggleWeapon(c4CheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void BookCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Book.ToggleWeapon(bookCheckBox.Checked);
+            MGS2UsableObjects.Book.ToggleWeapon(bookCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void CoolantCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Coolant.ToggleWeapon(coolantCheckBox.Checked);
+            MGS2UsableObjects.Coolant.ToggleWeapon(coolantCheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void Dmic1CheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.DMic1.ToggleWeapon(dmic1CheckBox.Checked);
+            MGS2UsableObjects.DMic1.ToggleWeapon(dmic1CheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void Dmic2CheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.DMic2.ToggleWeapon(dmic2CheckBox.Checked);
+            MGS2UsableObjects.DMic2.ToggleWeapon(dmic2CheckBox.Checked, _logger, toolStripStatusLabel);
         }
 
         private void HfBladeCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            MGS2UsableObjects.HighFrequencyBlade.ToggleWeapon(hfBladeCheckBox.Checked);
+            MGS2UsableObjects.HighFrequencyBlade.ToggleWeapon(hfBladeCheckBox.Checked, _logger, toolStripStatusLabel);
         }
         #endregion
 
         private void StringsListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (GuiLoaded == true)
+            try
             {
-                StaticGuiReference.Invoke(new Action(() =>
+                if (GuiLoaded == true)
                 {
-                    MGS2Strings.MGS2String selectedString = stringsListBox.SelectedItem as MGS2Strings.MGS2String;
-                    StaticGuiReference.basicNameTextBox.Text = selectedString.CurrentText;
-                    StaticGuiReference.basicNameTextBox.MaxLength = selectedString.MemoryOffset.Length;
-                    StaticGuiReference.characterLimitLabel.Text = selectedString.MemoryOffset.Length.ToString();
-                    StaticGuiReference.basicNameGroupBox.Text = selectedString.Tag;
-                }));
+                    StaticGuiReference?.Invoke(new Action(() =>
+                    {
+                        MGS2Strings.MGS2String selectedString = stringsListBox.SelectedItem as MGS2Strings.MGS2String;
+                        StaticGuiReference.basicNameTextBox.Text = selectedString.CurrentText;
+                        StaticGuiReference.basicNameTextBox.MaxLength = selectedString.MemoryOffset.Length;
+                        StaticGuiReference.characterLimitLabel.Text = selectedString.MemoryOffset.Length.ToString();
+                        StaticGuiReference.basicNameGroupBox.Text = selectedString.Tag;
+                    }));
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Failed to select string from sender {JsonSerializer.Serialize(sender)} and args {JsonSerializer.Serialize(e)}: {ex}");
+                MessageBox.Show(@"Failed to select string. If this error persists, please restart the application.");
             }
         }
 
@@ -1400,7 +1409,13 @@ namespace MGS2_MC
             try
             {
                 MGS2Strings.MGS2String selectedString = stringsListBox.SelectedItem as MGS2Strings.MGS2String;
+                _logger.Verbose($"Changing {selectedString.Tag} in memory...");
+                toolStripStatusLabel.Text = $"Finding {selectedString.Tag} in memory...";
+                selectedString.CurrentText = MGS2MemoryManager.ReadGameString(selectedString);
                 MGS2MemoryManager.UpdateGameString(selectedString, basicNameTextBox.Text);
+                toolStripStatusLabel.Text = $"Set {selectedString.Tag} from {selectedString.CurrentText} to {basicNameTextBox.Text} successfully!";
+                selectedString.CurrentText = basicNameTextBox.Text;
+                _logger.Verbose($"Successfully changed {selectedString.Tag} in memory");
             }
             catch(Exception ex)
             {
@@ -1411,22 +1426,30 @@ namespace MGS2_MC
 
         private void ItemListBox_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            ItemListBox_Click();
+           ItemListBox_Click();            
         }
 
         private static void ItemListBox_Click()
         {
-            StaticGuiReference.Invoke(new Action(() =>
+            try
             {
-                if (StaticGuiReference.itemGroupBox.Controls.Count > 0)
-                    StaticGuiReference.itemGroupBox.Controls[0].Visible = false;
-                StaticGuiReference.itemGroupBox.Controls.Clear();
+                StaticGuiReference.Invoke(new Action(() =>
+                    {
+                        if (StaticGuiReference.itemGroupBox.Controls.Count > 0)
+                            StaticGuiReference.itemGroupBox.Controls[0].Visible = false;
+                        StaticGuiReference.itemGroupBox.Controls.Clear();
 
-                GuiObject itemObject = itemGuiObjectList.First(guiObject => guiObject.Name == (StaticGuiReference.itemListBox.SelectedItem as GuiObject).Name);
+                        GuiObject itemObject = itemGuiObjectList.First(guiObject => guiObject.Name == (StaticGuiReference.itemListBox.SelectedItem as GuiObject).Name);
 
-                StaticGuiReference.itemGroupBox.Controls.Add(itemObject.AssociatedControl);
-                itemObject.AssociatedControl.Visible = true;
-            }));
+                        StaticGuiReference.itemGroupBox.Controls.Add(itemObject.AssociatedControl);
+                        itemObject.AssociatedControl.Visible = true;
+                    }));
+            }
+            catch (Exception ex)
+            {
+                StaticGuiReference._logger.Error($"Failed to select item from itemListBox: {ex}");
+                MessageBox.Show(@"Failed to select item from itemListBox. If this error persists, please restart the application.");
+            }
         }
 
         private void weaponListBox_MouseDoubleClick(object sender, MouseEventArgs e)
@@ -1436,42 +1459,79 @@ namespace MGS2_MC
 
         private static void WeaponListBox_Click()
         {
-            StaticGuiReference.Invoke(new Action(() =>
+            try
             {
-                if (StaticGuiReference.weaponGroupBox.Controls.Count > 0)
-                    StaticGuiReference.weaponGroupBox.Controls[0].Visible = false;
-                StaticGuiReference.weaponGroupBox.Controls.Clear();
+                StaticGuiReference.Invoke(new Action(() =>
+                {
+                    if (StaticGuiReference.weaponGroupBox.Controls.Count > 0)
+                        StaticGuiReference.weaponGroupBox.Controls[0].Visible = false;
+                    StaticGuiReference.weaponGroupBox.Controls.Clear();
 
-                GuiObject weaponObject = weaponGuiObjectList.First(guiObject => guiObject.Name == (StaticGuiReference.weaponListBox.SelectedItem as GuiObject).Name);
+                    GuiObject weaponObject = weaponGuiObjectList.First(guiObject => guiObject.Name == (StaticGuiReference.weaponListBox.SelectedItem as GuiObject).Name);
 
-                StaticGuiReference.weaponGroupBox.Controls.Add(weaponObject.AssociatedControl);
-                weaponObject.AssociatedControl.Visible = true;
-            }));
+                    StaticGuiReference.weaponGroupBox.Controls.Add(weaponObject.AssociatedControl);
+                    weaponObject.AssociatedControl.Visible = true;
+                }));
+            }
+            catch (Exception ex)
+            {
+                StaticGuiReference._logger.Error($"Failed to select weapon from weaponListBox: {ex}");
+                MessageBox.Show(@"Failed to select weapon from weaponListBox. If this error persists, please restart the application.");
+            }
         }
 
         private void Mgs2TabControl_SelectedIndexChanged(object sender, EventArgs e)
         {
-            CurrentTab = mgs2TabControl.SelectedIndex;
-            CurrentlySelectedObject = null;
+            try
+            {
+                _logger.Verbose($"Switching to tab #{mgs2TabControl.SelectedIndex}...");
+                CurrentTab = mgs2TabControl.SelectedIndex;
+                CurrentlySelectedObject = null;
+            }
+            catch(Exception ex) 
+            {
+                _logger.Error($"Failed to change tabs from sender {JsonSerializer.Serialize(sender)} and args {JsonSerializer.Serialize(e)}: {ex}");
+                MessageBox.Show(@"Failed to change tabs. If this error persists, please restart the application.");
+            }
         }
 
         private void GithubMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("https://github.com/sagefantasma/MGS2-Cheat-Trainer");
+            try
+            {
+                _logger.Verbose("Opening github link in web-browser");
+                Process.Start("https://github.com/sagefantasma/MGS2-Cheat-Trainer");
+            }
+            catch(Exception ex)
+            {
+                _logger.Error($"Failed to launch Github page from sender {JsonSerializer.Serialize(sender)} and args {JsonSerializer.Serialize(e)}: {ex}");
+                MessageBox.Show(@"Failed to launch Github page. If this error persists, please restart the application.");
+            }
         }
 
         private void ViewLogsMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start(Logging.LogLocation);
+            try
+            {
+                Process.Start(Logging.LogLocation);
+            }
+            catch(Exception ex)
+            {
+                _logger.Error($"Failed to open logs from sender {JsonSerializer.Serialize(sender)} and args {JsonSerializer.Serialize(e)}: {ex}");
+                MessageBox.Show(@"Failed to open log location. If this error persists, please restart the application.");
+            }
         }
 
         private void ModifyConfigMenuItem_Click(object sender, EventArgs e)
         {
+            _logger.Verbose("Opening modify config form...");
             ConfigEditorForm configEditorForm = new ConfigEditorForm(_logger);
             
             if(configEditorForm.ShowDialog() == DialogResult.OK)
             {
+                _logger.Verbose("Finished modifying config, loading new config");
                 MGS2Monitor.LoadConfig();
+                _logger.Verbose($"Config loaded");
             }            
         }
 
@@ -1485,7 +1545,9 @@ namespace MGS2_MC
             {
                 try
                 {
+                    _logger.Verbose("MGS2 thread is dead, restarting MGS2 thread...");
                     Program.RestartMonitoringThread();
+                    _logger.Verbose("MGS2 thread restarted successfully!");
                 }
                 catch(Exception ex)
                 {
@@ -1494,18 +1556,43 @@ namespace MGS2_MC
             }
             else
             {
+                _logger.Verbose("MGS2 thread isn't dead, but we don't see the MGS2 process. Killing MGS2 thread and restarting");
                 Program.MGS2Thread.Abort(); 
                 Program.RestartMonitoringThread();
+                _logger.Verbose("MGS2 thread killed and restarted successfully!");
                 //Program.MGS2Thread.
             }
         }
 
         public static void EnableLaunchMGS2Option(bool enable)
         {
-            StaticGuiReference.Invoke(new Action(() =>
+            try
             {
-                StaticGuiReference.launchMgs2MenuItem.Enabled = enable;
-            }));
+                StaticGuiReference.Invoke(new Action(() =>
+                {
+                    StaticGuiReference._logger.Verbose($"Setting LaunchMgs2MenuItem.Enabled to {enable}");
+                    StaticGuiReference.launchMgs2MenuItem.Enabled = enable;
+                }));
+            }
+            catch(Exception e)
+            {
+                StaticGuiReference._logger.Error($"Failed to set Launch MGS2 Option to {enable}: {e}");
+                //this isn't a user-facing error, so dont bother them with a message box here
+            }
+        }
+
+        private void JoinOurDiscordToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                _logger.Verbose("Opening discord link in web-browser");
+                Process.Start("https://discord.gg/XUh58VfqDu");
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Failed to launch Discord page from sender {JsonSerializer.Serialize(sender)} and args {JsonSerializer.Serialize(e)}: {ex}");
+                MessageBox.Show(@"Failed to launch Discord page. If this error persists, please restart the application.");
+            }
         }
     }
 }

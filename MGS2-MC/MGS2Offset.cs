@@ -53,6 +53,27 @@ namespace MGS2_MC
         //clipcurrentCount == -114 from the above AoB, 4bytes long. HP mod is DIRECTLY after, it seems?
         internal static byte[] StageInfo = new byte[] { 0x10, 0x0E, 0x18, 0x15, 0x20, 0x1C };
         //current "stage" == -267 from the above AoB, 5 bytes long. If it has r_tnk, it is Snake. if it is r_plt, it is raiden :)
+
+
+        /*new offsets and shit found 4/17/24:
+        * Offsets from AoBs:
+        * MaxLife is -140 bytes from PlayerInfoFinder (2bytes)
+        * Current(unmodifiable) health is -142 bytes from PlayerInfoFinder (2bytes)
+        * Player o2 is -138 bytes from PlayerInfoFinder (2 bytes)
+        * Snake grip level is -91~(0A) bytes from PlayerInfoFinder (2 bytes)
+        * Raiden grip level is -89~ bytes from PlayerInfoFinder (2 bytes)
+        * 
+        * New AoBs:
+        * ED 26 61 F7 7F 00 00 <--- current health + grip AoB? (this is also outside of the MGS2.exe, so idk if it will work)
+        *               - ED 26 61 F7 7F 00 00 E0 C5 53 6D 01 02 00 00 E6 DC 28 for NG Hard as Snake at start of game
+        *               - ED 26 61 F7 7F 00 00 00 29 36 6D 01 02 00 00 E6 DC 28 for NG Hard as Snake in Hold 2
+        *               - ED 26 61 F7 7F 00 00 F0 29 36 6D 01 02 00 00 E6 DC 28 for NG Hard as Snake in Hold 2 after reentering once
+        *               - ED 26 61 F7 7F 00 00 80 A0 5E 6D 01 02 00 00 27 15 9B for NG++ Normal as Raiden at Shell 1-2 Connecting Bridge
+        *               - ED 26 61 F7 7F 00 00 70 C8 64 6D 01 02 00 00 27 15 9B for NG Easy as Raiden at Shell A Roof(Plant only)
+        *               
+        *      current health is either + 41 or 42 bytes from the above AoB
+        *      current grip value is either -1169 or -1168 above the above aob
+        */
         #endregion
     }
 
@@ -144,14 +165,6 @@ namespace MGS2_MC
         #region Calculated From PlayerInfo
         public static readonly MemoryOffset BASE_WEAPON = new MemoryOffset(-42, 0); //if a "new" playerOffsetBytes is chosen, only need to update this value and the item offset will update.
         public static readonly MemoryOffset BASE_ITEM = new MemoryOffset(BASE_WEAPON.Start + 144, BASE_WEAPON.Start + 144 + 80);
-        public static readonly MemoryOffset SHOT_COUNT = new MemoryOffset(-96); //TODO: prove this is valid
-        public static readonly MemoryOffset HOLD_UP_COUNT = new MemoryOffset(5108); //TODO: prove this is valid, prolly isnt tbqh
-        public static readonly MemoryOffset PULL_UP_COUNT = new MemoryOffset(-90); //TODO: prove this is valid 
-        public static readonly MemoryOffset PLAYER_COLD = new MemoryOffset(-128); //TODO: prove this is valid
-        public static readonly MemoryOffset CURRENT_EQUIPPED_ITEM = new MemoryOffset(-130); //TODO: prove this is valid
-        public static readonly MemoryOffset CURRENT_EQUIPPED_WEAPON = new MemoryOffset(-68); //TODO: prove this is valid
-        public static readonly MemoryOffset PLAYER_STANCE = new MemoryOffset(-134); //TODO: prove this is valid
-        public static readonly MemoryOffset PLAYER_SNEEZING = new MemoryOffset(-108, -107); //TODO: prove this is valid
         #endregion
 
         #region Calculated From HealthMod
@@ -160,17 +173,27 @@ namespace MGS2_MC
         #endregion
 
         #region Calculated From StageInfo
-        public static readonly MemoryOffset CURRENT_STAGE = new MemoryOffset(-266, -262); //TODO: prove this is valid
+        public static readonly MemoryOffset CURRENT_STAGE = new MemoryOffset(-266, -262);
+        public static readonly MemoryOffset CURRENT_EQUIPPED_ITEM = new MemoryOffset(-32); //TODO: prove this is valid
+        public static readonly MemoryOffset CURRENT_EQUIPPED_WEAPON = new MemoryOffset(-34); //TODO: prove this is valid
+        public static readonly MemoryOffset SHOT_COUNT = new MemoryOffset(26); //TODO: prove this is valid
+        public static readonly MemoryOffset PULL_UP_COUNT = new MemoryOffset(8); //TODO: prove this is valid
+        public static readonly MemoryOffset DAMAGE_TAKEN = new MemoryOffset(32); //TODO: prove this is valid
+        public static readonly MemoryOffset KILL_COUNT = new MemoryOffset(30); //TODO: prove this is valid
+        public static readonly MemoryOffset ALERT_COUNT = new MemoryOffset(28); //TODO: prove this is valid
+        public static readonly MemoryOffset PLAY_TIME = new MemoryOffset(20, 23); //TODO: prove this is valid
+        public static readonly MemoryOffset SAVE_COUNT = new MemoryOffset(16); //TODO: prove this is valid
+        public static readonly MemoryOffset CONTINUE_COUNT = new MemoryOffset(12); //TODO: prove this is valid
+        public static readonly MemoryOffset SPECIAL_ITEMS_USED = new MemoryOffset(5232); //TODO: prove this is valid
+        public static readonly MemoryOffset RATIONS_USED = new MemoryOffset(5226); //TODO: prove this is valid(i really, really doubt it...)
         #endregion
 
-        #region Calculated from Unknown Finder AoBs
-        public const int TIMES_FOUND_GAME_LAUNCH_OFFSET = 0x17B786C; //TODO: need to get an OffsetFinderAoB for this and perform offset calculations
-        public const int HOLD_UPS_GAME_LAUNCH_OFFSET = 0x1673DB0; //TODO: need to get an OffsetFinderAoB for this and perform offset calculations
-        public const int CHOKE_OUTS_GAME_LAUNCH_OFFSET = 0x1673DBC; //TODO: need to get an OffsetFinderAoB for this and perform offset calculations
+        #region Calculated from Unknown Finder AoBs    
+        public static readonly MemoryOffset PLAYER_COLD = new MemoryOffset(-128); //TODO: prove this is valid, if even useful        
+        public static readonly MemoryOffset PLAYER_STANCE = new MemoryOffset(-134); //TODO: prove this is valid, if even useful
+        public static readonly MemoryOffset PLAYER_SNEEZING = new MemoryOffset(-108, -107); //TODO: prove this is valid, if even useful
 
         //TODO: add more of the game stats here
-
-
         //These values are PRESENTLY unknown
         //internal const int HealthPointerOffset = 0x00AE49D8; 
         //internal const int CurrentHealthOffset = 0x684;
@@ -179,6 +202,10 @@ namespace MGS2_MC
         //internal static IntPtr HudOffset = (IntPtr)0xADB40F;
         //internal static IntPtr CamOffset = (IntPtr)0xAE3B37;
         //internal static IntPtr AlertStatusOffset = (IntPtr)0x1D9C3D8;
+        
+
+        
+
         #endregion
         #endregion
         #endregion

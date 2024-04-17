@@ -59,6 +59,7 @@ namespace MGS2_MC
             MGS2UsableObjects.SOCOM,
             MGS2UsableObjects.SocomSuppressor,
             MGS2UsableObjects.Stealth,
+            MGS2UsableObjects.Stinger,
             MGS2UsableObjects.StunGrenade,
             MGS2UsableObjects.ThermalGoggles,
             MGS2UsableObjects.USPSuppressor,

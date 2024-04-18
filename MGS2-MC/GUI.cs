@@ -589,7 +589,7 @@ namespace MGS2_MC
             stringsListBox.DataSource = MGS2Strings.MGS2_STRINGS;
             stringsListBox.DisplayMember = "Tag";
             stringsListBox.SelectedIndex = -1;
-            mgs2TabControl.TabPages.RemoveByKey(tabPageStats.Name);
+            //mgs2TabControl.TabPages.RemoveByKey(tabPageStats.Name);
             GuiLoaded = true;
         }
 

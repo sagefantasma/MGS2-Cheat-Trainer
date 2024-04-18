@@ -46,7 +46,6 @@
             this.label54 = new System.Windows.Forms.Label();
             this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
             this.button2 = new System.Windows.Forms.Button();
-            this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.tabPageWeapon = new System.Windows.Forms.TabPage();
             this.weaponTabLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.weaponListBox = new System.Windows.Forms.ListBox();
@@ -65,14 +64,20 @@
             this.button4 = new System.Windows.Forms.Button();
             this.tabPageStats = new System.Windows.Forms.TabPage();
             this.tabPageLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.timesFoundGroupBox = new System.Windows.Forms.GroupBox();
-            this.timesFoundLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.label51 = new System.Windows.Forms.Label();
-            this.timesFoundSinceLatestSaveUpDown = new System.Windows.Forms.NumericUpDown();
-            this.label50 = new System.Windows.Forms.Label();
-            this.timesFoundOnLatestSaveUpDown = new System.Windows.Forms.NumericUpDown();
-            this.label49 = new System.Windows.Forms.Label();
-            this.timesFoundGameLaunchUpDown = new System.Windows.Forms.NumericUpDown();
+            this.alertsGroupBox = new System.Windows.Forms.GroupBox();
+            this.killCountGroupBox = new System.Windows.Forms.GroupBox();
+            this.playTimeGroupBox = new System.Windows.Forms.GroupBox();
+            this.rationsUsedGroupBox = new System.Windows.Forms.GroupBox();
+            this.continuesGroupBox = new System.Windows.Forms.GroupBox();
+            this.specialItemsGroupBox = new System.Windows.Forms.GroupBox();
+            this.specialItemsCheckedListBox = new System.Windows.Forms.CheckedListBox();
+            this.savesGroupBox = new System.Windows.Forms.GroupBox();
+            this.shotsFiredGroupBox = new System.Windows.Forms.GroupBox();
+            this.playerHealthGroupBox = new System.Windows.Forms.GroupBox();
+            this.playerHpTablePanel = new System.Windows.Forms.TableLayoutPanel();
+            this.damageTakenGroupBox = new System.Windows.Forms.GroupBox();
+            this.projectedRankGroupBox = new System.Windows.Forms.GroupBox();
+            this.gripGroupBox = new System.Windows.Forms.GroupBox();
             this.tabPageStrings = new System.Windows.Forms.TabPage();
             this.stringTabLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.stringsListBox = new System.Windows.Forms.ListBox();
@@ -83,6 +88,8 @@
             this.characterLimitLabel = new System.Windows.Forms.Label();
             this.basicNameTextBox = new System.Windows.Forms.TextBox();
             this.descriptionGroupBox = new System.Windows.Forms.GroupBox();
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.hfBladeGroupBox = new System.Windows.Forms.GroupBox();
             this.hfBladeLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.hfBladeStunBtn = new System.Windows.Forms.Button();
@@ -526,7 +533,41 @@
             this.viewLogsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.githubMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.joinOurDiscordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.currentHpLabel = new System.Windows.Forms.Label();
+            this.playerCurrentHpTrackBar = new System.Windows.Forms.TrackBar();
+            this.playerMaxHpLabel = new System.Windows.Forms.Label();
+            this.playerMaxHpUpDown = new System.Windows.Forms.NumericUpDown();
+            this.playerGripTablePanel = new System.Windows.Forms.TableLayoutPanel();
+            this.projectedRankTable = new System.Windows.Forms.TableLayoutPanel();
+            this.projectedRankLabel = new System.Windows.Forms.Label();
+            this.playerGripSubTablePanel = new System.Windows.Forms.TableLayoutPanel();
+            this.label49 = new System.Windows.Forms.Label();
+            this.gripTrackBar = new System.Windows.Forms.TrackBar();
+            this.lowerGripButton = new System.Windows.Forms.Button();
+            this.raiseGripButton = new System.Windows.Forms.Button();
+            this.playTimeTablePanel = new System.Windows.Forms.TableLayoutPanel();
+            this.playTimeLabel = new System.Windows.Forms.Label();
+            this.killCountTablePanel = new System.Windows.Forms.TableLayoutPanel();
+            this.alertsTablePanel = new System.Windows.Forms.TableLayoutPanel();
+            this.rationsUsedTablePanel = new System.Windows.Forms.TableLayoutPanel();
+            this.continueCountTablePanel = new System.Windows.Forms.TableLayoutPanel();
+            this.saveTablePanel = new System.Windows.Forms.TableLayoutPanel();
+            this.shotsFiredTablePanel = new System.Windows.Forms.TableLayoutPanel();
+            this.damageTakenTablePanel = new System.Windows.Forms.TableLayoutPanel();
+            this.killCountLabel = new System.Windows.Forms.Label();
+            this.alertCountLabel = new System.Windows.Forms.Label();
+            this.rationsUsedLabel = new System.Windows.Forms.Label();
+            this.continueCountLabel = new System.Windows.Forms.Label();
+            this.saveCountLabel = new System.Windows.Forms.Label();
+            this.shotsFiredLabel = new System.Windows.Forms.Label();
+            this.damageTakenLabel = new System.Windows.Forms.Label();
+            this.adjustKillCountButton = new System.Windows.Forms.Button();
+            this.alertCountButton = new System.Windows.Forms.Button();
+            this.rationsUsedButton = new System.Windows.Forms.Button();
+            this.continueCountButton = new System.Windows.Forms.Button();
+            this.saveCountButton = new System.Windows.Forms.Button();
+            this.shotsFiredButton = new System.Windows.Forms.Button();
+            this.damageTakenButton = new System.Windows.Forms.Button();
             this.mgs2TabControl.SuspendLayout();
             this.tabPageItem.SuspendLayout();
             this.itemLayoutPanel.SuspendLayout();
@@ -538,7 +579,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.itemTabTestPictureBox)).BeginInit();
             this.itemTabTestCurrentLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
-            this.statusStrip.SuspendLayout();
             this.tabPageWeapon.SuspendLayout();
             this.weaponTabLayoutPanel.SuspendLayout();
             this.weaponGroupBox.SuspendLayout();
@@ -551,15 +591,24 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
             this.tabPageStats.SuspendLayout();
             this.tabPageLayoutPanel.SuspendLayout();
-            this.timesFoundGroupBox.SuspendLayout();
-            this.timesFoundLayoutPanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.timesFoundSinceLatestSaveUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.timesFoundOnLatestSaveUpDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.timesFoundGameLaunchUpDown)).BeginInit();
+            this.alertsGroupBox.SuspendLayout();
+            this.killCountGroupBox.SuspendLayout();
+            this.playTimeGroupBox.SuspendLayout();
+            this.rationsUsedGroupBox.SuspendLayout();
+            this.continuesGroupBox.SuspendLayout();
+            this.specialItemsGroupBox.SuspendLayout();
+            this.savesGroupBox.SuspendLayout();
+            this.shotsFiredGroupBox.SuspendLayout();
+            this.playerHealthGroupBox.SuspendLayout();
+            this.playerHpTablePanel.SuspendLayout();
+            this.damageTakenGroupBox.SuspendLayout();
+            this.projectedRankGroupBox.SuspendLayout();
+            this.gripGroupBox.SuspendLayout();
             this.tabPageStrings.SuspendLayout();
             this.stringTabLayoutPanel.SuspendLayout();
             this.basicNameGroupBox.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
+            this.statusStrip.SuspendLayout();
             this.hfBladeGroupBox.SuspendLayout();
             this.hfBladeLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.hfBladePictureBox)).BeginInit();
@@ -834,6 +883,20 @@
             this.stealthLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.stealthPictureBox)).BeginInit();
             this.mainMenuStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.playerCurrentHpTrackBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.playerMaxHpUpDown)).BeginInit();
+            this.playerGripTablePanel.SuspendLayout();
+            this.projectedRankTable.SuspendLayout();
+            this.playerGripSubTablePanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gripTrackBar)).BeginInit();
+            this.playTimeTablePanel.SuspendLayout();
+            this.killCountTablePanel.SuspendLayout();
+            this.alertsTablePanel.SuspendLayout();
+            this.rationsUsedTablePanel.SuspendLayout();
+            this.continueCountTablePanel.SuspendLayout();
+            this.saveTablePanel.SuspendLayout();
+            this.shotsFiredTablePanel.SuspendLayout();
+            this.damageTakenTablePanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // mgs2TabControl
@@ -846,7 +909,7 @@
             this.mgs2TabControl.Location = new System.Drawing.Point(0, 24);
             this.mgs2TabControl.Name = "mgs2TabControl";
             this.mgs2TabControl.SelectedIndex = 0;
-            this.mgs2TabControl.Size = new System.Drawing.Size(584, 462);
+            this.mgs2TabControl.Size = new System.Drawing.Size(584, 440);
             this.mgs2TabControl.TabIndex = 0;
             this.mgs2TabControl.SelectedIndexChanged += new System.EventHandler(this.Mgs2TabControl_SelectedIndexChanged);
             // 
@@ -856,7 +919,7 @@
             this.tabPageItem.Location = new System.Drawing.Point(4, 22);
             this.tabPageItem.Name = "tabPageItem";
             this.tabPageItem.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageItem.Size = new System.Drawing.Size(576, 436);
+            this.tabPageItem.Size = new System.Drawing.Size(576, 414);
             this.tabPageItem.TabIndex = 0;
             this.tabPageItem.Text = "Items";
             this.tabPageItem.UseVisualStyleBackColor = true;
@@ -1059,24 +1122,13 @@
             this.button2.Text = "Set!";
             this.button2.UseVisualStyleBackColor = true;
             // 
-            // statusStrip
-            // 
-            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel});
-            this.statusStrip.Location = new System.Drawing.Point(3, 411);
-            this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(570, 22);
-            this.statusStrip.SizingGrip = false;
-            this.statusStrip.TabIndex = 1;
-            this.statusStrip.Text = "statusStrip1";
-            // 
             // tabPageWeapon
             // 
             this.tabPageWeapon.Controls.Add(this.weaponTabLayoutPanel);
             this.tabPageWeapon.Location = new System.Drawing.Point(4, 22);
             this.tabPageWeapon.Name = "tabPageWeapon";
             this.tabPageWeapon.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageWeapon.Size = new System.Drawing.Size(576, 436);
+            this.tabPageWeapon.Size = new System.Drawing.Size(576, 414);
             this.tabPageWeapon.TabIndex = 1;
             this.tabPageWeapon.Text = "Weapons";
             this.tabPageWeapon.UseVisualStyleBackColor = true;
@@ -1093,7 +1145,7 @@
             this.weaponTabLayoutPanel.Name = "weaponTabLayoutPanel";
             this.weaponTabLayoutPanel.RowCount = 1;
             this.weaponTabLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.weaponTabLayoutPanel.Size = new System.Drawing.Size(570, 430);
+            this.weaponTabLayoutPanel.Size = new System.Drawing.Size(570, 408);
             this.weaponTabLayoutPanel.TabIndex = 1;
             // 
             // weaponListBox
@@ -1103,7 +1155,7 @@
             this.weaponListBox.FormattingEnabled = true;
             this.weaponListBox.Location = new System.Drawing.Point(3, 3);
             this.weaponListBox.Name = "weaponListBox";
-            this.weaponListBox.Size = new System.Drawing.Size(108, 424);
+            this.weaponListBox.Size = new System.Drawing.Size(108, 402);
             this.weaponListBox.TabIndex = 0;
             this.weaponListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.weaponListBox_MouseDoubleClick);
             // 
@@ -1114,7 +1166,7 @@
             this.weaponGroupBox.Location = new System.Drawing.Point(117, 3);
             this.weaponGroupBox.Name = "weaponGroupBox";
             this.weaponGroupBox.Padding = new System.Windows.Forms.Padding(10);
-            this.weaponGroupBox.Size = new System.Drawing.Size(450, 424);
+            this.weaponGroupBox.Size = new System.Drawing.Size(450, 402);
             this.weaponGroupBox.TabIndex = 1;
             this.weaponGroupBox.TabStop = false;
             this.weaponGroupBox.Text = "Select a Weapon From the List to the Left";
@@ -1125,7 +1177,7 @@
             this.weaponTabTestGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.weaponTabTestGroupBox.Location = new System.Drawing.Point(10, 23);
             this.weaponTabTestGroupBox.Name = "weaponTabTestGroupBox";
-            this.weaponTabTestGroupBox.Size = new System.Drawing.Size(430, 391);
+            this.weaponTabTestGroupBox.Size = new System.Drawing.Size(430, 369);
             this.weaponTabTestGroupBox.TabIndex = 54;
             this.weaponTabTestGroupBox.TabStop = false;
             this.weaponTabTestGroupBox.Text = "TESTING PURPOSES ONLY";
@@ -1146,7 +1198,7 @@
             this.weaponTabTestLayoutPanel.RowCount = 2;
             this.weaponTabTestLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 42.22222F));
             this.weaponTabTestLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 57.77778F));
-            this.weaponTabTestLayoutPanel.Size = new System.Drawing.Size(424, 372);
+            this.weaponTabTestLayoutPanel.Size = new System.Drawing.Size(424, 350);
             this.weaponTabTestLayoutPanel.TabIndex = 41;
             // 
             // weaponTabTestMaxLayoutPanel
@@ -1158,12 +1210,12 @@
             this.weaponTabTestMaxLayoutPanel.Controls.Add(this.numericUpDown3, 0, 1);
             this.weaponTabTestMaxLayoutPanel.Controls.Add(this.button3, 1, 1);
             this.weaponTabTestMaxLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.weaponTabTestMaxLayoutPanel.Location = new System.Drawing.Point(215, 160);
+            this.weaponTabTestMaxLayoutPanel.Location = new System.Drawing.Point(215, 150);
             this.weaponTabTestMaxLayoutPanel.Name = "weaponTabTestMaxLayoutPanel";
             this.weaponTabTestMaxLayoutPanel.RowCount = 2;
             this.weaponTabTestMaxLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 38.88889F));
             this.weaponTabTestMaxLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 61.11111F));
-            this.weaponTabTestMaxLayoutPanel.Size = new System.Drawing.Size(206, 209);
+            this.weaponTabTestMaxLayoutPanel.Size = new System.Drawing.Size(206, 197);
             this.weaponTabTestMaxLayoutPanel.TabIndex = 3;
             // 
             // label55
@@ -1174,14 +1226,14 @@
             this.label55.Location = new System.Drawing.Point(0, 0);
             this.label55.Margin = new System.Windows.Forms.Padding(0);
             this.label55.Name = "label55";
-            this.label55.Size = new System.Drawing.Size(206, 81);
+            this.label55.Size = new System.Drawing.Size(206, 76);
             this.label55.TabIndex = 0;
             this.label55.Text = "Max Count";
             // 
             // numericUpDown3
             // 
             this.numericUpDown3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numericUpDown3.Location = new System.Drawing.Point(3, 82);
+            this.numericUpDown3.Location = new System.Drawing.Point(3, 77);
             this.numericUpDown3.Margin = new System.Windows.Forms.Padding(3, 1, 0, 0);
             this.numericUpDown3.Maximum = new decimal(new int[] {
             32767,
@@ -1195,7 +1247,7 @@
             // button3
             // 
             this.button3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.button3.Location = new System.Drawing.Point(166, 81);
+            this.button3.Location = new System.Drawing.Point(166, 76);
             this.button3.Margin = new System.Windows.Forms.Padding(0);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(40, 22);
@@ -1209,7 +1261,7 @@
             this.weaponTestTabPictureBox.ImageLocation = "Resources/images/niki_alp_ovl.bmp.bmp";
             this.weaponTestTabPictureBox.Location = new System.Drawing.Point(3, 3);
             this.weaponTestTabPictureBox.Name = "weaponTestTabPictureBox";
-            this.weaponTestTabPictureBox.Size = new System.Drawing.Size(206, 151);
+            this.weaponTestTabPictureBox.Size = new System.Drawing.Size(206, 141);
             this.weaponTestTabPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.weaponTestTabPictureBox.TabIndex = 0;
             this.weaponTestTabPictureBox.TabStop = false;
@@ -1234,12 +1286,12 @@
             this.weaponTabTestCurrentLayoutTable.Controls.Add(this.numericUpDown4, 0, 1);
             this.weaponTabTestCurrentLayoutTable.Controls.Add(this.button4, 1, 1);
             this.weaponTabTestCurrentLayoutTable.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.weaponTabTestCurrentLayoutTable.Location = new System.Drawing.Point(3, 160);
+            this.weaponTabTestCurrentLayoutTable.Location = new System.Drawing.Point(3, 150);
             this.weaponTabTestCurrentLayoutTable.Name = "weaponTabTestCurrentLayoutTable";
             this.weaponTabTestCurrentLayoutTable.RowCount = 2;
             this.weaponTabTestCurrentLayoutTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 38.88889F));
             this.weaponTabTestCurrentLayoutTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 61.11111F));
-            this.weaponTabTestCurrentLayoutTable.Size = new System.Drawing.Size(206, 209);
+            this.weaponTabTestCurrentLayoutTable.Size = new System.Drawing.Size(206, 197);
             this.weaponTabTestCurrentLayoutTable.TabIndex = 2;
             // 
             // label56
@@ -1250,14 +1302,14 @@
             this.label56.Location = new System.Drawing.Point(0, 0);
             this.label56.Margin = new System.Windows.Forms.Padding(0);
             this.label56.Name = "label56";
-            this.label56.Size = new System.Drawing.Size(206, 81);
+            this.label56.Size = new System.Drawing.Size(206, 76);
             this.label56.TabIndex = 0;
             this.label56.Text = "Current Count";
             // 
             // numericUpDown4
             // 
             this.numericUpDown4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.numericUpDown4.Location = new System.Drawing.Point(3, 82);
+            this.numericUpDown4.Location = new System.Drawing.Point(3, 77);
             this.numericUpDown4.Margin = new System.Windows.Forms.Padding(3, 1, 0, 0);
             this.numericUpDown4.Maximum = new decimal(new int[] {
             32767,
@@ -1271,7 +1323,7 @@
             // button4
             // 
             this.button4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.button4.Location = new System.Drawing.Point(166, 81);
+            this.button4.Location = new System.Drawing.Point(166, 76);
             this.button4.Margin = new System.Windows.Forms.Padding(0);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(40, 22);
@@ -1285,7 +1337,7 @@
             this.tabPageStats.Location = new System.Drawing.Point(4, 22);
             this.tabPageStats.Name = "tabPageStats";
             this.tabPageStats.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageStats.Size = new System.Drawing.Size(576, 436);
+            this.tabPageStats.Size = new System.Drawing.Size(576, 414);
             this.tabPageStats.TabIndex = 2;
             this.tabPageStats.Text = "In-Game Stats";
             this.tabPageStats.UseVisualStyleBackColor = true;
@@ -1293,10 +1345,21 @@
             // tabPageLayoutPanel
             // 
             this.tabPageLayoutPanel.ColumnCount = 3;
+            this.tabPageLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tabPageLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tabPageLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tabPageLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tabPageLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 402F));
-            this.tabPageLayoutPanel.Controls.Add(this.timesFoundGroupBox, 0, 0);
+            this.tabPageLayoutPanel.Controls.Add(this.alertsGroupBox);
+            this.tabPageLayoutPanel.Controls.Add(this.killCountGroupBox);
+            this.tabPageLayoutPanel.Controls.Add(this.playTimeGroupBox);
+            this.tabPageLayoutPanel.Controls.Add(this.rationsUsedGroupBox);
+            this.tabPageLayoutPanel.Controls.Add(this.continuesGroupBox);
+            this.tabPageLayoutPanel.Controls.Add(this.specialItemsGroupBox);
+            this.tabPageLayoutPanel.Controls.Add(this.savesGroupBox);
+            this.tabPageLayoutPanel.Controls.Add(this.shotsFiredGroupBox);
+            this.tabPageLayoutPanel.Controls.Add(this.playerHealthGroupBox);
+            this.tabPageLayoutPanel.Controls.Add(this.damageTakenGroupBox);
+            this.tabPageLayoutPanel.Controls.Add(this.projectedRankGroupBox);
+            this.tabPageLayoutPanel.Controls.Add(this.gripGroupBox);
             this.tabPageLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabPageLayoutPanel.Location = new System.Drawing.Point(3, 3);
             this.tabPageLayoutPanel.Name = "tabPageLayoutPanel";
@@ -1305,103 +1368,171 @@
             this.tabPageLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tabPageLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tabPageLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tabPageLayoutPanel.Size = new System.Drawing.Size(570, 430);
+            this.tabPageLayoutPanel.Size = new System.Drawing.Size(570, 408);
             this.tabPageLayoutPanel.TabIndex = 0;
             // 
-            // timesFoundGroupBox
+            // alertsGroupBox
             // 
-            this.timesFoundGroupBox.Controls.Add(this.timesFoundLayoutPanel);
-            this.timesFoundGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.timesFoundGroupBox.Location = new System.Drawing.Point(3, 3);
-            this.timesFoundGroupBox.Name = "timesFoundGroupBox";
-            this.timesFoundGroupBox.Size = new System.Drawing.Size(78, 101);
-            this.timesFoundGroupBox.TabIndex = 0;
-            this.timesFoundGroupBox.TabStop = false;
-            this.timesFoundGroupBox.Text = "Times Found";
+            this.alertsGroupBox.Controls.Add(this.alertsTablePanel);
+            this.alertsGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.alertsGroupBox.Location = new System.Drawing.Point(3, 3);
+            this.alertsGroupBox.Name = "alertsGroupBox";
+            this.alertsGroupBox.Size = new System.Drawing.Size(136, 96);
+            this.alertsGroupBox.TabIndex = 0;
+            this.alertsGroupBox.TabStop = false;
+            this.alertsGroupBox.Text = "Alert Count";
             // 
-            // timesFoundLayoutPanel
+            // killCountGroupBox
             // 
-            this.timesFoundLayoutPanel.ColumnCount = 2;
-            this.timesFoundLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
-            this.timesFoundLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
-            this.timesFoundLayoutPanel.Controls.Add(this.label51, 0, 2);
-            this.timesFoundLayoutPanel.Controls.Add(this.timesFoundSinceLatestSaveUpDown, 1, 2);
-            this.timesFoundLayoutPanel.Controls.Add(this.label50, 0, 1);
-            this.timesFoundLayoutPanel.Controls.Add(this.timesFoundOnLatestSaveUpDown, 1, 1);
-            this.timesFoundLayoutPanel.Controls.Add(this.label49, 0, 0);
-            this.timesFoundLayoutPanel.Controls.Add(this.timesFoundGameLaunchUpDown, 1, 0);
-            this.timesFoundLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.timesFoundLayoutPanel.Location = new System.Drawing.Point(3, 16);
-            this.timesFoundLayoutPanel.Name = "timesFoundLayoutPanel";
-            this.timesFoundLayoutPanel.RowCount = 3;
-            this.timesFoundLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.timesFoundLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.timesFoundLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.timesFoundLayoutPanel.Size = new System.Drawing.Size(72, 82);
-            this.timesFoundLayoutPanel.TabIndex = 0;
+            this.killCountGroupBox.Controls.Add(this.killCountTablePanel);
+            this.killCountGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.killCountGroupBox.Location = new System.Drawing.Point(145, 3);
+            this.killCountGroupBox.Name = "killCountGroupBox";
+            this.killCountGroupBox.Size = new System.Drawing.Size(136, 96);
+            this.killCountGroupBox.TabIndex = 4;
+            this.killCountGroupBox.TabStop = false;
+            this.killCountGroupBox.Text = "Kill Count";
             // 
-            // label51
+            // playTimeGroupBox
             // 
-            this.label51.AutoSize = true;
-            this.label51.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label51.Location = new System.Drawing.Point(3, 57);
-            this.label51.Margin = new System.Windows.Forms.Padding(3);
-            this.label51.Name = "label51";
-            this.label51.Size = new System.Drawing.Size(22, 22);
-            this.label51.TabIndex = 4;
-            this.label51.Text = "Since Latest Save";
-            this.label51.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.playTimeGroupBox.Controls.Add(this.playTimeTablePanel);
+            this.playTimeGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.playTimeGroupBox.Location = new System.Drawing.Point(287, 3);
+            this.playTimeGroupBox.Name = "playTimeGroupBox";
+            this.playTimeGroupBox.Size = new System.Drawing.Size(280, 96);
+            this.playTimeGroupBox.TabIndex = 5;
+            this.playTimeGroupBox.TabStop = false;
+            this.playTimeGroupBox.Text = "Play Time";
             // 
-            // timesFoundSinceLatestSaveUpDown
+            // rationsUsedGroupBox
             // 
-            this.timesFoundSinceLatestSaveUpDown.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.timesFoundSinceLatestSaveUpDown.Location = new System.Drawing.Point(31, 58);
-            this.timesFoundSinceLatestSaveUpDown.Name = "timesFoundSinceLatestSaveUpDown";
-            this.timesFoundSinceLatestSaveUpDown.Size = new System.Drawing.Size(38, 20);
-            this.timesFoundSinceLatestSaveUpDown.TabIndex = 5;
-            this.timesFoundSinceLatestSaveUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.rationsUsedGroupBox.Controls.Add(this.rationsUsedTablePanel);
+            this.rationsUsedGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rationsUsedGroupBox.Location = new System.Drawing.Point(3, 105);
+            this.rationsUsedGroupBox.Name = "rationsUsedGroupBox";
+            this.rationsUsedGroupBox.Size = new System.Drawing.Size(136, 96);
+            this.rationsUsedGroupBox.TabIndex = 9;
+            this.rationsUsedGroupBox.TabStop = false;
+            this.rationsUsedGroupBox.Text = "Rations Used";
             // 
-            // label50
+            // continuesGroupBox
             // 
-            this.label50.AutoSize = true;
-            this.label50.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label50.Location = new System.Drawing.Point(3, 30);
-            this.label50.Margin = new System.Windows.Forms.Padding(3);
-            this.label50.Name = "label50";
-            this.label50.Size = new System.Drawing.Size(22, 21);
-            this.label50.TabIndex = 2;
-            this.label50.Text = "On Latest Save";
-            this.label50.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.continuesGroupBox.Controls.Add(this.continueCountTablePanel);
+            this.continuesGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.continuesGroupBox.Location = new System.Drawing.Point(145, 105);
+            this.continuesGroupBox.Name = "continuesGroupBox";
+            this.continuesGroupBox.Size = new System.Drawing.Size(136, 96);
+            this.continuesGroupBox.TabIndex = 7;
+            this.continuesGroupBox.TabStop = false;
+            this.continuesGroupBox.Text = "Continue Count";
             // 
-            // timesFoundOnLatestSaveUpDown
+            // specialItemsGroupBox
             // 
-            this.timesFoundOnLatestSaveUpDown.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.timesFoundOnLatestSaveUpDown.Location = new System.Drawing.Point(31, 30);
-            this.timesFoundOnLatestSaveUpDown.Name = "timesFoundOnLatestSaveUpDown";
-            this.timesFoundOnLatestSaveUpDown.Size = new System.Drawing.Size(38, 20);
-            this.timesFoundOnLatestSaveUpDown.TabIndex = 3;
-            this.timesFoundOnLatestSaveUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.specialItemsGroupBox.Controls.Add(this.specialItemsCheckedListBox);
+            this.specialItemsGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.specialItemsGroupBox.Location = new System.Drawing.Point(287, 105);
+            this.specialItemsGroupBox.Name = "specialItemsGroupBox";
+            this.specialItemsGroupBox.Size = new System.Drawing.Size(280, 96);
+            this.specialItemsGroupBox.TabIndex = 8;
+            this.specialItemsGroupBox.TabStop = false;
+            this.specialItemsGroupBox.Text = "Special Items Used";
             // 
-            // label49
+            // specialItemsCheckedListBox
             // 
-            this.label49.AutoSize = true;
-            this.label49.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label49.Location = new System.Drawing.Point(3, 3);
-            this.label49.Margin = new System.Windows.Forms.Padding(3);
-            this.label49.Name = "label49";
-            this.label49.Size = new System.Drawing.Size(22, 21);
-            this.label49.TabIndex = 0;
-            this.label49.Text = "Since Game Launch";
-            this.label49.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.specialItemsCheckedListBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.specialItemsCheckedListBox.FormattingEnabled = true;
+            this.specialItemsCheckedListBox.Items.AddRange(new object[] {
+            "Wig",
+            "Stealth Camo",
+            "Bandana"});
+            this.specialItemsCheckedListBox.Location = new System.Drawing.Point(3, 16);
+            this.specialItemsCheckedListBox.Name = "specialItemsCheckedListBox";
+            this.specialItemsCheckedListBox.Size = new System.Drawing.Size(274, 77);
+            this.specialItemsCheckedListBox.TabIndex = 0;
             // 
-            // timesFoundGameLaunchUpDown
+            // savesGroupBox
             // 
-            this.timesFoundGameLaunchUpDown.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.timesFoundGameLaunchUpDown.Location = new System.Drawing.Point(31, 3);
-            this.timesFoundGameLaunchUpDown.Name = "timesFoundGameLaunchUpDown";
-            this.timesFoundGameLaunchUpDown.Size = new System.Drawing.Size(38, 20);
-            this.timesFoundGameLaunchUpDown.TabIndex = 1;
-            this.timesFoundGameLaunchUpDown.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.savesGroupBox.Controls.Add(this.saveTablePanel);
+            this.savesGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.savesGroupBox.Location = new System.Drawing.Point(3, 207);
+            this.savesGroupBox.Name = "savesGroupBox";
+            this.savesGroupBox.Size = new System.Drawing.Size(136, 96);
+            this.savesGroupBox.TabIndex = 6;
+            this.savesGroupBox.TabStop = false;
+            this.savesGroupBox.Text = "Save Count";
+            // 
+            // shotsFiredGroupBox
+            // 
+            this.shotsFiredGroupBox.Controls.Add(this.shotsFiredTablePanel);
+            this.shotsFiredGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.shotsFiredGroupBox.Location = new System.Drawing.Point(145, 207);
+            this.shotsFiredGroupBox.Name = "shotsFiredGroupBox";
+            this.shotsFiredGroupBox.Size = new System.Drawing.Size(136, 96);
+            this.shotsFiredGroupBox.TabIndex = 1;
+            this.shotsFiredGroupBox.TabStop = false;
+            this.shotsFiredGroupBox.Text = "Shots Fired";
+            // 
+            // playerHealthGroupBox
+            // 
+            this.playerHealthGroupBox.Controls.Add(this.playerHpTablePanel);
+            this.playerHealthGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.playerHealthGroupBox.Location = new System.Drawing.Point(287, 207);
+            this.playerHealthGroupBox.Name = "playerHealthGroupBox";
+            this.playerHealthGroupBox.Size = new System.Drawing.Size(280, 96);
+            this.playerHealthGroupBox.TabIndex = 10;
+            this.playerHealthGroupBox.TabStop = false;
+            this.playerHealthGroupBox.Text = "Player Health";
+            // 
+            // playerHpTablePanel
+            // 
+            this.playerHpTablePanel.ColumnCount = 2;
+            this.playerHpTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
+            this.playerHpTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
+            this.playerHpTablePanel.Controls.Add(this.currentHpLabel, 0, 0);
+            this.playerHpTablePanel.Controls.Add(this.playerCurrentHpTrackBar, 1, 0);
+            this.playerHpTablePanel.Controls.Add(this.playerMaxHpLabel, 0, 1);
+            this.playerHpTablePanel.Controls.Add(this.playerMaxHpUpDown, 1, 1);
+            this.playerHpTablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.playerHpTablePanel.Location = new System.Drawing.Point(3, 16);
+            this.playerHpTablePanel.Name = "playerHpTablePanel";
+            this.playerHpTablePanel.RowCount = 2;
+            this.playerHpTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.playerHpTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.playerHpTablePanel.Size = new System.Drawing.Size(274, 77);
+            this.playerHpTablePanel.TabIndex = 0;
+            // 
+            // damageTakenGroupBox
+            // 
+            this.damageTakenGroupBox.Controls.Add(this.damageTakenTablePanel);
+            this.damageTakenGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.damageTakenGroupBox.Location = new System.Drawing.Point(3, 309);
+            this.damageTakenGroupBox.Name = "damageTakenGroupBox";
+            this.damageTakenGroupBox.Size = new System.Drawing.Size(136, 96);
+            this.damageTakenGroupBox.TabIndex = 3;
+            this.damageTakenGroupBox.TabStop = false;
+            this.damageTakenGroupBox.Text = "Damage Taken";
+            // 
+            // projectedRankGroupBox
+            // 
+            this.projectedRankGroupBox.Controls.Add(this.projectedRankTable);
+            this.projectedRankGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.projectedRankGroupBox.Location = new System.Drawing.Point(145, 309);
+            this.projectedRankGroupBox.Name = "projectedRankGroupBox";
+            this.projectedRankGroupBox.Size = new System.Drawing.Size(136, 96);
+            this.projectedRankGroupBox.TabIndex = 2;
+            this.projectedRankGroupBox.TabStop = false;
+            this.projectedRankGroupBox.Text = "Projected Rank";
+            // 
+            // gripGroupBox
+            // 
+            this.gripGroupBox.Controls.Add(this.playerGripTablePanel);
+            this.gripGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gripGroupBox.Location = new System.Drawing.Point(287, 309);
+            this.gripGroupBox.Name = "gripGroupBox";
+            this.gripGroupBox.Size = new System.Drawing.Size(280, 96);
+            this.gripGroupBox.TabIndex = 11;
+            this.gripGroupBox.TabStop = false;
+            this.gripGroupBox.Text = "Player Grip";
             // 
             // tabPageStrings
             // 
@@ -1409,7 +1540,7 @@
             this.tabPageStrings.Location = new System.Drawing.Point(4, 22);
             this.tabPageStrings.Name = "tabPageStrings";
             this.tabPageStrings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageStrings.Size = new System.Drawing.Size(576, 436);
+            this.tabPageStrings.Size = new System.Drawing.Size(576, 414);
             this.tabPageStrings.TabIndex = 3;
             this.tabPageStrings.Text = "Modify Strings";
             this.tabPageStrings.UseVisualStyleBackColor = true;
@@ -1428,7 +1559,7 @@
             this.stringTabLayoutPanel.RowCount = 2;
             this.stringTabLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.stringTabLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.stringTabLayoutPanel.Size = new System.Drawing.Size(570, 430);
+            this.stringTabLayoutPanel.Size = new System.Drawing.Size(570, 408);
             this.stringTabLayoutPanel.TabIndex = 0;
             // 
             // stringsListBox
@@ -1438,7 +1569,7 @@
             this.stringsListBox.Location = new System.Drawing.Point(3, 3);
             this.stringsListBox.Name = "stringsListBox";
             this.stringTabLayoutPanel.SetRowSpan(this.stringsListBox, 2);
-            this.stringsListBox.Size = new System.Drawing.Size(108, 424);
+            this.stringsListBox.Size = new System.Drawing.Size(108, 402);
             this.stringsListBox.TabIndex = 0;
             this.stringsListBox.SelectedIndexChanged += new System.EventHandler(this.StringsListBox_SelectedIndexChanged);
             // 
@@ -1449,7 +1580,7 @@
             this.basicNameGroupBox.Controls.Add(this.basicNameTextBox);
             this.basicNameGroupBox.Location = new System.Drawing.Point(117, 3);
             this.basicNameGroupBox.Name = "basicNameGroupBox";
-            this.basicNameGroupBox.Size = new System.Drawing.Size(234, 208);
+            this.basicNameGroupBox.Size = new System.Drawing.Size(234, 198);
             this.basicNameGroupBox.TabIndex = 1;
             this.basicNameGroupBox.TabStop = false;
             this.basicNameGroupBox.Text = "Basic Name";
@@ -1505,13 +1636,29 @@
             // 
             // descriptionGroupBox
             // 
-            this.descriptionGroupBox.Location = new System.Drawing.Point(117, 218);
+            this.descriptionGroupBox.Location = new System.Drawing.Point(117, 207);
             this.descriptionGroupBox.Name = "descriptionGroupBox";
-            this.descriptionGroupBox.Size = new System.Drawing.Size(450, 209);
+            this.descriptionGroupBox.Size = new System.Drawing.Size(450, 198);
             this.descriptionGroupBox.TabIndex = 2;
             this.descriptionGroupBox.TabStop = false;
             this.descriptionGroupBox.Text = "Description";
             this.descriptionGroupBox.Visible = false;
+            // 
+            // statusStrip
+            // 
+            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel});
+            this.statusStrip.Location = new System.Drawing.Point(0, 464);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.Size = new System.Drawing.Size(584, 22);
+            this.statusStrip.SizingGrip = false;
+            this.statusStrip.TabIndex = 1;
+            this.statusStrip.Text = "statusStrip1";
+            // 
+            // toolStripStatusLabel
+            // 
+            this.toolStripStatusLabel.Name = "toolStripStatusLabel";
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(0, 17);
             // 
             // hfBladeGroupBox
             // 
@@ -7413,10 +7560,447 @@
             this.joinOurDiscordToolStripMenuItem.Text = "Join Our Discord";
             this.joinOurDiscordToolStripMenuItem.Click += new System.EventHandler(this.JoinOurDiscordToolStripMenuItem_Click);
             // 
-            // toolStripStatusLabel
+            // currentHpLabel
             // 
-            this.toolStripStatusLabel.Name = "toolStripStatusLabel";
-            this.toolStripStatusLabel.Size = new System.Drawing.Size(0, 17);
+            this.currentHpLabel.AutoSize = true;
+            this.currentHpLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.currentHpLabel.Location = new System.Drawing.Point(3, 0);
+            this.currentHpLabel.Name = "currentHpLabel";
+            this.currentHpLabel.Size = new System.Drawing.Size(76, 38);
+            this.currentHpLabel.TabIndex = 0;
+            this.currentHpLabel.Text = "Current HP";
+            this.currentHpLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // playerCurrentHpTrackBar
+            // 
+            this.playerCurrentHpTrackBar.BackColor = System.Drawing.Color.Aquamarine;
+            this.playerCurrentHpTrackBar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.playerCurrentHpTrackBar.LargeChange = 10;
+            this.playerCurrentHpTrackBar.Location = new System.Drawing.Point(85, 3);
+            this.playerCurrentHpTrackBar.Maximum = 100;
+            this.playerCurrentHpTrackBar.Name = "playerCurrentHpTrackBar";
+            this.playerCurrentHpTrackBar.Size = new System.Drawing.Size(186, 32);
+            this.playerCurrentHpTrackBar.TabIndex = 1;
+            this.playerCurrentHpTrackBar.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.playerCurrentHpTrackBar.Value = 100;
+            // 
+            // playerMaxHpLabel
+            // 
+            this.playerMaxHpLabel.AutoSize = true;
+            this.playerMaxHpLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.playerMaxHpLabel.Location = new System.Drawing.Point(3, 38);
+            this.playerMaxHpLabel.Name = "playerMaxHpLabel";
+            this.playerMaxHpLabel.Size = new System.Drawing.Size(76, 39);
+            this.playerMaxHpLabel.TabIndex = 2;
+            this.playerMaxHpLabel.Text = "Max HP";
+            this.playerMaxHpLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // playerMaxHpUpDown
+            // 
+            this.playerMaxHpUpDown.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.playerMaxHpUpDown.Location = new System.Drawing.Point(85, 41);
+            this.playerMaxHpUpDown.Name = "playerMaxHpUpDown";
+            this.playerMaxHpUpDown.Size = new System.Drawing.Size(186, 20);
+            this.playerMaxHpUpDown.TabIndex = 3;
+            this.playerMaxHpUpDown.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // playerGripTablePanel
+            // 
+            this.playerGripTablePanel.ColumnCount = 2;
+            this.playerGripTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.playerGripTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.playerGripTablePanel.Controls.Add(this.raiseGripButton, 1, 1);
+            this.playerGripTablePanel.Controls.Add(this.playerGripSubTablePanel, 0, 0);
+            this.playerGripTablePanel.Controls.Add(this.lowerGripButton, 0, 1);
+            this.playerGripTablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.playerGripTablePanel.Location = new System.Drawing.Point(3, 16);
+            this.playerGripTablePanel.Name = "playerGripTablePanel";
+            this.playerGripTablePanel.RowCount = 2;
+            this.playerGripTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.playerGripTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.playerGripTablePanel.Size = new System.Drawing.Size(274, 77);
+            this.playerGripTablePanel.TabIndex = 0;
+            // 
+            // projectedRankTable
+            // 
+            this.projectedRankTable.ColumnCount = 1;
+            this.projectedRankTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.projectedRankTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.projectedRankTable.Controls.Add(this.projectedRankLabel, 0, 0);
+            this.projectedRankTable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.projectedRankTable.Location = new System.Drawing.Point(3, 16);
+            this.projectedRankTable.Name = "projectedRankTable";
+            this.projectedRankTable.RowCount = 1;
+            this.projectedRankTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.projectedRankTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.projectedRankTable.Size = new System.Drawing.Size(130, 77);
+            this.projectedRankTable.TabIndex = 0;
+            // 
+            // projectedRankLabel
+            // 
+            this.projectedRankLabel.AutoSize = true;
+            this.projectedRankLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.projectedRankLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.projectedRankLabel.Location = new System.Drawing.Point(3, 0);
+            this.projectedRankLabel.Name = "projectedRankLabel";
+            this.projectedRankLabel.Size = new System.Drawing.Size(124, 77);
+            this.projectedRankLabel.TabIndex = 2;
+            this.projectedRankLabel.Text = "Tasmanian Devil";
+            this.projectedRankLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // playerGripSubTablePanel
+            // 
+            this.playerGripSubTablePanel.ColumnCount = 3;
+            this.playerGripTablePanel.SetColumnSpan(this.playerGripSubTablePanel, 2);
+            this.playerGripSubTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.playerGripSubTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.playerGripSubTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.playerGripSubTablePanel.Controls.Add(this.gripTrackBar, 1, 0);
+            this.playerGripSubTablePanel.Controls.Add(this.label49, 0, 0);
+            this.playerGripSubTablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.playerGripSubTablePanel.Location = new System.Drawing.Point(0, 0);
+            this.playerGripSubTablePanel.Margin = new System.Windows.Forms.Padding(0);
+            this.playerGripSubTablePanel.Name = "playerGripSubTablePanel";
+            this.playerGripSubTablePanel.RowCount = 1;
+            this.playerGripSubTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.playerGripSubTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.playerGripSubTablePanel.Size = new System.Drawing.Size(274, 38);
+            this.playerGripSubTablePanel.TabIndex = 0;
+            // 
+            // label49
+            // 
+            this.label49.AutoSize = true;
+            this.label49.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label49.Location = new System.Drawing.Point(3, 0);
+            this.label49.Name = "label49";
+            this.label49.Size = new System.Drawing.Size(85, 38);
+            this.label49.TabIndex = 0;
+            this.label49.Text = "Current Grip";
+            this.label49.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // gripTrackBar
+            // 
+            this.gripTrackBar.BackColor = System.Drawing.Color.DarkTurquoise;
+            this.playerGripSubTablePanel.SetColumnSpan(this.gripTrackBar, 2);
+            this.gripTrackBar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gripTrackBar.LargeChange = 250;
+            this.gripTrackBar.Location = new System.Drawing.Point(94, 3);
+            this.gripTrackBar.Maximum = 1800;
+            this.gripTrackBar.Name = "gripTrackBar";
+            this.gripTrackBar.Size = new System.Drawing.Size(177, 32);
+            this.gripTrackBar.TabIndex = 2;
+            this.gripTrackBar.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.gripTrackBar.Value = 1800;
+            // 
+            // lowerGripButton
+            // 
+            this.lowerGripButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lowerGripButton.Location = new System.Drawing.Point(3, 41);
+            this.lowerGripButton.Name = "lowerGripButton";
+            this.lowerGripButton.Size = new System.Drawing.Size(131, 33);
+            this.lowerGripButton.TabIndex = 1;
+            this.lowerGripButton.Text = "Lower Grip Level";
+            this.lowerGripButton.UseVisualStyleBackColor = true;
+            // 
+            // raiseGripButton
+            // 
+            this.raiseGripButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.raiseGripButton.Location = new System.Drawing.Point(140, 41);
+            this.raiseGripButton.Name = "raiseGripButton";
+            this.raiseGripButton.Size = new System.Drawing.Size(131, 33);
+            this.raiseGripButton.TabIndex = 2;
+            this.raiseGripButton.Text = "Raise Grip Level";
+            this.raiseGripButton.UseVisualStyleBackColor = true;
+            // 
+            // playTimeTablePanel
+            // 
+            this.playTimeTablePanel.ColumnCount = 1;
+            this.playTimeTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.playTimeTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.playTimeTablePanel.Controls.Add(this.playTimeLabel, 0, 0);
+            this.playTimeTablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.playTimeTablePanel.Location = new System.Drawing.Point(3, 16);
+            this.playTimeTablePanel.Name = "playTimeTablePanel";
+            this.playTimeTablePanel.RowCount = 1;
+            this.playTimeTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.playTimeTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.playTimeTablePanel.Size = new System.Drawing.Size(274, 77);
+            this.playTimeTablePanel.TabIndex = 0;
+            // 
+            // playTimeLabel
+            // 
+            this.playTimeLabel.AutoSize = true;
+            this.playTimeLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.playTimeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.playTimeLabel.Location = new System.Drawing.Point(3, 0);
+            this.playTimeLabel.Name = "playTimeLabel";
+            this.playTimeLabel.Size = new System.Drawing.Size(268, 77);
+            this.playTimeLabel.TabIndex = 1;
+            this.playTimeLabel.Text = "00 : 00 : 00";
+            this.playTimeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // killCountTablePanel
+            // 
+            this.killCountTablePanel.ColumnCount = 1;
+            this.killCountTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.killCountTablePanel.Controls.Add(this.killCountLabel, 0, 0);
+            this.killCountTablePanel.Controls.Add(this.adjustKillCountButton, 0, 1);
+            this.killCountTablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.killCountTablePanel.Location = new System.Drawing.Point(3, 16);
+            this.killCountTablePanel.Name = "killCountTablePanel";
+            this.killCountTablePanel.RowCount = 2;
+            this.killCountTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.killCountTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.killCountTablePanel.Size = new System.Drawing.Size(130, 77);
+            this.killCountTablePanel.TabIndex = 0;
+            // 
+            // alertsTablePanel
+            // 
+            this.alertsTablePanel.ColumnCount = 1;
+            this.alertsTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.alertsTablePanel.Controls.Add(this.alertCountButton, 0, 1);
+            this.alertsTablePanel.Controls.Add(this.alertCountLabel, 0, 0);
+            this.alertsTablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.alertsTablePanel.Location = new System.Drawing.Point(3, 16);
+            this.alertsTablePanel.Name = "alertsTablePanel";
+            this.alertsTablePanel.RowCount = 2;
+            this.alertsTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.alertsTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.alertsTablePanel.Size = new System.Drawing.Size(130, 77);
+            this.alertsTablePanel.TabIndex = 1;
+            // 
+            // rationsUsedTablePanel
+            // 
+            this.rationsUsedTablePanel.ColumnCount = 1;
+            this.rationsUsedTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.rationsUsedTablePanel.Controls.Add(this.rationsUsedButton, 0, 1);
+            this.rationsUsedTablePanel.Controls.Add(this.rationsUsedLabel, 0, 0);
+            this.rationsUsedTablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rationsUsedTablePanel.Location = new System.Drawing.Point(3, 16);
+            this.rationsUsedTablePanel.Name = "rationsUsedTablePanel";
+            this.rationsUsedTablePanel.RowCount = 2;
+            this.rationsUsedTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.rationsUsedTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.rationsUsedTablePanel.Size = new System.Drawing.Size(130, 77);
+            this.rationsUsedTablePanel.TabIndex = 1;
+            // 
+            // continueCountTablePanel
+            // 
+            this.continueCountTablePanel.ColumnCount = 1;
+            this.continueCountTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.continueCountTablePanel.Controls.Add(this.continueCountButton, 0, 1);
+            this.continueCountTablePanel.Controls.Add(this.continueCountLabel, 0, 0);
+            this.continueCountTablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.continueCountTablePanel.Location = new System.Drawing.Point(3, 16);
+            this.continueCountTablePanel.Name = "continueCountTablePanel";
+            this.continueCountTablePanel.RowCount = 2;
+            this.continueCountTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.continueCountTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.continueCountTablePanel.Size = new System.Drawing.Size(130, 77);
+            this.continueCountTablePanel.TabIndex = 1;
+            // 
+            // saveTablePanel
+            // 
+            this.saveTablePanel.ColumnCount = 1;
+            this.saveTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.saveTablePanel.Controls.Add(this.saveCountButton, 0, 1);
+            this.saveTablePanel.Controls.Add(this.saveCountLabel, 0, 0);
+            this.saveTablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.saveTablePanel.Location = new System.Drawing.Point(3, 16);
+            this.saveTablePanel.Name = "saveTablePanel";
+            this.saveTablePanel.RowCount = 2;
+            this.saveTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.saveTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.saveTablePanel.Size = new System.Drawing.Size(130, 77);
+            this.saveTablePanel.TabIndex = 1;
+            // 
+            // shotsFiredTablePanel
+            // 
+            this.shotsFiredTablePanel.ColumnCount = 1;
+            this.shotsFiredTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.shotsFiredTablePanel.Controls.Add(this.shotsFiredButton, 0, 1);
+            this.shotsFiredTablePanel.Controls.Add(this.shotsFiredLabel, 0, 0);
+            this.shotsFiredTablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.shotsFiredTablePanel.Location = new System.Drawing.Point(3, 16);
+            this.shotsFiredTablePanel.Name = "shotsFiredTablePanel";
+            this.shotsFiredTablePanel.RowCount = 2;
+            this.shotsFiredTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.shotsFiredTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.shotsFiredTablePanel.Size = new System.Drawing.Size(130, 77);
+            this.shotsFiredTablePanel.TabIndex = 1;
+            // 
+            // damageTakenTablePanel
+            // 
+            this.damageTakenTablePanel.ColumnCount = 1;
+            this.damageTakenTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.damageTakenTablePanel.Controls.Add(this.damageTakenButton, 0, 1);
+            this.damageTakenTablePanel.Controls.Add(this.damageTakenLabel, 0, 0);
+            this.damageTakenTablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.damageTakenTablePanel.Location = new System.Drawing.Point(3, 16);
+            this.damageTakenTablePanel.Name = "damageTakenTablePanel";
+            this.damageTakenTablePanel.RowCount = 2;
+            this.damageTakenTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.damageTakenTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.damageTakenTablePanel.Size = new System.Drawing.Size(130, 77);
+            this.damageTakenTablePanel.TabIndex = 1;
+            // 
+            // killCountLabel
+            // 
+            this.killCountLabel.AutoSize = true;
+            this.killCountLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.killCountLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.killCountLabel.Location = new System.Drawing.Point(3, 0);
+            this.killCountLabel.Name = "killCountLabel";
+            this.killCountLabel.Size = new System.Drawing.Size(124, 46);
+            this.killCountLabel.TabIndex = 0;
+            this.killCountLabel.Text = "0";
+            this.killCountLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // alertCountLabel
+            // 
+            this.alertCountLabel.AutoSize = true;
+            this.alertCountLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.alertCountLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.alertCountLabel.Location = new System.Drawing.Point(3, 0);
+            this.alertCountLabel.Name = "alertCountLabel";
+            this.alertCountLabel.Size = new System.Drawing.Size(124, 46);
+            this.alertCountLabel.TabIndex = 1;
+            this.alertCountLabel.Text = "0";
+            this.alertCountLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // rationsUsedLabel
+            // 
+            this.rationsUsedLabel.AutoSize = true;
+            this.rationsUsedLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rationsUsedLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rationsUsedLabel.Location = new System.Drawing.Point(3, 0);
+            this.rationsUsedLabel.Name = "rationsUsedLabel";
+            this.rationsUsedLabel.Size = new System.Drawing.Size(124, 46);
+            this.rationsUsedLabel.TabIndex = 1;
+            this.rationsUsedLabel.Text = "0";
+            this.rationsUsedLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // continueCountLabel
+            // 
+            this.continueCountLabel.AutoSize = true;
+            this.continueCountLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.continueCountLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.continueCountLabel.Location = new System.Drawing.Point(3, 0);
+            this.continueCountLabel.Name = "continueCountLabel";
+            this.continueCountLabel.Size = new System.Drawing.Size(124, 46);
+            this.continueCountLabel.TabIndex = 1;
+            this.continueCountLabel.Text = "0";
+            this.continueCountLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // saveCountLabel
+            // 
+            this.saveCountLabel.AutoSize = true;
+            this.saveCountLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.saveCountLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.saveCountLabel.Location = new System.Drawing.Point(3, 0);
+            this.saveCountLabel.Name = "saveCountLabel";
+            this.saveCountLabel.Size = new System.Drawing.Size(124, 46);
+            this.saveCountLabel.TabIndex = 1;
+            this.saveCountLabel.Text = "0";
+            this.saveCountLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // shotsFiredLabel
+            // 
+            this.shotsFiredLabel.AutoSize = true;
+            this.shotsFiredLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.shotsFiredLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.shotsFiredLabel.Location = new System.Drawing.Point(3, 0);
+            this.shotsFiredLabel.Name = "shotsFiredLabel";
+            this.shotsFiredLabel.Size = new System.Drawing.Size(124, 46);
+            this.shotsFiredLabel.TabIndex = 1;
+            this.shotsFiredLabel.Text = "0";
+            this.shotsFiredLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // damageTakenLabel
+            // 
+            this.damageTakenLabel.AutoSize = true;
+            this.damageTakenLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.damageTakenLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.damageTakenLabel.Location = new System.Drawing.Point(3, 0);
+            this.damageTakenLabel.Name = "damageTakenLabel";
+            this.damageTakenLabel.Size = new System.Drawing.Size(124, 46);
+            this.damageTakenLabel.TabIndex = 1;
+            this.damageTakenLabel.Text = "0";
+            this.damageTakenLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // adjustKillCountButton
+            // 
+            this.adjustKillCountButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.adjustKillCountButton.Location = new System.Drawing.Point(3, 49);
+            this.adjustKillCountButton.Name = "adjustKillCountButton";
+            this.adjustKillCountButton.Size = new System.Drawing.Size(124, 25);
+            this.adjustKillCountButton.TabIndex = 1;
+            this.adjustKillCountButton.Text = "Adjust Kill Count";
+            this.adjustKillCountButton.UseVisualStyleBackColor = true;
+            // 
+            // alertCountButton
+            // 
+            this.alertCountButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.alertCountButton.Location = new System.Drawing.Point(3, 49);
+            this.alertCountButton.Name = "alertCountButton";
+            this.alertCountButton.Size = new System.Drawing.Size(124, 25);
+            this.alertCountButton.TabIndex = 2;
+            this.alertCountButton.Text = "Adjust Alert Count";
+            this.alertCountButton.UseVisualStyleBackColor = true;
+            // 
+            // rationsUsedButton
+            // 
+            this.rationsUsedButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rationsUsedButton.Location = new System.Drawing.Point(3, 49);
+            this.rationsUsedButton.Name = "rationsUsedButton";
+            this.rationsUsedButton.Size = new System.Drawing.Size(124, 25);
+            this.rationsUsedButton.TabIndex = 2;
+            this.rationsUsedButton.Text = "Adjust Rations Used";
+            this.rationsUsedButton.UseVisualStyleBackColor = true;
+            // 
+            // continueCountButton
+            // 
+            this.continueCountButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.continueCountButton.Location = new System.Drawing.Point(3, 49);
+            this.continueCountButton.Name = "continueCountButton";
+            this.continueCountButton.Size = new System.Drawing.Size(124, 25);
+            this.continueCountButton.TabIndex = 2;
+            this.continueCountButton.Text = "Adjust Continue Count";
+            this.continueCountButton.UseVisualStyleBackColor = true;
+            // 
+            // saveCountButton
+            // 
+            this.saveCountButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.saveCountButton.Location = new System.Drawing.Point(3, 49);
+            this.saveCountButton.Name = "saveCountButton";
+            this.saveCountButton.Size = new System.Drawing.Size(124, 25);
+            this.saveCountButton.TabIndex = 2;
+            this.saveCountButton.Text = "Adjust Save Count";
+            this.saveCountButton.UseVisualStyleBackColor = true;
+            // 
+            // shotsFiredButton
+            // 
+            this.shotsFiredButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.shotsFiredButton.Location = new System.Drawing.Point(3, 49);
+            this.shotsFiredButton.Name = "shotsFiredButton";
+            this.shotsFiredButton.Size = new System.Drawing.Size(124, 25);
+            this.shotsFiredButton.TabIndex = 2;
+            this.shotsFiredButton.Text = "Adjust Shots Fired";
+            this.shotsFiredButton.UseVisualStyleBackColor = true;
+            // 
+            // damageTakenButton
+            // 
+            this.damageTakenButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.damageTakenButton.Location = new System.Drawing.Point(3, 49);
+            this.damageTakenButton.Name = "damageTakenButton";
+            this.damageTakenButton.Size = new System.Drawing.Size(124, 25);
+            this.damageTakenButton.TabIndex = 2;
+            this.damageTakenButton.Text = "Adjust Damage Taken";
+            this.damageTakenButton.UseVisualStyleBackColor = true;
             // 
             // GUI
             // 
@@ -7434,7 +8018,6 @@
             this.Text = "MGS2 Cheat Trainer";
             this.mgs2TabControl.ResumeLayout(false);
             this.tabPageItem.ResumeLayout(false);
-            this.tabPageItem.PerformLayout();
             this.itemLayoutPanel.ResumeLayout(false);
             this.itemGroupBox.ResumeLayout(false);
             this.itemTabTestGroupBox.ResumeLayout(false);
@@ -7447,8 +8030,6 @@
             this.itemTabTestCurrentLayoutPanel.ResumeLayout(false);
             this.itemTabTestCurrentLayoutPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
-            this.statusStrip.ResumeLayout(false);
-            this.statusStrip.PerformLayout();
             this.tabPageWeapon.ResumeLayout(false);
             this.weaponTabLayoutPanel.ResumeLayout(false);
             this.weaponGroupBox.ResumeLayout(false);
@@ -7464,18 +8045,28 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).EndInit();
             this.tabPageStats.ResumeLayout(false);
             this.tabPageLayoutPanel.ResumeLayout(false);
-            this.timesFoundGroupBox.ResumeLayout(false);
-            this.timesFoundLayoutPanel.ResumeLayout(false);
-            this.timesFoundLayoutPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.timesFoundSinceLatestSaveUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.timesFoundOnLatestSaveUpDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.timesFoundGameLaunchUpDown)).EndInit();
+            this.alertsGroupBox.ResumeLayout(false);
+            this.killCountGroupBox.ResumeLayout(false);
+            this.playTimeGroupBox.ResumeLayout(false);
+            this.rationsUsedGroupBox.ResumeLayout(false);
+            this.continuesGroupBox.ResumeLayout(false);
+            this.specialItemsGroupBox.ResumeLayout(false);
+            this.savesGroupBox.ResumeLayout(false);
+            this.shotsFiredGroupBox.ResumeLayout(false);
+            this.playerHealthGroupBox.ResumeLayout(false);
+            this.playerHpTablePanel.ResumeLayout(false);
+            this.playerHpTablePanel.PerformLayout();
+            this.damageTakenGroupBox.ResumeLayout(false);
+            this.projectedRankGroupBox.ResumeLayout(false);
+            this.gripGroupBox.ResumeLayout(false);
             this.tabPageStrings.ResumeLayout(false);
             this.stringTabLayoutPanel.ResumeLayout(false);
             this.basicNameGroupBox.ResumeLayout(false);
             this.basicNameGroupBox.PerformLayout();
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
+            this.statusStrip.ResumeLayout(false);
+            this.statusStrip.PerformLayout();
             this.hfBladeGroupBox.ResumeLayout(false);
             this.hfBladeLayoutPanel.ResumeLayout(false);
             this.hfBladeLayoutPanel.PerformLayout();
@@ -7859,6 +8450,30 @@
             ((System.ComponentModel.ISupportInitialize)(this.stealthPictureBox)).EndInit();
             this.mainMenuStrip.ResumeLayout(false);
             this.mainMenuStrip.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.playerCurrentHpTrackBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.playerMaxHpUpDown)).EndInit();
+            this.playerGripTablePanel.ResumeLayout(false);
+            this.projectedRankTable.ResumeLayout(false);
+            this.projectedRankTable.PerformLayout();
+            this.playerGripSubTablePanel.ResumeLayout(false);
+            this.playerGripSubTablePanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gripTrackBar)).EndInit();
+            this.playTimeTablePanel.ResumeLayout(false);
+            this.playTimeTablePanel.PerformLayout();
+            this.killCountTablePanel.ResumeLayout(false);
+            this.killCountTablePanel.PerformLayout();
+            this.alertsTablePanel.ResumeLayout(false);
+            this.alertsTablePanel.PerformLayout();
+            this.rationsUsedTablePanel.ResumeLayout(false);
+            this.rationsUsedTablePanel.PerformLayout();
+            this.continueCountTablePanel.ResumeLayout(false);
+            this.continueCountTablePanel.PerformLayout();
+            this.saveTablePanel.ResumeLayout(false);
+            this.saveTablePanel.PerformLayout();
+            this.shotsFiredTablePanel.ResumeLayout(false);
+            this.shotsFiredTablePanel.PerformLayout();
+            this.damageTakenTablePanel.ResumeLayout(false);
+            this.damageTakenTablePanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -8093,14 +8708,7 @@
         private System.Windows.Forms.Button hfBladeLethalBtn;
         private System.Windows.Forms.TabPage tabPageStats;
         private System.Windows.Forms.TableLayoutPanel tabPageLayoutPanel;
-        private System.Windows.Forms.GroupBox timesFoundGroupBox;
-        private System.Windows.Forms.TableLayoutPanel timesFoundLayoutPanel;
-        private System.Windows.Forms.Label label51;
-        private System.Windows.Forms.NumericUpDown timesFoundSinceLatestSaveUpDown;
-        private System.Windows.Forms.Label label50;
-        private System.Windows.Forms.NumericUpDown timesFoundOnLatestSaveUpDown;
-        private System.Windows.Forms.Label label49;
-        private System.Windows.Forms.NumericUpDown timesFoundGameLaunchUpDown;
+        private System.Windows.Forms.GroupBox alertsGroupBox;
         private System.Windows.Forms.TabPage tabPageStrings;
         private System.Windows.Forms.TableLayoutPanel stringTabLayoutPanel;
         private System.Windows.Forms.ListBox stringsListBox;
@@ -8364,6 +8972,54 @@
         private System.Windows.Forms.ToolStripMenuItem joinOurDiscordToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
+        private System.Windows.Forms.GroupBox savesGroupBox;
+        private System.Windows.Forms.GroupBox playTimeGroupBox;
+        private System.Windows.Forms.GroupBox killCountGroupBox;
+        private System.Windows.Forms.GroupBox damageTakenGroupBox;
+        private System.Windows.Forms.GroupBox projectedRankGroupBox;
+        private System.Windows.Forms.GroupBox shotsFiredGroupBox;
+        private System.Windows.Forms.GroupBox gripGroupBox;
+        private System.Windows.Forms.GroupBox playerHealthGroupBox;
+        private System.Windows.Forms.GroupBox rationsUsedGroupBox;
+        private System.Windows.Forms.GroupBox specialItemsGroupBox;
+        private System.Windows.Forms.GroupBox continuesGroupBox;
+        private System.Windows.Forms.CheckedListBox specialItemsCheckedListBox;
+        private System.Windows.Forms.TableLayoutPanel playerHpTablePanel;
+        private System.Windows.Forms.Label currentHpLabel;
+        private System.Windows.Forms.TrackBar playerCurrentHpTrackBar;
+        private System.Windows.Forms.Label playerMaxHpLabel;
+        private System.Windows.Forms.NumericUpDown playerMaxHpUpDown;
+        private System.Windows.Forms.TableLayoutPanel playerGripTablePanel;
+        private System.Windows.Forms.TableLayoutPanel projectedRankTable;
+        private System.Windows.Forms.Label projectedRankLabel;
+        private System.Windows.Forms.TableLayoutPanel playerGripSubTablePanel;
+        private System.Windows.Forms.TrackBar gripTrackBar;
+        private System.Windows.Forms.Label label49;
+        private System.Windows.Forms.Button lowerGripButton;
+        private System.Windows.Forms.Button raiseGripButton;
+        private System.Windows.Forms.TableLayoutPanel playTimeTablePanel;
+        private System.Windows.Forms.Label playTimeLabel;
+        private System.Windows.Forms.TableLayoutPanel killCountTablePanel;
+        private System.Windows.Forms.TableLayoutPanel alertsTablePanel;
+        private System.Windows.Forms.TableLayoutPanel rationsUsedTablePanel;
+        private System.Windows.Forms.TableLayoutPanel continueCountTablePanel;
+        private System.Windows.Forms.TableLayoutPanel saveTablePanel;
+        private System.Windows.Forms.TableLayoutPanel shotsFiredTablePanel;
+        private System.Windows.Forms.TableLayoutPanel damageTakenTablePanel;
+        private System.Windows.Forms.Button alertCountButton;
+        private System.Windows.Forms.Label alertCountLabel;
+        private System.Windows.Forms.Label killCountLabel;
+        private System.Windows.Forms.Button adjustKillCountButton;
+        private System.Windows.Forms.Label rationsUsedLabel;
+        private System.Windows.Forms.Label continueCountLabel;
+        private System.Windows.Forms.Label saveCountLabel;
+        private System.Windows.Forms.Label shotsFiredLabel;
+        private System.Windows.Forms.Label damageTakenLabel;
+        private System.Windows.Forms.Button rationsUsedButton;
+        private System.Windows.Forms.Button continueCountButton;
+        private System.Windows.Forms.Button saveCountButton;
+        private System.Windows.Forms.Button shotsFiredButton;
+        private System.Windows.Forms.Button damageTakenButton;
     }
 }
 

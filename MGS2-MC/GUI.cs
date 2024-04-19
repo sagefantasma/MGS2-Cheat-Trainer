@@ -1410,8 +1410,9 @@ namespace MGS2_MC
 
         private static string ParsePlayTime(int playTime)
         {
-            //TODO: not parsing correctly, unclear why
-            TimeSpan parsedPlayTime = TimeSpan.FromSeconds(playTime / 10);
+            //yes konami. why record game time at a normal rate, when you can record it at 60...
+            //ARE THEY COUNTING FRAMES??
+            TimeSpan parsedPlayTime = TimeSpan.FromSeconds(playTime / 60);
             return parsedPlayTime.ToString(@"hh\:mm\:ss");
         }
 

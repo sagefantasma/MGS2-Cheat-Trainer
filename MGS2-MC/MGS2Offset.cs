@@ -176,17 +176,17 @@ namespace MGS2_MC
         public static readonly MemoryOffset CURRENT_STAGE = new MemoryOffset(-266, -262);
         public static readonly MemoryOffset CURRENT_EQUIPPED_ITEM = new MemoryOffset(-32); //TODO: prove this is valid
         public static readonly MemoryOffset CURRENT_EQUIPPED_WEAPON = new MemoryOffset(-34); //TODO: prove this is valid
-        public static readonly MemoryOffset GAME_STATS_BLOCK = new MemoryOffset(8, 33); //TODO: prove this is valid
-        public static readonly MemoryOffset DAMAGE_TAKEN = new MemoryOffset(32); //TODO: prove this is valid
-        public static readonly MemoryOffset KILL_COUNT = new MemoryOffset(30); //TODO: prove this is valid
-        public static readonly MemoryOffset ALERT_COUNT = new MemoryOffset(28); //TODO: prove this is valid
-        public static readonly MemoryOffset SHOT_COUNT = new MemoryOffset(26); //TODO: prove this is valid
-        public static readonly MemoryOffset PLAY_TIME = new MemoryOffset(20, 23); //TODO: prove this is valid
-        public static readonly MemoryOffset SAVE_COUNT = new MemoryOffset(16); //TODO: prove this is valid
-        public static readonly MemoryOffset CONTINUE_COUNT = new MemoryOffset(12); //TODO: prove this is valid
+        public static readonly MemoryOffset GAME_STATS_BLOCK = new MemoryOffset(8, 33);
+        public static readonly MemoryOffset DAMAGE_TAKEN = new MemoryOffset(32); // what does this even represent?? is it actually whole damage????
+        public static readonly MemoryOffset KILL_COUNT = new MemoryOffset(30);
+        public static readonly MemoryOffset ALERT_COUNT = new MemoryOffset(28);
+        public static readonly MemoryOffset SHOT_COUNT = new MemoryOffset(26);
+        public static readonly MemoryOffset PLAY_TIME = new MemoryOffset(20, 23);
+        public static readonly MemoryOffset SAVE_COUNT = new MemoryOffset(16);
+        public static readonly MemoryOffset CONTINUE_COUNT = new MemoryOffset(12);
         public static readonly MemoryOffset PULL_UP_COUNT = new MemoryOffset(8); //TODO: prove this is valid
-        public static readonly MemoryOffset SPECIAL_ITEMS_USED = new MemoryOffset(5232, 5233); //TODO: prove this is valid
-        public static readonly MemoryOffset RATIONS_USED = new MemoryOffset(5226, 5227); //TODO: prove this is valid(i really, really doubt it...)
+        public static readonly MemoryOffset SPECIAL_ITEMS_USED = new MemoryOffset(5232, 5233);
+        public static readonly MemoryOffset RATIONS_USED = new MemoryOffset(5226, 5227);
         #endregion
 
         #region Calculated from Unknown Finder AoBs    

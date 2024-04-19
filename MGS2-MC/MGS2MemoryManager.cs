@@ -24,9 +24,22 @@ namespace MGS2_MC
             _logger.Verbose($"Instance ID: {Program.InstanceID}");
         }
 
+        public class GameStats
+        {
+            public short Alerts;
+            public short Continues;
+            public short DamageTaken;
+            public short Kills;
+            public int PlayTime;
+            public short Rations;
+            public short Saves;
+            public short Shots;
+            public short SpecialItems;
+        }
         #endregion
 
         #region Private methods
+
         private static Constants.PlayableCharacter DetermineActiveCharacter()
         {
             string stageName = GetStageName();
@@ -66,27 +79,30 @@ namespace MGS2_MC
 
         private static int[] GetStageOffsets()
         {
-            using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+            lock (MGS2Monitor.MGS2Process)
             {
-                byte[] gameMemoryBuffer = proxy.GetProcessSnapshot();
-                //if we've retrieved a stage offset before, check the old one first
-                if (_lastKnownStageOffsets != default)
+                using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                 {
-                    if (ValidateLastKnownOffsets(gameMemoryBuffer, _lastKnownStageOffsets, MGS2AoB.StageInfo))
+                    byte[] gameMemoryBuffer = proxy.GetProcessSnapshot();
+                    //if we've retrieved a stage offset before, check the old one first
+                    if (_lastKnownStageOffsets != default)
                     {
-                        return _lastKnownStageOffsets;
+                        if (ValidateLastKnownOffsets(gameMemoryBuffer, _lastKnownStageOffsets, MGS2AoB.StageInfo))
+                        {
+                            return _lastKnownStageOffsets;
+                        }
                     }
+
+                    _lastKnownStageOffsets = new int[2];
+
+                    List<int> stageOffset = FindUniqueOffset(gameMemoryBuffer, MGS2AoB.StageInfo);
+
+                    //most of the time we only get 2 results, but sometimes we may get 3. we always want the final two.
+                    stageOffset = stageOffset.GetRange(stageOffset.Count - 2, 2);
+
+                    Array.Copy(stageOffset.ToArray(), _lastKnownStageOffsets, 2);
+                    return _lastKnownStageOffsets;
                 }
-
-                _lastKnownStageOffsets = new int[2];
-
-                List<int> stageOffset = FindUniqueOffset(gameMemoryBuffer, MGS2AoB.StageInfo);
-
-                //most of the time we only get 2 results, but sometimes we may get 3. we always want the final two.
-                stageOffset = stageOffset.GetRange(stageOffset.Count - 2, 2);
-
-                Array.Copy(stageOffset.ToArray(), _lastKnownStageOffsets, 2);
-                return _lastKnownStageOffsets;
             }
         }
 
@@ -223,24 +239,27 @@ namespace MGS2_MC
 
         private static int[] GetPlayerOffsets()
         {
-            using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+            lock (MGS2Monitor.MGS2Process)
             {
-                byte[] gameMemoryBuffer = proxy.GetProcessSnapshot();
-
-                //if we've retrieved a player offset before, check the old one first
-                if (_lastKnownPlayerOffsets != default)
+                using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                 {
-                    if (ValidateLastKnownOffsets(gameMemoryBuffer, _lastKnownPlayerOffsets, MGS2AoB.PlayerInfoFinder))
+                    byte[] gameMemoryBuffer = proxy.GetProcessSnapshot();
+
+                    //if we've retrieved a player offset before, check the old one first
+                    if (_lastKnownPlayerOffsets != default)
                     {
-                        return _lastKnownPlayerOffsets;
+                        if (ValidateLastKnownOffsets(gameMemoryBuffer, _lastKnownPlayerOffsets, MGS2AoB.PlayerInfoFinder))
+                        {
+                            return _lastKnownPlayerOffsets;
+                        }
                     }
+
+                    _lastKnownPlayerOffsets = new int[2];
+                    List<int> playerOffsets = FindNewPlayerOffsets(gameMemoryBuffer);
+
+                    Array.Copy(playerOffsets.ToArray(), _lastKnownPlayerOffsets, 2);
+                    return _lastKnownPlayerOffsets;
                 }
-
-                _lastKnownPlayerOffsets = new int[2];
-                List<int> playerOffsets = FindNewPlayerOffsets(gameMemoryBuffer);
-
-                Array.Copy(playerOffsets.ToArray(), _lastKnownPlayerOffsets, 2);
-                return _lastKnownPlayerOffsets;
             }
         }
 
@@ -251,23 +270,26 @@ namespace MGS2_MC
                 bytesToRead = 2;
             }
 
-            using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+            lock (MGS2Monitor.MGS2Process)
             {
-                try
+                using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                 {
-                    byte[] bytesRead = proxy.ReadProcessOffset(offset, bytesToRead);
-                    if (bytesRead.Length != bytesToRead)
+                    try
                     {
-                        _logger.Warning($"Expected to read {bytesToRead}, but we actually read {bytesRead.Length}");
-                        throw new FileLoadException($"Failed to read value at offset {offset}.");
-                    }
+                        byte[] bytesRead = proxy.ReadProcessOffset(offset, bytesToRead);
+                        if (bytesRead.Length != bytesToRead)
+                        {
+                            _logger.Warning($"Expected to read {bytesToRead}, but we actually read {bytesRead.Length}");
+                            throw new FileLoadException($"Failed to read value at offset {offset}.");
+                        }
 
-                    return bytesRead;
-                }
-                catch(SimpleProcessProxyException e)
-                {
-                    _logger.Error($"Failed to read memory: {e}");
-                    throw e;
+                        return bytesRead;
+                    }
+                    catch (SimpleProcessProxyException e)
+                    {
+                        _logger.Error($"Failed to read memory: {e}");
+                        throw e;
+                    }
                 }
             }
         }
@@ -277,9 +299,12 @@ namespace MGS2_MC
             int combinedOffset = playerOffset + objectOffset;
             try
             {
-                using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                lock (MGS2Monitor.MGS2Process)
                 {
-                    proxy.InvertBooleanValue(combinedOffset, sizeof(short));
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    {
+                        proxy.InvertBooleanValue(combinedOffset, sizeof(short));
+                    }
                 }
             }
             catch (Exception e)
@@ -300,9 +325,12 @@ namespace MGS2_MC
         {
             try
             {
-                using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                lock (MGS2Monitor.MGS2Process)
                 {
-                    proxy.ModifyProcessOffset(stringOffset, valueToSet, true);
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    {
+                        proxy.ModifyProcessOffset(stringOffset, valueToSet, true);
+                    }
                 }
             }
             catch(Exception e)
@@ -319,10 +347,13 @@ namespace MGS2_MC
             {
                 int[] playerOffsets = GetPlayerOffsets();
 
-                using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                lock (MGS2Monitor.MGS2Process)
                 {
-                    proxy.ModifyProcessOffset(playerOffsets[0] + objectOffset, valueToSet);
-                    proxy.ModifyProcessOffset(playerOffsets[1] + objectOffset, valueToSet);
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    {
+                        proxy.ModifyProcessOffset(playerOffsets[0] + objectOffset, valueToSet);
+                        proxy.ModifyProcessOffset(playerOffsets[1] + objectOffset, valueToSet);
+                    }
                 }
             }
             catch (Exception e)
@@ -331,31 +362,81 @@ namespace MGS2_MC
                 throw new AggregateException($"Could not set memory at offset {objectOffset}", e);
             }
         }
+
+        private static byte[] ReadAoBOffsetValue(byte[] arrayOfBytes, MemoryOffset memoryOffset)
+        {
+            try
+            {
+                lock (MGS2Monitor.MGS2Process)
+                {
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    {
+                        byte[] processSnapshot = proxy.GetProcessSnapshot();
+
+                        int aobOffset = FindUniqueOffset(processSnapshot, arrayOfBytes).First();
+                        return proxy.ReadProcessOffset(aobOffset + memoryOffset.Start, memoryOffset.Length);
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                _logger.Error($"Failed to read memory AoB offset");
+                throw new AggregateException($"Could not read memory AoB offset", e);
+            }
+        }
+
+        private static void SetAoBOffsetValue(byte[] arrayOfBytes, MemoryOffset memoryOffset, dynamic valueToSet)
+        {
+            try
+            {
+                lock (MGS2Monitor.MGS2Process)
+                {
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    {
+                        byte[] processSnapshot = proxy.GetProcessSnapshot();
+
+                        int aobOffset = FindUniqueOffset(processSnapshot, arrayOfBytes).First();
+                        proxy.ModifyProcessOffset(aobOffset + memoryOffset.Start, valueToSet, true);
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                _logger.Error($"Failed to set memory AoB offset");
+                throw new AggregateException($"Could not set memory AoB offset", e);
+            }
+        }
         #endregion
 
         public static void UpdateGameString(MGS2Strings.MGS2String gameString, string newValue)
         {
-            using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+            lock (MGS2Monitor.MGS2Process)
             {
-                byte[] gameMemoryBuffer = proxy.GetProcessSnapshot();
+                using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                {
+                    byte[] gameMemoryBuffer = proxy.GetProcessSnapshot();
 
-                List<int> offsets = FindUniqueOffset(gameMemoryBuffer, gameString.FinderAoB);
+                    List<int> offsets = FindUniqueOffset(gameMemoryBuffer, gameString.FinderAoB);
 
-                SetStringValue(offsets[0] + gameString.MemoryOffset.Start, newValue);
+                    SetStringValue(offsets[0] + gameString.MemoryOffset.Start, newValue);
+                }
             }
         }
 
         public static string ReadGameString(MGS2Strings.MGS2String gameString)
         {
-            using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+            lock (MGS2Monitor.MGS2Process)
             {
-                byte[] gameMemoryBuffer = proxy.GetProcessSnapshot();
+                using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                {
+                    byte[] gameMemoryBuffer = proxy.GetProcessSnapshot();
 
-                List<int> offsets = FindUniqueOffset(gameMemoryBuffer, gameString.FinderAoB);
+                    List<int> offsets = FindUniqueOffset(gameMemoryBuffer, gameString.FinderAoB);
 
-                byte[] memoryValue = ReadValueFromMemory(offsets[0] + gameString.MemoryOffset.Start, gameString.MemoryOffset.Length);
+                    byte[] memoryValue = ReadValueFromMemory(offsets[0] + gameString.MemoryOffset.Start, gameString.MemoryOffset.Length);
 
-                return Encoding.UTF8.GetString(memoryValue);
+                    return Encoding.UTF8.GetString(memoryValue);
+                }
             }
         }
 
@@ -410,9 +491,40 @@ namespace MGS2_MC
             CheckIfUsable(mgs2Object);
             int objectOffset = mgs2Object.InventoryOffset;
             int[] playerOffsets = GetPlayerOffsets();
+            
 
             InvertBooleanValue(playerOffsets[0], objectOffset);
             InvertBooleanValue(playerOffsets[1], objectOffset);
+        }
+
+        public static GameStats ReadGameStats()
+        {
+            int stageOffset = GetStageOffsets().First();
+            byte[] gameStatsBytes = ReadValueFromMemory(stageOffset + MGS2Offset.GAME_STATS_BLOCK.Start, MGS2Offset.GAME_STATS_BLOCK.Length);
+            short continues = BitConverter.ToInt16(gameStatsBytes, 4);
+            short saves = BitConverter.ToInt16(gameStatsBytes, 8);
+            int playTime = BitConverter.ToInt32(gameStatsBytes, 10);
+            short shots = BitConverter.ToInt16(gameStatsBytes, 18);
+            short alerts = BitConverter.ToInt16(gameStatsBytes, 20);
+            short kills = BitConverter.ToInt16(gameStatsBytes, 22);
+            short damageTaken = BitConverter.ToInt16(gameStatsBytes, 24);
+            byte[] rationsUsedBytes = ReadValueFromMemory(stageOffset + MGS2Offset.RATIONS_USED.Start, MGS2Offset.RATIONS_USED.Length);
+            short rationsUsed = BitConverter.ToInt16(rationsUsedBytes, 0);
+            byte[] specialItemsBytes = ReadValueFromMemory(stageOffset + MGS2Offset.SPECIAL_ITEMS_USED.Start, MGS2Offset.SPECIAL_ITEMS_USED.Length);
+            short specialItems = BitConverter.ToInt16(specialItemsBytes, 0);
+
+            return new GameStats
+            {
+                Continues = continues,
+                Kills = kills,
+                DamageTaken = damageTaken,
+                PlayTime = playTime,
+                Rations = rationsUsed,
+                Saves = saves,
+                Shots = shots,
+                SpecialItems = specialItems,
+                Alerts = alerts
+            };
         }
     }
 }

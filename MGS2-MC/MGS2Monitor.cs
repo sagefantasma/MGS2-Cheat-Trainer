@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿using MGS2_MC.Helpers;
+using Serilog;
 using Serilog.Core;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using static MGS2_MC.TrainerConfigStructure;
 
@@ -105,9 +107,11 @@ namespace MGS2_MC
         private static Process _mgs2Process;
 
         private static bool _initialLaunch { get; set; } = true;
-        private static CancellationToken _cancellationToken { get; set; }
+        private static CancellationToken _monitorCancellationToken { get; set; }
+        private static CancellationTokenSource _mgs2CancellationTokenSource { get; set; } = new CancellationTokenSource();
         private static ILogger _logger { get; set; }
         private static Thread _scanningThread { get; set; }
+        private static Task _updateStatsTask { get; set; }
         #endregion
 
         #region Functions
@@ -230,7 +234,7 @@ namespace MGS2_MC
             try
             {
                 GUI.EnableLaunchMGS2Option(false);
-                while (!MGS2Process.HasExited || !_cancellationToken.IsCancellationRequested)
+                while (!MGS2Process.HasExited || !_monitorCancellationToken.IsCancellationRequested)
                 {
                     //this thread loops forever while MGS2 is running, but can be cancelled by the master cancellation token
                 }
@@ -264,7 +268,7 @@ namespace MGS2_MC
         #region Threads
         private static void ScanForMGS2()
         {
-            while (!_cancellationToken.IsCancellationRequested) //this loop should only end when the program ends.
+            while (!_monitorCancellationToken.IsCancellationRequested) //this loop should only end when the program ends.
             {
                 Process process = Process.GetProcessesByName(MGS2ProcessName).FirstOrDefault();
                 if (process != null)
@@ -280,6 +284,29 @@ namespace MGS2_MC
                 }
             }
         }
+
+        #region In-game Stats
+        
+        private static async Task MonitorScoringStats()
+        {
+            _mgs2CancellationTokenSource = new CancellationTokenSource();
+            CancellationToken mgs2CancellationToken = _mgs2CancellationTokenSource.Token;
+            await PeriodicTask.Run(UpdateScoringStats, TimeSpan.FromSeconds(1), mgs2CancellationToken);   
+        }
+
+        private static void UpdateScoringStats()
+        {
+            try
+            {
+                MGS2MemoryManager.GameStats currentGameStats = MGS2MemoryManager.ReadGameStats();
+                GUI.StaticGuiReference.UpdateGameStats(currentGameStats);
+            }
+            catch(Exception e)
+            {
+                _logger.Error($"Failed to update scoring stats! Error encountered: {e}");
+            }
+        }
+        #endregion
         #endregion
         #endregion
         #endregion
@@ -301,12 +328,22 @@ namespace MGS2_MC
                     return _mgs2Process;
                 }
 
+                try
+                {
+                    _mgs2CancellationTokenSource.Cancel();
+                }
+                catch 
+                {
+                    //if this fails, its not a big deal
+                }
                 _mgs2Process = null;
                 return null;
             }
             set
             {
-                if(GUI.GuiLoaded == true)
+                //start tasks to monitor in-game values
+                _updateStatsTask = Task.Factory.StartNew(MonitorScoringStats);
+                if (GUI.GuiLoaded == true)
                     GUI.EnableLaunchMGS2Option(value == null); //enable when process is null, disable otherwise
                 _mgs2Process = value;
             }
@@ -333,8 +370,8 @@ namespace MGS2_MC
 
         internal static void EnableMonitor(CancellationToken cancellationToken)
         {
-            _cancellationToken = cancellationToken;
-            _cancellationToken.Register(TearDownMonitor);
+            _monitorCancellationToken = cancellationToken;
+            _monitorCancellationToken.Register(TearDownMonitor);
             _logger.Information("Starting MGS2 scanning thread...");
             _scanningThread = new Thread(() => ScanForMGS2())
             {

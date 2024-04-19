@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using System.Windows.Forms;
 
@@ -1378,6 +1379,90 @@ namespace MGS2_MC
         private void HfBladeCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             MGS2UsableObjects.HighFrequencyBlade.ToggleWeapon(hfBladeCheckBox.Checked, _logger, toolStripStatusLabel);
+        }
+        #endregion
+
+        #region Stats Tab Functions
+        internal void UpdateGameStats(MGS2MemoryManager.GameStats gameStats)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new MethodInvoker(() => UpdateGui(gameStats)));
+            }
+            else
+            {
+                UpdateGui(gameStats);
+            }
+        }
+
+        private void UpdateGui(MGS2MemoryManager.GameStats currentGameStats)
+        {
+            alertCountLabel.Text = currentGameStats.Alerts.ToString();
+            continueCountLabel.Text = currentGameStats.Continues.ToString();
+            damageTakenLabel.Text = currentGameStats.DamageTaken.ToString();
+            killCountLabel.Text = currentGameStats.Kills.ToString();
+            playTimeLabel.Text = ParsePlayTime(currentGameStats.PlayTime);
+            rationsUsedLabel.Text = currentGameStats.Rations.ToString();
+            saveCountLabel.Text = currentGameStats.Saves.ToString();
+            shotsFiredLabel.Text = currentGameStats.Shots.ToString();
+            CheckOffSpecialItemsUsed(currentGameStats.SpecialItems);
+        }
+
+        private static string ParsePlayTime(int playTime)
+        {
+            //TODO: not parsing correctly, unclear why
+            TimeSpan parsedPlayTime = TimeSpan.FromSeconds(playTime / 10);
+            return parsedPlayTime.ToString(@"hh\:mm\:ss");
+        }
+
+        private void CheckOffSpecialItemsUsed(short specialItems)
+        {
+            //TODO: not parsing correctly
+            int indexOfWig = specialItemsCheckedListBox.FindString("Wig");
+            int indexOfStealth = specialItemsCheckedListBox.FindString("Stealth");
+            int indexOfBandana = specialItemsCheckedListBox.FindString("Bandana");
+            int indexOfRadar = specialItemsCheckedListBox.FindString("Radar");
+            for (int i = 0; i < specialItemsCheckedListBox.Items.Count; i++)
+                specialItemsCheckedListBox.SetItemCheckState(i, CheckState.Unchecked);
+
+            switch (specialItems)
+            {
+                default:
+                case 0x0000:
+                    break;
+                case 0x0220:
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfWig, CheckState.Checked);
+                    break;
+                case 0x1020:
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfStealth, CheckState.Checked);
+                    break;
+                case 0x1220:
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfStealth, CheckState.Checked);
+                    break;
+                case 0x2000:
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    break;
+                case 0x2220:
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfWig, CheckState.Checked);
+                    break;
+                case 0x3020:
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfStealth, CheckState.Checked);
+                    break;
+                case 0x3220:
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfStealth, CheckState.Checked);
+                    break;
+                case 0x2120:
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfStealth, CheckState.Checked);
+                    break;
+                case 0x0120:
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfBandana, CheckState.Checked);
+                    break;
+            }
         }
         #endregion
 

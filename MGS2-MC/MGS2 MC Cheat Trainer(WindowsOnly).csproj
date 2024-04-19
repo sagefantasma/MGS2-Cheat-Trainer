@@ -210,6 +210,7 @@
     <Compile Include="GuiObject.cs" />
     <Compile Include="Helpers\ControllerInterface.cs" />
     <Compile Include="Helpers\InstanceIdentifier.cs" />
+    <Compile Include="Helpers\PeriodicTask.cs" />
     <Compile Include="Helpers\PlayableCharacters\PlayableCharacter.cs" />
     <Compile Include="Helpers\Logging.cs" />
     <Compile Include="MGS2Monitor.cs" />

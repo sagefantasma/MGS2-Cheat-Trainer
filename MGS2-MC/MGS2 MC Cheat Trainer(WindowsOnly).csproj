@@ -208,11 +208,12 @@
     <Compile Include="ControllerSupport\Ps4ControllerManager.cs" />
     <Compile Include="ControllerSupport\XboxControllerManager.cs" />
     <Compile Include="GuiObject.cs" />
-    <Compile Include="Helpers\ControllerInterface.cs" />
+    <Compile Include="ControllerSupport\ControllerInterface.cs" />
     <Compile Include="Helpers\InstanceIdentifier.cs" />
     <Compile Include="Helpers\PeriodicTask.cs" />
     <Compile Include="Helpers\PlayableCharacters\PlayableCharacter.cs" />
     <Compile Include="Helpers\Logging.cs" />
+    <Compile Include="Cheat.cs" />
     <Compile Include="MGS2Monitor.cs" />
     <Compile Include="MGS2Object.cs" />
     <Compile Include="GUI.cs">

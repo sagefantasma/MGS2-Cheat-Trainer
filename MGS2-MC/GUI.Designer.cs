@@ -116,6 +116,7 @@
             this.descriptionGroupBox = new System.Windows.Forms.GroupBox();
             this.tabPageCheats = new System.Windows.Forms.TabPage();
             this.cheatTablePanel = new System.Windows.Forms.TableLayoutPanel();
+            this.healthAndGripTablePanel = new System.Windows.Forms.TableLayoutPanel();
             this.gripGroupBox = new System.Windows.Forms.GroupBox();
             this.playerGripTablePanel = new System.Windows.Forms.TableLayoutPanel();
             this.raiseGripButton = new System.Windows.Forms.Button();
@@ -129,6 +130,7 @@
             this.playerCurrentHpTrackBar = new System.Windows.Forms.TrackBar();
             this.playerMaxHpLabel = new System.Windows.Forms.Label();
             this.playerMaxHpUpDown = new System.Windows.Forms.NumericUpDown();
+            this.cheatsCheckedListBox = new System.Windows.Forms.CheckedListBox();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.hfBladeGroupBox = new System.Windows.Forms.GroupBox();
@@ -574,6 +576,15 @@
             this.viewLogsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.githubMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.joinOurDiscordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aobTesterTablePanel = new System.Windows.Forms.TableLayoutPanel();
+            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.rangeTextbox = new System.Windows.Forms.TextBox();
+            this.aobTextbox = new System.Windows.Forms.TextBox();
+            this.button5 = new System.Windows.Forms.Button();
+            this.button6 = new System.Windows.Forms.Button();
+            this.memContents = new System.Windows.Forms.TextBox();
+            this.label50 = new System.Windows.Forms.Label();
+            this.memRange = new System.Windows.Forms.Label();
             this.mgs2TabControl.SuspendLayout();
             this.tabPageItem.SuspendLayout();
             this.itemLayoutPanel.SuspendLayout();
@@ -624,6 +635,7 @@
             this.flowLayoutPanel1.SuspendLayout();
             this.tabPageCheats.SuspendLayout();
             this.cheatTablePanel.SuspendLayout();
+            this.healthAndGripTablePanel.SuspendLayout();
             this.gripGroupBox.SuspendLayout();
             this.playerGripTablePanel.SuspendLayout();
             this.playerGripSubTablePanel.SuspendLayout();
@@ -907,6 +919,8 @@
             this.stealthLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.stealthPictureBox)).BeginInit();
             this.mainMenuStrip.SuspendLayout();
+            this.aobTesterTablePanel.SuspendLayout();
+            this.flowLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // mgs2TabControl
@@ -1991,8 +2005,9 @@
             this.cheatTablePanel.ColumnCount = 2;
             this.cheatTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.cheatTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.cheatTablePanel.Controls.Add(this.gripGroupBox, 0, 1);
-            this.cheatTablePanel.Controls.Add(this.playerHealthGroupBox, 0, 0);
+            this.cheatTablePanel.Controls.Add(this.healthAndGripTablePanel, 1, 0);
+            this.cheatTablePanel.Controls.Add(this.cheatsCheckedListBox, 0, 0);
+            this.cheatTablePanel.Controls.Add(this.aobTesterTablePanel, 1, 1);
             this.cheatTablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cheatTablePanel.Location = new System.Drawing.Point(3, 3);
             this.cheatTablePanel.Name = "cheatTablePanel";
@@ -2002,14 +2017,30 @@
             this.cheatTablePanel.Size = new System.Drawing.Size(570, 408);
             this.cheatTablePanel.TabIndex = 0;
             // 
+            // healthAndGripTablePanel
+            // 
+            this.healthAndGripTablePanel.ColumnCount = 1;
+            this.healthAndGripTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.healthAndGripTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.healthAndGripTablePanel.Controls.Add(this.gripGroupBox, 0, 1);
+            this.healthAndGripTablePanel.Controls.Add(this.playerHealthGroupBox, 0, 0);
+            this.healthAndGripTablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.healthAndGripTablePanel.Location = new System.Drawing.Point(288, 3);
+            this.healthAndGripTablePanel.Name = "healthAndGripTablePanel";
+            this.healthAndGripTablePanel.RowCount = 2;
+            this.healthAndGripTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.healthAndGripTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.healthAndGripTablePanel.Size = new System.Drawing.Size(279, 198);
+            this.healthAndGripTablePanel.TabIndex = 13;
+            // 
             // gripGroupBox
             // 
             this.gripGroupBox.Controls.Add(this.playerGripTablePanel);
             this.gripGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gripGroupBox.Location = new System.Drawing.Point(3, 207);
+            this.gripGroupBox.Location = new System.Drawing.Point(3, 102);
             this.gripGroupBox.Name = "gripGroupBox";
-            this.gripGroupBox.Size = new System.Drawing.Size(279, 198);
-            this.gripGroupBox.TabIndex = 12;
+            this.gripGroupBox.Size = new System.Drawing.Size(273, 93);
+            this.gripGroupBox.TabIndex = 13;
             this.gripGroupBox.TabStop = false;
             this.gripGroupBox.Text = "Player Grip";
             // 
@@ -2027,15 +2058,15 @@
             this.playerGripTablePanel.RowCount = 2;
             this.playerGripTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.playerGripTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.playerGripTablePanel.Size = new System.Drawing.Size(273, 179);
+            this.playerGripTablePanel.Size = new System.Drawing.Size(267, 74);
             this.playerGripTablePanel.TabIndex = 0;
             // 
             // raiseGripButton
             // 
             this.raiseGripButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.raiseGripButton.Location = new System.Drawing.Point(139, 92);
+            this.raiseGripButton.Location = new System.Drawing.Point(136, 40);
             this.raiseGripButton.Name = "raiseGripButton";
-            this.raiseGripButton.Size = new System.Drawing.Size(131, 84);
+            this.raiseGripButton.Size = new System.Drawing.Size(128, 31);
             this.raiseGripButton.TabIndex = 2;
             this.raiseGripButton.Text = "Raise Grip Level";
             this.raiseGripButton.UseVisualStyleBackColor = true;
@@ -2055,8 +2086,8 @@
             this.playerGripSubTablePanel.Name = "playerGripSubTablePanel";
             this.playerGripSubTablePanel.RowCount = 1;
             this.playerGripSubTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.playerGripSubTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 89F));
-            this.playerGripSubTablePanel.Size = new System.Drawing.Size(273, 89);
+            this.playerGripSubTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
+            this.playerGripSubTablePanel.Size = new System.Drawing.Size(267, 37);
             this.playerGripSubTablePanel.TabIndex = 0;
             // 
             // gripTrackBar
@@ -2065,10 +2096,10 @@
             this.playerGripSubTablePanel.SetColumnSpan(this.gripTrackBar, 2);
             this.gripTrackBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gripTrackBar.LargeChange = 250;
-            this.gripTrackBar.Location = new System.Drawing.Point(94, 3);
+            this.gripTrackBar.Location = new System.Drawing.Point(92, 3);
             this.gripTrackBar.Maximum = 1800;
             this.gripTrackBar.Name = "gripTrackBar";
-            this.gripTrackBar.Size = new System.Drawing.Size(176, 83);
+            this.gripTrackBar.Size = new System.Drawing.Size(172, 31);
             this.gripTrackBar.TabIndex = 2;
             this.gripTrackBar.TickStyle = System.Windows.Forms.TickStyle.None;
             this.gripTrackBar.Value = 1800;
@@ -2079,7 +2110,7 @@
             this.label49.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label49.Location = new System.Drawing.Point(3, 0);
             this.label49.Name = "label49";
-            this.label49.Size = new System.Drawing.Size(85, 89);
+            this.label49.Size = new System.Drawing.Size(83, 37);
             this.label49.TabIndex = 0;
             this.label49.Text = "Current Grip";
             this.label49.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2087,9 +2118,9 @@
             // lowerGripButton
             // 
             this.lowerGripButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lowerGripButton.Location = new System.Drawing.Point(3, 92);
+            this.lowerGripButton.Location = new System.Drawing.Point(3, 40);
             this.lowerGripButton.Name = "lowerGripButton";
-            this.lowerGripButton.Size = new System.Drawing.Size(130, 84);
+            this.lowerGripButton.Size = new System.Drawing.Size(127, 31);
             this.lowerGripButton.TabIndex = 1;
             this.lowerGripButton.Text = "Lower Grip Level";
             this.lowerGripButton.UseVisualStyleBackColor = true;
@@ -2100,8 +2131,8 @@
             this.playerHealthGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.playerHealthGroupBox.Location = new System.Drawing.Point(3, 3);
             this.playerHealthGroupBox.Name = "playerHealthGroupBox";
-            this.playerHealthGroupBox.Size = new System.Drawing.Size(279, 198);
-            this.playerHealthGroupBox.TabIndex = 11;
+            this.playerHealthGroupBox.Size = new System.Drawing.Size(273, 93);
+            this.playerHealthGroupBox.TabIndex = 12;
             this.playerHealthGroupBox.TabStop = false;
             this.playerHealthGroupBox.Text = "Player Health";
             // 
@@ -2120,7 +2151,7 @@
             this.playerHpTablePanel.RowCount = 2;
             this.playerHpTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.playerHpTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.playerHpTablePanel.Size = new System.Drawing.Size(273, 179);
+            this.playerHpTablePanel.Size = new System.Drawing.Size(267, 74);
             this.playerHpTablePanel.TabIndex = 0;
             // 
             // currentHpLabel
@@ -2129,7 +2160,7 @@
             this.currentHpLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.currentHpLabel.Location = new System.Drawing.Point(3, 0);
             this.currentHpLabel.Name = "currentHpLabel";
-            this.currentHpLabel.Size = new System.Drawing.Size(75, 89);
+            this.currentHpLabel.Size = new System.Drawing.Size(74, 37);
             this.currentHpLabel.TabIndex = 0;
             this.currentHpLabel.Text = "Current HP";
             this.currentHpLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2139,10 +2170,10 @@
             this.playerCurrentHpTrackBar.BackColor = System.Drawing.Color.Aquamarine;
             this.playerCurrentHpTrackBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.playerCurrentHpTrackBar.LargeChange = 10;
-            this.playerCurrentHpTrackBar.Location = new System.Drawing.Point(84, 3);
+            this.playerCurrentHpTrackBar.Location = new System.Drawing.Point(83, 3);
             this.playerCurrentHpTrackBar.Maximum = 100;
             this.playerCurrentHpTrackBar.Name = "playerCurrentHpTrackBar";
-            this.playerCurrentHpTrackBar.Size = new System.Drawing.Size(186, 83);
+            this.playerCurrentHpTrackBar.Size = new System.Drawing.Size(181, 31);
             this.playerCurrentHpTrackBar.TabIndex = 1;
             this.playerCurrentHpTrackBar.TickStyle = System.Windows.Forms.TickStyle.None;
             this.playerCurrentHpTrackBar.Value = 100;
@@ -2151,9 +2182,9 @@
             // 
             this.playerMaxHpLabel.AutoSize = true;
             this.playerMaxHpLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.playerMaxHpLabel.Location = new System.Drawing.Point(3, 89);
+            this.playerMaxHpLabel.Location = new System.Drawing.Point(3, 37);
             this.playerMaxHpLabel.Name = "playerMaxHpLabel";
-            this.playerMaxHpLabel.Size = new System.Drawing.Size(75, 90);
+            this.playerMaxHpLabel.Size = new System.Drawing.Size(74, 37);
             this.playerMaxHpLabel.TabIndex = 2;
             this.playerMaxHpLabel.Text = "Max HP";
             this.playerMaxHpLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2161,15 +2192,27 @@
             // playerMaxHpUpDown
             // 
             this.playerMaxHpUpDown.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.playerMaxHpUpDown.Location = new System.Drawing.Point(84, 92);
+            this.playerMaxHpUpDown.Location = new System.Drawing.Point(83, 40);
             this.playerMaxHpUpDown.Name = "playerMaxHpUpDown";
-            this.playerMaxHpUpDown.Size = new System.Drawing.Size(186, 20);
+            this.playerMaxHpUpDown.Size = new System.Drawing.Size(181, 20);
             this.playerMaxHpUpDown.TabIndex = 3;
             this.playerMaxHpUpDown.Value = new decimal(new int[] {
             100,
             0,
             0,
             0});
+            // 
+            // cheatsCheckedListBox
+            // 
+            this.cheatsCheckedListBox.CheckOnClick = true;
+            this.cheatsCheckedListBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cheatsCheckedListBox.FormattingEnabled = true;
+            this.cheatsCheckedListBox.Location = new System.Drawing.Point(3, 3);
+            this.cheatsCheckedListBox.Name = "cheatsCheckedListBox";
+            this.cheatTablePanel.SetRowSpan(this.cheatsCheckedListBox, 2);
+            this.cheatsCheckedListBox.Size = new System.Drawing.Size(279, 402);
+            this.cheatsCheckedListBox.TabIndex = 14;
+            this.cheatsCheckedListBox.SelectedIndexChanged += new System.EventHandler(this.CheatsCheckedListBox_SelectedIndexChanged);
             // 
             // statusStrip
             // 
@@ -8087,6 +8130,98 @@
             this.joinOurDiscordToolStripMenuItem.Text = "Join Our Discord";
             this.joinOurDiscordToolStripMenuItem.Click += new System.EventHandler(this.JoinOurDiscordToolStripMenuItem_Click);
             // 
+            // aobTesterTablePanel
+            // 
+            this.aobTesterTablePanel.ColumnCount = 2;
+            this.aobTesterTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.aobTesterTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.aobTesterTablePanel.Controls.Add(this.flowLayoutPanel2, 0, 0);
+            this.aobTesterTablePanel.Controls.Add(this.button5, 1, 0);
+            this.aobTesterTablePanel.Controls.Add(this.button6, 1, 1);
+            this.aobTesterTablePanel.Controls.Add(this.memContents, 0, 1);
+            this.aobTesterTablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.aobTesterTablePanel.Location = new System.Drawing.Point(288, 207);
+            this.aobTesterTablePanel.Name = "aobTesterTablePanel";
+            this.aobTesterTablePanel.RowCount = 2;
+            this.aobTesterTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.aobTesterTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.aobTesterTablePanel.Size = new System.Drawing.Size(279, 198);
+            this.aobTesterTablePanel.TabIndex = 15;
+            this.aobTesterTablePanel.Visible = false;
+            // 
+            // flowLayoutPanel2
+            // 
+            this.flowLayoutPanel2.Controls.Add(this.label50);
+            this.flowLayoutPanel2.Controls.Add(this.aobTextbox);
+            this.flowLayoutPanel2.Controls.Add(this.memRange);
+            this.flowLayoutPanel2.Controls.Add(this.rangeTextbox);
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(3, 3);
+            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(133, 93);
+            this.flowLayoutPanel2.TabIndex = 0;
+            // 
+            // rangeTextbox
+            // 
+            this.rangeTextbox.Location = new System.Drawing.Point(3, 55);
+            this.rangeTextbox.Name = "rangeTextbox";
+            this.rangeTextbox.Size = new System.Drawing.Size(100, 20);
+            this.rangeTextbox.TabIndex = 0;
+            // 
+            // aobTextbox
+            // 
+            this.aobTextbox.Location = new System.Drawing.Point(3, 16);
+            this.aobTextbox.Name = "aobTextbox";
+            this.aobTextbox.Size = new System.Drawing.Size(100, 20);
+            this.aobTextbox.TabIndex = 1;
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(142, 3);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(104, 78);
+            this.button5.TabIndex = 1;
+            this.button5.Text = "Find AoB and load Range";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(142, 102);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(115, 48);
+            this.button6.TabIndex = 2;
+            this.button6.Text = "Modify Bytes";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // memContents
+            // 
+            this.memContents.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.memContents.Location = new System.Drawing.Point(3, 102);
+            this.memContents.Multiline = true;
+            this.memContents.Name = "memContents";
+            this.memContents.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.memContents.Size = new System.Drawing.Size(133, 93);
+            this.memContents.TabIndex = 3;
+            // 
+            // label50
+            // 
+            this.label50.AutoSize = true;
+            this.label50.Location = new System.Drawing.Point(3, 0);
+            this.label50.Name = "label50";
+            this.label50.Size = new System.Drawing.Size(59, 13);
+            this.label50.TabIndex = 2;
+            this.label50.Text = "AoB to find";
+            // 
+            // memRange
+            // 
+            this.memRange.AutoSize = true;
+            this.memRange.Location = new System.Drawing.Point(3, 39);
+            this.memRange.Name = "memRange";
+            this.memRange.Size = new System.Drawing.Size(74, 13);
+            this.memRange.TabIndex = 3;
+            this.memRange.Text = "Range to load";
+            // 
             // GUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -8169,6 +8304,7 @@
             this.flowLayoutPanel1.PerformLayout();
             this.tabPageCheats.ResumeLayout(false);
             this.cheatTablePanel.ResumeLayout(false);
+            this.healthAndGripTablePanel.ResumeLayout(false);
             this.gripGroupBox.ResumeLayout(false);
             this.playerGripTablePanel.ResumeLayout(false);
             this.playerGripSubTablePanel.ResumeLayout(false);
@@ -8564,6 +8700,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.stealthPictureBox)).EndInit();
             this.mainMenuStrip.ResumeLayout(false);
             this.mainMenuStrip.PerformLayout();
+            this.aobTesterTablePanel.ResumeLayout(false);
+            this.aobTesterTablePanel.PerformLayout();
+            this.flowLayoutPanel2.ResumeLayout(false);
+            this.flowLayoutPanel2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -9100,6 +9240,10 @@
         private System.Windows.Forms.TabPage tabPageCheats;
         private System.Windows.Forms.TableLayoutPanel cheatTablePanel;
         private System.Windows.Forms.GroupBox mechDamageGroupBox;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Button mechsDestroyedButton;
+        private System.Windows.Forms.Label mechsDestroyedLabel;
+        private System.Windows.Forms.TableLayoutPanel healthAndGripTablePanel;
         private System.Windows.Forms.GroupBox gripGroupBox;
         private System.Windows.Forms.TableLayoutPanel playerGripTablePanel;
         private System.Windows.Forms.Button raiseGripButton;
@@ -9113,9 +9257,16 @@
         private System.Windows.Forms.TrackBar playerCurrentHpTrackBar;
         private System.Windows.Forms.Label playerMaxHpLabel;
         private System.Windows.Forms.NumericUpDown playerMaxHpUpDown;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Button mechsDestroyedButton;
-        private System.Windows.Forms.Label mechsDestroyedLabel;
+        private System.Windows.Forms.CheckedListBox cheatsCheckedListBox;
+        private System.Windows.Forms.TableLayoutPanel aobTesterTablePanel;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
+        private System.Windows.Forms.Label label50;
+        private System.Windows.Forms.TextBox aobTextbox;
+        private System.Windows.Forms.Label memRange;
+        private System.Windows.Forms.TextBox rangeTextbox;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.TextBox memContents;
     }
 }
 

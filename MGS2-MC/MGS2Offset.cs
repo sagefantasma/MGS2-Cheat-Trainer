@@ -53,6 +53,8 @@ namespace MGS2_MC
         //clipcurrentCount == -114 from the above AoB, 4bytes long. HP mod is DIRECTLY after, it seems?
         internal static byte[] StageInfo = new byte[] { 0x10, 0x0E, 0x18, 0x15, 0x20, 0x1C };
         //current "stage" == -267 from the above AoB, 5 bytes long. If it has r_tnk, it is Snake. if it is r_plt, it is raiden :)
+        internal static byte[] InfiniteAmmoBytes = new byte[] { 0x66, 0x89, 0x0C, 0x1A, 0x48, 0x8B, 0x5C, 0x24, 0x30, 0x0F, 0xBF, 0xC1, 0x48, 0x83, 0xC4, 0x20 };
+        internal static string InfiniteAmmoString = "66 89 0C 1A 48 8B 5C 24 30 0F BF C1 48 83 C4 20";
 
 
         /*new offsets and shit found 4/17/24:
@@ -188,6 +190,10 @@ namespace MGS2_MC
         public static readonly MemoryOffset PULL_UP_COUNT = new MemoryOffset(8); //TODO: prove this is valid
         public static readonly MemoryOffset SPECIAL_ITEMS_USED = new MemoryOffset(5232, 5233);
         public static readonly MemoryOffset RATIONS_USED = new MemoryOffset(5226, 5227);
+        #endregion
+
+        #region Cheats offsets
+        public static readonly MemoryOffset INFINITE_AMMO = new MemoryOffset(0, 16);
         #endregion
 
         #region Calculated from Unknown Finder AoBs    

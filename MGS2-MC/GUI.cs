@@ -1,13 +1,17 @@
 using MGS2_MC.Controllers;
 using Serilog;
+using SimplifiedMemoryManager;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Text.Json;
+using System.Web.UI.WebControls;
 using System.Windows.Forms;
 
 namespace MGS2_MC
@@ -538,6 +542,12 @@ namespace MGS2_MC
             weaponGuiObjectList.Add(new GuiObject("Stinger", stingerGroupBox));
             weaponGuiObjectList.Add(new GuiObject("Stun Grenade", stunGroupBox));
             weaponGuiObjectList.Add(new GuiObject("USP", uspGroupBox));
+
+            foreach(Cheat cheat in MGS2Cheat.CheatList)
+            {
+                cheatsCheckedListBox.Items.Add(cheat);
+            }
+            cheatsCheckedListBox.DisplayMember = "Name";
         }
 
         private void BuildGroupBoxForObject(MGS2Object objectToEdit)
@@ -591,6 +601,9 @@ namespace MGS2_MC
             stringsListBox.DisplayMember = "Tag";
             stringsListBox.SelectedIndex = -1;
             //mgs2TabControl.TabPages.RemoveByKey(tabPageStats.Name);
+#if DEBUG
+            aobTesterTablePanel.Visible = true;
+#endif
             GuiLoaded = true;
         }
 
@@ -1692,6 +1705,60 @@ namespace MGS2_MC
             {
                 _logger.Error($"Failed to launch Discord page from sender {JsonSerializer.Serialize(sender)} and args {JsonSerializer.Serialize(e)}: {ex}");
                 MessageBox.Show(@"Failed to launch Discord page. If this error persists, please restart the application.");
+            }
+        }
+
+        private void CheatsCheckedListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            CheckedListBox cheatsBox = sender as CheckedListBox;
+
+            if (cheatsBox?.SelectedItem != null)
+            {
+                Cheat selectedCheat = (Cheat)cheatsBox.SelectedItem;
+
+                selectedCheat.CheatAction();
+            }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            string aob = aobTextbox.Text;
+            string[] range = rangeTextbox.Text.Split(',');
+
+
+            _memoryLocation = 0;
+            lock (MGS2Monitor.MGS2Process)
+            {
+                using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                {
+                    SimplePattern pattern = new SimplePattern(aob);
+                    _memoryLocation = spp.ScanMemoryForPattern(pattern);
+
+                    byte[] memoryContent = spp.ReadProcessOffset(_memoryLocation, (long)(int.Parse(range[1]) - int.Parse(range[0])));
+
+                    memContents.Text = BitConverter.ToString(memoryContent);
+                }
+            }
+        }
+
+        int _memoryLocation = 0;
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            lock (MGS2Monitor.MGS2Process)
+            {
+                using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                {
+                    string strippedText = memContents.Text.Replace("-", "");
+                    byte[] convertedMem = new byte[strippedText.Length / 2];
+                    for(int i = 0; i < convertedMem.Length; i++)
+                    {
+                        string oneByte = strippedText.Substring(i * 2, 2);
+                        convertedMem[i] = byte.Parse(oneByte, NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+                    }
+                    //byte[] convertedMemory = Encoding.Default.GetBytes(memContents.Text.Replace('-',' '));
+                    spp.ModifyProcessOffset(_memoryLocation, convertedMem, true);
+                }
             }
         }
     }

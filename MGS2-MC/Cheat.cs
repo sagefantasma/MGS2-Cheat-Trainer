@@ -20,33 +20,18 @@ namespace MGS2_MC
 
         internal class CheatActions
         {
-            public static void TurnScreenBlack()
-            {
-
-            }
-
-            public static void TurnOffBleedDamage()
-            {
-
-            }
-
-            public static void TurnOffBurnDamage()
-            {
-
-            }
-
-            internal static void InfiniteAmmo()
+            private static void ReplaceWithInvalidCode(string aob, MemoryOffset offset, int bytesToReplace, int startIndexToReplace = 0)
             {
                 lock (MGS2Monitor.MGS2Process)
                 {
                     using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                     {
-                        SimplePattern pattern = new SimplePattern(MGS2AoB.InfiniteAmmoString);
+                        SimplePattern pattern = new SimplePattern(aob);
                         int memoryLocation = spp.ScanMemoryForPattern(pattern);
 
-                        byte[] memoryContent = spp.ReadProcessOffset(memoryLocation, MGS2Offset.INFINITE_AMMO.Length);
+                        byte[] memoryContent = spp.ReadProcessOffset(memoryLocation, offset.Length);
 
-                        for(int i = 0; i < 4; i++)
+                        for (int i = startIndexToReplace; i < startIndexToReplace+bytesToReplace; i++)
                         {
                             memoryContent[i] = 0x90;
                         }
@@ -56,14 +41,34 @@ namespace MGS2_MC
                 }
             }
 
+            public static void TurnScreenBlack()
+            {
+
+            }
+
+            public static void TurnOffBleedDamage()
+            {
+                ReplaceWithInvalidCode(MGS2AoB.NoBleedDamage, MGS2Offset.NO_BLEED_DMG, 7);
+            }
+
+            public static void TurnOffBurnDamage()
+            {
+                ReplaceWithInvalidCode(MGS2AoB.NoBurnDamage, MGS2Offset.NO_BURN_DMG, 7);
+            }
+
+            internal static void InfiniteAmmo()
+            {
+                ReplaceWithInvalidCode(MGS2AoB.InfiniteAmmo, MGS2Offset.INFINITE_AMMO, 4);
+            }
+
             internal static void InfiniteLife()
             {
-                throw new NotImplementedException();
+                ReplaceWithInvalidCode(MGS2AoB.InfiniteLife, MGS2Offset.INFINITE_LIFE, 4);
             }
 
             internal static void InfiniteOxygen()
             {
-                throw new NotImplementedException();
+                ReplaceWithInvalidCode(MGS2AoB.InfiniteO2, MGS2Offset.INFINITE_O2, 4);
             }
 
             internal static void Letterboxing()
@@ -73,7 +78,7 @@ namespace MGS2_MC
 
             internal static void AmmoNeverDepletes()
             {
-                throw new NotImplementedException();
+                ReplaceWithInvalidCode(MGS2AoB.NeverReload, MGS2Offset.NEVER_RELOAD, 4);
             }
 
             internal static void NoClipNoGravity()

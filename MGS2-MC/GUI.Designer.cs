@@ -93,26 +93,17 @@
             this.shotsFiredTablePanel = new System.Windows.Forms.TableLayoutPanel();
             this.shotsFiredButton = new System.Windows.Forms.Button();
             this.shotsFiredLabel = new System.Windows.Forms.Label();
-            this.playerHealthGroupBox = new System.Windows.Forms.GroupBox();
-            this.playerHpTablePanel = new System.Windows.Forms.TableLayoutPanel();
-            this.currentHpLabel = new System.Windows.Forms.Label();
-            this.playerCurrentHpTrackBar = new System.Windows.Forms.TrackBar();
-            this.playerMaxHpLabel = new System.Windows.Forms.Label();
-            this.playerMaxHpUpDown = new System.Windows.Forms.NumericUpDown();
+            this.projectedRankGroupBox = new System.Windows.Forms.GroupBox();
+            this.projectedRankTable = new System.Windows.Forms.TableLayoutPanel();
+            this.projectedRankLabel = new System.Windows.Forms.Label();
             this.damageTakenGroupBox = new System.Windows.Forms.GroupBox();
             this.damageTakenTablePanel = new System.Windows.Forms.TableLayoutPanel();
             this.damageTakenButton = new System.Windows.Forms.Button();
             this.damageTakenLabel = new System.Windows.Forms.Label();
-            this.projectedRankGroupBox = new System.Windows.Forms.GroupBox();
-            this.projectedRankTable = new System.Windows.Forms.TableLayoutPanel();
-            this.projectedRankLabel = new System.Windows.Forms.Label();
-            this.gripGroupBox = new System.Windows.Forms.GroupBox();
-            this.playerGripTablePanel = new System.Windows.Forms.TableLayoutPanel();
-            this.raiseGripButton = new System.Windows.Forms.Button();
-            this.playerGripSubTablePanel = new System.Windows.Forms.TableLayoutPanel();
-            this.gripTrackBar = new System.Windows.Forms.TrackBar();
-            this.label49 = new System.Windows.Forms.Label();
-            this.lowerGripButton = new System.Windows.Forms.Button();
+            this.mechDamageGroupBox = new System.Windows.Forms.GroupBox();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.mechsDestroyedButton = new System.Windows.Forms.Button();
+            this.mechsDestroyedLabel = new System.Windows.Forms.Label();
             this.tabPageStrings = new System.Windows.Forms.TabPage();
             this.stringTabLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.stringsListBox = new System.Windows.Forms.ListBox();
@@ -123,6 +114,21 @@
             this.characterLimitLabel = new System.Windows.Forms.Label();
             this.basicNameTextBox = new System.Windows.Forms.TextBox();
             this.descriptionGroupBox = new System.Windows.Forms.GroupBox();
+            this.tabPageCheats = new System.Windows.Forms.TabPage();
+            this.cheatTablePanel = new System.Windows.Forms.TableLayoutPanel();
+            this.gripGroupBox = new System.Windows.Forms.GroupBox();
+            this.playerGripTablePanel = new System.Windows.Forms.TableLayoutPanel();
+            this.raiseGripButton = new System.Windows.Forms.Button();
+            this.playerGripSubTablePanel = new System.Windows.Forms.TableLayoutPanel();
+            this.gripTrackBar = new System.Windows.Forms.TrackBar();
+            this.label49 = new System.Windows.Forms.Label();
+            this.lowerGripButton = new System.Windows.Forms.Button();
+            this.playerHealthGroupBox = new System.Windows.Forms.GroupBox();
+            this.playerHpTablePanel = new System.Windows.Forms.TableLayoutPanel();
+            this.currentHpLabel = new System.Windows.Forms.Label();
+            this.playerCurrentHpTrackBar = new System.Windows.Forms.TrackBar();
+            this.playerMaxHpLabel = new System.Windows.Forms.Label();
+            this.playerMaxHpUpDown = new System.Windows.Forms.NumericUpDown();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.hfBladeGroupBox = new System.Windows.Forms.GroupBox();
@@ -606,22 +612,26 @@
             this.saveTablePanel.SuspendLayout();
             this.shotsFiredGroupBox.SuspendLayout();
             this.shotsFiredTablePanel.SuspendLayout();
-            this.playerHealthGroupBox.SuspendLayout();
-            this.playerHpTablePanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.playerCurrentHpTrackBar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.playerMaxHpUpDown)).BeginInit();
-            this.damageTakenGroupBox.SuspendLayout();
-            this.damageTakenTablePanel.SuspendLayout();
             this.projectedRankGroupBox.SuspendLayout();
             this.projectedRankTable.SuspendLayout();
-            this.gripGroupBox.SuspendLayout();
-            this.playerGripTablePanel.SuspendLayout();
-            this.playerGripSubTablePanel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.gripTrackBar)).BeginInit();
+            this.damageTakenGroupBox.SuspendLayout();
+            this.damageTakenTablePanel.SuspendLayout();
+            this.mechDamageGroupBox.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             this.tabPageStrings.SuspendLayout();
             this.stringTabLayoutPanel.SuspendLayout();
             this.basicNameGroupBox.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
+            this.tabPageCheats.SuspendLayout();
+            this.cheatTablePanel.SuspendLayout();
+            this.gripGroupBox.SuspendLayout();
+            this.playerGripTablePanel.SuspendLayout();
+            this.playerGripSubTablePanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gripTrackBar)).BeginInit();
+            this.playerHealthGroupBox.SuspendLayout();
+            this.playerHpTablePanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.playerCurrentHpTrackBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.playerMaxHpUpDown)).BeginInit();
             this.statusStrip.SuspendLayout();
             this.hfBladeGroupBox.SuspendLayout();
             this.hfBladeLayoutPanel.SuspendLayout();
@@ -905,6 +915,7 @@
             this.mgs2TabControl.Controls.Add(this.tabPageWeapon);
             this.mgs2TabControl.Controls.Add(this.tabPageStats);
             this.mgs2TabControl.Controls.Add(this.tabPageStrings);
+            this.mgs2TabControl.Controls.Add(this.tabPageCheats);
             this.mgs2TabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mgs2TabControl.Location = new System.Drawing.Point(0, 24);
             this.mgs2TabControl.Name = "mgs2TabControl";
@@ -1356,10 +1367,9 @@
             this.tabPageLayoutPanel.Controls.Add(this.specialItemsGroupBox);
             this.tabPageLayoutPanel.Controls.Add(this.savesGroupBox);
             this.tabPageLayoutPanel.Controls.Add(this.shotsFiredGroupBox);
-            this.tabPageLayoutPanel.Controls.Add(this.playerHealthGroupBox);
-            this.tabPageLayoutPanel.Controls.Add(this.damageTakenGroupBox);
             this.tabPageLayoutPanel.Controls.Add(this.projectedRankGroupBox);
-            this.tabPageLayoutPanel.Controls.Add(this.gripGroupBox);
+            this.tabPageLayoutPanel.Controls.Add(this.damageTakenGroupBox);
+            this.tabPageLayoutPanel.Controls.Add(this.mechDamageGroupBox);
             this.tabPageLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabPageLayoutPanel.Location = new System.Drawing.Point(3, 3);
             this.tabPageLayoutPanel.Name = "tabPageLayoutPanel";
@@ -1617,10 +1627,10 @@
             this.specialItemsCheckedListBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.specialItemsCheckedListBox.FormattingEnabled = true;
             this.specialItemsCheckedListBox.Items.AddRange(new object[] {
-            "Wig",
-            "Stealth Camo",
             "Bandana",
-            "Radar (if not appropriate to difficulty)"});
+            "Radar",
+            "Stealth",
+            "Wig"});
             this.specialItemsCheckedListBox.Location = new System.Drawing.Point(3, 16);
             this.specialItemsCheckedListBox.Name = "specialItemsCheckedListBox";
             this.specialItemsCheckedListBox.Size = new System.Drawing.Size(274, 77);
@@ -1722,82 +1732,43 @@
             this.shotsFiredLabel.Text = "0";
             this.shotsFiredLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // playerHealthGroupBox
+            // projectedRankGroupBox
             // 
-            this.playerHealthGroupBox.Controls.Add(this.playerHpTablePanel);
-            this.playerHealthGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.playerHealthGroupBox.Location = new System.Drawing.Point(287, 207);
-            this.playerHealthGroupBox.Name = "playerHealthGroupBox";
-            this.playerHealthGroupBox.Size = new System.Drawing.Size(280, 96);
-            this.playerHealthGroupBox.TabIndex = 10;
-            this.playerHealthGroupBox.TabStop = false;
-            this.playerHealthGroupBox.Text = "Player Health";
+            this.projectedRankGroupBox.Controls.Add(this.projectedRankTable);
+            this.projectedRankGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.projectedRankGroupBox.Location = new System.Drawing.Point(287, 207);
+            this.projectedRankGroupBox.Name = "projectedRankGroupBox";
+            this.projectedRankGroupBox.Size = new System.Drawing.Size(280, 96);
+            this.projectedRankGroupBox.TabIndex = 2;
+            this.projectedRankGroupBox.TabStop = false;
+            this.projectedRankGroupBox.Text = "Projected Rank";
             // 
-            // playerHpTablePanel
+            // projectedRankTable
             // 
-            this.playerHpTablePanel.ColumnCount = 2;
-            this.playerHpTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
-            this.playerHpTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
-            this.playerHpTablePanel.Controls.Add(this.currentHpLabel, 0, 0);
-            this.playerHpTablePanel.Controls.Add(this.playerCurrentHpTrackBar, 1, 0);
-            this.playerHpTablePanel.Controls.Add(this.playerMaxHpLabel, 0, 1);
-            this.playerHpTablePanel.Controls.Add(this.playerMaxHpUpDown, 1, 1);
-            this.playerHpTablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.playerHpTablePanel.Location = new System.Drawing.Point(3, 16);
-            this.playerHpTablePanel.Name = "playerHpTablePanel";
-            this.playerHpTablePanel.RowCount = 2;
-            this.playerHpTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.playerHpTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.playerHpTablePanel.Size = new System.Drawing.Size(274, 77);
-            this.playerHpTablePanel.TabIndex = 0;
+            this.projectedRankTable.ColumnCount = 1;
+            this.projectedRankTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.projectedRankTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.projectedRankTable.Controls.Add(this.projectedRankLabel, 0, 0);
+            this.projectedRankTable.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.projectedRankTable.Location = new System.Drawing.Point(3, 16);
+            this.projectedRankTable.Name = "projectedRankTable";
+            this.projectedRankTable.RowCount = 1;
+            this.projectedRankTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.projectedRankTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 77F));
+            this.projectedRankTable.Size = new System.Drawing.Size(274, 77);
+            this.projectedRankTable.TabIndex = 0;
             // 
-            // currentHpLabel
+            // projectedRankLabel
             // 
-            this.currentHpLabel.AutoSize = true;
-            this.currentHpLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.currentHpLabel.Location = new System.Drawing.Point(3, 0);
-            this.currentHpLabel.Name = "currentHpLabel";
-            this.currentHpLabel.Size = new System.Drawing.Size(76, 38);
-            this.currentHpLabel.TabIndex = 0;
-            this.currentHpLabel.Text = "Current HP";
-            this.currentHpLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // playerCurrentHpTrackBar
-            // 
-            this.playerCurrentHpTrackBar.BackColor = System.Drawing.Color.Aquamarine;
-            this.playerCurrentHpTrackBar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.playerCurrentHpTrackBar.LargeChange = 10;
-            this.playerCurrentHpTrackBar.Location = new System.Drawing.Point(85, 3);
-            this.playerCurrentHpTrackBar.Maximum = 100;
-            this.playerCurrentHpTrackBar.Name = "playerCurrentHpTrackBar";
-            this.playerCurrentHpTrackBar.Size = new System.Drawing.Size(186, 32);
-            this.playerCurrentHpTrackBar.TabIndex = 1;
-            this.playerCurrentHpTrackBar.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.playerCurrentHpTrackBar.Value = 100;
-            // 
-            // playerMaxHpLabel
-            // 
-            this.playerMaxHpLabel.AutoSize = true;
-            this.playerMaxHpLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.playerMaxHpLabel.Location = new System.Drawing.Point(3, 38);
-            this.playerMaxHpLabel.Name = "playerMaxHpLabel";
-            this.playerMaxHpLabel.Size = new System.Drawing.Size(76, 39);
-            this.playerMaxHpLabel.TabIndex = 2;
-            this.playerMaxHpLabel.Text = "Max HP";
-            this.playerMaxHpLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // playerMaxHpUpDown
-            // 
-            this.playerMaxHpUpDown.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.playerMaxHpUpDown.Location = new System.Drawing.Point(85, 41);
-            this.playerMaxHpUpDown.Name = "playerMaxHpUpDown";
-            this.playerMaxHpUpDown.Size = new System.Drawing.Size(186, 20);
-            this.playerMaxHpUpDown.TabIndex = 3;
-            this.playerMaxHpUpDown.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
+            this.projectedRankLabel.AutoSize = true;
+            this.projectedRankLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.projectedRankLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.projectedRankLabel.Location = new System.Drawing.Point(3, 0);
+            this.projectedRankLabel.Name = "projectedRankLabel";
+            this.projectedRankLabel.Size = new System.Drawing.Size(268, 77);
+            this.projectedRankLabel.TabIndex = 2;
+            this.projectedRankLabel.Text = "Tasmanian Devil";
+            this.projectedRankLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // damageTakenGroupBox
             // 
@@ -1847,135 +1818,52 @@
             this.damageTakenLabel.Text = "0";
             this.damageTakenLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // projectedRankGroupBox
+            // mechDamageGroupBox
             // 
-            this.projectedRankGroupBox.Controls.Add(this.projectedRankTable);
-            this.projectedRankGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.projectedRankGroupBox.Location = new System.Drawing.Point(145, 309);
-            this.projectedRankGroupBox.Name = "projectedRankGroupBox";
-            this.projectedRankGroupBox.Size = new System.Drawing.Size(136, 96);
-            this.projectedRankGroupBox.TabIndex = 2;
-            this.projectedRankGroupBox.TabStop = false;
-            this.projectedRankGroupBox.Text = "Projected Rank";
+            this.mechDamageGroupBox.Controls.Add(this.tableLayoutPanel1);
+            this.mechDamageGroupBox.Location = new System.Drawing.Point(145, 309);
+            this.mechDamageGroupBox.Name = "mechDamageGroupBox";
+            this.mechDamageGroupBox.Size = new System.Drawing.Size(136, 96);
+            this.mechDamageGroupBox.TabIndex = 10;
+            this.mechDamageGroupBox.TabStop = false;
+            this.mechDamageGroupBox.Text = "Mechs Destroyed";
             // 
-            // projectedRankTable
+            // tableLayoutPanel1
             // 
-            this.projectedRankTable.ColumnCount = 1;
-            this.projectedRankTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.projectedRankTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.projectedRankTable.Controls.Add(this.projectedRankLabel, 0, 0);
-            this.projectedRankTable.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.projectedRankTable.Location = new System.Drawing.Point(3, 16);
-            this.projectedRankTable.Name = "projectedRankTable";
-            this.projectedRankTable.RowCount = 1;
-            this.projectedRankTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.projectedRankTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 77F));
-            this.projectedRankTable.Size = new System.Drawing.Size(130, 77);
-            this.projectedRankTable.TabIndex = 0;
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.mechsDestroyedButton, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.mechsDestroyedLabel, 0, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 16);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(130, 77);
+            this.tableLayoutPanel1.TabIndex = 2;
             // 
-            // projectedRankLabel
+            // mechsDestroyedButton
             // 
-            this.projectedRankLabel.AutoSize = true;
-            this.projectedRankLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.projectedRankLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.projectedRankLabel.Location = new System.Drawing.Point(3, 0);
-            this.projectedRankLabel.Name = "projectedRankLabel";
-            this.projectedRankLabel.Size = new System.Drawing.Size(124, 77);
-            this.projectedRankLabel.TabIndex = 2;
-            this.projectedRankLabel.Text = "Tasmanian Devil";
-            this.projectedRankLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.mechsDestroyedButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mechsDestroyedButton.Location = new System.Drawing.Point(3, 49);
+            this.mechsDestroyedButton.Name = "mechsDestroyedButton";
+            this.mechsDestroyedButton.Size = new System.Drawing.Size(124, 25);
+            this.mechsDestroyedButton.TabIndex = 2;
+            this.mechsDestroyedButton.Text = "Adjust Mech Damage";
+            this.mechsDestroyedButton.UseVisualStyleBackColor = true;
             // 
-            // gripGroupBox
+            // mechsDestroyedLabel
             // 
-            this.gripGroupBox.Controls.Add(this.playerGripTablePanel);
-            this.gripGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gripGroupBox.Location = new System.Drawing.Point(287, 309);
-            this.gripGroupBox.Name = "gripGroupBox";
-            this.gripGroupBox.Size = new System.Drawing.Size(280, 96);
-            this.gripGroupBox.TabIndex = 11;
-            this.gripGroupBox.TabStop = false;
-            this.gripGroupBox.Text = "Player Grip";
-            // 
-            // playerGripTablePanel
-            // 
-            this.playerGripTablePanel.ColumnCount = 2;
-            this.playerGripTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.playerGripTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.playerGripTablePanel.Controls.Add(this.raiseGripButton, 1, 1);
-            this.playerGripTablePanel.Controls.Add(this.playerGripSubTablePanel, 0, 0);
-            this.playerGripTablePanel.Controls.Add(this.lowerGripButton, 0, 1);
-            this.playerGripTablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.playerGripTablePanel.Location = new System.Drawing.Point(3, 16);
-            this.playerGripTablePanel.Name = "playerGripTablePanel";
-            this.playerGripTablePanel.RowCount = 2;
-            this.playerGripTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.playerGripTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.playerGripTablePanel.Size = new System.Drawing.Size(274, 77);
-            this.playerGripTablePanel.TabIndex = 0;
-            // 
-            // raiseGripButton
-            // 
-            this.raiseGripButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.raiseGripButton.Location = new System.Drawing.Point(140, 41);
-            this.raiseGripButton.Name = "raiseGripButton";
-            this.raiseGripButton.Size = new System.Drawing.Size(131, 33);
-            this.raiseGripButton.TabIndex = 2;
-            this.raiseGripButton.Text = "Raise Grip Level";
-            this.raiseGripButton.UseVisualStyleBackColor = true;
-            // 
-            // playerGripSubTablePanel
-            // 
-            this.playerGripSubTablePanel.ColumnCount = 3;
-            this.playerGripTablePanel.SetColumnSpan(this.playerGripSubTablePanel, 2);
-            this.playerGripSubTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.playerGripSubTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.playerGripSubTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.playerGripSubTablePanel.Controls.Add(this.gripTrackBar, 1, 0);
-            this.playerGripSubTablePanel.Controls.Add(this.label49, 0, 0);
-            this.playerGripSubTablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.playerGripSubTablePanel.Location = new System.Drawing.Point(0, 0);
-            this.playerGripSubTablePanel.Margin = new System.Windows.Forms.Padding(0);
-            this.playerGripSubTablePanel.Name = "playerGripSubTablePanel";
-            this.playerGripSubTablePanel.RowCount = 1;
-            this.playerGripSubTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.playerGripSubTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 38F));
-            this.playerGripSubTablePanel.Size = new System.Drawing.Size(274, 38);
-            this.playerGripSubTablePanel.TabIndex = 0;
-            // 
-            // gripTrackBar
-            // 
-            this.gripTrackBar.BackColor = System.Drawing.Color.DarkTurquoise;
-            this.playerGripSubTablePanel.SetColumnSpan(this.gripTrackBar, 2);
-            this.gripTrackBar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gripTrackBar.LargeChange = 250;
-            this.gripTrackBar.Location = new System.Drawing.Point(94, 3);
-            this.gripTrackBar.Maximum = 1800;
-            this.gripTrackBar.Name = "gripTrackBar";
-            this.gripTrackBar.Size = new System.Drawing.Size(177, 32);
-            this.gripTrackBar.TabIndex = 2;
-            this.gripTrackBar.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.gripTrackBar.Value = 1800;
-            // 
-            // label49
-            // 
-            this.label49.AutoSize = true;
-            this.label49.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label49.Location = new System.Drawing.Point(3, 0);
-            this.label49.Name = "label49";
-            this.label49.Size = new System.Drawing.Size(85, 38);
-            this.label49.TabIndex = 0;
-            this.label49.Text = "Current Grip";
-            this.label49.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // lowerGripButton
-            // 
-            this.lowerGripButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lowerGripButton.Location = new System.Drawing.Point(3, 41);
-            this.lowerGripButton.Name = "lowerGripButton";
-            this.lowerGripButton.Size = new System.Drawing.Size(131, 33);
-            this.lowerGripButton.TabIndex = 1;
-            this.lowerGripButton.Text = "Lower Grip Level";
-            this.lowerGripButton.UseVisualStyleBackColor = true;
+            this.mechsDestroyedLabel.AutoSize = true;
+            this.mechsDestroyedLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mechsDestroyedLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.mechsDestroyedLabel.Location = new System.Drawing.Point(3, 0);
+            this.mechsDestroyedLabel.Name = "mechsDestroyedLabel";
+            this.mechsDestroyedLabel.Size = new System.Drawing.Size(124, 46);
+            this.mechsDestroyedLabel.TabIndex = 1;
+            this.mechsDestroyedLabel.Text = "0";
+            this.mechsDestroyedLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tabPageStrings
             // 
@@ -2086,6 +1974,202 @@
             this.descriptionGroupBox.TabStop = false;
             this.descriptionGroupBox.Text = "Description";
             this.descriptionGroupBox.Visible = false;
+            // 
+            // tabPageCheats
+            // 
+            this.tabPageCheats.Controls.Add(this.cheatTablePanel);
+            this.tabPageCheats.Location = new System.Drawing.Point(4, 22);
+            this.tabPageCheats.Name = "tabPageCheats";
+            this.tabPageCheats.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageCheats.Size = new System.Drawing.Size(576, 414);
+            this.tabPageCheats.TabIndex = 4;
+            this.tabPageCheats.Text = "Cheats";
+            this.tabPageCheats.UseVisualStyleBackColor = true;
+            // 
+            // cheatTablePanel
+            // 
+            this.cheatTablePanel.ColumnCount = 2;
+            this.cheatTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.cheatTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.cheatTablePanel.Controls.Add(this.gripGroupBox, 0, 1);
+            this.cheatTablePanel.Controls.Add(this.playerHealthGroupBox, 0, 0);
+            this.cheatTablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cheatTablePanel.Location = new System.Drawing.Point(3, 3);
+            this.cheatTablePanel.Name = "cheatTablePanel";
+            this.cheatTablePanel.RowCount = 2;
+            this.cheatTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.cheatTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.cheatTablePanel.Size = new System.Drawing.Size(570, 408);
+            this.cheatTablePanel.TabIndex = 0;
+            // 
+            // gripGroupBox
+            // 
+            this.gripGroupBox.Controls.Add(this.playerGripTablePanel);
+            this.gripGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gripGroupBox.Location = new System.Drawing.Point(3, 207);
+            this.gripGroupBox.Name = "gripGroupBox";
+            this.gripGroupBox.Size = new System.Drawing.Size(279, 198);
+            this.gripGroupBox.TabIndex = 12;
+            this.gripGroupBox.TabStop = false;
+            this.gripGroupBox.Text = "Player Grip";
+            // 
+            // playerGripTablePanel
+            // 
+            this.playerGripTablePanel.ColumnCount = 2;
+            this.playerGripTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.playerGripTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.playerGripTablePanel.Controls.Add(this.raiseGripButton, 1, 1);
+            this.playerGripTablePanel.Controls.Add(this.playerGripSubTablePanel, 0, 0);
+            this.playerGripTablePanel.Controls.Add(this.lowerGripButton, 0, 1);
+            this.playerGripTablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.playerGripTablePanel.Location = new System.Drawing.Point(3, 16);
+            this.playerGripTablePanel.Name = "playerGripTablePanel";
+            this.playerGripTablePanel.RowCount = 2;
+            this.playerGripTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.playerGripTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.playerGripTablePanel.Size = new System.Drawing.Size(273, 179);
+            this.playerGripTablePanel.TabIndex = 0;
+            // 
+            // raiseGripButton
+            // 
+            this.raiseGripButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.raiseGripButton.Location = new System.Drawing.Point(139, 92);
+            this.raiseGripButton.Name = "raiseGripButton";
+            this.raiseGripButton.Size = new System.Drawing.Size(131, 84);
+            this.raiseGripButton.TabIndex = 2;
+            this.raiseGripButton.Text = "Raise Grip Level";
+            this.raiseGripButton.UseVisualStyleBackColor = true;
+            // 
+            // playerGripSubTablePanel
+            // 
+            this.playerGripSubTablePanel.ColumnCount = 3;
+            this.playerGripTablePanel.SetColumnSpan(this.playerGripSubTablePanel, 2);
+            this.playerGripSubTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.playerGripSubTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.playerGripSubTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.playerGripSubTablePanel.Controls.Add(this.gripTrackBar, 1, 0);
+            this.playerGripSubTablePanel.Controls.Add(this.label49, 0, 0);
+            this.playerGripSubTablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.playerGripSubTablePanel.Location = new System.Drawing.Point(0, 0);
+            this.playerGripSubTablePanel.Margin = new System.Windows.Forms.Padding(0);
+            this.playerGripSubTablePanel.Name = "playerGripSubTablePanel";
+            this.playerGripSubTablePanel.RowCount = 1;
+            this.playerGripSubTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.playerGripSubTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 89F));
+            this.playerGripSubTablePanel.Size = new System.Drawing.Size(273, 89);
+            this.playerGripSubTablePanel.TabIndex = 0;
+            // 
+            // gripTrackBar
+            // 
+            this.gripTrackBar.BackColor = System.Drawing.Color.DarkTurquoise;
+            this.playerGripSubTablePanel.SetColumnSpan(this.gripTrackBar, 2);
+            this.gripTrackBar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gripTrackBar.LargeChange = 250;
+            this.gripTrackBar.Location = new System.Drawing.Point(94, 3);
+            this.gripTrackBar.Maximum = 1800;
+            this.gripTrackBar.Name = "gripTrackBar";
+            this.gripTrackBar.Size = new System.Drawing.Size(176, 83);
+            this.gripTrackBar.TabIndex = 2;
+            this.gripTrackBar.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.gripTrackBar.Value = 1800;
+            // 
+            // label49
+            // 
+            this.label49.AutoSize = true;
+            this.label49.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.label49.Location = new System.Drawing.Point(3, 0);
+            this.label49.Name = "label49";
+            this.label49.Size = new System.Drawing.Size(85, 89);
+            this.label49.TabIndex = 0;
+            this.label49.Text = "Current Grip";
+            this.label49.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // lowerGripButton
+            // 
+            this.lowerGripButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lowerGripButton.Location = new System.Drawing.Point(3, 92);
+            this.lowerGripButton.Name = "lowerGripButton";
+            this.lowerGripButton.Size = new System.Drawing.Size(130, 84);
+            this.lowerGripButton.TabIndex = 1;
+            this.lowerGripButton.Text = "Lower Grip Level";
+            this.lowerGripButton.UseVisualStyleBackColor = true;
+            // 
+            // playerHealthGroupBox
+            // 
+            this.playerHealthGroupBox.Controls.Add(this.playerHpTablePanel);
+            this.playerHealthGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.playerHealthGroupBox.Location = new System.Drawing.Point(3, 3);
+            this.playerHealthGroupBox.Name = "playerHealthGroupBox";
+            this.playerHealthGroupBox.Size = new System.Drawing.Size(279, 198);
+            this.playerHealthGroupBox.TabIndex = 11;
+            this.playerHealthGroupBox.TabStop = false;
+            this.playerHealthGroupBox.Text = "Player Health";
+            // 
+            // playerHpTablePanel
+            // 
+            this.playerHpTablePanel.ColumnCount = 2;
+            this.playerHpTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
+            this.playerHpTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
+            this.playerHpTablePanel.Controls.Add(this.currentHpLabel, 0, 0);
+            this.playerHpTablePanel.Controls.Add(this.playerCurrentHpTrackBar, 1, 0);
+            this.playerHpTablePanel.Controls.Add(this.playerMaxHpLabel, 0, 1);
+            this.playerHpTablePanel.Controls.Add(this.playerMaxHpUpDown, 1, 1);
+            this.playerHpTablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.playerHpTablePanel.Location = new System.Drawing.Point(3, 16);
+            this.playerHpTablePanel.Name = "playerHpTablePanel";
+            this.playerHpTablePanel.RowCount = 2;
+            this.playerHpTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.playerHpTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.playerHpTablePanel.Size = new System.Drawing.Size(273, 179);
+            this.playerHpTablePanel.TabIndex = 0;
+            // 
+            // currentHpLabel
+            // 
+            this.currentHpLabel.AutoSize = true;
+            this.currentHpLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.currentHpLabel.Location = new System.Drawing.Point(3, 0);
+            this.currentHpLabel.Name = "currentHpLabel";
+            this.currentHpLabel.Size = new System.Drawing.Size(75, 89);
+            this.currentHpLabel.TabIndex = 0;
+            this.currentHpLabel.Text = "Current HP";
+            this.currentHpLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // playerCurrentHpTrackBar
+            // 
+            this.playerCurrentHpTrackBar.BackColor = System.Drawing.Color.Aquamarine;
+            this.playerCurrentHpTrackBar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.playerCurrentHpTrackBar.LargeChange = 10;
+            this.playerCurrentHpTrackBar.Location = new System.Drawing.Point(84, 3);
+            this.playerCurrentHpTrackBar.Maximum = 100;
+            this.playerCurrentHpTrackBar.Name = "playerCurrentHpTrackBar";
+            this.playerCurrentHpTrackBar.Size = new System.Drawing.Size(186, 83);
+            this.playerCurrentHpTrackBar.TabIndex = 1;
+            this.playerCurrentHpTrackBar.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.playerCurrentHpTrackBar.Value = 100;
+            // 
+            // playerMaxHpLabel
+            // 
+            this.playerMaxHpLabel.AutoSize = true;
+            this.playerMaxHpLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.playerMaxHpLabel.Location = new System.Drawing.Point(3, 89);
+            this.playerMaxHpLabel.Name = "playerMaxHpLabel";
+            this.playerMaxHpLabel.Size = new System.Drawing.Size(75, 90);
+            this.playerMaxHpLabel.TabIndex = 2;
+            this.playerMaxHpLabel.Text = "Max HP";
+            this.playerMaxHpLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // playerMaxHpUpDown
+            // 
+            this.playerMaxHpUpDown.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.playerMaxHpUpDown.Location = new System.Drawing.Point(84, 92);
+            this.playerMaxHpUpDown.Name = "playerMaxHpUpDown";
+            this.playerMaxHpUpDown.Size = new System.Drawing.Size(186, 20);
+            this.playerMaxHpUpDown.TabIndex = 3;
+            this.playerMaxHpUpDown.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
             // 
             // statusStrip
             // 
@@ -8068,28 +8152,33 @@
             this.shotsFiredGroupBox.ResumeLayout(false);
             this.shotsFiredTablePanel.ResumeLayout(false);
             this.shotsFiredTablePanel.PerformLayout();
-            this.playerHealthGroupBox.ResumeLayout(false);
-            this.playerHpTablePanel.ResumeLayout(false);
-            this.playerHpTablePanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.playerCurrentHpTrackBar)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.playerMaxHpUpDown)).EndInit();
-            this.damageTakenGroupBox.ResumeLayout(false);
-            this.damageTakenTablePanel.ResumeLayout(false);
-            this.damageTakenTablePanel.PerformLayout();
             this.projectedRankGroupBox.ResumeLayout(false);
             this.projectedRankTable.ResumeLayout(false);
             this.projectedRankTable.PerformLayout();
-            this.gripGroupBox.ResumeLayout(false);
-            this.playerGripTablePanel.ResumeLayout(false);
-            this.playerGripSubTablePanel.ResumeLayout(false);
-            this.playerGripSubTablePanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.gripTrackBar)).EndInit();
+            this.damageTakenGroupBox.ResumeLayout(false);
+            this.damageTakenTablePanel.ResumeLayout(false);
+            this.damageTakenTablePanel.PerformLayout();
+            this.mechDamageGroupBox.ResumeLayout(false);
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             this.tabPageStrings.ResumeLayout(false);
             this.stringTabLayoutPanel.ResumeLayout(false);
             this.basicNameGroupBox.ResumeLayout(false);
             this.basicNameGroupBox.PerformLayout();
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
+            this.tabPageCheats.ResumeLayout(false);
+            this.cheatTablePanel.ResumeLayout(false);
+            this.gripGroupBox.ResumeLayout(false);
+            this.playerGripTablePanel.ResumeLayout(false);
+            this.playerGripSubTablePanel.ResumeLayout(false);
+            this.playerGripSubTablePanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gripTrackBar)).EndInit();
+            this.playerHealthGroupBox.ResumeLayout(false);
+            this.playerHpTablePanel.ResumeLayout(false);
+            this.playerHpTablePanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.playerCurrentHpTrackBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.playerMaxHpUpDown)).EndInit();
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
             this.hfBladeGroupBox.ResumeLayout(false);
@@ -8979,25 +9068,12 @@
         private System.Windows.Forms.GroupBox damageTakenGroupBox;
         private System.Windows.Forms.GroupBox projectedRankGroupBox;
         private System.Windows.Forms.GroupBox shotsFiredGroupBox;
-        private System.Windows.Forms.GroupBox gripGroupBox;
-        private System.Windows.Forms.GroupBox playerHealthGroupBox;
         private System.Windows.Forms.GroupBox rationsUsedGroupBox;
         private System.Windows.Forms.GroupBox specialItemsGroupBox;
         private System.Windows.Forms.GroupBox continuesGroupBox;
         private System.Windows.Forms.CheckedListBox specialItemsCheckedListBox;
-        private System.Windows.Forms.TableLayoutPanel playerHpTablePanel;
-        private System.Windows.Forms.Label currentHpLabel;
-        private System.Windows.Forms.TrackBar playerCurrentHpTrackBar;
-        private System.Windows.Forms.Label playerMaxHpLabel;
-        private System.Windows.Forms.NumericUpDown playerMaxHpUpDown;
-        private System.Windows.Forms.TableLayoutPanel playerGripTablePanel;
         private System.Windows.Forms.TableLayoutPanel projectedRankTable;
         private System.Windows.Forms.Label projectedRankLabel;
-        private System.Windows.Forms.TableLayoutPanel playerGripSubTablePanel;
-        private System.Windows.Forms.TrackBar gripTrackBar;
-        private System.Windows.Forms.Label label49;
-        private System.Windows.Forms.Button lowerGripButton;
-        private System.Windows.Forms.Button raiseGripButton;
         private System.Windows.Forms.TableLayoutPanel playTimeTablePanel;
         private System.Windows.Forms.Label playTimeLabel;
         private System.Windows.Forms.TableLayoutPanel killCountTablePanel;
@@ -9021,6 +9097,25 @@
         private System.Windows.Forms.Button saveCountButton;
         private System.Windows.Forms.Button shotsFiredButton;
         private System.Windows.Forms.Button damageTakenButton;
+        private System.Windows.Forms.TabPage tabPageCheats;
+        private System.Windows.Forms.TableLayoutPanel cheatTablePanel;
+        private System.Windows.Forms.GroupBox mechDamageGroupBox;
+        private System.Windows.Forms.GroupBox gripGroupBox;
+        private System.Windows.Forms.TableLayoutPanel playerGripTablePanel;
+        private System.Windows.Forms.Button raiseGripButton;
+        private System.Windows.Forms.TableLayoutPanel playerGripSubTablePanel;
+        private System.Windows.Forms.TrackBar gripTrackBar;
+        private System.Windows.Forms.Label label49;
+        private System.Windows.Forms.Button lowerGripButton;
+        private System.Windows.Forms.GroupBox playerHealthGroupBox;
+        private System.Windows.Forms.TableLayoutPanel playerHpTablePanel;
+        private System.Windows.Forms.Label currentHpLabel;
+        private System.Windows.Forms.TrackBar playerCurrentHpTrackBar;
+        private System.Windows.Forms.Label playerMaxHpLabel;
+        private System.Windows.Forms.NumericUpDown playerMaxHpUpDown;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Button mechsDestroyedButton;
+        private System.Windows.Forms.Label mechsDestroyedLabel;
     }
 }
 

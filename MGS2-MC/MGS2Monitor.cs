@@ -303,7 +303,11 @@ namespace MGS2_MC
             }
             catch(Exception e)
             {
-                _logger.Error($"Failed to update scoring stats! Error encountered: {e}");
+                if (_mgs2Process != null)
+                {
+                    //if mgs2 process isn't active, we shouldn't log an error here. it just spams the log otherwise
+                    _logger.Error($"Failed to update scoring stats! Error encountered: {e}");
+                }
             }
         }
         #endregion

@@ -30,6 +30,7 @@ namespace MGS2_MC
             public short Continues;
             public short DamageTaken;
             public short Kills;
+            public short MechsDestroyed;
             public int PlayTime;
             public short Rations;
             public short Saves;
@@ -504,6 +505,7 @@ namespace MGS2_MC
             short continues = BitConverter.ToInt16(gameStatsBytes, 4);
             short saves = BitConverter.ToInt16(gameStatsBytes, 8);
             int playTime = BitConverter.ToInt32(gameStatsBytes, 10);
+            short mechsDestroyed = BitConverter.ToInt16(gameStatsBytes, 42);
             short shots = BitConverter.ToInt16(gameStatsBytes, 18);
             short alerts = BitConverter.ToInt16(gameStatsBytes, 20);
             short kills = BitConverter.ToInt16(gameStatsBytes, 22);
@@ -523,7 +525,8 @@ namespace MGS2_MC
                 Saves = saves,
                 Shots = shots,
                 SpecialItems = specialItems,
-                Alerts = alerts
+                Alerts = alerts,
+                MechsDestroyed = mechsDestroyed
             };
         }
     }

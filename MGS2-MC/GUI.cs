@@ -1401,6 +1401,7 @@ namespace MGS2_MC
             continueCountLabel.Text = currentGameStats.Continues.ToString();
             damageTakenLabel.Text = currentGameStats.DamageTaken.ToString();
             killCountLabel.Text = currentGameStats.Kills.ToString();
+            mechsDestroyedLabel.Text = currentGameStats.MechsDestroyed.ToString();
             playTimeLabel.Text = ParsePlayTime(currentGameStats.PlayTime);
             rationsUsedLabel.Text = currentGameStats.Rations.ToString();
             saveCountLabel.Text = currentGameStats.Saves.ToString();
@@ -1418,7 +1419,7 @@ namespace MGS2_MC
 
         private void CheckOffSpecialItemsUsed(short specialItems)
         {
-            //TODO: not parsing correctly
+            //TODO: add more wigs?
             int indexOfWig = specialItemsCheckedListBox.FindString("Wig");
             int indexOfStealth = specialItemsCheckedListBox.FindString("Stealth");
             int indexOfBandana = specialItemsCheckedListBox.FindString("Bandana");
@@ -1429,13 +1430,22 @@ namespace MGS2_MC
             switch (specialItems)
             {
                 default:
+                    //just marking the box red because we know BB run is failed
+                    specialItemsCheckedListBox.BackColor = Color.DarkRed;
+                    break;
                 case 0x0000:
                     break;
+                case 0x0120:
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfBandana, CheckState.Checked);
+                    break;
                 case 0x0220:
-                    specialItemsCheckedListBox.SetItemCheckState(indexOfWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfWig, CheckState.Checked); //specifically infinity wig
                     break;
                 case 0x1020:
                     specialItemsCheckedListBox.SetItemCheckState(indexOfStealth, CheckState.Checked);
+                    break;
+                case 0x1056:
+                    //blue wig used
                     break;
                 case 0x1220:
                     specialItemsCheckedListBox.SetItemCheckState(indexOfWig, CheckState.Checked);
@@ -1443,6 +1453,10 @@ namespace MGS2_MC
                     break;
                 case 0x2000:
                     specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    break;
+                case 0x2120:
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfBandana, CheckState.Checked);
                     break;
                 case 0x2220:
                     specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
@@ -1452,16 +1466,16 @@ namespace MGS2_MC
                     specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
                     specialItemsCheckedListBox.SetItemCheckState(indexOfStealth, CheckState.Checked);
                     break;
+                case 0x3104: //orange and blue wigs
+                    break;
                 case 0x3220:
                     specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
                     specialItemsCheckedListBox.SetItemCheckState(indexOfWig, CheckState.Checked);
                     specialItemsCheckedListBox.SetItemCheckState(indexOfStealth, CheckState.Checked);
                     break;
-                case 0x2120:
-                    specialItemsCheckedListBox.SetItemCheckState(indexOfStealth, CheckState.Checked);
+                case 0x3616: //orange, blue, and infinity wigs
                     break;
-                case 0x0120:
-                    specialItemsCheckedListBox.SetItemCheckState(indexOfBandana, CheckState.Checked);
+                case 0x7712: //orange, blue, and infinity wigs AND stealth
                     break;
             }
         }

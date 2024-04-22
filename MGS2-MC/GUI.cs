@@ -30,6 +30,7 @@ namespace MGS2_MC
         public static GUI StaticGuiReference = null;
         public static bool? GuiLoaded = false;
         private readonly ILogger _logger;
+        private static bool UserHasBeenWarned = false;
 
         internal static void ShowGui()
         {
@@ -1599,6 +1600,14 @@ namespace MGS2_MC
             {
                 _logger.Verbose($"Switching to tab #{mgs2TabControl.SelectedIndex}...");
                 CurrentTab = mgs2TabControl.SelectedIndex;
+                #if DEBUG
+                UserHasBeenWarned = true;
+                #endif
+                if (CurrentTab == mgs2TabControl.TabPages.IndexOfKey("tabPageCheats") && !UserHasBeenWarned)
+                {
+                    MessageBox.Show("WARNING! Use the contents of this tab at your own risk. USE OF THESE CHEATS MAY CRASH YOUR GAME! All of these have worked at some point or another, but may not always. Results not guaranteed.");
+                    UserHasBeenWarned = true;
+                }
                 CurrentlySelectedObject = null;
             }
             catch(Exception ex) 
@@ -1716,7 +1725,9 @@ namespace MGS2_MC
             {
                 Cheat selectedCheat = (Cheat)cheatsBox.SelectedItem;
 
+                toolStripStatusLabel.Text = $"Attempting to enable {selectedCheat.Name}...";
                 selectedCheat.CheatAction();
+                toolStripStatusLabel.Text = $"Finished trying to enable {selectedCheat.Name}. Did it work?!?";
             }
         }
 

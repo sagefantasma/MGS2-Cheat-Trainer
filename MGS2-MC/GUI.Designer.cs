@@ -131,6 +131,15 @@
             this.playerMaxHpLabel = new System.Windows.Forms.Label();
             this.playerMaxHpUpDown = new System.Windows.Forms.NumericUpDown();
             this.cheatsCheckedListBox = new System.Windows.Forms.CheckedListBox();
+            this.aobTesterTablePanel = new System.Windows.Forms.TableLayoutPanel();
+            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.label50 = new System.Windows.Forms.Label();
+            this.aobTextbox = new System.Windows.Forms.TextBox();
+            this.memRange = new System.Windows.Forms.Label();
+            this.rangeTextbox = new System.Windows.Forms.TextBox();
+            this.button5 = new System.Windows.Forms.Button();
+            this.button6 = new System.Windows.Forms.Button();
+            this.memContents = new System.Windows.Forms.TextBox();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.hfBladeGroupBox = new System.Windows.Forms.GroupBox();
@@ -576,15 +585,6 @@
             this.viewLogsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.githubMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.joinOurDiscordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aobTesterTablePanel = new System.Windows.Forms.TableLayoutPanel();
-            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
-            this.rangeTextbox = new System.Windows.Forms.TextBox();
-            this.aobTextbox = new System.Windows.Forms.TextBox();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
-            this.memContents = new System.Windows.Forms.TextBox();
-            this.label50 = new System.Windows.Forms.Label();
-            this.memRange = new System.Windows.Forms.Label();
             this.mgs2TabControl.SuspendLayout();
             this.tabPageItem.SuspendLayout();
             this.itemLayoutPanel.SuspendLayout();
@@ -644,6 +644,8 @@
             this.playerHpTablePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.playerCurrentHpTrackBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.playerMaxHpUpDown)).BeginInit();
+            this.aobTesterTablePanel.SuspendLayout();
+            this.flowLayoutPanel2.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.hfBladeGroupBox.SuspendLayout();
             this.hfBladeLayoutPanel.SuspendLayout();
@@ -919,8 +921,6 @@
             this.stealthLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.stealthPictureBox)).BeginInit();
             this.mainMenuStrip.SuspendLayout();
-            this.aobTesterTablePanel.SuspendLayout();
-            this.flowLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // mgs2TabControl
@@ -2213,6 +2213,98 @@
             this.cheatsCheckedListBox.Size = new System.Drawing.Size(279, 402);
             this.cheatsCheckedListBox.TabIndex = 14;
             this.cheatsCheckedListBox.SelectedIndexChanged += new System.EventHandler(this.CheatsCheckedListBox_SelectedIndexChanged);
+            // 
+            // aobTesterTablePanel
+            // 
+            this.aobTesterTablePanel.ColumnCount = 2;
+            this.aobTesterTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.aobTesterTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.aobTesterTablePanel.Controls.Add(this.flowLayoutPanel2, 0, 0);
+            this.aobTesterTablePanel.Controls.Add(this.button5, 1, 0);
+            this.aobTesterTablePanel.Controls.Add(this.button6, 1, 1);
+            this.aobTesterTablePanel.Controls.Add(this.memContents, 0, 1);
+            this.aobTesterTablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.aobTesterTablePanel.Location = new System.Drawing.Point(288, 207);
+            this.aobTesterTablePanel.Name = "aobTesterTablePanel";
+            this.aobTesterTablePanel.RowCount = 2;
+            this.aobTesterTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.aobTesterTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.aobTesterTablePanel.Size = new System.Drawing.Size(279, 198);
+            this.aobTesterTablePanel.TabIndex = 15;
+            this.aobTesterTablePanel.Visible = false;
+            // 
+            // flowLayoutPanel2
+            // 
+            this.flowLayoutPanel2.Controls.Add(this.label50);
+            this.flowLayoutPanel2.Controls.Add(this.aobTextbox);
+            this.flowLayoutPanel2.Controls.Add(this.memRange);
+            this.flowLayoutPanel2.Controls.Add(this.rangeTextbox);
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(3, 3);
+            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(133, 93);
+            this.flowLayoutPanel2.TabIndex = 0;
+            // 
+            // label50
+            // 
+            this.label50.AutoSize = true;
+            this.label50.Location = new System.Drawing.Point(3, 0);
+            this.label50.Name = "label50";
+            this.label50.Size = new System.Drawing.Size(59, 13);
+            this.label50.TabIndex = 2;
+            this.label50.Text = "AoB to find";
+            // 
+            // aobTextbox
+            // 
+            this.aobTextbox.Location = new System.Drawing.Point(3, 16);
+            this.aobTextbox.Name = "aobTextbox";
+            this.aobTextbox.Size = new System.Drawing.Size(100, 20);
+            this.aobTextbox.TabIndex = 1;
+            // 
+            // memRange
+            // 
+            this.memRange.AutoSize = true;
+            this.memRange.Location = new System.Drawing.Point(3, 39);
+            this.memRange.Name = "memRange";
+            this.memRange.Size = new System.Drawing.Size(74, 13);
+            this.memRange.TabIndex = 3;
+            this.memRange.Text = "Range to load";
+            // 
+            // rangeTextbox
+            // 
+            this.rangeTextbox.Location = new System.Drawing.Point(3, 55);
+            this.rangeTextbox.Name = "rangeTextbox";
+            this.rangeTextbox.Size = new System.Drawing.Size(100, 20);
+            this.rangeTextbox.TabIndex = 0;
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(142, 3);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(104, 78);
+            this.button5.TabIndex = 1;
+            this.button5.Text = "Find AoB and load Range";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(142, 102);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(115, 48);
+            this.button6.TabIndex = 2;
+            this.button6.Text = "Modify Bytes";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // memContents
+            // 
+            this.memContents.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.memContents.Location = new System.Drawing.Point(3, 102);
+            this.memContents.Multiline = true;
+            this.memContents.Name = "memContents";
+            this.memContents.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.memContents.Size = new System.Drawing.Size(133, 93);
+            this.memContents.TabIndex = 3;
             // 
             // statusStrip
             // 
@@ -8130,98 +8222,6 @@
             this.joinOurDiscordToolStripMenuItem.Text = "Join Our Discord";
             this.joinOurDiscordToolStripMenuItem.Click += new System.EventHandler(this.JoinOurDiscordToolStripMenuItem_Click);
             // 
-            // aobTesterTablePanel
-            // 
-            this.aobTesterTablePanel.ColumnCount = 2;
-            this.aobTesterTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.aobTesterTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.aobTesterTablePanel.Controls.Add(this.flowLayoutPanel2, 0, 0);
-            this.aobTesterTablePanel.Controls.Add(this.button5, 1, 0);
-            this.aobTesterTablePanel.Controls.Add(this.button6, 1, 1);
-            this.aobTesterTablePanel.Controls.Add(this.memContents, 0, 1);
-            this.aobTesterTablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.aobTesterTablePanel.Location = new System.Drawing.Point(288, 207);
-            this.aobTesterTablePanel.Name = "aobTesterTablePanel";
-            this.aobTesterTablePanel.RowCount = 2;
-            this.aobTesterTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.aobTesterTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.aobTesterTablePanel.Size = new System.Drawing.Size(279, 198);
-            this.aobTesterTablePanel.TabIndex = 15;
-            this.aobTesterTablePanel.Visible = false;
-            // 
-            // flowLayoutPanel2
-            // 
-            this.flowLayoutPanel2.Controls.Add(this.label50);
-            this.flowLayoutPanel2.Controls.Add(this.aobTextbox);
-            this.flowLayoutPanel2.Controls.Add(this.memRange);
-            this.flowLayoutPanel2.Controls.Add(this.rangeTextbox);
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(3, 3);
-            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(133, 93);
-            this.flowLayoutPanel2.TabIndex = 0;
-            // 
-            // rangeTextbox
-            // 
-            this.rangeTextbox.Location = new System.Drawing.Point(3, 55);
-            this.rangeTextbox.Name = "rangeTextbox";
-            this.rangeTextbox.Size = new System.Drawing.Size(100, 20);
-            this.rangeTextbox.TabIndex = 0;
-            // 
-            // aobTextbox
-            // 
-            this.aobTextbox.Location = new System.Drawing.Point(3, 16);
-            this.aobTextbox.Name = "aobTextbox";
-            this.aobTextbox.Size = new System.Drawing.Size(100, 20);
-            this.aobTextbox.TabIndex = 1;
-            // 
-            // button5
-            // 
-            this.button5.Location = new System.Drawing.Point(142, 3);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(104, 78);
-            this.button5.TabIndex = 1;
-            this.button5.Text = "Find AoB and load Range";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
-            // 
-            // button6
-            // 
-            this.button6.Location = new System.Drawing.Point(142, 102);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(115, 48);
-            this.button6.TabIndex = 2;
-            this.button6.Text = "Modify Bytes";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
-            // 
-            // memContents
-            // 
-            this.memContents.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.memContents.Location = new System.Drawing.Point(3, 102);
-            this.memContents.Multiline = true;
-            this.memContents.Name = "memContents";
-            this.memContents.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.memContents.Size = new System.Drawing.Size(133, 93);
-            this.memContents.TabIndex = 3;
-            // 
-            // label50
-            // 
-            this.label50.AutoSize = true;
-            this.label50.Location = new System.Drawing.Point(3, 0);
-            this.label50.Name = "label50";
-            this.label50.Size = new System.Drawing.Size(59, 13);
-            this.label50.TabIndex = 2;
-            this.label50.Text = "AoB to find";
-            // 
-            // memRange
-            // 
-            this.memRange.AutoSize = true;
-            this.memRange.Location = new System.Drawing.Point(3, 39);
-            this.memRange.Name = "memRange";
-            this.memRange.Size = new System.Drawing.Size(74, 13);
-            this.memRange.TabIndex = 3;
-            this.memRange.Text = "Range to load";
-            // 
             // GUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -8315,6 +8315,10 @@
             this.playerHpTablePanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.playerCurrentHpTrackBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.playerMaxHpUpDown)).EndInit();
+            this.aobTesterTablePanel.ResumeLayout(false);
+            this.aobTesterTablePanel.PerformLayout();
+            this.flowLayoutPanel2.ResumeLayout(false);
+            this.flowLayoutPanel2.PerformLayout();
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
             this.hfBladeGroupBox.ResumeLayout(false);
@@ -8700,10 +8704,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.stealthPictureBox)).EndInit();
             this.mainMenuStrip.ResumeLayout(false);
             this.mainMenuStrip.PerformLayout();
-            this.aobTesterTablePanel.ResumeLayout(false);
-            this.aobTesterTablePanel.PerformLayout();
-            this.flowLayoutPanel2.ResumeLayout(false);
-            this.flowLayoutPanel2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

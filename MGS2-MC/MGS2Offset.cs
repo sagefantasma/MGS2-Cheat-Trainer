@@ -56,10 +56,14 @@ namespace MGS2_MC
         //internal static byte[] InfiniteAmmoBytes = new byte[] { 0x66, 0x89, 0x0C, 0x1A, 0x48, 0x8B, 0x5C, 0x24, 0x30, 0x0F, 0xBF, 0xC1, 0x48, 0x83, 0xC4, 0x20 }; //leaving this here in case i need it in the future
         internal static string InfiniteAmmo = "66 89 0C 1A 48 8B 5C 24 30 0F BF C1 48 83 C4 20";
         internal static string NeverReload = "89 05 F2 BB 18 01 C3 CC 48 85 C9 74 23 45 33 D2";
+        internal static byte[] NeverReloadBytes = new byte[] { 0x89, 0x05, 0xF2, 0xBB, 0x18, 0x01, 0xC3, 0xCC, 0x48, 0x85, 0xC9, 0x74, 0x23, 0x45, 0x33, 0xD2};
         internal static string InfiniteLife = "66 29 43 12 E9 67 FF FF FF 41 0F 28 F9 41 0F 28";
         internal static string InfiniteO2 = "66 89 47 78 F3 0F 11 87 E0 00 00 00 44 0F BF 47";
         internal static string NoBleedDamage = "66 89 8B D2 08 00 00 B9 00 00 01 00 E8 5C 9E 03";
         internal static string NoBurnDamage = "66 89 83 D2 08 00 00 8B 0D 96 BA 19 01 0F BF D0";
+        internal static string RaidenClipping = "01 ?? 00 00 00 00 00 00 00 00 00 00 00 27 15 9B";
+        internal static string SnakeClipping = "01 ?? 00 00 00 00 00 00 00 00 00 00 00 E6 DC 28";
+        internal static string Camera = "45 00 00 00 00 00 00 00 06 17 42 53 17 06 53 42 44";
 
 
         /*new offsets and shit found 4/17/24:
@@ -204,6 +208,10 @@ namespace MGS2_MC
         public static readonly MemoryOffset INFINITE_O2 = new MemoryOffset(0, 16);
         public static readonly MemoryOffset NO_BLEED_DMG = new MemoryOffset(0, 16);
         public static readonly MemoryOffset NO_BURN_DMG = new MemoryOffset(0, 16);
+        public static readonly MemoryOffset NO_CLIP = new MemoryOffset(1);
+        public static readonly MemoryOffset LETTERBOX = new MemoryOffset(-188);
+        public static readonly MemoryOffset ZOOM = new MemoryOffset(-192); //todo: verify
+        public static readonly MemoryOffset BLACK_SCREEN = new MemoryOffset(-229);
         #endregion
 
         #region Calculated from Unknown Finder AoBs    

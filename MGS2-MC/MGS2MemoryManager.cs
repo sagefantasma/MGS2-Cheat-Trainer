@@ -40,25 +40,6 @@ namespace MGS2_MC
         #endregion
 
         #region Private methods
-
-        private static Constants.PlayableCharacter DetermineActiveCharacter()
-        {
-            string stageName = GetStageName();
-
-            if (stageName.Contains("tnk")) 
-            {
-                return Constants.PlayableCharacter.Snake;
-            }
-            else if(stageName.Contains("plt"))
-            {
-                return Constants.PlayableCharacter.Raiden;
-            }
-            else
-            {
-                throw new NotImplementedException("Unknown stage! Can't safely determine what the active character is");
-            }
-        }
-
         private static void CheckIfUsable(MGS2Object mgs2Object)
         {
             switch (DetermineActiveCharacter())
@@ -528,6 +509,24 @@ namespace MGS2_MC
                 Alerts = alerts,
                 MechsDestroyed = mechsDestroyed
             };
+        }
+
+        public static Constants.PlayableCharacter DetermineActiveCharacter()
+        {
+            string stageName = GetStageName();
+
+            if (stageName.Contains("tnk"))
+            {
+                return Constants.PlayableCharacter.Snake;
+            }
+            else if (stageName.Contains("plt"))
+            {
+                return Constants.PlayableCharacter.Raiden;
+            }
+            else
+            {
+                throw new NotImplementedException("Unknown stage! Can't safely determine what the active character is");
+            }
         }
     }
 }

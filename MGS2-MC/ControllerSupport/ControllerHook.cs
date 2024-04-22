@@ -64,6 +64,10 @@ namespace MGS2_MC
             _logger.Verbose($"Instance ID: {Program.InstanceID}");
 
             MGS2Monitor.LoadConfig();
+            while(MGS2Monitor.TrainerConfig == null)
+            {
+
+            }
             if (!MGS2Monitor.TrainerConfig.EnableControllerSupport)
             {
                 _logger.Information("The current trainer config has controller support disabled, ending monitoring thread.");

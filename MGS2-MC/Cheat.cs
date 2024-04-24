@@ -1,12 +1,42 @@
 ﻿using SimplifiedMemoryManager;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MGS2_MC
 {
+    internal static class CheatNativeMethods
+    {
+        // Declare OpenProcess
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, int dwProcessId);
+
+        // Declare WriteProcessMemory with short
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, ref short lpBuffer, uint nSize, out int lpNumberOfBytesWritten);
+        // and with bytes
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, uint nSize, out int lpNumberOfBytesWritten);
+
+        // Declare ReadProcessMemory
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, out short lpBuffer, uint size, out int lpNumberOfBytesRead);
+        // and with bytes
+        [DllImport("kernel32.dll")]
+        public static extern bool ReadProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, uint nSize, out int lpNumberOfBytesRead);
+
+        // Declare CloseHandle
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool CloseHandle(IntPtr hObject);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool VirtualProtectEx(IntPtr hProcess, IntPtr lpBaseAddress, int dwSize, uint flNewProtect, out uint lpflOldProtect);
+    }
+
     public struct Cheat
     {
         public string Name { get; private set; }
@@ -45,6 +75,38 @@ namespace MGS2_MC
                                     }
 
                                     spp.ModifyProcessOffset(memoryLocation, memoryContent, true);
+                                    successful = true;
+                                }
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            retries--;
+                        }
+                    } while (!successful && retries > 0);
+                }
+            }
+
+            private static void ReplaceWithNewCode(string aob, MemoryOffset offset, byte[] newCode, int additionalOffset = 0)
+            {
+                lock (MGS2Monitor.MGS2Process)
+                {
+                    bool successful = false;
+                    int retries = 5;
+                    do
+                    {
+                        try
+                        {
+                            using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                            {
+                                SimplePattern pattern = new SimplePattern(aob);
+                                int memoryLocation = spp.ScanMemoryForPattern(pattern);
+
+                                if (memoryLocation != -1)
+                                {
+                                    byte[] memoryContent = spp.ReadProcessOffset(memoryLocation + offset.Start, offset.Length);
+
+                                    spp.ModifyProcessOffset(memoryLocation + additionalOffset, newCode, true);
                                     successful = true;
                                 }
                             }
@@ -116,6 +178,167 @@ namespace MGS2_MC
                 }
             }
 
+            private static void SetMemoryOutsideGameBlock(byte[] bytes, int memoryLocation, IntPtr moduleBaseAddress)
+            {
+                //Process process = Process.GetProcessById(moduleId);
+                //IntPtr moduleBaseAddress = process.MainModule.BaseAddress;
+                lock (MGS2Monitor.MGS2Process)
+                {
+                    try
+                    {
+                        bool successful = false;
+                        int retries = 5;
+                        //byte[] bytesRead = new byte[MGS2Monitor.MGS2Process.MainModule.BaseAddress.ToInt64() + MGS2Monitor.MGS2Process.PrivateMemorySize64];
+
+                        do
+                        {
+                            try
+                            {
+                                moduleBaseAddress = CheatNativeMethods.OpenProcess(0x1F0FFF, false, MGS2Monitor.MGS2Process.Id);
+
+                                successful = CheatNativeMethods.WriteProcessMemory(moduleBaseAddress, IntPtr.Add(moduleBaseAddress, memoryLocation), bytes, (uint)bytes.Length, out int bytesWritten);
+                            }
+                            catch (Exception e)
+                            {
+                                retries--;
+                            }
+                        } while (!successful && retries > 0);
+                    }
+                    finally
+                    {
+                        if (moduleBaseAddress != IntPtr.Zero)
+                            CheatNativeMethods.CloseHandle(moduleBaseAddress);
+                    }
+                }
+            }
+
+            private static byte[] ReadMemoryOutsideGameBlock(string aob, MemoryOffset offset, out int memoryLocation, out IntPtr moduleBaseAddress)
+            {
+                IntPtr moduleHandle = IntPtr.Zero;
+                lock (MGS2Monitor.MGS2Process)
+                {
+                    try
+                    {
+                        bool successful = false;
+                        int retries = 5;
+                        //long arraySize = MGS2Monitor.MGS2Process.MainModule.BaseAddress.ToInt64() / 4;
+                        //MGS2Monitor.MGS2Process.Modules.
+
+                        
+                        //int otherArraySize = MGS2Monitor.MGS2Process.MainModule.BaseAddress.ToInt32();
+                        //List<byte[]> memoryArrays = new List<byte[]>();
+                        
+                            //memoryArrays.Add(new byte[module.ModuleMemorySize]);
+                        //}
+                        /*for(long i = 0; i < arraySize; i += 1073741824)
+                        {
+                            memoryArrays.Add(new byte[1073741824]);
+                        }*/
+                    //var bytesRead = Array.CreateInstance(typeof(byte), arraySize);
+                    //bytesRead = new byte[arraySize];
+
+                        foreach (Process module in Process.GetProcesses())
+                        {
+                            //if (module.ModuleName == "METAL GEAR SOLID2.exe")
+                            //    continue;
+                            //Process moduleProcess = Process.GetProcessesByName(module.ModuleName).First();
+                            //moduleId = moduleProcess.Id;
+                            /*
+                             * 
+                             * 
+                             * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                             * 
+                             * So all this crap here was my "best" idea at how to replicate Cheat Engine's
+                             * "scan all memory" functionality, but this didn't work. it also took over 5
+                             * minutes to go through all processes that were openable OMEGALUL
+                             * 
+                             * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                             * 
+                             * 
+                             */
+                            try
+                            {
+                                moduleBaseAddress = module.MainModule.BaseAddress;
+                            }
+                            catch
+                            {
+                                continue;
+                            }
+                            byte[] moduleMemory = new byte[module.MainModule.ModuleMemorySize];
+                            do
+                            {
+                                try
+                                {
+                                    moduleHandle = CheatNativeMethods.OpenProcess(0x1F0FFF, false, MGS2Monitor.MGS2Process.Id);
+                                    
+
+                                    successful = CheatNativeMethods.ReadProcessMemory(moduleHandle, moduleBaseAddress, moduleMemory, (uint)moduleMemory.Length, out int totalRead);
+                                    
+                                }
+                                catch (Exception e)
+                                {
+                                    retries--;
+                                }
+                            } while (!successful && retries > 0);
+                            if (successful)
+                            {
+                                using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                                {
+                                    IntPtr guaranteed = new IntPtr(2101677557987);
+                                    if(moduleBaseAddress.ToInt64() < guaranteed.ToInt64() && IntPtr.Add(moduleBaseAddress, moduleMemory.Length).ToInt64() > guaranteed.ToInt64())
+                                    {
+                                        int b = 420 + 69;
+                                    }
+                                    SimplePattern pattern = new SimplePattern(aob);
+                                    /*int foundLocation = -1;
+                                    for (long i = 0; i < arraySize; i += int.MaxValue)
+                                    {
+                                        byte[] tempArray = new byte[int.MaxValue];
+                                        Array.Copy(bytesRead, i, tempArray, 0, int.MaxValue);
+                                        foundLocation = spp.ScanMemoryForPattern(pattern, tempArray);
+                                        if (foundLocation != -1)
+                                            break;
+                                    }*/
+                                    memoryLocation = -1;
+                                    try
+                                    {
+                                        memoryLocation = spp.ScanMemoryForPattern(pattern, moduleMemory);
+                                    }
+                                    catch {
+                                        int a = 2 + 2;
+                                    }
+                                    //memoryLocation = 1;
+
+                                    if (memoryLocation != -1)
+                                    {
+                                        byte[] specificBytesToRead = new byte[offset.Length];
+                                        successful = CheatNativeMethods.ReadProcessMemory(moduleHandle, module.MainModule.BaseAddress, specificBytesToRead, (uint)offset.Length, out int totalRead);
+
+                                        if (successful)
+                                        {
+                                            return specificBytesToRead;
+                                        }
+                                        else
+                                        {
+                                            return null;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        memoryLocation = -1;
+                        moduleBaseAddress = IntPtr.Zero;
+                        return null;
+                    }
+                    finally
+                    {
+                        if (moduleHandle != IntPtr.Zero)
+                            CheatNativeMethods.CloseHandle(moduleHandle);
+                    }
+                }
+            }
+
             public static void TurnScreenBlack() //works
             {
                 ModifySingleByte(MGS2AoB.Camera, MGS2Offset.BLACK_SCREEN, 0x00);
@@ -153,7 +376,8 @@ namespace MGS2_MC
 
             internal static void AmmoNeverDepletes() //crashes
             {
-                ReplaceWithInvalidCode(MGS2AoB.NeverReload, MGS2Offset.NEVER_RELOAD, 4); 
+                //ReplaceWithInvalidCode(MGS2AoB.NeverReload, MGS2Offset.NEVER_RELOAD, 4); 
+                ReplaceWithNewCode(MGS2AoB.NeverReload, MGS2Offset.NEVER_RELOAD, new byte[] { 0xE9, 0xA5, 0xFE, 0xA9, 0xFF, 0x0F, 0x1F, 0x00 }, -6);
             }
 
             internal static void NoClipNoGravity() //doesnt exist within the game's memory, so we can't use it atm
@@ -172,9 +396,9 @@ namespace MGS2_MC
 
                 lock (MGS2Monitor.MGS2Process)
                 {
+                    string activeCharacterAoB;
                     using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                     {
-                        string activeCharacterAoB;
                         switch (currentPc)
                         {
                             case Constants.PlayableCharacter.Raiden:
@@ -186,46 +410,35 @@ namespace MGS2_MC
                             default:
                                 throw new NotImplementedException("This character is not (yet?) supported for no clip, sorry");
                         }
-                        
-                        SimplePattern pattern = new SimplePattern(activeCharacterAoB);
-                        /*
-                        int memoryLocation = spp.ScanMemoryForPattern(pattern);
-                        byte[] memoryContent = spp.ReadProcessOffset(memoryLocation + MGS2Offset.NO_CLIP.Start, MGS2Offset.NO_CLIP.Length);
-                        */
+                    }
 
-                        byte[] gameMemoryBuffer = spp.GetProcessSnapshot();
+                    byte[] memoryContent = ReadMemoryOutsideGameBlock(activeCharacterAoB, MGS2Offset.NO_CLIP, out int memoryLocation, out IntPtr moduleBaseAddress);
 
-                        //List<int> offsets = MGS2MemoryManager.FindUniqueOffset(gameMemoryBuffer, MGS2AoB.NeverReloadBytes);
-                        int memoryLocation = spp.ScanMemoryForPattern(pattern, gameMemoryBuffer);
-                        byte[] memoryContent = spp.ReadProcessOffset(memoryLocation + MGS2Offset.NO_CLIP.Start, MGS2Offset.NO_CLIP.Length);
-
-                        if (gravity)
+                    if (gravity)
+                    {
+                        //set byte to either 15 or 25
+                        if (memoryContent[1] == 0x24)
                         {
-                            //set byte to either 15 or 25
-                            if (memoryContent[0] == 0x24)
-                            {
-                                memoryContent[0] = 0x25;
-                            }
-                            else
-                            {
-                                memoryContent[0] = 0x15;
-                            }
+                            memoryContent[1] = 0x25;
                         }
                         else
                         {
-                            //set byte to either 13 or 23
-                            if (memoryContent[0] == 0x24)
-                            {
-                                memoryContent[0] = 0x23;
-                            }
-                            else
-                            {
-                                memoryContent[0] = 0x13;
-                            }
+                            memoryContent[1] = 0x15;
                         }
-
-                        spp.ModifyProcessOffset(memoryLocation + MGS2Offset.NO_CLIP.Start, memoryContent, true);
                     }
+                    else
+                    {
+                        //set byte to either 13 or 23
+                        if (memoryContent[1] == 0x24)
+                        {
+                            memoryContent[1] = 0x23;
+                        }
+                        else
+                        {
+                            memoryContent[1] = 0x13;
+                        }
+                    }
+                    SetMemoryOutsideGameBlock(memoryContent, memoryLocation, moduleBaseAddress);
                 }
             }
 

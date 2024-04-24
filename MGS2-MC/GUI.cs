@@ -601,7 +601,6 @@ namespace MGS2_MC
             stringsListBox.DataSource = MGS2Strings.MGS2_STRINGS;
             stringsListBox.DisplayMember = "Tag";
             stringsListBox.SelectedIndex = -1;
-            //mgs2TabControl.TabPages.RemoveByKey(tabPageStats.Name);
 #if DEBUG
             aobTesterTablePanel.Visible = true;
 #endif
@@ -1771,6 +1770,11 @@ namespace MGS2_MC
                     spp.ModifyProcessOffset(_memoryLocation, convertedMem, true);
                 }
             }
+        }
+
+        private void DisableStatsTrackingCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            MGS2Monitor.EnableGameStats = !disableStatsTrackingCheckBox.Checked;
         }
     }
 }

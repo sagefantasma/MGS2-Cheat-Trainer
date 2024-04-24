@@ -276,7 +276,8 @@ namespace MGS2_MC
             _cheatList = new List<Cheat>
             {
                 BlackScreen, NoBleedDamage, NoBurnDamage, InfiniteAmmo, InfiniteLife, InfiniteOxygen, Letterboxing,
-                NoReload, NoClipWithGravity, NoClipNoGravity, ZoomIn, ZoomOut
+                //NoReload, NoClipWithGravity, NoClipNoGravity, //cutting these out for now, as they dont work and/or crash the game
+                ZoomIn, ZoomOut
             };
         }
 

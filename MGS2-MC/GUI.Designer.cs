@@ -585,6 +585,7 @@
             this.viewLogsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.githubMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.joinOurDiscordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.disableStatsTrackingCheckBox = new System.Windows.Forms.CheckBox();
             this.mgs2TabControl.SuspendLayout();
             this.tabPageItem.SuspendLayout();
             this.itemLayoutPanel.SuspendLayout();
@@ -1384,6 +1385,7 @@
             this.tabPageLayoutPanel.Controls.Add(this.projectedRankGroupBox);
             this.tabPageLayoutPanel.Controls.Add(this.damageTakenGroupBox);
             this.tabPageLayoutPanel.Controls.Add(this.mechDamageGroupBox);
+            this.tabPageLayoutPanel.Controls.Add(this.disableStatsTrackingCheckBox, 2, 3);
             this.tabPageLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabPageLayoutPanel.Location = new System.Drawing.Point(3, 3);
             this.tabPageLayoutPanel.Name = "tabPageLayoutPanel";
@@ -8222,6 +8224,18 @@
             this.joinOurDiscordToolStripMenuItem.Text = "Join Our Discord";
             this.joinOurDiscordToolStripMenuItem.Click += new System.EventHandler(this.JoinOurDiscordToolStripMenuItem_Click);
             // 
+            // disableStatsTrackingCheckBox
+            // 
+            this.disableStatsTrackingCheckBox.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.disableStatsTrackingCheckBox.AutoSize = true;
+            this.disableStatsTrackingCheckBox.Location = new System.Drawing.Point(360, 348);
+            this.disableStatsTrackingCheckBox.Name = "disableStatsTrackingCheckBox";
+            this.disableStatsTrackingCheckBox.Size = new System.Drawing.Size(134, 17);
+            this.disableStatsTrackingCheckBox.TabIndex = 11;
+            this.disableStatsTrackingCheckBox.Text = "Disable Stat Tracking?";
+            this.disableStatsTrackingCheckBox.UseVisualStyleBackColor = true;
+            this.disableStatsTrackingCheckBox.CheckedChanged += new System.EventHandler(this.DisableStatsTrackingCheckBox_CheckedChanged);
+            // 
             // GUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -8265,6 +8279,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).EndInit();
             this.tabPageStats.ResumeLayout(false);
             this.tabPageLayoutPanel.ResumeLayout(false);
+            this.tabPageLayoutPanel.PerformLayout();
             this.alertsGroupBox.ResumeLayout(false);
             this.alertsTablePanel.ResumeLayout(false);
             this.alertsTablePanel.PerformLayout();
@@ -9267,6 +9282,7 @@
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.TextBox memContents;
+        private System.Windows.Forms.CheckBox disableStatsTrackingCheckBox;
     }
 }
 

@@ -298,8 +298,11 @@ namespace MGS2_MC
         {
             try
             {
-                MGS2MemoryManager.GameStats currentGameStats = MGS2MemoryManager.ReadGameStats();
-                GUI.StaticGuiReference.UpdateGameStats(currentGameStats);
+                if (EnableGameStats)
+                {
+                    MGS2MemoryManager.GameStats currentGameStats = MGS2MemoryManager.ReadGameStats();
+                    GUI.StaticGuiReference.UpdateGameStats(currentGameStats);
+                }
             }
             catch(Exception e)
             {
@@ -322,6 +325,8 @@ namespace MGS2_MC
             _logger.Information($"MGS2 Monitor for version {Program.AppVersion} initialized...");
             _logger.Verbose($"Instance ID: {Program.InstanceID}");
         }
+
+        public static bool EnableGameStats { get; set; } = true;
 
         public static Process MGS2Process
         {

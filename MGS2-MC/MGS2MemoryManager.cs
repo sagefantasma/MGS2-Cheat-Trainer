@@ -47,15 +47,19 @@ namespace MGS2_MC
                 case Constants.PlayableCharacter.Snake:
                     if (!Snake.UsableObjects.Contains(mgs2Object))
                     {
+                        _logger.Warning($"Snake cannot use {mgs2Object.Name}");
                         throw new InvalidOperationException($"Snake cannot use {mgs2Object.Name}");
                     }
                     break;
                 case Constants.PlayableCharacter.Raiden:
                     if (!Raiden.UsableObjects.Contains(mgs2Object))
                     {
+                        _logger.Warning($"Raiden cannot use {mgs2Object.Name}");
                         throw new InvalidOperationException($"Raiden cannot use {mgs2Object.Name}");
                     }
                     break;
+                default:
+                    return;
             }
         }
 
@@ -514,17 +518,46 @@ namespace MGS2_MC
         public static Constants.PlayableCharacter DetermineActiveCharacter()
         {
             string stageName = GetStageName();
+            _logger.Debug($"Found stage name: {stageName}");
 
-            if (stageName.Contains("tnk"))
+            if (stageName.Contains("tnk") || stageName.Contains("r_vr_s"))
             {
+                _logger.Verbose("Currently playing as Snake");
                 return Constants.PlayableCharacter.Snake;
             }
             else if (stageName.Contains("plt"))
             {
+                _logger.Verbose("Currently playing as Raiden");
                 return Constants.PlayableCharacter.Raiden;
+            }
+            else if (stageName.Contains("vr_1"))
+            {
+                _logger.Verbose("Currently playing as MGS1 Snake");
+                return Constants.PlayableCharacter.MGS1Snake;
+            }
+            else if (stageName.Contains("r_vr_t"))
+            {
+                _logger.Verbose("Currently playing as Tuxedo Snake");
+                return Constants.PlayableCharacter.TuxedoSnake;
+            }
+            else if (stageName.Contains("r_vr_p"))
+            {
+                _logger.Verbose("Currently playing as Pliskin");
+                return Constants.PlayableCharacter.Pliskin;
+            }
+            else if (stageName.Contains("r_vr_b"))
+            {
+                _logger.Verbose("Currently playing as Ninja Raiden");
+                return Constants.PlayableCharacter.NinjaRaiden;
+            }
+            else if (stageName.Contains("r_vr_x"))
+            {
+                _logger.Verbose("Currently playing as Naked Raiden");
+                return Constants.PlayableCharacter.NakedRaiden;
             }
             else
             {
+                _logger.Warning("Unable to determine what the active character is!");
                 throw new NotImplementedException("Unknown stage! Can't safely determine what the active character is");
             }
         }

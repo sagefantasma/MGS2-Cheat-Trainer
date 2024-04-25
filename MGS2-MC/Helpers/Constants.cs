@@ -10,7 +10,12 @@
         public enum PlayableCharacter
         {
             Snake,
-            Raiden
+            Raiden,
+            MGS1Snake,
+            TuxedoSnake,
+            Pliskin,
+            NinjaRaiden,
+            NakedRaiden
         }
 
         #region Item Table

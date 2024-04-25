@@ -40,7 +40,7 @@ namespace MGS2_MC
         #endregion
 
         #region Private methods
-        private static void CheckIfUsable(MGS2Object mgs2Object)
+        internal static void CheckIfUsable(MGS2Object mgs2Object)
         {
             switch (DetermineActiveCharacter())
             {
@@ -435,8 +435,6 @@ namespace MGS2_MC
 
         public static void UpdateObjectBaseValue(MGS2Object mgs2Object, short value)
         {
-            CheckIfUsable(mgs2Object);
-
             switch (mgs2Object)
             {
                 case StackableItem stackableItem:
@@ -459,8 +457,6 @@ namespace MGS2_MC
 
         public static void UpdateObjectMaxValue(MGS2Object mgs2Object, short count)
         {
-            CheckIfUsable(mgs2Object);
-
             switch (mgs2Object)
             {
                 case StackableItem stackableItem:
@@ -474,7 +470,6 @@ namespace MGS2_MC
 
         public static void ToggleObject(MGS2Object mgs2Object)
         {
-            CheckIfUsable(mgs2Object);
             int objectOffset = mgs2Object.InventoryOffset;
             int[] playerOffsets = GetPlayerOffsets();
             

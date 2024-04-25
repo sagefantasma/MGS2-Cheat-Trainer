@@ -41,6 +41,7 @@ namespace MGS2_MC
         public void ToggleObject(bool shouldBeEnabled, ILogger logger, ToolStripStatusLabel statusLabel)
         {
             logger.Verbose($"Toggling {Name}...");
+            MGS2MemoryManager.CheckIfUsable(this);
             statusLabel.Text = $"Finding {Name} in memory...";
             short currentObjectValue = BitConverter.ToInt16(MGS2MemoryManager.GetPlayerInfoBasedValue(InventoryOffset, sizeof(short)), 0);
             bool isCurrentlyEnabled = currentObjectValue != 0 ? true : false; //this feels more readable as a ternary than the shorthand
@@ -92,6 +93,7 @@ namespace MGS2_MC
             try
             {
                 logger.Verbose($"Setting {Name} to {level}...");
+                MGS2MemoryManager.CheckIfUsable(this);
                 statusLabel.Text = $"Finding {Name} in memory...";
                 MGS2MemoryManager.UpdateObjectBaseValue(this, level);
                 statusLabel.Text = $"{Name} level updated to {level}";
@@ -121,6 +123,7 @@ namespace MGS2_MC
             try
             {
                 logger.Verbose($"Setting durability {value} for {Name}...");
+                MGS2MemoryManager.CheckIfUsable(this);
                 statusLabel.Text = $"Finding {Name} in memory...";
                 MGS2MemoryManager.UpdateObjectBaseValue(this, value);
                 statusLabel.Text = $"{Name} durability updated to {value}";
@@ -187,6 +190,7 @@ namespace MGS2_MC
             try
             {
                 logger.Verbose($"Setting current count to {count} for {Name}...");
+                MGS2MemoryManager.CheckIfUsable(this);
                 statusLabel.Text = $"Finding {Name} in memory...";
                 MGS2MemoryManager.UpdateObjectBaseValue(this, count);
                 statusLabel.Text = $"Current count for {Name} updated to {count}";
@@ -204,6 +208,7 @@ namespace MGS2_MC
             try
             {
                 logger.Verbose($"Setting max count to {count} for {Name}...");
+                MGS2MemoryManager.CheckIfUsable(this);
                 statusLabel.Text = $"Finding {Name} in memory...";
                 MGS2MemoryManager.UpdateObjectMaxValue(this, count);
                 statusLabel.Text = $"Max count for {Name} updated to {count}";
@@ -281,6 +286,7 @@ namespace MGS2_MC
             try
             {
                 logger?.Verbose($"Setting current ammo to {count} for {Name}...");
+                MGS2MemoryManager.CheckIfUsable(this);
                 statusLabel.Text = $"Finding {Name} in memory...";
                 MGS2MemoryManager.UpdateObjectBaseValue(this, shortCount);
                 statusLabel.Text = $"Current ammo count for {Name} updated to {count}";
@@ -299,6 +305,7 @@ namespace MGS2_MC
             try
             {
                 logger.Verbose($"Setting max ammo to {count} for {Name}...");
+                MGS2MemoryManager.CheckIfUsable(this);
                 statusLabel.Text = $"Finding {Name} in memory...";
                 MGS2MemoryManager.UpdateObjectMaxValue(this, shortCount);
                 statusLabel.Text = $"Max ammo count for {Name} updated to {count}";
@@ -327,6 +334,7 @@ namespace MGS2_MC
             try
             {
                 logger.Verbose($"Setting HF blade to lethal");
+                MGS2MemoryManager.CheckIfUsable(this);
                 MGS2MemoryManager.UpdateObjectBaseValue(this, count += 1); //TODO: determine real values
                 logger.Verbose($"HF blade set to lethal successfully!");
             }
@@ -342,6 +350,7 @@ namespace MGS2_MC
             try
             {
                 logger.Verbose($"Setting HF blade to stun");
+                MGS2MemoryManager.CheckIfUsable(this);
                 MGS2MemoryManager.UpdateObjectBaseValue(this, count -= 1); //TODO: determine real values
                 logger.Verbose($"HF blade set to lethal successfully!");
             }

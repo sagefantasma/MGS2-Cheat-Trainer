@@ -40,9 +40,10 @@ namespace MGS2_MC
         #endregion
 
         #region Private methods
-        internal static void CheckIfUsable(MGS2Object mgs2Object)
+        internal static Constants.PlayableCharacter CheckIfUsable(MGS2Object mgs2Object)
         {
-            switch (DetermineActiveCharacter())
+            Constants.PlayableCharacter currentPC = DetermineActiveCharacter();
+            switch (currentPC)
             {
                 case Constants.PlayableCharacter.Snake:
                     if (!Snake.UsableObjects.Contains(mgs2Object))
@@ -59,8 +60,10 @@ namespace MGS2_MC
                     }
                     break;
                 default:
-                    return;
+                    break;
             }
+
+            return currentPC;
         }
 
         private static int[] GetStageOffsets()
@@ -223,8 +226,9 @@ namespace MGS2_MC
             }
         }
 
-        private static int[] GetPlayerOffsets()
+        private static int[] GetPlayerOffsets(Constants.PlayableCharacter character)
         {
+            //TODO: based on current PC, look for a different AoB
             lock (MGS2Monitor.MGS2Process)
             {
                 using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
@@ -326,12 +330,12 @@ namespace MGS2_MC
             }
         }
 
-        private static void SetPlayerOffsetBasedByteValueObject(int objectOffset, byte[] valueToSet)
+        private static void SetPlayerOffsetBasedByteValueObject(int objectOffset, byte[] valueToSet, Constants.PlayableCharacter character)
         {
             //TODO: this is kind of gross that this is hardcoded to be playeroffset only... i would like to fix that.
             try
             {
-                int[] playerOffsets = GetPlayerOffsets();
+                int[] playerOffsets = GetPlayerOffsets(character);
 
                 lock (MGS2Monitor.MGS2Process)
                 {
@@ -426,52 +430,52 @@ namespace MGS2_MC
             }
         }
 
-        public static byte[] GetPlayerInfoBasedValue(int valueOffset, int sizeToRead)
+        public static byte[] GetPlayerInfoBasedValue(int valueOffset, int sizeToRead, Constants.PlayableCharacter character)
         {
-            int[] playerMemoryOffsets = GetPlayerOffsets();
+            int[] playerMemoryOffsets = GetPlayerOffsets(character);
 
             return ReadValueFromMemory(playerMemoryOffsets[0] + valueOffset, sizeToRead);
         }
 
-        public static void UpdateObjectBaseValue(MGS2Object mgs2Object, short value)
+        public static void UpdateObjectBaseValue(MGS2Object mgs2Object, short value, Constants.PlayableCharacter character)
         {
             switch (mgs2Object)
             {
                 case StackableItem stackableItem:
-                    SetPlayerOffsetBasedByteValueObject(stackableItem.CurrentCountOffset, BitConverter.GetBytes(value));
+                    SetPlayerOffsetBasedByteValueObject(stackableItem.CurrentCountOffset, BitConverter.GetBytes(value), character);
                     break;
                 case DurabilityItem durabilityItem:
-                    SetPlayerOffsetBasedByteValueObject(durabilityItem.DurabilityOffset, BitConverter.GetBytes(value));
+                    SetPlayerOffsetBasedByteValueObject(durabilityItem.DurabilityOffset, BitConverter.GetBytes(value), character);
                     break;
                 case AmmoWeapon ammoWeapon:
-                    SetPlayerOffsetBasedByteValueObject(ammoWeapon.CurrentAmmoOffset, BitConverter.GetBytes(value));
+                    SetPlayerOffsetBasedByteValueObject(ammoWeapon.CurrentAmmoOffset, BitConverter.GetBytes(value), character);
                     break;
                 case SpecialWeapon specialWeapon:
-                    SetPlayerOffsetBasedByteValueObject(specialWeapon.SpecialOffset, BitConverter.GetBytes(value));
+                    SetPlayerOffsetBasedByteValueObject(specialWeapon.SpecialOffset, BitConverter.GetBytes(value), character);
                     break;
                 case LevelableItem levelableItem:
-                    SetPlayerOffsetBasedByteValueObject(levelableItem.LevelOffset, BitConverter.GetBytes(value));
+                    SetPlayerOffsetBasedByteValueObject(levelableItem.LevelOffset, BitConverter.GetBytes(value), character);
                     break;
             }
         }
 
-        public static void UpdateObjectMaxValue(MGS2Object mgs2Object, short count)
+        public static void UpdateObjectMaxValue(MGS2Object mgs2Object, short count, Constants.PlayableCharacter character)
         {
             switch (mgs2Object)
             {
                 case StackableItem stackableItem:
-                    SetPlayerOffsetBasedByteValueObject(stackableItem.MaxCountOffset, BitConverter.GetBytes(count)); 
+                    SetPlayerOffsetBasedByteValueObject(stackableItem.MaxCountOffset, BitConverter.GetBytes(count), character); 
                     break;
                 case AmmoWeapon ammoWeapon:
-                    SetPlayerOffsetBasedByteValueObject(ammoWeapon.MaxAmmoOffset, BitConverter.GetBytes(count));
+                    SetPlayerOffsetBasedByteValueObject(ammoWeapon.MaxAmmoOffset, BitConverter.GetBytes(count), character);
                     break;
             }
         }
 
-        public static void ToggleObject(MGS2Object mgs2Object)
+        public static void ToggleObject(MGS2Object mgs2Object, Constants.PlayableCharacter character)
         {
             int objectOffset = mgs2Object.InventoryOffset;
-            int[] playerOffsets = GetPlayerOffsets();
+            int[] playerOffsets = GetPlayerOffsets(character);
             
 
             InvertBooleanValue(playerOffsets[0], objectOffset);

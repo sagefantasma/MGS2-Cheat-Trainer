@@ -41,14 +41,14 @@ namespace MGS2_MC
         public void ToggleObject(bool shouldBeEnabled, ILogger logger, ToolStripStatusLabel statusLabel)
         {
             logger.Verbose($"Toggling {Name}...");
-            MGS2MemoryManager.CheckIfUsable(this);
+            Constants.PlayableCharacter currentPC = MGS2MemoryManager.CheckIfUsable(this);
             statusLabel.Text = $"Finding {Name} in memory...";
-            short currentObjectValue = BitConverter.ToInt16(MGS2MemoryManager.GetPlayerInfoBasedValue(InventoryOffset, sizeof(short)), 0);
+            short currentObjectValue = BitConverter.ToInt16(MGS2MemoryManager.GetPlayerInfoBasedValue(InventoryOffset, sizeof(short), currentPC), 0);
             bool isCurrentlyEnabled = currentObjectValue != 0 ? true : false; //this feels more readable as a ternary than the shorthand
             //Toggle the object if it is currently disabled and needs enabling, or if it is currently enabled and needs disabling.
             if (isCurrentlyEnabled != shouldBeEnabled)
             {
-                MGS2MemoryManager.ToggleObject(this);
+                MGS2MemoryManager.ToggleObject(this, currentPC);
             }
             statusLabel.Text = $"Toggled {Name}!";
             logger.Verbose($"Toggle was successful");
@@ -93,9 +93,9 @@ namespace MGS2_MC
             try
             {
                 logger.Verbose($"Setting {Name} to {level}...");
-                MGS2MemoryManager.CheckIfUsable(this);
+                Constants.PlayableCharacter currentPC = MGS2MemoryManager.CheckIfUsable(this);
                 statusLabel.Text = $"Finding {Name} in memory...";
-                MGS2MemoryManager.UpdateObjectBaseValue(this, level);
+                MGS2MemoryManager.UpdateObjectBaseValue(this, level, currentPC);
                 statusLabel.Text = $"{Name} level updated to {level}";
                 logger.Verbose($"Level set");
             }
@@ -123,9 +123,9 @@ namespace MGS2_MC
             try
             {
                 logger.Verbose($"Setting durability {value} for {Name}...");
-                MGS2MemoryManager.CheckIfUsable(this);
+                Constants.PlayableCharacter currentPC = MGS2MemoryManager.CheckIfUsable(this);
                 statusLabel.Text = $"Finding {Name} in memory...";
-                MGS2MemoryManager.UpdateObjectBaseValue(this, value);
+                MGS2MemoryManager.UpdateObjectBaseValue(this, value, currentPC);
                 statusLabel.Text = $"{Name} durability updated to {value}";
                 logger.Verbose($"Durability set successfully");
             }
@@ -138,7 +138,8 @@ namespace MGS2_MC
 
         internal new void ToggleObject(bool shouldBeEnabled, ILogger logger, ToolStripStatusLabel statusLabel)
         {
-            short currentDurability = BitConverter.ToInt16(MGS2MemoryManager.GetPlayerInfoBasedValue(DurabilityOffset, sizeof(short)), 0);
+            Constants.PlayableCharacter currentPC = MGS2MemoryManager.CheckIfUsable(this);
+            short currentDurability = BitConverter.ToInt16(MGS2MemoryManager.GetPlayerInfoBasedValue(DurabilityOffset, sizeof(short), currentPC), 0);
             
             if (currentDurability == 0 && shouldBeEnabled)
             {
@@ -170,7 +171,8 @@ namespace MGS2_MC
 
         internal new void ToggleObject(bool shouldBeEnabled, ILogger logger, ToolStripStatusLabel statusLabel)
         {
-            short currentCount = BitConverter.ToInt16(MGS2MemoryManager.GetPlayerInfoBasedValue(CurrentCountOffset, sizeof(short)), 0);
+            Constants.PlayableCharacter currentPC = MGS2MemoryManager.CheckIfUsable(this);
+            short currentCount = BitConverter.ToInt16(MGS2MemoryManager.GetPlayerInfoBasedValue(CurrentCountOffset, sizeof(short), currentPC), 0);
             if (currentCount == 0 && shouldBeEnabled)
             {
                 if (LastKnownCurrentCount != 0)
@@ -190,9 +192,9 @@ namespace MGS2_MC
             try
             {
                 logger.Verbose($"Setting current count to {count} for {Name}...");
-                MGS2MemoryManager.CheckIfUsable(this);
+                Constants.PlayableCharacter currentPC = MGS2MemoryManager.CheckIfUsable(this);
                 statusLabel.Text = $"Finding {Name} in memory...";
-                MGS2MemoryManager.UpdateObjectBaseValue(this, count);
+                MGS2MemoryManager.UpdateObjectBaseValue(this, count, currentPC);
                 statusLabel.Text = $"Current count for {Name} updated to {count}";
                 logger.Verbose($"Current count set successfully");
             }
@@ -208,9 +210,9 @@ namespace MGS2_MC
             try
             {
                 logger.Verbose($"Setting max count to {count} for {Name}...");
-                MGS2MemoryManager.CheckIfUsable(this);
+                Constants.PlayableCharacter currentPC = MGS2MemoryManager.CheckIfUsable(this);
                 statusLabel.Text = $"Finding {Name} in memory...";
-                MGS2MemoryManager.UpdateObjectMaxValue(this, count);
+                MGS2MemoryManager.UpdateObjectMaxValue(this, count, currentPC);
                 statusLabel.Text = $"Max count for {Name} updated to {count}";
                 logger.Verbose($"Max count set successfully");
             }
@@ -262,7 +264,8 @@ namespace MGS2_MC
 
         internal new void ToggleObject(bool shouldBeEnabled, ILogger logger, ToolStripStatusLabel statusLabel)
         {
-            short currentAmmo = BitConverter.ToInt16(MGS2MemoryManager.GetPlayerInfoBasedValue(CurrentAmmoOffset, sizeof(short)), 0);
+            Constants.PlayableCharacter currentPC = MGS2MemoryManager.CheckIfUsable(this);
+            short currentAmmo = BitConverter.ToInt16(MGS2MemoryManager.GetPlayerInfoBasedValue(CurrentAmmoOffset, sizeof(short), currentPC), 0);
             //TODO: it would be cool to duplicate the "NO USE" functionality the Stinger gets when prone when disabled!
             //can't seem to easily find the bytes that control that though :(
             //TODO: for some reason this just... doesn't work as intended for the first set of toggling. O_o
@@ -286,9 +289,9 @@ namespace MGS2_MC
             try
             {
                 logger?.Verbose($"Setting current ammo to {count} for {Name}...");
-                MGS2MemoryManager.CheckIfUsable(this);
+                Constants.PlayableCharacter currentPC = MGS2MemoryManager.CheckIfUsable(this);
                 statusLabel.Text = $"Finding {Name} in memory...";
-                MGS2MemoryManager.UpdateObjectBaseValue(this, shortCount);
+                MGS2MemoryManager.UpdateObjectBaseValue(this, shortCount, currentPC);
                 statusLabel.Text = $"Current ammo count for {Name} updated to {count}";
                 logger.Verbose($"Current ammo set successfully");
             }
@@ -305,9 +308,9 @@ namespace MGS2_MC
             try
             {
                 logger.Verbose($"Setting max ammo to {count} for {Name}...");
-                MGS2MemoryManager.CheckIfUsable(this);
+                Constants.PlayableCharacter currentPC = MGS2MemoryManager.CheckIfUsable(this);
                 statusLabel.Text = $"Finding {Name} in memory...";
-                MGS2MemoryManager.UpdateObjectMaxValue(this, shortCount);
+                MGS2MemoryManager.UpdateObjectMaxValue(this, shortCount, currentPC);
                 statusLabel.Text = $"Max ammo count for {Name} updated to {count}";
                 logger.Verbose($"Max ammo set successfully");
             }
@@ -334,8 +337,8 @@ namespace MGS2_MC
             try
             {
                 logger.Verbose($"Setting HF blade to lethal");
-                MGS2MemoryManager.CheckIfUsable(this);
-                MGS2MemoryManager.UpdateObjectBaseValue(this, count += 1); //TODO: determine real values
+                Constants.PlayableCharacter currentPC = MGS2MemoryManager.CheckIfUsable(this);
+                MGS2MemoryManager.UpdateObjectBaseValue(this, count += 1, currentPC); //TODO: determine real values
                 logger.Verbose($"HF blade set to lethal successfully!");
             }
             catch(Exception e)
@@ -350,8 +353,8 @@ namespace MGS2_MC
             try
             {
                 logger.Verbose($"Setting HF blade to stun");
-                MGS2MemoryManager.CheckIfUsable(this);
-                MGS2MemoryManager.UpdateObjectBaseValue(this, count -= 1); //TODO: determine real values
+                Constants.PlayableCharacter currentPC = MGS2MemoryManager.CheckIfUsable(this);
+                MGS2MemoryManager.UpdateObjectBaseValue(this, count -= 1, currentPC); //TODO: determine real values
                 logger.Verbose($"HF blade set to lethal successfully!");
             }
             catch(Exception e)

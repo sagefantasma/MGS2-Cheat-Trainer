@@ -1281,12 +1281,12 @@ namespace MGS2_MC
 
         private void HfBladeLethalBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.HighFrequencyBlade.SetToLethal();
+            MGS2UsableObjects.HighFrequencyBlade.SetToLethal(_logger);
         }
 
         private void HfBladeStunBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.HighFrequencyBlade.SetToStun();
+            MGS2UsableObjects.HighFrequencyBlade.SetToStun(_logger);
         }
 
         private void M9CheckBox_CheckedChanged(object sender, EventArgs e)

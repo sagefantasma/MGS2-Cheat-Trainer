@@ -72,6 +72,7 @@ namespace MGS2_MC
             }
             catch(Exception e)
             {
+                logger.Error($"Failed to toggle {Name}: {e}");
                 MessageBox.Show($"Failed to toggle {Name}: {e}");
             }
         }
@@ -98,6 +99,7 @@ namespace MGS2_MC
             }
             catch(Exception e)
             {
+                logger.Error($"Failed to set card level: {e}");
                 MessageBox.Show($"Failed to set card level: {e}");
             }
         }
@@ -126,6 +128,7 @@ namespace MGS2_MC
             }
             catch(Exception e)
             {
+                logger.Error($"Failed to modify durability for {Name}: {e}");
                 MessageBox.Show($"Failed to modify durability for {Name}: {e}");
             }
         }
@@ -191,6 +194,7 @@ namespace MGS2_MC
             }
             catch(Exception e)
             {
+                logger.Error($"Failed to update current count of {Name}: {e}");
                 MessageBox.Show($"Failed to update current count of {Name}: {e}");
             }
         }
@@ -207,6 +211,7 @@ namespace MGS2_MC
             }
             catch(Exception e)
             {
+                logger.Error($"Failed to update max count of {Name}: {e}");
                 MessageBox.Show($"Failed to update max count of {Name}: {e}");
             }
         }
@@ -230,6 +235,7 @@ namespace MGS2_MC
             }
             catch(Exception e)
             {
+                logger.Error($"Failed to toggle {Name}: {e}");
                 MessageBox.Show($"Failed to toggle {Name}: {e}");
             }
         }
@@ -282,6 +288,7 @@ namespace MGS2_MC
             }
             catch(Exception e)
             {
+                logger.Error($"Failed to update current ammo count for {Name}: {e}");
                 MessageBox.Show($"Failed to update current ammo count for {Name}: {e}");
             }
         }
@@ -299,6 +306,7 @@ namespace MGS2_MC
             }
             catch(Exception e)
             {
+                logger.Error($"Failed to update max ammo count for {Name}: {e}");
                 MessageBox.Show($"Failed to update max ammo count for {Name}: {e}");
             }
         }
@@ -314,26 +322,32 @@ namespace MGS2_MC
         }
         #endregion
 
-        public void SetToLethal()
+        public void SetToLethal(ILogger logger)
         {
             try
             {
+                logger.Verbose($"Setting HF blade to lethal");
                 MGS2MemoryManager.UpdateObjectBaseValue(this, count += 1); //TODO: determine real values
+                logger.Verbose($"HF blade set to lethal successfully!");
             }
             catch(Exception e)
             {
+                logger.Error($"Failed to set HF blade to lethal: {e}");
                 MessageBox.Show($"Failed to set HF blade to lethal: {e}");
             }
         }
 
-        public void SetToStun()
+        public void SetToStun(ILogger logger)
         {
             try
             {
+                logger.Verbose($"Setting HF blade to stun");
                 MGS2MemoryManager.UpdateObjectBaseValue(this, count -= 1); //TODO: determine real values
+                logger.Verbose($"HF blade set to lethal successfully!");
             }
             catch(Exception e)
             {
+                logger.Error($"Failed to set HF blade to stun: {e}");
                 MessageBox.Show($"Failed to set HF blade to stun: {e}");
             }
         }

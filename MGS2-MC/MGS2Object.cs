@@ -44,7 +44,7 @@ namespace MGS2_MC
             Constants.PlayableCharacter currentPC = MGS2MemoryManager.CheckIfUsable(this);
             statusLabel.Text = $"Finding {Name} in memory...";
             short currentObjectValue = BitConverter.ToInt16(MGS2MemoryManager.GetPlayerInfoBasedValue(InventoryOffset, sizeof(short), currentPC), 0);
-            bool isCurrentlyEnabled = currentObjectValue != 0 ? true : false; //this feels more readable as a ternary than the shorthand
+            bool isCurrentlyEnabled = currentObjectValue == -1 ? true : false; //this feels more readable as a ternary than the shorthand
             //Toggle the object if it is currently disabled and needs enabling, or if it is currently enabled and needs disabling.
             if (isCurrentlyEnabled != shouldBeEnabled)
             {

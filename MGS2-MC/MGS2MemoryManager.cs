@@ -165,7 +165,7 @@ namespace MGS2_MC
             return foundOffsets;
         }
 
-        private static List<int> FindNewPlayerOffsets(byte[] buffer)
+        private static List<int> FindNewPlayerOffsets(byte[] buffer, int offsetsToFind)
         {
             int byteCount = 0;
             List<int> playerOffsets = new List<int>();
@@ -217,7 +217,7 @@ namespace MGS2_MC
                         }
                     }
 
-                    if (playerOffsets.Count == 2) //if we have found 2 offsets, then we have found the player offset & the checkpoint
+                    if (playerOffsets.Count == offsetsToFind)
                         break;
 
                     byteCount += 4; //8 bytes can result in missed offsets, 4 bytes is sufficient in accuracy & speed.
@@ -251,7 +251,11 @@ namespace MGS2_MC
                     }
 
                     _lastKnownPlayerOffsets = new List<int>();
-                    List<int> playerOffsets = FindNewPlayerOffsets(gameMemoryBuffer);
+                    int offsetsToFind = 2;
+                    string currentStage = GetStageName();
+                    if (StageNames.VRStages.PrefixesList.Any(stagePrefix => currentStage.Contains(stagePrefix)))
+                        offsetsToFind = 1;
+                    List<int> playerOffsets = FindNewPlayerOffsets(gameMemoryBuffer, offsetsToFind);
 
                     _lastKnownPlayerOffsets = new List<int>(playerOffsets);
                     return _lastKnownPlayerOffsets;
@@ -308,6 +312,13 @@ namespace MGS2_MC
                 _logger.Error($"Failed to invert boolean at offset {playerOffset}+{objectOffset}: {e}");
                 throw new AggregateException("Could not invert boolean", e);
             }
+        }
+
+        private static string GetCharacterCode()
+        {
+            List<int> stageMemoryOffsets = GetStageOffsets();
+
+            return Encoding.UTF8.GetString(ReadValueFromMemory(stageMemoryOffsets.First() + MGS2Offset.CURRENT_CHARACTER.Start, MGS2Offset.CURRENT_CHARACTER.Length));
         }
 
         private static string GetStageName()
@@ -462,6 +473,9 @@ namespace MGS2_MC
                 case LevelableItem levelableItem:
                     SetPlayerOffsetBasedByteValueObject(levelableItem.LevelOffset, BitConverter.GetBytes(value), character);
                     break;
+                case BasicItem basicItem:
+                    SetPlayerOffsetBasedByteValueObject(basicItem.InventoryOffset, BitConverter.GetBytes(value), character);
+                    break;
             }
         }
 
@@ -482,10 +496,14 @@ namespace MGS2_MC
         {
             int objectOffset = mgs2Object.InventoryOffset;
             List<int> playerOffsets = GetPlayerOffsets(character);
-            
-            foreach(int playerOffset in  playerOffsets)
+
+            foreach(int playerOffset in playerOffsets)
             {
-                InvertBooleanValue(playerOffset, objectOffset);
+                short currentValue = BitConverter.ToInt16(ReadValueFromMemory(playerOffset + objectOffset, sizeof(short)), 0);
+                if (currentValue == -1)
+                    UpdateObjectBaseValue(mgs2Object, 1, character);
+                else
+                    UpdateObjectBaseValue(mgs2Object, -1, character);
             }
         }
 
@@ -523,8 +541,8 @@ namespace MGS2_MC
 
         public static Constants.PlayableCharacter DetermineActiveCharacter()
         {
-            string stageName = GetStageName();
-            _logger.Debug($"Found stage name: {stageName}");
+            string stageName = GetCharacterCode();
+            _logger.Debug($"Found character: {stageName}");
 
             if (stageName.Contains("tnk") || stageName.Contains("r_vr_s"))
             {

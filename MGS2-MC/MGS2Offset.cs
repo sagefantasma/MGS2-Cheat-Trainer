@@ -51,7 +51,7 @@ namespace MGS2_MC
         //00 00 00 78 00 08 00 <-- possibly an AoB for HP/Magazine modificaitons? might have to key off of LIFE?(or at least whatever it is called at that moment, within the games memory block)
         internal static byte[] HealthMod = new byte[] { 0x00, 0x00, 0x00, 0x78, 0x00, 0x08, 0x00 }; //TODO: prove this is valid
         //clipcurrentCount == -114 from the above AoB, 4bytes long. HP mod is DIRECTLY after, it seems?
-        internal static byte[] StageInfo = new byte[] { 0x10, 0x0E, 0x18, 0x15, 0x20, 0x1C };
+        internal static byte[] StageInfo = new byte[] { 0x10, 0x0E, 0x18, 0x15, 0x00, 0x00 };
         //current "stage" == -267 from the above AoB, 5 bytes long. If it has r_tnk, it is Snake. if it is r_plt, it is raiden :)
         //internal static byte[] InfiniteAmmoBytes = new byte[] { 0x66, 0x89, 0x0C, 0x1A, 0x48, 0x8B, 0x5C, 0x24, 0x30, 0x0F, 0xBF, 0xC1, 0x48, 0x83, 0xC4, 0x20 }; //leaving this here in case i need it in the future
         internal static string InfiniteAmmo = "66 89 0C 1A 48 8B 5C 24 30 0F BF C1 48 83 C4 20";
@@ -184,21 +184,21 @@ namespace MGS2_MC
         #endregion
 
         #region Calculated From StageInfo
-        public static readonly MemoryOffset CURRENT_STAGE = new MemoryOffset(-266, -262);
-        public static readonly MemoryOffset CURRENT_EQUIPPED_ITEM = new MemoryOffset(-32); //TODO: prove this is valid
-        public static readonly MemoryOffset CURRENT_EQUIPPED_WEAPON = new MemoryOffset(-34); //TODO: prove this is valid
-        public static readonly MemoryOffset GAME_STATS_BLOCK = new MemoryOffset(8, 51);
-        public static readonly MemoryOffset DAMAGE_TAKEN = new MemoryOffset(32); // what does this even represent?? is it actually whole damage????
-        public static readonly MemoryOffset KILL_COUNT = new MemoryOffset(30);
-        public static readonly MemoryOffset ALERT_COUNT = new MemoryOffset(28);
-        public static readonly MemoryOffset SHOT_COUNT = new MemoryOffset(26);
-        public static readonly MemoryOffset PLAY_TIME = new MemoryOffset(20, 23);
-        public static readonly MemoryOffset SAVE_COUNT = new MemoryOffset(16);
-        public static readonly MemoryOffset CONTINUE_COUNT = new MemoryOffset(12);
-        public static readonly MemoryOffset MECHS_DESTROYED = new MemoryOffset(50);
-        public static readonly MemoryOffset PULL_UP_COUNT = new MemoryOffset(8); //TODO: prove this is valid
-        public static readonly MemoryOffset SPECIAL_ITEMS_USED = new MemoryOffset(5232, 5233);
-        public static readonly MemoryOffset RATIONS_USED = new MemoryOffset(5226, 5227);
+        public static readonly MemoryOffset CURRENT_STAGE = new MemoryOffset(-260, -255);
+        public static readonly MemoryOffset CURRENT_EQUIPPED_ITEM = new MemoryOffset(-26); //TODO: prove this is valid
+        public static readonly MemoryOffset CURRENT_EQUIPPED_WEAPON = new MemoryOffset(-28); //TODO: prove this is valid
+        public static readonly MemoryOffset GAME_STATS_BLOCK = new MemoryOffset(14, 57);
+        public static readonly MemoryOffset DAMAGE_TAKEN = new MemoryOffset(38);
+        public static readonly MemoryOffset KILL_COUNT = new MemoryOffset(36);
+        public static readonly MemoryOffset ALERT_COUNT = new MemoryOffset(34);
+        public static readonly MemoryOffset SHOT_COUNT = new MemoryOffset(32);
+        public static readonly MemoryOffset PLAY_TIME = new MemoryOffset(26, 29);
+        public static readonly MemoryOffset SAVE_COUNT = new MemoryOffset(22);
+        public static readonly MemoryOffset CONTINUE_COUNT = new MemoryOffset(18);
+        public static readonly MemoryOffset MECHS_DESTROYED = new MemoryOffset(56);
+        public static readonly MemoryOffset PULL_UP_COUNT = new MemoryOffset(14); //TODO: prove this is valid
+        public static readonly MemoryOffset SPECIAL_ITEMS_USED = new MemoryOffset(5238, 5239);
+        public static readonly MemoryOffset RATIONS_USED = new MemoryOffset(5232, 5233);
         #endregion
 
         #region Cheats offsets

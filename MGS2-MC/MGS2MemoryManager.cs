@@ -13,8 +13,8 @@ namespace MGS2_MC
         #region Internals
         private const string loggerName = "MemoryManagerDebuglog.log";
 
-        private static int[] _lastKnownPlayerOffsets { get; set; } = default;
-        private static int[] _lastKnownStageOffsets { get; set; } = default;
+        private static List<int> _lastKnownPlayerOffsets { get; set; } = default;
+        private static List<int> _lastKnownStageOffsets { get; set; } = default;
         private static ILogger _logger { get; set; }
 
         internal static void StartLogger()
@@ -66,7 +66,7 @@ namespace MGS2_MC
             return currentPC;
         }
 
-        private static int[] GetStageOffsets()
+        private static List<int> GetStageOffsets()
         {
             lock (MGS2Monitor.MGS2Process)
             {
@@ -82,24 +82,30 @@ namespace MGS2_MC
                         }
                     }
 
-                    _lastKnownStageOffsets = new int[2];
+                    _lastKnownStageOffsets = new List<int>();
 
                     List<int> stageOffset = FindUniqueOffset(gameMemoryBuffer, MGS2AoB.StageInfo);
 
-                    //most of the time we only get 2 results, but sometimes we may get 3. we always want the final two.
-                    stageOffset = stageOffset.GetRange(stageOffset.Count - 2, 2);
+                    //ignore all results except for the final two if more than 2 are found.
+                    if(stageOffset.Count > 1)
+                        stageOffset = stageOffset.GetRange(stageOffset.Count - 2, 2);
 
-                    Array.Copy(stageOffset.ToArray(), _lastKnownStageOffsets, 2);
+                    _lastKnownStageOffsets = new List<int>(stageOffset);
                     return _lastKnownStageOffsets;
                 }
             }
         }
 
-        private static bool ValidateLastKnownOffsets(byte[] memoryBuffer, int[] lastKnownOffsets, byte[] finderAoB)
+        private static bool ValidateLastKnownOffsets(byte[] memoryBuffer, List<int> lastKnownOffsets, byte[] finderAoB)
         {
             try
             {
                 bool offsetIsValid = true;
+                if(lastKnownOffsets.Count == 0)
+                {
+                    return false;
+                }
+
                 foreach (int previousOffset in lastKnownOffsets)
                 {
                     byte[] previousOffsetBuffer = new byte[finderAoB.Length];
@@ -226,9 +232,9 @@ namespace MGS2_MC
             }
         }
 
-        private static int[] GetPlayerOffsets(Constants.PlayableCharacter character)
+        private static List<int> GetPlayerOffsets(Constants.PlayableCharacter character)
         {
-            //TODO: based on current PC, look for a different AoB
+            //TODO: based on current STAGE, change the quantity of offsets we're looking for(there is only 1 match in VR)
             lock (MGS2Monitor.MGS2Process)
             {
                 using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
@@ -244,10 +250,10 @@ namespace MGS2_MC
                         }
                     }
 
-                    _lastKnownPlayerOffsets = new int[2];
+                    _lastKnownPlayerOffsets = new List<int>();
                     List<int> playerOffsets = FindNewPlayerOffsets(gameMemoryBuffer);
 
-                    Array.Copy(playerOffsets.ToArray(), _lastKnownPlayerOffsets, 2);
+                    _lastKnownPlayerOffsets = new List<int>(playerOffsets);
                     return _lastKnownPlayerOffsets;
                 }
             }
@@ -306,9 +312,9 @@ namespace MGS2_MC
 
         private static string GetStageName()
         {
-            int[] stageMemoryOffsets = GetStageOffsets();
+            List<int> stageMemoryOffsets = GetStageOffsets();
 
-            return Encoding.UTF8.GetString(ReadValueFromMemory(stageMemoryOffsets.Last() + MGS2Offset.CURRENT_STAGE.Start, MGS2Offset.CURRENT_STAGE.Length));
+            return Encoding.UTF8.GetString(ReadValueFromMemory(stageMemoryOffsets.First() + MGS2Offset.CURRENT_STAGE.Start, MGS2Offset.CURRENT_STAGE.Length));
         }
 
         private static void SetStringValue(int stringOffset, string valueToSet)
@@ -335,14 +341,14 @@ namespace MGS2_MC
             //TODO: this is kind of gross that this is hardcoded to be playeroffset only... i would like to fix that.
             try
             {
-                int[] playerOffsets = GetPlayerOffsets(character);
+                List<int> playerOffsets = GetPlayerOffsets(character);
 
                 lock (MGS2Monitor.MGS2Process)
                 {
                     using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                     {
-                        proxy.ModifyProcessOffset(playerOffsets[0] + objectOffset, valueToSet);
-                        proxy.ModifyProcessOffset(playerOffsets[1] + objectOffset, valueToSet);
+                        foreach(int offset in playerOffsets)
+                            proxy.ModifyProcessOffset(offset + objectOffset, valueToSet);
                     }
                 }
             }
@@ -432,7 +438,7 @@ namespace MGS2_MC
 
         public static byte[] GetPlayerInfoBasedValue(int valueOffset, int sizeToRead, Constants.PlayableCharacter character)
         {
-            int[] playerMemoryOffsets = GetPlayerOffsets(character);
+            List<int> playerMemoryOffsets = GetPlayerOffsets(character);
 
             return ReadValueFromMemory(playerMemoryOffsets[0] + valueOffset, sizeToRead);
         }
@@ -475,11 +481,12 @@ namespace MGS2_MC
         public static void ToggleObject(MGS2Object mgs2Object, Constants.PlayableCharacter character)
         {
             int objectOffset = mgs2Object.InventoryOffset;
-            int[] playerOffsets = GetPlayerOffsets(character);
+            List<int> playerOffsets = GetPlayerOffsets(character);
             
-
-            InvertBooleanValue(playerOffsets[0], objectOffset);
-            InvertBooleanValue(playerOffsets[1], objectOffset);
+            foreach(int playerOffset in  playerOffsets)
+            {
+                InvertBooleanValue(playerOffset, objectOffset);
+            }
         }
 
         public static GameStats ReadGameStats()

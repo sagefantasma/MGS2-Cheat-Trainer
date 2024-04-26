@@ -551,40 +551,6 @@ namespace MGS2_MC
             cheatsCheckedListBox.DisplayMember = "Name";
         }
 
-        private void BuildGroupBoxForObject(MGS2Object objectToEdit)
-        {
-            //TODO: i think this is all set to be removed
-            //envisioning a listbox on the left pane to choose item to edit
-            //then the item you select determines what shows up in the right pane
-            //eventually, this should dovetail well into the controller support
-
-            //all items need the enable checkbox & picture
-            switch(objectToEdit)
-            {
-                case AmmoWeapon ammoWeapon:
-                    //need current ammo updown & set and max ammo updown & set
-                    break;
-                case SpecialWeapon specialWeapon:
-                    //need lethal/stun buttons
-                    break;
-                case BasicWeapon basicWeapon:
-                    //don't need anything else
-                    break;
-                case StackableItem stackableItem:
-                    //need current count updown & set
-                    break;
-                case DurabilityItem durabilityItem:
-                    //need durability updown & set
-                    break;
-                case LevelableItem levelableItem:
-                    //need level updown & set
-                    break;
-                case BasicItem basicItem:
-                    //don't need anything else
-                    break;
-            }
-        }
-
         public GUI(ILogger logger)
         {
             _logger = logger;

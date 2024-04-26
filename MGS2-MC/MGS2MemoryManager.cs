@@ -234,7 +234,6 @@ namespace MGS2_MC
 
         private static List<int> GetPlayerOffsets(Constants.PlayableCharacter character)
         {
-            //TODO: based on current STAGE, change the quantity of offsets we're looking for(there is only 1 match in VR)
             lock (MGS2Monitor.MGS2Process)
             {
                 using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))

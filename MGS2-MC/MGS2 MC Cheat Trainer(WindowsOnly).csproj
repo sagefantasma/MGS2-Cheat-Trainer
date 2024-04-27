@@ -32,7 +32,7 @@
     <ErrorReportUrl>https://github.com/sagefantasma/MGS2-Cheat-Trainer/issues</ErrorReportUrl>
     <ProductName>MGS2 Master Collection Cheat Trainer</ProductName>
     <PublisherName>ANTIBigBoss</PublisherName>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>3</ApplicationRevision>
     <ApplicationVersion>1.3.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -214,6 +214,7 @@
     <Compile Include="Helpers\PlayableCharacters\PlayableCharacter.cs" />
     <Compile Include="Helpers\Logging.cs" />
     <Compile Include="Cheat.cs" />
+    <Compile Include="Helpers\Rank.cs" />
     <Compile Include="MGS2Monitor.cs" />
     <Compile Include="MGS2Object.cs" />
     <Compile Include="GUI.cs">

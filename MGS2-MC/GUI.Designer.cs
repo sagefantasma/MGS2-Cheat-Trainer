@@ -2060,6 +2060,7 @@
             // 
             this.gripGroupBox.Controls.Add(this.playerGripTablePanel);
             this.gripGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gripGroupBox.Enabled = false;
             this.gripGroupBox.Location = new System.Drawing.Point(3, 102);
             this.gripGroupBox.Name = "gripGroupBox";
             this.gripGroupBox.Size = new System.Drawing.Size(273, 93);
@@ -2152,6 +2153,7 @@
             // 
             this.playerHealthGroupBox.Controls.Add(this.playerHpTablePanel);
             this.playerHealthGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.playerHealthGroupBox.Enabled = false;
             this.playerHealthGroupBox.Location = new System.Drawing.Point(3, 3);
             this.playerHealthGroupBox.Name = "playerHealthGroupBox";
             this.playerHealthGroupBox.Size = new System.Drawing.Size(273, 93);

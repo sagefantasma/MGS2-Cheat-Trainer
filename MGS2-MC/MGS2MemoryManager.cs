@@ -26,6 +26,8 @@ namespace MGS2_MC
 
         public class GameStats
         {
+            //TODO: add current difficulty
+            //TODO: add game choice(Tanker, Plant, TankerPlant)
             public short Alerts;
             public short Continues;
             public short DamageTaken;

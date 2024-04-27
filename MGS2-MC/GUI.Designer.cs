@@ -104,6 +104,7 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.mechsDestroyedButton = new System.Windows.Forms.Button();
             this.mechsDestroyedLabel = new System.Windows.Forms.Label();
+            this.disableStatsTrackingCheckBox = new System.Windows.Forms.CheckBox();
             this.tabPageStrings = new System.Windows.Forms.TabPage();
             this.stringTabLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.stringsListBox = new System.Windows.Forms.ListBox();
@@ -585,7 +586,6 @@
             this.viewLogsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.githubMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.joinOurDiscordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.disableStatsTrackingCheckBox = new System.Windows.Forms.CheckBox();
             this.mgs2TabControl.SuspendLayout();
             this.tabPageItem.SuspendLayout();
             this.itemLayoutPanel.SuspendLayout();
@@ -1426,6 +1426,7 @@
             // alertCountButton
             // 
             this.alertCountButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.alertCountButton.Enabled = false;
             this.alertCountButton.Location = new System.Drawing.Point(3, 49);
             this.alertCountButton.Name = "alertCountButton";
             this.alertCountButton.Size = new System.Drawing.Size(124, 25);
@@ -1486,6 +1487,7 @@
             // adjustKillCountButton
             // 
             this.adjustKillCountButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.adjustKillCountButton.Enabled = false;
             this.adjustKillCountButton.Location = new System.Drawing.Point(3, 49);
             this.adjustKillCountButton.Name = "adjustKillCountButton";
             this.adjustKillCountButton.Size = new System.Drawing.Size(124, 25);
@@ -1560,6 +1562,7 @@
             // rationsUsedButton
             // 
             this.rationsUsedButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rationsUsedButton.Enabled = false;
             this.rationsUsedButton.Location = new System.Drawing.Point(3, 49);
             this.rationsUsedButton.Name = "rationsUsedButton";
             this.rationsUsedButton.Size = new System.Drawing.Size(124, 25);
@@ -1608,6 +1611,7 @@
             // continueCountButton
             // 
             this.continueCountButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.continueCountButton.Enabled = false;
             this.continueCountButton.Location = new System.Drawing.Point(3, 49);
             this.continueCountButton.Name = "continueCountButton";
             this.continueCountButton.Size = new System.Drawing.Size(124, 25);
@@ -1681,6 +1685,7 @@
             // saveCountButton
             // 
             this.saveCountButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.saveCountButton.Enabled = false;
             this.saveCountButton.Location = new System.Drawing.Point(3, 49);
             this.saveCountButton.Name = "saveCountButton";
             this.saveCountButton.Size = new System.Drawing.Size(124, 25);
@@ -1729,6 +1734,7 @@
             // shotsFiredButton
             // 
             this.shotsFiredButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.shotsFiredButton.Enabled = false;
             this.shotsFiredButton.Location = new System.Drawing.Point(3, 49);
             this.shotsFiredButton.Name = "shotsFiredButton";
             this.shotsFiredButton.Size = new System.Drawing.Size(124, 25);
@@ -1778,12 +1784,13 @@
             // 
             this.projectedRankLabel.AutoSize = true;
             this.projectedRankLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.projectedRankLabel.Enabled = false;
             this.projectedRankLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.projectedRankLabel.Location = new System.Drawing.Point(3, 0);
             this.projectedRankLabel.Name = "projectedRankLabel";
             this.projectedRankLabel.Size = new System.Drawing.Size(268, 77);
             this.projectedRankLabel.TabIndex = 2;
-            this.projectedRankLabel.Text = "Tasmanian Devil";
+            this.projectedRankLabel.Text = "-";
             this.projectedRankLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // damageTakenGroupBox
@@ -1815,6 +1822,7 @@
             // damageTakenButton
             // 
             this.damageTakenButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.damageTakenButton.Enabled = false;
             this.damageTakenButton.Location = new System.Drawing.Point(3, 49);
             this.damageTakenButton.Name = "damageTakenButton";
             this.damageTakenButton.Size = new System.Drawing.Size(124, 25);
@@ -1862,6 +1870,7 @@
             // mechsDestroyedButton
             // 
             this.mechsDestroyedButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mechsDestroyedButton.Enabled = false;
             this.mechsDestroyedButton.Location = new System.Drawing.Point(3, 49);
             this.mechsDestroyedButton.Name = "mechsDestroyedButton";
             this.mechsDestroyedButton.Size = new System.Drawing.Size(124, 25);
@@ -1880,6 +1889,18 @@
             this.mechsDestroyedLabel.TabIndex = 1;
             this.mechsDestroyedLabel.Text = "0";
             this.mechsDestroyedLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // disableStatsTrackingCheckBox
+            // 
+            this.disableStatsTrackingCheckBox.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.disableStatsTrackingCheckBox.AutoSize = true;
+            this.disableStatsTrackingCheckBox.Location = new System.Drawing.Point(360, 348);
+            this.disableStatsTrackingCheckBox.Name = "disableStatsTrackingCheckBox";
+            this.disableStatsTrackingCheckBox.Size = new System.Drawing.Size(134, 17);
+            this.disableStatsTrackingCheckBox.TabIndex = 11;
+            this.disableStatsTrackingCheckBox.Text = "Disable Stat Tracking?";
+            this.disableStatsTrackingCheckBox.UseVisualStyleBackColor = true;
+            this.disableStatsTrackingCheckBox.CheckedChanged += new System.EventHandler(this.DisableStatsTrackingCheckBox_CheckedChanged);
             // 
             // tabPageStrings
             // 
@@ -8223,18 +8244,6 @@
             this.joinOurDiscordToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.joinOurDiscordToolStripMenuItem.Text = "Join Our Discord";
             this.joinOurDiscordToolStripMenuItem.Click += new System.EventHandler(this.JoinOurDiscordToolStripMenuItem_Click);
-            // 
-            // disableStatsTrackingCheckBox
-            // 
-            this.disableStatsTrackingCheckBox.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.disableStatsTrackingCheckBox.AutoSize = true;
-            this.disableStatsTrackingCheckBox.Location = new System.Drawing.Point(360, 348);
-            this.disableStatsTrackingCheckBox.Name = "disableStatsTrackingCheckBox";
-            this.disableStatsTrackingCheckBox.Size = new System.Drawing.Size(134, 17);
-            this.disableStatsTrackingCheckBox.TabIndex = 11;
-            this.disableStatsTrackingCheckBox.Text = "Disable Stat Tracking?";
-            this.disableStatsTrackingCheckBox.UseVisualStyleBackColor = true;
-            this.disableStatsTrackingCheckBox.CheckedChanged += new System.EventHandler(this.DisableStatsTrackingCheckBox_CheckedChanged);
             // 
             // GUI
             // 

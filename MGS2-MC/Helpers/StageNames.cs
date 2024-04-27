@@ -6,38 +6,49 @@ using System.Threading.Tasks;
 
 namespace MGS2_MC
 {
+    public class Stage
+    {
+        public string Name;
+        public string AreaCode;
+
+        public override string ToString()
+        {
+            return $"Area: {Name} -- Code: {AreaCode}";
+        }
+    }
+
     public static class StageNames
     {
         public static class MenuStages
         {
-            public static readonly string DevMenu = "select";
-            public static readonly string MainMenu = "n_title";
-            public static readonly string VRMenu = "mselect";
-            public static readonly string SnakeTalesMenu = "tales";
+            public static readonly Stage DevMenu = new Stage { Name = "DevMenu", AreaCode = "select" };
+            public static readonly Stage MainMenu = new Stage { Name = "MainMenu", AreaCode = "n_title" };
+            public static readonly Stage VRMenu = new Stage { Name = "VRMenu", AreaCode = "mselect" };
+            public static readonly Stage SnakeTalesMenu = new Stage { Name = "SnakeTalesMenu", AreaCode = "tales" };
 
-            public static readonly List<string> StageList = new List<string> { DevMenu, MainMenu, VRMenu, SnakeTalesMenu };
+            public static readonly List<Stage> StageList = new List<Stage> { DevMenu, MainMenu, VRMenu, SnakeTalesMenu };
         }
 
         public static class TankerStages
         {
             #region Playable Stages
-            public static readonly string AltDeck = "w00a";
-            public static readonly string OlgaFight = "w00b";
-            public static readonly string NavigationalDeck = "w00c";
-            public static readonly string DeckACrewQuarters = "w01a";
-            public static readonly string DeckACrewQuartersStarboard = "w01b";
-            public static readonly string DeckCCrewQuarters = "w01c";
-            public static readonly string DeckDCrewQuarters = "w01d";
-            public static readonly string DeckEBridge = "w01e";
-            public static readonly string DeckACrewLounge = "w01f";
-            public static readonly string EngineRoom = "w02a";
-            public static readonly string Deck2Port = "w03a";
-            public static readonly string Deck2Starboard = "w03b";
-            public static readonly string Hold1 = "w04a";
-            public static readonly string Hold2 = "w04b";
-            public static readonly string Hold3 = "w04c";
+            public static readonly Stage AltDeck = new Stage { Name = "AltDeck", AreaCode = "w00a" };
+            public static readonly Stage OlgaFight = new Stage { Name = "OlgaFight", AreaCode = "w00b" };
+            public static readonly Stage NavigationalDeck = new Stage { Name = "NavigationalDeck", AreaCode = "w00c" };
+            public static readonly Stage DeckACrewQuarters = new Stage { Name = "DeckACrewQuarters", AreaCode = "w01a" };
+            public static readonly Stage DeckACrewQuartersStarboard = new Stage { Name = "DeckACrewQuartersStarboard", AreaCode = "w01b" };
+            public static readonly Stage DeckCCrewQuarters = new Stage { Name = "DeckCCrewQuarters", AreaCode = "w01c" };
+            public static readonly Stage DeckDCrewQuarters = new Stage { Name = "DeckDCrewQuarters", AreaCode = "w01d" };
+            public static readonly Stage DeckEBridge = new Stage { Name = "DeckEBridge", AreaCode = "w01e" };
+            public static readonly Stage DeckACrewLounge = new Stage { Name = "DeckACrewLounge", AreaCode = "w01f" };
+            public static readonly Stage EngineRoom = new Stage { Name = "EngineRoom", AreaCode = "w02a" };
+            public static readonly Stage Deck2Port = new Stage { Name = "Deck2Port", AreaCode = "w03a" };
+            public static readonly Stage Deck2Starboard = new Stage { Name = "Deck2Starboard", AreaCode = "w03b" };
+            public static readonly Stage Hold1 = new Stage { Name = "Hold1", AreaCode = "w04a" };
+            public static readonly Stage Hold2 = new Stage { Name = "Hold2", AreaCode = "w04b" };
+            public static readonly Stage Hold3 = new Stage { Name = "Hold3", AreaCode = "w04c" };
 
-            public static readonly List<string> PlayableStageList = new List<string> { AltDeck, OlgaFight, NavigationalDeck, DeckACrewQuarters, DeckACrewQuartersStarboard, 
+            public static readonly List<Stage> PlayableStageList = new List<Stage> { AltDeck, OlgaFight, NavigationalDeck, DeckACrewQuarters, DeckACrewQuartersStarboard, 
                 DeckACrewLounge, DeckCCrewQuarters, DeckDCrewQuarters, DeckEBridge, EngineRoom, Deck2Port, Deck2Starboard, Hold1, Hold2, Hold3 };
             #endregion
 
@@ -63,52 +74,52 @@ namespace MGS2_MC
         public static class PlantStages
         {
             #region Playable Stages
-            public static readonly string SeaDock = "w11a";
-            public static readonly string SeaDockBombDisposal = "w11b";
-            public static readonly string SeaDockFortune = "w11c";
-            public static readonly string StrutARoof = "w12a";
-            public static readonly string StrutARoofBomb = "w12c";
-            public static readonly string StrutAPumpRoom = "w12b";
-            public static readonly string ABConnectingBridge = "w13a";
-            public static readonly string ABConnectingBridgeSensorB = "w13b";
-            public static readonly string TransformerRoom = "w14a";
-            public static readonly string BCConnectingBridge = "w15a";
-            public static readonly string BCConnectingBridgeAfterStillman = "w15b";
-            public static readonly string DiningHall = "w16a";
-            public static readonly string DiningHallAfterStillman = "w16b";
-            public static readonly string CDConnectingBridge = "w17a";
-            public static readonly string SedimentPool = "w18a";
-            public static readonly string DEConnectingBridge = "w19a";
-            public static readonly string ParcelRoom = "w20a";
-            public static readonly string Heliport = "w20b";
-            public static readonly string HeliportBomb = "w20c";
-            public static readonly string HeliportPostNinja = "w20d";
-            public static readonly string EFConnectingBridge = "w21a";
-            public static readonly string Warehouse = "w22a";
-            public static readonly string FAConnectingBridge = "w23b";
-            public static readonly string Shell1Core = "w24a";
-            public static readonly string Shell1CoreB1 = "w24b";
-            public static readonly string Shell1CoreB2 = "w24d";
-            public static readonly string Shell1CoreHostageRoom = "w24c";
-            public static readonly string ShellsConnectingBridge = "w25a";
-            public static readonly string ShellsConnectingBridgeDestroyed = "w25b";
-            public static readonly string StrutLPerimeter = "w25c";
-            public static readonly string KLConnectingBridge = "w25d";
-            public static readonly string SewageTreatment = "w28a";
-            public static readonly string Shell2Core = "w31a";
-            public static readonly string Shell2FiltrationChamber1 = "w31b";
-            public static readonly string Shell2FiltrationChamber2 = "w31c";
-            public static readonly string Shell2CoreWithEmma = "w31d";
-            public static readonly string OilFence = "w32a";
-            public static readonly string OilFenceVamp = "w32b";
-            public static readonly string Stomach = "w41a";
-            public static readonly string Jujenum = "w42a";
-            public static readonly string AscendingColon = "w43a";
-            public static readonly string Ileum = "w44a";
-            public static readonly string SigmoidColon = "w45a";
-            public static readonly string Rectum = "w46a";
-            public static readonly string ArsenalGear = "w51a";
-            public static readonly string FederalHall = "w61a";
+            public static readonly Stage SeaDock = new Stage { Name = "SeaDock", AreaCode = "w11a" };
+            public static readonly Stage SeaDockBombDisposal = new Stage { Name = "SeaDockBombDisposal", AreaCode = "w11b" };
+            public static readonly Stage SeaDockFortune = new Stage { Name = "SeaDockFortune", AreaCode = "w11c" };
+            public static readonly Stage StrutARoof = new Stage { Name = "StrutARoof", AreaCode = "w12a" };
+            public static readonly Stage StrutARoofBomb = new Stage { Name = "StrutARoofBomb", AreaCode = "w12c" };
+            public static readonly Stage StrutAPumpRoom = new Stage { Name = "StrutAPumpRoom", AreaCode = "w12b" };
+            public static readonly Stage ABConnectingBridge = new Stage { Name = "ABConnectingBridge", AreaCode = "w13a" };
+            public static readonly Stage ABConnectingBridgeSensorB = new Stage { Name = "ABConnectingBridgeSensorB", AreaCode = "w13b" };
+            public static readonly Stage TransformerRoom = new Stage { Name = "TransformerRoom", AreaCode = "w14a" };
+            public static readonly Stage BCConnectingBridge = new Stage { Name = "BCConnectingBridge", AreaCode = "w15a" };
+            public static readonly Stage BCConnectingBridgeAfterStillman = new Stage { Name = "BCConnectingBridgeAfterStillman", AreaCode = "w15b" };
+            public static readonly Stage DiningHall = new Stage { Name = "DiningHall", AreaCode = "w16a" };
+            public static readonly Stage DiningHallAfterStillman = new Stage { Name = "DiningHallAfterStillman", AreaCode = "w16b" };
+            public static readonly Stage CDConnectingBridge = new Stage { Name = "CDConnectingBridge", AreaCode = "w17a" };
+            public static readonly Stage SedimentPool = new Stage { Name = "SedimentPool", AreaCode = "w18a" };
+            public static readonly Stage DEConnectingBridge = new Stage { Name = "DEConnectingBridge", AreaCode = "w19a" };
+            public static readonly Stage ParcelRoom = new Stage { Name = "ParcelRoom", AreaCode = "w20a" };
+            public static readonly Stage Heliport = new Stage { Name = "Heliport", AreaCode = "w20b" };
+            public static readonly Stage HeliportBomb = new Stage { Name = "HeliportBomb", AreaCode = "w20c" };
+            public static readonly Stage HeliportPostNinja = new Stage { Name = "HeliportPostNinja", AreaCode = "w20d" };
+            public static readonly Stage EFConnectingBridge = new Stage { Name = "EFConnectingBridge", AreaCode = "w21a" };
+            public static readonly Stage Warehouse = new Stage { Name = "Warehouse", AreaCode = "w22a" };
+            public static readonly Stage FAConnectingBridge = new Stage { Name = "FAConnectingBridge", AreaCode = "w23b" };
+            public static readonly Stage Shell1Core = new Stage { Name = "Shell1Core", AreaCode = "w24a" };
+            public static readonly Stage Shell1CoreB1 = new Stage { Name = "Shell1CoreB1", AreaCode = "w24b" };
+            public static readonly Stage Shell1CoreB2 = new Stage { Name = "Shell1CoreB2", AreaCode = "w24d" };
+            public static readonly Stage Shell1CoreHostageRoom = new Stage { Name = "Shell1CoreHostageRoom", AreaCode = "w24c" };
+            public static readonly Stage ShellsConnectingBridge = new Stage { Name = "ShellsConnectingBridge", AreaCode = "w25a" };
+            public static readonly Stage ShellsConnectingBridgeDestroyed = new Stage { Name = "ShellsConnectingBridgeDestroyed", AreaCode = "w25b" };
+            public static readonly Stage StrutLPerimeter = new Stage { Name = "StrutLPerimeter", AreaCode = "w25c" };
+            public static readonly Stage KLConnectingBridge = new Stage { Name = "KLConnectingBridge", AreaCode = "w25d" };
+            public static readonly Stage SewageTreatment = new Stage { Name = "SewageTreatment", AreaCode = "w28a" };
+            public static readonly Stage Shell2Core = new Stage { Name = "Shell2Core", AreaCode = "w31a" };
+            public static readonly Stage Shell2FiltrationChamber1 = new Stage { Name = "Shell2FiltrationChamber1", AreaCode = "w31b" };
+            public static readonly Stage Shell2FiltrationChamber2 = new Stage { Name = "Shell2FiltrationChamber2", AreaCode = "w31c" };
+            public static readonly Stage Shell2CoreWithEmma = new Stage { Name = "Shell2CoreWithEmma", AreaCode = "w31d" };
+            public static readonly Stage OilFence = new Stage { Name = "OilFence", AreaCode = "w32a" };
+            public static readonly Stage OilFenceVamp = new Stage { Name = "OilFenceVamp", AreaCode = "w32b" };
+            public static readonly Stage Stomach = new Stage { Name = "Stomach", AreaCode = "w41a" };
+            public static readonly Stage Jujenum = new Stage { Name = "Jujenum", AreaCode = "w42a" };
+            public static readonly Stage AscendingColon = new Stage { Name = "AscendingColon", AreaCode = "w43a" };
+            public static readonly Stage Ileum = new Stage { Name = "Ileum", AreaCode = "w44a" };
+            public static readonly Stage SigmoidColon = new Stage { Name = "SigmoidColon", AreaCode = "w45a" };
+            public static readonly Stage Rectum = new Stage { Name = "Rectum", AreaCode = "w46a" };
+            public static readonly Stage ArsenalGear = new Stage { Name = "ArsenalGear", AreaCode = "w51a" };
+            public static readonly Stage FederalHall = new Stage { Name = "FederalHall", AreaCode = "w61a" };
             #endregion
 
             #region Cutscenes
@@ -145,155 +156,153 @@ namespace MGS2_MC
 
         public static class VRStages
         {
-            public static readonly string AltDec = "a00a";
-            public static readonly string NavDeck = "a00b";
-            public static readonly string NavDeckUnused = "a00c";
-            public static readonly string DeckACrewQuarters = "a01a";
-            public static readonly string DeckACrewQuartersStarboard = "a01b";
-            public static readonly string DeckCCrewQuarters = "a01c";
-            public static readonly string DeckDCrewQuarters = "a01d";
-            public static readonly string DeckEBridge = "a01e";
-            public static readonly string DeckACrewLounge = "a01f";
-            public static readonly string EngineRoom = "a02a";
-            public static readonly string Deck2Port = "a03a";
-            public static readonly string Deck2Starboard = "a03b";
-            public static readonly string Hold1 = "a04a";
-            public static readonly string Hold2 = "a04b";
-            public static readonly string Hold3 = "a04c";
-            public static readonly string SeaDock = "a11a";
-            public static readonly string SeaDockBomb = "a11b";
-            public static readonly string SeaDockFortune = "a11c";
-            public static readonly string StrutARoof = "a12a";
-            public static readonly string StrutARoofBomb = "a12c";
-            public static readonly string PumpRoom = "a12b";
-            public static readonly string ABConnectingBridge = "a13a";
-            public static readonly string ABConnectingBridgeSensorB = "a13b";
-            public static readonly string TransformerRoom = "a14a";
-            public static readonly string BCConnectingBridge = "a15a";
-            public static readonly string BCConnectingAfterStillman = "a15b";
-            public static readonly List<string> MissionList = new List<string> { };
+            #region Alternate Missions & SnakeTales
+            public static readonly Stage AltDeck = new Stage { Name = "AlternateAltDeck", AreaCode = "a00a" };
+            public static readonly Stage NavDeck = new Stage { Name = "AlternateNavDeck", AreaCode = "a00b" };
+            public static readonly Stage NavDeckUnused = new Stage { Name = "AlternateNavDeckUnused", AreaCode = "a00c" };
+            public static readonly Stage DeckACrewQuarters = new Stage { Name = "AlternateDeckACrewQuarters", AreaCode = "a01a" };
+            public static readonly Stage DeckACrewQuartersStarboard = new Stage { Name = "AlternateDeckACrewQuartersStarboard", AreaCode = "a01b" };
+            public static readonly Stage DeckCCrewQuarters = new Stage { Name = "AlternateDeckCCrewQuarters", AreaCode = "a01c" };
+            public static readonly Stage DeckDCrewQuarters = new Stage { Name = "AlternateDeckDCrewQuarters", AreaCode = "a01d" };
+            public static readonly Stage DeckEBridge = new Stage { Name = "AlternateDeckEBridge", AreaCode = "a01e" };
+            public static readonly Stage DeckACrewLounge = new Stage { Name = "AlternateDeckACrewLounge", AreaCode = "a01f" };
+            public static readonly Stage EngineRoom = new Stage { Name = "AlternateEngineRoom", AreaCode = "a02a" };
+            public static readonly Stage Deck2Port = new Stage { Name = "AlternateDeck2Port", AreaCode = "a03a" };
+            public static readonly Stage Deck2Starboard = new Stage { Name = "AlternateDeck2Starboard", AreaCode = "a03b" };
+            public static readonly Stage Hold1 = new Stage { Name = "AlternateHold1", AreaCode = "a04a" };
+            public static readonly Stage Hold2 = new Stage { Name = "AlternateHold2", AreaCode = "a04b" };
+            public static readonly Stage Hold3 = new Stage { Name = "AlternateHold3", AreaCode = "a04c" };
+            public static readonly Stage SeaDock = new Stage { Name = "AlternateSeaDock", AreaCode = "a11a" };
+            public static readonly Stage SeaDockBomb = new Stage { Name = "AlternateSeaDockBomb", AreaCode = "a11b" };
+            public static readonly Stage SeaDockFortune = new Stage { Name = "AlternateSeaDockFortune", AreaCode = "a11c" };
+            public static readonly Stage StrutARoof = new Stage { Name = "AlternateStrutARoof", AreaCode = "a12a" };
+            public static readonly Stage StrutARoofBomb = new Stage { Name = "AlternateStrutARoofBomb", AreaCode = "a12c" };
+            public static readonly Stage PumpRoom = new Stage { Name = "AlternatePumpRoom", AreaCode = "a12b" };
+            public static readonly Stage ABConnectingBridge = new Stage { Name = "AlternateABConnectingBridge", AreaCode = "a13a" };
+            public static readonly Stage ABConnectingBridgeSensorB = new Stage { Name = "AlternateABConnectingBridgeSensorB", AreaCode = "a13b" };
+            public static readonly Stage TransformerRoom = new Stage { Name = "AlternateTransformerRoom", AreaCode = "a14a" };
+            public static readonly Stage BCConnectingBridge = new Stage { Name = "AlternateBCConnectingBridge", AreaCode = "a15a" };
+            public static readonly Stage BCConnectingAfterStillman = new Stage { Name = "AlternateBCConnectingAfterStillman", AreaCode = "a15b" };
+            public static readonly Stage DiningHall = new Stage { Name = "AlternateDiningHall", AreaCode = "a16a" };
+            public static readonly Stage DiningHallAfterCutscene = new Stage { Name = "AlternateDiningHallAfterCutscene", AreaCode = "a16b" };
+            public static readonly Stage CDConnectingBridge = new Stage { Name = "AlternateCDConnectingBridge", AreaCode = "a17a" };
+            public static readonly Stage SedimentPool = new Stage { Name = "AlternateSedimentPool", AreaCode = "a18a" };
+            public static readonly Stage DEConnectingBridge = new Stage { Name = "AlternateDEConnectingBridge", AreaCode = "a19a" };
+            public static readonly Stage ParcelRoom = new Stage { Name = "AlternateParcelRoom", AreaCode = "a20a" };
+            public static readonly Stage Heliport = new Stage { Name = "AlternateHeliport", AreaCode = "a20b" };
+            public static readonly Stage HeliportBomb = new Stage { Name = "AlternateHeliportBomb", AreaCode = "a20c" };
+            public static readonly Stage HeliportNinja = new Stage { Name = "AlternateHeliportNinja", AreaCode = "a20d" };
+            public static readonly Stage EFConnectingBridge = new Stage { Name = "AlternateEFConnectingBridge", AreaCode = "a21a" };
+            public static readonly Stage Warehouse = new Stage { Name = "AlternateWarehouse", AreaCode = "a22a" };
+            public static readonly Stage FAConnectingBridge = new Stage { Name = "AlternateFAConnectingBridge", AreaCode = "a23b" };
+            public static readonly Stage Shell1 = new Stage { Name = "AlternateShell1", AreaCode = "a24a" };
+            public static readonly Stage Shell1B1 = new Stage { Name = "AlternateShell1B1", AreaCode = "a24b" };
+            public static readonly Stage Shell1B2 = new Stage { Name = "AlternateShell1B2", AreaCode = "a24d" };
+            public static readonly Stage Shell1HostageRoom = new Stage { Name = "AlternateShell1HostageRoom", AreaCode = "a24c" };
+            public static readonly Stage Shell12ConnectingBridge = new Stage { Name = "AlternateShell12ConnectingBridge", AreaCode = "a25a" };
+            public static readonly Stage Shell12ConnectingBridgeDestroyed = new Stage { Name = "AlternateShell12ConnectingBridgeDestroyed", AreaCode = "a25b" };
+            public static readonly Stage StrutLPerimeter = new Stage { Name = "AlternateStrutLPerimeter", AreaCode = "a25c" };
+            public static readonly Stage KLConnectingBridge = new Stage { Name = "AlternateKLConnectingBridge", AreaCode = "a25d" };
+            public static readonly Stage SewageTreatment = new Stage { Name = "AlternateSewageTreatment", AreaCode = "a28a" };
+            public static readonly Stage Shell2 = new Stage { Name = "AlternateShell2", AreaCode = "a31a" };
+            public static readonly Stage Shell2B1 = new Stage { Name = "AlternateShell2B1", AreaCode = "a31b" };
+            public static readonly Stage Shell2B1VampFight = new Stage { Name = "AlternateShell2B1VampFight", AreaCode = "a31c" };
+            public static readonly Stage Shell2WithEmma = new Stage { Name = "AlternateShell2WithEmma", AreaCode = "a31d" };
+            public static readonly Stage OilFence = new Stage { Name = "AlternateOilFence", AreaCode = "a32a" };
+            public static readonly Stage OilFenceVamp = new Stage { Name = "AlternateOilFenceVamp", AreaCode = "a32b" };
+            public static readonly Stage Stomach = new Stage { Name = "AlternateStomach", AreaCode = "a41a" };
+            public static readonly Stage AscendingColon = new Stage { Name = "AlternateAscendingColon", AreaCode = "a42a" };
+            public static readonly Stage Ileum = new Stage { Name = "AlternateIleum", AreaCode = "a44a" };
+            public static readonly Stage SigmoidColon = new Stage { Name = "AlternateSigmoidColon", AreaCode = "a45a" };
+            public static readonly Stage Rectum = new Stage { Name = "AlternateRectum", AreaCode = "a46a" };
+            public static readonly Stage ArsenalGear = new Stage { Name = "AlternateArsenalGear", AreaCode = "a51a" };
+            public static readonly Stage FederalHall = new Stage { Name = "AlternateFederalHall", AreaCode = "a61a" };
+            #endregion
+
+            #region Sneaking/Eliminate All Missions
+            public static readonly Stage Sneaking01 = new Stage { Name = "Sneaking01", AreaCode = "vs01a" };
+            public static readonly Stage Sneaking02 = new Stage { Name = "Sneaking02", AreaCode = "vs02a" };
+            public static readonly Stage Sneaking03 = new Stage { Name = "Sneaking03", AreaCode = "vs03a" };
+            public static readonly Stage Sneaking04 = new Stage { Name = "Sneaking04", AreaCode = "vs04a" };
+            public static readonly Stage Sneaking05 = new Stage { Name = "Sneaking05", AreaCode = "vs05a" };
+            public static readonly Stage Sneaking06 = new Stage { Name = "Sneaking06", AreaCode = "vs06a" };
+            public static readonly Stage Sneaking07 = new Stage { Name = "Sneaking07", AreaCode = "vs07a" };
+            public static readonly Stage Sneaking08 = new Stage { Name = "Sneaking08", AreaCode = "vs08a" };
+            public static readonly Stage Sneaking09 = new Stage { Name = "Sneaking09", AreaCode = "vs09a" };
+            public static readonly Stage Sneaking10 = new Stage { Name = "Sneaking10", AreaCode = "vs10a" };
+            #endregion
+
+            #region Variety Missions
+            public static readonly Stage Variety01 = new Stage { Name = "Variety01", AreaCode = "sp01a" };
+            public static readonly Stage Variety02 = new Stage { Name = "Variety02", AreaCode = "sp02a" };
+            public static readonly Stage Variety03 = new Stage { Name = "Variety03", AreaCode = "sp03a" } ;
+            public static readonly Stage Variety04 = new Stage { Name = "Variety04", AreaCode = "sp04a" };
+            public static readonly Stage Variety05 = new Stage { Name = "Variety05", AreaCode = "sp05a" };
+            public static readonly Stage Variety06 = new Stage { Name = "Variety06", AreaCode = "sp06a" };
+            public static readonly Stage Variety07 = new Stage { Name = "Variety07", AreaCode = "sp07a" };
+            public static readonly Stage Variety08 = new Stage { Name = "Variety08", AreaCode = "sp08a" };
+            #endregion
+
+            #region Streaking Missions
+            public static readonly Stage Streaking01 = new Stage { Name = "Streaking01", AreaCode = "st02a" };
+            public static readonly Stage Streaking02 = new Stage { Name = "Streaking02", AreaCode = "st03a" };
+            public static readonly Stage Streaking03 = new Stage { Name = "Streaking03", AreaCode = "st04a" };
+            public static readonly Stage Streaking04 = new Stage { Name = "Streaking04", AreaCode = "st05a" };
+            #endregion
+
+            #region First Person Missions
+            public static readonly Stage FirstPerson01 = new Stage { Name = "FirstPerson01", AreaCode = "sp21" };
+            public static readonly Stage FirstPerson02 = new Stage { Name = "FirstPerson02", AreaCode = "sp22" };
+            public static readonly Stage FirstPerson03 = new Stage { Name = "FirstPerson03", AreaCode = "sp23" };
+            public static readonly Stage FirstPerson04 = new Stage { Name = "FirstPerson04", AreaCode = "sp24" };
+            public static readonly Stage FirstPerson05 = new Stage { Name = "FirstPerson05", AreaCode = "sp25" };
+            #endregion
+
+            #region Weapons Missions
+            public static readonly Stage Socom01 = new Stage { Name = "Socom01", AreaCode = "wp01a" };
+            public static readonly Stage Socom02 = new Stage { Name = "Socom02", AreaCode = "wp02a" };
+            public static readonly Stage Socom03 = new Stage { Name = "Socom03", AreaCode = "wp03a" };
+            public static readonly Stage Socom04 = new Stage { Name = "Socom04", AreaCode = "wp04a" };
+            public static readonly Stage Socom05 = new Stage { Name = "Socom05", AreaCode = "wp05a" };
+            public static readonly Stage M401 = new Stage { Name = "M401", AreaCode = "wp11a" };
+            public static readonly Stage M402 = new Stage { Name = "M402", AreaCode = "wp12a" };
+            public static readonly Stage M403 = new Stage { Name = "M403", AreaCode = "wp13a" };
+            public static readonly Stage M404 = new Stage { Name = "M404", AreaCode = "wp14a" };
+            public static readonly Stage M405 = new Stage { Name = "M405", AreaCode = "wp15a" };
+            public static readonly Stage C401 = new Stage { Name = "C401", AreaCode = "wp21a" };
+            public static readonly Stage C402 = new Stage { Name = "C402", AreaCode = "wp22a" };
+            public static readonly Stage C403 = new Stage { Name = "C403", AreaCode = "wp23a" };
+            public static readonly Stage C404 = new Stage { Name = "C404", AreaCode = "wp24a" };
+            public static readonly Stage C405 = new Stage { Name = "C405", AreaCode = "wp25a" };
+            public static readonly Stage Grenade01 = new Stage { Name = "Grenade01", AreaCode = "wp31a" };
+            public static readonly Stage Grenade02 = new Stage { Name = "Grenade02", AreaCode = "wp32a" };
+            public static readonly Stage Grenade03 = new Stage { Name = "Grenade03", AreaCode = "wp33a" };
+            public static readonly Stage Grenade04 = new Stage { Name = "Grenade04", AreaCode = "wp34a" };
+            public static readonly Stage Grenade05 = new Stage { Name = "Grenade05", AreaCode = "wp35a" };
+            public static readonly Stage PSG101 = new Stage { Name = "PSG101", AreaCode = "wp41a" };
+            public static readonly Stage PSG102 = new Stage { Name = "PSG102", AreaCode = "wp42a" };
+            public static readonly Stage PSG103 = new Stage { Name = "PSG103", AreaCode = "wp43a" };
+            public static readonly Stage PSG104 = new Stage { Name = "PSG104", AreaCode = "wp44a" };
+            public static readonly Stage PSG105 = new Stage { Name = "PSG105", AreaCode = "wp45a" };
+            public static readonly Stage Stinger01 = new Stage { Name = "Stinger01", AreaCode = "wp51a" };
+            public static readonly Stage Stinger02 = new Stage { Name = "Stinger02", AreaCode = "wp52a" };
+            public static readonly Stage Stinger03 = new Stage { Name = "Stinger03", AreaCode = "wp53a" };
+            public static readonly Stage Stinger04 = new Stage { Name = "Stinger04", AreaCode = "wp54a" };
+            public static readonly Stage Stinger05 = new Stage { Name = "Stinger05", AreaCode = "wp55a" };
+            public static readonly Stage Nikita01 = new Stage { Name = "Nikita01", AreaCode = "wp61a" };
+            public static readonly Stage Nikita02 = new Stage { Name = "Nikita02", AreaCode = "wp62a" };
+            public static readonly Stage Nikita03 = new Stage { Name = "Nikita03", AreaCode = "wp63a" };
+            public static readonly Stage Nikita04 = new Stage { Name = "Nikita04", AreaCode = "wp64a" };
+            public static readonly Stage Nikita05 = new Stage { Name = "Nikita05", AreaCode = "wp65a" };
+            public static readonly Stage NoWeapon01 = new Stage { Name = "NoWeapon01", AreaCode = "wp71a" };
+            public static readonly Stage NoWeapon02 = new Stage { Name = "NoWeapon02", AreaCode = "wp72a" };
+            public static readonly Stage NoWeapon03 = new Stage { Name = "NoWeapon03", AreaCode = "wp73a" };
+            public static readonly Stage NoWeapon04 = new Stage { Name = "NoWeapon04", AreaCode = "wp74a" };
+            public static readonly Stage NoWeapon05 = new Stage { Name = "NoWeapon05", AreaCode = "wp75a" };
+            #endregion
+
+            public static readonly List<string> MissionList = new List<string> { }; //i am entirely too lazy to populate this right now.
             public static readonly List<string> PrefixesList = new List<string> { "a1", "a2", "a3", "a4", "a5", "a6", "vs", "sp", "st", "wp"};
-            /*
-             * VR MISSIONS (Alternate/Snake Tales)
-a11a	Strut A Sea Dock
-a11b	Strut A Sea Dock (Bomb disposal)
-a11c	Strut A Sea Dock (Fortune Fight)
-a12a	Strut A Roof
-a12c	Strut A Roof (Last Bomb)
-a12b	Strut A Pump room
-a13a	AB Connecting bridge
-a13b	AB Connecting bridge (With Sensor B)
-a14a	Strut B Transformer Room
-a15a	BC Connecting bridge
-a15b	BC Connecting bridge (After Stillman cutscene)
-a16a	Strut C Dining Hall
-a16b	Strut C Dining Hall (after 'd014p01')
-a17a	CD Connecting bridge
-a18a	Strut D Sediment Pool
-a19a	DE Connecting bridge
-a20a	Strut E Parcel room, 1F
-a20b	Strut E Heliport
-a20c	Strut E Heliport (last bomb)
-a20d	Strut E Heliport (After ninja cutscene)
-a21a	EF Connecting bridge
-a22a	Strut F Warehouse
-a23b	FA Connecting bridge
-a24a	Shell 1 Core
-a24b	Shell 1 Core B1
-a24d	Shell 1 Core B2,Computer's Room
-a24c	Shell 1 B1 Hall,Hostages Room
-a25a	Shell 1,2 Connecting Bridge
-a25b	Shell 1,2 Connecting Bridge (Destroyed)
-a25c	Strut L perimeter
-a25d	KL Connecting Bridge
-a28a	Strut L Sewage Treatment Facility
-a31a	Shell 2 Core,1F Air Purification Room
-a31b	Shell 2 Core,B1 Filtration Chamber NO1
-a31c	Shell 2 Core,B1 Filtration Chamber NO2 (Vamp Fight)
-a31d	Shell 2 Core,1F Air Purification Room (w/emma)
-a32a	Strut L Oil Fence
-a32b	Strut L Oil Fence (Vamp Fight)
-a41a	Arsenal Gear-Stomach
-a42a	Arsenal Gear-Jujenum
-a43a	Arsenal Gear-Ascending Colon
-a44a	Arsenal Gear-Ileum
-a45a	Arsenal Gear-Sigmoid Colon
-a46a	Arsenal Gear-Rectum
-a51a	Arsenal Gear (After Ray Battle)
-a61a	Federal Hall
-VR MISSIONS(Sneaking/Eliminate All)
-vs01a	Stage One
-vs02a	Stage Two
-vs03a	Stage Three
-vs04a	Stage Four
-vs05a	Stage Five
-vs06A	Stage Six
-vs07a	Stage Seven
-vs08a	Stage Eight
-vs09A	Stage Nine
-vs10A	Stage Ten
-VR MISSIONS(Variety)
-sp01a	Stage One
-sp02a	Stage Two
-sp03a	Stage Three
-sp04a	Stage Four
-sp05a	Stage Five
-sp06a	Stage Six
-sp07a	Stage Seven
-sp08a	Stage Eight
-VR MISSIONS(Streaking Mode)
-st02a	Stage One
-st03a	Stage Two
-st04a	Stage Three
-st05a	Stage Four
-VR MISSIONS(First Person Mode)
-sp21	Stage One
-sp22	Stage Two
-sp23	Stage Three
-sp24	Stage Four
-sp25	Stage Five
-VR MISSIONS(Weapons Mode)
-wp01a	Stage One(USP/SOCOM)
-wp02a	Stage Two(USP/SOCOM)
-wp03a	Stage Three(USP/SOCOM)
-wp04a	Stage Four(USP/SOCOM)
-wp05a	Stage Five(USP/SOCOM)
-wp11a	Stage One(M4/AK74U)
-wp12a	Stage Two(M4/AK74U)
-wp13a	Stage Three(M4/AK74U)
-wp14a	Stage Four(M4/AK74U)
-wp15a	Stage Five(M4/AK74U)
-wp21a	Stage One(C4/CLAYMORE)
-wp22a	Stage Two(C4/CLAYMORE)
-wp23a	Stage Three(C4/CLAYMORE)
-wp24a	Stage Four(C4/CLAYMORE)
-wp25a	Stage Five(C4/CLAYMORE)
-wp31a	Stage One(GRENADE)
-wp32a	Stage Two(GRENADE)
-wp33a	Stage Three(GRENADE)
-wp34a	Stage Four(GRENADE)
-wp35a	Stage Five(GRENADE)
-wp41a	Stage One(PSG-1)
-wp42a	Stage Two(PSG-1)
-wp43a	Stage Three(PSG-1)
-wp44a	Stage Four(PSG-1)
-wp45a	Stage Five(PSG-1)
-wp51a	Stage One(STINGER)
-wp52a	Stage Two(STINGER)
-wp53a	Stage Three(STINGER)
-wp54a	Stage Four(STINGER)
-wp55a	Stage Five(STINGER)
-wp61a	Stage One(NIKITA)
-wp62a	Stage Two(NIKITA)
-wp63a	Stage Three(NIKITA)
-wp64a	Stage Four(NIKITA)
-wp65a	Stage Five(NIKITA)
-wp71a	Stage One(NO WEAPON/HF.BLADE)
-wp72a	Stage Two(NO WEAPON/HF.BLADE)
-wp73a	Stage Three(NO WEAPON/HF.BLADE)
-wp74a	Stage Four(NO WEAPON/HF.BLADE)
-wp75a	Stage Five(NO WEAPON/HF.BLADE)
-             */
         }
     }
 }

@@ -1690,7 +1690,7 @@ namespace MGS2_MC
             {
                 Cheat selectedCheat = (Cheat)cheatsBox.SelectedItem;
 
-                toolStripStatusLabel.Text = $"Attempting to enable {selectedCheat.Name}...";
+                toolStripStatusLabel.Text = $"Attempting to enable {selectedCheat.Name}, this may take a long time...";
                 selectedCheat.CheatAction();
                 toolStripStatusLabel.Text = $"Finished trying to enable {selectedCheat.Name}. Did it work?!?";
             }

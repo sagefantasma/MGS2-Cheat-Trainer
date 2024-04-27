@@ -300,15 +300,19 @@ namespace MGS2_MC
             {
                 if (EnableGameStats)
                 {
-                    MGS2MemoryManager.GameStats currentGameStats = MGS2MemoryManager.ReadGameStats();
-                    GUI.StaticGuiReference.UpdateGameStats(currentGameStats);
+                    //if we're in a main menu, we shouldn't try to find stats right now.
+                    if (!StageNames.MenuStages.StageList.Contains(MGS2MemoryManager.GetStage()))
+                    {
+                        MGS2MemoryManager.GameStats currentGameStats = MGS2MemoryManager.ReadGameStats();
+                        GUI.StaticGuiReference.UpdateGameStats(currentGameStats);
+                    }
                 }
             }
             catch(Exception e)
             {
                 if (_mgs2Process != null)
                 {
-                    //if mgs2 process isn't active, we shouldn't log an error here. it just spams the log otherwise
+                    //only write to log when we are actually in a game, and should have some stats to grab
                     _logger.Error($"Failed to update scoring stats! Error encountered: {e}");
                 }
             }

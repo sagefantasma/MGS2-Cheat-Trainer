@@ -15,6 +15,31 @@ namespace MGS2_MC
         {
             return $"Area: {Name} -- Code: {AreaCode}";
         }
+
+        public static Stage Parse(string s)
+        {
+            if(StageNames.MenuStages.StageList.Any(stageCode => s == stageCode.AreaCode))
+            {
+                return StageNames.MenuStages.StageList.First(stageCode => s == stageCode.AreaCode);
+            }
+
+            if (StageNames.TankerStages.PlayableStageList.Any(stageCode => s == stageCode.AreaCode))
+            {
+                return StageNames.TankerStages.PlayableStageList.First(stageCode => s == stageCode.AreaCode);
+            }
+
+            if (StageNames.PlantStages.PlayableStageList.Any(stageCode => s == stageCode.AreaCode))
+            {
+                return StageNames.PlantStages.PlayableStageList.First(stageCode => s == stageCode.AreaCode);
+            }
+
+            if (StageNames.VRStages.PlayableStageList.Any(stageCode => s == stageCode.AreaCode))
+            {
+                return StageNames.VRStages.PlayableStageList.First(stageCode => s == stageCode.AreaCode);
+            }
+
+            return null;
+        }
     }
 
     public static class StageNames
@@ -120,6 +145,13 @@ namespace MGS2_MC
             public static readonly Stage Rectum = new Stage { Name = "Rectum", AreaCode = "w46a" };
             public static readonly Stage ArsenalGear = new Stage { Name = "ArsenalGear", AreaCode = "w51a" };
             public static readonly Stage FederalHall = new Stage { Name = "FederalHall", AreaCode = "w61a" };
+
+            public static readonly List<Stage> PlayableStageList = new List<Stage> { SeaDock, SeaDockBombDisposal, SeaDockFortune, StrutARoof, StrutARoofBomb, StrutAPumpRoom,
+                ABConnectingBridge, ABConnectingBridgeSensorB, TransformerRoom, BCConnectingBridge, BCConnectingBridgeAfterStillman, DiningHall, DiningHallAfterStillman,
+                CDConnectingBridge, SedimentPool, DEConnectingBridge, ParcelRoom, Heliport, HeliportBomb, HeliportPostNinja, EFConnectingBridge, Warehouse, FAConnectingBridge,
+                Shell1Core, Shell1CoreB1, Shell1CoreB2, Shell1CoreHostageRoom, ShellsConnectingBridge, ShellsConnectingBridgeDestroyed, StrutLPerimeter, KLConnectingBridge,
+                SewageTreatment, Shell2Core, Shell2FiltrationChamber1, Shell2FiltrationChamber2, Shell2CoreWithEmma, OilFence, OilFenceVamp, Stomach, Jujenum,
+                AscendingColon, Ileum, SigmoidColon, Rectum, ArsenalGear, FederalHall};
             #endregion
 
             #region Cutscenes
@@ -211,14 +243,15 @@ namespace MGS2_MC
             public static readonly Stage OilFence = new Stage { Name = "AlternateOilFence", AreaCode = "a32a" };
             public static readonly Stage OilFenceVamp = new Stage { Name = "AlternateOilFenceVamp", AreaCode = "a32b" };
             public static readonly Stage Stomach = new Stage { Name = "AlternateStomach", AreaCode = "a41a" };
-            public static readonly Stage AscendingColon = new Stage { Name = "AlternateAscendingColon", AreaCode = "a42a" };
+            public static readonly Stage Jujenum = new Stage { Name = "AlternateJujenum", AreaCode = "a42a" };
+            public static readonly Stage AscendingColon = new Stage { Name = "AlternateAscendingColon", AreaCode = "a43a" };
             public static readonly Stage Ileum = new Stage { Name = "AlternateIleum", AreaCode = "a44a" };
             public static readonly Stage SigmoidColon = new Stage { Name = "AlternateSigmoidColon", AreaCode = "a45a" };
             public static readonly Stage Rectum = new Stage { Name = "AlternateRectum", AreaCode = "a46a" };
             public static readonly Stage ArsenalGear = new Stage { Name = "AlternateArsenalGear", AreaCode = "a51a" };
             public static readonly Stage FederalHall = new Stage { Name = "AlternateFederalHall", AreaCode = "a61a" };
             #endregion
-
+            
             #region Sneaking/Eliminate All Missions
             public static readonly Stage Sneaking01 = new Stage { Name = "Sneaking01", AreaCode = "vs01a" };
             public static readonly Stage Sneaking02 = new Stage { Name = "Sneaking02", AreaCode = "vs02a" };
@@ -301,7 +334,18 @@ namespace MGS2_MC
             public static readonly Stage NoWeapon05 = new Stage { Name = "NoWeapon05", AreaCode = "wp75a" };
             #endregion
 
-            public static readonly List<string> MissionList = new List<string> { }; //i am entirely too lazy to populate this right now.
+            public static readonly List<Stage> PlayableStageList = new List<Stage> { AltDeck, NavDeck, NavDeckUnused, DeckACrewQuarters, DeckACrewQuartersStarboard,
+                DeckACrewLounge, DeckCCrewQuarters, DeckDCrewQuarters, DeckEBridge, EngineRoom, Deck2Port, Deck2Starboard, Hold1, Hold2, Hold3, SeaDock, SeaDockBomb,
+                SeaDockFortune, StrutARoof, StrutARoofBomb, PumpRoom, ABConnectingBridge, ABConnectingBridgeSensorB, TransformerRoom, BCConnectingBridge,
+                BCConnectingAfterStillman, DiningHall, DiningHallAfterCutscene, CDConnectingBridge, SedimentPool, DEConnectingBridge, ParcelRoom, Heliport,
+                HeliportBomb, HeliportNinja, EFConnectingBridge, Warehouse, FAConnectingBridge, Shell1, Shell1B1, Shell1B2, Shell1HostageRoom, Shell12ConnectingBridge,
+                Shell12ConnectingBridgeDestroyed, StrutLPerimeter, KLConnectingBridge, SewageTreatment, Shell2, Shell2B1, Shell2B1VampFight, Shell2WithEmma, OilFence,
+                OilFenceVamp, Stomach, Jujenum, AscendingColon, Ileum, SigmoidColon, Rectum, ArsenalGear, FederalHall, Sneaking01, Sneaking02, Sneaking03, Sneaking04,
+                Sneaking05, Sneaking06, Sneaking07, Sneaking08, Sneaking09, Sneaking10, Variety01, Variety02, Variety03, Variety04, Variety05, Variety06, Variety07,
+                Variety08, Streaking01, Streaking02, Streaking03, Streaking04, FirstPerson01, FirstPerson02, FirstPerson03, FirstPerson04, FirstPerson05, Socom01,
+                Socom02, Socom03, Socom04, Socom05, M401, M402, M403, M404, M405, C401, C402, C403, C404, C405, Grenade01, Grenade02, Grenade03, Grenade04, Grenade05,
+                PSG101, PSG102, PSG103, PSG104, PSG105, Stinger01, Stinger02, Stinger03, Stinger04, Stinger05, Nikita01, Nikita02, Nikita03, Nikita04, Nikita05,
+                NoWeapon01, NoWeapon02, NoWeapon03, NoWeapon04, NoWeapon05};
             public static readonly List<string> PrefixesList = new List<string> { "a1", "a2", "a3", "a4", "a5", "a6", "vs", "sp", "st", "wp"};
         }
     }

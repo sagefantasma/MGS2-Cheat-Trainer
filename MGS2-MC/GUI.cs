@@ -1,12 +1,17 @@
 using MGS2_MC.Controllers;
 using Serilog;
+using SimplifiedMemoryManager;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Text;
 using System.Text.Json;
+using System.Web.UI.WebControls;
 using System.Windows.Forms;
 
 namespace MGS2_MC
@@ -25,6 +30,7 @@ namespace MGS2_MC
         public static GUI StaticGuiReference = null;
         public static bool? GuiLoaded = false;
         private readonly ILogger _logger;
+        private static bool UserHasBeenWarned = false;
 
         internal static void ShowGui()
         {
@@ -537,40 +543,12 @@ namespace MGS2_MC
             weaponGuiObjectList.Add(new GuiObject("Stinger", stingerGroupBox));
             weaponGuiObjectList.Add(new GuiObject("Stun Grenade", stunGroupBox));
             weaponGuiObjectList.Add(new GuiObject("USP", uspGroupBox));
-        }
 
-        private void BuildGroupBoxForObject(MGS2Object objectToEdit)
-        {
-            //TODO: i think this is all set to be removed
-            //envisioning a listbox on the left pane to choose item to edit
-            //then the item you select determines what shows up in the right pane
-            //eventually, this should dovetail well into the controller support
-
-            //all items need the enable checkbox & picture
-            switch(objectToEdit)
+            foreach(Cheat cheat in MGS2Cheat.CheatList)
             {
-                case AmmoWeapon ammoWeapon:
-                    //need current ammo updown & set and max ammo updown & set
-                    break;
-                case SpecialWeapon specialWeapon:
-                    //need lethal/stun buttons
-                    break;
-                case BasicWeapon basicWeapon:
-                    //don't need anything else
-                    break;
-                case StackableItem stackableItem:
-                    //need current count updown & set
-                    break;
-                case DurabilityItem durabilityItem:
-                    //need durability updown & set
-                    break;
-                case LevelableItem levelableItem:
-                    //need level updown & set
-                    break;
-                case BasicItem basicItem:
-                    //don't need anything else
-                    break;
+                cheatsCheckedListBox.Items.Add(cheat);
             }
+            cheatsCheckedListBox.DisplayMember = "Name";
         }
 
         public GUI(ILogger logger)
@@ -589,7 +567,9 @@ namespace MGS2_MC
             stringsListBox.DataSource = MGS2Strings.MGS2_STRINGS;
             stringsListBox.DisplayMember = "Tag";
             stringsListBox.SelectedIndex = -1;
-            mgs2TabControl.TabPages.RemoveByKey(tabPageStats.Name);
+#if DEBUG
+            aobTesterTablePanel.Visible = true;
+#endif
             GuiLoaded = true;
         }
 
@@ -1267,12 +1247,12 @@ namespace MGS2_MC
 
         private void HfBladeLethalBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.HighFrequencyBlade.SetToLethal();
+            MGS2UsableObjects.HighFrequencyBlade.SetToLethal(_logger);
         }
 
         private void HfBladeStunBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.HighFrequencyBlade.SetToStun();
+            MGS2UsableObjects.HighFrequencyBlade.SetToStun(_logger);
         }
 
         private void M9CheckBox_CheckedChanged(object sender, EventArgs e)
@@ -1381,6 +1361,105 @@ namespace MGS2_MC
         }
         #endregion
 
+        #region Stats Tab Functions
+        internal void UpdateGameStats(MGS2MemoryManager.GameStats gameStats)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new MethodInvoker(() => UpdateGui(gameStats)));
+            }
+            else
+            {
+                UpdateGui(gameStats);
+            }
+        }
+
+        private void UpdateGui(MGS2MemoryManager.GameStats currentGameStats)
+        {
+            alertCountLabel.Text = currentGameStats.Alerts.ToString();
+            continueCountLabel.Text = currentGameStats.Continues.ToString();
+            damageTakenLabel.Text = currentGameStats.DamageTaken.ToString();
+            killCountLabel.Text = currentGameStats.Kills.ToString();
+            mechsDestroyedLabel.Text = currentGameStats.MechsDestroyed.ToString();
+            playTimeLabel.Text = ParsePlayTime(currentGameStats.PlayTime);
+            rationsUsedLabel.Text = currentGameStats.Rations.ToString();
+            saveCountLabel.Text = currentGameStats.Saves.ToString();
+            shotsFiredLabel.Text = currentGameStats.Shots.ToString();
+            CheckOffSpecialItemsUsed(currentGameStats.SpecialItems);
+        }
+
+        private static string ParsePlayTime(int playTime)
+        {
+            //yes konami. why record game time at a normal rate, when you can record it at 60...
+            //ARE THEY COUNTING FRAMES??
+            TimeSpan parsedPlayTime = TimeSpan.FromSeconds(playTime / 60);
+            return parsedPlayTime.ToString(@"hh\:mm\:ss");
+        }
+
+        private void CheckOffSpecialItemsUsed(short specialItems)
+        {
+            //TODO: add more wigs?
+            int indexOfWig = specialItemsCheckedListBox.FindString("Wig");
+            int indexOfStealth = specialItemsCheckedListBox.FindString("Stealth");
+            int indexOfBandana = specialItemsCheckedListBox.FindString("Bandana");
+            int indexOfRadar = specialItemsCheckedListBox.FindString("Radar");
+            for (int i = 0; i < specialItemsCheckedListBox.Items.Count; i++)
+                specialItemsCheckedListBox.SetItemCheckState(i, CheckState.Unchecked);
+
+            switch (specialItems)
+            {
+                default:
+                    //just marking the box red because we know BB run is failed
+                    specialItemsCheckedListBox.BackColor = Color.DarkRed;
+                    break;
+                case 0x0000:
+                    break;
+                case 0x0120:
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfBandana, CheckState.Checked);
+                    break;
+                case 0x0220:
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfWig, CheckState.Checked); //specifically infinity wig
+                    break;
+                case 0x1020:
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfStealth, CheckState.Checked);
+                    break;
+                case 0x1056:
+                    //blue wig used
+                    break;
+                case 0x1220:
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfStealth, CheckState.Checked);
+                    break;
+                case 0x2000:
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    break;
+                case 0x2120:
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfBandana, CheckState.Checked);
+                    break;
+                case 0x2220:
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfWig, CheckState.Checked);
+                    break;
+                case 0x3020:
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfStealth, CheckState.Checked);
+                    break;
+                case 0x3104: //orange and blue wigs
+                    break;
+                case 0x3220:
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfStealth, CheckState.Checked);
+                    break;
+                case 0x3616: //orange, blue, and infinity wigs
+                    break;
+                case 0x7712: //orange, blue, and infinity wigs AND stealth
+                    break;
+            }
+        }
+        #endregion
+
         private void StringsListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
@@ -1486,6 +1565,14 @@ namespace MGS2_MC
             {
                 _logger.Verbose($"Switching to tab #{mgs2TabControl.SelectedIndex}...");
                 CurrentTab = mgs2TabControl.SelectedIndex;
+                #if DEBUG
+                UserHasBeenWarned = true;
+                #endif
+                if (CurrentTab == mgs2TabControl.TabPages.IndexOfKey("tabPageCheats") && !UserHasBeenWarned)
+                {
+                    MessageBox.Show("WARNING! Use the contents of this tab at your own risk. USE OF THESE CHEATS MAY CRASH YOUR GAME! All of these have worked at some point or another, but may not always. Results not guaranteed.");
+                    UserHasBeenWarned = true;
+                }
                 CurrentlySelectedObject = null;
             }
             catch(Exception ex) 
@@ -1593,6 +1680,67 @@ namespace MGS2_MC
                 _logger.Error($"Failed to launch Discord page from sender {JsonSerializer.Serialize(sender)} and args {JsonSerializer.Serialize(e)}: {ex}");
                 MessageBox.Show(@"Failed to launch Discord page. If this error persists, please restart the application.");
             }
+        }
+
+        private void CheatsCheckedListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            CheckedListBox cheatsBox = sender as CheckedListBox;
+
+            if (cheatsBox?.SelectedItem != null)
+            {
+                Cheat selectedCheat = (Cheat)cheatsBox.SelectedItem;
+
+                toolStripStatusLabel.Text = $"Attempting to enable {selectedCheat.Name}, this may take a long time...";
+                selectedCheat.CheatAction();
+                toolStripStatusLabel.Text = $"Finished trying to enable {selectedCheat.Name}. Did it work?!?";
+            }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            string aob = aobTextbox.Text;
+            string[] range = rangeTextbox.Text.Split(',');
+
+
+            _memoryLocation = 0;
+            lock (MGS2Monitor.MGS2Process)
+            {
+                using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                {
+                    SimplePattern pattern = new SimplePattern(aob);
+                    _memoryLocation = spp.ScanMemoryForPattern(pattern);
+
+                    byte[] memoryContent = spp.ReadProcessOffset(_memoryLocation, (long)(int.Parse(range[1]) - int.Parse(range[0])));
+
+                    memContents.Text = BitConverter.ToString(memoryContent);
+                }
+            }
+        }
+
+        int _memoryLocation = 0;
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            lock (MGS2Monitor.MGS2Process)
+            {
+                using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                {
+                    string strippedText = memContents.Text.Replace("-", "");
+                    byte[] convertedMem = new byte[strippedText.Length / 2];
+                    for(int i = 0; i < convertedMem.Length; i++)
+                    {
+                        string oneByte = strippedText.Substring(i * 2, 2);
+                        convertedMem[i] = byte.Parse(oneByte, NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+                    }
+                    //byte[] convertedMemory = Encoding.Default.GetBytes(memContents.Text.Replace('-',' '));
+                    spp.ModifyProcessOffset(_memoryLocation, convertedMem, true);
+                }
+            }
+        }
+
+        private void DisableStatsTrackingCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            MGS2Monitor.EnableGameStats = !disableStatsTrackingCheckBox.Checked;
         }
     }
 }

@@ -42,7 +42,7 @@ namespace MGS2_MC.Controllers
                         if (IsMenuRequestCombination(xboxControllerState))
                         {
                             TrainerMenuActive = !TrainerMenuActive;
-                            TrainerMenu.Invoke(this, new TrainerMenuArgs { ActivateMenu = TrainerMenuActive }); //TODO: verify
+                            TrainerMenu.Invoke(this, new TrainerMenuArgs { ActivateMenu = TrainerMenuActive });
                         }
                     }
                 }

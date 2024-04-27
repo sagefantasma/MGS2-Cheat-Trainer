@@ -15,7 +15,7 @@ namespace MGS2_MC
 
         internal static void EnableInjector(CancellationToken cancellationToken)
         {
-            Task.Run(() => StartControllerHook(cancellationToken)); //TODO: is this necessary to be its own task?
+            Task.Run(() => StartControllerHook(cancellationToken));
         }
 
         private static void StartControllerHook(CancellationToken cancellationToken)

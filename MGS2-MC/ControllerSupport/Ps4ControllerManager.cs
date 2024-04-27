@@ -149,7 +149,7 @@ namespace MGS2_MC.Controllers
                             if (IsMenuRequestCombination(currentState))
                             {
                                 TrainerMenuActive = !TrainerMenuActive;
-                                TrainerMenu.Invoke(this, new TrainerMenuArgs { ActivateMenu = TrainerMenuActive }); //TODO: verify
+                                TrainerMenu.Invoke(this, new TrainerMenuArgs { ActivateMenu = TrainerMenuActive });
                             }
                             else if (TrainerMenuActive)
                             {

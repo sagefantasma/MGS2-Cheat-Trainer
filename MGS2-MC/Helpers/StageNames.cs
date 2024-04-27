@@ -18,6 +18,7 @@ namespace MGS2_MC
 
         public static Stage Parse(string s)
         {
+            s = s.Split('\0').First().Trim();
             if(StageNames.MenuStages.StageList.Any(stageCode => s == stageCode.AreaCode))
             {
                 return StageNames.MenuStages.StageList.First(stageCode => s == stageCode.AreaCode);
@@ -277,10 +278,10 @@ namespace MGS2_MC
             #endregion
 
             #region Streaking Missions
-            public static readonly Stage Streaking01 = new Stage { Name = "Streaking01", AreaCode = "st02a" };
-            public static readonly Stage Streaking02 = new Stage { Name = "Streaking02", AreaCode = "st03a" };
-            public static readonly Stage Streaking03 = new Stage { Name = "Streaking03", AreaCode = "st04a" };
-            public static readonly Stage Streaking04 = new Stage { Name = "Streaking04", AreaCode = "st05a" };
+            public static readonly Stage Streaking01 = new Stage { Name = "Streaking01", AreaCode = "st01a" };
+            public static readonly Stage Streaking02 = new Stage { Name = "Streaking02", AreaCode = "st02a" };
+            public static readonly Stage Streaking03 = new Stage { Name = "Streaking03", AreaCode = "st03a" };
+            public static readonly Stage Streaking04 = new Stage { Name = "Streaking04", AreaCode = "st04a" };
             #endregion
 
             #region First Person Missions

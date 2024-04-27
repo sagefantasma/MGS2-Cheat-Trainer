@@ -115,7 +115,7 @@ namespace MGS2_MC
             }
             catch
             {
-                logLevel = "Information";
+                logLevel = "Debug";
             }
             Logging.MainLogEventLevel = ParseLogEventLevel(logLevel);
             Logging.LogLocation = Path.Combine(new FileInfo(Application.ExecutablePath).DirectoryName, "logs");

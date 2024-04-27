@@ -185,7 +185,7 @@ namespace MGS2_MC
 
         #region Calculated From StageInfo
         public static readonly MemoryOffset CURRENT_CHARACTER = new MemoryOffset(-260, -255);
-        public static readonly MemoryOffset CURRENT_STAGE = new MemoryOffset(-244, -236);
+        public static readonly MemoryOffset CURRENT_STAGE = new MemoryOffset(-244, -238);
         public static readonly MemoryOffset CURRENT_EQUIPPED_ITEM = new MemoryOffset(-26); //TODO: prove this is valid
         public static readonly MemoryOffset CURRENT_EQUIPPED_WEAPON = new MemoryOffset(-28); //TODO: prove this is valid
         public static readonly MemoryOffset GAME_STATS_BLOCK = new MemoryOffset(14, 57);

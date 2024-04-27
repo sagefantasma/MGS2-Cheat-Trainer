@@ -85,7 +85,7 @@ namespace MGS2_MC
                     {
                         if (ValidateLastKnownOffsets(gameMemoryBuffer, _lastKnownStageOffsets, MGS2AoB.StageInfo))
                         {
-                            _logger.Information($"Last known stageOffsets are still valid, reusing...");
+                            _logger.Verbose($"Last known stageOffsets are still valid, reusing...");
                             return _lastKnownStageOffsets;
                         }
                     }
@@ -93,7 +93,7 @@ namespace MGS2_MC
                     _lastKnownStageOffsets = new List<int>();
 
                     List<int> stageOffset = FindUniqueOffset(gameMemoryBuffer, MGS2AoB.StageInfo);
-                    _logger.Information($"We found {stageOffset.Count} stage offsets in memory");
+                    _logger.Verbose($"We found {stageOffset.Count} stage offsets in memory");
 
                     //ignore all results except for the final two if more than 2 are found.
                     if(stageOffset.Count > 1)
@@ -124,13 +124,13 @@ namespace MGS2_MC
                         if (previousOffsetBuffer[i] != finderAoB[i])
                         {
                             //if ANY byte does not match exactly to the offsetBytes, we know the offset has moved
-                            _logger.Information($"Last known offset at {previousOffset} has changed since we last looked!");
+                            _logger.Verbose($"Last known offset at {previousOffset} has changed since we last looked!");
                             offsetIsValid = false;
                         }
                     }
                 }
 
-                _logger.Information($"Last known offset(s) are still valid.");
+                _logger.Verbose($"Last known offset(s) are still valid.");
                 return offsetIsValid;
             }
             catch (Exception e)
@@ -261,7 +261,7 @@ namespace MGS2_MC
                     {
                         if (ValidateLastKnownOffsets(gameMemoryBuffer, _lastKnownPlayerOffsets, MGS2AoB.PlayerInfoFinder))
                         {
-                            _logger.Information("Last known player offsets are valid, reusing...");
+                            _logger.Verbose("Last known player offsets are valid, reusing...");
                             return _lastKnownPlayerOffsets;
                         }
                     }
@@ -269,6 +269,7 @@ namespace MGS2_MC
                     _lastKnownPlayerOffsets = new List<int>();
                     int offsetsToFind = 2;
                     Stage currentStage = GetStage();
+                    _logger.Debug($"User is in {currentStage}");
                     if (StageNames.VRStages.PlayableStageList.Contains(currentStage))
                     {
                         _logger.Debug("Looks like this is a VR stage, will now only search for 1 player offset.");
@@ -348,7 +349,7 @@ namespace MGS2_MC
             string stringInMemory = Encoding.UTF8.GetString(ReadValueFromMemory(stageMemoryOffsets.First() + MGS2Offset.CURRENT_STAGE.Start, MGS2Offset.CURRENT_STAGE.Length));
 
             Stage currentStage = Stage.Parse(stringInMemory);
-            _logger.Debug($"User is currently in stage: {stringInMemory}. Parsed as {currentStage}");
+            _logger.Verbose($"User is currently in stage: {stringInMemory}. Parsed as {currentStage}");
             return currentStage;
         }
 

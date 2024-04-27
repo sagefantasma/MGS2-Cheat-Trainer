@@ -112,6 +112,7 @@ namespace MGS2_MC
         private static ILogger _logger { get; set; }
         private static Thread _scanningThread { get; set; }
         private static Task _updateStatsTask { get; set; }
+        private static Stage _lastKnownStage { get; set; }
         #endregion
 
         #region Functions
@@ -300,8 +301,14 @@ namespace MGS2_MC
             {
                 if (EnableGameStats)
                 {
+                    Stage currentStage = MGS2MemoryManager.GetStage();
+                    if(currentStage?.Name != _lastKnownStage?.Name)
+                    {
+                        _logger.Debug($"User is now in stage: {currentStage}");
+                        _lastKnownStage = currentStage;
+                    }
                     //if we're in a main menu, we shouldn't try to find stats right now.
-                    if (!StageNames.MenuStages.StageList.Contains(MGS2MemoryManager.GetStage()))
+                    if (!StageNames.MenuStages.StageList.Contains(currentStage))
                     {
                         MGS2MemoryManager.GameStats currentGameStats = MGS2MemoryManager.ReadGameStats();
                         GUI.StaticGuiReference.UpdateGameStats(currentGameStats);

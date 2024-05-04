@@ -151,9 +151,9 @@ namespace MGS2_MC
                 ModifySingleByte(MGS2AoB.Camera, MGS2Offset.LETTERBOX, 0x00);
             }
 
-            internal static void AmmoNeverDepletes() //crashes
+            internal static void AmmoNeverDepletes() //works
             {
-                ReplaceWithInvalidCode(MGS2AoB.NeverReload, MGS2Offset.NEVER_RELOAD, 4); 
+                ReplaceWithInvalidCode(MGS2AoB.NeverReload, MGS2Offset.NEVER_RELOAD, 2); 
             }
 
             internal static void NoClipNoGravity() //doesnt exist within the game's memory, so we can't use it atm
@@ -276,8 +276,8 @@ namespace MGS2_MC
             _cheatList = new List<Cheat>
             {
                 BlackScreen, NoBleedDamage, NoBurnDamage, InfiniteAmmo, InfiniteLife, InfiniteOxygen, Letterboxing,
-                //NoReload, NoClipWithGravity, NoClipNoGravity, //cutting these out for now, as they dont work and/or crash the game
-                ZoomIn, ZoomOut
+                // NoClipWithGravity, NoClipNoGravity, //cutting these out for now, as they dont work and/or crash the game
+                NoReload,ZoomIn, ZoomOut
             };
         }
 

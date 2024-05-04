@@ -12,11 +12,12 @@ namespace MGS2_MC.Helpers
         MGS2MemoryManager.GameStats MinimumStats;
         MGS2MemoryManager.GameStats MaximumStats;
 
+        //taken from: https://metalgear.fandom.com/wiki/Codename_(gameplay)#Requirements -- not the best source, but it'll do.
         List<Rank> MGS2ExtremeRanks = new List<Rank>();
         List<Rank> MGS2HardRanks = new List<Rank>();
         List<Rank> MGS2NormalRanks = new List<Rank>();
         List<Rank> MGS2EasyRanks = new List<Rank>();
-        List<Rank> MGS2DifficultyAgnosticRanks = new List<Rank>();
+        List<Rank> MGS2DifficultyAgnosticRanks = new List<Rank>(); //in case we ever decide to implement more
 
         #region Extreme Ranks
         private static readonly Rank BigBoss = new Rank
@@ -144,7 +145,7 @@ namespace MGS2_MC.Helpers
         };
         #endregion
 
-
+        #region Hard Ranks
         private static readonly Rank FoxHard = new Rank
         {
             Name = "Fox",
@@ -166,39 +167,6 @@ namespace MGS2_MC.Helpers
                 Alerts = 3,
                 Continues = 0,
                 DamageTaken = 750,
-                Kills = 0,
-                Rations = 0,
-                MechsDestroyed = 60,
-                PlayTime = 648000,
-                Saves = 8,
-                Shots = 700,
-                SpecialItems = 0
-            }
-        };
-
-        
-
-        private static readonly Rank DobermanNormal = new Rank
-        {
-            Name = "Doberman",
-            MinimumStats = new MGS2MemoryManager.GameStats
-            {
-                Alerts = 0,
-                Continues = 0,
-                DamageTaken = 0,
-                Kills = 0,
-                MechsDestroyed = 0,
-                PlayTime = 0,
-                Rations = 0,
-                Saves = 0,
-                Shots = 0,
-                SpecialItems = 0
-            },
-            MaximumStats = new MGS2MemoryManager.GameStats
-            {
-                Alerts = 3,
-                Continues = 0,
-                DamageTaken = 1000,
                 Kills = 0,
                 Rations = 0,
                 MechsDestroyed = 60,
@@ -240,70 +208,6 @@ namespace MGS2_MC.Helpers
             }
         };
 
-        
-
-        private static readonly Rank HoundEasy = new Rank
-        {
-            Name = "Hound",
-            MinimumStats = new MGS2MemoryManager.GameStats
-            {
-                Alerts = 0,
-                Continues = 0,
-                DamageTaken = 0,
-                Kills = 0,
-                MechsDestroyed = 0,
-                PlayTime = 0,
-                Rations = 0,
-                Saves = 0,
-                Shots = 0,
-                SpecialItems = 0
-            },
-            MaximumStats = new MGS2MemoryManager.GameStats
-            {
-                Alerts = 3,
-                Continues = 0,
-                DamageTaken = 1500, //TODO: confirm
-                Kills = 0,
-                Rations = 0,
-                MechsDestroyed = 60,
-                PlayTime = 648000,
-                Saves = 8,
-                Shots = 700,
-                SpecialItems = 0
-            }
-        };
-
-        private static readonly Rank HoundNormal = new Rank
-        {
-            Name = "Hound",
-            MinimumStats = new MGS2MemoryManager.GameStats
-            {
-                Alerts = 0,
-                Continues = 0,
-                DamageTaken = 0,
-                Kills = 0,
-                MechsDestroyed = 0,
-                PlayTime = 0,
-                Rations = 0,
-                Saves = 0,
-                Shots = 0,
-                SpecialItems = 0
-            },
-            MaximumStats = new MGS2MemoryManager.GameStats
-            {
-                Alerts = 3,
-                Continues = 0,
-                DamageTaken = short.MaxValue, 
-                Kills = 0,
-                Rations = 0,
-                MechsDestroyed = 60,
-                PlayTime = 648000,
-                Saves = 16,
-                Shots = short.MaxValue,
-                SpecialItems = 0 //radar can be used
-            }
-        };
-
         private static readonly Rank HoundHard = new Rank
         {
             Name = "Hound",
@@ -334,8 +238,106 @@ namespace MGS2_MC.Helpers
                 SpecialItems = 0 //radar can be used
             }
         };
+        #endregion
 
-        
+        #region Normal Ranks
+        private static readonly Rank DobermanNormal = new Rank
+        {
+            Name = "Doberman",
+            MinimumStats = new MGS2MemoryManager.GameStats
+            {
+                Alerts = 0,
+                Continues = 0,
+                DamageTaken = 0,
+                Kills = 0,
+                MechsDestroyed = 0,
+                PlayTime = 0,
+                Rations = 0,
+                Saves = 0,
+                Shots = 0,
+                SpecialItems = 0
+            },
+            MaximumStats = new MGS2MemoryManager.GameStats
+            {
+                Alerts = 3,
+                Continues = 0,
+                DamageTaken = 1000,
+                Kills = 0,
+                Rations = 0,
+                MechsDestroyed = 60,
+                PlayTime = 648000,
+                Saves = 8,
+                Shots = 700,
+                SpecialItems = 0
+            }
+        };
+
+        private static readonly Rank HoundNormal = new Rank
+        {
+            Name = "Hound",
+            MinimumStats = new MGS2MemoryManager.GameStats
+            {
+                Alerts = 0,
+                Continues = 0,
+                DamageTaken = 0,
+                Kills = 0,
+                MechsDestroyed = 0,
+                PlayTime = 0,
+                Rations = 0,
+                Saves = 0,
+                Shots = 0,
+                SpecialItems = 0
+            },
+            MaximumStats = new MGS2MemoryManager.GameStats
+            {
+                Alerts = 3,
+                Continues = 0,
+                DamageTaken = short.MaxValue,
+                Kills = 0,
+                Rations = 0,
+                MechsDestroyed = 60,
+                PlayTime = 648000,
+                Saves = 16,
+                Shots = short.MaxValue,
+                SpecialItems = 0 //radar can be used
+            }
+        };
+        #endregion
+
+
+
+        #region Easy Ranks
+        private static readonly Rank HoundEasy = new Rank
+        {
+            Name = "Hound",
+            MinimumStats = new MGS2MemoryManager.GameStats
+            {
+                Alerts = 0,
+                Continues = 0,
+                DamageTaken = 0,
+                Kills = 0,
+                MechsDestroyed = 0,
+                PlayTime = 0,
+                Rations = 0,
+                Saves = 0,
+                Shots = 0,
+                SpecialItems = 0
+            },
+            MaximumStats = new MGS2MemoryManager.GameStats
+            {
+                Alerts = 3,
+                Continues = 0,
+                DamageTaken = 1500, //TODO: confirm
+                Kills = 0,
+                Rations = 0,
+                MechsDestroyed = 60,
+                PlayTime = 648000,
+                Saves = 8,
+                Shots = 700,
+                SpecialItems = 0
+            }
+        };
+        #endregion
     }
 
 }

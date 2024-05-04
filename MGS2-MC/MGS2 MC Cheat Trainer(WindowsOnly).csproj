@@ -129,7 +129,7 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\images\AIColonel.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\images\Solid_Smoke-1.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -276,7 +276,9 @@
     <None Include="Resources\Documentation\deployment_notes.md" />
     <Content Include="Resources\Documentation\difficulties and area name memory block.png" />
     <Content Include="Resources\Documentation\digital camera and wig names memory block.png" />
+    <Content Include="Resources\Documentation\dogtags_investigations.txt" />
     <Content Include="Resources\Documentation\fortune and vamp names memory block.png" />
+    <Content Include="Resources\Documentation\gcx_investigations.txt" />
     <Content Include="Resources\Documentation\item and weapon box names.png" />
     <Content Include="Resources\Documentation\learnings.txt" />
     <Content Include="Resources\Documentation\memoryDumps.txt" />
@@ -429,6 +431,7 @@
     <Content Include="Resources\images\smoke_alp_ovl.bmp.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\images\Solid_Smoke-1.ico" />
     <Content Include="Resources\images\stin_alp_ovl.bmp.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

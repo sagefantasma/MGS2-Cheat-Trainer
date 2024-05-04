@@ -55,8 +55,9 @@ namespace MGS2_MC
         //current "stage" == -267 from the above AoB, 5 bytes long. If it has r_tnk, it is Snake. if it is r_plt, it is raiden :)
         //internal static byte[] InfiniteAmmoBytes = new byte[] { 0x66, 0x89, 0x0C, 0x1A, 0x48, 0x8B, 0x5C, 0x24, 0x30, 0x0F, 0xBF, 0xC1, 0x48, 0x83, 0xC4, 0x20 }; //leaving this here in case i need it in the future
         internal static string InfiniteAmmo = "66 89 0C 1A 48 8B 5C 24 30 0F BF C1 48 83 C4 20";
-        internal static string NeverReload = "89 05 F2 BB 18 01 C3 CC 48 85 C9 74 23 45 33 D2";
-        internal static byte[] NeverReloadBytes = new byte[] { 0x89, 0x05, 0xF2, 0xBB, 0x18, 0x01, 0xC3, 0xCC, 0x48, 0x85, 0xC9, 0x74, 0x23, 0x45, 0x33, 0xD2};
+        //internal static string NeverReload = "89 05 F2 BB 18 01 C3 CC 48 85 C9 74 23 45 33 D2";
+        //internal static byte[] NeverReloadBytes = new byte[] { 0x89, 0x05, 0xF2, 0xBB, 0x18, 0x01, 0xC3, 0xCC, 0x48, 0x85, 0xC9, 0x74, 0x23, 0x45, 0x33, 0xD2};
+        internal static string NeverReload = "FF C8 89 05 F2 BB 18 01";
         internal static string InfiniteLife = "66 29 43 12 E9 67 FF FF FF 41 0F 28 F9 41 0F 28";
         internal static string InfiniteO2 = "66 89 47 78 F3 0F 11 87 E0 00 00 00 44 0F BF 47";
         internal static string NoBleedDamage = "66 89 8B D2 08 00 00 B9 00 00 01 00 E8 5C 9E 03";

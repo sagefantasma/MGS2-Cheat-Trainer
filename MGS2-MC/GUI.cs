@@ -1708,9 +1708,9 @@ namespace MGS2_MC
                 using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                 {
                     SimplePattern pattern = new SimplePattern(aob);
-                    _memoryLocation = spp.ScanMemoryForPattern(pattern);
+                    _memoryLocation = spp.ScanMemoryForUniquePattern(pattern).ToInt32();
 
-                    byte[] memoryContent = spp.ReadProcessOffset(_memoryLocation, (long)(int.Parse(range[1]) - int.Parse(range[0])));
+                    byte[] memoryContent = spp.ReadProcessOffset(new IntPtr(_memoryLocation), (long)(int.Parse(range[1]) - int.Parse(range[0])));
 
                     memContents.Text = BitConverter.ToString(memoryContent);
                 }
@@ -1733,7 +1733,7 @@ namespace MGS2_MC
                         convertedMem[i] = byte.Parse(oneByte, NumberStyles.HexNumber, CultureInfo.InvariantCulture);
                     }
                     //byte[] convertedMemory = Encoding.Default.GetBytes(memContents.Text.Replace('-',' '));
-                    spp.ModifyProcessOffset(_memoryLocation, convertedMem, true);
+                    spp.ModifyProcessOffset(new IntPtr(_memoryLocation), convertedMem, true);
                 }
             }
         }

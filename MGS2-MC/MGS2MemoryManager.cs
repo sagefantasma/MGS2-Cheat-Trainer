@@ -298,7 +298,7 @@ namespace MGS2_MC
                 {
                     try
                     {
-                        byte[] bytesRead = proxy.ReadProcessOffset(offset, bytesToRead);
+                        byte[] bytesRead = proxy.ReadProcessOffset(new IntPtr(offset), bytesToRead);
                         if (bytesRead.Length != bytesToRead)
                         {
                             _logger.Warning($"Expected to read {bytesToRead}, but we actually read {bytesRead.Length}");
@@ -326,7 +326,7 @@ namespace MGS2_MC
                     using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                     {
                         _logger.Information($"Inverting boolean value at {combinedOffset}...");
-                        proxy.InvertBooleanValue(combinedOffset, sizeof(short));
+                        proxy.InvertBooleanValue(new IntPtr(combinedOffset), sizeof(short));
                     }
                 }
             }
@@ -364,7 +364,7 @@ namespace MGS2_MC
                     using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                     {
                         _logger.Information($"setting memory at offset {stringOffset} to {valueToSet}...");
-                        proxy.ModifyProcessOffset(stringOffset, valueToSet, true);
+                        proxy.ModifyProcessOffset(new IntPtr(stringOffset), valueToSet, true);
                     }
                 }
             }
@@ -389,7 +389,7 @@ namespace MGS2_MC
                         foreach (int offset in playerOffsets)
                         {
                             _logger.Information($"setting playerOffsetBased value at offset: {offset} to {BitConverter.ToString(valueToSet)}...");
-                            proxy.ModifyProcessOffset(offset + objectOffset, valueToSet);
+                            proxy.ModifyProcessOffset(new IntPtr(offset + objectOffset), valueToSet);
                         }
                     }
                 }
@@ -412,7 +412,7 @@ namespace MGS2_MC
                         byte[] processSnapshot = proxy.GetProcessSnapshot();
 
                         int aobOffset = FindUniqueOffset(processSnapshot, arrayOfBytes).First();
-                        return proxy.ReadProcessOffset(aobOffset + memoryOffset.Start, memoryOffset.Length);
+                        return proxy.ReadProcessOffset(new IntPtr(aobOffset + memoryOffset.Start), memoryOffset.Length);
                     }
                 }
             }
@@ -434,7 +434,7 @@ namespace MGS2_MC
                         byte[] processSnapshot = proxy.GetProcessSnapshot();
 
                         int aobOffset = FindUniqueOffset(processSnapshot, arrayOfBytes).First();
-                        proxy.ModifyProcessOffset(aobOffset + memoryOffset.Start, valueToSet, true);
+                        proxy.ModifyProcessOffset(new IntPtr(aobOffset + memoryOffset.Start), valueToSet, true);
                     }
                 }
             }

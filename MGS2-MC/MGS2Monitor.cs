@@ -292,7 +292,7 @@ namespace MGS2_MC
         {
             _mgs2CancellationTokenSource = new CancellationTokenSource();
             CancellationToken mgs2CancellationToken = _mgs2CancellationTokenSource.Token;
-            await PeriodicTask.Run(UpdateScoringStats, TimeSpan.FromSeconds(1), mgs2CancellationToken);   
+            //await PeriodicTask.Run(UpdateScoringStats, TimeSpan.FromSeconds(1), mgs2CancellationToken);   
         }
 
         private static void UpdateScoringStats()

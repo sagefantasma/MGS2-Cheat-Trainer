@@ -33,18 +33,18 @@ namespace MGS2_MC
                             using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                             {
                                 SimplePattern pattern = new SimplePattern(aob);
-                                int memoryLocation = spp.ScanMemoryForPattern(pattern);
+                                int memoryLocation = spp.ScanMemoryForUniquePattern(pattern).ToInt32();
 
                                 if (memoryLocation != -1)
                                 {
-                                    byte[] memoryContent = spp.ReadProcessOffset(memoryLocation + offset.Start, offset.Length);
+                                    byte[] memoryContent = spp.ReadProcessOffset(new IntPtr(memoryLocation + offset.Start), offset.Length);
 
                                     for (int i = startIndexToReplace; i < startIndexToReplace + bytesToReplace; i++)
                                     {
                                         memoryContent[i] = 0x90;
                                     }
 
-                                    spp.ModifyProcessOffset(memoryLocation, memoryContent, true);
+                                    spp.ModifyProcessOffset(new IntPtr(memoryLocation), memoryContent, true);
                                     successful = true;
                                 }
                             }
@@ -70,11 +70,11 @@ namespace MGS2_MC
                             using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                             {
                                 SimplePattern pattern = new SimplePattern(aob);
-                                int memoryLocation = spp.ScanMemoryForPattern(pattern);
+                                int memoryLocation = spp.ScanMemoryForUniquePattern(pattern).ToInt32();
 
                                 if (memoryLocation != -1)
                                 {
-                                    spp.ModifyProcessOffset(memoryLocation + offset.Start, replacementValue, true);
+                                    spp.ModifyProcessOffset(new IntPtr(memoryLocation + offset.Start), replacementValue, true);
                                     successful = true;
                                 }
                             }
@@ -100,10 +100,10 @@ namespace MGS2_MC
                             using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                             {
                                 SimplePattern pattern = new SimplePattern(aob);
-                                int memoryLocation = spp.ScanMemoryForPattern(pattern);
+                                int memoryLocation = spp.ScanMemoryForUniquePattern(pattern).ToInt32();
 
                                 if(memoryLocation != -1)
-                                    return spp.ReadProcessOffset(memoryLocation + offset.Start, offset.Length);
+                                    return spp.ReadProcessOffset(new IntPtr(memoryLocation + offset.Start), offset.Length);
                             }
                         }
                         catch (Exception e)
@@ -193,10 +193,10 @@ namespace MGS2_MC
                         byte[] memoryContent = spp.ReadProcessOffset(memoryLocation + MGS2Offset.NO_CLIP.Start, MGS2Offset.NO_CLIP.Length);
                         */
 
-                        byte[] gameMemoryBuffer = spp.GetProcessSnapshot();
+                        //byte[] gameMemoryBuffer = spp.GetProcessSnapshot();
 
                         //List<int> offsets = MGS2MemoryManager.FindUniqueOffset(gameMemoryBuffer, MGS2AoB.NeverReloadBytes);
-                        int memoryLocation = spp.ScanMemoryForPattern(pattern, gameMemoryBuffer);
+                        IntPtr memoryLocation = spp.ScanMemoryForUniquePattern(pattern);
                         byte[] memoryContent = spp.ReadProcessOffset(memoryLocation + MGS2Offset.NO_CLIP.Start, MGS2Offset.NO_CLIP.Length);
 
                         if (gravity)
@@ -276,7 +276,7 @@ namespace MGS2_MC
             _cheatList = new List<Cheat>
             {
                 BlackScreen, NoBleedDamage, NoBurnDamage, InfiniteAmmo, InfiniteLife, InfiniteOxygen, Letterboxing,
-                // NoClipWithGravity, NoClipNoGravity, //cutting these out for now, as they dont work and/or crash the game
+                NoClipWithGravity, NoClipNoGravity, //cutting these out for now, as they dont work and/or crash the game
                 NoReload,ZoomIn, ZoomOut
             };
         }

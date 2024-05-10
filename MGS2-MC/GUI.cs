@@ -1573,6 +1573,12 @@ namespace MGS2_MC
                     MessageBox.Show("WARNING! Use the contents of this tab at your own risk. USE OF THESE CHEATS MAY CRASH YOUR GAME! All of these have worked at some point or another, but may not always. Results not guaranteed.");
                     UserHasBeenWarned = true;
                 }
+                /* Turns out we don't have any cheats that require administrator, but I'm leaving this reference here in case we do.
+                if(!Program.IsRunAsAdministrator())
+                {
+                    Program.RestartInAdminMode();
+                }
+                */
                 CurrentlySelectedObject = null;
             }
             catch(Exception ex) 
@@ -1689,10 +1695,25 @@ namespace MGS2_MC
             if (cheatsBox?.SelectedItem != null)
             {
                 Cheat selectedCheat = (Cheat)cheatsBox.SelectedItem;
+                _logger.Debug($"Trying to toggle cheat: {selectedCheat.Name}");
 
-                toolStripStatusLabel.Text = $"Attempting to enable {selectedCheat.Name}, this may take a long time...";
-                selectedCheat.CheatAction();
-                toolStripStatusLabel.Text = $"Finished trying to enable {selectedCheat.Name}. Did it work?!?";
+                if (!cheatsBox.CheckedItems.Contains(cheatsBox.SelectedItem)) 
+                {
+                    //cheat is enabled already, so now disable it
+                    toolStripStatusLabel.Text = $"Attempting to disable {selectedCheat.Name}, this may take a long time...";
+                    Application.DoEvents();
+                    selectedCheat.CheatAction(false);
+                    toolStripStatusLabel.Text = $"Finished trying to disable {selectedCheat.Name}. Did it work?!?";
+                }
+                else
+                {
+                    //cheat is not yet enabled, so enable it
+                    toolStripStatusLabel.Text = $"Attempting to enable {selectedCheat.Name}, this may take a long time...";
+                    Application.DoEvents();
+                    selectedCheat.CheatAction(true);
+                    toolStripStatusLabel.Text = $"Finished trying to enable {selectedCheat.Name}. Did it work?!?";
+                }
+                _logger.Debug($"Finished trying to toggle cheat: {selectedCheat.Name}");
             }
         }
 
@@ -1740,6 +1761,7 @@ namespace MGS2_MC
 
         private void DisableStatsTrackingCheckBox_CheckedChanged(object sender, EventArgs e)
         {
+            _logger.Debug($"Toggling stat tracking");
             MGS2Monitor.EnableGameStats = !disableStatsTrackingCheckBox.Checked;
         }
     }

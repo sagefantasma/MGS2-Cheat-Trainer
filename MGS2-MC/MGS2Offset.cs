@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Forms;
 
 namespace MGS2_MC
 {
@@ -24,6 +25,11 @@ namespace MGS2_MC
             End = offsetEnd;
             Length = Math.Abs(offsetEnd - offsetStart) + 1;
         }
+    }
+
+    internal struct MGS2Pointer
+    {
+        internal static int WalkThroughWalls = 0x01534E68;
     }
 
     internal struct MGS2AoB
@@ -53,18 +59,36 @@ namespace MGS2_MC
         //clipcurrentCount == -114 from the above AoB, 4bytes long. HP mod is DIRECTLY after, it seems?
         internal static byte[] StageInfo = new byte[] { 0x10, 0x0E, 0x18, 0x15, 0x00, 0x00 };
         //current "stage" == -267 from the above AoB, 5 bytes long. If it has r_tnk, it is Snake. if it is r_plt, it is raiden :)
-        //internal static byte[] InfiniteAmmoBytes = new byte[] { 0x66, 0x89, 0x0C, 0x1A, 0x48, 0x8B, 0x5C, 0x24, 0x30, 0x0F, 0xBF, 0xC1, 0x48, 0x83, 0xC4, 0x20 }; //leaving this here in case i need it in the future
+        internal static byte[] OriginalAmmoBytes = new byte[] { 0x66, 0x89, 0x0C, 0x1A, 0x48, 0x8B, 0x5C, 0x24, 0x30, 0x0F, 0xBF, 0xC1, 0x48, 0x83, 0xC4, 0x20 };
+        internal static string RestoreAmmo = "90 90 90 90 48 8B 5C 24 30 0F BF C1 48 83 C4 20";
         internal static string InfiniteAmmo = "66 89 0C 1A 48 8B 5C 24 30 0F BF C1 48 83 C4 20";
-        //internal static string NeverReload = "89 05 F2 BB 18 01 C3 CC 48 85 C9 74 23 45 33 D2";
-        //internal static byte[] NeverReloadBytes = new byte[] { 0x89, 0x05, 0xF2, 0xBB, 0x18, 0x01, 0xC3, 0xCC, 0x48, 0x85, 0xC9, 0x74, 0x23, 0x45, 0x33, 0xD2};
+        internal static byte[] OriginalReloadBytes = { 0xFF, 0xC8, 0x89, 0x05, 0xF2, 0xBB, 0x18, 0x01 };
+        internal static string RestoreReload = "90 90 89 05 F2 BB 18 01";
         internal static string NeverReload = "FF C8 89 05 F2 BB 18 01";
+        internal static byte[] OriginalLifeBytes = { 0x66, 0x29, 0x43, 0x12, 0xE9, 0x67, 0xFF, 0xFF, 0xFF, 0x41, 0x0F, 0x28, 0xF9, 0x41, 0x0F, 0x28 };
+        internal static string RestoreLife = "90 90 90 90 E9 67 FF FF FF 41 0F 28 F9 41 0F 28";
         internal static string InfiniteLife = "66 29 43 12 E9 67 FF FF FF 41 0F 28 F9 41 0F 28";
+        internal static byte[] OriginalO2Bytes = { 0x66, 0x89, 0x47, 0x78, 0xF3, 0x0F, 0x11, 0x87, 0xE0, 0x00, 0x00, 0x00, 0x44, 0x0F, 0xBF, 0x47 };
+        internal static string RestoreO2 = "90 90 90 90 F3 0F 11 87 E0 00 00 00 44 0F BF 47";
         internal static string InfiniteO2 = "66 89 47 78 F3 0F 11 87 E0 00 00 00 44 0F BF 47";
+        internal static byte[] OriginalBleedDamageBytes = { 0x66, 0x89, 0x8B, 0xD2, 0x08, 0x00, 0x00, 0xB9, 0x00, 0x00, 0x01, 0x00, 0xE8, 0x5C, 0x9E, 0x03 };
+        internal static string RestoreBleedDamage = "90 90 90 90 90 90 90 B9 00 00 01 00 E8 5C 9E 03";
         internal static string NoBleedDamage = "66 89 8B D2 08 00 00 B9 00 00 01 00 E8 5C 9E 03";
+        internal static byte[] OriginalBurnDamageBytes = { 0x66, 0x89, 0x83, 0xD2, 0x08, 0x00, 0x00, 0x8B, 0x0D, 0x96, 0xBA, 0x19, 0x01, 0x0F, 0xBF, 0xD0 };
+        internal static string RestoreBurnDamage = "90 90 90 90 90 90 90 8B 0D 96 BA 19 01 0F BF D0";
         internal static string NoBurnDamage = "66 89 83 D2 08 00 00 8B 0D 96 BA 19 01 0F BF D0";
+        internal static byte[] OriginalClippingBytes = { };
         internal static string RaidenClipping = "01 ?? 00 00 00 00 00 00 00 00 00 00 00 27 15 9B";
+        internal static string NinjaClipping = "01 ?? F4 01 24 00 00 00 00 00 00 00 00 27 15 9B";
+        internal static string NakedRaidenClipping = "01 ?? 01 24 00 00 00 00 00 00 00 00 00 27 15 9B";
         internal static string SnakeClipping = "01 ?? 00 00 00 00 00 00 00 00 00 00 00 E6 DC 28";
+        internal static string VRClipping = "DA 01 F4 01 ?? 00 00 00 00 00 00 00 00 00 00 00 27 15 9B";
+        internal static string PliskinClipping = "DA 01 F4 01 ?? 00 00 00 00 00 00 00 00 00 00 00 27 15 9B";
+        internal static string TuxedoSnakeClipping = "DA 01 F4 01 ?? 00 00 00 00 00 00 00 00 00 00 00 27 15 9B";
+        internal static string MGS1SnakeClipping = "DA 01 F4 01 ?? 00 00 00 00 00 00 00 00 00 00 00 27 15 9B";
+        internal static byte[] OriginalCameraBytes = { 0x45, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x06, 0x17, 0x42, 0x53, 0x17, 0x06, 0x53, 0x42, 0x44 };
         internal static string Camera = "45 00 00 00 00 00 00 00 06 17 42 53 17 06 53 42 44";
+
 
 
         /*new offsets and shit found 4/17/24:
@@ -210,7 +234,7 @@ namespace MGS2_MC
         public static readonly MemoryOffset INFINITE_O2 = new MemoryOffset(0, 16);
         public static readonly MemoryOffset NO_BLEED_DMG = new MemoryOffset(0, 16);
         public static readonly MemoryOffset NO_BURN_DMG = new MemoryOffset(0, 16);
-        public static readonly MemoryOffset NO_CLIP = new MemoryOffset(1);
+        public static readonly MemoryOffset NO_CLIP = new MemoryOffset(0x40, 0x53);
         public static readonly MemoryOffset LETTERBOX = new MemoryOffset(-188);
         public static readonly MemoryOffset ZOOM = new MemoryOffset(-192); //todo: verify
         public static readonly MemoryOffset BLACK_SCREEN = new MemoryOffset(-229);

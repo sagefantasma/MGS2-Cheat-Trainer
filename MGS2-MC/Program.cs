@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Configuration;
 using System.Deployment.Application;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Security.Principal;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Serilog;
 using Serilog.Events;
@@ -27,17 +30,78 @@ namespace MGS2_MC
         [STAThread]
         static void Main()
         {
+            Task.Run(() =>
+            {
+                if (IsRunAsAdministrator())
+                {
+                    while (GUI.GuiLoaded == false)
+                    {
+                        //wait for the GUI to load
+                    }
+                    _logger.Debug("Cheat Trainer started in admin mode! Starting on cheats tab.");
+                    (GUI.StaticGuiReference.Controls["mgs2TabControl"] as TabControl).SelectTab("tabPageCheats");
+                    GUI.StaticGuiReference.Name += " (ADMIN MODE)";
+                }
+            });
+            InitializeTrainer();
+        }
+
+        public static void RestartInAdminMode()
+        {
+            _logger.Debug("User isn't in admin mode. Asking to restart in admin mode");
+
+            string message = "Not all cheats work without admin mode. Would you like to restart in Admin mode?";
+            string caption = "Limited functionality ahead!";
+            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+            DialogResult userChoice = MessageBox.Show(message, caption, buttons);
+            switch (userChoice)
+            {
+                case DialogResult.Yes:
+                    var processInfo = new ProcessStartInfo(Assembly.GetExecutingAssembly().CodeBase)
+                    {
+                        UseShellExecute = true,
+                        Verb = "runas"
+                    };
+
+                    try
+                    {
+                        _logger.Debug("Restarting process with UAC prompt");
+                        Process.Start(processInfo);
+                    }
+                    catch
+                    {
+                        _logger.Error("User declined UAC prompt.");
+                    }
+                    Application.Exit();
+                    break;
+                default:
+                case DialogResult.No:
+                    _logger.Debug("User chose to not restart in admin mode.");
+                    break;
+            }
+        }
+
+        private static void InitializeTrainer()
+        {
             SetAppVersion();
             InitializeLogs();
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            
+
             StartMonitoringThread();
             StartControllerThread();
 
             Application.ApplicationExit += AppEnding;
             Application.Run(new GUI(_logger));
+        }
+
+        public static bool IsRunAsAdministrator()
+        {
+            var wi = WindowsIdentity.GetCurrent();
+            var wp = new WindowsPrincipal(wi);
+
+            return wp.IsInRole(WindowsBuiltInRole.Administrator);
         }
 
         private static void AppEnding(object sender, EventArgs e)

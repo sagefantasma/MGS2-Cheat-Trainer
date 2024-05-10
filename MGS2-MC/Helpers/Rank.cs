@@ -1,23 +1,72 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MGS2_MC.Helpers
 {
+    public enum Difficulty
+    {
+        EuropeanExtreme,
+        Extreme,
+        Hard,
+        Normal,
+        Easy,
+        VeryEasy
+    }
+
     internal class Rank
     {
+        public static Rank CurrentlyProjectedRank(MGS2MemoryManager.GameStats currentStats, Difficulty currentDifficulty)
+        {
+            //check and see if it is Tanker/Plant
+            Rank projectedRank = null;
+            switch(currentDifficulty)
+            {
+                case Difficulty.EuropeanExtreme:
+                case Difficulty.Extreme:
+                    MGS2ExtremeRanks.FirstOrDefault(rank => rank.)
+                    break;
+                case Difficulty.Hard:
+
+                    break;
+                case Difficulty.Normal:
+
+                    break;
+                case Difficulty.Easy:
+                case Difficulty.VeryEasy:
+
+                    break;
+            }
+
+            return projectedRank;
+        }
+
+        private bool AreStatsWithinRankRequirements(MGS2MemoryManager.GameStats stats)
+        {
+
+            foreach(PropertyInfo member in typeof(MGS2MemoryManager.GameStats).GetProperties())
+            {
+                if(member.GetValue(stats) < member.GetValue(MinimumStats))
+                    return false;
+            }
+            if (stats.Alerts < this.MinimumStats.Alerts)
+                return false;
+            if (stats.Continues < MinimumStats.Continues) return false;
+        }
+
         string Name;
         MGS2MemoryManager.GameStats MinimumStats;
         MGS2MemoryManager.GameStats MaximumStats;
 
         //taken from: https://metalgear.fandom.com/wiki/Codename_(gameplay)#Requirements -- not the best source, but it'll do.
-        List<Rank> MGS2ExtremeRanks = new List<Rank>();
-        List<Rank> MGS2HardRanks = new List<Rank>();
-        List<Rank> MGS2NormalRanks = new List<Rank>();
-        List<Rank> MGS2EasyRanks = new List<Rank>();
-        List<Rank> MGS2DifficultyAgnosticRanks = new List<Rank>(); //in case we ever decide to implement more
+        private static readonly List<Rank> MGS2ExtremeRanks = new List<Rank> { BigBoss, FoxExtreme, DobermanExtreme, HoundExtreme };
+        private static readonly List<Rank> MGS2HardRanks = new List<Rank> { FoxHard, DobermanHard, HoundHard };
+        private static readonly List<Rank> MGS2NormalRanks = new List<Rank> { DobermanNormal, HoundEasy };
+        private static readonly List<Rank> MGS2EasyRanks = new List<Rank> { HoundEasy };
+        private static readonly List<Rank> MGS2DifficultyAgnosticRanks = new List<Rank>(); //in case we ever decide to implement more
 
         #region Extreme Ranks
         private static readonly Rank BigBoss = new Rank

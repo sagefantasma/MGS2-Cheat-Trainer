@@ -1,4 +1,5 @@
 using MGS2_MC.Controllers;
+using MGS2_MC.Helpers;
 using Serilog;
 using SimplifiedMemoryManager;
 using System;
@@ -1362,19 +1363,19 @@ namespace MGS2_MC
         #endregion
 
         #region Stats Tab Functions
-        internal void UpdateGameStats(MGS2MemoryManager.GameStats gameStats)
+        internal void UpdateGameStats(MGS2MemoryManager.GameStats gameStats, Difficulty difficulty)
         {
             if (InvokeRequired)
             {
-                Invoke(new MethodInvoker(() => UpdateGui(gameStats)));
+                Invoke(new MethodInvoker(() => UpdateGui(gameStats, difficulty)));
             }
             else
             {
-                UpdateGui(gameStats);
+                UpdateGui(gameStats, difficulty);
             }
         }
 
-        private void UpdateGui(MGS2MemoryManager.GameStats currentGameStats)
+        private void UpdateGui(MGS2MemoryManager.GameStats currentGameStats, Difficulty difficulty)
         {
             alertCountLabel.Text = currentGameStats.Alerts.ToString();
             continueCountLabel.Text = currentGameStats.Continues.ToString();
@@ -1386,6 +1387,9 @@ namespace MGS2_MC
             saveCountLabel.Text = currentGameStats.Saves.ToString();
             shotsFiredLabel.Text = currentGameStats.Shots.ToString();
             CheckOffSpecialItemsUsed(currentGameStats.SpecialItems);
+
+            Rank projectedRank = Rank.CurrentlyProjectedRank(currentGameStats, difficulty, GameType.TankerPlant); //TODO: fix this when we actually figure out gametype
+            projectedRankLabel.Text = projectedRank.Name;
         }
 
         private static string ParsePlayTime(int playTime)

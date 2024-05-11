@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using SimplifiedMemoryManager;
+using MGS2_MC.Helpers;
 
 namespace MGS2_MC
 {
@@ -26,8 +27,6 @@ namespace MGS2_MC
 
         public class GameStats
         {
-            //TODO: add current difficulty
-            //TODO: add game choice(Tanker, Plant, TankerPlant)
             public short Alerts;
             public short Continues;
             public short DamageTaken;
@@ -583,6 +582,26 @@ namespace MGS2_MC
             _logger.Verbose($"Current game stats: {gameStats}");
 
             return gameStats;
+        }
+
+        public static Difficulty ReadCurrentDifficulty()
+        {
+            int stageOffset = GetStageOffsets().First();
+            byte[] difficultyByte = ReadValueFromMemory(stageOffset + MGS2Offset.CURRENT_DIFFICULTY.Start, MGS2Offset.CURRENT_DIFFICULTY.Length);
+
+            int convertedDifficulty = difficultyByte[0];
+            
+            return (Difficulty) convertedDifficulty;
+        }
+
+        public static GameType ReadGameType()
+        {
+            int stageOffset = GetStageOffsets().First();
+            byte[] gameTypeByte = ReadValueFromMemory(stageOffset + MGS2Offset.CURRENT_GAMETYPE.Start, MGS2Offset.CURRENT_GAMETYPE.Length);
+
+            int convertedGameType = gameTypeByte[0];
+
+            return (GameType)convertedGameType;
         }
 
         public static Constants.PlayableCharacter DetermineActiveCharacter()

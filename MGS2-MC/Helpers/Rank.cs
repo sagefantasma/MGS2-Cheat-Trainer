@@ -4,40 +4,51 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace MGS2_MC.Helpers
 {
+    public enum GameType
+    {
+        Tanker,
+        Plant,
+        TankerPlant
+    }
+
     public enum Difficulty
     {
-        EuropeanExtreme,
-        Extreme,
-        Hard,
-        Normal,
-        Easy,
-        VeryEasy
+        EuropeanExtreme = 60,
+        Extreme = 50,
+        Hard = 40,
+        Normal = 30,
+        Easy = 20,
+        VeryEasy = 10
     }
 
     internal class Rank
     {
-        public static Rank CurrentlyProjectedRank(MGS2MemoryManager.GameStats currentStats, Difficulty currentDifficulty)
+        public static Rank CurrentlyProjectedRank(MGS2MemoryManager.GameStats currentStats, Difficulty currentDifficulty, GameType gameType)
         {
-            //check and see if it is Tanker/Plant
             Rank projectedRank = null;
+            if (gameType != GameType.TankerPlant) //for now i'm only worrying about TankerPlant shared ranks on different difficulties
+                return projectedRank;
+
+            projectedRank = new Rank();
             switch(currentDifficulty)
             {
                 case Difficulty.EuropeanExtreme:
                 case Difficulty.Extreme:
-                    MGS2ExtremeRanks.FirstOrDefault(rank => rank.)
+                    projectedRank = MGS2ExtremeRanks.FirstOrDefault(rank => rank.AreStatsWithinRankRequirements(currentStats));
                     break;
                 case Difficulty.Hard:
-
+                    projectedRank = MGS2HardRanks.FirstOrDefault(rank => rank.AreStatsWithinRankRequirements(currentStats));
                     break;
                 case Difficulty.Normal:
-
+                    projectedRank = MGS2NormalRanks.FirstOrDefault(rank => rank.AreStatsWithinRankRequirements(currentStats));
                     break;
                 case Difficulty.Easy:
                 case Difficulty.VeryEasy:
-
+                    projectedRank = MGS2EasyRanks.FirstOrDefault(rank => rank.AreStatsWithinRankRequirements(currentStats));
                     break;
             }
 
@@ -46,30 +57,35 @@ namespace MGS2_MC.Helpers
 
         private bool AreStatsWithinRankRequirements(MGS2MemoryManager.GameStats stats)
         {
-
             foreach(PropertyInfo member in typeof(MGS2MemoryManager.GameStats).GetProperties())
             {
-                if(member.GetValue(stats) < member.GetValue(MinimumStats))
+                if((int) member.GetValue(stats) < (int) member.GetValue(MinimumStats))
+                    return false;
+                if ((int)member.GetValue(stats) >= (int)member.GetValue(MaximumStats))
                     return false;
             }
-            if (stats.Alerts < this.MinimumStats.Alerts)
-                return false;
-            if (stats.Continues < MinimumStats.Continues) return false;
+
+            return true;
         }
 
-        string Name;
-        MGS2MemoryManager.GameStats MinimumStats;
-        MGS2MemoryManager.GameStats MaximumStats;
+        public string Name { get; set; }
+        public MGS2MemoryManager.GameStats MinimumStats { get; set; }
+        public MGS2MemoryManager.GameStats MaximumStats { get; set; }
 
         //taken from: https://metalgear.fandom.com/wiki/Codename_(gameplay)#Requirements -- not the best source, but it'll do.
-        private static readonly List<Rank> MGS2ExtremeRanks = new List<Rank> { BigBoss, FoxExtreme, DobermanExtreme, HoundExtreme };
-        private static readonly List<Rank> MGS2HardRanks = new List<Rank> { FoxHard, DobermanHard, HoundHard };
-        private static readonly List<Rank> MGS2NormalRanks = new List<Rank> { DobermanNormal, HoundEasy };
-        private static readonly List<Rank> MGS2EasyRanks = new List<Rank> { HoundEasy };
-        private static readonly List<Rank> MGS2DifficultyAgnosticRanks = new List<Rank>(); //in case we ever decide to implement more
+        public static List<Rank> MGS2ExtremeRanks = new List<Rank> { RankRequirements.BigBoss, RankRequirements.FoxExtreme, RankRequirements.DobermanExtreme, RankRequirements.HoundExtreme };
+        public static List<Rank> MGS2HardRanks = new List<Rank> { RankRequirements.FoxHard, RankRequirements.DobermanHard, RankRequirements.HoundHard };
+        public static List<Rank> MGS2NormalRanks = new List<Rank> { RankRequirements.DobermanNormal, RankRequirements.HoundEasy };
+        public static List<Rank> MGS2EasyRanks = new List<Rank> { RankRequirements.HoundEasy };
+        public static List<Rank> MGS2DifficultyAgnosticRanks = new List<Rank>(); //in case we ever decide to implement more
+    }
+
+    struct RankRequirements
+    {
+        
 
         #region Extreme Ranks
-        private static readonly Rank BigBoss = new Rank
+        public static Rank BigBoss = new Rank
         {
             Name = "Big Boss",
             MinimumStats = new MGS2MemoryManager.GameStats
@@ -100,7 +116,7 @@ namespace MGS2_MC.Helpers
             }
         };
 
-        private static readonly Rank FoxExtreme = new Rank
+        public static readonly Rank FoxExtreme = new Rank
         {
             Name = "Fox",
             MinimumStats = new MGS2MemoryManager.GameStats
@@ -131,7 +147,7 @@ namespace MGS2_MC.Helpers
             }
         };
 
-        private static readonly Rank DobermanExtreme = new Rank
+        public static readonly Rank DobermanExtreme = new Rank
         {
             Name = "Doberman",
             MinimumStats = new MGS2MemoryManager.GameStats
@@ -162,7 +178,7 @@ namespace MGS2_MC.Helpers
             }
         };
 
-        private static readonly Rank HoundExtreme = new Rank
+        public static readonly Rank HoundExtreme = new Rank
         {
             Name = "Hound",
             MinimumStats = new MGS2MemoryManager.GameStats
@@ -195,7 +211,7 @@ namespace MGS2_MC.Helpers
         #endregion
 
         #region Hard Ranks
-        private static readonly Rank FoxHard = new Rank
+        public static readonly Rank FoxHard = new Rank
         {
             Name = "Fox",
             MinimumStats = new MGS2MemoryManager.GameStats
@@ -226,7 +242,7 @@ namespace MGS2_MC.Helpers
             }
         };
 
-        private static readonly Rank DobermanHard = new Rank
+        public static readonly Rank DobermanHard = new Rank
         {
             Name = "Doberman",
             MinimumStats = new MGS2MemoryManager.GameStats
@@ -257,7 +273,7 @@ namespace MGS2_MC.Helpers
             }
         };
 
-        private static readonly Rank HoundHard = new Rank
+        public static readonly Rank HoundHard = new Rank
         {
             Name = "Hound",
             MinimumStats = new MGS2MemoryManager.GameStats
@@ -290,7 +306,7 @@ namespace MGS2_MC.Helpers
         #endregion
 
         #region Normal Ranks
-        private static readonly Rank DobermanNormal = new Rank
+        public static readonly Rank DobermanNormal = new Rank
         {
             Name = "Doberman",
             MinimumStats = new MGS2MemoryManager.GameStats
@@ -321,7 +337,7 @@ namespace MGS2_MC.Helpers
             }
         };
 
-        private static readonly Rank HoundNormal = new Rank
+        public static readonly Rank HoundNormal = new Rank
         {
             Name = "Hound",
             MinimumStats = new MGS2MemoryManager.GameStats
@@ -356,7 +372,7 @@ namespace MGS2_MC.Helpers
 
 
         #region Easy Ranks
-        private static readonly Rank HoundEasy = new Rank
+        public static readonly Rank HoundEasy = new Rank
         {
             Name = "Hound",
             MinimumStats = new MGS2MemoryManager.GameStats

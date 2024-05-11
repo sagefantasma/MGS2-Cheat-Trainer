@@ -280,8 +280,13 @@
     <Content Include="Resources\Documentation\learnings.txt" />
     <Content Include="Resources\Documentation\memoryDumps.txt" />
     <Content Include="Resources\Documentation\npc snake memory block.png" />
+    <Content Include="Resources\Documentation\gametype investigations\plant only, new game.png" />
+    <Content Include="Resources\Documentation\gametype investigations\plant only, ng plus or more.png" />
     <Content Include="Resources\Documentation\raiden hf blade stuff memory block.png" />
     <Content Include="Resources\Documentation\stage names memory block.png" />
+    <Content Include="Resources\Documentation\gametype investigations\tanker only, new game.png" />
+    <Content Include="Resources\Documentation\gametype investigations\tankerplant, on plant, ng plus or more.png" />
+    <Content Include="Resources\Documentation\gametype investigations\tankerplant, on tanker, new game.png" />
     <Content Include="Resources\images\acd_alp_ovl.bmp.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -32,8 +32,8 @@
     <ErrorReportUrl>https://github.com/sagefantasma/MGS2-Cheat-Trainer/issues</ErrorReportUrl>
     <ProductName>MGS2 Master Collection Cheat Trainer</ProductName>
     <PublisherName>ANTIBigBoss</PublisherName>
-    <ApplicationRevision>3</ApplicationRevision>
-    <ApplicationVersion>1.3.0.%2a</ApplicationVersion>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>1.4.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -129,7 +129,7 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\images\AIColonel.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\images\Solid_Smoke-1.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -149,9 +149,6 @@
     </Reference>
     <Reference Include="Serilog.Sinks.File, Version=5.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.Sinks.File.5.0.0\lib\net45\Serilog.Sinks.File.dll</HintPath>
-    </Reference>
-    <Reference Include="Simplified Memory Manager, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SimplifiedMemoryManager.1.1.0\lib\netstandard2.0\Simplified Memory Manager.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -276,13 +273,20 @@
     <None Include="Resources\Documentation\deployment_notes.md" />
     <Content Include="Resources\Documentation\difficulties and area name memory block.png" />
     <Content Include="Resources\Documentation\digital camera and wig names memory block.png" />
+    <Content Include="Resources\Documentation\dogtags_investigations.txt" />
     <Content Include="Resources\Documentation\fortune and vamp names memory block.png" />
+    <Content Include="Resources\Documentation\gcx_investigations.txt" />
     <Content Include="Resources\Documentation\item and weapon box names.png" />
     <Content Include="Resources\Documentation\learnings.txt" />
     <Content Include="Resources\Documentation\memoryDumps.txt" />
     <Content Include="Resources\Documentation\npc snake memory block.png" />
+    <Content Include="Resources\Documentation\gametype investigations\plant only, new game.png" />
+    <Content Include="Resources\Documentation\gametype investigations\plant only, ng plus or more.png" />
     <Content Include="Resources\Documentation\raiden hf blade stuff memory block.png" />
     <Content Include="Resources\Documentation\stage names memory block.png" />
+    <Content Include="Resources\Documentation\gametype investigations\tanker only, new game.png" />
+    <Content Include="Resources\Documentation\gametype investigations\tankerplant, on plant, ng plus or more.png" />
+    <Content Include="Resources\Documentation\gametype investigations\tankerplant, on tanker, new game.png" />
     <Content Include="Resources\images\acd_alp_ovl.bmp.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -429,6 +433,7 @@
     <Content Include="Resources\images\smoke_alp_ovl.bmp.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\images\Solid_Smoke-1.ico" />
     <Content Include="Resources\images\stin_alp_ovl.bmp.bmp">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -566,6 +571,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\Documentation\assets\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\SimplifiedMemoryManager\Simplified Memory Manager\Simplified Memory Manager.csproj">
+      <Project>{8af5d83d-8d35-416d-a415-74012c745650}</Project>
+      <Name>Simplified Memory Manager</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions />

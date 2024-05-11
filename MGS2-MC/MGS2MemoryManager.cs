@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using SimplifiedMemoryManager;
+using MGS2_MC.Helpers;
 
 namespace MGS2_MC
 {
@@ -26,8 +27,6 @@ namespace MGS2_MC
 
         public class GameStats
         {
-            //TODO: add current difficulty
-            //TODO: add game choice(Tanker, Plant, TankerPlant)
             public short Alerts;
             public short Continues;
             public short DamageTaken;
@@ -298,7 +297,7 @@ namespace MGS2_MC
                 {
                     try
                     {
-                        byte[] bytesRead = proxy.ReadProcessOffset(offset, bytesToRead);
+                        byte[] bytesRead = proxy.ReadProcessOffset(new IntPtr(offset), bytesToRead);
                         if (bytesRead.Length != bytesToRead)
                         {
                             _logger.Warning($"Expected to read {bytesToRead}, but we actually read {bytesRead.Length}");
@@ -326,7 +325,7 @@ namespace MGS2_MC
                     using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                     {
                         _logger.Information($"Inverting boolean value at {combinedOffset}...");
-                        proxy.InvertBooleanValue(combinedOffset, sizeof(short));
+                        proxy.InvertBooleanValue(new IntPtr(combinedOffset), sizeof(short));
                     }
                 }
             }
@@ -364,7 +363,7 @@ namespace MGS2_MC
                     using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                     {
                         _logger.Information($"setting memory at offset {stringOffset} to {valueToSet}...");
-                        proxy.ModifyProcessOffset(stringOffset, valueToSet, true);
+                        proxy.ModifyProcessOffset(new IntPtr(stringOffset), valueToSet, true);
                     }
                 }
             }
@@ -389,7 +388,7 @@ namespace MGS2_MC
                         foreach (int offset in playerOffsets)
                         {
                             _logger.Information($"setting playerOffsetBased value at offset: {offset} to {BitConverter.ToString(valueToSet)}...");
-                            proxy.ModifyProcessOffset(offset + objectOffset, valueToSet);
+                            proxy.ModifyProcessOffset(new IntPtr(offset + objectOffset), valueToSet);
                         }
                     }
                 }
@@ -412,7 +411,7 @@ namespace MGS2_MC
                         byte[] processSnapshot = proxy.GetProcessSnapshot();
 
                         int aobOffset = FindUniqueOffset(processSnapshot, arrayOfBytes).First();
-                        return proxy.ReadProcessOffset(aobOffset + memoryOffset.Start, memoryOffset.Length);
+                        return proxy.ReadProcessOffset(new IntPtr(aobOffset + memoryOffset.Start), memoryOffset.Length);
                     }
                 }
             }
@@ -434,7 +433,7 @@ namespace MGS2_MC
                         byte[] processSnapshot = proxy.GetProcessSnapshot();
 
                         int aobOffset = FindUniqueOffset(processSnapshot, arrayOfBytes).First();
-                        proxy.ModifyProcessOffset(aobOffset + memoryOffset.Start, valueToSet, true);
+                        proxy.ModifyProcessOffset(new IntPtr(aobOffset + memoryOffset.Start), valueToSet, true);
                     }
                 }
             }
@@ -583,6 +582,26 @@ namespace MGS2_MC
             _logger.Verbose($"Current game stats: {gameStats}");
 
             return gameStats;
+        }
+
+        public static Difficulty ReadCurrentDifficulty()
+        {
+            int stageOffset = GetStageOffsets().First();
+            byte[] difficultyByte = ReadValueFromMemory(stageOffset + MGS2Offset.CURRENT_DIFFICULTY.Start, MGS2Offset.CURRENT_DIFFICULTY.Length);
+
+            int convertedDifficulty = difficultyByte[0];
+            
+            return (Difficulty) convertedDifficulty;
+        }
+
+        public static GameType ReadGameType()
+        {
+            int stageOffset = GetStageOffsets().First();
+            byte[] gameTypeByte = ReadValueFromMemory(stageOffset + MGS2Offset.CURRENT_GAMETYPE.Start, MGS2Offset.CURRENT_GAMETYPE.Length);
+
+            int convertedGameType = gameTypeByte[0];
+
+            return (GameType)convertedGameType;
         }
 
         public static Constants.PlayableCharacter DetermineActiveCharacter()

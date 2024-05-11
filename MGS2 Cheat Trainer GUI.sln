@@ -5,6 +5,12 @@ VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MGS2 MC Cheat Trainer(WindowsOnly)", "MGS2-MC\MGS2 MC Cheat Trainer(WindowsOnly).csproj", "{EAB87157-1FA5-4D7C-B087-FBEF035E606A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MGS2 GCX Tools", "gcx\MGS2 GCX Tools.csproj", "{B44C0C3F-4B96-43FC-93B9-294D6BF5AC29}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GCX", "GCX", "{26C0F3DD-974B-4442-85D2-22437E5DEBB5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simplified Memory Manager", "..\SimplifiedMemoryManager\Simplified Memory Manager\Simplified Memory Manager.csproj", "{8AF5D83D-8D35-416D-A415-74012C745650}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,9 +27,28 @@ Global
 		{EAB87157-1FA5-4D7C-B087-FBEF035E606A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EAB87157-1FA5-4D7C-B087-FBEF035E606A}.Release|x64.ActiveCfg = Release|x64
 		{EAB87157-1FA5-4D7C-B087-FBEF035E606A}.Release|x64.Build.0 = Release|x64
+		{B44C0C3F-4B96-43FC-93B9-294D6BF5AC29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B44C0C3F-4B96-43FC-93B9-294D6BF5AC29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B44C0C3F-4B96-43FC-93B9-294D6BF5AC29}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B44C0C3F-4B96-43FC-93B9-294D6BF5AC29}.Debug|x64.Build.0 = Debug|Any CPU
+		{B44C0C3F-4B96-43FC-93B9-294D6BF5AC29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B44C0C3F-4B96-43FC-93B9-294D6BF5AC29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B44C0C3F-4B96-43FC-93B9-294D6BF5AC29}.Release|x64.ActiveCfg = Release|Any CPU
+		{B44C0C3F-4B96-43FC-93B9-294D6BF5AC29}.Release|x64.Build.0 = Release|Any CPU
+		{8AF5D83D-8D35-416D-A415-74012C745650}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AF5D83D-8D35-416D-A415-74012C745650}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AF5D83D-8D35-416D-A415-74012C745650}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8AF5D83D-8D35-416D-A415-74012C745650}.Debug|x64.Build.0 = Debug|Any CPU
+		{8AF5D83D-8D35-416D-A415-74012C745650}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AF5D83D-8D35-416D-A415-74012C745650}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AF5D83D-8D35-416D-A415-74012C745650}.Release|x64.ActiveCfg = Release|Any CPU
+		{8AF5D83D-8D35-416D-A415-74012C745650}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B44C0C3F-4B96-43FC-93B9-294D6BF5AC29} = {26C0F3DD-974B-4442-85D2-22437E5DEBB5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DD60E27C-5B25-4B5C-A760-46D82188282D}

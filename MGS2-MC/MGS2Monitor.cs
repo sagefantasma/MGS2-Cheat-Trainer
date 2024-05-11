@@ -311,7 +311,9 @@ namespace MGS2_MC
                     if (!StageNames.MenuStages.StageList.Contains(currentStage))
                     {
                         MGS2MemoryManager.GameStats currentGameStats = MGS2MemoryManager.ReadGameStats();
-                        GUI.StaticGuiReference.UpdateGameStats(currentGameStats);
+                        Difficulty currentDifficulty = MGS2MemoryManager.ReadCurrentDifficulty();
+                        //GameType currentGameType = MGS2MemoryManager.ReadGameType(); //TODO: finish determining how to determine what gametype we're in
+                        GUI.StaticGuiReference.UpdateGameStats(currentGameStats, currentDifficulty);
                     }
                 }
             }

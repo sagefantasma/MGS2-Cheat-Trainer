@@ -1,4 +1,5 @@
 using MGS2_MC.Controllers;
+using MGS2_MC.Helpers;
 using Serilog;
 using SimplifiedMemoryManager;
 using System;
@@ -1362,19 +1363,19 @@ namespace MGS2_MC
         #endregion
 
         #region Stats Tab Functions
-        internal void UpdateGameStats(MGS2MemoryManager.GameStats gameStats)
+        internal void UpdateGameStats(MGS2MemoryManager.GameStats gameStats, Difficulty difficulty)
         {
             if (InvokeRequired)
             {
-                Invoke(new MethodInvoker(() => UpdateGui(gameStats)));
+                Invoke(new MethodInvoker(() => UpdateGui(gameStats, difficulty)));
             }
             else
             {
-                UpdateGui(gameStats);
+                UpdateGui(gameStats, difficulty);
             }
         }
 
-        private void UpdateGui(MGS2MemoryManager.GameStats currentGameStats)
+        private void UpdateGui(MGS2MemoryManager.GameStats currentGameStats, Difficulty difficulty)
         {
             alertCountLabel.Text = currentGameStats.Alerts.ToString();
             continueCountLabel.Text = currentGameStats.Continues.ToString();
@@ -1386,6 +1387,9 @@ namespace MGS2_MC
             saveCountLabel.Text = currentGameStats.Saves.ToString();
             shotsFiredLabel.Text = currentGameStats.Shots.ToString();
             CheckOffSpecialItemsUsed(currentGameStats.SpecialItems);
+
+            Rank projectedRank = Rank.CurrentlyProjectedRank(currentGameStats, difficulty, GameType.TankerPlant); //TODO: fix this when we actually figure out gametype
+            projectedRankLabel.Text = projectedRank.Name;
         }
 
         private static string ParsePlayTime(int playTime)
@@ -1573,6 +1577,12 @@ namespace MGS2_MC
                     MessageBox.Show("WARNING! Use the contents of this tab at your own risk. USE OF THESE CHEATS MAY CRASH YOUR GAME! All of these have worked at some point or another, but may not always. Results not guaranteed.");
                     UserHasBeenWarned = true;
                 }
+                /* Turns out we don't have any cheats that require administrator, but I'm leaving this reference here in case we do.
+                if(!Program.IsRunAsAdministrator())
+                {
+                    Program.RestartInAdminMode();
+                }
+                */
                 CurrentlySelectedObject = null;
             }
             catch(Exception ex) 
@@ -1689,10 +1699,25 @@ namespace MGS2_MC
             if (cheatsBox?.SelectedItem != null)
             {
                 Cheat selectedCheat = (Cheat)cheatsBox.SelectedItem;
+                _logger.Debug($"Trying to toggle cheat: {selectedCheat.Name}");
 
-                toolStripStatusLabel.Text = $"Attempting to enable {selectedCheat.Name}, this may take a long time...";
-                selectedCheat.CheatAction();
-                toolStripStatusLabel.Text = $"Finished trying to enable {selectedCheat.Name}. Did it work?!?";
+                if (!cheatsBox.CheckedItems.Contains(cheatsBox.SelectedItem)) 
+                {
+                    //cheat is enabled already, so now disable it
+                    toolStripStatusLabel.Text = $"Attempting to disable {selectedCheat.Name}, this may take a long time...";
+                    Application.DoEvents();
+                    selectedCheat.CheatAction(false);
+                    toolStripStatusLabel.Text = $"Finished trying to disable {selectedCheat.Name}. Did it work?!?";
+                }
+                else
+                {
+                    //cheat is not yet enabled, so enable it
+                    toolStripStatusLabel.Text = $"Attempting to enable {selectedCheat.Name}, this may take a long time...";
+                    Application.DoEvents();
+                    selectedCheat.CheatAction(true);
+                    toolStripStatusLabel.Text = $"Finished trying to enable {selectedCheat.Name}. Did it work?!?";
+                }
+                _logger.Debug($"Finished trying to toggle cheat: {selectedCheat.Name}");
             }
         }
 
@@ -1708,9 +1733,9 @@ namespace MGS2_MC
                 using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                 {
                     SimplePattern pattern = new SimplePattern(aob);
-                    _memoryLocation = spp.ScanMemoryForPattern(pattern);
+                    _memoryLocation = spp.ScanMemoryForUniquePattern(pattern).ToInt32();
 
-                    byte[] memoryContent = spp.ReadProcessOffset(_memoryLocation, (long)(int.Parse(range[1]) - int.Parse(range[0])));
+                    byte[] memoryContent = spp.ReadProcessOffset(new IntPtr(_memoryLocation), (long)(int.Parse(range[1]) - int.Parse(range[0])));
 
                     memContents.Text = BitConverter.ToString(memoryContent);
                 }
@@ -1733,13 +1758,14 @@ namespace MGS2_MC
                         convertedMem[i] = byte.Parse(oneByte, NumberStyles.HexNumber, CultureInfo.InvariantCulture);
                     }
                     //byte[] convertedMemory = Encoding.Default.GetBytes(memContents.Text.Replace('-',' '));
-                    spp.ModifyProcessOffset(_memoryLocation, convertedMem, true);
+                    spp.ModifyProcessOffset(new IntPtr(_memoryLocation), convertedMem, true);
                 }
             }
         }
 
         private void DisableStatsTrackingCheckBox_CheckedChanged(object sender, EventArgs e)
         {
+            _logger.Debug($"Toggling stat tracking");
             MGS2Monitor.EnableGameStats = !disableStatsTrackingCheckBox.Checked;
         }
     }

@@ -88,6 +88,7 @@ namespace MGS2_MC
         internal static string MGS1SnakeClipping = "DA 01 F4 01 ?? 00 00 00 00 00 00 00 00 00 00 00 27 15 9B";
         internal static byte[] OriginalCameraBytes = { 0x45, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x06, 0x17, 0x42, 0x53, 0x17, 0x06, 0x53, 0x42, 0x44 };
         internal static string Camera = "45 00 00 00 00 00 00 00 06 17 42 53 17 06 53 42 44";
+        internal static string DecrementGripGauge = "66 89 BB 18 04 00 00"; //TODO: add cheat for this :)
 
 
 
@@ -210,6 +211,8 @@ namespace MGS2_MC
 
         #region Calculated From StageInfo
         public static readonly MemoryOffset CURRENT_CHARACTER = new MemoryOffset(-260, -255);
+        public static readonly MemoryOffset CURRENT_MAX_HP = new MemoryOffset(-36, -35);
+        public static readonly MemoryOffset CURRENT_HP = new MemoryOffset(-38, -37);
         public static readonly MemoryOffset CURRENT_STAGE = new MemoryOffset(-244, -238);
         public static readonly MemoryOffset CURRENT_DIFFICULTY = new MemoryOffset(-272);
         public static readonly MemoryOffset NGPLUS_COUNT = new MemoryOffset(-271, -272); //TODO: prove this is valid
@@ -241,6 +244,7 @@ namespace MGS2_MC
         public static readonly MemoryOffset LETTERBOX = new MemoryOffset(-188);
         public static readonly MemoryOffset ZOOM = new MemoryOffset(-192); //todo: verify
         public static readonly MemoryOffset BLACK_SCREEN = new MemoryOffset(-229);
+        public static readonly MemoryOffset NO_GRIP_DMG = new MemoryOffset(0, 6);
         #endregion
 
         #region Calculated from Unknown Finder AoBs    

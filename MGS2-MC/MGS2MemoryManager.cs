@@ -485,7 +485,7 @@ namespace MGS2_MC
             return ReadValueFromMemory(playerMemoryOffsets[0] + valueOffset, sizeToRead);
         }
 
-        public static void UpdateObjectBaseValue(MGS2Object mgs2Object, short value, Constants.PlayableCharacter character)
+        public static void UpdateObjectBaseValue(MGS2Object mgs2Object, ushort value, Constants.PlayableCharacter character)
         {
             switch (mgs2Object)
             {
@@ -516,7 +516,7 @@ namespace MGS2_MC
             }
         }
 
-        public static void UpdateObjectMaxValue(MGS2Object mgs2Object, short count, Constants.PlayableCharacter character)
+        public static void UpdateObjectMaxValue(MGS2Object mgs2Object, ushort count, Constants.PlayableCharacter character)
         {
             switch (mgs2Object)
             {
@@ -531,20 +531,20 @@ namespace MGS2_MC
             }
         }
 
-        public static void ToggleObject(MGS2Object mgs2Object, Constants.PlayableCharacter character)
+        public static void ToggleObject(MGS2Object mgs2Object, Constants.PlayableCharacter character, bool enable = true)
         {
-            int objectOffset = mgs2Object.InventoryOffset;
             _logger.Debug($"Attempting to toggle {mgs2Object.Name} for {character}...");
-            List<int> playerOffsets = GetPlayerOffsets(character);
 
-            foreach(int playerOffset in playerOffsets)
+            if (enable)
+                UpdateObjectBaseValue(mgs2Object, 1, character);
+            else
             {
-                short currentValue = BitConverter.ToInt16(ReadValueFromMemory(playerOffset + objectOffset, sizeof(short)), 0);
-                if (currentValue == -1)
-                    UpdateObjectBaseValue(mgs2Object, 1, character);
+                if (mgs2Object is BasicItem)
+                    UpdateObjectBaseValue(mgs2Object, 0, character);
                 else
-                    UpdateObjectBaseValue(mgs2Object, -1, character);
+                    UpdateObjectBaseValue(mgs2Object, ushort.MaxValue, character);
             }
+            
         }
 
         public static GameStats ReadGameStats()
@@ -602,6 +602,22 @@ namespace MGS2_MC
             int convertedGameType = gameTypeByte[0];
 
             return (GameType)convertedGameType;
+        }
+
+        public static ushort GetCurrentHP()
+        {
+            int stageOffset = GetStageOffsets().First();
+            byte[] currentHpBytes = ReadValueFromMemory(stageOffset + MGS2Offset.CURRENT_HP.Start, MGS2Offset.CURRENT_HP.Length);
+
+            return BitConverter.ToUInt16(currentHpBytes, 0);
+        }
+
+        public static ushort GetCurrentMaxHP()
+        {
+            int stageOffset = GetStageOffsets().First();
+            byte[] currentMaxHpBytes = ReadValueFromMemory(stageOffset + MGS2Offset.CURRENT_MAX_HP.Start, MGS2Offset.CURRENT_MAX_HP.Length);
+
+            return BitConverter.ToUInt16(currentMaxHpBytes, 0);
         }
 
         public static Constants.PlayableCharacter DetermineActiveCharacter()

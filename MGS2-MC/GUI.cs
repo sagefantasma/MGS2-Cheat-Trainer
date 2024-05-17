@@ -1464,6 +1464,52 @@ namespace MGS2_MC
                     break;
             }
         }
+
+        private void DisableStatsTrackingCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            _logger.Debug($"Toggling stat tracking");
+            MGS2Monitor.EnableGameStats = !disableStatsTrackingCheckBox.Checked;
+        }
+
+        private void alertCountButton_Click(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void adjustKillCountButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void rationsUsedButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void continueCountButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void saveCountButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void shotsFiredButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void damageTakenButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void mechsDestroyedButton_Click(object sender, EventArgs e)
+        {
+
+        }
         #endregion
 
         private void StringsListBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -1526,6 +1572,7 @@ namespace MGS2_MC
 
                         GuiObject itemObject = itemGuiObjectList.First(guiObject => guiObject.Name == (StaticGuiReference.itemListBox.SelectedItem as GuiObject).Name);
 
+                        StaticGuiReference._logger.Verbose($"Item {itemObject.Name} selected");
                         StaticGuiReference.itemGroupBox.Controls.Add(itemObject.AssociatedControl);
                         itemObject.AssociatedControl.Visible = true;
                     }));
@@ -1554,6 +1601,7 @@ namespace MGS2_MC
 
                     GuiObject weaponObject = weaponGuiObjectList.First(guiObject => guiObject.Name == (StaticGuiReference.weaponListBox.SelectedItem as GuiObject).Name);
 
+                    StaticGuiReference._logger.Verbose($"Weapon {weaponObject.Name} selected");
                     StaticGuiReference.weaponGroupBox.Controls.Add(weaponObject.AssociatedControl);
                     weaponObject.AssociatedControl.Visible = true;
                 }));
@@ -1574,10 +1622,25 @@ namespace MGS2_MC
                 #if DEBUG
                 UserHasBeenWarned = true;
                 #endif
-                if (CurrentTab == mgs2TabControl.TabPages.IndexOfKey("tabPageCheats") && !UserHasBeenWarned)
+                if (CurrentTab == mgs2TabControl.TabPages.IndexOfKey("tabPageCheats"))
                 {
-                    MessageBox.Show("WARNING! Use the contents of this tab at your own risk. USE OF THESE CHEATS MAY CRASH YOUR GAME! All of these have worked at some point or another, but may not always. Results not guaranteed.");
-                    UserHasBeenWarned = true;
+                    if (!UserHasBeenWarned)
+                    {
+                        MessageBox.Show("WARNING! Use the contents of this tab at your own risk. USE OF THESE CHEATS MAY CRASH YOUR GAME! All of these have worked at some point or another, but may not always. Results not guaranteed.");
+                        UserHasBeenWarned = true;
+                    }
+                    try
+                    {
+                        playerMaxHpUpDown.Value = MGS2MemoryManager.GetCurrentMaxHP();
+                        playerCurrentHpTrackBar.Maximum = (int)playerMaxHpUpDown.Value;
+                        playerCurrentHpTrackBar.Value = MGS2MemoryManager.GetCurrentHP();
+                        Task.Factory.StartNew(LiveUpdateHp);
+                    }
+                    catch(Exception ex)
+                    {
+                        _logger.Error($"Something went wrong with the live HP stats: {ex}");
+                        playerHealthGroupBox.Enabled = false;
+                    }
                 }
                 /* Turns out we don't have any cheats that require administrator, but I'm leaving this reference here in case we do.
                 if(!Program.IsRunAsAdministrator())
@@ -1585,10 +1648,6 @@ namespace MGS2_MC
                     Program.RestartInAdminMode();
                 }
                 */
-                playerMaxHpUpDown.Value = MGS2MemoryManager.GetCurrentMaxHP();
-                playerCurrentHpTrackBar.Maximum = (int) playerMaxHpUpDown.Value;
-                playerCurrentHpTrackBar.Value = MGS2MemoryManager.GetCurrentHP();
-                Task.Factory.StartNew(LiveUpdateHp);
                 CurrentlySelectedObject = null;
             }
             catch(Exception ex) 
@@ -1783,12 +1842,6 @@ namespace MGS2_MC
                     spp.ModifyProcessOffset(new IntPtr(_memoryLocation), convertedMem, true);
                 }
             }
-        }
-
-        private void DisableStatsTrackingCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            _logger.Debug($"Toggling stat tracking");
-            MGS2Monitor.EnableGameStats = !disableStatsTrackingCheckBox.Checked;
         }
     }
 }

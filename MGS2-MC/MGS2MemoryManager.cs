@@ -27,6 +27,18 @@ namespace MGS2_MC
 
         public class GameStats
         {
+            public enum ModifiableStats
+            {
+                Alerts,
+                Continues,
+                DamageTaken,
+                Kills,
+                MechsDestroyed,
+                Rations,
+                Saves,
+                Shots
+            }
+
             public short Alerts;
             public short Continues;
             public short DamageTaken;
@@ -583,6 +595,8 @@ namespace MGS2_MC
 
             return gameStats;
         }
+
+        public static void ChangeGameStat()
 
         public static Difficulty ReadCurrentDifficulty()
         {

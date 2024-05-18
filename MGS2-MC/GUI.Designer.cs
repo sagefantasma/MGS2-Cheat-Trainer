@@ -1444,6 +1444,7 @@
             this.alertCountLabel.Size = new System.Drawing.Size(124, 31);
             this.alertCountLabel.TabIndex = 1;
             this.alertCountLabel.Text = "0";
+            this.alertCountLabel.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // killCountGroupBox
             // 
@@ -1481,6 +1482,7 @@
             this.killCountLabel.Size = new System.Drawing.Size(124, 31);
             this.killCountLabel.TabIndex = 0;
             this.killCountLabel.Text = "0";
+            this.killCountLabel.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // adjustKillCountButton
             // 
@@ -1578,6 +1580,7 @@
             this.rationsUsedLabel.Size = new System.Drawing.Size(124, 31);
             this.rationsUsedLabel.TabIndex = 1;
             this.rationsUsedLabel.Text = "0";
+            this.rationsUsedLabel.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // continuesGroupBox
             // 
@@ -1626,6 +1629,7 @@
             this.continueCountLabel.Size = new System.Drawing.Size(124, 31);
             this.continueCountLabel.TabIndex = 1;
             this.continueCountLabel.Text = "0";
+            this.continueCountLabel.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // specialItemsGroupBox
             // 
@@ -1702,6 +1706,7 @@
             this.saveCountLabel.Size = new System.Drawing.Size(124, 31);
             this.saveCountLabel.TabIndex = 1;
             this.saveCountLabel.Text = "0";
+            this.saveCountLabel.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // shotsFiredGroupBox
             // 
@@ -1750,6 +1755,7 @@
             this.shotsFiredLabel.Size = new System.Drawing.Size(124, 31);
             this.shotsFiredLabel.TabIndex = 1;
             this.shotsFiredLabel.Text = "0";
+            this.shotsFiredLabel.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // projectedRankGroupBox
             // 
@@ -1837,6 +1843,7 @@
             this.damageTakenLabel.Size = new System.Drawing.Size(124, 31);
             this.damageTakenLabel.TabIndex = 1;
             this.damageTakenLabel.Text = "0";
+            this.damageTakenLabel.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // mechDamageGroupBox
             // 
@@ -1884,6 +1891,7 @@
             this.mechsDestroyedLabel.Size = new System.Drawing.Size(124, 31);
             this.mechsDestroyedLabel.TabIndex = 1;
             this.mechsDestroyedLabel.Text = "0";
+            this.mechsDestroyedLabel.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // disableStatsTrackingCheckBox
             // 
@@ -2105,7 +2113,7 @@
             this.playerGripSubTablePanel.Name = "playerGripSubTablePanel";
             this.playerGripSubTablePanel.RowCount = 1;
             this.playerGripSubTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.playerGripSubTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 38F));
+            this.playerGripSubTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
             this.playerGripSubTablePanel.Size = new System.Drawing.Size(267, 37);
             this.playerGripSubTablePanel.TabIndex = 0;
             // 
@@ -2116,12 +2124,12 @@
             this.gripTrackBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gripTrackBar.LargeChange = 250;
             this.gripTrackBar.Location = new System.Drawing.Point(92, 3);
-            this.gripTrackBar.Maximum = 1800;
+            this.gripTrackBar.Maximum = 3600;
             this.gripTrackBar.Name = "gripTrackBar";
             this.gripTrackBar.Size = new System.Drawing.Size(172, 31);
             this.gripTrackBar.TabIndex = 2;
             this.gripTrackBar.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.gripTrackBar.Value = 1800;
+            this.gripTrackBar.Value = 3600;
             // 
             // label49
             // 
@@ -2213,6 +2221,11 @@
             // 
             this.playerMaxHpUpDown.Dock = System.Windows.Forms.DockStyle.Fill;
             this.playerMaxHpUpDown.Location = new System.Drawing.Point(83, 40);
+            this.playerMaxHpUpDown.Maximum = new decimal(new int[] {
+            65534,
+            0,
+            0,
+            0});
             this.playerMaxHpUpDown.Name = "playerMaxHpUpDown";
             this.playerMaxHpUpDown.Size = new System.Drawing.Size(181, 20);
             this.playerMaxHpUpDown.TabIndex = 3;

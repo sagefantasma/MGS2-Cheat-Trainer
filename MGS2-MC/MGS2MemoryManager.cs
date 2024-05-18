@@ -709,6 +709,23 @@ namespace MGS2_MC
             return BitConverter.ToUInt16(currentMaxHpBytes, 0);
         }
 
+        public static ushort GetCurrentGripGauge()
+        {
+            lock (MGS2Monitor.MGS2Process)
+            {
+                using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                {
+                    IntPtr pointerLocation = proxy.ScanMemoryForUniquePattern(new SimplePattern(MGS2AoB.CurrentGripGauge));
+                    byte[] locationPointedTo = proxy.ReadProcessOffset(pointerLocation, 8);
+                    long locationPointedToLong = BitConverter.ToInt64(locationPointedTo, 0);
+                    locationPointedToLong += MGS2Offset.CURRENT_GRIP_GAUGE.Start; //add the offset to find the grip gauge
+                    byte[] gripGauge = proxy.GetMemoryFromPointer(new IntPtr(locationPointedToLong), MGS2Offset.CURRENT_GRIP_GAUGE.Length);
+
+                    return BitConverter.ToUInt16(gripGauge, 0);
+                }
+            }
+        }
+
         public static Constants.PlayableCharacter DetermineActiveCharacter()
         {
             string characterCode = GetCharacterCode();

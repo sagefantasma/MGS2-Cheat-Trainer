@@ -89,6 +89,7 @@ namespace MGS2_MC
         internal static byte[] OriginalCameraBytes = { 0x45, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x06, 0x17, 0x42, 0x53, 0x17, 0x06, 0x53, 0x42, 0x44 };
         internal static string Camera = "45 00 00 00 00 00 00 00 06 17 42 53 17 06 53 42 44";
         internal static string DecrementGripGauge = "66 89 BB 18 04 00 00"; //TODO: add cheat for this :)
+        internal static string CurrentGripGauge = "B0 4B 74 85 1E 02 00 00";
 
 
 
@@ -245,6 +246,10 @@ namespace MGS2_MC
         public static readonly MemoryOffset ZOOM = new MemoryOffset(-192); //todo: verify
         public static readonly MemoryOffset BLACK_SCREEN = new MemoryOffset(-229);
         public static readonly MemoryOffset NO_GRIP_DMG = new MemoryOffset(0, 6);
+        #endregion
+
+        #region Calculated From CurrentGripGauge
+        public static readonly MemoryOffset CURRENT_GRIP_GAUGE = new MemoryOffset(136, 137); //TODO: verify
         #endregion
 
         #region Calculated from Unknown Finder AoBs    

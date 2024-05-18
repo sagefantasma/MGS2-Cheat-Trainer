@@ -1712,10 +1712,14 @@ namespace MGS2_MC
                     }
                     try
                     {
-                        playerMaxHpUpDown.Value = MGS2MemoryManager.GetCurrentMaxHP();
-                        playerCurrentHpTrackBar.Maximum = (int)playerMaxHpUpDown.Value;
-                        playerCurrentHpTrackBar.Value = MGS2MemoryManager.GetCurrentHP();
-                        Task.Factory.StartNew(LiveUpdateHp);
+                        if (MGS2Monitor.EnableGameStats)
+                        {
+                            playerMaxHpUpDown.Value = MGS2MemoryManager.GetCurrentMaxHP();
+                            playerCurrentHpTrackBar.Maximum = (int)playerMaxHpUpDown.Value;
+                            playerCurrentHpTrackBar.Value = MGS2MemoryManager.GetCurrentHP();
+                            gripTrackBar.Value = MGS2MemoryManager.GetCurrentGripGauge();
+                            Task.Factory.StartNew(LiveUpdateHp);
+                        }
                     }
                     catch(Exception ex)
                     {
@@ -1744,11 +1748,14 @@ namespace MGS2_MC
             {
                 if (InvokeRequired)
                 {
-                    Invoke(new MethodInvoker(() => playerCurrentHpTrackBar.Value = MGS2MemoryManager.GetCurrentHP()));
+                    Invoke(new MethodInvoker(() => { playerCurrentHpTrackBar.Value = MGS2MemoryManager.GetCurrentHP();
+                        gripTrackBar.Value = MGS2MemoryManager.GetCurrentGripGauge();
+                    }));
                 }
                 else
                 {
                     playerCurrentHpTrackBar.Value = MGS2MemoryManager.GetCurrentHP();
+                    gripTrackBar.Value = MGS2MemoryManager.GetCurrentGripGauge();
                 }
                 Thread.Sleep(333);
             }

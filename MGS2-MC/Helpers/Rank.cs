@@ -38,17 +38,17 @@ namespace MGS2_MC.Helpers
             {
                 case Difficulty.EuropeanExtreme:
                 case Difficulty.Extreme:
-                    projectedRank = MGS2ExtremeRanks.FirstOrDefault(rank => rank.AreStatsWithinRankRequirements(currentStats));
+                    projectedRank = MGS2ExtremeRanks.FirstOrDefault(rank => rank.AreStatsWithinRankRequirements(currentStats) == true);
                     break;
                 case Difficulty.Hard:
-                    projectedRank = MGS2HardRanks.FirstOrDefault(rank => rank.AreStatsWithinRankRequirements(currentStats));
+                    projectedRank = MGS2HardRanks.FirstOrDefault(rank => rank.AreStatsWithinRankRequirements(currentStats) == true);
                     break;
                 case Difficulty.Normal:
-                    projectedRank = MGS2NormalRanks.FirstOrDefault(rank => rank.AreStatsWithinRankRequirements(currentStats));
+                    projectedRank = MGS2NormalRanks.FirstOrDefault(rank => rank.AreStatsWithinRankRequirements(currentStats) == true);
                     break;
                 case Difficulty.Easy:
                 case Difficulty.VeryEasy:
-                    projectedRank = MGS2EasyRanks.FirstOrDefault(rank => rank.AreStatsWithinRankRequirements(currentStats));
+                    projectedRank = MGS2EasyRanks.FirstOrDefault(rank => rank.AreStatsWithinRankRequirements(currentStats) == true);
                     break;
             }
 
@@ -57,12 +57,24 @@ namespace MGS2_MC.Helpers
 
         private bool AreStatsWithinRankRequirements(MGS2MemoryManager.GameStats stats)
         {
-            foreach(PropertyInfo member in typeof(MGS2MemoryManager.GameStats).GetProperties())
+            foreach(FieldInfo member in typeof(MGS2MemoryManager.GameStats).GetFields())
             {
-                if((int) member.GetValue(stats) < (int) member.GetValue(MinimumStats))
-                    return false;
-                if ((int)member.GetValue(stats) >= (int)member.GetValue(MaximumStats))
-                    return false;
+                var test = member.FieldType;
+                if(member.FieldType == typeof(short))
+                {
+                    if ((short)member.GetValue(stats) < (short)member.GetValue(MinimumStats))
+                        return false;
+                    if ((short)member.GetValue(stats) > (short)member.GetValue(MaximumStats))
+                        return false;
+                }
+                else if(member.FieldType == typeof(int))
+                {
+                    if ((int)member.GetValue(stats) < (int)member.GetValue(MinimumStats))
+                        return false;
+                    if ((int)member.GetValue(stats) > (int)member.GetValue(MaximumStats))
+                        return false;
+                }
+                
             }
 
             return true;
@@ -75,7 +87,7 @@ namespace MGS2_MC.Helpers
         //taken from: https://metalgear.fandom.com/wiki/Codename_(gameplay)#Requirements -- not the best source, but it'll do.
         public static List<Rank> MGS2ExtremeRanks = new List<Rank> { RankRequirements.BigBoss, RankRequirements.FoxExtreme, RankRequirements.DobermanExtreme, RankRequirements.HoundExtreme };
         public static List<Rank> MGS2HardRanks = new List<Rank> { RankRequirements.FoxHard, RankRequirements.DobermanHard, RankRequirements.HoundHard };
-        public static List<Rank> MGS2NormalRanks = new List<Rank> { RankRequirements.DobermanNormal, RankRequirements.HoundEasy };
+        public static List<Rank> MGS2NormalRanks = new List<Rank> { RankRequirements.DobermanNormal, RankRequirements.HoundNormal };
         public static List<Rank> MGS2EasyRanks = new List<Rank> { RankRequirements.HoundEasy };
         public static List<Rank> MGS2DifficultyAgnosticRanks = new List<Rank>(); //in case we ever decide to implement more
     }
@@ -143,7 +155,7 @@ namespace MGS2_MC.Helpers
                 PlayTime = 648000,
                 Saves = 16,
                 Shots = short.MaxValue,
-                SpecialItems = 0 //can use radar
+                SpecialItems = 0x2000 //can use radar
             }
         };
 
@@ -174,7 +186,7 @@ namespace MGS2_MC.Helpers
                 PlayTime = 648900,
                 Saves = short.MaxValue,
                 Shots = short.MaxValue,
-                SpecialItems = 0 //can use radar
+                SpecialItems = 0x2000 //can use radar
             }
         };
 
@@ -205,7 +217,7 @@ namespace MGS2_MC.Helpers
                 PlayTime = 649800,
                 Saves = short.MaxValue,
                 Shots = short.MaxValue,
-                SpecialItems = 0 //radar can be used
+                SpecialItems = 0x2000 //radar can be used
             }
         };
         #endregion
@@ -256,7 +268,7 @@ namespace MGS2_MC.Helpers
                 Rations = 0,
                 Saves = 8,
                 Shots = 0,
-                SpecialItems = 0 //radar can be used
+                SpecialItems = 0
             },
             MaximumStats = new MGS2MemoryManager.GameStats
             {
@@ -269,7 +281,7 @@ namespace MGS2_MC.Helpers
                 PlayTime = 648000,
                 Saves = 16,
                 Shots = short.MaxValue,
-                SpecialItems = 0
+                SpecialItems = 0x2000 //radar can be used
             }
         };
 
@@ -300,7 +312,7 @@ namespace MGS2_MC.Helpers
                 PlayTime = 648900,
                 Saves = short.MaxValue,
                 Shots = short.MaxValue,
-                SpecialItems = 0 //radar can be used
+                SpecialItems = 0x2000 //radar can be used
             }
         };
         #endregion
@@ -364,7 +376,7 @@ namespace MGS2_MC.Helpers
                 PlayTime = 648000,
                 Saves = 16,
                 Shots = short.MaxValue,
-                SpecialItems = 0 //radar can be used
+                SpecialItems = 0x2000 //radar can be used
             }
         };
         #endregion

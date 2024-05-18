@@ -27,6 +27,18 @@ namespace MGS2_MC
 
         public class GameStats
         {
+            public enum ModifiableStats
+            {
+                Alerts,
+                Continues,
+                DamageTaken,
+                Kills,
+                MechsDestroyed,
+                Rations,
+                Saves,
+                Shots
+            }
+
             public short Alerts;
             public short Continues;
             public short DamageTaken;
@@ -400,6 +412,46 @@ namespace MGS2_MC
             }
         }
 
+        private static void SetKnownOffsetValue(int offset, byte[] valueToSet)
+        {
+            try
+            {
+                lock (MGS2Monitor.MGS2Process)
+                {
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    {
+                        _logger.Information($"Setting known offset value at offset: {offset} to {BitConverter.ToString(valueToSet)}...");
+                        proxy.ModifyProcessOffset(new IntPtr(offset), valueToSet, true);
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                _logger.Error($"Failed to set memory at offset {offset}: {e}");
+                throw new AggregateException($"Could not set memory at offset {offset}", e);
+            }
+        }
+
+        private static void SetKnownOffsetValue(int offset, byte valueToSet)
+        {
+            try
+            {
+                lock (MGS2Monitor.MGS2Process)
+                {
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    {
+                        _logger.Information($"Setting known offset value at offset: {offset} to {valueToSet}...");
+                        proxy.ModifyProcessOffset(new IntPtr(offset), valueToSet, true);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Failed to set memory at offset {offset}: {e}");
+                throw new AggregateException($"Could not set memory at offset {offset}", e);
+            }
+        }
+
         private static byte[] ReadAoBOffsetValue(byte[] arrayOfBytes, MemoryOffset memoryOffset)
         {
             try
@@ -485,7 +537,7 @@ namespace MGS2_MC
             return ReadValueFromMemory(playerMemoryOffsets[0] + valueOffset, sizeToRead);
         }
 
-        public static void UpdateObjectBaseValue(MGS2Object mgs2Object, short value, Constants.PlayableCharacter character)
+        public static void UpdateObjectBaseValue(MGS2Object mgs2Object, ushort value, Constants.PlayableCharacter character)
         {
             switch (mgs2Object)
             {
@@ -516,7 +568,7 @@ namespace MGS2_MC
             }
         }
 
-        public static void UpdateObjectMaxValue(MGS2Object mgs2Object, short count, Constants.PlayableCharacter character)
+        public static void UpdateObjectMaxValue(MGS2Object mgs2Object, ushort count, Constants.PlayableCharacter character)
         {
             switch (mgs2Object)
             {
@@ -531,20 +583,20 @@ namespace MGS2_MC
             }
         }
 
-        public static void ToggleObject(MGS2Object mgs2Object, Constants.PlayableCharacter character)
+        public static void ToggleObject(MGS2Object mgs2Object, Constants.PlayableCharacter character, bool enable = true)
         {
-            int objectOffset = mgs2Object.InventoryOffset;
             _logger.Debug($"Attempting to toggle {mgs2Object.Name} for {character}...");
-            List<int> playerOffsets = GetPlayerOffsets(character);
 
-            foreach(int playerOffset in playerOffsets)
+            if (enable)
+                UpdateObjectBaseValue(mgs2Object, 1, character);
+            else
             {
-                short currentValue = BitConverter.ToInt16(ReadValueFromMemory(playerOffset + objectOffset, sizeof(short)), 0);
-                if (currentValue == -1)
-                    UpdateObjectBaseValue(mgs2Object, 1, character);
+                if (mgs2Object is BasicItem)
+                    UpdateObjectBaseValue(mgs2Object, 0, character);
                 else
-                    UpdateObjectBaseValue(mgs2Object, -1, character);
+                    UpdateObjectBaseValue(mgs2Object, ushort.MaxValue, character);
             }
+            
         }
 
         public static GameStats ReadGameStats()
@@ -584,6 +636,43 @@ namespace MGS2_MC
             return gameStats;
         }
 
+        public static void ChangeGameStat(GameStats.ModifiableStats gameStat, short value)
+        {
+            int stageOffset = GetStageOffsets().First();
+            MemoryOffset gameStatOffset;
+            switch (gameStat)
+            {
+                case GameStats.ModifiableStats.Alerts:
+                    gameStatOffset = MGS2Offset.ALERT_COUNT;
+                    break;
+                case GameStats.ModifiableStats.Continues:
+                    gameStatOffset = MGS2Offset.CONTINUE_COUNT;
+                    break;
+                case GameStats.ModifiableStats.DamageTaken:
+                    gameStatOffset = MGS2Offset.DAMAGE_TAKEN;
+                    break;
+                case GameStats.ModifiableStats.Kills:
+                    gameStatOffset = MGS2Offset.KILL_COUNT;
+                    break;
+                case GameStats.ModifiableStats.MechsDestroyed:
+                    gameStatOffset = MGS2Offset.MECHS_DESTROYED;
+                    break;
+                case GameStats.ModifiableStats.Rations:
+                    gameStatOffset = MGS2Offset.RATIONS_USED;
+                    break;
+                case GameStats.ModifiableStats.Saves:
+                    gameStatOffset = MGS2Offset.SAVE_COUNT;
+                    break;
+                case GameStats.ModifiableStats.Shots:
+                    gameStatOffset = MGS2Offset.SHOT_COUNT;
+                    break;
+                default:
+                    throw new Exception("You must provide a valid game stat to modify");
+            }
+
+            SetKnownOffsetValue(stageOffset + gameStatOffset.Start, (byte) value);
+        }
+
         public static Difficulty ReadCurrentDifficulty()
         {
             int stageOffset = GetStageOffsets().First();
@@ -602,6 +691,39 @@ namespace MGS2_MC
             int convertedGameType = gameTypeByte[0];
 
             return (GameType)convertedGameType;
+        }
+
+        public static ushort GetCurrentHP()
+        {
+            int stageOffset = GetStageOffsets().First();
+            byte[] currentHpBytes = ReadValueFromMemory(stageOffset + MGS2Offset.CURRENT_HP.Start, MGS2Offset.CURRENT_HP.Length);
+
+            return BitConverter.ToUInt16(currentHpBytes, 0);
+        }
+
+        public static ushort GetCurrentMaxHP()
+        {
+            int stageOffset = GetStageOffsets().First();
+            byte[] currentMaxHpBytes = ReadValueFromMemory(stageOffset + MGS2Offset.CURRENT_MAX_HP.Start, MGS2Offset.CURRENT_MAX_HP.Length);
+
+            return BitConverter.ToUInt16(currentMaxHpBytes, 0);
+        }
+
+        public static ushort GetCurrentGripGauge()
+        {
+            lock (MGS2Monitor.MGS2Process)
+            {
+                using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                {
+                    IntPtr pointerLocation = proxy.ScanMemoryForUniquePattern(new SimplePattern(MGS2AoB.CurrentGripGauge));
+                    byte[] locationPointedTo = proxy.ReadProcessOffset(pointerLocation, 8);
+                    long locationPointedToLong = BitConverter.ToInt64(locationPointedTo, 0);
+                    locationPointedToLong += MGS2Offset.CURRENT_GRIP_GAUGE.Start; //add the offset to find the grip gauge
+                    byte[] gripGauge = proxy.GetMemoryFromPointer(new IntPtr(locationPointedToLong), MGS2Offset.CURRENT_GRIP_GAUGE.Length);
+
+                    return BitConverter.ToUInt16(gripGauge, 0);
+                }
+            }
         }
 
         public static Constants.PlayableCharacter DetermineActiveCharacter()

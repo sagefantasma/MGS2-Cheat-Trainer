@@ -67,10 +67,10 @@
             this.alertsGroupBox = new System.Windows.Forms.GroupBox();
             this.alertsTablePanel = new System.Windows.Forms.TableLayoutPanel();
             this.alertCountButton = new System.Windows.Forms.Button();
-            this.alertCountLabel = new System.Windows.Forms.Label();
+            this.alertCountLabel = new System.Windows.Forms.TextBox();
             this.killCountGroupBox = new System.Windows.Forms.GroupBox();
             this.killCountTablePanel = new System.Windows.Forms.TableLayoutPanel();
-            this.killCountLabel = new System.Windows.Forms.Label();
+            this.killCountLabel = new System.Windows.Forms.TextBox();
             this.adjustKillCountButton = new System.Windows.Forms.Button();
             this.playTimeGroupBox = new System.Windows.Forms.GroupBox();
             this.playTimeTablePanel = new System.Windows.Forms.TableLayoutPanel();
@@ -78,32 +78,32 @@
             this.rationsUsedGroupBox = new System.Windows.Forms.GroupBox();
             this.rationsUsedTablePanel = new System.Windows.Forms.TableLayoutPanel();
             this.rationsUsedButton = new System.Windows.Forms.Button();
-            this.rationsUsedLabel = new System.Windows.Forms.Label();
+            this.rationsUsedLabel = new System.Windows.Forms.TextBox();
             this.continuesGroupBox = new System.Windows.Forms.GroupBox();
             this.continueCountTablePanel = new System.Windows.Forms.TableLayoutPanel();
             this.continueCountButton = new System.Windows.Forms.Button();
-            this.continueCountLabel = new System.Windows.Forms.Label();
+            this.continueCountLabel = new System.Windows.Forms.TextBox();
             this.specialItemsGroupBox = new System.Windows.Forms.GroupBox();
             this.specialItemsCheckedListBox = new System.Windows.Forms.CheckedListBox();
             this.savesGroupBox = new System.Windows.Forms.GroupBox();
             this.saveTablePanel = new System.Windows.Forms.TableLayoutPanel();
             this.saveCountButton = new System.Windows.Forms.Button();
-            this.saveCountLabel = new System.Windows.Forms.Label();
+            this.saveCountLabel = new System.Windows.Forms.TextBox();
             this.shotsFiredGroupBox = new System.Windows.Forms.GroupBox();
             this.shotsFiredTablePanel = new System.Windows.Forms.TableLayoutPanel();
             this.shotsFiredButton = new System.Windows.Forms.Button();
-            this.shotsFiredLabel = new System.Windows.Forms.Label();
+            this.shotsFiredLabel = new System.Windows.Forms.TextBox();
             this.projectedRankGroupBox = new System.Windows.Forms.GroupBox();
             this.projectedRankTable = new System.Windows.Forms.TableLayoutPanel();
             this.projectedRankLabel = new System.Windows.Forms.Label();
             this.damageTakenGroupBox = new System.Windows.Forms.GroupBox();
             this.damageTakenTablePanel = new System.Windows.Forms.TableLayoutPanel();
             this.damageTakenButton = new System.Windows.Forms.Button();
-            this.damageTakenLabel = new System.Windows.Forms.Label();
+            this.damageTakenLabel = new System.Windows.Forms.TextBox();
             this.mechDamageGroupBox = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.mechsDestroyedButton = new System.Windows.Forms.Button();
-            this.mechsDestroyedLabel = new System.Windows.Forms.Label();
+            this.mechsDestroyedLabel = new System.Windows.Forms.TextBox();
             this.disableStatsTrackingCheckBox = new System.Windows.Forms.CheckBox();
             this.tabPageStrings = new System.Windows.Forms.TabPage();
             this.stringTabLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
@@ -1053,7 +1053,7 @@
             this.numericUpDown1.Location = new System.Drawing.Point(3, 77);
             this.numericUpDown1.Margin = new System.Windows.Forms.Padding(3, 1, 0, 0);
             this.numericUpDown1.Maximum = new decimal(new int[] {
-            32767,
+            65534,
             0,
             0,
             0});
@@ -1129,7 +1129,7 @@
             this.numericUpDown2.Location = new System.Drawing.Point(3, 77);
             this.numericUpDown2.Margin = new System.Windows.Forms.Padding(3, 1, 0, 0);
             this.numericUpDown2.Maximum = new decimal(new int[] {
-            32767,
+            65534,
             0,
             0,
             0});
@@ -1262,7 +1262,7 @@
             this.numericUpDown3.Location = new System.Drawing.Point(3, 77);
             this.numericUpDown3.Margin = new System.Windows.Forms.Padding(3, 1, 0, 0);
             this.numericUpDown3.Maximum = new decimal(new int[] {
-            32767,
+            65534,
             0,
             0,
             0});
@@ -1338,7 +1338,7 @@
             this.numericUpDown4.Location = new System.Drawing.Point(3, 77);
             this.numericUpDown4.Margin = new System.Windows.Forms.Padding(3, 1, 0, 0);
             this.numericUpDown4.Maximum = new decimal(new int[] {
-            32767,
+            65534,
             0,
             0,
             0});
@@ -1426,25 +1426,25 @@
             // alertCountButton
             // 
             this.alertCountButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.alertCountButton.Enabled = false;
             this.alertCountButton.Location = new System.Drawing.Point(3, 49);
             this.alertCountButton.Name = "alertCountButton";
             this.alertCountButton.Size = new System.Drawing.Size(124, 25);
             this.alertCountButton.TabIndex = 2;
-            this.alertCountButton.Text = "Adjust Alert Count";
+            this.alertCountButton.Text = "Adjust Alerts";
             this.alertCountButton.UseVisualStyleBackColor = true;
+            this.alertCountButton.Click += new System.EventHandler(this.alertCountButton_Click);
             // 
             // alertCountLabel
             // 
-            this.alertCountLabel.AutoSize = true;
             this.alertCountLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.alertCountLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.alertCountLabel.Location = new System.Drawing.Point(3, 0);
+            this.alertCountLabel.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.alertCountLabel.Name = "alertCountLabel";
-            this.alertCountLabel.Size = new System.Drawing.Size(124, 46);
+            this.alertCountLabel.Size = new System.Drawing.Size(124, 31);
             this.alertCountLabel.TabIndex = 1;
             this.alertCountLabel.Text = "0";
-            this.alertCountLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.alertCountLabel.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // killCountGroupBox
             // 
@@ -1474,26 +1474,26 @@
             // 
             // killCountLabel
             // 
-            this.killCountLabel.AutoSize = true;
             this.killCountLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.killCountLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.killCountLabel.Location = new System.Drawing.Point(3, 0);
+            this.killCountLabel.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.killCountLabel.Name = "killCountLabel";
-            this.killCountLabel.Size = new System.Drawing.Size(124, 46);
+            this.killCountLabel.Size = new System.Drawing.Size(124, 31);
             this.killCountLabel.TabIndex = 0;
             this.killCountLabel.Text = "0";
-            this.killCountLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.killCountLabel.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // adjustKillCountButton
             // 
             this.adjustKillCountButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.adjustKillCountButton.Enabled = false;
             this.adjustKillCountButton.Location = new System.Drawing.Point(3, 49);
             this.adjustKillCountButton.Name = "adjustKillCountButton";
             this.adjustKillCountButton.Size = new System.Drawing.Size(124, 25);
             this.adjustKillCountButton.TabIndex = 1;
-            this.adjustKillCountButton.Text = "Adjust Kill Count";
+            this.adjustKillCountButton.Text = "Adjust Kills";
             this.adjustKillCountButton.UseVisualStyleBackColor = true;
+            this.adjustKillCountButton.Click += new System.EventHandler(this.adjustKillCountButton_Click);
             // 
             // playTimeGroupBox
             // 
@@ -1562,25 +1562,25 @@
             // rationsUsedButton
             // 
             this.rationsUsedButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rationsUsedButton.Enabled = false;
             this.rationsUsedButton.Location = new System.Drawing.Point(3, 49);
             this.rationsUsedButton.Name = "rationsUsedButton";
             this.rationsUsedButton.Size = new System.Drawing.Size(124, 25);
             this.rationsUsedButton.TabIndex = 2;
             this.rationsUsedButton.Text = "Adjust Rations Used";
             this.rationsUsedButton.UseVisualStyleBackColor = true;
+            this.rationsUsedButton.Click += new System.EventHandler(this.rationsUsedButton_Click);
             // 
             // rationsUsedLabel
             // 
-            this.rationsUsedLabel.AutoSize = true;
             this.rationsUsedLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rationsUsedLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rationsUsedLabel.Location = new System.Drawing.Point(3, 0);
+            this.rationsUsedLabel.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.rationsUsedLabel.Name = "rationsUsedLabel";
-            this.rationsUsedLabel.Size = new System.Drawing.Size(124, 46);
+            this.rationsUsedLabel.Size = new System.Drawing.Size(124, 31);
             this.rationsUsedLabel.TabIndex = 1;
             this.rationsUsedLabel.Text = "0";
-            this.rationsUsedLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.rationsUsedLabel.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // continuesGroupBox
             // 
@@ -1611,25 +1611,25 @@
             // continueCountButton
             // 
             this.continueCountButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.continueCountButton.Enabled = false;
             this.continueCountButton.Location = new System.Drawing.Point(3, 49);
             this.continueCountButton.Name = "continueCountButton";
             this.continueCountButton.Size = new System.Drawing.Size(124, 25);
             this.continueCountButton.TabIndex = 2;
-            this.continueCountButton.Text = "Adjust Continue Count";
+            this.continueCountButton.Text = "Adjust Continues";
             this.continueCountButton.UseVisualStyleBackColor = true;
+            this.continueCountButton.Click += new System.EventHandler(this.continueCountButton_Click);
             // 
             // continueCountLabel
             // 
-            this.continueCountLabel.AutoSize = true;
             this.continueCountLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.continueCountLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.continueCountLabel.Location = new System.Drawing.Point(3, 0);
+            this.continueCountLabel.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.continueCountLabel.Name = "continueCountLabel";
-            this.continueCountLabel.Size = new System.Drawing.Size(124, 46);
+            this.continueCountLabel.Size = new System.Drawing.Size(124, 31);
             this.continueCountLabel.TabIndex = 1;
             this.continueCountLabel.Text = "0";
-            this.continueCountLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.continueCountLabel.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // specialItemsGroupBox
             // 
@@ -1650,8 +1650,11 @@
             "Bandana",
             "Radar",
             "Stealth",
-            "Wig"});
+            "Infinity Wig",
+            "Blue Wig",
+            "Orange Wig"});
             this.specialItemsCheckedListBox.Location = new System.Drawing.Point(3, 16);
+            this.specialItemsCheckedListBox.MultiColumn = true;
             this.specialItemsCheckedListBox.Name = "specialItemsCheckedListBox";
             this.specialItemsCheckedListBox.Size = new System.Drawing.Size(274, 77);
             this.specialItemsCheckedListBox.TabIndex = 0;
@@ -1685,25 +1688,25 @@
             // saveCountButton
             // 
             this.saveCountButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.saveCountButton.Enabled = false;
             this.saveCountButton.Location = new System.Drawing.Point(3, 49);
             this.saveCountButton.Name = "saveCountButton";
             this.saveCountButton.Size = new System.Drawing.Size(124, 25);
             this.saveCountButton.TabIndex = 2;
-            this.saveCountButton.Text = "Adjust Save Count";
+            this.saveCountButton.Text = "Adjust Saves";
             this.saveCountButton.UseVisualStyleBackColor = true;
+            this.saveCountButton.Click += new System.EventHandler(this.saveCountButton_Click);
             // 
             // saveCountLabel
             // 
-            this.saveCountLabel.AutoSize = true;
             this.saveCountLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.saveCountLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.saveCountLabel.Location = new System.Drawing.Point(3, 0);
+            this.saveCountLabel.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.saveCountLabel.Name = "saveCountLabel";
-            this.saveCountLabel.Size = new System.Drawing.Size(124, 46);
+            this.saveCountLabel.Size = new System.Drawing.Size(124, 31);
             this.saveCountLabel.TabIndex = 1;
             this.saveCountLabel.Text = "0";
-            this.saveCountLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.saveCountLabel.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // shotsFiredGroupBox
             // 
@@ -1734,25 +1737,25 @@
             // shotsFiredButton
             // 
             this.shotsFiredButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.shotsFiredButton.Enabled = false;
             this.shotsFiredButton.Location = new System.Drawing.Point(3, 49);
             this.shotsFiredButton.Name = "shotsFiredButton";
             this.shotsFiredButton.Size = new System.Drawing.Size(124, 25);
             this.shotsFiredButton.TabIndex = 2;
             this.shotsFiredButton.Text = "Adjust Shots Fired";
             this.shotsFiredButton.UseVisualStyleBackColor = true;
+            this.shotsFiredButton.Click += new System.EventHandler(this.shotsFiredButton_Click);
             // 
             // shotsFiredLabel
             // 
-            this.shotsFiredLabel.AutoSize = true;
             this.shotsFiredLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.shotsFiredLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.shotsFiredLabel.Location = new System.Drawing.Point(3, 0);
+            this.shotsFiredLabel.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.shotsFiredLabel.Name = "shotsFiredLabel";
-            this.shotsFiredLabel.Size = new System.Drawing.Size(124, 46);
+            this.shotsFiredLabel.Size = new System.Drawing.Size(124, 31);
             this.shotsFiredLabel.TabIndex = 1;
             this.shotsFiredLabel.Text = "0";
-            this.shotsFiredLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.shotsFiredLabel.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // projectedRankGroupBox
             // 
@@ -1822,25 +1825,25 @@
             // damageTakenButton
             // 
             this.damageTakenButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.damageTakenButton.Enabled = false;
             this.damageTakenButton.Location = new System.Drawing.Point(3, 49);
             this.damageTakenButton.Name = "damageTakenButton";
             this.damageTakenButton.Size = new System.Drawing.Size(124, 25);
             this.damageTakenButton.TabIndex = 2;
             this.damageTakenButton.Text = "Adjust Damage Taken";
             this.damageTakenButton.UseVisualStyleBackColor = true;
+            this.damageTakenButton.Click += new System.EventHandler(this.damageTakenButton_Click);
             // 
             // damageTakenLabel
             // 
-            this.damageTakenLabel.AutoSize = true;
             this.damageTakenLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.damageTakenLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.damageTakenLabel.Location = new System.Drawing.Point(3, 0);
+            this.damageTakenLabel.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.damageTakenLabel.Name = "damageTakenLabel";
-            this.damageTakenLabel.Size = new System.Drawing.Size(124, 46);
+            this.damageTakenLabel.Size = new System.Drawing.Size(124, 31);
             this.damageTakenLabel.TabIndex = 1;
             this.damageTakenLabel.Text = "0";
-            this.damageTakenLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.damageTakenLabel.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // mechDamageGroupBox
             // 
@@ -1870,25 +1873,25 @@
             // mechsDestroyedButton
             // 
             this.mechsDestroyedButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mechsDestroyedButton.Enabled = false;
             this.mechsDestroyedButton.Location = new System.Drawing.Point(3, 49);
             this.mechsDestroyedButton.Name = "mechsDestroyedButton";
             this.mechsDestroyedButton.Size = new System.Drawing.Size(124, 25);
             this.mechsDestroyedButton.TabIndex = 2;
             this.mechsDestroyedButton.Text = "Adjust Mech Damage";
             this.mechsDestroyedButton.UseVisualStyleBackColor = true;
+            this.mechsDestroyedButton.Click += new System.EventHandler(this.mechsDestroyedButton_Click);
             // 
             // mechsDestroyedLabel
             // 
-            this.mechsDestroyedLabel.AutoSize = true;
             this.mechsDestroyedLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mechsDestroyedLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.mechsDestroyedLabel.Location = new System.Drawing.Point(3, 0);
+            this.mechsDestroyedLabel.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.mechsDestroyedLabel.Name = "mechsDestroyedLabel";
-            this.mechsDestroyedLabel.Size = new System.Drawing.Size(124, 46);
+            this.mechsDestroyedLabel.Size = new System.Drawing.Size(124, 31);
             this.mechsDestroyedLabel.TabIndex = 1;
             this.mechsDestroyedLabel.Text = "0";
-            this.mechsDestroyedLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.mechsDestroyedLabel.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // disableStatsTrackingCheckBox
             // 
@@ -2121,12 +2124,12 @@
             this.gripTrackBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gripTrackBar.LargeChange = 250;
             this.gripTrackBar.Location = new System.Drawing.Point(92, 3);
-            this.gripTrackBar.Maximum = 1800;
+            this.gripTrackBar.Maximum = 3600;
             this.gripTrackBar.Name = "gripTrackBar";
             this.gripTrackBar.Size = new System.Drawing.Size(172, 31);
             this.gripTrackBar.TabIndex = 2;
             this.gripTrackBar.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.gripTrackBar.Value = 1800;
+            this.gripTrackBar.Value = 3600;
             // 
             // label49
             // 
@@ -2218,6 +2221,11 @@
             // 
             this.playerMaxHpUpDown.Dock = System.Windows.Forms.DockStyle.Fill;
             this.playerMaxHpUpDown.Location = new System.Drawing.Point(83, 40);
+            this.playerMaxHpUpDown.Maximum = new decimal(new int[] {
+            65534,
+            0,
+            0,
+            0});
             this.playerMaxHpUpDown.Name = "playerMaxHpUpDown";
             this.playerMaxHpUpDown.Size = new System.Drawing.Size(181, 20);
             this.playerMaxHpUpDown.TabIndex = 3;
@@ -2333,6 +2341,7 @@
             // 
             // statusStrip
             // 
+            this.statusStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel});
             this.statusStrip.Location = new System.Drawing.Point(0, 464);
@@ -8184,11 +8193,13 @@
             // 
             // mainMenuStrip
             // 
+            this.mainMenuStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.mainMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.optionsMenuItem,
             this.helpMenuItem});
             this.mainMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.mainMenuStrip.Name = "mainMenuStrip";
+            this.mainMenuStrip.Padding = new System.Windows.Forms.Padding(4, 1, 0, 1);
             this.mainMenuStrip.Size = new System.Drawing.Size(584, 24);
             this.mainMenuStrip.TabIndex = 1;
             // 
@@ -8199,7 +8210,7 @@
             this.launchMgs2MenuItem});
             this.optionsMenuItem.Name = "optionsMenuItem";
             this.optionsMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.O)));
-            this.optionsMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.optionsMenuItem.Size = new System.Drawing.Size(61, 22);
             this.optionsMenuItem.Text = "Options";
             // 
             // modifyConfigMenuItem
@@ -8223,7 +8234,7 @@
             this.githubMenuItem,
             this.joinOurDiscordToolStripMenuItem});
             this.helpMenuItem.Name = "helpMenuItem";
-            this.helpMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpMenuItem.Size = new System.Drawing.Size(44, 22);
             this.helpMenuItem.Text = "Help";
             // 
             // viewLogsMenuItem
@@ -9250,14 +9261,14 @@
         private System.Windows.Forms.TableLayoutPanel shotsFiredTablePanel;
         private System.Windows.Forms.TableLayoutPanel damageTakenTablePanel;
         private System.Windows.Forms.Button alertCountButton;
-        private System.Windows.Forms.Label alertCountLabel;
-        private System.Windows.Forms.Label killCountLabel;
+        private System.Windows.Forms.TextBox alertCountLabel;
+        private System.Windows.Forms.TextBox killCountLabel;
         private System.Windows.Forms.Button adjustKillCountButton;
-        private System.Windows.Forms.Label rationsUsedLabel;
-        private System.Windows.Forms.Label continueCountLabel;
-        private System.Windows.Forms.Label saveCountLabel;
-        private System.Windows.Forms.Label shotsFiredLabel;
-        private System.Windows.Forms.Label damageTakenLabel;
+        private System.Windows.Forms.TextBox rationsUsedLabel;
+        private System.Windows.Forms.TextBox continueCountLabel;
+        private System.Windows.Forms.TextBox saveCountLabel;
+        private System.Windows.Forms.TextBox shotsFiredLabel;
+        private System.Windows.Forms.TextBox damageTakenLabel;
         private System.Windows.Forms.Button rationsUsedButton;
         private System.Windows.Forms.Button continueCountButton;
         private System.Windows.Forms.Button saveCountButton;
@@ -9268,7 +9279,7 @@
         private System.Windows.Forms.GroupBox mechDamageGroupBox;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Button mechsDestroyedButton;
-        private System.Windows.Forms.Label mechsDestroyedLabel;
+        private System.Windows.Forms.TextBox mechsDestroyedLabel;
         private System.Windows.Forms.TableLayoutPanel healthAndGripTablePanel;
         private System.Windows.Forms.GroupBox gripGroupBox;
         private System.Windows.Forms.TableLayoutPanel playerGripTablePanel;

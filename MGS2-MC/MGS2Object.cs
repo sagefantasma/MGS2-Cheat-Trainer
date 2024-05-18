@@ -43,12 +43,16 @@ namespace MGS2_MC
             logger.Verbose($"Toggling {Name}...");
             Constants.PlayableCharacter currentPC = MGS2MemoryManager.CheckIfUsable(this);
             statusLabel.Text = $"Finding {Name} in memory...";
-            short currentObjectValue = BitConverter.ToInt16(MGS2MemoryManager.GetPlayerInfoBasedValue(InventoryOffset, sizeof(short), currentPC), 0);
-            bool isCurrentlyEnabled = currentObjectValue == -1 ? true : false; //this feels more readable as a ternary than the shorthand
+            ushort currentObjectValue = BitConverter.ToUInt16(MGS2MemoryManager.GetPlayerInfoBasedValue(InventoryOffset, sizeof(short), currentPC), 0);
+            bool isCurrentlyEnabled;
+            if (this is BasicItem)
+                isCurrentlyEnabled = currentObjectValue == 0 ? false : true;
+            else        
+                isCurrentlyEnabled = currentObjectValue == ushort.MaxValue ? false : true;
             //Toggle the object if it is currently disabled and needs enabling, or if it is currently enabled and needs disabling.
             if (isCurrentlyEnabled != shouldBeEnabled)
             {
-                MGS2MemoryManager.ToggleObject(this, currentPC);
+                MGS2MemoryManager.ToggleObject(this, currentPC, shouldBeEnabled);
             }
             statusLabel.Text = $"Toggled {Name}!";
             logger.Verbose($"Toggle was successful");
@@ -88,7 +92,7 @@ namespace MGS2_MC
         {
         }
 
-        public void SetLevel(short level, ILogger logger, ToolStripStatusLabel statusLabel)
+        public void SetLevel(ushort level, ILogger logger, ToolStripStatusLabel statusLabel)
         {
             try
             {
@@ -117,7 +121,7 @@ namespace MGS2_MC
         }
         #endregion
 
-        public void SetDurability(short value, ILogger logger, ToolStripStatusLabel statusLabel)
+        public void SetDurability(ushort value, ILogger logger, ToolStripStatusLabel statusLabel)
         {
             //Boxes have a durability of 21(perfect condition) -> 1(nearly destroyed)
             try
@@ -161,7 +165,7 @@ namespace MGS2_MC
         internal int MaxCountOffset { get; set; } //TODO: make this a MemoryOffset
 
         const int MIN_MAX_COUNT_DIFF = 96;
-        private short LastKnownCurrentCount = 1;
+        private ushort LastKnownCurrentCount = 1;
 
         public StackableItem(string name, IntPtr nameMemoryOffset, int inventoryOffset) : base(name, nameMemoryOffset, inventoryOffset)
         {
@@ -172,7 +176,7 @@ namespace MGS2_MC
         internal new void ToggleObject(bool shouldBeEnabled, ILogger logger, ToolStripStatusLabel statusLabel)
         {
             Constants.PlayableCharacter currentPC = MGS2MemoryManager.CheckIfUsable(this);
-            short currentCount = BitConverter.ToInt16(MGS2MemoryManager.GetPlayerInfoBasedValue(CurrentCountOffset, sizeof(short), currentPC), 0);
+            ushort currentCount = BitConverter.ToUInt16(MGS2MemoryManager.GetPlayerInfoBasedValue(CurrentCountOffset, sizeof(short), currentPC), 0);
             if (currentCount == 0 && shouldBeEnabled)
             {
                 if (LastKnownCurrentCount != 0)
@@ -187,7 +191,7 @@ namespace MGS2_MC
             }
         }
 
-        public void UpdateCurrentCount(short count, ILogger logger, ToolStripStatusLabel statusLabel)
+        public void UpdateCurrentCount(ushort count, ILogger logger, ToolStripStatusLabel statusLabel)
         {
             try
             {
@@ -205,7 +209,7 @@ namespace MGS2_MC
             }
         }
 
-        public void UpdateMaxCount(short count, ILogger logger, ToolStripStatusLabel statusLabel)
+        public void UpdateMaxCount(ushort count, ILogger logger, ToolStripStatusLabel statusLabel)
         {
             try
             {
@@ -285,7 +289,7 @@ namespace MGS2_MC
 
         public void UpdateCurrentAmmoCount(int count, ILogger logger, ToolStripStatusLabel statusLabel)
         {
-            short shortCount = (short)count;
+            ushort shortCount = (ushort)count;
             try
             {
                 logger?.Verbose($"Setting current ammo to {count} for {Name}...");
@@ -304,7 +308,7 @@ namespace MGS2_MC
 
         public void UpdateMaxAmmoCount(int count, ILogger logger, ToolStripStatusLabel statusLabel)
         {
-            short shortCount = (short)count;
+            ushort shortCount = (ushort)count;
             try
             {
                 logger.Verbose($"Setting max ammo to {count} for {Name}...");
@@ -326,7 +330,7 @@ namespace MGS2_MC
     {
         #region Internals & Constructor
         public int SpecialOffset { get { return InventoryOffset; } set { InventoryOffset = value; } } //TODO: make this a MemoryOffset
-        short count = 0;
+        ushort count = 0;
         public SpecialWeapon(string name, IntPtr nameMemoryOffset, int inventoryOffset) : base(name, nameMemoryOffset, inventoryOffset)
         {
         }

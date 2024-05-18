@@ -12,6 +12,8 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web.UI.WebControls;
 using System.Windows.Forms;
 
@@ -575,219 +577,219 @@ namespace MGS2_MC
         }
 
         #region GUI getters
-        private short CurrentRationValue()
+        private ushort CurrentRationValue()
         {
-            return (short)rationCurrentUpDown.Value;
+            return (ushort)rationCurrentUpDown.Value;
         }
 
-        private short MaxRationValue()
+        private ushort MaxRationValue()
         {
-            return (short)rationMaxUpDown.Value;
+            return (ushort)rationMaxUpDown.Value;
         }
 
-        private short CurrentBandageValue()
+        private ushort CurrentBandageValue()
         {
-            return (short)bandageCurrentUpDown.Value;
+            return (ushort)bandageCurrentUpDown.Value;
         }
 
-        private short MaxBandageValue()
+        private ushort MaxBandageValue()
         {
-            return (short)bandageMaxUpDown.Value;
+            return (ushort)bandageMaxUpDown.Value;
         }
 
-        private short CurrentPentazeminCount()
+        private ushort CurrentPentazeminCount()
         {
-            return (short)pentazeminCurrentUpDown.Value;
+            return (ushort)pentazeminCurrentUpDown.Value;
         }
 
-        private short MaxPentazeminCount()
+        private ushort MaxPentazeminCount()
         {
-            return (short)pentazeminMaxUpDown.Value;
+            return (ushort)pentazeminMaxUpDown.Value;
         }
 
-        private short CurrentDogTagCount()
+        private ushort CurrentDogTagCount()
         {
-            return (short)dogTagsCurrentUpDown.Value;
+            return (ushort)dogTagsCurrentUpDown.Value;
         }
 
-        private short MaxDogTagCount()
+        private ushort MaxDogTagCount()
         {
-            return (short)dogTagsMaxUpDown.Value;
+            return (ushort)dogTagsMaxUpDown.Value;
         }
 
-        private short CardSecurityLevel()
+        private ushort CardSecurityLevel()
         {
-            return (short)cardUpDown.Value;
+            return (ushort)cardUpDown.Value;
         }
 
-        private short M9CurrentAmmoCount()
+        private ushort M9CurrentAmmoCount()
         {
-            return (short)m9CurrentUpDown.Value;
+            return (ushort)m9CurrentUpDown.Value;
         }
 
-        private short M9MaxAmmoCount()
+        private ushort M9MaxAmmoCount()
         {
-            return (short)m9MaxUpDown.Value;
+            return (ushort)m9MaxUpDown.Value;
         }
 
-        private short USPCurrentAmmoCount()
+        private ushort USPCurrentAmmoCount()
         {
-            return (short)uspCurrentUpDown.Value;
+            return (ushort)uspCurrentUpDown.Value;
         }
 
-        private short USPMaxAmmoCount()
+        private ushort USPMaxAmmoCount()
         {
-            return (short)uspMaxUpDown.Value;
+            return (ushort)uspMaxUpDown.Value;
         }
 
-        private short SOCOMCurrentAmmoCount()
+        private ushort SOCOMCurrentAmmoCount()
         {
-            return (short)socomCurrentUpDown.Value;
+            return (ushort)socomCurrentUpDown.Value;
         }
 
-        private short SOCOMMaxAmmoCount()
+        private ushort SOCOMMaxAmmoCount()
         {
-            return (short)socomMaxUpDown.Value;
+            return (ushort)socomMaxUpDown.Value;
         }
 
-        private short PSG1CurrentAmmoCount()
+        private ushort PSG1CurrentAmmoCount()
         {
-            return (short)psg1CurrentUpDown.Value;
+            return (ushort)psg1CurrentUpDown.Value;
         }
 
-        private short PSG1MaxAmmoCount()
+        private ushort PSG1MaxAmmoCount()
         {
-            return (short)psg1MaxUpDown.Value;
+            return (ushort)psg1MaxUpDown.Value;
         }
 
-        private short RGB6CurrentAmmoCount()
+        private ushort RGB6CurrentAmmoCount()
         {
-            return (short)rgb6CurrentUpDown.Value;
+            return (ushort)rgb6CurrentUpDown.Value;
         }
 
-        private short RGB6MaxAmmoCount()
+        private ushort RGB6MaxAmmoCount()
         {
-            return (short)rgb6MaxUpDown.Value;
+            return (ushort)rgb6MaxUpDown.Value;
         }
 
-        private short NikitaCurrentAmmoCount()
+        private ushort NikitaCurrentAmmoCount()
         {
-            return (short)nikitaCurrentUpDown.Value;
+            return (ushort)nikitaCurrentUpDown.Value;
         }
 
-        private short NikitaMaxAmmoCount()
+        private ushort NikitaMaxAmmoCount()
         {
-            return (short)nikitaMaxUpDown.Value;
+            return (ushort)nikitaMaxUpDown.Value;
         }
 
-        private short StingerCurrentAmmoCount()
+        private ushort StingerCurrentAmmoCount()
         {
-            return (short)stingerCurrentUpDown.Value;
+            return (ushort)stingerCurrentUpDown.Value;
         }
 
-        private short StingerMaxAmmoCount()
+        private ushort StingerMaxAmmoCount()
         {
-            return (short)stingerMaxUpDown.Value;
+            return (ushort)stingerMaxUpDown.Value;
         }
 
-        private short C4CurrentAmmoCount()
+        private ushort C4CurrentAmmoCount()
         {
-            return (short)c4CurrentUpDown.Value;
+            return (ushort)c4CurrentUpDown.Value;
         }
 
-        private short C4MaxAmmoCount()
+        private ushort C4MaxAmmoCount()
         {
-            return (short)c4MaxUpDown.Value;
+            return (ushort)c4MaxUpDown.Value;
         }
 
-        private short AKCurrentAmmoCount()
+        private ushort AKCurrentAmmoCount()
         {
-            return (short)akCurrentUpDown.Value;
+            return (ushort)akCurrentUpDown.Value;
         }
 
-        private short AKMaxAmmoCount()
+        private ushort AKMaxAmmoCount()
         {
-            return (short)akMaxUpDown.Value;
+            return (ushort)akMaxUpDown.Value;
         }
 
-        private short M4CurrentAmmoCount()
+        private ushort M4CurrentAmmoCount()
         {
-            return (short)m4CurrentUpDown.Value;
+            return (ushort)m4CurrentUpDown.Value;
         }
 
-        private short M4MaxAmmoCount()
+        private ushort M4MaxAmmoCount()
         {
-            return (short)m4MaxUpDown.Value;
+            return (ushort)m4MaxUpDown.Value;
         }
 
-        private short PSG1TCurrentAmmoCount()
+        private ushort PSG1TCurrentAmmoCount()
         {
-            return (short)psg1TCurrentUpDown.Value;
+            return (ushort)psg1TCurrentUpDown.Value;
         }
 
-        private short PSG1TMaxAmmoCount()
+        private ushort PSG1TMaxAmmoCount()
         {
-            return (short)psg1TMaxUpDown.Value;
+            return (ushort)psg1TMaxUpDown.Value;
         }
 
-        private short ChaffCurrentAmmoCount()
+        private ushort ChaffCurrentAmmoCount()
         {
-            return (short)chaffCurrentUpDown.Value;
+            return (ushort)chaffCurrentUpDown.Value;
         }
 
-        private short ChaffMaxAmmoCount()
+        private ushort ChaffMaxAmmoCount()
         {
-            return (short)chaffMaxUpDown.Value;
+            return (ushort)chaffMaxUpDown.Value;
         }
 
-        private short StunCurrentAmmoCount()
+        private ushort StunCurrentAmmoCount()
         {
-            return (short)stunCurrentUpDown.Value;
+            return (ushort)stunCurrentUpDown.Value;
         }
 
-        private short StunMaxAmmoCount()
+        private ushort StunMaxAmmoCount()
         {
-            return (short)stunMaxUpDown.Value;
+            return (ushort)stunMaxUpDown.Value;
         }
 
-        private short GrenadeCurrentAmmoCount()
+        private ushort GrenadeCurrentAmmoCount()
         {
-            return (short)grenadeCurrentUpDown.Value;
+            return (ushort)grenadeCurrentUpDown.Value;
         }
 
-        private short GrenadeMaxAmmoCount()
+        private ushort GrenadeMaxAmmoCount()
         {
-            return (short)grenadeMaxUpDown.Value;
+            return (ushort)grenadeMaxUpDown.Value;
         }
 
-        private short BookCurrentAmmoCount()
+        private ushort BookCurrentAmmoCount()
         {
-            return (short)bookCurrentUpDown.Value;
+            return (ushort)bookCurrentUpDown.Value;
         }
 
-        private short BookMaxAmmoCount()
+        private ushort BookMaxAmmoCount()
         {
-            return (short)bookMaxUpDown.Value;
+            return (ushort)bookMaxUpDown.Value;
         }
 
-        private short MagazineCurrentAmmoCount()
+        private ushort MagazineCurrentAmmoCount()
         {
-            return (short)magazineCurrentUpDown.Value;
+            return (ushort)magazineCurrentUpDown.Value;
         }
 
-        private short MagazineMaxAmmoCount()
+        private ushort MagazineMaxAmmoCount()
         {
-            return (short)magazineMaxUpDown.Value;
+            return (ushort)magazineMaxUpDown.Value;
         }
 
-        private short ClaymoreCurrentAmmoCount()
+        private ushort ClaymoreCurrentAmmoCount()
         {
-            return (short)claymoreCurrentUpDown.Value;
+            return (ushort)claymoreCurrentUpDown.Value;
         }
 
-        private short ClaymoreMaxAmmoCount()
+        private ushort ClaymoreMaxAmmoCount()
         {
-            return (short)claymoreMaxUpDown.Value;
+            return (ushort)claymoreMaxUpDown.Value;
         }
 
         private bool DMic1Enabled()
@@ -1046,32 +1048,32 @@ namespace MGS2_MC
 
         private void box1Btn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Box1.SetDurability((short)box1UpDown.Value, _logger, toolStripStatusLabel);
+            MGS2UsableObjects.Box1.SetDurability((ushort)box1UpDown.Value, _logger, toolStripStatusLabel);
         }
 
         private void box2Btn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Box2.SetDurability((short)box2UpDown.Value, _logger, toolStripStatusLabel);
+            MGS2UsableObjects.Box2.SetDurability((ushort)box2UpDown.Value, _logger, toolStripStatusLabel);
         }
 
         private void box3Btn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Box3.SetDurability((short)box3UpDown.Value, _logger, toolStripStatusLabel);
+            MGS2UsableObjects.Box3.SetDurability((ushort)box3UpDown.Value, _logger, toolStripStatusLabel);
         }
 
         private void box4Btn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Box4.SetDurability((short)box4UpDown.Value, _logger, toolStripStatusLabel);
+            MGS2UsableObjects.Box4.SetDurability((ushort)box4UpDown.Value, _logger, toolStripStatusLabel);
         }
 
         private void box5Btn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.Box5.SetDurability((short)box5UpDown.Value, _logger, toolStripStatusLabel);
+            MGS2UsableObjects.Box5.SetDurability((ushort)box5UpDown.Value, _logger, toolStripStatusLabel);
         }
 
         private void wetBoxBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.WetBox.SetDurability((short)wetBoxUpDown.Value, _logger, toolStripStatusLabel);
+            MGS2UsableObjects.WetBox.SetDurability((ushort)wetBoxUpDown.Value, _logger, toolStripStatusLabel);
         }
         #endregion
 
@@ -1389,7 +1391,7 @@ namespace MGS2_MC
             CheckOffSpecialItemsUsed(currentGameStats.SpecialItems);
 
             Rank projectedRank = Rank.CurrentlyProjectedRank(currentGameStats, difficulty, GameType.TankerPlant); //TODO: fix this when we actually figure out gametype
-            projectedRankLabel.Text = projectedRank.Name;
+            projectedRankLabel.Text = projectedRank?.Name;
         }
 
         private static string ParsePlayTime(int playTime)
@@ -1402,19 +1404,41 @@ namespace MGS2_MC
 
         private void CheckOffSpecialItemsUsed(short specialItems)
         {
-            //TODO: add more wigs?
-            int indexOfWig = specialItemsCheckedListBox.FindString("Wig");
+            int indexOfInfWig = specialItemsCheckedListBox.FindString("Infinity Wig");
+            int indexOfBlueWig = specialItemsCheckedListBox.FindString("Blue Wig");
+            int indexOfOrangeWig = specialItemsCheckedListBox.FindString("Orange Wig");
             int indexOfStealth = specialItemsCheckedListBox.FindString("Stealth");
             int indexOfBandana = specialItemsCheckedListBox.FindString("Bandana");
             int indexOfRadar = specialItemsCheckedListBox.FindString("Radar");
+            specialItemsCheckedListBox.BackColor = Color.FromName("Window");
             for (int i = 0; i < specialItemsCheckedListBox.Items.Count; i++)
                 specialItemsCheckedListBox.SetItemCheckState(i, CheckState.Unchecked);
 
             switch (specialItems)
             {
+                //I really don't want to go through all 63 combinations.
+                //Storing a list of ones I've discovered so far here: 
+                //https://docs.google.com/spreadsheets/d/1Zzb6t_0igEPBxIIwQcKYzol3s4Tta1DafDkt3769WOA/edit?usp=sharing
+                //Please add any new ones here, and there! :)
                 default:
                     //just marking the box red because we know BB run is failed
                     specialItemsCheckedListBox.BackColor = Color.DarkRed;
+                    break;
+                case 0x3C20:
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfStealth, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfBlueWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfOrangeWig, CheckState.Checked);
+                    break;
+                case 0x3820:
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfStealth, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfOrangeWig, CheckState.Checked);
+                    break;
+                case 0x2620:
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfBlueWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfInfWig, CheckState.Checked);
                     break;
                 case 0x0000:
                     break;
@@ -1422,16 +1446,19 @@ namespace MGS2_MC
                     specialItemsCheckedListBox.SetItemCheckState(indexOfBandana, CheckState.Checked);
                     break;
                 case 0x0220:
-                    specialItemsCheckedListBox.SetItemCheckState(indexOfWig, CheckState.Checked); //specifically infinity wig
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfInfWig, CheckState.Checked);
                     break;
                 case 0x1020:
                     specialItemsCheckedListBox.SetItemCheckState(indexOfStealth, CheckState.Checked);
                     break;
-                case 0x1056:
+                case 0x2420:
                     //blue wig used
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfBlueWig, CheckState.Checked);
                     break;
                 case 0x1220:
-                    specialItemsCheckedListBox.SetItemCheckState(indexOfWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfInfWig, CheckState.Checked);
                     specialItemsCheckedListBox.SetItemCheckState(indexOfStealth, CheckState.Checked);
                     break;
                 case 0x2000:
@@ -1443,24 +1470,126 @@ namespace MGS2_MC
                     break;
                 case 0x2220:
                     specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
-                    specialItemsCheckedListBox.SetItemCheckState(indexOfWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfInfWig, CheckState.Checked);
+                    break;
+                case 0x2820:
+                    //orange wig used
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfOrangeWig, CheckState.Checked);
+                    break;
+                case 0x2A20:
+                    //orange and infinity wigs used
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfOrangeWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfInfWig, CheckState.Checked);
                     break;
                 case 0x3020:
                     specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
                     specialItemsCheckedListBox.SetItemCheckState(indexOfStealth, CheckState.Checked);
                     break;
                 case 0x3104: //orange and blue wigs
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfOrangeWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfBlueWig, CheckState.Checked);
                     break;
                 case 0x3220:
                     specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
-                    specialItemsCheckedListBox.SetItemCheckState(indexOfWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfInfWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfStealth, CheckState.Checked);
+                    break;
+                case 0x3420: //blue wig and stealth
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfBlueWig, CheckState.Checked);
                     specialItemsCheckedListBox.SetItemCheckState(indexOfStealth, CheckState.Checked);
                     break;
                 case 0x3616: //orange, blue, and infinity wigs
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfOrangeWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfInfWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfBlueWig, CheckState.Checked);
                     break;
-                case 0x7712: //orange, blue, and infinity wigs AND stealth
+                case 0x3620: //blue and infinity wigs AND stealth
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfInfWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfBlueWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfStealth, CheckState.Checked);
+                    break;
+                case 0x3A20:
+                    //orange, and infinity wigs AND stealth
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfOrangeWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfInfWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfStealth, CheckState.Checked);
+                    break;
+                case 0x3E20: //orange, blue, and infinity wigs AND stealth
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfOrangeWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfInfWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfBlueWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfStealth, CheckState.Checked);
                     break;
             }
+        }
+
+        private void DisableStatsTrackingCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            _logger.Debug($"Toggling stat tracking");
+            MGS2Monitor.EnableGameStats = !disableStatsTrackingCheckBox.Checked;
+        }
+
+        private void AdjustStat(string stat, Button statButton, TextBox statTextBox, MGS2MemoryManager.GameStats.ModifiableStats statType)
+        {
+            if(statButton.Text == $"Adjust {stat}")
+            {
+                MGS2Monitor.EnableGameStats = false;
+                statButton.Text = $"Save {stat} Count";
+            }
+            else
+            {
+                MGS2MemoryManager.ChangeGameStat(statType, short.Parse(statTextBox.Text));
+                MGS2Monitor.EnableGameStats = true;
+                statButton.Text = $"Adjust {stat}";
+            }
+        }
+
+        private void alertCountButton_Click(object sender, EventArgs e)
+        {
+            AdjustStat("Alerts", sender as Button, alertCountLabel, MGS2MemoryManager.GameStats.ModifiableStats.Alerts);
+        }
+
+        private void adjustKillCountButton_Click(object sender, EventArgs e)
+        {
+            AdjustStat("Kills", sender as Button, killCountLabel, MGS2MemoryManager.GameStats.ModifiableStats.Kills);
+        }
+
+        private void rationsUsedButton_Click(object sender, EventArgs e)
+        {
+            AdjustStat("Rations Used", sender as Button, rationsUsedLabel, MGS2MemoryManager.GameStats.ModifiableStats.Rations);
+        }
+
+        private void continueCountButton_Click(object sender, EventArgs e)
+        {
+            AdjustStat("Continues", sender as Button, continueCountLabel, MGS2MemoryManager.GameStats.ModifiableStats.Continues);
+        }
+
+        private void saveCountButton_Click(object sender, EventArgs e)
+        {
+            AdjustStat("Saves", sender as Button, saveCountLabel, MGS2MemoryManager.GameStats.ModifiableStats.Saves);
+        }
+
+        private void shotsFiredButton_Click(object sender, EventArgs e)
+        {
+            AdjustStat("Shots Fired", sender as Button, shotsFiredLabel, MGS2MemoryManager.GameStats.ModifiableStats.Shots);
+        }
+
+        private void damageTakenButton_Click(object sender, EventArgs e)
+        {
+            AdjustStat("Damage Taken", sender as Button, damageTakenLabel, MGS2MemoryManager.GameStats.ModifiableStats.DamageTaken);
+        }
+
+        private void mechsDestroyedButton_Click(object sender, EventArgs e)
+        {
+            AdjustStat("Mechs Destroyed", sender as Button, mechsDestroyedLabel, MGS2MemoryManager.GameStats.ModifiableStats.MechsDestroyed);
         }
         #endregion
 
@@ -1524,6 +1653,7 @@ namespace MGS2_MC
 
                         GuiObject itemObject = itemGuiObjectList.First(guiObject => guiObject.Name == (StaticGuiReference.itemListBox.SelectedItem as GuiObject).Name);
 
+                        StaticGuiReference._logger.Verbose($"Item {itemObject.Name} selected");
                         StaticGuiReference.itemGroupBox.Controls.Add(itemObject.AssociatedControl);
                         itemObject.AssociatedControl.Visible = true;
                     }));
@@ -1552,6 +1682,7 @@ namespace MGS2_MC
 
                     GuiObject weaponObject = weaponGuiObjectList.First(guiObject => guiObject.Name == (StaticGuiReference.weaponListBox.SelectedItem as GuiObject).Name);
 
+                    StaticGuiReference._logger.Verbose($"Weapon {weaponObject.Name} selected");
                     StaticGuiReference.weaponGroupBox.Controls.Add(weaponObject.AssociatedControl);
                     weaponObject.AssociatedControl.Visible = true;
                 }));
@@ -1572,10 +1703,29 @@ namespace MGS2_MC
                 #if DEBUG
                 UserHasBeenWarned = true;
                 #endif
-                if (CurrentTab == mgs2TabControl.TabPages.IndexOfKey("tabPageCheats") && !UserHasBeenWarned)
+                if (CurrentTab == mgs2TabControl.TabPages.IndexOfKey("tabPageCheats"))
                 {
-                    MessageBox.Show("WARNING! Use the contents of this tab at your own risk. USE OF THESE CHEATS MAY CRASH YOUR GAME! All of these have worked at some point or another, but may not always. Results not guaranteed.");
-                    UserHasBeenWarned = true;
+                    if (!UserHasBeenWarned)
+                    {
+                        MessageBox.Show("WARNING! Use the contents of this tab at your own risk. USE OF THESE CHEATS MAY CRASH YOUR GAME! All of these have worked at some point or another, but may not always. Results not guaranteed.");
+                        UserHasBeenWarned = true;
+                    }
+                    try
+                    {
+                        if (MGS2Monitor.EnableGameStats)
+                        {
+                            playerMaxHpUpDown.Value = MGS2MemoryManager.GetCurrentMaxHP();
+                            playerCurrentHpTrackBar.Maximum = (int)playerMaxHpUpDown.Value;
+                            playerCurrentHpTrackBar.Value = MGS2MemoryManager.GetCurrentHP();
+                            gripTrackBar.Value = MGS2MemoryManager.GetCurrentGripGauge();
+                            Task.Factory.StartNew(LiveUpdateHp);
+                        }
+                    }
+                    catch(Exception ex)
+                    {
+                        _logger.Error($"Something went wrong with the live HP stats: {ex}");
+                        playerHealthGroupBox.Enabled = false;
+                    }
                 }
                 /* Turns out we don't have any cheats that require administrator, but I'm leaving this reference here in case we do.
                 if(!Program.IsRunAsAdministrator())
@@ -1589,6 +1739,25 @@ namespace MGS2_MC
             {
                 _logger.Error($"Failed to change tabs from sender {JsonSerializer.Serialize(sender)} and args {JsonSerializer.Serialize(e)}: {ex}");
                 MessageBox.Show(@"Failed to change tabs. If this error persists, please restart the application.");
+            }
+        }
+
+        private void LiveUpdateHp()
+        {
+            while (CurrentTab == mgs2TabControl.TabPages.IndexOfKey("tabPageCheats"))
+            {
+                if (InvokeRequired)
+                {
+                    Invoke(new MethodInvoker(() => { playerCurrentHpTrackBar.Value = MGS2MemoryManager.GetCurrentHP();
+                        gripTrackBar.Value = MGS2MemoryManager.GetCurrentGripGauge();
+                    }));
+                }
+                else
+                {
+                    playerCurrentHpTrackBar.Value = MGS2MemoryManager.GetCurrentHP();
+                    gripTrackBar.Value = MGS2MemoryManager.GetCurrentGripGauge();
+                }
+                Thread.Sleep(333);
             }
         }
 
@@ -1761,12 +1930,6 @@ namespace MGS2_MC
                     spp.ModifyProcessOffset(new IntPtr(_memoryLocation), convertedMem, true);
                 }
             }
-        }
-
-        private void DisableStatsTrackingCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            _logger.Debug($"Toggling stat tracking");
-            MGS2Monitor.EnableGameStats = !disableStatsTrackingCheckBox.Checked;
         }
     }
 }

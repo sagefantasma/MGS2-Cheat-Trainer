@@ -1391,7 +1391,7 @@ namespace MGS2_MC
             CheckOffSpecialItemsUsed(currentGameStats.SpecialItems);
 
             Rank projectedRank = Rank.CurrentlyProjectedRank(currentGameStats, difficulty, GameType.TankerPlant); //TODO: fix this when we actually figure out gametype
-            projectedRankLabel.Text = projectedRank.Name;
+            projectedRankLabel.Text = projectedRank?.Name;
         }
 
         private static string ParsePlayTime(int playTime)
@@ -1404,19 +1404,41 @@ namespace MGS2_MC
 
         private void CheckOffSpecialItemsUsed(short specialItems)
         {
-            //TODO: add more wigs?
-            int indexOfWig = specialItemsCheckedListBox.FindString("Wig");
+            int indexOfInfWig = specialItemsCheckedListBox.FindString("Infinity Wig");
+            int indexOfBlueWig = specialItemsCheckedListBox.FindString("Blue Wig");
+            int indexOfOrangeWig = specialItemsCheckedListBox.FindString("Orange Wig");
             int indexOfStealth = specialItemsCheckedListBox.FindString("Stealth");
             int indexOfBandana = specialItemsCheckedListBox.FindString("Bandana");
             int indexOfRadar = specialItemsCheckedListBox.FindString("Radar");
+            specialItemsCheckedListBox.BackColor = Color.FromName("Window");
             for (int i = 0; i < specialItemsCheckedListBox.Items.Count; i++)
                 specialItemsCheckedListBox.SetItemCheckState(i, CheckState.Unchecked);
 
             switch (specialItems)
             {
+                //I really don't want to go through all 63 combinations.
+                //Storing a list of ones I've discovered so far here: 
+                //https://docs.google.com/spreadsheets/d/1Zzb6t_0igEPBxIIwQcKYzol3s4Tta1DafDkt3769WOA/edit?usp=sharing
+                //Please add any new ones here, and there! :)
                 default:
                     //just marking the box red because we know BB run is failed
                     specialItemsCheckedListBox.BackColor = Color.DarkRed;
+                    break;
+                case 0x3C20:
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfStealth, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfBlueWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfOrangeWig, CheckState.Checked);
+                    break;
+                case 0x3820:
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfStealth, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfOrangeWig, CheckState.Checked);
+                    break;
+                case 0x2620:
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfBlueWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfInfWig, CheckState.Checked);
                     break;
                 case 0x0000:
                     break;
@@ -1424,16 +1446,19 @@ namespace MGS2_MC
                     specialItemsCheckedListBox.SetItemCheckState(indexOfBandana, CheckState.Checked);
                     break;
                 case 0x0220:
-                    specialItemsCheckedListBox.SetItemCheckState(indexOfWig, CheckState.Checked); //specifically infinity wig
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfInfWig, CheckState.Checked);
                     break;
                 case 0x1020:
                     specialItemsCheckedListBox.SetItemCheckState(indexOfStealth, CheckState.Checked);
                     break;
-                case 0x1056:
+                case 0x2420:
                     //blue wig used
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfBlueWig, CheckState.Checked);
                     break;
                 case 0x1220:
-                    specialItemsCheckedListBox.SetItemCheckState(indexOfWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfInfWig, CheckState.Checked);
                     specialItemsCheckedListBox.SetItemCheckState(indexOfStealth, CheckState.Checked);
                     break;
                 case 0x2000:
@@ -1445,22 +1470,63 @@ namespace MGS2_MC
                     break;
                 case 0x2220:
                     specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
-                    specialItemsCheckedListBox.SetItemCheckState(indexOfWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfInfWig, CheckState.Checked);
+                    break;
+                case 0x2820:
+                    //orange wig used
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfOrangeWig, CheckState.Checked);
+                    break;
+                case 0x2A20:
+                    //orange and infinity wigs used
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfOrangeWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfInfWig, CheckState.Checked);
                     break;
                 case 0x3020:
                     specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
                     specialItemsCheckedListBox.SetItemCheckState(indexOfStealth, CheckState.Checked);
                     break;
                 case 0x3104: //orange and blue wigs
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfOrangeWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfBlueWig, CheckState.Checked);
                     break;
                 case 0x3220:
                     specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
-                    specialItemsCheckedListBox.SetItemCheckState(indexOfWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfInfWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfStealth, CheckState.Checked);
+                    break;
+                case 0x3420: //blue wig and stealth
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfBlueWig, CheckState.Checked);
                     specialItemsCheckedListBox.SetItemCheckState(indexOfStealth, CheckState.Checked);
                     break;
                 case 0x3616: //orange, blue, and infinity wigs
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfOrangeWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfInfWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfBlueWig, CheckState.Checked);
                     break;
-                case 0x7712: //orange, blue, and infinity wigs AND stealth
+                case 0x3620: //blue and infinity wigs AND stealth
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfInfWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfBlueWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfStealth, CheckState.Checked);
+                    break;
+                case 0x3A20:
+                    //orange, and infinity wigs AND stealth
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfOrangeWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfInfWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfStealth, CheckState.Checked);
+                    break;
+                case 0x3E20: //orange, blue, and infinity wigs AND stealth
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfRadar, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfOrangeWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfInfWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfBlueWig, CheckState.Checked);
+                    specialItemsCheckedListBox.SetItemCheckState(indexOfStealth, CheckState.Checked);
                     break;
             }
         }
@@ -1471,44 +1537,59 @@ namespace MGS2_MC
             MGS2Monitor.EnableGameStats = !disableStatsTrackingCheckBox.Checked;
         }
 
+        private void AdjustStat(string stat, Button statButton, TextBox statTextBox, MGS2MemoryManager.GameStats.ModifiableStats statType)
+        {
+            if(statButton.Text == $"Adjust {stat}")
+            {
+                MGS2Monitor.EnableGameStats = false;
+                statButton.Text = $"Save {stat} Count";
+            }
+            else
+            {
+                MGS2MemoryManager.ChangeGameStat(statType, short.Parse(statTextBox.Text));
+                MGS2Monitor.EnableGameStats = true;
+                statButton.Text = $"Adjust {stat}";
+            }
+        }
+
         private void alertCountButton_Click(object sender, EventArgs e)
         {
-            
+            AdjustStat("Alerts", sender as Button, alertCountLabel, MGS2MemoryManager.GameStats.ModifiableStats.Alerts);
         }
 
         private void adjustKillCountButton_Click(object sender, EventArgs e)
         {
-
+            AdjustStat("Kills", sender as Button, killCountLabel, MGS2MemoryManager.GameStats.ModifiableStats.Kills);
         }
 
         private void rationsUsedButton_Click(object sender, EventArgs e)
         {
-
+            AdjustStat("Rations Used", sender as Button, rationsUsedLabel, MGS2MemoryManager.GameStats.ModifiableStats.Rations);
         }
 
         private void continueCountButton_Click(object sender, EventArgs e)
         {
-
+            AdjustStat("Continues", sender as Button, continueCountLabel, MGS2MemoryManager.GameStats.ModifiableStats.Continues);
         }
 
         private void saveCountButton_Click(object sender, EventArgs e)
         {
-
+            AdjustStat("Saves", sender as Button, saveCountLabel, MGS2MemoryManager.GameStats.ModifiableStats.Saves);
         }
 
         private void shotsFiredButton_Click(object sender, EventArgs e)
         {
-
+            AdjustStat("Shots Fired", sender as Button, shotsFiredLabel, MGS2MemoryManager.GameStats.ModifiableStats.Shots);
         }
 
         private void damageTakenButton_Click(object sender, EventArgs e)
         {
-
+            AdjustStat("Damage Taken", sender as Button, damageTakenLabel, MGS2MemoryManager.GameStats.ModifiableStats.DamageTaken);
         }
 
         private void mechsDestroyedButton_Click(object sender, EventArgs e)
         {
-
+            AdjustStat("Mechs Destroyed", sender as Button, mechsDestroyedLabel, MGS2MemoryManager.GameStats.ModifiableStats.MechsDestroyed);
         }
         #endregion
 

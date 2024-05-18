@@ -412,6 +412,46 @@ namespace MGS2_MC
             }
         }
 
+        private static void SetKnownOffsetValue(int offset, byte[] valueToSet)
+        {
+            try
+            {
+                lock (MGS2Monitor.MGS2Process)
+                {
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    {
+                        _logger.Information($"Setting known offset value at offset: {offset} to {BitConverter.ToString(valueToSet)}...");
+                        proxy.ModifyProcessOffset(new IntPtr(offset), valueToSet, true);
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                _logger.Error($"Failed to set memory at offset {offset}: {e}");
+                throw new AggregateException($"Could not set memory at offset {offset}", e);
+            }
+        }
+
+        private static void SetKnownOffsetValue(int offset, byte valueToSet)
+        {
+            try
+            {
+                lock (MGS2Monitor.MGS2Process)
+                {
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    {
+                        _logger.Information($"Setting known offset value at offset: {offset} to {valueToSet}...");
+                        proxy.ModifyProcessOffset(new IntPtr(offset), valueToSet, true);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Failed to set memory at offset {offset}: {e}");
+                throw new AggregateException($"Could not set memory at offset {offset}", e);
+            }
+        }
+
         private static byte[] ReadAoBOffsetValue(byte[] arrayOfBytes, MemoryOffset memoryOffset)
         {
             try
@@ -596,7 +636,42 @@ namespace MGS2_MC
             return gameStats;
         }
 
-        public static void ChangeGameStat()
+        public static void ChangeGameStat(GameStats.ModifiableStats gameStat, short value)
+        {
+            int stageOffset = GetStageOffsets().First();
+            MemoryOffset gameStatOffset;
+            switch (gameStat)
+            {
+                case GameStats.ModifiableStats.Alerts:
+                    gameStatOffset = MGS2Offset.ALERT_COUNT;
+                    break;
+                case GameStats.ModifiableStats.Continues:
+                    gameStatOffset = MGS2Offset.CONTINUE_COUNT;
+                    break;
+                case GameStats.ModifiableStats.DamageTaken:
+                    gameStatOffset = MGS2Offset.DAMAGE_TAKEN;
+                    break;
+                case GameStats.ModifiableStats.Kills:
+                    gameStatOffset = MGS2Offset.KILL_COUNT;
+                    break;
+                case GameStats.ModifiableStats.MechsDestroyed:
+                    gameStatOffset = MGS2Offset.MECHS_DESTROYED;
+                    break;
+                case GameStats.ModifiableStats.Rations:
+                    gameStatOffset = MGS2Offset.RATIONS_USED;
+                    break;
+                case GameStats.ModifiableStats.Saves:
+                    gameStatOffset = MGS2Offset.SAVE_COUNT;
+                    break;
+                case GameStats.ModifiableStats.Shots:
+                    gameStatOffset = MGS2Offset.SHOT_COUNT;
+                    break;
+                default:
+                    throw new Exception("You must provide a valid game stat to modify");
+            }
+
+            SetKnownOffsetValue(stageOffset + gameStatOffset.Start, (byte) value);
+        }
 
         public static Difficulty ReadCurrentDifficulty()
         {

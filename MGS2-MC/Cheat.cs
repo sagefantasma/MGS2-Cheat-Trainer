@@ -216,6 +216,14 @@ namespace MGS2_MC
                     ReplaceWithOriginalCode(MGS2AoB.RestoreReload, MGS2Offset.NEVER_RELOAD, MGS2AoB.OriginalReloadBytes);
             }
 
+            internal static void GripNeverDepletes(bool activate)
+            {
+                if (activate)
+                    ReplaceWithInvalidCode(MGS2AoB.DecrementGripGauge, MGS2Offset.NO_GRIP_DMG, 2);
+                else
+                    ReplaceWithOriginalCode(MGS2AoB.IncrementGripGauge, MGS2Offset.NO_GRIP_DMG, MGS2AoB.OriginalGripDamageBytes);
+            }
+
             internal static void NoClipNoGravity(bool activate)
             {
                 NoClip(false);
@@ -359,14 +367,16 @@ namespace MGS2_MC
         public static Cheat ZoomIn { get; } = new Cheat("Zoom In", Cheat.CheatActions.ZoomIn, MGS2AoB.OriginalCameraBytes);
         public static Cheat ZoomOut { get; } = new Cheat("Zoom Out", Cheat.CheatActions.ZoomOut, MGS2AoB.OriginalCameraBytes);
 
+        public static Cheat NoGripDamage { get; } = new Cheat("Infinite Grip Stamina", Cheat.CheatActions.GripNeverDepletes, MGS2AoB.OriginalGripDamageBytes);
+
         private static List<Cheat> _cheatList = null;
 
         private static void BuildCheatList()
         {
             _cheatList = new List<Cheat>
             {
-                BlackScreen, NoBleedDamage, NoBurnDamage, InfiniteAmmo, InfiniteLife, InfiniteOxygen, Letterboxing,
-                NoClipWithGravity, NoClipNoGravity, NoReload,ZoomIn, ZoomOut
+                BlackScreen, NoBleedDamage, NoBurnDamage, InfiniteAmmo, InfiniteLife, InfiniteOxygen, NoGripDamage,
+                Letterboxing, NoClipWithGravity, NoClipNoGravity, NoReload,ZoomIn, ZoomOut
             };
         }
 

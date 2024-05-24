@@ -89,6 +89,8 @@ namespace MGS2_MC
         internal static byte[] OriginalCameraBytes = { 0x45, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x06, 0x17, 0x42, 0x53, 0x17, 0x06, 0x53, 0x42, 0x44 };
         internal static string Camera = "45 00 00 00 00 00 00 00 06 17 42 53 17 06 53 42 44";
         internal static string DecrementGripGauge = "66 89 BB 18 04 00 00"; //TODO: add cheat for this :)
+        internal static byte[] OriginalGripDamageBytes = { 0x66, 0x89, 0xBB, 0x18, 0x04, 0x00, 0x00 };
+        internal static string IncrementGripGauge = "90 90 BB 18 04 00 00";
         internal static string CurrentGripGauge = "B0 4B 74 85 1E 02 00 00";
 
 

@@ -219,7 +219,7 @@ namespace MGS2_MC
             internal static void GripNeverDepletes(bool activate)
             {
                 if (activate)
-                    ReplaceWithInvalidCode(MGS2AoB.DecrementGripGauge, MGS2Offset.NO_GRIP_DMG, 2);
+                    ReplaceWithInvalidCode(MGS2AoB.DecrementGripGauge, MGS2Offset.NO_GRIP_DMG, 7);
                 else
                     ReplaceWithOriginalCode(MGS2AoB.IncrementGripGauge, MGS2Offset.NO_GRIP_DMG, MGS2AoB.OriginalGripDamageBytes);
             }

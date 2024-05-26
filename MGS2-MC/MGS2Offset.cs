@@ -88,10 +88,16 @@ namespace MGS2_MC
         internal static string MGS1SnakeClipping = "DA 01 F4 01 ?? 00 00 00 00 00 00 00 00 00 00 00 27 15 9B";
         internal static byte[] OriginalCameraBytes = { 0x45, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x06, 0x17, 0x42, 0x53, 0x17, 0x06, 0x53, 0x42, 0x44 };
         internal static string Camera = "45 00 00 00 00 00 00 00 06 17 42 53 17 06 53 42 44";
-        internal static string DecrementGripGauge = "66 89 BB 18 04 00 00"; //TODO: add cheat for this :)
+        internal static string DecrementGripGauge = "66 89 BB 18 04 00 00";
         internal static byte[] OriginalGripDamageBytes = { 0x66, 0x89, 0xBB, 0x18, 0x04, 0x00, 0x00 };
         internal static string IncrementGripGauge = "90 90 BB 18 04 00 00";
         internal static string CurrentGripGauge = "B0 4B 74 85 1E 02 00 00";
+        internal static string InGamePause = "A9 00 07 00 00 0F 85 C4";
+        internal static byte[] OriginalPauseButtonBytes = { 0xA9, 0x00, 0x07, 0x00, 0x00 };
+        internal static string ItemMenuPause = "09 35 B1 EF 5D 01";
+        internal static byte[] OriginalItemMenuPauseBytes = { 0x09, 0x35, 0xB1, 0xEF, 0x5D, 0x01 };
+        internal static string WeaponMenuPause = "09 35 14 D5 5D 01";
+        internal static byte[] OriginalWeaponMenuPauseBytes = { 0x09, 0x35, 0x14, 0xD5, 0x5D, 0x01 };
 
 
 
@@ -248,6 +254,9 @@ namespace MGS2_MC
         public static readonly MemoryOffset ZOOM = new MemoryOffset(-192); //todo: verify
         public static readonly MemoryOffset BLACK_SCREEN = new MemoryOffset(-229);
         public static readonly MemoryOffset NO_GRIP_DMG = new MemoryOffset(0, 6);
+        public static readonly MemoryOffset NO_PAUSE_BTN = new MemoryOffset(0, 5);
+        public static readonly MemoryOffset NO_ITEM_PAUSE = new MemoryOffset(0, 6);
+        public static readonly MemoryOffset NO_WEAPON_PAUSE = new MemoryOffset(0, 6);
         #endregion
 
         #region Calculated From CurrentGripGauge

@@ -231,6 +231,7 @@ namespace MGS2_MC
                 {
                     if (activeCheat.CodeLocation == IntPtr.Zero)
                     {
+                        activeCheat.OriginalBytes = ReadMemory(MGS2AoB.Camera, MGS2Offset.BLACK_SCREEN);
                         activeCheat.CodeLocation = ModifySingleByte(MGS2AoB.Camera, MGS2Offset.BLACK_SCREEN, 0x00);
                         MGS2Cheat.BlackScreen = activeCheat;
                     }
@@ -240,7 +241,7 @@ namespace MGS2_MC
                     }
                 }
                 else
-                    ModifySingleByte(activeCheat.CodeLocation, MGS2Offset.BLACK_SCREEN, 0x01);
+                    ModifySingleByte(activeCheat.CodeLocation, MGS2Offset.BLACK_SCREEN, 0x40);
             }
 
             public static void TurnOffBleedDamage(bool activate)
@@ -618,8 +619,8 @@ namespace MGS2_MC
             _cheatList = new List<Cheat>
             {
                 BlackScreen, NoBleedDamage, NoBurnDamage, InfiniteAmmo, InfiniteLife, InfiniteOxygen, NoGripDamage,
-                Letterboxing, NoClipWithGravity, NoClipNoGravity, NoReload,ZoomIn, ZoomOut, DisablePauseButton,
-                DisableItemMenuPause, DisableWeaponMenuPause
+                Letterboxing, NoClipWithGravity, NoClipNoGravity, NoReload,/*ZoomIn, ZoomOut,*/ DisablePauseButton,
+                DisableItemMenuPause, DisableWeaponMenuPause //zoom in and out aren't working as expected, and i cant be bothered to fix them right now.
             };
         }
 

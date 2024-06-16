@@ -250,9 +250,9 @@ namespace MGS2_MC
         public static readonly MemoryOffset NO_BLEED_DMG = new MemoryOffset(0, 16);
         public static readonly MemoryOffset NO_BURN_DMG = new MemoryOffset(0, 16);
         public static readonly MemoryOffset NO_CLIP = new MemoryOffset(0x40, 0x53);
-        public static readonly MemoryOffset LETTERBOX = new MemoryOffset(-188);
-        public static readonly MemoryOffset ZOOM = new MemoryOffset(-192); //todo: verify
-        public static readonly MemoryOffset BLACK_SCREEN = new MemoryOffset(-229);
+        public static readonly MemoryOffset LETTERBOX = new MemoryOffset(-187);
+        public static readonly MemoryOffset ZOOM = new MemoryOffset(-189); //todo: verify
+        public static readonly MemoryOffset BLACK_SCREEN = new MemoryOffset(-228);
         public static readonly MemoryOffset NO_GRIP_DMG = new MemoryOffset(0, 6);
         public static readonly MemoryOffset NO_PAUSE_BTN = new MemoryOffset(0, 5);
         public static readonly MemoryOffset NO_ITEM_PAUSE = new MemoryOffset(0, 6);

@@ -734,7 +734,10 @@ namespace MGS2_MC
             if (characterCode.Contains("tnk") || characterCode.Contains("r_vr_s"))
             {
                 _logger.Verbose("Currently playing as Snake");
-                return Constants.PlayableCharacter.Snake;
+                if (characterCode.Contains("tnk"))
+                    return Constants.PlayableCharacter.Snake;
+                else
+                    return Constants.PlayableCharacter.Pliskin; //technically you're not playing as Pliskin, but this fixes the VR/Snake tales issue for Snake
             }
             else if (characterCode.Contains("plt"))
             {

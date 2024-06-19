@@ -606,6 +606,57 @@ namespace MGS2_MC
             }
         }
 
+        public static ushort ModifyGripLevel(bool increase)
+        {
+            try
+            {
+                Constants.PlayableCharacter currentCharacter = DetermineActiveCharacter();
+
+                lock (MGS2Monitor.MGS2Process)
+                {
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    {
+                        IntPtr memoryLocation = proxy.ScanMemoryForUniquePattern(new SimplePattern(MGS2AoB.PlayerInfoFinderString));
+
+                        if (currentCharacter == Constants.PlayableCharacter.Snake)
+                            memoryLocation = IntPtr.Add(memoryLocation, MGS2Offset.GRIP_LEVEL_SNAKE.Start);
+                        else
+                            memoryLocation = IntPtr.Add(memoryLocation, MGS2Offset.GRIP_LEVEL_RAIDEN.Start);
+
+                        byte[] gripLevelBytes = proxy.ReadProcessOffset(memoryLocation, 2);
+                        ushort gripLevel = BitConverter.ToUInt16(gripLevelBytes, 0);
+
+                        switch (increase)
+                        {
+                            default:
+                            case true:
+                                if (gripLevel < 200)
+                                {
+                                    proxy.ModifyProcessOffset(memoryLocation, gripLevel+=100);
+                                }
+                                return gripLevel;
+                            case false:
+                                //this, unfortunately, doesn't seem to actually cause the grip level to change... annoying
+                                if (gripLevel > 0 && gripLevel >= 100)
+                                {
+                                    proxy.ModifyProcessOffset(memoryLocation, gripLevel-=100);
+                                }
+                                else
+                                {
+                                    proxy.ModifyProcessOffset(memoryLocation, 0);
+                                }
+                                return gripLevel;
+                        }
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                _logger.Error($"Failed to modify grip level: {e}");
+                return ushort.MaxValue;
+            }
+        }
+
         public static Constants.PlayableCharacter DetermineActiveCharacter()
         {
             string characterCode = GetCharacterCode();

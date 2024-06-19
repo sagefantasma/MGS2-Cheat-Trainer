@@ -215,6 +215,8 @@ namespace MGS2_MC
         #region Calculated From PlayerInfo
         public static readonly MemoryOffset BASE_WEAPON = new MemoryOffset(-250, 0); //if a "new" playerOffsetBytes is chosen, only need to update this value and the item offset will update.
         public static readonly MemoryOffset BASE_ITEM = new MemoryOffset(BASE_WEAPON.Start + 144, BASE_WEAPON.Start + 144 + 80);
+        public static readonly MemoryOffset GRIP_LEVEL_SNAKE = new MemoryOffset(-634, -633);
+        public static readonly MemoryOffset GRIP_LEVEL_RAIDEN = new MemoryOffset(-632, -631);
         #endregion
 
         #region Calculated From HealthMod

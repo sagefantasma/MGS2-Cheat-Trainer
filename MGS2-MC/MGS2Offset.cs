@@ -30,6 +30,8 @@ namespace MGS2_MC
     internal struct MGS2Pointer
     {
         internal static int WalkThroughWalls = 0x01534E68;
+        internal static int ModifiableHP = 0x017C1A20;
+        internal static int CurrentGrip = 0x016CBDA0;
     }
 
     internal struct MGS2AoB
@@ -95,7 +97,7 @@ namespace MGS2_MC
         internal static string DecrementGripGauge = "66 89 BB 18 04 00 00";
         internal static byte[] OriginalGripDamageBytes = { 0x66, 0x89, 0xBB, 0x18, 0x04, 0x00, 0x00 };
         internal static string IncrementGripGauge = "90 90 BB 18 04 00 00";
-        internal static string CurrentGripGauge = "B0 4B 74 85 1E 02 00 00";
+        //internal static string CurrentGripGauge = "B0 4B 74 85 1E 02 00 00"; //this is invalid, evidently.
         internal static string InGamePause = "A9 00 07 00 00 0F 85 C4";
         internal static byte[] OriginalPauseButtonBytes = { 0xA9, 0x00, 0x07, 0x00, 0x00 };
         internal static string ItemMenuPause = "09 35 B1 EF 5D 01";
@@ -267,6 +269,10 @@ namespace MGS2_MC
 
         #region Calculated From CurrentGripGauge
         public static readonly MemoryOffset CURRENT_GRIP_GAUGE = new MemoryOffset(136, 137); //TODO: verify
+        #endregion
+
+        #region Calculated From ModifiableHP
+        public static readonly MemoryOffset MODIFIABLE_HP = new MemoryOffset(2258, 2259);
         #endregion
 
         #region Calculated from Unknown Finder AoBs    

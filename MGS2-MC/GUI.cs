@@ -1714,6 +1714,15 @@ namespace MGS2_MC
                     {
                         if (MGS2Monitor.EnableGameStats)
                         {
+                            Constants.PlayableCharacter currentCharacter = MGS2MemoryManager.DetermineActiveCharacter();
+                            if(currentCharacter == Constants.PlayableCharacter.Snake)
+                            {
+                                gripTrackBar.Maximum = 1800;
+                            }
+                            else
+                            {
+                                gripTrackBar.Maximum = 3600;
+                            }
                             playerMaxHpUpDown.Value = MGS2MemoryManager.GetCurrentMaxHP();
                             playerCurrentHpTrackBar.Maximum = (int)playerMaxHpUpDown.Value;
                             playerCurrentHpTrackBar.Value = MGS2MemoryManager.GetCurrentHP();
@@ -1724,7 +1733,7 @@ namespace MGS2_MC
                     catch(Exception ex)
                     {
                         _logger.Error($"Something went wrong with the live HP stats: {ex}");
-                        playerHealthGroupBox.Enabled = false;
+                        //playerHealthGroupBox.Enabled = false;
                     }
                 }
                 /* Turns out we don't have any cheats that require administrator, but I'm leaving this reference here in case we do.
@@ -1744,20 +1753,37 @@ namespace MGS2_MC
 
         private void LiveUpdateHp()
         {
-            while (CurrentTab == mgs2TabControl.TabPages.IndexOfKey("tabPageCheats"))
+            try
             {
-                if (InvokeRequired)
+                while (CurrentTab == mgs2TabControl.TabPages.IndexOfKey("tabPageCheats"))
                 {
-                    Invoke(new MethodInvoker(() => { playerCurrentHpTrackBar.Value = MGS2MemoryManager.GetCurrentHP();
-                        gripTrackBar.Value = MGS2MemoryManager.GetCurrentGripGauge();
-                    }));
+                    if (InvokeRequired)
+                    {
+                        lock (playerCurrentHpTrackBar)
+                            lock(gripTrackBar)
+                            {
+                                Invoke(new MethodInvoker(() =>
+                                {
+                                    playerCurrentHpTrackBar.Value = MGS2MemoryManager.GetCurrentHP();
+                                    gripTrackBar.Value = MGS2MemoryManager.GetCurrentGripGauge();
+                                }));
+                            }
+                    }
+                    else
+                    {
+                        lock (playerCurrentHpTrackBar)
+                            lock (gripTrackBar)
+                            {
+                                playerCurrentHpTrackBar.Value = MGS2MemoryManager.GetCurrentHP();
+                                gripTrackBar.Value = MGS2MemoryManager.GetCurrentGripGauge();
+                            }
+                    }
+                    Thread.Sleep(333);
                 }
-                else
-                {
-                    playerCurrentHpTrackBar.Value = MGS2MemoryManager.GetCurrentHP();
-                    gripTrackBar.Value = MGS2MemoryManager.GetCurrentGripGauge();
-                }
-                Thread.Sleep(333);
+            }
+            catch(Exception e)
+            {
+                int a = 2 + 2;
             }
         }
 
@@ -1953,6 +1979,7 @@ namespace MGS2_MC
             lock (playerCurrentHpTrackBar)
             {
                 //modify hp
+                MGS2MemoryManager.ModifyCurrentHp((ushort)playerCurrentHpTrackBar.Value);
             }
         }
 
@@ -1961,12 +1988,14 @@ namespace MGS2_MC
             lock (gripTrackBar)
             {
                 //modify grip
+                //can use current grip stamina
+                MGS2MemoryManager.ModifyCurrentGripGauge((ushort)gripTrackBar.Value);
             }
         }
 
         private void PlayerMaxHpUpDown_ValueChanged(object sender, EventArgs e)
         {
-
+            //TODO: implement
         }
     }
 }

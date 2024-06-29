@@ -595,14 +595,52 @@ namespace MGS2_MC
             {
                 using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                 {
-                    IntPtr pointerLocation = proxy.ScanMemoryForUniquePattern(new SimplePattern(MGS2AoB.CurrentGripGauge));
-                    byte[] locationPointedTo = proxy.ReadProcessOffset(pointerLocation, 8);
-                    long locationPointedToLong = BitConverter.ToInt64(locationPointedTo, 0);
-                    locationPointedToLong += MGS2Offset.CURRENT_GRIP_GAUGE.Start; //add the offset to find the grip gauge
-                    byte[] gripGauge = proxy.GetMemoryFromPointer(new IntPtr(locationPointedToLong), MGS2Offset.CURRENT_GRIP_GAUGE.Length);
+                    IntPtr memoryPointedTo = proxy.FollowPointer(new IntPtr(MGS2Pointer.CurrentGrip), false);
+                    memoryPointedTo = IntPtr.Add(memoryPointedTo, MGS2Offset.CURRENT_GRIP_GAUGE.Start);
+                    byte[] gripGauge = proxy.GetMemoryFromPointer(memoryPointedTo, MGS2Offset.CURRENT_GRIP_GAUGE.Length);
 
                     return BitConverter.ToUInt16(gripGauge, 0);
                 }
+            }
+        }
+
+        public static void ModifyCurrentGripGauge(ushort desiredGripGauge)
+        {
+            try
+            {
+                lock (MGS2Monitor.MGS2Process)
+                {
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    {
+                        IntPtr memoryPointedTo = proxy.FollowPointer(new IntPtr(MGS2Pointer.CurrentGrip), false);
+                        memoryPointedTo = IntPtr.Add(memoryPointedTo, MGS2Offset.CURRENT_GRIP_GAUGE.Start);
+                        proxy.SetMemoryAtPointer(memoryPointedTo, BitConverter.GetBytes(desiredGripGauge));
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Failed to modify current grip: {e}");
+            }
+        }
+
+        public static void ModifyCurrentHp(ushort desiredHp)
+        {
+            try
+            {
+                lock (MGS2Monitor.MGS2Process)
+                {
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    {
+                        IntPtr memoryPointedTo = proxy.FollowPointer(new IntPtr(MGS2Pointer.ModifiableHP), false);
+                        memoryPointedTo = IntPtr.Add(memoryPointedTo, MGS2Offset.MODIFIABLE_HP.Start);
+                        proxy.SetMemoryAtPointer(memoryPointedTo, BitConverter.GetBytes(desiredHp));
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Failed to modify current hp: {e}");
             }
         }
 
@@ -610,10 +648,10 @@ namespace MGS2_MC
         {
             try
             {
-                Constants.PlayableCharacter currentCharacter = DetermineActiveCharacter();
-
                 lock (MGS2Monitor.MGS2Process)
                 {
+                    Constants.PlayableCharacter currentCharacter = DetermineActiveCharacter();
+                
                     using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                     {
                         IntPtr memoryLocation = proxy.ScanMemoryForUniquePattern(new SimplePattern(MGS2AoB.PlayerInfoFinderString));

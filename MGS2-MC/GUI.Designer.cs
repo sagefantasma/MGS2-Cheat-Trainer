@@ -2122,15 +2122,14 @@
             this.gripTrackBar.BackColor = System.Drawing.Color.DarkTurquoise;
             this.playerGripSubTablePanel.SetColumnSpan(this.gripTrackBar, 2);
             this.gripTrackBar.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gripTrackBar.Enabled = false;
             this.gripTrackBar.LargeChange = 250;
             this.gripTrackBar.Location = new System.Drawing.Point(92, 3);
-            this.gripTrackBar.Maximum = 3600;
+            this.gripTrackBar.Maximum = 1800;
             this.gripTrackBar.Name = "gripTrackBar";
             this.gripTrackBar.Size = new System.Drawing.Size(172, 31);
             this.gripTrackBar.TabIndex = 2;
             this.gripTrackBar.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.gripTrackBar.Value = 3600;
+            this.gripTrackBar.Value = 1800;
             this.gripTrackBar.Scroll += new System.EventHandler(this.GripTrackBar_Scroll);
             // 
             // label49
@@ -2223,6 +2222,7 @@
             // playerMaxHpUpDown
             // 
             this.playerMaxHpUpDown.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.playerMaxHpUpDown.Enabled = false;
             this.playerMaxHpUpDown.Location = new System.Drawing.Point(83, 40);
             this.playerMaxHpUpDown.Maximum = new decimal(new int[] {
             65534,

@@ -2122,6 +2122,7 @@
             this.gripTrackBar.BackColor = System.Drawing.Color.DarkTurquoise;
             this.playerGripSubTablePanel.SetColumnSpan(this.gripTrackBar, 2);
             this.gripTrackBar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gripTrackBar.Enabled = false;
             this.gripTrackBar.LargeChange = 250;
             this.gripTrackBar.Location = new System.Drawing.Point(92, 3);
             this.gripTrackBar.Maximum = 3600;

@@ -272,7 +272,6 @@ namespace MGS2_MC
             short currentAmmo = BitConverter.ToInt16(MGS2MemoryManager.GetPlayerInfoBasedValue(CurrentAmmoOffset, sizeof(short), currentPC), 0);
             //TODO: it would be cool to duplicate the "NO USE" functionality the Stinger gets when prone when disabled!
             //can't seem to easily find the bytes that control that though :(
-            //TODO: for some reason this just... doesn't work as intended for the first set of toggling. O_o
             if (currentAmmo <= 0 && shouldBeEnabled)
             {
                 if (LastKnownCurrentAmmo != 0)

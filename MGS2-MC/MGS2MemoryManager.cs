@@ -621,6 +621,7 @@ namespace MGS2_MC
             catch (Exception e)
             {
                 _logger.Error($"Failed to modify current grip: {e}");
+                throw new AggregateException("Could not modify current grip", e);
             }
         }
 
@@ -641,6 +642,7 @@ namespace MGS2_MC
             catch (Exception e)
             {
                 _logger.Error($"Failed to modify current hp: {e}");
+                throw new AggregateException("Could not modify current hp", e);
             }
         }
 
@@ -691,7 +693,7 @@ namespace MGS2_MC
             catch(Exception e)
             {
                 _logger.Error($"Failed to modify grip level: {e}");
-                return ushort.MaxValue;
+                throw new AggregateException("Could not modify current grip level", e);
             }
         }
 

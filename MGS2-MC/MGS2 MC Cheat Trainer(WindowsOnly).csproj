@@ -228,7 +228,7 @@
     </Compile>
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="MGS2MemoryManager.cs" />
-    <Compile Include="MGS2Offset.cs" />
+    <Compile Include="MGS2ApplicationNavigator.cs" />
     <Compile Include="Helpers\StageNames.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

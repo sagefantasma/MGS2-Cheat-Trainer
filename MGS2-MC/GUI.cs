@@ -1755,35 +1755,30 @@ namespace MGS2_MC
         {
             try
             {
+                //only keep this task alive while the cheats tab is open to save system resources
                 while (CurrentTab == mgs2TabControl.TabPages.IndexOfKey("tabPageCheats"))
                 {
                     if (InvokeRequired)
                     {
-                        lock (playerCurrentHpTrackBar)
-                            lock(gripTrackBar)
-                            {
-                                Invoke(new MethodInvoker(() =>
-                                {
-                                    playerCurrentHpTrackBar.Value = MGS2MemoryManager.GetCurrentHP();
-                                    gripTrackBar.Value = MGS2MemoryManager.GetCurrentGripGauge();
-                                }));
-                            }
+                        Invoke(new MethodInvoker(() =>
+                        {
+                            playerCurrentHpTrackBar.Value = MGS2MemoryManager.GetCurrentHP();
+                            gripTrackBar.Value = MGS2MemoryManager.GetCurrentGripGauge();
+                        }));
                     }
                     else
                     {
-                        lock (playerCurrentHpTrackBar)
-                            lock (gripTrackBar)
-                            {
-                                playerCurrentHpTrackBar.Value = MGS2MemoryManager.GetCurrentHP();
-                                gripTrackBar.Value = MGS2MemoryManager.GetCurrentGripGauge();
-                            }
+                        playerCurrentHpTrackBar.Value = MGS2MemoryManager.GetCurrentHP();
+                        gripTrackBar.Value = MGS2MemoryManager.GetCurrentGripGauge();
                     }
                     Thread.Sleep(333);
                 }
             }
             catch(Exception e)
             {
-                int a = 2 + 2;
+                _logger.Error($"Something went wrong when getting current HP or grip stamina. Going to wait 5 seconds before retrying.\n\nError information: {e}");
+                Thread.Sleep(5000);
+                LiveUpdateHp();
             }
         }
 
@@ -1851,8 +1846,7 @@ namespace MGS2_MC
                 _logger.Verbose("MGS2 thread isn't dead, but we don't see the MGS2 process. Killing MGS2 thread and restarting");
                 Program.MGS2Thread.Abort(); 
                 Program.RestartMonitoringThread();
-                _logger.Verbose("MGS2 thread killed and restarted successfully!");
-                //Program.MGS2Thread.
+                _logger.Verbose("MGS2 thread killed and restarted successfully!");                
             }
         }
 
@@ -1963,7 +1957,7 @@ namespace MGS2_MC
             _logger.Information("User clicked -100 pushups button");
             toolStripStatusLabel.Text = $"Attempting to reduce pushup count by 100 pushups...";
             ushort currentPushups = MGS2MemoryManager.ModifyGripLevel(false);
-            toolStripStatusLabel.Text = $"Pushup count set to {currentPushups} for this character.";
+            toolStripStatusLabel.Text = $"Pushup count set to {currentPushups} for this character. This may not actually change anything.";
         }
 
         private void RaiseGripButton_Click(object sender, EventArgs e)
@@ -1976,6 +1970,7 @@ namespace MGS2_MC
 
         private void PlayerCurrentHpTrackBar_Scroll(object sender, EventArgs e)
         {
+            //lock the trackbar so modifying the hp feels more natural(by preventing auto-updates)
             lock (playerCurrentHpTrackBar)
             {
                 //modify hp
@@ -1985,6 +1980,7 @@ namespace MGS2_MC
 
         private void GripTrackBar_Scroll(object sender, EventArgs e)
         {
+            //lock the trackbar so modifying the grip feels more natural(by preventing auto-updates)
             lock (gripTrackBar)
             {
                 //modify grip

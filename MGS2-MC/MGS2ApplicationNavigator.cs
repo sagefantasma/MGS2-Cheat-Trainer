@@ -42,8 +42,7 @@ namespace MGS2_MC
         internal static byte[] PlayerInfoFinderSnake = new byte[] { 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x19, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x19, 0x00, 0x19, 0x00, 0x14, 0x00, 0x01, 0x00, 0x19, 0x00, 0x19, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x0F, 0x27, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01 };
         internal static byte[] PlayerInfoFinderGeneric = new byte[] { 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x19, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x19, 0x00, 0x19, 0x00, 0x19, 0x00, 0x01, 0x00, 0x19, 0x00, 0x19, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x0F, 0x27, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01 };
         internal static string PlayerInfoFinderString = "01 00 01 00 01 00 01 00 01 00 01 00 01 00 01 00 01 00 01 00 19 00 01 00 ?? 00 01 00 01 00 01 00 19 00 19 00 ?? 00 01 00 19 00 19 00 01 00 01 00 01 00 01 00 01 00 0F 27 01 00 01 00 01 00 01 00 01 00 01 00 01";
-        #endregion
-        #region Static AoBs
+
         internal static byte[] MenuNamesFinder = new byte[] { 0x6D, 0x61, 0x70, 0x2E, 0x63 }; //TODO: prove this is valid
         internal static byte[] DifficultyAndAreaNames = new byte[] { 0x2F, 0x44, 0x2A }; //TODO: prove this is valid, also this is _concerningly_ short.
         internal static string LifeAndGripNames = "72 61 69 64 65 6E 2E 63";
@@ -97,7 +96,6 @@ namespace MGS2_MC
         internal static string DecrementGripGauge = "66 89 BB 18 04 00 00";
         internal static byte[] OriginalGripDamageBytes = { 0x66, 0x89, 0xBB, 0x18, 0x04, 0x00, 0x00 };
         internal static string IncrementGripGauge = "90 90 BB 18 04 00 00";
-        //internal static string CurrentGripGauge = "B0 4B 74 85 1E 02 00 00"; //this is invalid, evidently.
         internal static string InGamePause = "A9 00 07 00 00 0F 85 C4";
         internal static byte[] OriginalPauseButtonBytes = { 0xA9, 0x00, 0x07, 0x00, 0x00 };
         internal static string ItemMenuPause = "09 35 B1 EF 5D 01";
@@ -245,7 +243,7 @@ namespace MGS2_MC
         public static readonly MemoryOffset SAVE_COUNT = new MemoryOffset(22);
         public static readonly MemoryOffset CONTINUE_COUNT = new MemoryOffset(18);
         public static readonly MemoryOffset MECHS_DESTROYED = new MemoryOffset(56);
-        public static readonly MemoryOffset PULL_UP_COUNT = new MemoryOffset(14); //TODO: prove this is valid
+        public static readonly MemoryOffset PULL_UP_COUNT = new MemoryOffset(14);
         public static readonly MemoryOffset SPECIAL_ITEMS_USED = new MemoryOffset(5238, 5239);
         public static readonly MemoryOffset RATIONS_USED = new MemoryOffset(5232, 5233);
         #endregion
@@ -268,7 +266,7 @@ namespace MGS2_MC
         #endregion
 
         #region Calculated From CurrentGripGauge
-        public static readonly MemoryOffset CURRENT_GRIP_GAUGE = new MemoryOffset(136, 137); //TODO: verify
+        public static readonly MemoryOffset CURRENT_GRIP_GAUGE = new MemoryOffset(136, 137);
         #endregion
 
         #region Calculated From ModifiableHP

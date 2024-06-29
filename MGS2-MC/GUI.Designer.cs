@@ -2063,7 +2063,6 @@
             // 
             this.gripGroupBox.Controls.Add(this.playerGripTablePanel);
             this.gripGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gripGroupBox.Enabled = false;
             this.gripGroupBox.Location = new System.Drawing.Point(3, 102);
             this.gripGroupBox.Name = "gripGroupBox";
             this.gripGroupBox.Size = new System.Drawing.Size(273, 93);
@@ -2095,8 +2094,9 @@
             this.raiseGripButton.Name = "raiseGripButton";
             this.raiseGripButton.Size = new System.Drawing.Size(128, 31);
             this.raiseGripButton.TabIndex = 2;
-            this.raiseGripButton.Text = "Raise Grip Level";
+            this.raiseGripButton.Text = "Add 100 Pushups";
             this.raiseGripButton.UseVisualStyleBackColor = true;
+            this.raiseGripButton.Click += new System.EventHandler(this.RaiseGripButton_Click);
             // 
             // playerGripSubTablePanel
             // 
@@ -2122,6 +2122,7 @@
             this.gripTrackBar.BackColor = System.Drawing.Color.DarkTurquoise;
             this.playerGripSubTablePanel.SetColumnSpan(this.gripTrackBar, 2);
             this.gripTrackBar.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gripTrackBar.Enabled = false;
             this.gripTrackBar.LargeChange = 250;
             this.gripTrackBar.Location = new System.Drawing.Point(92, 3);
             this.gripTrackBar.Maximum = 3600;
@@ -2130,6 +2131,7 @@
             this.gripTrackBar.TabIndex = 2;
             this.gripTrackBar.TickStyle = System.Windows.Forms.TickStyle.None;
             this.gripTrackBar.Value = 3600;
+            this.gripTrackBar.Scroll += new System.EventHandler(this.GripTrackBar_Scroll);
             // 
             // label49
             // 
@@ -2149,14 +2151,14 @@
             this.lowerGripButton.Name = "lowerGripButton";
             this.lowerGripButton.Size = new System.Drawing.Size(127, 31);
             this.lowerGripButton.TabIndex = 1;
-            this.lowerGripButton.Text = "Lower Grip Level";
+            this.lowerGripButton.Text = "Remove 100 Pushups";
             this.lowerGripButton.UseVisualStyleBackColor = true;
+            this.lowerGripButton.Click += new System.EventHandler(this.LowerGripButton_Click);
             // 
             // playerHealthGroupBox
             // 
             this.playerHealthGroupBox.Controls.Add(this.playerHpTablePanel);
             this.playerHealthGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.playerHealthGroupBox.Enabled = false;
             this.playerHealthGroupBox.Location = new System.Drawing.Point(3, 3);
             this.playerHealthGroupBox.Name = "playerHealthGroupBox";
             this.playerHealthGroupBox.Size = new System.Drawing.Size(273, 93);
@@ -2205,6 +2207,7 @@
             this.playerCurrentHpTrackBar.TabIndex = 1;
             this.playerCurrentHpTrackBar.TickStyle = System.Windows.Forms.TickStyle.None;
             this.playerCurrentHpTrackBar.Value = 100;
+            this.playerCurrentHpTrackBar.Scroll += new System.EventHandler(this.PlayerCurrentHpTrackBar_Scroll);
             // 
             // playerMaxHpLabel
             // 
@@ -2234,6 +2237,7 @@
             0,
             0,
             0});
+            this.playerMaxHpUpDown.ValueChanged += new System.EventHandler(this.PlayerMaxHpUpDown_ValueChanged);
             // 
             // cheatsCheckedListBox
             // 

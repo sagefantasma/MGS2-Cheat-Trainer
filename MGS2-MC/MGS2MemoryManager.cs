@@ -14,8 +14,8 @@ namespace MGS2_MC
         #region Internals
         private const string loggerName = "MemoryManagerDebuglog.log";
 
-        private static List<int> _lastKnownPlayerOffsets { get; set; } = default;
-        private static List<int> _lastKnownStageOffsets { get; set; } = default;
+        private static List<IntPtr> _lastKnownPlayerOffsets { get; set; } = default;
+        private static List<IntPtr> _lastKnownStageOffsets { get; set; } = default;
         private static ILogger _logger { get; set; }
 
         internal static void StartLogger()
@@ -86,217 +86,106 @@ namespace MGS2_MC
             return currentPC;
         }
 
-        private static List<int> GetStageOffsets()
+        private static List<IntPtr> GetStageOffsets()
         {
             lock (MGS2Monitor.MGS2Process)
             {
                 using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                 {
-                    byte[] gameMemoryBuffer = proxy.GetProcessSnapshot();
-                    //if we've retrieved a stage offset before, check the old one first
-                    if (_lastKnownStageOffsets != default)
+                    if(_lastKnownStageOffsets != default)
                     {
-                        if (ValidateLastKnownOffsets(gameMemoryBuffer, _lastKnownStageOffsets, MGS2AoB.StageInfo))
+                        if (ValidateLastKnownOffsets(proxy, _lastKnownStageOffsets, MGS2AoB.StageInfo))
                         {
                             _logger.Verbose($"Last known stageOffsets are still valid, reusing...");
                             return _lastKnownStageOffsets;
                         }
                     }
+                    SimplePattern stageOffsetPattern = new SimplePattern(MGS2AoB.StageInfoString);
+                    List<IntPtr> stageOffsets = proxy.ScanMemoryForPattern(stageOffsetPattern);
 
-                    _lastKnownStageOffsets = new List<int>();
-
-                    List<int> stageOffset = FindUniqueOffset(gameMemoryBuffer, MGS2AoB.StageInfo);
-                    _logger.Verbose($"We found {stageOffset.Count} stage offsets in memory");
+                    _logger.Verbose($"We found {stageOffsets.Count} stage offsets in memory");
 
                     //ignore all results except for the final two if more than 2 are found.
-                    if(stageOffset.Count > 1)
-                        stageOffset = stageOffset.GetRange(stageOffset.Count - 2, 2);
+                    if (stageOffsets.Count > 1)
+                        stageOffsets = stageOffsets.GetRange(stageOffsets.Count - 2, 2);
 
-                    _lastKnownStageOffsets = new List<int>(stageOffset);
+                    _lastKnownStageOffsets = new List<IntPtr>(stageOffsets);
                     return _lastKnownStageOffsets;
                 }
             }
         }
 
-        private static bool ValidateLastKnownOffsets(byte[] memoryBuffer, List<int> lastKnownOffsets, byte[] finderAoB)
+        private static bool ValidateLastKnownOffsets(SimpleProcessProxy proxy, List<IntPtr> lastKnownOffsets, byte[] finderAoB)
         {
             try
             {
-                bool offsetIsValid = true;
-                if(lastKnownOffsets.Count == 0)
+                bool lastKnownAreValid = true;
+                foreach (IntPtr stageOffset in lastKnownOffsets)
                 {
-                    return false;
-                }
-
-                foreach (int previousOffset in lastKnownOffsets)
-                {
-                    byte[] previousOffsetBuffer = new byte[finderAoB.Length];
-                    Array.Copy(memoryBuffer, previousOffset, previousOffsetBuffer, 0, finderAoB.Length);
-                    for (int i = 0; i < previousOffsetBuffer.Length; i++)
+                    byte[] currentBytesAtLastKnown = proxy.ReadProcessOffset(stageOffset, finderAoB.Length);
+                    if (!currentBytesAtLastKnown.SequenceEqual(finderAoB))
                     {
-                        if (previousOffsetBuffer[i] != finderAoB[i])
-                        {
-                            //if ANY byte does not match exactly to the offsetBytes, we know the offset has moved
-                            _logger.Verbose($"Last known offset at {previousOffset} has changed since we last looked!");
-                            offsetIsValid = false;
-                        }
+                        _logger.Verbose($"Last known offset at {stageOffset} has changed since we last looked!");
+                        lastKnownAreValid = false;
                     }
                 }
 
                 _logger.Verbose($"Last known offset(s) are still valid.");
-                return offsetIsValid;
+                return lastKnownAreValid;
             }
             catch (Exception e)
             {
-                _logger.Warning($"Something unexpected went wrong when looking at the last known player offsets: {e}");
-                //we failed to look at the last known player offsets, which isn't fatal.
+                _logger.Warning($"Something unexpected went wrong when looking at the last known offsets: {e}");
+                //we failed to look at the last known offsets, which isn't fatal.
                 return false;
             }
         }
 
-        private static List<int> FindUniqueOffset(byte[] gameMemoryBuffer, byte[] finderAoB, int resultLimit = -1)
-        {
-            int byteCount = 0;
-            List<int> foundOffsets = new List<int>();
-            try
-            {
-                while (byteCount + 1 < gameMemoryBuffer.Length)
-                {
-                    for (int position = 0; position < finderAoB.Length; position++)
-                    {
-                        //now filter any out that don't match with the finderAoB
-                        if (gameMemoryBuffer[byteCount + position] != finderAoB[position])
-                            break;
-                        //if we get all the way through the scan without finding anything "wrong", we have a match
-                        else if (position == finderAoB.Length - 1)
-                        {
-                            _logger.Debug($"Found AoB {BitConverter.ToString(finderAoB)} at {byteCount}!");
-                            foundOffsets.Add(byteCount);
-                        }
-                    }
-
-                    if (foundOffsets.Count == resultLimit)
-                    {
-                        _logger.Debug($"{resultLimit} matches were requested, and all were found.");
-                        return foundOffsets;
-                    }
-
-                    byteCount ++; //2 bytes seems to be the maximum we can reliably go without missing offsets
-                }
-            }
-            catch (Exception e)
-            {
-                _logger.Error($"Failed to find unique offset: {e}");
-                throw new AggregateException($"Failed to find unique offset: ", e);
-            }
-
-            _logger.Debug($"{resultLimit} matches were requested, and only {foundOffsets.Count} were found.");
-            return foundOffsets;
-        }
-
-        private static List<int> FindNewPlayerOffsets(byte[] buffer, int offsetsToFind)
-        {
-            int byteCount = 0;
-            List<int> playerOffsets = new List<int>();
-            try
-            {
-                while (byteCount + 152 < buffer.Length) //this can _probably just be 144 or 148, but i want to be safe
-                {
-                    bool mightBeValid = false;
-                    for (int position = 0; position < MGS2AoB.PlayerInfoFinder.Length; position++)
-                    {
-                        //the "playerOffsetBytes" is very common within the game's memory. (~60-90 matches)
-                        //HOWEVER, if we limit the playerOffsets bytes by the _relative position_, we get VERY few results!
-                        //#1 if you have fired 0 shots, you will have 4 of these blocks of memory.
-                        //#2 if you have fired 1+ shots but HAVE NOT checkpointed, you will have 3 blocks
-                        //#3 if you have fired 1+ shots and HAVE checkpointed, you will have 2 blocks
-
-                        //the playerOffsetBytes will have a mirrored result: one directly between the currentAmmo array and
-                        //maxAmmo array, and another one directly before the start of currentItem array. They will be separated
-                        //by EXACTLY 72 bytes(difference between currentAmmo and maxAmmo). Ignore any sets where the current
-                        //byte value does not match with the byte value 72 bytes ahead.
-                        if (buffer[byteCount + position + 72] != buffer[byteCount + position])
-                            break;
-                        //now filter any out that don't match with the playerOffsetBytes
-                        if (buffer[byteCount + position] != MGS2AoB.PlayerInfoFinder[position])
-                            break;
-                        //if we get all the way through the scan without finding anything "wrong", we have a possible match
-                        else if (position == MGS2AoB.PlayerInfoFinder.Length - 1)
-                        {
-                            mightBeValid = true;
-                        }
-                    }
-
-                    if (mightBeValid)
-                    {
-                        byte[] bufferBeingExamined = new byte[MGS2AoB.PlayerInfoFinder.Length];
-                        Array.Copy(buffer, byteCount + 144, bufferBeingExamined, 0, MGS2AoB.PlayerInfoFinder.Length);
-
-                        //to filter out scenarios #1 and #2 above, for all of the possible matches, check 144 bytes ahead.
-                        //ONLY if we are matching on a file with 0 shots OR 0 shots at last checkpoint can there be a full match
-                        //144 bytes ahead. if at ANY point in the 144 bytes after each position in the offset array we're scanning
-                        //there is a value that DOES NOT MATCH, then we know we have a real player offset.
-                        for (int position = 0; position < MGS2AoB.PlayerInfoFinder.Length; position++)
-                        {
-                            if (bufferBeingExamined[position] != MGS2AoB.PlayerInfoFinder[position])
-                            {
-                                playerOffsets.Add(byteCount);
-                                break;
-                            }
-                        }
-                    }
-
-                    if (playerOffsets.Count == offsetsToFind)
-                        break;
-
-                    byteCount += 4; //8 bytes can result in missed offsets, 4 bytes is sufficient in accuracy & speed.
-                }
-
-                return playerOffsets;
-            }
-            catch (Exception e)
-            {
-                _logger.Error($"Failed to find player offset: {e}");
-                throw new AggregateException($"Failed to find player offset: ", e);
-            }
-        }
-
-        private static List<int> GetPlayerOffsets(Constants.PlayableCharacter character)
+        private static List<IntPtr> GetPlayerOffsets(Constants.PlayableCharacter character)
         {
             lock (MGS2Monitor.MGS2Process)
             {
                 using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                 {
-                    byte[] gameMemoryBuffer = proxy.GetProcessSnapshot();
-
-                    //if we've retrieved a player offset before, check the old one first
-                    if (_lastKnownPlayerOffsets != default)
+                    if(_lastKnownPlayerOffsets != default)
                     {
-                        if (ValidateLastKnownOffsets(gameMemoryBuffer, _lastKnownPlayerOffsets, MGS2AoB.PlayerInfoFinder))
+                        if (character == Constants.PlayableCharacter.Raiden) {
+                            if (ValidateLastKnownOffsets(proxy, _lastKnownPlayerOffsets, MGS2AoB.PlayerInfoFinderRaiden))
+                            {
+                                _logger.Verbose($"Last known playerOffsets are still valid, reusing...");
+                                return _lastKnownPlayerOffsets;
+                            }
+                        }
+                        else if(character == Constants.PlayableCharacter.Snake)
                         {
-                            _logger.Verbose("Last known player offsets are valid, reusing...");
-                            return _lastKnownPlayerOffsets;
+                            if (ValidateLastKnownOffsets(proxy, _lastKnownPlayerOffsets, MGS2AoB.PlayerInfoFinderSnake))
+                            {
+                                _logger.Verbose($"Last known playerOffsets are still valid, reusing...");
+                                return _lastKnownPlayerOffsets;
+                            }
+                        }
+                        else
+                        {
+                            if (ValidateLastKnownOffsets(proxy, _lastKnownPlayerOffsets, MGS2AoB.PlayerInfoFinderGeneric))
+                            {
+                                _logger.Verbose($"Last known playerOffsets are still valid, reusing...");
+                                return _lastKnownPlayerOffsets;
+                            }
                         }
                     }
 
-                    _lastKnownPlayerOffsets = new List<int>();
-                    int offsetsToFind = 2;
-                    Stage currentStage = GetStage();
-                    _logger.Debug($"User is in {currentStage}");
-                    if (StageNames.VRStages.PlayableStageList.Contains(currentStage))
-                    {
-                        _logger.Debug("Looks like this is a VR stage, will now only search for 1 player offset.");
-                        offsetsToFind = 1;
-                    }
-                    List<int> playerOffsets = FindNewPlayerOffsets(gameMemoryBuffer, offsetsToFind);
+                    _lastKnownPlayerOffsets = new List<IntPtr>();
+                    
+                    SimplePattern pattern = new SimplePattern(MGS2AoB.PlayerInfoFinderString);
+                    List<IntPtr> playerOffsets = proxy.ScanMemoryForPattern(pattern);
 
-                    _lastKnownPlayerOffsets = new List<int>(playerOffsets);
+                    _lastKnownPlayerOffsets = new List<IntPtr>(playerOffsets);
                     return _lastKnownPlayerOffsets;
                 }
             }
         }
 
-        private static byte[] ReadValueFromMemory(int offset, long bytesToRead = default)
+        private static byte[] ReadValueFromMemory(IntPtr memoryLocation, long bytesToRead = default)
         {
             if(bytesToRead == default)
             {
@@ -309,11 +198,11 @@ namespace MGS2_MC
                 {
                     try
                     {
-                        byte[] bytesRead = proxy.ReadProcessOffset(new IntPtr(offset), bytesToRead);
+                        byte[] bytesRead = proxy.ReadProcessOffset(memoryLocation, bytesToRead);
                         if (bytesRead.Length != bytesToRead)
                         {
                             _logger.Warning($"Expected to read {bytesToRead}, but we actually read {bytesRead.Length}");
-                            throw new FileLoadException($"Failed to read value at offset {offset}.");
+                            throw new FileLoadException($"Failed to read value at memoryLocation {memoryLocation}.");
                         }
 
                         return bytesRead;
@@ -350,7 +239,7 @@ namespace MGS2_MC
 
         private static string GetCharacterCode()
         {
-            List<int> stageMemoryOffsets = GetStageOffsets();
+            List<IntPtr> stageMemoryOffsets = GetStageOffsets();
             string stringInMemory = Encoding.UTF8.GetString(ReadValueFromMemory(stageMemoryOffsets.First() + MGS2Offset.CURRENT_CHARACTER.Start, MGS2Offset.CURRENT_CHARACTER.Length));
 
             return stringInMemory;
@@ -358,7 +247,7 @@ namespace MGS2_MC
 
         internal static Stage GetStage()
         {
-            List<int> stageMemoryOffsets = GetStageOffsets();
+            List<IntPtr> stageMemoryOffsets = GetStageOffsets();
             string stringInMemory = Encoding.UTF8.GetString(ReadValueFromMemory(stageMemoryOffsets.First() + MGS2Offset.CURRENT_STAGE.Start, MGS2Offset.CURRENT_STAGE.Length));
 
             Stage currentStage = Stage.Parse(stringInMemory);
@@ -366,7 +255,7 @@ namespace MGS2_MC
             return currentStage;
         }
 
-        private static void SetStringValue(int stringOffset, string valueToSet)
+        private static void SetStringValue(IntPtr stringOffset, string valueToSet)
         {
             try
             {
@@ -375,7 +264,7 @@ namespace MGS2_MC
                     using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                     {
                         _logger.Information($"setting memory at offset {stringOffset} to {valueToSet}...");
-                        proxy.ModifyProcessOffset(new IntPtr(stringOffset), valueToSet, true);
+                        proxy.ModifyProcessOffset(stringOffset, valueToSet, true);
                     }
                 }
             }
@@ -391,7 +280,7 @@ namespace MGS2_MC
             //TODO: this is kind of gross that this is hardcoded to be playeroffset only... i would like to fix that.
             try
             {
-                List<int> playerOffsets = GetPlayerOffsets(character);
+                List<IntPtr> playerOffsets = GetPlayerOffsets(character);
 
                 lock (MGS2Monitor.MGS2Process)
                 {
@@ -412,7 +301,7 @@ namespace MGS2_MC
             }
         }
 
-        private static void SetKnownOffsetValue(int offset, byte[] valueToSet)
+        private static void SetKnownOffsetValue(IntPtr offset, byte[] valueToSet)
         {
             try
             {
@@ -421,7 +310,7 @@ namespace MGS2_MC
                     using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                     {
                         _logger.Information($"Setting known offset value at offset: {offset} to {BitConverter.ToString(valueToSet)}...");
-                        proxy.ModifyProcessOffset(new IntPtr(offset), valueToSet, true);
+                        proxy.ModifyProcessOffset(offset, valueToSet, true);
                     }
                 }
             }
@@ -432,7 +321,7 @@ namespace MGS2_MC
             }
         }
 
-        private static void SetKnownOffsetValue(int offset, byte valueToSet)
+        private static void SetKnownOffsetValue(IntPtr offset, byte valueToSet)
         {
             try
             {
@@ -441,7 +330,7 @@ namespace MGS2_MC
                     using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                     {
                         _logger.Information($"Setting known offset value at offset: {offset} to {valueToSet}...");
-                        proxy.ModifyProcessOffset(new IntPtr(offset), valueToSet, true);
+                        proxy.ModifyProcessOffset(offset, valueToSet, true);
                     }
                 }
             }
@@ -452,7 +341,7 @@ namespace MGS2_MC
             }
         }
 
-        private static byte[] ReadAoBOffsetValue(byte[] arrayOfBytes, MemoryOffset memoryOffset)
+        private static byte[] ReadAoBOffsetValue(string byteString, MemoryOffset memoryOffset)
         {
             try
             {
@@ -460,10 +349,8 @@ namespace MGS2_MC
                 {
                     using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                     {
-                        byte[] processSnapshot = proxy.GetProcessSnapshot();
-
-                        int aobOffset = FindUniqueOffset(processSnapshot, arrayOfBytes).First();
-                        return proxy.ReadProcessOffset(new IntPtr(aobOffset + memoryOffset.Start), memoryOffset.Length);
+                        IntPtr memoryLocation = proxy.ScanMemoryForUniquePattern(new SimplePattern(byteString));
+                        return proxy.ReadProcessOffset(IntPtr.Add(memoryLocation, memoryOffset.Start), memoryOffset.Length);
                     }
                 }
             }
@@ -474,7 +361,7 @@ namespace MGS2_MC
             }
         }
 
-        private static void SetAoBOffsetValue(byte[] arrayOfBytes, MemoryOffset memoryOffset, dynamic valueToSet)
+        private static void SetAoBOffsetValue(string byteString, MemoryOffset memoryOffset, dynamic valueToSet)
         {
             try
             {
@@ -482,10 +369,8 @@ namespace MGS2_MC
                 {
                     using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                     {
-                        byte[] processSnapshot = proxy.GetProcessSnapshot();
-
-                        int aobOffset = FindUniqueOffset(processSnapshot, arrayOfBytes).First();
-                        proxy.ModifyProcessOffset(new IntPtr(aobOffset + memoryOffset.Start), valueToSet, true);
+                        IntPtr memoryLocation = proxy.ScanMemoryForUniquePattern(new SimplePattern(byteString));
+                        proxy.ModifyProcessOffset(IntPtr.Add(memoryLocation, memoryOffset.Start), valueToSet, true);
                     }
                 }
             }
@@ -504,11 +389,9 @@ namespace MGS2_MC
             {
                 using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                 {
-                    byte[] gameMemoryBuffer = proxy.GetProcessSnapshot();
+                    IntPtr offset = proxy.ScanMemoryForUniquePattern(new SimplePattern(gameString.FinderAoB));
 
-                    List<int> offsets = FindUniqueOffset(gameMemoryBuffer, gameString.FinderAoB);
-
-                    SetStringValue(offsets[0] + gameString.MemoryOffset.Start, newValue);
+                    SetStringValue(IntPtr.Add(offset, gameString.MemoryOffset.Start), newValue);
                 }
             }
         }
@@ -519,11 +402,9 @@ namespace MGS2_MC
             {
                 using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                 {
-                    byte[] gameMemoryBuffer = proxy.GetProcessSnapshot();
+                    IntPtr offset = proxy.ScanMemoryForUniquePattern(new SimplePattern(gameString.FinderAoB));
 
-                    List<int> offsets = FindUniqueOffset(gameMemoryBuffer, gameString.FinderAoB);
-
-                    byte[] memoryValue = ReadValueFromMemory(offsets[0] + gameString.MemoryOffset.Start, gameString.MemoryOffset.Length);
+                    byte[] memoryValue = ReadValueFromMemory(IntPtr.Add(offset, gameString.MemoryOffset.Start), gameString.MemoryOffset.Length);
 
                     return Encoding.UTF8.GetString(memoryValue);
                 }
@@ -532,9 +413,8 @@ namespace MGS2_MC
 
         public static byte[] GetPlayerInfoBasedValue(int valueOffset, int sizeToRead, Constants.PlayableCharacter character)
         {
-            List<int> playerMemoryOffsets = GetPlayerOffsets(character);
-
-            return ReadValueFromMemory(playerMemoryOffsets[0] + valueOffset, sizeToRead);
+            List<IntPtr> playerMemoryOffsets = GetPlayerOffsets(character);
+            return ReadValueFromMemory(IntPtr.Add(playerMemoryOffsets[0], valueOffset), sizeToRead);
         }
 
         public static void UpdateObjectBaseValue(MGS2Object mgs2Object, ushort value, Constants.PlayableCharacter character)
@@ -602,7 +482,7 @@ namespace MGS2_MC
         public static GameStats ReadGameStats()
         {
             _logger.Verbose("Reading game stats...");
-            int stageOffset = GetStageOffsets().First();
+            IntPtr stageOffset = GetStageOffsets().First();
             byte[] gameStatsBytes = ReadValueFromMemory(stageOffset + MGS2Offset.GAME_STATS_BLOCK.Start, MGS2Offset.GAME_STATS_BLOCK.Length);
             short continues = BitConverter.ToInt16(gameStatsBytes, 4);
             short saves = BitConverter.ToInt16(gameStatsBytes, 8);
@@ -638,7 +518,7 @@ namespace MGS2_MC
 
         public static void ChangeGameStat(GameStats.ModifiableStats gameStat, short value)
         {
-            int stageOffset = GetStageOffsets().First();
+            IntPtr stageOffset = GetStageOffsets().First();
             MemoryOffset gameStatOffset;
             switch (gameStat)
             {
@@ -675,7 +555,7 @@ namespace MGS2_MC
 
         public static Difficulty ReadCurrentDifficulty()
         {
-            int stageOffset = GetStageOffsets().First();
+            IntPtr stageOffset = GetStageOffsets().First();
             byte[] difficultyByte = ReadValueFromMemory(stageOffset + MGS2Offset.CURRENT_DIFFICULTY.Start, MGS2Offset.CURRENT_DIFFICULTY.Length);
 
             int convertedDifficulty = difficultyByte[0];
@@ -685,7 +565,7 @@ namespace MGS2_MC
 
         public static GameType ReadGameType()
         {
-            int stageOffset = GetStageOffsets().First();
+            IntPtr stageOffset = GetStageOffsets().First();
             byte[] gameTypeByte = ReadValueFromMemory(stageOffset + MGS2Offset.CURRENT_GAMETYPE.Start, MGS2Offset.CURRENT_GAMETYPE.Length);
 
             int convertedGameType = gameTypeByte[0];
@@ -695,7 +575,7 @@ namespace MGS2_MC
 
         public static ushort GetCurrentHP()
         {
-            int stageOffset = GetStageOffsets().First();
+            IntPtr stageOffset = GetStageOffsets().First();
             byte[] currentHpBytes = ReadValueFromMemory(stageOffset + MGS2Offset.CURRENT_HP.Start, MGS2Offset.CURRENT_HP.Length);
 
             return BitConverter.ToUInt16(currentHpBytes, 0);
@@ -703,7 +583,7 @@ namespace MGS2_MC
 
         public static ushort GetCurrentMaxHP()
         {
-            int stageOffset = GetStageOffsets().First();
+            IntPtr stageOffset = GetStageOffsets().First();
             byte[] currentMaxHpBytes = ReadValueFromMemory(stageOffset + MGS2Offset.CURRENT_MAX_HP.Start, MGS2Offset.CURRENT_MAX_HP.Length);
 
             return BitConverter.ToUInt16(currentMaxHpBytes, 0);
@@ -726,6 +606,57 @@ namespace MGS2_MC
             }
         }
 
+        public static ushort ModifyGripLevel(bool increase)
+        {
+            try
+            {
+                Constants.PlayableCharacter currentCharacter = DetermineActiveCharacter();
+
+                lock (MGS2Monitor.MGS2Process)
+                {
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    {
+                        IntPtr memoryLocation = proxy.ScanMemoryForUniquePattern(new SimplePattern(MGS2AoB.PlayerInfoFinderString));
+
+                        if (currentCharacter == Constants.PlayableCharacter.Snake)
+                            memoryLocation = IntPtr.Add(memoryLocation, MGS2Offset.GRIP_LEVEL_SNAKE.Start);
+                        else
+                            memoryLocation = IntPtr.Add(memoryLocation, MGS2Offset.GRIP_LEVEL_RAIDEN.Start);
+
+                        byte[] gripLevelBytes = proxy.ReadProcessOffset(memoryLocation, 2);
+                        ushort gripLevel = BitConverter.ToUInt16(gripLevelBytes, 0);
+
+                        switch (increase)
+                        {
+                            default:
+                            case true:
+                                if (gripLevel < 200)
+                                {
+                                    proxy.ModifyProcessOffset(memoryLocation, gripLevel+=100);
+                                }
+                                return gripLevel;
+                            case false:
+                                //this, unfortunately, doesn't seem to actually cause the grip level to change... annoying
+                                if (gripLevel > 0 && gripLevel >= 100)
+                                {
+                                    proxy.ModifyProcessOffset(memoryLocation, gripLevel-=100);
+                                }
+                                else
+                                {
+                                    proxy.ModifyProcessOffset(memoryLocation, 0);
+                                }
+                                return gripLevel;
+                        }
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                _logger.Error($"Failed to modify grip level: {e}");
+                return ushort.MaxValue;
+            }
+        }
+
         public static Constants.PlayableCharacter DetermineActiveCharacter()
         {
             string characterCode = GetCharacterCode();
@@ -734,7 +665,10 @@ namespace MGS2_MC
             if (characterCode.Contains("tnk") || characterCode.Contains("r_vr_s"))
             {
                 _logger.Verbose("Currently playing as Snake");
-                return Constants.PlayableCharacter.Snake;
+                if (characterCode.Contains("tnk"))
+                    return Constants.PlayableCharacter.Snake;
+                else
+                    return Constants.PlayableCharacter.Pliskin; //technically you're not playing as Pliskin, but this fixes the VR/Snake tales issue for Snake
             }
             else if (characterCode.Contains("plt"))
             {

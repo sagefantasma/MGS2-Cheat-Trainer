@@ -7,19 +7,21 @@ namespace MGS2_MC
     public struct Cheat
     {
         public string Name { get; private set; }
-        public Action<bool> CheatAction;
-        public byte[] OriginalBytes { get; set; }
+        public Action<bool> CheatAction { get; private set; }
+        public byte[] OriginalBytes { get; private set; }
+        public IntPtr CodeLocation { get; set; }
 
         public Cheat(string name, Action<bool> action, byte[] originalBytes)
         {
             Name = name;
             CheatAction = action;
             OriginalBytes = originalBytes;
+            CodeLocation = IntPtr.Zero;
         }
 
         internal class CheatActions
         {
-            private static void ReplaceWithOriginalCode(string aob, MemoryOffset offset, byte[] bytesToReplace, int startIndexToReplace = 0)
+            private static void ReplaceWithOriginalCode(IntPtr memoryLocation, MemoryOffset offset, byte[] bytesToReplace, int startIndexToReplace = 0)
             {
                 lock (MGS2Monitor.MGS2Process)
                 {
@@ -31,19 +33,16 @@ namespace MGS2_MC
                         {
                             using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                             {
-                                SimplePattern pattern = new SimplePattern(aob);
-                                int memoryLocation = spp.ScanMemoryForUniquePattern(pattern).ToInt32();
-
-                                if (memoryLocation != -1)
+                                if (memoryLocation != IntPtr.Zero)
                                 {
-                                    byte[] memoryContent = spp.ReadProcessOffset(new IntPtr(memoryLocation + offset.Start), offset.Length);
+                                    byte[] memoryContent = spp.ReadProcessOffset(IntPtr.Add(memoryLocation, offset.Start), offset.Length);
 
                                     for (int i = startIndexToReplace; i < startIndexToReplace + bytesToReplace.Length; i++)
                                     {
                                         memoryContent[i] = bytesToReplace[i];
                                     }
 
-                                    spp.ModifyProcessOffset(new IntPtr(memoryLocation), memoryContent, true);
+                                    spp.ModifyProcessOffset(memoryLocation, memoryContent, true);
                                     successful = true;
                                 }
                             }
@@ -56,7 +55,7 @@ namespace MGS2_MC
                 }
             }
 
-            private static void ReplaceWithInvalidCode(string aob, MemoryOffset offset, int bytesToReplace, int startIndexToReplace = 0)
+            private static IntPtr ReplaceWithInvalidCode(string aob, MemoryOffset offset, int bytesToReplace, int startIndexToReplace = 0)
             {
                 lock (MGS2Monitor.MGS2Process)
                 {
@@ -82,6 +81,8 @@ namespace MGS2_MC
 
                                     spp.ModifyProcessOffset(new IntPtr(memoryLocation), memoryContent, true);
                                     successful = true;
+
+                                    return new IntPtr(memoryLocation);
                                 }
                             }
                         }
@@ -91,9 +92,49 @@ namespace MGS2_MC
                         }
                     } while (!successful && retries > 0);
                 }
+
+                return IntPtr.Zero;
             }
 
-            private static void ModifySingleByte(string aob, MemoryOffset offset, byte replacementValue)
+            private static IntPtr ReplaceWithInvalidCode(IntPtr memoryLocation, MemoryOffset offset, int bytesToReplace, int startIndexToReplace = 0)
+            {
+                lock (MGS2Monitor.MGS2Process)
+                {
+                    bool successful = false;
+                    int retries = 5;
+                    do
+                    {
+                        try
+                        {
+                            using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                            {
+                                if (memoryLocation != IntPtr.Zero)
+                                {
+                                    byte[] memoryContent = spp.ReadProcessOffset(IntPtr.Add(memoryLocation, offset.Start), offset.Length);
+
+                                    for (int i = startIndexToReplace; i < startIndexToReplace + bytesToReplace; i++)
+                                    {
+                                        memoryContent[i] = 0x90;
+                                    }
+
+                                    spp.ModifyProcessOffset(memoryLocation, memoryContent, true);
+                                    successful = true;
+
+                                    return memoryLocation;
+                                }
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            retries--;
+                        }
+                    } while (!successful && retries > 0);
+                }
+
+                return IntPtr.Zero;
+            }
+
+            private static IntPtr ModifySingleByte(string aob, MemoryOffset offset, byte replacementValue)
             {
                 lock (MGS2Monitor.MGS2Process)
                 {
@@ -111,6 +152,37 @@ namespace MGS2_MC
                                 if (memoryLocation != -1)
                                 {
                                     spp.ModifyProcessOffset(new IntPtr(memoryLocation + offset.Start), replacementValue, true);
+                                    successful = true;
+
+                                    return new IntPtr(memoryLocation);
+                                }
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            retries--;
+                        }
+                    } while (!successful && retries > 0);
+                }
+
+                return IntPtr.Zero;
+            }
+
+            private static void ModifySingleByte(IntPtr memoryLocation, MemoryOffset offset, byte replacementValue)
+            {
+                lock (MGS2Monitor.MGS2Process)
+                {
+                    bool successful = false;
+                    int retries = 5;
+                    do
+                    {
+                        try
+                        {
+                            using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                            {
+                                if (memoryLocation != IntPtr.Zero)
+                                {
+                                    spp.ModifyProcessOffset(IntPtr.Add(memoryLocation, offset.Start), replacementValue, true);
                                     successful = true;
                                 }
                             }
@@ -154,79 +226,244 @@ namespace MGS2_MC
 
             public static void TurnScreenBlack(bool activate)
             {
+                Cheat activeCheat = MGS2Cheat.BlackScreen;
                 if (activate)
-                    ModifySingleByte(MGS2AoB.Camera, MGS2Offset.BLACK_SCREEN, 0x00);
+                {
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.OriginalBytes = ReadMemory(MGS2AoB.Camera, MGS2Offset.BLACK_SCREEN);
+                        activeCheat.CodeLocation = ModifySingleByte(MGS2AoB.Camera, MGS2Offset.BLACK_SCREEN, 0x00);
+                        MGS2Cheat.BlackScreen = activeCheat;
+                    }
+                    else
+                    {
+                        ModifySingleByte(activeCheat.CodeLocation, MGS2Offset.BLACK_SCREEN, 0x00);
+                    }
+                }
                 else
-                    ModifySingleByte(MGS2AoB.Camera, MGS2Offset.BLACK_SCREEN, 0x01);
+                    ModifySingleByte(activeCheat.CodeLocation, MGS2Offset.BLACK_SCREEN, 0x40);
             }
 
             public static void TurnOffBleedDamage(bool activate)
             {
+                Cheat activeCheat = MGS2Cheat.NoBleedDamage;
                 if (activate)
-                    ReplaceWithInvalidCode(MGS2AoB.NoBleedDamage, MGS2Offset.NO_BLEED_DMG, 7);
+                {
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.NoBleedDamage, MGS2Offset.NO_BLEED_DMG, 7);
+                        MGS2Cheat.NoBleedDamage = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.NO_BLEED_DMG, 7);
+                    }
+                }
                 else
-                    ReplaceWithOriginalCode(MGS2AoB.RestoreBleedDamage, MGS2Offset.NO_BLEED_DMG, MGS2AoB.OriginalBleedDamageBytes);
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.NO_BLEED_DMG, MGS2AoB.OriginalBleedDamageBytes);
             }
 
             public static void TurnOffBurnDamage(bool activate)
             {
+                Cheat activeCheat = MGS2Cheat.NoBurnDamage;
                 if (activate)
-                    ReplaceWithInvalidCode(MGS2AoB.NoBurnDamage, MGS2Offset.NO_BURN_DMG, 7);
+                {
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.NoBurnDamage, MGS2Offset.NO_BURN_DMG, 7);
+                        MGS2Cheat.NoBurnDamage = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.NO_BURN_DMG, 7);
+                    }
+                }
                 else
-                    ReplaceWithOriginalCode(MGS2AoB.RestoreBurnDamage, MGS2Offset.NO_BLEED_DMG, MGS2AoB.OriginalBurnDamageBytes);
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.NO_BLEED_DMG, MGS2AoB.OriginalBurnDamageBytes);
             }
 
             internal static void InfiniteAmmo(bool activate)
             {
+                Cheat activeCheat = MGS2Cheat.InfiniteAmmo;
                 if (activate)
-                    ReplaceWithInvalidCode(MGS2AoB.InfiniteAmmo, MGS2Offset.INFINITE_AMMO, 4);
+                {
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.InfiniteAmmo, MGS2Offset.INFINITE_AMMO, 4);
+                        MGS2Cheat.InfiniteAmmo = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.INFINITE_AMMO, 4);
+                    }
+                }
                 else
-                    ReplaceWithOriginalCode(MGS2AoB.RestoreAmmo, MGS2Offset.INFINITE_AMMO, MGS2AoB.OriginalAmmoBytes);
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.INFINITE_AMMO, MGS2AoB.OriginalAmmoBytes);
             }
 
             internal static void InfiniteLife(bool activate)
             {
+                Cheat activeCheat = MGS2Cheat.InfiniteLife;
                 if (activate)
-                    ReplaceWithInvalidCode(MGS2AoB.InfiniteLife, MGS2Offset.INFINITE_LIFE, 4);
+                {
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.InfiniteLife, MGS2Offset.INFINITE_LIFE, 4);
+                        MGS2Cheat.InfiniteLife = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.INFINITE_LIFE, 4);
+                    }
+                }
                 else
-                    ReplaceWithOriginalCode(MGS2AoB.RestoreLife, MGS2Offset.INFINITE_LIFE, MGS2AoB.OriginalLifeBytes);
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.INFINITE_LIFE, MGS2AoB.OriginalLifeBytes);
             }
 
             internal static void InfiniteOxygen(bool activate)
             {
+                Cheat activeCheat = MGS2Cheat.InfiniteOxygen;
                 if (activate)
-                    ReplaceWithInvalidCode(MGS2AoB.InfiniteO2, MGS2Offset.INFINITE_O2, 4);
+                {
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.InfiniteO2, MGS2Offset.INFINITE_O2, 4);
+                        MGS2Cheat.InfiniteOxygen = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.INFINITE_O2, 4);
+                    }
+                }
                 else
-                    ReplaceWithOriginalCode(MGS2AoB.RestoreO2, MGS2Offset.INFINITE_O2, MGS2AoB.OriginalO2Bytes);
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.INFINITE_O2, MGS2AoB.OriginalO2Bytes);
             }
 
             internal static void Letterboxing(bool activate)
             {
+                Cheat activeCheat = MGS2Cheat.Letterboxing;
                 if (activate)
-                    ModifySingleByte(MGS2AoB.Camera, MGS2Offset.LETTERBOX, 0x00);
+                {
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ModifySingleByte(MGS2AoB.Camera, MGS2Offset.LETTERBOX, 0x00);
+                        MGS2Cheat.Letterboxing = activeCheat;
+                    }
+                    else
+                    {
+                        ModifySingleByte(activeCheat.CodeLocation, MGS2Offset.LETTERBOX, 0x01);
+                    }
+                }
                 else
-                    ModifySingleByte(MGS2AoB.Camera, MGS2Offset.LETTERBOX, 0x01);
+                    ModifySingleByte(activeCheat.CodeLocation, MGS2Offset.LETTERBOX, 0x01);
             }
 
             internal static void AmmoNeverDepletes(bool activate)
             {
+                Cheat activeCheat = MGS2Cheat.NoReload;
                 if (activate)
-                    ReplaceWithInvalidCode(MGS2AoB.NeverReload, MGS2Offset.NEVER_RELOAD, 2);
+                {
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.NeverReload, MGS2Offset.NEVER_RELOAD, 2);
+                        MGS2Cheat.NoReload = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.NEVER_RELOAD, 2);
+                    }
+                }
                 else
-                    ReplaceWithOriginalCode(MGS2AoB.RestoreReload, MGS2Offset.NEVER_RELOAD, MGS2AoB.OriginalReloadBytes);
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.NEVER_RELOAD, MGS2AoB.OriginalReloadBytes);
+            }
+
+            internal static void GripNeverDepletes(bool activate)
+            {
+                Cheat activeCheat = MGS2Cheat.NoGripDamage;
+                if (activate)
+                {
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.DecrementGripGauge, MGS2Offset.NO_GRIP_DMG, 7);
+                        MGS2Cheat.NoGripDamage = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.NO_GRIP_DMG, 7);
+                    }
+                }
+                else
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.NO_GRIP_DMG, MGS2AoB.OriginalGripDamageBytes);
+            }
+
+            internal static void TurnOffPauseButton(bool activate)
+            {
+                Cheat activeCheat = MGS2Cheat.DisablePauseButton;
+                if (activate)
+                {
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.InGamePause, MGS2Offset.NO_PAUSE_BTN, 5);
+                        MGS2Cheat.DisablePauseButton = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.NO_PAUSE_BTN, 5);
+                    }
+                }
+                else
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.NO_PAUSE_BTN, MGS2AoB.OriginalPauseButtonBytes);
+            }
+
+            internal static void TurnOffItemMenuPause(bool activate)
+            {
+                Cheat activeCheat = MGS2Cheat.DisableItemMenuPause;
+                if (activate)
+                {
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.ItemMenuPause, MGS2Offset.NO_ITEM_PAUSE, 6);
+                        MGS2Cheat.DisableItemMenuPause = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.NO_ITEM_PAUSE, 6);
+                    }
+                }
+                else
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.NO_ITEM_PAUSE, MGS2AoB.OriginalItemMenuPauseBytes);
+            }
+
+            internal static void TurnOffWeaponMenuPause(bool activate)
+            {
+                Cheat activeCheat = MGS2Cheat.DisableWeaponMenuPause;
+                if (activate)
+                {
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.WeaponMenuPause, MGS2Offset.NO_WEAPON_PAUSE, 6);
+                        MGS2Cheat.DisableWeaponMenuPause = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.NO_WEAPON_PAUSE, 6);
+                    }
+                }
+                else
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.NO_WEAPON_PAUSE, MGS2AoB.OriginalWeaponMenuPauseBytes);
             }
 
             internal static void NoClipNoGravity(bool activate)
             {
-                NoClip(false);
+                NoClip(false, activate);
             }
 
             internal static void NoClipWithGravity(bool activate)
             {
-                NoClip(true);
+                NoClip(true, activate);
             }
 
-            private static void NoClip(bool gravity)
+            private static void NoClip(bool gravity, bool activate)
             {
                 Constants.PlayableCharacter currentPc = MGS2MemoryManager.DetermineActiveCharacter();
 
@@ -265,17 +502,8 @@ namespace MGS2_MC
 
                         IntPtr pointerLocation = spp.FollowPointer(new IntPtr(MGS2Pointer.WalkThroughWalls), false);
                         byte[] memoryContent = spp.GetMemoryFromPointer(new IntPtr(pointerLocation.ToInt64() + MGS2Offset.NO_CLIP.Start), MGS2Offset.NO_CLIP.Length);
-                        bool revertToOriginal = false;
-                        if(MGS2AoB.OriginalClippingBytes.Length == 0)
-                        {
-                            MGS2AoB.OriginalClippingBytes = memoryContent;
-                        }
-                        else if(MGS2AoB.OriginalClippingBytes != memoryContent)
-                        {
-                            revertToOriginal = true;
-                        }
 
-                        if (revertToOriginal)
+                        if (!activate)
                         {
                             if (memoryContent[4] == 0x15 || memoryContent[4] == 0x13)
                             {
@@ -336,28 +564,53 @@ namespace MGS2_MC
                 if (currentZoom == null)
                     return;
 
+                Cheat activeCheat = zoomIn ? MGS2Cheat.ZoomIn : MGS2Cheat.ZoomOut;
                 if (zoomIn)
-                    ModifySingleByte(MGS2AoB.Camera, MGS2Offset.ZOOM, currentZoom[0]++);
+                {
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ModifySingleByte(MGS2AoB.Camera, MGS2Offset.ZOOM, currentZoom[0]++);
+                        MGS2Cheat.ZoomIn = activeCheat;
+                    }
+                    else
+                    {
+                        ModifySingleByte(activeCheat.CodeLocation, MGS2Offset.ZOOM, currentZoom[0]++);
+                    }
+                }
                 else
-                    ModifySingleByte(MGS2AoB.Camera, MGS2Offset.ZOOM, currentZoom[0]--);
+                {
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ModifySingleByte(MGS2AoB.Camera, MGS2Offset.ZOOM, currentZoom[0]--);
+                        MGS2Cheat.ZoomOut = activeCheat;
+                    }
+                    else
+                    {
+                        ModifySingleByte(activeCheat.CodeLocation, MGS2Offset.ZOOM, currentZoom[0]--);
+                    }
+                }
             }
         }
     }    
 
     public class MGS2Cheat
     {
-        public static Cheat BlackScreen { get; } = new Cheat("Black Screen", Cheat.CheatActions.TurnScreenBlack, MGS2AoB.OriginalCameraBytes);
-        public static Cheat NoBleedDamage { get; } = new Cheat("Bleeding Causes No Damage", Cheat.CheatActions.TurnOffBleedDamage, MGS2AoB.OriginalBleedDamageBytes);
-        public static Cheat NoBurnDamage { get; } = new Cheat("Burning Causes No Damage", Cheat.CheatActions.TurnOffBurnDamage, MGS2AoB.OriginalBurnDamageBytes);
-        public static Cheat InfiniteAmmo { get; } = new Cheat("Infinite Ammo", Cheat.CheatActions.InfiniteAmmo, MGS2AoB.OriginalAmmoBytes);
-        public static Cheat InfiniteLife { get; } = new Cheat("Enemies Deal No Damage", Cheat.CheatActions.InfiniteLife, MGS2AoB.OriginalLifeBytes);
-        public static Cheat InfiniteOxygen { get; } = new Cheat("Infinite Oxygen", Cheat.CheatActions.InfiniteOxygen, MGS2AoB.OriginalO2Bytes);
-        public static Cheat Letterboxing { get; } = new Cheat("Letterboxing", Cheat.CheatActions.Letterboxing, MGS2AoB.OriginalCameraBytes);
-        public static Cheat NoReload { get; } = new Cheat("Reloading Not Required", Cheat.CheatActions.AmmoNeverDepletes, MGS2AoB.OriginalReloadBytes);
-        public static Cheat NoClipWithGravity { get; } = new Cheat("Walk Through Walls (gravity)", Cheat.CheatActions.NoClipWithGravity, MGS2AoB.OriginalClippingBytes);
-        public static Cheat NoClipNoGravity { get; } = new Cheat("Walk Through Walls (no gravity)", Cheat.CheatActions.NoClipNoGravity, MGS2AoB.OriginalClippingBytes);
-        public static Cheat ZoomIn { get; } = new Cheat("Zoom In", Cheat.CheatActions.ZoomIn, MGS2AoB.OriginalCameraBytes);
-        public static Cheat ZoomOut { get; } = new Cheat("Zoom Out", Cheat.CheatActions.ZoomOut, MGS2AoB.OriginalCameraBytes);
+        public static Cheat BlackScreen { get; internal set; } = new Cheat("Black Screen", Cheat.CheatActions.TurnScreenBlack, MGS2AoB.OriginalCameraBytes);
+        public static Cheat NoBleedDamage { get; internal set; } = new Cheat("Bleeding Causes No Damage", Cheat.CheatActions.TurnOffBleedDamage, MGS2AoB.OriginalBleedDamageBytes);
+        public static Cheat NoBurnDamage { get; internal set; } = new Cheat("Burning Causes No Damage", Cheat.CheatActions.TurnOffBurnDamage, MGS2AoB.OriginalBurnDamageBytes);
+        public static Cheat InfiniteAmmo { get; internal set; } = new Cheat("Infinite Ammo", Cheat.CheatActions.InfiniteAmmo, MGS2AoB.OriginalAmmoBytes);
+        public static Cheat InfiniteLife { get; internal set; } = new Cheat("Enemies Deal No Damage", Cheat.CheatActions.InfiniteLife, MGS2AoB.OriginalLifeBytes);
+        public static Cheat InfiniteOxygen { get; internal set; } = new Cheat("Infinite Oxygen", Cheat.CheatActions.InfiniteOxygen, MGS2AoB.OriginalO2Bytes);
+        public static Cheat Letterboxing { get; internal set; } = new Cheat("Letterboxing", Cheat.CheatActions.Letterboxing, MGS2AoB.OriginalCameraBytes);
+        public static Cheat NoReload { get; internal set; } = new Cheat("Reloading Not Required", Cheat.CheatActions.AmmoNeverDepletes, MGS2AoB.OriginalReloadBytes);
+        public static Cheat NoClipWithGravity { get; internal set; } = new Cheat("Walk Through Walls (gravity)", Cheat.CheatActions.NoClipWithGravity, MGS2AoB.OriginalClippingBytes);
+        public static Cheat NoClipNoGravity { get; internal set; } = new Cheat("Walk Through Walls (no gravity)", Cheat.CheatActions.NoClipNoGravity, MGS2AoB.OriginalClippingBytes);
+        public static Cheat ZoomIn { get; internal set; } = new Cheat("Zoom In", Cheat.CheatActions.ZoomIn, MGS2AoB.OriginalCameraBytes);
+        public static Cheat ZoomOut { get; internal set; } = new Cheat("Zoom Out", Cheat.CheatActions.ZoomOut, MGS2AoB.OriginalCameraBytes);
+        public static Cheat NoGripDamage { get; internal set; } = new Cheat("Infinite Grip Stamina", Cheat.CheatActions.GripNeverDepletes, MGS2AoB.OriginalGripDamageBytes);
+        public static Cheat DisablePauseButton { get; internal set; } = new Cheat("Disable Pause Button", Cheat.CheatActions.TurnOffPauseButton, MGS2AoB.OriginalPauseButtonBytes);
+        public static Cheat DisableItemMenuPause { get; internal set; } = new Cheat("Disable Item Menu Pause", Cheat.CheatActions.TurnOffItemMenuPause, MGS2AoB.OriginalItemMenuPauseBytes);
+        public static Cheat DisableWeaponMenuPause { get; internal set; } = new Cheat("Disable Weapon Menu Pause", Cheat.CheatActions.TurnOffWeaponMenuPause, MGS2AoB.OriginalWeaponMenuPauseBytes);
 
         private static List<Cheat> _cheatList = null;
 
@@ -365,8 +618,9 @@ namespace MGS2_MC
         {
             _cheatList = new List<Cheat>
             {
-                BlackScreen, NoBleedDamage, NoBurnDamage, InfiniteAmmo, InfiniteLife, InfiniteOxygen, Letterboxing,
-                NoClipWithGravity, NoClipNoGravity, NoReload,ZoomIn, ZoomOut
+                BlackScreen, NoBleedDamage, NoBurnDamage, InfiniteAmmo, InfiniteLife, InfiniteOxygen, NoGripDamage,
+                Letterboxing, NoClipWithGravity, NoClipNoGravity, NoReload,/*ZoomIn, ZoomOut,*/ DisablePauseButton,
+                DisableItemMenuPause, DisableWeaponMenuPause //zoom in and out aren't working as expected, and i cant be bothered to fix them right now.
             };
         }
 

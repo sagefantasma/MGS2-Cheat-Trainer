@@ -12,7 +12,7 @@ namespace MGS2_MC
         public class MGS2String
         {
             public MemoryOffset MemoryOffset { get; set; }
-            internal byte[] FinderAoB { get; set; }
+            internal string FinderAoB { get; set; }
             public string Tag { get; set; }
             public string CurrentText { get; set; }
         }

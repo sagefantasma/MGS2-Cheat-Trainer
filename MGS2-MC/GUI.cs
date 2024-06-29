@@ -1931,5 +1931,42 @@ namespace MGS2_MC
                 }
             }
         }
+
+        private void LowerGripButton_Click(object sender, EventArgs e)
+        {
+            _logger.Information("User clicked -100 pushups button");
+            toolStripStatusLabel.Text = $"Attempting to reduce pushup count by 100 pushups...";
+            ushort currentPushups = MGS2MemoryManager.ModifyGripLevel(false);
+            toolStripStatusLabel.Text = $"Pushup count set to {currentPushups} for this character.";
+        }
+
+        private void RaiseGripButton_Click(object sender, EventArgs e)
+        {
+            _logger.Information("User clicked +100 pushups button");
+            toolStripStatusLabel.Text = $"Attempting to increase pushup count by 100 pushups...";
+            ushort currentPushups = MGS2MemoryManager.ModifyGripLevel(true);
+            toolStripStatusLabel.Text = $"Pushup count set to {currentPushups} for this character. Perform one manual pull-up to set grip level.";
+        }
+
+        private void PlayerCurrentHpTrackBar_Scroll(object sender, EventArgs e)
+        {
+            lock (playerCurrentHpTrackBar)
+            {
+                //modify hp
+            }
+        }
+
+        private void GripTrackBar_Scroll(object sender, EventArgs e)
+        {
+            lock (gripTrackBar)
+            {
+                //modify grip
+            }
+        }
+
+        private void PlayerMaxHpUpDown_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

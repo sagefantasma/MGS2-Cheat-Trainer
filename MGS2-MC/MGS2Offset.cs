@@ -36,28 +36,32 @@ namespace MGS2_MC
     {
         //if the region is dynamic(i.e. PlayerOffsetAoB), it will change on area load. The others will only (possibly[hopefully]) change with game updates
         #region Dynamic AoBs
-        internal static byte[] PlayerInfoFinder = new byte[] { 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 01, 00 };
+        internal static byte[] PlayerInfoFinderRaiden = new byte[] { 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x19, 0x00, 0x01, 0x00, 0x10, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x19, 0x00, 0x19, 0x00, 0x14, 0x00, 0x01, 0x00, 0x19, 0x00, 0x19, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x0F, 0x27, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01 };
+        internal static byte[] PlayerInfoFinderSnake = new byte[] { 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x19, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x19, 0x00, 0x19, 0x00, 0x14, 0x00, 0x01, 0x00, 0x19, 0x00, 0x19, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x0F, 0x27, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01 };
+        internal static byte[] PlayerInfoFinderGeneric = new byte[] { 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x19, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x19, 0x00, 0x19, 0x00, 0x19, 0x00, 0x01, 0x00, 0x19, 0x00, 0x19, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x0F, 0x27, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01 };
+        internal static string PlayerInfoFinderString = "01 00 01 00 01 00 01 00 01 00 01 00 01 00 01 00 01 00 01 00 19 00 01 00 ?? 00 01 00 01 00 01 00 19 00 19 00 ?? 00 01 00 19 00 19 00 01 00 01 00 01 00 01 00 01 00 0F 27 01 00 01 00 01 00 01 00 01 00 01 00 01";
         #endregion
         #region Static AoBs
         internal static byte[] MenuNamesFinder = new byte[] { 0x6D, 0x61, 0x70, 0x2E, 0x63 }; //TODO: prove this is valid
         internal static byte[] DifficultyAndAreaNames = new byte[] { 0x2F, 0x44, 0x2A }; //TODO: prove this is valid, also this is _concerningly_ short.
-        internal static byte[] LifeAndGripNames = new byte[] { 0x72, 0x61, 0x69, 0x64, 0x65, 0x6E, 0x2E, 0x63 };
-        internal static byte[] RayNames = new byte[] { 0x6D, 0x69, 0x6E, 0x69, 0x5F, 0x73, 0x63, 0x6E, 0x2E, 0x63 };
+        internal static string LifeAndGripNames = "72 61 69 64 65 6E 2E 63";
+        internal static string RayNames = "6D 69 6E 69 5F 73 63 6E 2E 63";
         //weapon & item descriptions dispersed through out. seems to start around +00613CCB or so in the memory print?
         internal static byte[] RationMedsBandagePentazeminDescriptions = new byte[] { 0xA4, 0xE3, 0x81, 0xAF, 0xE3, 0x81, 0x9A, 0xE3, 0x81, 0xA0, 0xEE, 0x80, 0x80, 0xE3, 0x80, 0x82, 0x0A }; //TODO: prove this is valid
-        internal static byte[] SolidusName = new byte[] { 0x69, 0x6E, 0x69, 0x74, 0x5F, 0x73, 0x6F, 0x6C, 0x2E, 0x63 };
-        internal static byte[] EmmaName = new byte[] { 0x62, 0x72, 0x6B, 0x5F, 0x67, 0x6C, 0x73, 0x5F, 0x69, 0x6E, 0x69, 0x2E, 0x63 };
-        internal static byte[] EmmaO2 = new byte[] { 0x65, 0x6D, 0x61, 0x5F, 0x72, 0x61, 0x69, 0x5F, 0x6F, 0x6E, 0x62, 0x75, 0x5F, 0x65, 0x6E, 0x64 };
-        internal static byte[] FatmanName = new byte[] { 0x77, 0x61, 0x74, 0x65, 0x72, 0x6C, 0x69, 0x6E, 0x65, 0x66, 0x61, 0x6C, 0x6C, 0x2E, 0x63 }; 
-        internal static byte[] OlgaName = new byte[] { 0x6F, 0x72, 0x67, 0x61, 0x5F, 0x6C, 0x6E, 0x7A, 0x2E, 0x63 };
-        internal static byte[] HarrierName = new byte[] { 0x68, 0x61, 0x72, 0x5F, 0x76, 0x75, 0x6C, 0x63, 0x2E, 0x63 };
-        internal static byte[] KasatkaName = new byte[] { 0x6B, 0x63, 0x6B, 0x5F, 0x70, 0x6C, 0x61, 0x6E, 0x74, 0x5F, 0x6D, 0x74 };
-        internal static byte[] FortuneName = new byte[] { 0x66, 0x6F, 0x72, 0x74, 0x5F, 0x6F, 0x62, 0x6A, 0x5F, 0x69, 0x6E, 0x69, 0x2E, 0x63 };
-        internal static byte[] Vamp02 = new byte[] { 0x76, 0x61, 0x6D, 0x70, 0x2E, 0x63 };
+        internal static string SolidusName = "69 6E 69 74 5F 73 6F 6C 2E 63";
+        internal static string EmmaName = "62 72 6B 5F 67 6C 73 5F 69 6E 69 2E 63";
+        internal static string EmmaO2 = "65 6D 61 5F 72 61 69 5F 6F 6E 62 75 5F 65 6E 64";
+        internal static string FatmanName = "77 61 74 65 72 6C 69 6E 65 66 61 6C 6C 2E 63"; 
+        internal static string OlgaName = "6F 72 67 61 5F 6C 6E 7A 2E 63";
+        internal static string HarrierName = "68 61 72 5F 76 75 6C 63 2E 63";
+        internal static string KasatkaName = "6B 63 6B 5F 70 6C 61 6E 74 5F 6D 74";
+        internal static string FortuneName = "66 6F 72 74 5F 6F 62 6A 5F 69 6E 69 2E 63";
+        internal static string Vamp02 = "76 61 6D 70 2E 63";
         //00 00 00 78 00 08 00 <-- possibly an AoB for HP/Magazine modificaitons? might have to key off of LIFE?(or at least whatever it is called at that moment, within the games memory block)
         internal static byte[] HealthMod = new byte[] { 0x00, 0x00, 0x00, 0x78, 0x00, 0x08, 0x00 }; //TODO: prove this is valid
         //clipcurrentCount == -114 from the above AoB, 4bytes long. HP mod is DIRECTLY after, it seems?
         internal static byte[] StageInfo = new byte[] { 0x10, 0x0E, 0x18, 0x15, 0x00, 0x00 };
+        internal static string StageInfoString = "10 0E 18 15 00 00";
         //current "stage" == -267 from the above AoB, 5 bytes long. If it has r_tnk, it is Snake. if it is r_plt, it is raiden :)
         internal static byte[] OriginalAmmoBytes = new byte[] { 0x66, 0x89, 0x0C, 0x1A, 0x48, 0x8B, 0x5C, 0x24, 0x30, 0x0F, 0xBF, 0xC1, 0x48, 0x83, 0xC4, 0x20 };
         internal static string RestoreAmmo = "90 90 90 90 48 8B 5C 24 30 0F BF C1 48 83 C4 20";
@@ -88,8 +92,16 @@ namespace MGS2_MC
         internal static string MGS1SnakeClipping = "DA 01 F4 01 ?? 00 00 00 00 00 00 00 00 00 00 00 27 15 9B";
         internal static byte[] OriginalCameraBytes = { 0x45, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x06, 0x17, 0x42, 0x53, 0x17, 0x06, 0x53, 0x42, 0x44 };
         internal static string Camera = "45 00 00 00 00 00 00 00 06 17 42 53 17 06 53 42 44";
-        internal static string DecrementGripGauge = "66 89 BB 18 04 00 00"; //TODO: add cheat for this :)
+        internal static string DecrementGripGauge = "66 89 BB 18 04 00 00";
+        internal static byte[] OriginalGripDamageBytes = { 0x66, 0x89, 0xBB, 0x18, 0x04, 0x00, 0x00 };
+        internal static string IncrementGripGauge = "90 90 BB 18 04 00 00";
         internal static string CurrentGripGauge = "B0 4B 74 85 1E 02 00 00";
+        internal static string InGamePause = "A9 00 07 00 00 0F 85 C4";
+        internal static byte[] OriginalPauseButtonBytes = { 0xA9, 0x00, 0x07, 0x00, 0x00 };
+        internal static string ItemMenuPause = "09 35 B1 EF 5D 01";
+        internal static byte[] OriginalItemMenuPauseBytes = { 0x09, 0x35, 0xB1, 0xEF, 0x5D, 0x01 };
+        internal static string WeaponMenuPause = "09 35 14 D5 5D 01";
+        internal static byte[] OriginalWeaponMenuPauseBytes = { 0x09, 0x35, 0x14, 0xD5, 0x5D, 0x01 };
 
 
 
@@ -201,8 +213,10 @@ namespace MGS2_MC
 
         #region Value offsets
         #region Calculated From PlayerInfo
-        public static readonly MemoryOffset BASE_WEAPON = new MemoryOffset(-42, 0); //if a "new" playerOffsetBytes is chosen, only need to update this value and the item offset will update.
+        public static readonly MemoryOffset BASE_WEAPON = new MemoryOffset(-250, 0); //if a "new" playerOffsetBytes is chosen, only need to update this value and the item offset will update.
         public static readonly MemoryOffset BASE_ITEM = new MemoryOffset(BASE_WEAPON.Start + 144, BASE_WEAPON.Start + 144 + 80);
+        public static readonly MemoryOffset GRIP_LEVEL_SNAKE = new MemoryOffset(-634, -633);
+        public static readonly MemoryOffset GRIP_LEVEL_RAIDEN = new MemoryOffset(-632, -631);
         #endregion
 
         #region Calculated From HealthMod
@@ -242,10 +256,13 @@ namespace MGS2_MC
         public static readonly MemoryOffset NO_BLEED_DMG = new MemoryOffset(0, 16);
         public static readonly MemoryOffset NO_BURN_DMG = new MemoryOffset(0, 16);
         public static readonly MemoryOffset NO_CLIP = new MemoryOffset(0x40, 0x53);
-        public static readonly MemoryOffset LETTERBOX = new MemoryOffset(-188);
-        public static readonly MemoryOffset ZOOM = new MemoryOffset(-192); //todo: verify
-        public static readonly MemoryOffset BLACK_SCREEN = new MemoryOffset(-229);
+        public static readonly MemoryOffset LETTERBOX = new MemoryOffset(-187);
+        public static readonly MemoryOffset ZOOM = new MemoryOffset(-189); //todo: verify
+        public static readonly MemoryOffset BLACK_SCREEN = new MemoryOffset(-228);
         public static readonly MemoryOffset NO_GRIP_DMG = new MemoryOffset(0, 6);
+        public static readonly MemoryOffset NO_PAUSE_BTN = new MemoryOffset(0, 5);
+        public static readonly MemoryOffset NO_ITEM_PAUSE = new MemoryOffset(0, 6);
+        public static readonly MemoryOffset NO_WEAPON_PAUSE = new MemoryOffset(0, 6);
         #endregion
 
         #region Calculated From CurrentGripGauge

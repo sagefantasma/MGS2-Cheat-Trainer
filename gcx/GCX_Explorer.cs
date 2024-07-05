@@ -15,6 +15,7 @@ namespace gcx
     {
         private Dictionary<string, string> contentTree = new Dictionary<string, string>();
         private Dictionary<string, string> contentTreeCarbonCopy = new Dictionary<string, string>();
+        private gcx_editor gcx_Editor;
         public GCX_Explorer()
         {
             InitializeComponent();
@@ -25,12 +26,12 @@ namespace gcx
             contentTree = new Dictionary<string, string>();
             OpenFileDialog ofd = new OpenFileDialog();
             DialogResult result = ofd.ShowDialog(this);
-            gcx_editor editor = new gcx_editor();
+            gcx_Editor = new gcx_editor();
 
             if (result == DialogResult.OK)
             {
-                debugTextbox.Text = editor.CallDecompiler(ofd.FileName);
-                contentTree = editor.BuildContentTree();
+                debugTextbox.Text = gcx_Editor.CallDecompiler(ofd.FileName);
+                contentTree = gcx_Editor.BuildContentTree();
                 foreach(KeyValuePair<string, string> entry in contentTree)
                 {
                     contentTreeCarbonCopy.Add(entry.Key, entry.Value);
@@ -53,8 +54,9 @@ namespace gcx
             functionContentsTextbox.Text = contentTree[selectedNode];
             functionContentsTextbox.Text = functionContentsTextbox.Text.Replace("\r\n", "");
             functionContentsTextbox.Text = functionContentsTextbox.Text.Replace("\t", "");
-            functionContentsTextbox.Text = functionContentsTextbox.Text.Replace("{", "{\r\n\t");
+            //functionContentsTextbox.Text = functionContentsTextbox.Text.Replace("{", "{\r\n\t");
             functionContentsTextbox.Text = functionContentsTextbox.Text.Replace("}", "}\r\n");
+            hexCodeTextbox.Text = BitConverter.ToString(gcx_Editor.Procedures.Find(proc => proc.Name == selectedNode).RawContents);
         }
 
         private void saveFunctionChangesBtn_Click(object sender, EventArgs e)

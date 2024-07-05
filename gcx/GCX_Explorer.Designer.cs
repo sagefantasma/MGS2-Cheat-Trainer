@@ -34,9 +34,10 @@
             this.nodeContentsGroupBox = new System.Windows.Forms.GroupBox();
             this.functionContentsTextbox = new System.Windows.Forms.TextBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.saveFileButton = new System.Windows.Forms.Button();
-            this.saveFunctionChangesBtn = new System.Windows.Forms.Button();
             this.debugTextbox = new System.Windows.Forms.TextBox();
+            this.saveFunctionChangesBtn = new System.Windows.Forms.Button();
+            this.saveFileButton = new System.Windows.Forms.Button();
+            this.hexCodeTextbox = new System.Windows.Forms.TextBox();
             this.guiControlsLayoutPanel.SuspendLayout();
             this.nodeContentsGroupBox.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
@@ -52,6 +53,7 @@
             this.guiControlsLayoutPanel.Controls.Add(this.contentsTreeView, 1, 0);
             this.guiControlsLayoutPanel.Controls.Add(this.nodeContentsGroupBox, 0, 1);
             this.guiControlsLayoutPanel.Controls.Add(this.flowLayoutPanel1, 2, 1);
+            this.guiControlsLayoutPanel.Controls.Add(this.hexCodeTextbox, 2, 0);
             this.guiControlsLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.guiControlsLayoutPanel.Location = new System.Drawing.Point(0, 0);
             this.guiControlsLayoutPanel.Name = "guiControlsLayoutPanel";
@@ -97,10 +99,10 @@
             // functionContentsTextbox
             // 
             this.functionContentsTextbox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.functionContentsTextbox.Enabled = false;
             this.functionContentsTextbox.Location = new System.Drawing.Point(3, 16);
             this.functionContentsTextbox.Multiline = true;
             this.functionContentsTextbox.Name = "functionContentsTextbox";
+            this.functionContentsTextbox.ReadOnly = true;
             this.functionContentsTextbox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.functionContentsTextbox.Size = new System.Drawing.Size(520, 200);
             this.functionContentsTextbox.TabIndex = 0;
@@ -116,14 +118,14 @@
             this.flowLayoutPanel1.Size = new System.Drawing.Size(262, 219);
             this.flowLayoutPanel1.TabIndex = 5;
             // 
-            // saveFileButton
+            // debugTextbox
             // 
-            this.saveFileButton.Location = new System.Drawing.Point(137, 151);
-            this.saveFileButton.Name = "saveFileButton";
-            this.saveFileButton.Size = new System.Drawing.Size(113, 66);
-            this.saveFileButton.TabIndex = 4;
-            this.saveFileButton.Text = "Save GCX File";
-            this.saveFileButton.UseVisualStyleBackColor = true;
+            this.debugTextbox.Enabled = false;
+            this.debugTextbox.Location = new System.Drawing.Point(3, 3);
+            this.debugTextbox.Multiline = true;
+            this.debugTextbox.Name = "debugTextbox";
+            this.debugTextbox.Size = new System.Drawing.Size(247, 142);
+            this.debugTextbox.TabIndex = 6;
             // 
             // saveFunctionChangesBtn
             // 
@@ -135,14 +137,24 @@
             this.saveFunctionChangesBtn.UseVisualStyleBackColor = true;
             this.saveFunctionChangesBtn.Click += new System.EventHandler(this.saveFunctionChangesBtn_Click);
             // 
-            // debugTextbox
+            // saveFileButton
             // 
-            this.debugTextbox.Enabled = false;
-            this.debugTextbox.Location = new System.Drawing.Point(3, 3);
-            this.debugTextbox.Multiline = true;
-            this.debugTextbox.Name = "debugTextbox";
-            this.debugTextbox.Size = new System.Drawing.Size(247, 142);
-            this.debugTextbox.TabIndex = 6;
+            this.saveFileButton.Location = new System.Drawing.Point(137, 151);
+            this.saveFileButton.Name = "saveFileButton";
+            this.saveFileButton.Size = new System.Drawing.Size(113, 66);
+            this.saveFileButton.TabIndex = 4;
+            this.saveFileButton.Text = "Save GCX File";
+            this.saveFileButton.UseVisualStyleBackColor = true;
+            // 
+            // hexCodeTextbox
+            // 
+            this.hexCodeTextbox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.hexCodeTextbox.Location = new System.Drawing.Point(535, 3);
+            this.hexCodeTextbox.Multiline = true;
+            this.hexCodeTextbox.Name = "hexCodeTextbox";
+            this.hexCodeTextbox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.hexCodeTextbox.Size = new System.Drawing.Size(262, 219);
+            this.hexCodeTextbox.TabIndex = 6;
             // 
             // GCX_Explorer
             // 
@@ -153,6 +165,7 @@
             this.Name = "GCX_Explorer";
             this.Text = "GCX_Editor";
             this.guiControlsLayoutPanel.ResumeLayout(false);
+            this.guiControlsLayoutPanel.PerformLayout();
             this.nodeContentsGroupBox.ResumeLayout(false);
             this.nodeContentsGroupBox.PerformLayout();
             this.flowLayoutPanel1.ResumeLayout(false);
@@ -172,5 +185,6 @@
         private System.Windows.Forms.Button saveFunctionChangesBtn;
         private System.Windows.Forms.Button saveFileButton;
         private System.Windows.Forms.TextBox debugTextbox;
+        private System.Windows.Forms.TextBox hexCodeTextbox;
     }
 }

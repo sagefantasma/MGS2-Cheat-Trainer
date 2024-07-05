@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing.Printing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -16,7 +17,17 @@ namespace gcx
         public string FileName { get; set; }
         private byte[] RawContents { get; set; }
         private byte[] TrimmedContents { get; set; }
-        private List<GCX_Object.Procedure> Procedures { get; set; }
+        internal List<GCX_Object.Procedure> Procedures { get; set; }
+        private int _startOfOffsetBlock;
+        private int _scriptOffset;
+        private int _resourceTableOffset;
+        private int _stringTableOffset;
+        private int _fontDataOffset;
+        private int _key;
+        private int _proceduresBodySize;
+        private int _proceduresDataLocation;
+        private int _mainBodySize;
+        private int _mainDataLocation;
 
         public gcx_editor()
         {
@@ -42,8 +53,60 @@ namespace gcx
             Process decompilingProcess = Process.Start(startInfo);
 
             decompilingProcess.WaitForExit();
-            
-            return decompilingProcess.StandardOutput.ReadToEnd();
+
+            string decompilingOutput = decompilingProcess.StandardOutput.ReadToEnd();
+            string[] decompilingOutputs = decompilingOutput.Split('\n');
+            foreach(string output in decompilingOutputs)
+            {
+                if (string.IsNullOrWhiteSpace(output))
+                    continue;
+                string[] kvp = output.Split(':');
+                string key = kvp[0].Trim();
+                string value = kvp[1].Trim();
+                ParseKeyValuePair(key, value);
+            }
+            _mainDataLocation = _mainBodySize + 4;
+            return decompilingOutput;
+        }
+
+        private void ParseKeyValuePair(string key, string value)
+        {
+            if (key.Contains("strres_block_top"))
+            {
+                _startOfOffsetBlock = int.Parse(value);
+            }
+            else if(key.Contains("script offset"))
+            {
+                _scriptOffset = int.Parse(value);
+            }
+            else if(key.Contains("resource table offset"))
+            {
+                _resourceTableOffset = int.Parse(value);
+            }
+            else if(key.Contains("string table offset"))
+            {
+                _stringTableOffset = int.Parse(value);
+            }
+            else if(key.Contains("font data offset"))
+            {
+                _fontDataOffset = int.Parse(value);
+            }
+            else if (key.Contains("key"))
+            {
+                _key = int.Parse(value);
+            }
+            else if (key.Contains("proc_body_size"))
+            {
+                _proceduresBodySize = int.Parse(value);
+            }
+            else if (key.Contains("proc_body_data"))
+            {
+                _proceduresDataLocation = int.Parse(value);
+            }
+            else if (key.Contains("main_body_size"))
+            {
+                _mainBodySize = int.Parse(value);
+            }
         }
 
         internal Dictionary<string,string> BuildContentTree()
@@ -94,43 +157,53 @@ namespace gcx
         {
             byte[] functionData = null;
 
-            functionName = functionName.Replace("proc_0x", "");
-            string[] functionNamePairings = new string[3];
-            if(functionName.Length % 2 != 0)
-            {
-                //odd length
-                functionNamePairings[0] = functionName.Substring(0, 1);
-            }
-            else
-            {
-                //even length
-                functionNamePairings[0] = functionName.Substring(0, 2);
-            }
-            functionNamePairings[1] = functionName.Substring(1, 2);
-            functionNamePairings[2] = functionName.Substring(3, 2);
-
-            functionNamePairings = functionNamePairings.Reverse().ToArray(); //reverse the order, as this is how they are expressed in the gcx file
-            //in proc table, function will be denoted as FF FF FF 00 YY YY 00 00 ; where FFFFFF is the function name, and YY YY is the offset
-
             if (functionName.ToLower().Trim() != "main")
             {
+                functionName = functionName.Replace("proc_0x", "").Trim();
+                string[] functionNamePairings = new string[3];
+                int index = 0;
+                if(functionName.Length % 2 != 0)
+                {
+                    //odd length
+                    functionNamePairings[0] = functionName.Substring(0, 1);
+                    index++;
+                }
+                else
+                {
+                    //even length
+                    functionNamePairings[0] = functionName.Substring(0, 2);
+                    index += 2;
+                }
+                functionNamePairings[1] = functionName.Substring(index, 2);
+                index += 2;
+                functionNamePairings[2] = functionName.Substring(index, 2);
+            
+
+                functionNamePairings = functionNamePairings.Reverse().ToArray(); //reverse the order, as this is how they are expressed in the gcx file
+                //in proc table, function will be denoted as FF FF FF 00 YY YY 00 00 ; where FFFFFF is the function name, and YY YY is the offset
+
+            
                 byte[] functionNameBytes = new byte[3];
                 for (int i = 0; i < functionNameBytes.Length; i++)
                 {
                     functionNameBytes[i] = byte.Parse(functionNamePairings[i], NumberStyles.HexNumber);
                 }
 
-                procTablePosition = FindSubArray(RawContents, functionNameBytes);
+                procTablePosition = FindSubArray(TrimmedContents, functionNameBytes);
 
-                scriptPos = BitConverter.ToInt32(RawContents, procTablePosition + 4);
+                scriptPos = BitConverter.ToInt32(TrimmedContents, procTablePosition + 4);
+                functionData = new byte[TrimmedContents[_startOfOffsetBlock + _scriptOffset + scriptPos + 1]];
             }
             else
             {
                 procTablePosition = 0; //main is not in proc table
-                scriptPos = -1; //TODO: get main pos from the decompiler
+                scriptPos = _mainDataLocation;
+                functionData = new byte[_mainBodySize];
             }
 
-            return functionData; //TODO: populate with data KEK
+            Array.Copy(RawContents, scriptPos, functionData, 0, functionData.Length);
+
+            return functionData;
         }
 
         private static int FindSubArray(byte[] largeArray, byte[] subArray)

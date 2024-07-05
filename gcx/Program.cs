@@ -3,13 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace gcx
 {
     internal class Program
     {
+        private static void ShowGui()
+        {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new GCX_Explorer());
+        }
+
+        [STAThread]
         static void Main(string[] args)
         {
+            ShowGui();
+            return;
             bool rerun = false;
             do
             {

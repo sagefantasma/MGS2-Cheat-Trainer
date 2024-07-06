@@ -13,8 +13,6 @@ namespace MGS2_MC
     {
         #region Internals
         private const string loggerName = "MemoryManagerDebuglog.log";
-
-        private static List<IntPtr> _lastKnownPlayerOffsets { get; set; } = default;
         private static List<IntPtr> _lastKnownStageOffsets { get; set; } = default;
         private static ILogger _logger { get; set; }
 
@@ -141,50 +139,6 @@ namespace MGS2_MC
             }
         }
 
-        private static List<IntPtr> GetPlayerOffsets(Constants.PlayableCharacter character)
-        {
-            lock (MGS2Monitor.MGS2Process)
-            {
-                using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
-                {
-                    if(_lastKnownPlayerOffsets != default)
-                    {
-                        if (character == Constants.PlayableCharacter.Raiden) {
-                            if (ValidateLastKnownOffsets(proxy, _lastKnownPlayerOffsets, MGS2AoB.PlayerInfoFinderRaiden))
-                            {
-                                _logger.Verbose($"Last known playerOffsets are still valid, reusing...");
-                                return _lastKnownPlayerOffsets;
-                            }
-                        }
-                        else if(character == Constants.PlayableCharacter.Snake)
-                        {
-                            if (ValidateLastKnownOffsets(proxy, _lastKnownPlayerOffsets, MGS2AoB.PlayerInfoFinderSnake))
-                            {
-                                _logger.Verbose($"Last known playerOffsets are still valid, reusing...");
-                                return _lastKnownPlayerOffsets;
-                            }
-                        }
-                        else
-                        {
-                            if (ValidateLastKnownOffsets(proxy, _lastKnownPlayerOffsets, MGS2AoB.PlayerInfoFinderGeneric))
-                            {
-                                _logger.Verbose($"Last known playerOffsets are still valid, reusing...");
-                                return _lastKnownPlayerOffsets;
-                            }
-                        }
-                    }
-
-                    _lastKnownPlayerOffsets = new List<IntPtr>();
-                    
-                    SimplePattern pattern = new SimplePattern(MGS2AoB.PlayerInfoFinderString);
-                    List<IntPtr> playerOffsets = proxy.ScanMemoryForPattern(pattern);
-
-                    _lastKnownPlayerOffsets = new List<IntPtr>(playerOffsets);
-                    return _lastKnownPlayerOffsets;
-                }
-            }
-        }
-
         private static byte[] ReadValueFromMemory(IntPtr memoryLocation, long bytesToRead = default)
         {
             if(bytesToRead == default)
@@ -280,17 +234,13 @@ namespace MGS2_MC
             //TODO: this is kind of gross that this is hardcoded to be playeroffset only... i would like to fix that.
             try
             {
-                List<IntPtr> playerOffsets = GetPlayerOffsets(character);
-
                 lock (MGS2Monitor.MGS2Process)
                 {
                     using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                     {
-                        foreach (int offset in playerOffsets)
-                        {
-                            _logger.Information($"setting playerOffsetBased value at offset: {offset} to {BitConverter.ToString(valueToSet)}...");
-                            proxy.ModifyProcessOffset(new IntPtr(offset + objectOffset), valueToSet);
-                        }
+                        IntPtr ammoOffset = proxy.FollowPointer(new IntPtr(MGS2Pointer.CurrentAmmo), false);
+                        _logger.Information($"setting playerOffsetBased value at offset: {ammoOffset}+{objectOffset} to {BitConverter.ToString(valueToSet)}...");
+                        proxy.SetMemoryAtPointer(IntPtr.Add(ammoOffset, objectOffset), valueToSet);
                     }
                 }
             }
@@ -413,8 +363,14 @@ namespace MGS2_MC
 
         public static byte[] GetPlayerInfoBasedValue(int valueOffset, int sizeToRead, Constants.PlayableCharacter character)
         {
-            List<IntPtr> playerMemoryOffsets = GetPlayerOffsets(character);
-            return ReadValueFromMemory(IntPtr.Add(playerMemoryOffsets[0], valueOffset), sizeToRead);
+            lock (MGS2Monitor.MGS2Process)
+            {
+                using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                {
+                    IntPtr ammoOffset = proxy.FollowPointer(new IntPtr(MGS2Pointer.CurrentAmmo), false);
+                    return proxy.GetMemoryFromPointer(IntPtr.Add(ammoOffset, valueOffset), sizeToRead);
+                }
+            }
         }
 
         public static void UpdateObjectBaseValue(MGS2Object mgs2Object, ushort value, Constants.PlayableCharacter character)
@@ -656,14 +612,14 @@ namespace MGS2_MC
                 
                     using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                     {
-                        IntPtr memoryLocation = proxy.ScanMemoryForUniquePattern(new SimplePattern(MGS2AoB.PlayerInfoFinderString));
+                        IntPtr memoryLocation = proxy.FollowPointer(new IntPtr(MGS2Pointer.CurrentAmmo), false);
 
                         if (currentCharacter == Constants.PlayableCharacter.Snake)
                             memoryLocation = IntPtr.Add(memoryLocation, MGS2Offset.GRIP_LEVEL_SNAKE.Start);
                         else
                             memoryLocation = IntPtr.Add(memoryLocation, MGS2Offset.GRIP_LEVEL_RAIDEN.Start);
 
-                        byte[] gripLevelBytes = proxy.ReadProcessOffset(memoryLocation, 2);
+                        byte[] gripLevelBytes = proxy.GetMemoryFromPointer(memoryLocation, 2);
                         ushort gripLevel = BitConverter.ToUInt16(gripLevelBytes, 0);
 
                         switch (increase)
@@ -672,18 +628,18 @@ namespace MGS2_MC
                             case true:
                                 if (gripLevel < 200)
                                 {
-                                    proxy.ModifyProcessOffset(memoryLocation, gripLevel+=100);
+                                    proxy.SetMemoryAtPointer(memoryLocation, BitConverter.GetBytes(gripLevel += 100));
                                 }
                                 return gripLevel;
                             case false:
                                 //this, unfortunately, doesn't seem to actually cause the grip level to change... annoying
                                 if (gripLevel > 0 && gripLevel >= 100)
                                 {
-                                    proxy.ModifyProcessOffset(memoryLocation, gripLevel-=100);
+                                    proxy.SetMemoryAtPointer(memoryLocation, BitConverter.GetBytes(gripLevel -= 100));
                                 }
                                 else
                                 {
-                                    proxy.ModifyProcessOffset(memoryLocation, 0);
+                                    proxy.SetMemoryAtPointer(memoryLocation, BitConverter.GetBytes(0));
                                 }
                                 return gripLevel;
                         }

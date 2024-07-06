@@ -1717,7 +1717,7 @@ namespace MGS2_MC
                             Constants.PlayableCharacter currentCharacter = MGS2MemoryManager.DetermineActiveCharacter();
                             if(currentCharacter == Constants.PlayableCharacter.Snake)
                             {
-                                gripTrackBar.Maximum = 1800;
+                                gripTrackBar.Maximum = 1800; //1800//3600//5400
                             }
                             else
                             {
@@ -1763,13 +1763,19 @@ namespace MGS2_MC
                         Invoke(new MethodInvoker(() =>
                         {
                             playerCurrentHpTrackBar.Value = MGS2MemoryManager.GetCurrentHP();
-                            gripTrackBar.Value = MGS2MemoryManager.GetCurrentGripGauge();
+                            ushort currentGripStamina = MGS2MemoryManager.GetCurrentGripGauge();
+                            if (currentGripStamina > gripTrackBar.Maximum)
+                                gripTrackBar.Maximum = currentGripStamina;
+                            gripTrackBar.Value = currentGripStamina;
                         }));
                     }
                     else
                     {
                         playerCurrentHpTrackBar.Value = MGS2MemoryManager.GetCurrentHP();
-                        gripTrackBar.Value = MGS2MemoryManager.GetCurrentGripGauge();
+                        ushort currentGripStamina = MGS2MemoryManager.GetCurrentGripGauge();
+                        if (currentGripStamina > gripTrackBar.Maximum)
+                            gripTrackBar.Maximum = currentGripStamina;
+                        gripTrackBar.Value = currentGripStamina;
                     }
                     Thread.Sleep(333);
                 }

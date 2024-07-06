@@ -32,6 +32,7 @@ namespace MGS2_MC
         internal static int WalkThroughWalls = 0x01534E68;
         internal static int ModifiableHP = 0x017C1A20;
         internal static int CurrentGrip = 0x016CBDA0;
+        internal static int CurrentAmmo = 0x01523A00;
     }
 
     internal struct MGS2AoB
@@ -213,10 +214,10 @@ namespace MGS2_MC
 
         #region Value offsets
         #region Calculated From PlayerInfo
-        public static readonly MemoryOffset BASE_WEAPON = new MemoryOffset(-250, 0); //if a "new" playerOffsetBytes is chosen, only need to update this value and the item offset will update.
+        public static readonly MemoryOffset BASE_WEAPON = new MemoryOffset(2, 116); //if a "new" playerOffsetBytes is chosen, only need to update this value and the item offset will update.
         public static readonly MemoryOffset BASE_ITEM = new MemoryOffset(BASE_WEAPON.Start + 144, BASE_WEAPON.Start + 144 + 80);
-        public static readonly MemoryOffset GRIP_LEVEL_SNAKE = new MemoryOffset(-634, -633);
-        public static readonly MemoryOffset GRIP_LEVEL_RAIDEN = new MemoryOffset(-632, -631);
+        public static readonly MemoryOffset GRIP_LEVEL_SNAKE = new MemoryOffset(-46, -45); //will break
+        public static readonly MemoryOffset GRIP_LEVEL_RAIDEN = new MemoryOffset(-44, -43); //will break
         #endregion
 
         #region Calculated From HealthMod

@@ -30,6 +30,7 @@ namespace gcx
         {
             contentTree = new Dictionary<string, string>();
             contentTreeCarbonCopy = new Dictionary<string, string>();
+            hexFunctionChanges = new Dictionary<string, string>();
             OpenFileDialog ofd = new OpenFileDialog();
             DialogResult result = ofd.ShowDialog(this);
             gcx_Editor = new gcx_editor();
@@ -68,10 +69,13 @@ namespace gcx
 
         private void saveFunctionChangesBtn_Click(object sender, EventArgs e)
         {
-            //ForceProperHexFormat(hexCodeTextbox);
+            if (!ForceProperHexFormat(hexCodeTextbox))
+            {
+                return;
+            } 
             if (hexCodeTextbox.TextLength != hexCodeTextbox.MaxLength)
             {
-                //TODO: insert a bunch of zeroes at the end of the function until the max length is met
+                //TODO: verify this works
                 if (hexCodeTextbox.Text[hexCodeTextbox.Text.Length - 1] == '-')
                 {
                     hexCodeTextbox.Text.Remove(hexCodeTextbox.TextLength -1, 1);
@@ -86,10 +90,14 @@ namespace gcx
                 hexFunctionChanges.Add(selectedFunction, hexCodeTextbox.Text);
             else
                 hexFunctionChanges[selectedFunction] = hexCodeTextbox.Text;
+
+            MessageBox.Show("Function changes saved!");
         }
 
-        private void ForceProperHexFormat(TextBox textbox)
+        private bool ForceProperHexFormat(TextBox textbox)
         {
+            //TODO: fix this, cuz it isn't working correctly
+            return true;
             bool validFormatting = true;
             
             for(int i = 0; i < textbox.MaxLength; i++)
@@ -132,6 +140,7 @@ namespace gcx
             }
 
             gcx_Editor.SaveGcxFile(formattedChanges);
+            MessageBox.Show("GCX file saved!");
         }
 
         private void hexCodeTextbox_TextChanged(object sender, EventArgs e)

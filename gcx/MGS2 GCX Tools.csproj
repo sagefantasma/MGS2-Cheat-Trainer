@@ -85,6 +85,7 @@
       <DependentUpon>GCX_Explorer.cs</DependentUpon>
     </Compile>
     <Compile Include="GCX_Object.cs" />
+    <Compile Include="ObjectIds.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

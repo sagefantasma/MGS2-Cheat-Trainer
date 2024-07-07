@@ -145,6 +145,7 @@
             this.saveFileButton.TabIndex = 4;
             this.saveFileButton.Text = "Save GCX File";
             this.saveFileButton.UseVisualStyleBackColor = true;
+            this.saveFileButton.Click += new System.EventHandler(this.saveFileButton_Click);
             // 
             // hexCodeTextbox
             // 

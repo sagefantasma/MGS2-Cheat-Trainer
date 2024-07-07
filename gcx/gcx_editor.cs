@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Buffers.Binary;
 
 namespace gcx
 {
@@ -190,18 +191,19 @@ namespace gcx
                 }
 
                 procTablePosition = FindSubArray(TrimmedContents, functionNameBytes);
-
                 scriptPos = BitConverter.ToInt32(TrimmedContents, procTablePosition + 4);
-                functionData = new byte[TrimmedContents[_startOfOffsetBlock + _scriptOffset + scriptPos + 1]];
+                scriptPos = scriptPos & 0xFFFFFF;
+
+                functionData = new byte[TrimmedContents[_proceduresDataLocation + scriptPos + 1]];
             }
             else
             {
-                procTablePosition = 0; //main is not in proc table
+                procTablePosition = -1; //main is not in proc table
                 scriptPos = _mainDataLocation;
                 functionData = new byte[_mainBodySize];
             }
 
-            Array.Copy(RawContents, scriptPos, functionData, 0, functionData.Length);
+            Array.Copy(TrimmedContents, _proceduresDataLocation + scriptPos, functionData, 0, functionData.Length);
 
             return functionData;
         }

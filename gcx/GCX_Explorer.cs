@@ -24,6 +24,7 @@ namespace gcx
         private void selectGcxFile_Click(object sender, EventArgs e)
         {
             contentTree = new Dictionary<string, string>();
+            contentTreeCarbonCopy = new Dictionary<string, string>();
             OpenFileDialog ofd = new OpenFileDialog();
             DialogResult result = ofd.ShowDialog(this);
             gcx_Editor = new gcx_editor();
@@ -61,7 +62,13 @@ namespace gcx
 
         private void saveFunctionChangesBtn_Click(object sender, EventArgs e)
         {
-            contentTree[nodeContentsGroupBox.Text] = functionContentsTextbox.Text;
+            //TODO: copy the data from the hex panel into an object to be saved into the GCX later
+            // don't strip out the hypens and shit yet, because that will make things more confusing later
+        }
+
+        private void saveFileButton_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -12,7 +12,7 @@ namespace gcx
         {
             public string Name { get; private set; }
             public string DecodedContents { get; private set; }
-            public byte[] RawContents { get; private set; }
+            public byte[] RawContents { get; set; }
 
             public readonly int ProcTablePosition;
             public readonly int ScriptLength;

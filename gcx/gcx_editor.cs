@@ -39,7 +39,8 @@ namespace gcx
         {
             //remove first 4 bytes, then call python script
             //make note of the output as we will use it for the rest of the explorer
-            RawContents = File.ReadAllBytes(file);
+            FileName = file;
+            RawContents = File.ReadAllBytes(FileName);
             TrimmedContents = new byte[RawContents.Length - 4];
             Array.Copy(RawContents, 4, TrimmedContents, 0, TrimmedContents.Length);
             File.WriteAllBytes("sanitizedGcx", TrimmedContents);
@@ -161,7 +162,8 @@ namespace gcx
             if (functionName.ToLower().Trim() != "main")
             {
                 functionName = functionName.Replace("proc_0x", "").Trim();
-                string[] functionNamePairings = new string[3];
+                int arraySize = (int)Math.Ceiling(functionName.Length / 2d);
+                string[] functionNamePairings = new string[arraySize];
                 int index = 0;
                 if(functionName.Length % 2 != 0)
                 {
@@ -177,14 +179,15 @@ namespace gcx
                 }
                 functionNamePairings[1] = functionName.Substring(index, 2);
                 index += 2;
-                functionNamePairings[2] = functionName.Substring(index, 2);
+                if(functionName.Length>4)
+                    functionNamePairings[2] = functionName.Substring(index, 2);
             
 
                 functionNamePairings = functionNamePairings.Reverse().ToArray(); //reverse the order, as this is how they are expressed in the gcx file
                 //in proc table, function will be denoted as FF FF FF 00 YY YY 00 00 ; where FFFFFF is the function name, and YY YY is the offset
 
             
-                byte[] functionNameBytes = new byte[3];
+                byte[] functionNameBytes = new byte[arraySize];
                 for (int i = 0; i < functionNameBytes.Length; i++)
                 {
                     functionNameBytes[i] = byte.Parse(functionNamePairings[i], NumberStyles.HexNumber);
@@ -198,7 +201,7 @@ namespace gcx
             }
             else
             {
-                procTablePosition = -1; //main is not in proc table
+                procTablePosition = -1; //main is never in proc table
                 scriptPos = _mainDataLocation;
                 functionData = new byte[_mainBodySize];
             }
@@ -237,15 +240,26 @@ namespace gcx
 
         internal void BuildElementList()
         {
-
+            //TODO: should we even bother keeping this?
         }
 
-        internal void SaveGcxFile()
+        internal void SaveGcxFile(Dictionary<string, byte[]> modifications)
         {
-            //we can either "recompile", or direct edit bytes... honestly probably easier to "recompile" lmao, but i don't think i can reliably do that.
-            //instead, it might actually be simpler to allow the modifications, then do automated math to find the function's contents and do byte modifications
+            foreach(KeyValuePair<string, byte[]> modification in modifications)
+            {
+                GCX_Object.Procedure modifiedProcedure = Procedures.Find(proc => proc.Name.Contains(modification.Key));
 
+                modifiedProcedure.RawContents = modification.Value;
+            }
 
+            foreach(GCX_Object.Procedure procedure in Procedures)
+            {
+                Array.Copy(procedure.RawContents, 0, TrimmedContents, procedure.ScriptInitialPosition + _proceduresDataLocation, procedure.ScriptLength);
+            }
+
+            Array.Copy(TrimmedContents, 0, RawContents, 4, TrimmedContents.Length);
+
+            File.WriteAllBytes(FileName, RawContents);
         }
 
         internal void CompareFunctionWithOriginal(string currentContents, string originalContents)

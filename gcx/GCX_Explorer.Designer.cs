@@ -156,6 +156,7 @@
             this.hexCodeTextbox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.hexCodeTextbox.Size = new System.Drawing.Size(262, 219);
             this.hexCodeTextbox.TabIndex = 6;
+            this.hexCodeTextbox.TextChanged += new System.EventHandler(this.hexCodeTextbox_TextChanged);
             // 
             // GCX_Explorer
             // 

@@ -136,7 +136,10 @@ namespace gcx
                     else
                     {
                         //start of function
-                        currentFunctionName = linedContents[i].Substring(0, linedContents[i].LastIndexOf('{'));
+                        int lastIndex = linedContents[i].LastIndexOf('{');
+                        if (lastIndex == -1)
+                            continue;
+                        currentFunctionName = linedContents[i].Substring(0, lastIndex != -1 ? lastIndex : linedContents[i].Length);
                         currentFunction = "";
                     }
                 }
@@ -161,43 +164,61 @@ namespace gcx
 
             if (functionName.ToLower().Trim() != "main")
             {
-                functionName = functionName.Replace("proc_0x", "").Trim();
-                int arraySize = (int)Math.Ceiling(functionName.Length / 2d);
-                string[] functionNamePairings = new string[arraySize];
-                int index = 0;
-                if(functionName.Length % 2 != 0)
+                if (functionName.Contains("proc_0x"))
                 {
-                    //odd length
-                    functionNamePairings[0] = functionName.Substring(0, 1);
-                    index++;
+                    //proc table type 1
+                    functionName = functionName.Replace("proc_0x", "").Trim();
+                    int arraySize = (int)Math.Ceiling(functionName.Length / 2d);
+                    string[] functionNamePairings = new string[arraySize];
+                    int index = 0;
+                    if (functionName.Length % 2 != 0)
+                    {
+                        //odd length
+                        functionNamePairings[0] = functionName.Substring(0, 1);
+                        index++;
+                    }
+                    else
+                    {
+                        //even length
+                        functionNamePairings[0] = functionName.Substring(0, 2);
+                        index += 2;
+                    }
+                    functionNamePairings[1] = functionName.Substring(index, 2);
+                    index += 2;
+                    if (functionName.Length > 4)
+                        functionNamePairings[2] = functionName.Substring(index, 2);
+                    index += 2;
+                    if (functionName.Length > 6)
+                        functionNamePairings[3] = functionName.Substring(index, 2);
+
+
+                    functionNamePairings = functionNamePairings.Reverse().ToArray(); //reverse the order, as this is how they are expressed in the gcx file
+                                                                                     //in proc table, function will be denoted as FF FF FF 00 YY YY 00 00 ; where FFFFFF is the function name, and YY YY is the offset
+
+
+                    byte[] functionNameBytes = new byte[arraySize];
+                    for (int i = 0; i < functionNameBytes.Length; i++)
+                    {
+                        functionNameBytes[i] = byte.Parse(functionNamePairings[i], NumberStyles.HexNumber);
+                    }
+
+                    procTablePosition = FindSubArray(TrimmedContents, functionNameBytes);
+                    scriptPos = BitConverter.ToInt32(TrimmedContents, procTablePosition + 4);
+                    scriptPos = scriptPos & 0xFFFFFF;
+
+                    functionData = new byte[TrimmedContents[_proceduresDataLocation + scriptPos + 1]];
                 }
                 else
                 {
-                    //even length
-                    functionNamePairings[0] = functionName.Substring(0, 2);
-                    index += 2;
+                    //proc table type 2
+                    int functionId = int.Parse(functionName.Replace("proc_id_", "")) - 1;
+
+                    procTablePosition = functionId * 4;
+                    scriptPos = BitConverter.ToInt32(TrimmedContents, procTablePosition + 4);
+                    scriptPos = scriptPos & 0xFFFFFF;
+
+                    functionData = new byte[TrimmedContents[_proceduresDataLocation + scriptPos + 1]];
                 }
-                functionNamePairings[1] = functionName.Substring(index, 2);
-                index += 2;
-                if(functionName.Length>4)
-                    functionNamePairings[2] = functionName.Substring(index, 2);
-            
-
-                functionNamePairings = functionNamePairings.Reverse().ToArray(); //reverse the order, as this is how they are expressed in the gcx file
-                //in proc table, function will be denoted as FF FF FF 00 YY YY 00 00 ; where FFFFFF is the function name, and YY YY is the offset
-
-            
-                byte[] functionNameBytes = new byte[arraySize];
-                for (int i = 0; i < functionNameBytes.Length; i++)
-                {
-                    functionNameBytes[i] = byte.Parse(functionNamePairings[i], NumberStyles.HexNumber);
-                }
-
-                procTablePosition = FindSubArray(TrimmedContents, functionNameBytes);
-                scriptPos = BitConverter.ToInt32(TrimmedContents, procTablePosition + 4);
-                scriptPos = scriptPos & 0xFFFFFF;
-
-                functionData = new byte[TrimmedContents[_proceduresDataLocation + scriptPos + 1]];
             }
             else
             {

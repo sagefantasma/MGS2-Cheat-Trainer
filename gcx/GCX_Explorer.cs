@@ -30,6 +30,7 @@ namespace gcx
         {
             contentTree = new Dictionary<string, string>();
             contentTreeCarbonCopy = new Dictionary<string, string>();
+            contentsTreeView.Nodes.Clear();
             hexFunctionChanges = new Dictionary<string, string>();
             OpenFileDialog ofd = new OpenFileDialog();
             DialogResult result = ofd.ShowDialog(this);

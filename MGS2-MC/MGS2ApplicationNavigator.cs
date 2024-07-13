@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace MGS2_MC
@@ -111,6 +112,55 @@ namespace MGS2_MC
         internal static byte[] DontForceGuardsToWake = { 0x66, 0x83, 0xAB, 0x5A, 0x13, 0x00, 0x00, 0x01, 0x79, 0x07 };
         internal static string GuardsAreForcedToWake = "66 81 AB 5A 13 00 00 00 10 90";
         internal static byte[] BytesToForceGuardsToWake = { 0x66, 0x81, 0xAB, 0x5A, 0x13, 0x00, 0x00, 0x00, 0x10, 0x90 };
+        internal static string InfiniteItemUse = "66 41 89 09 0F BF C1";
+        internal static byte[] OriginalItemUseBytes = { 0x66, 0x41, 0x89, 0x09, 0x0F, 0xBF, 0xC1 };
+        internal static string MaxCountOnPickup = "44 8B 47 60 8B 57 5C";
+        internal static byte[] OriginalCountOnPickup = { 0x44, 0x8B, 0x47, 0x60, 0x8B, 0x57, 0x5C };
+        internal static string KnockoutDuration = "66 83 AB 5A 13 00 00 01";
+        internal static byte[] OriginalKnockoutDuration = { 0x66, 0x83, 0xAB, 0x5A, 0x13, 0x00, 0x00, 0x01 };
+        internal static string RemoveFilter = "F3 41 0F 10 94 19 3C 02 00 00";
+        internal static byte[] OriginalRemoveFilterBytes = { 0xF3, 0x41, 0x0F, 0x10, 0x94, 0x19, 0x3C, 0x02, 0x00, 0x00 };
+        internal static string GuardAnimations = "?? ?? ?? ?? ?? ?? ?? 48 8B 41 20 89 90 40 14 00 00 48 8B 49 20 8B 81 40 14";
+        internal static byte[] OriginalGuardAnimationsBytes = { 0x0F, 0xBF, 0x90, 0x00, 0x0C, 0x00, 0x00, 0x48, 0x8B, 0x41, 0x20, 0x89, 0x90, 0x40, 0x14, 0x00, 0x00, 0x48, 0x8B, 0x49, 0x20, 0x8B, 0x81, 0x40, 0x14 };
+        internal static byte[] StaticGuardAnimationBytes = { 0x48, 0x8B, 0x41, 0x20, 0x89, 0x90, 0x40, 0x14, 0x00, 0x00, 0x48, 0x8B, 0x49, 0x20, 0x8B, 0x81, 0x40, 0x14 };
+
+        internal static GuardAnimation WaitAnimation = new GuardAnimation { Name = "Wait", Bytes = new byte[] { 0xBA, 0x00, 0x00, 0x00, 0x00, 0x90, 0x90 } };
+        internal static GuardAnimation PatrolAnimation = new GuardAnimation { Name = "Patrol", Bytes = new byte[] { 0xBA, 0x02, 0x00, 0x00, 0x00, 0x90, 0x90 } };
+        internal static GuardAnimation MoveForwardAnimation = new GuardAnimation { Name = "Move Forward", Bytes = new byte[] { 0xBA, 0x03, 0x00, 0x00, 0x00, 0x90, 0x90 } };
+        internal static GuardAnimation YawnAnimation = new GuardAnimation { Name = "Yawn", Bytes = new byte[] { 0xBA, 0x04, 0x00, 0x00, 0x00, 0x90, 0x90 } };
+        internal static GuardAnimation StretchAnimation = new GuardAnimation { Name = "Stretch", Bytes = new byte[] { 0xBA, 0x05, 0x00, 0x00, 0x00, 0x90, 0x90 } };
+        internal static GuardAnimation DozeAnimation = new GuardAnimation { Name = "Doze", Bytes = new byte[] { 0xBA, 0x06, 0x00, 0x00, 0x00, 0x90, 0x90 } };
+        internal static GuardAnimation AttentionAnimation = new GuardAnimation { Name = "Attention", Bytes = new byte[] { 0xBA, 0x07, 0x00, 0x00, 0x00, 0x90, 0x90 } };
+        internal static GuardAnimation BoogieAnimation = new GuardAnimation { Name = "Boogie", Bytes = new byte[] { 0xBA, 0x09, 0x00, 0x00, 0x00, 0x90, 0x90 } };
+        internal static GuardAnimation LDOverwatchAnimation = new GuardAnimation { Name = "Long Distance Overwatch", Bytes = new byte[] { 0xBA, 0x0A, 0x00, 0x00, 0x00, 0x90, 0x90 } };
+        internal static GuardAnimation RemoveGogglesAnimation = new GuardAnimation { Name = "Remove Goggles", Bytes = new byte[] { 0xBA, 0x0B, 0x00, 0x00, 0x00, 0x90, 0x90 } };
+        internal static GuardAnimation DazedAnimation = new GuardAnimation { Name = "Dazed", Bytes = new byte[] { 0xBA, 0x0C, 0x00, 0x00, 0x00, 0x90, 0x90 } };
+        internal static GuardAnimation SDOverwatchAnimation = new GuardAnimation { Name = "Short Distance Overwatch", Bytes = new byte[] { 0xBA, 0x0D, 0x00, 0x00, 0x00, 0x90, 0x90 } };
+        internal static GuardAnimation MoveBackwardAnimation = new GuardAnimation { Name = "Move Backward", Bytes = new byte[] { 0xBA, 0x0F, 0x00, 0x00, 0x00, 0x90, 0x90 } };
+        internal static GuardAnimation LookMagazineAnimation = new GuardAnimation { Name = "Look at Magazine", Bytes = new byte[] { 0xBA, 0x15, 0x00, 0x00, 0x00, 0x90, 0x90 } };
+        internal static GuardAnimation DeactivateAIAnimation = new GuardAnimation { Name = "Deactivate AI", Bytes = new byte[] { 0xBA, 0x16, 0x00, 0x00, 0x00, 0x90, 0x90 } };
+        internal static GuardAnimation CommandSoldiersAnimation = new GuardAnimation { Name = "Command Soldiers", Bytes = new byte[] { 0xBA, 0x18, 0x00, 0x00, 0x00, 0x90, 0x90 } };
+        internal static GuardAnimation RadioCheckinAnimation = new GuardAnimation { Name = "Radio Check-in", Bytes = new byte[] { 0xBA, 0x19, 0x00, 0x00, 0x00, 0x90, 0x90 }};
+        internal static GuardAnimation PeeAnimation = new GuardAnimation { Name = "Pee", Bytes = new byte[] { 0xBA, 0x1A, 0x00, 0x00, 0x00, 0x90, 0x90 } };
+        internal static GuardAnimation PeeWiggleAnimation = new GuardAnimation { Name = "Pee Wiggle", Bytes = new byte[] { 0xBA, 0x1B, 0x00, 0x00, 0x00, 0x90, 0x90 } };
+        internal static GuardAnimation LeanRightAnimation = new GuardAnimation { Name = "Lean Right", Bytes = new byte[] { 0xBA, 0x1C, 0x00, 0x00, 0x00, 0x90, 0x90 } };
+        internal static GuardAnimation LeanLeftAnimation = new GuardAnimation { Name = "Lean Left", Bytes = new byte[] { 0xBA, 0x1D, 0x00, 0x00, 0x00, 0x90, 0x90 } };
+        internal static GuardAnimation RollRightAnimation = new GuardAnimation { Name = "Roll Right", Bytes = new byte[] { 0xBA, 0x1E, 0x00, 0x00, 0x00, 0x90, 0x90 } };
+        internal static GuardAnimation RollLeftAnimation = new GuardAnimation { Name = "Roll Left", Bytes = new byte[] { 0xBA, 0x1F, 0x00, 0x00, 0x00, 0x90, 0x90 } };
+        internal static List<GuardAnimation> GuardAnimationList = new List<GuardAnimation>
+        { 
+            WaitAnimation, PatrolAnimation, MoveForwardAnimation, YawnAnimation, StretchAnimation, DozeAnimation, AttentionAnimation, BoogieAnimation,
+            LDOverwatchAnimation, RemoveGogglesAnimation, DazedAnimation, SDOverwatchAnimation, MoveBackwardAnimation, LookMagazineAnimation,
+            DeactivateAIAnimation, CommandSoldiersAnimation, RadioCheckinAnimation, PeeAnimation, PeeWiggleAnimation, LeanRightAnimation,
+            LeanLeftAnimation, RollRightAnimation, RollLeftAnimation
+        };
+        internal class GuardAnimation
+        {
+            public string Name { get; set; }
+            public byte[] Bytes { get; set; }
+
+            public GuardAnimation() { }
+        }
 
 
 
@@ -274,6 +324,11 @@ namespace MGS2_MC
         public static readonly MemoryOffset NO_WEAPON_PAUSE = new MemoryOffset(0, 6);
         public static readonly MemoryOffset FORCE_SLEEP = new MemoryOffset(0, 7);
         public static readonly MemoryOffset FORCE_WAKE = new MemoryOffset(0, 9);
+        public static readonly MemoryOffset INFINITE_ITEMS = new MemoryOffset(0, 6);
+        public static readonly MemoryOffset MAX_ON_PICKUP = new MemoryOffset(0, 6);
+        public static readonly MemoryOffset KNOCKOUT_DURATION = new MemoryOffset(0, 7);
+        public static readonly MemoryOffset REMOVE_FILTER = new MemoryOffset(0, 9);
+        public static readonly MemoryOffset GUARD_ANIMATIONS = new MemoryOffset(0, 6);
         #endregion
 
         #region Calculated From CurrentGripGauge

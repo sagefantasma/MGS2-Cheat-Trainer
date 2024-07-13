@@ -570,6 +570,8 @@ namespace MGS2_MC
             stringsListBox.DataSource = MGS2Strings.MGS2_STRINGS;
             stringsListBox.DisplayMember = "Tag";
             stringsListBox.SelectedIndex = -1;
+            guardAnimationComboBox.DataSource = MGS2AoB.GuardAnimationList;
+            guardAnimationComboBox.DisplayMember = "Name";
 #if DEBUG
             aobTesterTablePanel.Visible = true;
 #endif
@@ -2039,6 +2041,16 @@ namespace MGS2_MC
             Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.ForceGuardsToWake, MGS2AoB.BytesToForceGuardsToWake, MGS2Offset.FORCE_WAKE);
 
             toolStripStatusLabel.Text = $"All guards have awoken!";
+        }
+
+        private void startAnimationButton_Click(object sender, EventArgs e)
+        {
+            _logger.Information($"User clicked on 'Start animation' button with {guardAnimationComboBox.SelectedText} animation selected");
+            toolStripStatusLabel.Text = $"Attempting to set all guards animation to :{guardAnimationComboBox.SelectedText}";
+
+            Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.GuardAnimations, (guardAnimationComboBox.SelectedItem as MGS2AoB.GuardAnimation).Bytes, MGS2Offset.GUARD_ANIMATIONS);
+
+            toolStripStatusLabel.Text = $"All guards' animations have been set to {guardAnimationComboBox.SelectedText}~!";
         }
     }
 }

@@ -589,6 +589,9 @@
             this.viewLogsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.githubMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.joinOurDiscordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.guardAnimationComboBox = new System.Windows.Forms.ComboBox();
+            this.guardAnimationsGroupBox = new System.Windows.Forms.GroupBox();
+            this.startAnimationButton = new System.Windows.Forms.Button();
             this.mgs2TabControl.SuspendLayout();
             this.tabPageItem.SuspendLayout();
             this.itemLayoutPanel.SuspendLayout();
@@ -926,6 +929,7 @@
             this.stealthLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.stealthPictureBox)).BeginInit();
             this.mainMenuStrip.SuspendLayout();
+            this.guardAnimationsGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // mgs2TabControl
@@ -2341,6 +2345,7 @@
             this.cheatsLeftSideFlowPanel.Controls.Add(this.cheatsCheckedListBox);
             this.cheatsLeftSideFlowPanel.Controls.Add(this.forceSleepButton);
             this.cheatsLeftSideFlowPanel.Controls.Add(this.forceWakeButton);
+            this.cheatsLeftSideFlowPanel.Controls.Add(this.guardAnimationsGroupBox);
             this.cheatsLeftSideFlowPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cheatsLeftSideFlowPanel.Location = new System.Drawing.Point(3, 3);
             this.cheatsLeftSideFlowPanel.Name = "cheatsLeftSideFlowPanel";
@@ -8297,6 +8302,36 @@
             this.joinOurDiscordToolStripMenuItem.Text = "Join Our Discord";
             this.joinOurDiscordToolStripMenuItem.Click += new System.EventHandler(this.JoinOurDiscordToolStripMenuItem_Click);
             // 
+            // guardAnimationComboBox
+            // 
+            this.guardAnimationComboBox.FormattingEnabled = true;
+            this.guardAnimationComboBox.Location = new System.Drawing.Point(19, 24);
+            this.guardAnimationComboBox.Name = "guardAnimationComboBox";
+            this.guardAnimationComboBox.Size = new System.Drawing.Size(121, 21);
+            this.guardAnimationComboBox.TabIndex = 18;
+            this.guardAnimationComboBox.Text = "Select an Animation";
+            // 
+            // guardAnimationsGroupBox
+            // 
+            this.guardAnimationsGroupBox.Controls.Add(this.startAnimationButton);
+            this.guardAnimationsGroupBox.Controls.Add(this.guardAnimationComboBox);
+            this.guardAnimationsGroupBox.Location = new System.Drawing.Point(3, 295);
+            this.guardAnimationsGroupBox.Name = "guardAnimationsGroupBox";
+            this.guardAnimationsGroupBox.Size = new System.Drawing.Size(200, 100);
+            this.guardAnimationsGroupBox.TabIndex = 19;
+            this.guardAnimationsGroupBox.TabStop = false;
+            this.guardAnimationsGroupBox.Text = "Change Guard Animations";
+            // 
+            // startAnimationButton
+            // 
+            this.startAnimationButton.Location = new System.Drawing.Point(19, 50);
+            this.startAnimationButton.Name = "startAnimationButton";
+            this.startAnimationButton.Size = new System.Drawing.Size(121, 23);
+            this.startAnimationButton.TabIndex = 19;
+            this.startAnimationButton.Text = "Begin Animation";
+            this.startAnimationButton.UseVisualStyleBackColor = true;
+            this.startAnimationButton.Click += new System.EventHandler(this.startAnimationButton_Click);
+            // 
             // GUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -8781,6 +8816,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.stealthPictureBox)).EndInit();
             this.mainMenuStrip.ResumeLayout(false);
             this.mainMenuStrip.PerformLayout();
+            this.guardAnimationsGroupBox.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -9348,6 +9384,9 @@
         private System.Windows.Forms.CheckedListBox cheatsCheckedListBox;
         private System.Windows.Forms.Button forceSleepButton;
         private System.Windows.Forms.Button forceWakeButton;
+        private System.Windows.Forms.GroupBox guardAnimationsGroupBox;
+        private System.Windows.Forms.Button startAnimationButton;
+        private System.Windows.Forms.ComboBox guardAnimationComboBox;
     }
 }
 

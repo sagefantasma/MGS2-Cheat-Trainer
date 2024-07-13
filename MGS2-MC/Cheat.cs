@@ -1,6 +1,7 @@
 ﻿using SimplifiedMemoryManager;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace MGS2_MC
 {
@@ -630,6 +631,87 @@ namespace MGS2_MC
                     }
                 }
             }
+
+            internal static void InfiniteItems(bool activate)
+            {
+                //TODO: test
+                Cheat activeCheat = MGS2Cheat.InfiniteItems;
+                if (activate)
+                {
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.InfiniteItemUse, MGS2Offset.INFINITE_ITEMS, 4);
+                        MGS2Cheat.InfiniteItems = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.INFINITE_ITEMS, 4);
+                    }
+                }
+                else
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.INFINITE_ITEMS, MGS2AoB.OriginalItemUseBytes);
+            }
+
+            internal static void MaxStackOnPickup(bool activate)
+            {
+                //TODO: test
+                Cheat activeCheat = MGS2Cheat.MaxStackOnPickup;
+                if (activate)
+                {
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.MaxCountOnPickup, MGS2Offset.MAX_ON_PICKUP, 4);
+                        MGS2Cheat.MaxStackOnPickup = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.MAX_ON_PICKUP, 4);
+                    }
+                }
+                else
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.MAX_ON_PICKUP, MGS2AoB.OriginalCountOnPickup);
+            }
+
+            internal static void InfiniteKnockout(bool activate)
+            {
+                //TODO: test
+                Cheat activeCheat = MGS2Cheat.InfiniteKnockout;
+                if (activate)
+                {
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.KnockoutDuration, MGS2Offset.KNOCKOUT_DURATION, 8);
+                        MGS2Cheat.InfiniteKnockout = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.KNOCKOUT_DURATION, 8);
+                    }
+                }
+                else
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.KNOCKOUT_DURATION, MGS2AoB.OriginalKnockoutDuration);
+                
+            }
+
+            internal static void RemoveFilter(bool activate)
+            {
+                //TODO: test
+                Cheat activeCheat = MGS2Cheat.RemoveFilter;
+                if (activate)
+                {
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.RemoveFilter, MGS2Offset.REMOVE_FILTER, 10);
+                        MGS2Cheat.RemoveFilter = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.REMOVE_FILTER, 10);
+                    }
+                }
+                else
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.REMOVE_FILTER, MGS2AoB.OriginalRemoveFilterBytes);
+            }
         }
     }    
 
@@ -651,6 +733,10 @@ namespace MGS2_MC
         public static Cheat DisablePauseButton { get; internal set; } = new Cheat("Disable Pause Button", Cheat.CheatActions.TurnOffPauseButton, MGS2AoB.OriginalPauseButtonBytes);
         public static Cheat DisableItemMenuPause { get; internal set; } = new Cheat("Disable Item Menu Pause", Cheat.CheatActions.TurnOffItemMenuPause, MGS2AoB.OriginalItemMenuPauseBytes);
         public static Cheat DisableWeaponMenuPause { get; internal set; } = new Cheat("Disable Weapon Menu Pause", Cheat.CheatActions.TurnOffWeaponMenuPause, MGS2AoB.OriginalWeaponMenuPauseBytes);
+        public static Cheat InfiniteItems { get; internal set; } = new Cheat("Infinite Item Uses", Cheat.CheatActions.InfiniteItems, MGS2AoB.OriginalItemUseBytes);
+        public static Cheat MaxStackOnPickup { get; internal set; } = new Cheat("Max Stack on Pickup", Cheat.CheatActions.MaxStackOnPickup, MGS2AoB.OriginalCountOnPickup);
+        public static Cheat InfiniteKnockout { get; internal set; } = new Cheat("Infinite Knockout/Tranq Duration", Cheat.CheatActions.InfiniteKnockout, MGS2AoB.OriginalKnockoutDuration);
+        public static Cheat RemoveFilter { get; internal set; } = new Cheat("Remove Washout Filter", Cheat.CheatActions.RemoveFilter, MGS2AoB.OriginalRemoveFilterBytes);
 
         private static List<Cheat> _cheatList = null;
 
@@ -659,8 +745,9 @@ namespace MGS2_MC
             _cheatList = new List<Cheat>
             {
                 BlackScreen, NoBleedDamage, NoBurnDamage, InfiniteAmmo, InfiniteLife, InfiniteOxygen, NoGripDamage,
-                Letterboxing, NoClipWithGravity, NoClipNoGravity, NoReload,/*ZoomIn, ZoomOut,*/ DisablePauseButton,
-                DisableItemMenuPause, DisableWeaponMenuPause //zoom in and out aren't working as expected, and i cant be bothered to fix them right now.
+                Letterboxing, NoClipWithGravity, NoClipNoGravity, NoReload,/*ZoomIn, ZoomOut,*/ DisablePauseButton, //zoom in and out aren't working as expected, and i cant be bothered to fix them right now.
+                DisableItemMenuPause, DisableWeaponMenuPause, InfiniteItems, InfiniteKnockout, RemoveFilter,
+                MaxStackOnPickup
             };
         }
 

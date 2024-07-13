@@ -134,6 +134,46 @@ namespace MGS2_MC
                 return IntPtr.Zero;
             }
 
+            internal static void ReplaceWithSpecificCode(string patternToScan, byte[] replacementBytes, MemoryOffset offset)
+            {
+                lock (MGS2Monitor.MGS2Process)
+                {
+                    bool successful = false;
+                    int retries = 5;
+                    do
+                    {
+                        try
+                        {
+                            using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                            {
+                                SimplePattern pattern = new SimplePattern(patternToScan);
+                                int memoryLocation = spp.ScanMemoryForUniquePattern(pattern).ToInt32();
+
+                                if (memoryLocation != -1)
+                                {
+                                    byte[] memoryContent = spp.ReadProcessOffset(new IntPtr(memoryLocation + offset.Start), offset.Length);
+
+                                    for (int i = 0; i < replacementBytes.Length; i++)
+                                    {
+                                        memoryContent[i] = replacementBytes[i];
+                                    }
+
+                                    spp.ModifyProcessOffset(new IntPtr(memoryLocation), memoryContent, true);
+                                    successful = true;
+
+                                    return;
+                                }
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            retries--;
+                        }
+                    } while (!successful && retries > 0);
+                }
+                throw new Exception("Failed to replace code, aborting the process");
+            }
+
             private static IntPtr ModifySingleByte(string aob, MemoryOffset offset, byte replacementValue)
             {
                 lock (MGS2Monitor.MGS2Process)
@@ -195,7 +235,7 @@ namespace MGS2_MC
                 }
             }
 
-            private static byte[] ReadMemory(string aob, MemoryOffset offset)
+            internal static byte[] ReadMemory(string aob, MemoryOffset offset)
             {
                 lock (MGS2Monitor.MGS2Process)
                 {

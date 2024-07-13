@@ -131,7 +131,6 @@
             this.playerCurrentHpTrackBar = new System.Windows.Forms.TrackBar();
             this.playerMaxHpLabel = new System.Windows.Forms.Label();
             this.playerMaxHpUpDown = new System.Windows.Forms.NumericUpDown();
-            this.cheatsCheckedListBox = new System.Windows.Forms.CheckedListBox();
             this.aobTesterTablePanel = new System.Windows.Forms.TableLayoutPanel();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.label50 = new System.Windows.Forms.Label();
@@ -141,6 +140,10 @@
             this.button5 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.memContents = new System.Windows.Forms.TextBox();
+            this.cheatsLeftSideFlowPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.cheatsCheckedListBox = new System.Windows.Forms.CheckedListBox();
+            this.forceSleepButton = new System.Windows.Forms.Button();
+            this.forceWakeButton = new System.Windows.Forms.Button();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.hfBladeGroupBox = new System.Windows.Forms.GroupBox();
@@ -647,6 +650,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.playerMaxHpUpDown)).BeginInit();
             this.aobTesterTablePanel.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
+            this.cheatsLeftSideFlowPanel.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.hfBladeGroupBox.SuspendLayout();
             this.hfBladeLayoutPanel.SuspendLayout();
@@ -2032,14 +2036,15 @@
             this.cheatTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.cheatTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.cheatTablePanel.Controls.Add(this.healthAndGripTablePanel, 1, 0);
-            this.cheatTablePanel.Controls.Add(this.cheatsCheckedListBox, 0, 0);
             this.cheatTablePanel.Controls.Add(this.aobTesterTablePanel, 1, 1);
+            this.cheatTablePanel.Controls.Add(this.cheatsLeftSideFlowPanel, 0, 0);
             this.cheatTablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cheatTablePanel.Location = new System.Drawing.Point(3, 3);
             this.cheatTablePanel.Name = "cheatTablePanel";
             this.cheatTablePanel.RowCount = 2;
             this.cheatTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.cheatTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.cheatTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.cheatTablePanel.Size = new System.Drawing.Size(570, 408);
             this.cheatTablePanel.TabIndex = 0;
             // 
@@ -2239,18 +2244,6 @@
             0});
             this.playerMaxHpUpDown.ValueChanged += new System.EventHandler(this.PlayerMaxHpUpDown_ValueChanged);
             // 
-            // cheatsCheckedListBox
-            // 
-            this.cheatsCheckedListBox.CheckOnClick = true;
-            this.cheatsCheckedListBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cheatsCheckedListBox.FormattingEnabled = true;
-            this.cheatsCheckedListBox.Location = new System.Drawing.Point(3, 3);
-            this.cheatsCheckedListBox.Name = "cheatsCheckedListBox";
-            this.cheatTablePanel.SetRowSpan(this.cheatsCheckedListBox, 2);
-            this.cheatsCheckedListBox.Size = new System.Drawing.Size(279, 402);
-            this.cheatsCheckedListBox.TabIndex = 14;
-            this.cheatsCheckedListBox.SelectedIndexChanged += new System.EventHandler(this.CheatsCheckedListBox_SelectedIndexChanged);
-            // 
             // aobTesterTablePanel
             // 
             this.aobTesterTablePanel.ColumnCount = 2;
@@ -2342,6 +2335,48 @@
             this.memContents.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.memContents.Size = new System.Drawing.Size(133, 93);
             this.memContents.TabIndex = 3;
+            // 
+            // cheatsLeftSideFlowPanel
+            // 
+            this.cheatsLeftSideFlowPanel.Controls.Add(this.cheatsCheckedListBox);
+            this.cheatsLeftSideFlowPanel.Controls.Add(this.forceSleepButton);
+            this.cheatsLeftSideFlowPanel.Controls.Add(this.forceWakeButton);
+            this.cheatsLeftSideFlowPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cheatsLeftSideFlowPanel.Location = new System.Drawing.Point(3, 3);
+            this.cheatsLeftSideFlowPanel.Name = "cheatsLeftSideFlowPanel";
+            this.cheatTablePanel.SetRowSpan(this.cheatsLeftSideFlowPanel, 2);
+            this.cheatsLeftSideFlowPanel.Size = new System.Drawing.Size(279, 402);
+            this.cheatsLeftSideFlowPanel.TabIndex = 16;
+            // 
+            // cheatsCheckedListBox
+            // 
+            this.cheatsCheckedListBox.CheckOnClick = true;
+            this.cheatsCheckedListBox.FormattingEnabled = true;
+            this.cheatsCheckedListBox.Location = new System.Drawing.Point(3, 3);
+            this.cheatsCheckedListBox.Name = "cheatsCheckedListBox";
+            this.cheatsCheckedListBox.Size = new System.Drawing.Size(276, 244);
+            this.cheatsCheckedListBox.TabIndex = 15;
+            this.cheatsCheckedListBox.SelectedIndexChanged += new System.EventHandler(this.CheatsCheckedListBox_SelectedIndexChanged);
+            // 
+            // forceSleepButton
+            // 
+            this.forceSleepButton.Location = new System.Drawing.Point(3, 253);
+            this.forceSleepButton.Name = "forceSleepButton";
+            this.forceSleepButton.Size = new System.Drawing.Size(99, 36);
+            this.forceSleepButton.TabIndex = 16;
+            this.forceSleepButton.Text = "Force Guards To Sleep";
+            this.forceSleepButton.UseVisualStyleBackColor = true;
+            this.forceSleepButton.Click += new System.EventHandler(this.forceSleepButton_Click);
+            // 
+            // forceWakeButton
+            // 
+            this.forceWakeButton.Location = new System.Drawing.Point(108, 253);
+            this.forceWakeButton.Name = "forceWakeButton";
+            this.forceWakeButton.Size = new System.Drawing.Size(99, 36);
+            this.forceWakeButton.TabIndex = 17;
+            this.forceWakeButton.Text = "Force Guards To Wake";
+            this.forceWakeButton.UseVisualStyleBackColor = true;
+            this.forceWakeButton.Click += new System.EventHandler(this.forceWakeButton_Click);
             // 
             // statusStrip
             // 
@@ -8360,6 +8395,7 @@
             this.aobTesterTablePanel.PerformLayout();
             this.flowLayoutPanel2.ResumeLayout(false);
             this.flowLayoutPanel2.PerformLayout();
+            this.cheatsLeftSideFlowPanel.ResumeLayout(false);
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
             this.hfBladeGroupBox.ResumeLayout(false);
@@ -9298,7 +9334,6 @@
         private System.Windows.Forms.TrackBar playerCurrentHpTrackBar;
         private System.Windows.Forms.Label playerMaxHpLabel;
         private System.Windows.Forms.NumericUpDown playerMaxHpUpDown;
-        private System.Windows.Forms.CheckedListBox cheatsCheckedListBox;
         private System.Windows.Forms.TableLayoutPanel aobTesterTablePanel;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
         private System.Windows.Forms.Label label50;
@@ -9309,6 +9344,10 @@
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.TextBox memContents;
         private System.Windows.Forms.CheckBox disableStatsTrackingCheckBox;
+        private System.Windows.Forms.FlowLayoutPanel cheatsLeftSideFlowPanel;
+        private System.Windows.Forms.CheckedListBox cheatsCheckedListBox;
+        private System.Windows.Forms.Button forceSleepButton;
+        private System.Windows.Forms.Button forceWakeButton;
     }
 }
 

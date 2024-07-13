@@ -1999,5 +1999,34 @@ namespace MGS2_MC
         {
             //TODO: implement
         }
+
+        private void forceSleepButton_Click(object sender, EventArgs e)
+        {
+            //force undo of wake(if done)
+            byte[] currentWake = Cheat.CheatActions.ReadMemory(MGS2AoB.GuardsAreForcedToWake, MGS2Offset.FORCE_WAKE);
+
+            if (currentWake != null && currentWake.SequenceEqual(MGS2AoB.BytesToForceGuardsToWake))
+            {
+                Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.GuardsAreForcedToWake, MGS2AoB.DontForceGuardsToWake, MGS2Offset.FORCE_WAKE);
+            }
+
+            Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.ForceGuardsToSleep, MGS2AoB.BytesToForceGuardsToSleep, MGS2Offset.FORCE_SLEEP);
+        }
+
+
+
+        private void forceWakeButton_Click(object sender, EventArgs e)
+        {
+            //force undo of sleep(if done)
+            byte[] currentSleep = Cheat.CheatActions.ReadMemory(MGS2AoB.GuardsAreForcedToSleep, MGS2Offset.FORCE_SLEEP);
+
+            
+            if (currentSleep != null && currentSleep.SequenceEqual(MGS2AoB.BytesToForceGuardsToSleep))
+            {
+                Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.GuardsAreForcedToSleep, MGS2AoB.DontForceGuardsToSleep, MGS2Offset.FORCE_SLEEP);
+            }
+
+            Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.ForceGuardsToWake, MGS2AoB.BytesToForceGuardsToWake, MGS2Offset.FORCE_WAKE);
+        }
     }
 }

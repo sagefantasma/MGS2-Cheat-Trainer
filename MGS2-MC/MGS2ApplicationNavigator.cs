@@ -103,6 +103,14 @@ namespace MGS2_MC
         internal static byte[] OriginalItemMenuPauseBytes = { 0x09, 0x35, 0xB1, 0xEF, 0x5D, 0x01 };
         internal static string WeaponMenuPause = "09 35 14 D5 5D 01";
         internal static byte[] OriginalWeaponMenuPauseBytes = { 0x09, 0x35, 0x14, 0xD5, 0x5D, 0x01 };
+        internal static string ForceGuardsToSleep = "66 44 29 82 52 13 00 00";
+        internal static byte[] DontForceGuardsToSleep = { 0x66, 0x44, 0x29, 0x82, 0x52, 0x13, 0x00, 0x00 };
+        internal static string GuardsAreForcedToSleep = "83 AA 52 13 00 00 35 90";
+        internal static byte[] BytesToForceGuardsToSleep = { 0x83, 0xAA, 0x52, 0x13, 0x00, 0x00, 0x35, 0x90 };
+        internal static string ForceGuardsToWake = "66 83 AB 5A 13 00 00 01 79 07";
+        internal static byte[] DontForceGuardsToWake = { 0x66, 0x83, 0xAB, 0x5A, 0x13, 0x00, 0x00, 0x01, 0x79, 0x07 };
+        internal static string GuardsAreForcedToWake = "66 81 AB 5A 13 00 00 00 10 90";
+        internal static byte[] BytesToForceGuardsToWake = { 0x66, 0x81, 0xAB, 0x5A, 0x13, 0x00, 0x00, 0x00, 0x10, 0x90 };
 
 
 
@@ -264,6 +272,8 @@ namespace MGS2_MC
         public static readonly MemoryOffset NO_PAUSE_BTN = new MemoryOffset(0, 5);
         public static readonly MemoryOffset NO_ITEM_PAUSE = new MemoryOffset(0, 6);
         public static readonly MemoryOffset NO_WEAPON_PAUSE = new MemoryOffset(0, 6);
+        public static readonly MemoryOffset FORCE_SLEEP = new MemoryOffset(0, 7);
+        public static readonly MemoryOffset FORCE_WAKE = new MemoryOffset(0, 9);
         #endregion
 
         #region Calculated From CurrentGripGauge

@@ -32,12 +32,14 @@
             this.selectGcxFile = new System.Windows.Forms.Button();
             this.contentsTreeView = new System.Windows.Forms.TreeView();
             this.nodeContentsGroupBox = new System.Windows.Forms.GroupBox();
-            this.functionContentsTextbox = new System.Windows.Forms.TextBox();
+            this.functionContentsRichTextbox = new System.Windows.Forms.RichTextBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.debugTextbox = new System.Windows.Forms.TextBox();
             this.saveFunctionChangesBtn = new System.Windows.Forms.Button();
             this.saveFileButton = new System.Windows.Forms.Button();
-            this.hexCodeTextbox = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.hexCodeRichTextbox = new System.Windows.Forms.RichTextBox();
             this.guiControlsLayoutPanel.SuspendLayout();
             this.nodeContentsGroupBox.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
@@ -53,7 +55,7 @@
             this.guiControlsLayoutPanel.Controls.Add(this.contentsTreeView, 1, 0);
             this.guiControlsLayoutPanel.Controls.Add(this.nodeContentsGroupBox, 0, 1);
             this.guiControlsLayoutPanel.Controls.Add(this.flowLayoutPanel1, 2, 1);
-            this.guiControlsLayoutPanel.Controls.Add(this.hexCodeTextbox, 2, 0);
+            this.guiControlsLayoutPanel.Controls.Add(this.hexCodeRichTextbox, 2, 0);
             this.guiControlsLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.guiControlsLayoutPanel.Location = new System.Drawing.Point(0, 0);
             this.guiControlsLayoutPanel.Name = "guiControlsLayoutPanel";
@@ -87,7 +89,7 @@
             // nodeContentsGroupBox
             // 
             this.guiControlsLayoutPanel.SetColumnSpan(this.nodeContentsGroupBox, 2);
-            this.nodeContentsGroupBox.Controls.Add(this.functionContentsTextbox);
+            this.nodeContentsGroupBox.Controls.Add(this.functionContentsRichTextbox);
             this.nodeContentsGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.nodeContentsGroupBox.Location = new System.Drawing.Point(3, 228);
             this.nodeContentsGroupBox.Name = "nodeContentsGroupBox";
@@ -96,22 +98,25 @@
             this.nodeContentsGroupBox.TabStop = false;
             this.nodeContentsGroupBox.Text = "groupBox1";
             // 
-            // functionContentsTextbox
+            // functionContentsRichTextbox
             // 
-            this.functionContentsTextbox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.functionContentsTextbox.Location = new System.Drawing.Point(3, 16);
-            this.functionContentsTextbox.Multiline = true;
-            this.functionContentsTextbox.Name = "functionContentsTextbox";
-            this.functionContentsTextbox.ReadOnly = true;
-            this.functionContentsTextbox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.functionContentsTextbox.Size = new System.Drawing.Size(520, 200);
-            this.functionContentsTextbox.TabIndex = 0;
+            this.functionContentsRichTextbox.DetectUrls = false;
+            this.functionContentsRichTextbox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.functionContentsRichTextbox.Location = new System.Drawing.Point(3, 16);
+            this.functionContentsRichTextbox.Name = "functionContentsRichTextbox";
+            this.functionContentsRichTextbox.ReadOnly = true;
+            this.functionContentsRichTextbox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.functionContentsRichTextbox.Size = new System.Drawing.Size(520, 200);
+            this.functionContentsRichTextbox.TabIndex = 0;
+            this.functionContentsRichTextbox.Text = "";
             // 
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.Controls.Add(this.debugTextbox);
             this.flowLayoutPanel1.Controls.Add(this.saveFunctionChangesBtn);
             this.flowLayoutPanel1.Controls.Add(this.saveFileButton);
+            this.flowLayoutPanel1.Controls.Add(this.button1);
+            this.flowLayoutPanel1.Controls.Add(this.button2);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(535, 228);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -124,12 +129,13 @@
             this.debugTextbox.Location = new System.Drawing.Point(3, 3);
             this.debugTextbox.Multiline = true;
             this.debugTextbox.Name = "debugTextbox";
-            this.debugTextbox.Size = new System.Drawing.Size(247, 142);
+            this.debugTextbox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.debugTextbox.Size = new System.Drawing.Size(247, 76);
             this.debugTextbox.TabIndex = 6;
             // 
             // saveFunctionChangesBtn
             // 
-            this.saveFunctionChangesBtn.Location = new System.Drawing.Point(3, 151);
+            this.saveFunctionChangesBtn.Location = new System.Drawing.Point(3, 85);
             this.saveFunctionChangesBtn.Name = "saveFunctionChangesBtn";
             this.saveFunctionChangesBtn.Size = new System.Drawing.Size(128, 65);
             this.saveFunctionChangesBtn.TabIndex = 5;
@@ -139,7 +145,7 @@
             // 
             // saveFileButton
             // 
-            this.saveFileButton.Location = new System.Drawing.Point(137, 151);
+            this.saveFileButton.Location = new System.Drawing.Point(137, 85);
             this.saveFileButton.Name = "saveFileButton";
             this.saveFileButton.Size = new System.Drawing.Size(113, 66);
             this.saveFileButton.TabIndex = 4;
@@ -147,16 +153,34 @@
             this.saveFileButton.UseVisualStyleBackColor = true;
             this.saveFileButton.Click += new System.EventHandler(this.saveFileButton_Click);
             // 
-            // hexCodeTextbox
+            // button1
             // 
-            this.hexCodeTextbox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hexCodeTextbox.Location = new System.Drawing.Point(535, 3);
-            this.hexCodeTextbox.Multiline = true;
-            this.hexCodeTextbox.Name = "hexCodeTextbox";
-            this.hexCodeTextbox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.hexCodeTextbox.Size = new System.Drawing.Size(262, 219);
-            this.hexCodeTextbox.TabIndex = 6;
-            this.hexCodeTextbox.TextChanged += new System.EventHandler(this.hexCodeTextbox_TextChanged);
+            this.button1.Location = new System.Drawing.Point(3, 157);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(128, 62);
+            this.button1.TabIndex = 7;
+            this.button1.Text = "Insert Blade Function Into This GCX File";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(137, 157);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(113, 59);
+            this.button2.TabIndex = 8;
+            this.button2.Text = "Enumerate";
+            this.button2.UseVisualStyleBackColor = true;
+            // 
+            // hexCodeRichTextbox
+            // 
+            this.hexCodeRichTextbox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.hexCodeRichTextbox.Location = new System.Drawing.Point(535, 3);
+            this.hexCodeRichTextbox.Name = "hexCodeRichTextbox";
+            this.hexCodeRichTextbox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.hexCodeRichTextbox.Size = new System.Drawing.Size(262, 219);
+            this.hexCodeRichTextbox.TabIndex = 6;
+            this.hexCodeRichTextbox.Text = "";
             // 
             // GCX_Explorer
             // 
@@ -167,9 +191,7 @@
             this.Name = "GCX_Explorer";
             this.Text = "GCX_Editor";
             this.guiControlsLayoutPanel.ResumeLayout(false);
-            this.guiControlsLayoutPanel.PerformLayout();
             this.nodeContentsGroupBox.ResumeLayout(false);
-            this.nodeContentsGroupBox.PerformLayout();
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
@@ -182,11 +204,13 @@
         private System.Windows.Forms.Button selectGcxFile;
         private System.Windows.Forms.TreeView contentsTreeView;
         private System.Windows.Forms.GroupBox nodeContentsGroupBox;
-        private System.Windows.Forms.TextBox functionContentsTextbox;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Button saveFunctionChangesBtn;
         private System.Windows.Forms.Button saveFileButton;
         private System.Windows.Forms.TextBox debugTextbox;
-        private System.Windows.Forms.TextBox hexCodeTextbox;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.RichTextBox hexCodeRichTextbox;
+        private System.Windows.Forms.RichTextBox functionContentsRichTextbox;
     }
 }

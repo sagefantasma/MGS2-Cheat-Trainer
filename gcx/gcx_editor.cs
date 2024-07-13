@@ -67,7 +67,7 @@ namespace gcx
                 string value = kvp[1].Trim();
                 ParseKeyValuePair(key, value);
             }
-            _mainDataLocation = _mainBodySize + 4;
+            _mainDataLocation = _proceduresDataLocation + _proceduresBodySize + 4;
             return decompilingOutput;
         }
 
@@ -151,62 +151,130 @@ namespace gcx
 
             foreach(KeyValuePair<string,string> kvp in functions)
             {
-                byte[] functionData = FindFunctionInFile(kvp.Key, out int procTablePosition, out int scriptPos);
+                byte[] functionData = GetFunctionByteData(kvp.Key, out int procTablePosition, out int scriptPos);
                 Procedures.Add(new GCX_Object.Procedure(kvp.Key, functionData, kvp.Value, procTablePosition, scriptPos));
             }
 
             return functions;
         }
 
-        private byte[] FindFunctionInFile(string functionName, out int procTablePosition, out int scriptPos)
+        internal void InsertNewProcedureToFile(GCX_Object.Procedure procedure)
         {
+            byte[] newTrimmedData = new byte[TrimmedContents.Length + procedure.ScriptLength + 8];
+            //insert 8 bytes at end of proc list, before strres_block_top
+            int newTrimmedDataIndex = 0;
+            int oldContentsIndex = 0;
+            Array.Copy(TrimmedContents, newTrimmedData, _startOfOffsetBlock);
+            oldContentsIndex += _startOfOffsetBlock;
+            newTrimmedDataIndex += _startOfOffsetBlock - 8;
+
+            //set first 4 bytes to reversed proc name
+            byte[] procId = ConvertFunctionNameToByteRepresentation(procedure.Name);
+            byte[] newProcBlock = new byte[8];
+            procId.CopyTo(newProcBlock, 0);
+
+            //increase proc body size by procedure's data length
+            _proceduresBodySize += procedure.ScriptLength;
+            _proceduresDataLocation += 8;
+
+            //set last 4 of step 1's bytes to proc offset
+            int procLocation = _mainDataLocation - 4; // -4 to get at start of main body size, then +8 to account for the added proc table value?
+            procLocation &= 0xFFFFFF;
+            byte[] byteLocation = BitConverter.GetBytes(procLocation);
+            byteLocation.CopyTo(newProcBlock, 4);
+            newProcBlock.CopyTo(newTrimmedData, newTrimmedDataIndex);
+            newTrimmedDataIndex += 16;
+
+            //set inserted data to proc's data
+            int lengthToCopy = procLocation; //TODO: verify
+            
+            Array.Copy(TrimmedContents, oldContentsIndex, newTrimmedData, newTrimmedDataIndex, lengthToCopy);
+            oldContentsIndex += lengthToCopy;
+            newTrimmedDataIndex += lengthToCopy;
+            procedure.RawContents.CopyTo(newTrimmedData, newTrimmedDataIndex);
+            newTrimmedDataIndex += procedure.ScriptLength;
+
+            Array.Copy(TrimmedContents, oldContentsIndex, newTrimmedData, newTrimmedDataIndex, TrimmedContents.Length - oldContentsIndex);
+            byte[] newProcBodySize = BitConverter.GetBytes(_proceduresBodySize);
+            Array.Copy(newProcBodySize, 0, newTrimmedData, _proceduresDataLocation - 4, 4);
+
+            byte[] extendedRawContents = new byte[RawContents.Length + 8 + procedure.ScriptLength];
+            
+
+            Array.Copy(RawContents, extendedRawContents, 4);
+            Array.Copy(newTrimmedData, 0, extendedRawContents, 4, newTrimmedData.Length);
+
+
+            if (extendedRawContents.Length % 16 != 0)
+            {
+                byte[] squaredOffContents = new byte[extendedRawContents.Length + 16 - extendedRawContents.Length % 16];
+                Array.Copy(extendedRawContents, squaredOffContents, extendedRawContents.Length);
+                File.WriteAllBytes(FileName, squaredOffContents);
+            }
+            else
+                File.WriteAllBytes(FileName, extendedRawContents);
+        }
+
+        private byte[] ConvertFunctionNameToByteRepresentation(string functionName)
+        {
+            if (functionName.Contains("proc_0x"))
+            {
+                //proc table type 1
+                functionName = functionName.Replace("proc_0x", "").Trim();
+            }
+            
+            int arraySize = (int)Math.Ceiling(functionName.Length / 2d);
+            string[] functionNamePairings = new string[arraySize];
+            int index = 0;
+            if (functionName.Length % 2 != 0)
+            {
+                //odd length
+                functionNamePairings[0] = functionName.Substring(0, 1);
+                index++;
+            }
+            else
+            {
+                //even length
+                functionNamePairings[0] = functionName.Substring(0, 2);
+                index += 2;
+            }
+            functionNamePairings[1] = functionName.Substring(index, 2);
+            index += 2;
+            if (functionName.Length > 4)
+                functionNamePairings[2] = functionName.Substring(index, 2);
+            index += 2;
+            if (functionName.Length > 6)
+                functionNamePairings[3] = functionName.Substring(index, 2);
+
+
+            functionNamePairings = functionNamePairings.Reverse().ToArray(); //reverse the order, as this is how they are expressed in the gcx file
+                                                                                //in proc table, function will be denoted as FF FF FF 00 YY YY 00 00 ; where FFFFFF is the function name, and YY YY is the offset
+
+            byte[] functionNameBytes = new byte[arraySize];
+            for (int i = 0; i < functionNameBytes.Length; i++)
+            {
+                functionNameBytes[i] = byte.Parse(functionNamePairings[i], NumberStyles.HexNumber);
+            }
+
+            return functionNameBytes;
+        }
+
+        private byte[] GetFunctionByteData(string functionName, out int procTablePosition, out int scriptPos)
+        { 
+            //TODO: this isnt quite working correctly, sadge
             byte[] functionData = null;
 
             if (functionName.ToLower().Trim() != "main")
             {
                 if (functionName.Contains("proc_0x"))
                 {
-                    //proc table type 1
-                    functionName = functionName.Replace("proc_0x", "").Trim();
-                    int arraySize = (int)Math.Ceiling(functionName.Length / 2d);
-                    string[] functionNamePairings = new string[arraySize];
-                    int index = 0;
-                    if (functionName.Length % 2 != 0)
-                    {
-                        //odd length
-                        functionNamePairings[0] = functionName.Substring(0, 1);
-                        index++;
-                    }
-                    else
-                    {
-                        //even length
-                        functionNamePairings[0] = functionName.Substring(0, 2);
-                        index += 2;
-                    }
-                    functionNamePairings[1] = functionName.Substring(index, 2);
-                    index += 2;
-                    if (functionName.Length > 4)
-                        functionNamePairings[2] = functionName.Substring(index, 2);
-                    index += 2;
-                    if (functionName.Length > 6)
-                        functionNamePairings[3] = functionName.Substring(index, 2);
-
-
-                    functionNamePairings = functionNamePairings.Reverse().ToArray(); //reverse the order, as this is how they are expressed in the gcx file
-                                                                                     //in proc table, function will be denoted as FF FF FF 00 YY YY 00 00 ; where FFFFFF is the function name, and YY YY is the offset
-
-
-                    byte[] functionNameBytes = new byte[arraySize];
-                    for (int i = 0; i < functionNameBytes.Length; i++)
-                    {
-                        functionNameBytes[i] = byte.Parse(functionNamePairings[i], NumberStyles.HexNumber);
-                    }
+                    byte[] functionNameBytes = ConvertFunctionNameToByteRepresentation(functionName);
 
                     procTablePosition = FindSubArray(TrimmedContents, functionNameBytes);
                     scriptPos = BitConverter.ToInt32(TrimmedContents, procTablePosition + 4);
                     scriptPos = scriptPos & 0xFFFFFF;
 
-                    functionData = new byte[TrimmedContents[_proceduresDataLocation + scriptPos + 1]];
+                    functionData = new byte[TrimmedContents[_scriptOffset + scriptPos + 1]];
                 }
                 else
                 {
@@ -217,17 +285,20 @@ namespace gcx
                     scriptPos = BitConverter.ToInt32(TrimmedContents, procTablePosition + 4);
                     scriptPos = scriptPos & 0xFFFFFF;
 
-                    functionData = new byte[TrimmedContents[_proceduresDataLocation + scriptPos + 1]];
+                    functionData = new byte[TrimmedContents[_scriptOffset + scriptPos + 1]];
                 }
+
+                Array.Copy(TrimmedContents, _proceduresDataLocation + scriptPos, functionData, 0, functionData.Length);
             }
             else
             {
                 procTablePosition = -1; //main is never in proc table
                 scriptPos = _mainDataLocation;
                 functionData = new byte[_mainBodySize];
+                Array.Copy(TrimmedContents, scriptPos, functionData, 0, functionData.Length);
             }
 
-            Array.Copy(TrimmedContents, _proceduresDataLocation + scriptPos, functionData, 0, functionData.Length);
+            
 
             return functionData;
         }

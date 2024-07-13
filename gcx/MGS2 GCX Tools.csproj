@@ -86,6 +86,7 @@
     </Compile>
     <Compile Include="GCX_Object.cs" />
     <Compile Include="GcxIds.cs" />
+    <Compile Include="ItemSets.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

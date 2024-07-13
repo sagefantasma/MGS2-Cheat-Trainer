@@ -20,10 +20,61 @@ namespace gcx
         private Dictionary<string, string> hexFunctionChanges = new Dictionary<string, string>();
         private gcx_editor gcx_Editor;
         readonly Regex hexRegex = new Regex("^[0-9A-F]+$");
+        private Dictionary<Procedure, Color> quickIdProcs = new Dictionary<Procedure, Color>();
 
         public GCX_Explorer()
         {
             InitializeComponent();
+            BuildQuickIdProcs();
+        }
+
+        private void BuildQuickIdProcs()
+        {
+            quickIdProcs.Add(ProcIds.AwardAksAmmo, Color.LightGreen);
+            quickIdProcs.Add(ProcIds.AwardAksGun, Color.Orange); //progression blocker
+            quickIdProcs.Add(ProcIds.AwardAksSuppressor, Color.LightCoral);
+            quickIdProcs.Add(ProcIds.AwardBandages, Color.LightCoral);
+            quickIdProcs.Add(ProcIds.AwardBodyArmor, Color.LightGreen);
+            quickIdProcs.Add(ProcIds.AwardBook, Color.LightGreen);
+            quickIdProcs.Add(ProcIds.AwardBox1, Color.LightCoral);
+            quickIdProcs.Add(ProcIds.AwardBox2, Color.LightCoral);
+            quickIdProcs.Add(ProcIds.AwardBox3, Color.LightCoral);
+            quickIdProcs.Add(ProcIds.AwardBox4, Color.LightCoral);
+            quickIdProcs.Add(ProcIds.AwardBox5, Color.LightCoral);
+            quickIdProcs.Add(ProcIds.AwardC4, Color.LightGreen);
+            quickIdProcs.Add(ProcIds.AwardChaffG, Color.LightGreen);
+            quickIdProcs.Add(ProcIds.AwardClaymore, Color.LightGreen);
+            quickIdProcs.Add(ProcIds.AwardColdMeds, Color.LightCoral);
+            quickIdProcs.Add(ProcIds.AwardColdMeds2, Color.LightCoral);
+            quickIdProcs.Add(ProcIds.AwardDigitalCamera, Color.LightCoral);
+            quickIdProcs.Add(ProcIds.AwardDirectionalMic, Color.Orange); //progression blocker
+            quickIdProcs.Add(ProcIds.AwardGrenade, Color.LightGreen);
+            quickIdProcs.Add(ProcIds.AwardM4Ammo, Color.LightGreen);
+            quickIdProcs.Add(ProcIds.AwardM4Gun, Color.Orange);
+            quickIdProcs.Add(ProcIds.AwardM9Ammo, Color.LightGreen);
+            quickIdProcs.Add(ProcIds.AwardM9Gun, Color.Orange);
+            quickIdProcs.Add(ProcIds.AwardMineDetector, Color.LightCoral);
+            quickIdProcs.Add(ProcIds.AwardNikitaAmmo, Color.LightGreen);
+            quickIdProcs.Add(ProcIds.AwardNikitaGun, Color.Orange); //progression blocker
+            quickIdProcs.Add(ProcIds.AwardNvg, Color.LightCoral);
+            quickIdProcs.Add(ProcIds.AwardPentazemin, Color.LightCoral);
+            quickIdProcs.Add(ProcIds.AwardPsg1Ammo, Color.LightGreen);
+            quickIdProcs.Add(ProcIds.AwardPsg1Gun, Color.Orange); //progression blocker
+            quickIdProcs.Add(ProcIds.AwardPsg1tAmmo, Color.LightGreen);
+            quickIdProcs.Add(ProcIds.AwardPsg1tGun, Color.Orange);
+            quickIdProcs.Add(ProcIds.AwardRation, Color.LightCoral);
+            quickIdProcs.Add(ProcIds.AwardRgbAmmo, Color.LightGreen);
+            quickIdProcs.Add(ProcIds.AwardRgbGun, Color.Orange);
+            quickIdProcs.Add(ProcIds.AwardSensorB, Color.LightCoral);
+            quickIdProcs.Add(ProcIds.AwardShaver, Color.LightCoral);
+            quickIdProcs.Add(ProcIds.AwardSocomAmmo, Color.LightGreen);
+            quickIdProcs.Add(ProcIds.AwardSocomSuppressor, Color.LightCoral);
+            quickIdProcs.Add(ProcIds.AwardStingerAmmo, Color.LightGreen);
+            quickIdProcs.Add(ProcIds.AwardStingerGun, Color.Orange);
+            quickIdProcs.Add(ProcIds.AwardStunG, Color.LightGreen);
+            quickIdProcs.Add(ProcIds.AwardThermalG, Color.LightCoral);
+            quickIdProcs.Add(ProcIds.AwardUspAmmo, Color.LightGreen);
+            quickIdProcs.Add(ProcIds.AwardWetBox, Color.LightCoral);
         }
 
         private void selectGcxFile_Click(object sender, EventArgs e)
@@ -39,14 +90,26 @@ namespace gcx
             if (result == DialogResult.OK)
             {
                 debugTextbox.Text = gcx_Editor.CallDecompiler(ofd.FileName);
+                this.Text = ofd.SafeFileName;
                 contentTree = gcx_Editor.BuildContentTree();
+                /* this will show you all the (known) functions within the gcx file responsible for item/weapon spawns.
+                 * this can give you a good idea of _what_ each level has in it as possible spawns.
                 foreach(KeyValuePair<string, string> entry in contentTree)
                 {
-                    contentTreeCarbonCopy.Add(entry.Key, entry.Value);
+                    if(ProcIds.SpawnProcs.Any(knownProc => entry.Key.Contains(knownProc.BigEndianRepresentation))) //this works fine to do what it is designed to
+                        contentTreeCarbonCopy.Add(entry.Key, entry.Value);
+                }
+                */
+
+                //filter out any procs that don't call any of our known, desired procs
+                foreach(KeyValuePair<string, string> entry in contentTree)
+                {
+                    if (ProcIds.SpawnProcs.Any(knownProc => entry.Value.Contains(knownProc.BigEndianRepresentation)))
+                        contentTreeCarbonCopy.Add(entry.Key, entry.Value);
                 }
 
                 List<TreeNode> treeNodes = new List<TreeNode>();
-                foreach(KeyValuePair<string, string> item in contentTree)
+                foreach(KeyValuePair<string, string> item in contentTreeCarbonCopy)
                 {
                     treeNodes.Add(new TreeNode(item.Key));
                 }
@@ -59,43 +122,64 @@ namespace gcx
             string selectedNode = e.Node.Text;
 
             nodeContentsGroupBox.Text = selectedNode;
-            functionContentsTextbox.Text = contentTree[selectedNode];
-            functionContentsTextbox.Text = functionContentsTextbox.Text.Replace("\r\n", "");
-            functionContentsTextbox.Text = functionContentsTextbox.Text.Replace("\t", "");
-            functionContentsTextbox.Text = functionContentsTextbox.Text.Replace("}", "}\r\n");
+            functionContentsRichTextbox.Text = contentTree[selectedNode];
+            functionContentsRichTextbox.Text = functionContentsRichTextbox.Text.Replace("\r\n", "");
+            functionContentsRichTextbox.Text = functionContentsRichTextbox.Text.Replace("\t", "");
+            functionContentsRichTextbox.Text = functionContentsRichTextbox.Text.Replace("}", "}\r\n");
+
+            
+            foreach(KeyValuePair<Procedure, Color> kvp in quickIdProcs)
+            {
+                //this goes through and highlights all proc calls in the decoded text
+                List<int> positionsFound = new List<int>();
+                do
+                {
+                    positionsFound.Add(functionContentsRichTextbox.Find(kvp.Key.BigEndianRepresentation, positionsFound.Count > 0 ? positionsFound.Last() + 1 : 0, RichTextBoxFinds.None));
+                } while (!positionsFound.Any(position => position == -1));
+                foreach (int position in positionsFound)
+                {
+                    if (position == -1)
+                        break;
+                    functionContentsRichTextbox.Select(position, kvp.Key.BigEndianRepresentation.Length);
+                    functionContentsRichTextbox.SelectionBackColor = kvp.Value;
+                }
+            }
+
             string hexContents = BitConverter.ToString(gcx_Editor.Procedures.Find(proc => proc.Name == selectedNode).RawContents);
-            hexCodeTextbox.MaxLength = hexContents.Length;
-            hexCodeTextbox.Text = hexContents;
+            hexCodeRichTextbox.MaxLength = hexContents.Length;
+            hexCodeRichTextbox.Text = hexContents;
+
+            //TODO: highlight the procs in the hexCodeRichTextBox as well
         }
 
         private void saveFunctionChangesBtn_Click(object sender, EventArgs e)
         {
-            if (!ForceProperHexFormat(hexCodeTextbox))
+            if (!ForceProperHexFormat(hexCodeRichTextbox))
             {
                 return;
             } 
-            if (hexCodeTextbox.TextLength != hexCodeTextbox.MaxLength)
+            if (hexCodeRichTextbox.TextLength != hexCodeRichTextbox.MaxLength)
             {
                 //TODO: verify this works
-                if (hexCodeTextbox.Text[hexCodeTextbox.Text.Length - 1] == '-')
+                if (hexCodeRichTextbox.Text[hexCodeRichTextbox.Text.Length - 1] == '-')
                 {
-                    hexCodeTextbox.Text.Remove(hexCodeTextbox.TextLength -1, 1);
+                    hexCodeRichTextbox.Text.Remove(hexCodeRichTextbox.TextLength -1, 1);
                 }
-                while(hexCodeTextbox.TextLength != hexCodeTextbox.MaxLength)
+                while(hexCodeRichTextbox.TextLength != hexCodeRichTextbox.MaxLength)
                 {
-                    hexCodeTextbox.Text += "-00";
+                    hexCodeRichTextbox.Text += "-00";
                 }
             }
             string selectedFunction = contentsTreeView.SelectedNode.Text;
             if (!hexFunctionChanges.ContainsKey(selectedFunction))
-                hexFunctionChanges.Add(selectedFunction, hexCodeTextbox.Text);
+                hexFunctionChanges.Add(selectedFunction, hexCodeRichTextbox.Text);
             else
-                hexFunctionChanges[selectedFunction] = hexCodeTextbox.Text;
+                hexFunctionChanges[selectedFunction] = hexCodeRichTextbox.Text;
 
             MessageBox.Show("Function changes saved!");
         }
 
-        private bool ForceProperHexFormat(TextBox textbox)
+        private bool ForceProperHexFormat(RichTextBox textbox)
         {
             //TODO: fix this, cuz it isn't working correctly
             return true;
@@ -147,6 +231,14 @@ namespace gcx
         private void hexCodeTextbox_TextChanged(object sender, EventArgs e)
         {
             //TODO: should we do anything here?            
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            byte[] contents = new byte[] { 0x8D, 0x12, 0x6D, 0x0F, 0xC9, 0x2B, 0x08, 0x04, 0x06, 0xCB, 0xB5, 0x56, 0x55, 0x6D, 0x06, 0xE9, 0xB3, 0xCC };
+            GCX_Object.Procedure procedure = new GCX_Object.Procedure("40ADFE", contents, "doesnt matter", 0, 0);
+
+            gcx_Editor.InsertNewProcedureToFile(procedure);
         }
     }
 }

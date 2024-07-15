@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace MGS2_MC
 {
@@ -634,7 +635,6 @@ namespace MGS2_MC
 
             internal static void InfiniteItems(bool activate)
             {
-                //TODO: test
                 Cheat activeCheat = MGS2Cheat.InfiniteItems;
                 if (activate)
                 {
@@ -654,7 +654,6 @@ namespace MGS2_MC
 
             internal static void MaxStackOnPickup(bool activate)
             {
-                //TODO: test
                 Cheat activeCheat = MGS2Cheat.MaxStackOnPickup;
                 if (activate)
                 {
@@ -674,7 +673,6 @@ namespace MGS2_MC
 
             internal static void InfiniteKnockout(bool activate)
             {
-                //TODO: test
                 Cheat activeCheat = MGS2Cheat.InfiniteKnockout;
                 if (activate)
                 {
@@ -695,7 +693,6 @@ namespace MGS2_MC
 
             internal static void RemoveFilter(bool activate)
             {
-                //TODO: test
                 Cheat activeCheat = MGS2Cheat.RemoveFilter;
                 if (activate)
                 {
@@ -711,6 +708,11 @@ namespace MGS2_MC
                 }
                 else
                     ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.REMOVE_FILTER, MGS2AoB.OriginalRemoveFilterBytes);
+            }
+
+            internal static void ApplyColorFilter(Color chosenColor)
+            {
+                //ReplaceWithSpecificCode()
             }
         }
     }    

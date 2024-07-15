@@ -144,6 +144,9 @@
             this.cheatsCheckedListBox = new System.Windows.Forms.CheckedListBox();
             this.forceSleepButton = new System.Windows.Forms.Button();
             this.forceWakeButton = new System.Windows.Forms.Button();
+            this.guardAnimationsGroupBox = new System.Windows.Forms.GroupBox();
+            this.startAnimationButton = new System.Windows.Forms.Button();
+            this.guardAnimationComboBox = new System.Windows.Forms.ComboBox();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.hfBladeGroupBox = new System.Windows.Forms.GroupBox();
@@ -589,9 +592,9 @@
             this.viewLogsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.githubMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.joinOurDiscordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.guardAnimationComboBox = new System.Windows.Forms.ComboBox();
-            this.guardAnimationsGroupBox = new System.Windows.Forms.GroupBox();
-            this.startAnimationButton = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.filterColorPictureBox = new System.Windows.Forms.PictureBox();
+            this.filterColorButton = new System.Windows.Forms.Button();
             this.mgs2TabControl.SuspendLayout();
             this.tabPageItem.SuspendLayout();
             this.itemLayoutPanel.SuspendLayout();
@@ -654,6 +657,7 @@
             this.aobTesterTablePanel.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
             this.cheatsLeftSideFlowPanel.SuspendLayout();
+            this.guardAnimationsGroupBox.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.hfBladeGroupBox.SuspendLayout();
             this.hfBladeLayoutPanel.SuspendLayout();
@@ -929,7 +933,8 @@
             this.stealthLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.stealthPictureBox)).BeginInit();
             this.mainMenuStrip.SuspendLayout();
-            this.guardAnimationsGroupBox.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.filterColorPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // mgs2TabControl
@@ -2346,6 +2351,7 @@
             this.cheatsLeftSideFlowPanel.Controls.Add(this.forceSleepButton);
             this.cheatsLeftSideFlowPanel.Controls.Add(this.forceWakeButton);
             this.cheatsLeftSideFlowPanel.Controls.Add(this.guardAnimationsGroupBox);
+            this.cheatsLeftSideFlowPanel.Controls.Add(this.groupBox1);
             this.cheatsLeftSideFlowPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cheatsLeftSideFlowPanel.Location = new System.Drawing.Point(3, 3);
             this.cheatsLeftSideFlowPanel.Name = "cheatsLeftSideFlowPanel";
@@ -2382,6 +2388,36 @@
             this.forceWakeButton.Text = "Force Guards To Wake";
             this.forceWakeButton.UseVisualStyleBackColor = true;
             this.forceWakeButton.Click += new System.EventHandler(this.forceWakeButton_Click);
+            // 
+            // guardAnimationsGroupBox
+            // 
+            this.guardAnimationsGroupBox.Controls.Add(this.startAnimationButton);
+            this.guardAnimationsGroupBox.Controls.Add(this.guardAnimationComboBox);
+            this.guardAnimationsGroupBox.Location = new System.Drawing.Point(3, 295);
+            this.guardAnimationsGroupBox.Name = "guardAnimationsGroupBox";
+            this.guardAnimationsGroupBox.Size = new System.Drawing.Size(131, 80);
+            this.guardAnimationsGroupBox.TabIndex = 19;
+            this.guardAnimationsGroupBox.TabStop = false;
+            this.guardAnimationsGroupBox.Text = "Change Guard Animations";
+            // 
+            // startAnimationButton
+            // 
+            this.startAnimationButton.Location = new System.Drawing.Point(4, 51);
+            this.startAnimationButton.Name = "startAnimationButton";
+            this.startAnimationButton.Size = new System.Drawing.Size(121, 23);
+            this.startAnimationButton.TabIndex = 19;
+            this.startAnimationButton.Text = "Begin Animation";
+            this.startAnimationButton.UseVisualStyleBackColor = true;
+            this.startAnimationButton.Click += new System.EventHandler(this.startAnimationButton_Click);
+            // 
+            // guardAnimationComboBox
+            // 
+            this.guardAnimationComboBox.FormattingEnabled = true;
+            this.guardAnimationComboBox.Location = new System.Drawing.Point(4, 28);
+            this.guardAnimationComboBox.Name = "guardAnimationComboBox";
+            this.guardAnimationComboBox.Size = new System.Drawing.Size(121, 21);
+            this.guardAnimationComboBox.TabIndex = 18;
+            this.guardAnimationComboBox.Text = "Select an Animation";
             // 
             // statusStrip
             // 
@@ -8302,35 +8338,36 @@
             this.joinOurDiscordToolStripMenuItem.Text = "Join Our Discord";
             this.joinOurDiscordToolStripMenuItem.Click += new System.EventHandler(this.JoinOurDiscordToolStripMenuItem_Click);
             // 
-            // guardAnimationComboBox
+            // groupBox1
             // 
-            this.guardAnimationComboBox.FormattingEnabled = true;
-            this.guardAnimationComboBox.Location = new System.Drawing.Point(19, 24);
-            this.guardAnimationComboBox.Name = "guardAnimationComboBox";
-            this.guardAnimationComboBox.Size = new System.Drawing.Size(121, 21);
-            this.guardAnimationComboBox.TabIndex = 18;
-            this.guardAnimationComboBox.Text = "Select an Animation";
+            this.groupBox1.Controls.Add(this.filterColorButton);
+            this.groupBox1.Controls.Add(this.filterColorPictureBox);
+            this.groupBox1.Location = new System.Drawing.Point(140, 295);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(125, 100);
+            this.groupBox1.TabIndex = 20;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Color Filter";
             // 
-            // guardAnimationsGroupBox
+            // filterColorPictureBox
             // 
-            this.guardAnimationsGroupBox.Controls.Add(this.startAnimationButton);
-            this.guardAnimationsGroupBox.Controls.Add(this.guardAnimationComboBox);
-            this.guardAnimationsGroupBox.Location = new System.Drawing.Point(3, 295);
-            this.guardAnimationsGroupBox.Name = "guardAnimationsGroupBox";
-            this.guardAnimationsGroupBox.Size = new System.Drawing.Size(200, 100);
-            this.guardAnimationsGroupBox.TabIndex = 19;
-            this.guardAnimationsGroupBox.TabStop = false;
-            this.guardAnimationsGroupBox.Text = "Change Guard Animations";
+            this.filterColorPictureBox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.filterColorPictureBox.Location = new System.Drawing.Point(3, 16);
+            this.filterColorPictureBox.Name = "filterColorPictureBox";
+            this.filterColorPictureBox.Size = new System.Drawing.Size(119, 50);
+            this.filterColorPictureBox.TabIndex = 0;
+            this.filterColorPictureBox.TabStop = false;
             // 
-            // startAnimationButton
+            // filterColorButton
             // 
-            this.startAnimationButton.Location = new System.Drawing.Point(19, 50);
-            this.startAnimationButton.Name = "startAnimationButton";
-            this.startAnimationButton.Size = new System.Drawing.Size(121, 23);
-            this.startAnimationButton.TabIndex = 19;
-            this.startAnimationButton.Text = "Begin Animation";
-            this.startAnimationButton.UseVisualStyleBackColor = true;
-            this.startAnimationButton.Click += new System.EventHandler(this.startAnimationButton_Click);
+            this.filterColorButton.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.filterColorButton.Location = new System.Drawing.Point(3, 74);
+            this.filterColorButton.Name = "filterColorButton";
+            this.filterColorButton.Size = new System.Drawing.Size(119, 23);
+            this.filterColorButton.TabIndex = 1;
+            this.filterColorButton.Text = "Change Filter Color";
+            this.filterColorButton.UseVisualStyleBackColor = true;
+            this.filterColorButton.Click += new System.EventHandler(this.filterColorButton_Click);
             // 
             // GUI
             // 
@@ -8431,6 +8468,7 @@
             this.flowLayoutPanel2.ResumeLayout(false);
             this.flowLayoutPanel2.PerformLayout();
             this.cheatsLeftSideFlowPanel.ResumeLayout(false);
+            this.guardAnimationsGroupBox.ResumeLayout(false);
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
             this.hfBladeGroupBox.ResumeLayout(false);
@@ -8816,7 +8854,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.stealthPictureBox)).EndInit();
             this.mainMenuStrip.ResumeLayout(false);
             this.mainMenuStrip.PerformLayout();
-            this.guardAnimationsGroupBox.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.filterColorPictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -9387,6 +9426,9 @@
         private System.Windows.Forms.GroupBox guardAnimationsGroupBox;
         private System.Windows.Forms.Button startAnimationButton;
         private System.Windows.Forms.ComboBox guardAnimationComboBox;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button filterColorButton;
+        private System.Windows.Forms.PictureBox filterColorPictureBox;
     }
 }
 

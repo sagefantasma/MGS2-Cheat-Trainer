@@ -2052,5 +2052,18 @@ namespace MGS2_MC
 
             toolStripStatusLabel.Text = $"All guards' animations have been set to {guardAnimationComboBox.SelectedText}~!";
         }
+
+        private void filterColorButton_Click(object sender, EventArgs e)
+        {
+            ColorDialog dialog = new ColorDialog();
+            dialog.AnyColor = false;
+            dialog.FullOpen = true;
+            DialogResult result = dialog.ShowDialog();
+
+            if(result == DialogResult.OK)
+            {
+                filterColorPictureBox.BackColor = dialog.Color;
+            }
+        }
     }
 }

@@ -118,11 +118,21 @@ namespace MGS2_MC
         internal static byte[] OriginalCountOnPickup = { 0x44, 0x8B, 0x47, 0x60, 0x8B, 0x57, 0x5C };
         internal static string KnockoutDuration = "66 83 AB 5A 13 00 00 01";
         internal static byte[] OriginalKnockoutDuration = { 0x66, 0x83, 0xAB, 0x5A, 0x13, 0x00, 0x00, 0x01 };
-        internal static string RemoveFilter = "F3 41 0F 10 94 19 3C 02 00 00";
-        internal static byte[] OriginalRemoveFilterBytes = { 0xF3, 0x41, 0x0F, 0x10, 0x94, 0x19, 0x3C, 0x02, 0x00, 0x00 };
+        internal static string RemovePlantFilter = "F3 41 0F 10 94 19 3C 02 00 00";
+        internal static byte[] OriginalRemovePlantFilterBytes = { 0xF3, 0x41, 0x0F, 0x10, 0x94, 0x19, 0x3C, 0x02, 0x00, 0x00 };
         internal static string GuardAnimations = "?? ?? ?? ?? ?? ?? ?? 48 8B 41 20 89 90 40 14 00 00 48 8B 49 20 8B 81 40 14";
         internal static byte[] OriginalGuardAnimationsBytes = { 0x0F, 0xBF, 0x90, 0x00, 0x0C, 0x00, 0x00, 0x48, 0x8B, 0x41, 0x20, 0x89, 0x90, 0x40, 0x14, 0x00, 0x00, 0x48, 0x8B, 0x49, 0x20, 0x8B, 0x81, 0x40, 0x14 };
         internal static byte[] StaticGuardAnimationBytes = { 0x48, 0x8B, 0x41, 0x20, 0x89, 0x90, 0x40, 0x14, 0x00, 0x00, 0x48, 0x8B, 0x49, 0x20, 0x8B, 0x81, 0x40, 0x14 };
+        internal static string RemovePlantFog = "?? 02 00 00 F3 0F 10 9B D0 01";
+        internal static byte[] OriginalPlantFogBytes = { 0x00, 0x02, 0x00, 0x00, 0xF3, 0x0F, 0x10, 0x9B, 0xD0, 0x01 };
+        internal static string RemoveTankerFilter = "B9 F9 FF 66 41 0F 6E 8F 2C 03";
+        internal static byte[] OriginalRemoveTankerFilterBytes = { 0xB9, 0xF9, 0xFF, 0x66, 0x41, 0x0F, 0x6E, 0x8F, 0x2C, 0x03 };
+        internal static string NightTime = "FF 00 00 00 4C 6B C8 70 0F B6 83 C8 01";
+        internal static byte[] OriginalNightTimeBytes = { 0xFF, 0x00, 0x00, 0x00, 0x4C, 0x6B, 0xC8, 0x70, 0x0F, 0xB6, 0x83, 0xC8, 0x01 };
+        internal static string EnableCustomFiltering = "88 0D BA C6 4B 01 88 15 B5 C6 4B 01 44 88 05 AF C6 4B 01 C3";
+        internal static byte[] OriginalCustomFilteringBytes = { 0x88, 0x0D, 0xBA, 0xC6, 0x4B, 0x01, 0x88, 0x15, 0xB5, 0xC6, 0x4B, 0x01, 0x44, 0x88, 0x05, 0xAF, 0xC6, 0x4B, 0x01, 0xC3 };
+        internal static string CustomFilteringAoB = "00 00 80 3F 00 00 00 00 E0 0B 00 00 00 00 00 00";
+
 
         internal static GuardAnimation WaitAnimation = new GuardAnimation { Name = "Wait", Bytes = new byte[] { 0xBA, 0x00, 0x00, 0x00, 0x00, 0x90, 0x90 } };
         internal static GuardAnimation PatrolAnimation = new GuardAnimation { Name = "Patrol", Bytes = new byte[] { 0xBA, 0x02, 0x00, 0x00, 0x00, 0x90, 0x90 } };
@@ -154,6 +164,7 @@ namespace MGS2_MC
             DeactivateAIAnimation, CommandSoldiersAnimation, RadioCheckinAnimation, PeeAnimation, PeeWiggleAnimation, LeanRightAnimation,
             LeanLeftAnimation, RollRightAnimation, RollLeftAnimation
         };
+
         internal class GuardAnimation
         {
             public string Name { get; set; }
@@ -327,8 +338,13 @@ namespace MGS2_MC
         public static readonly MemoryOffset INFINITE_ITEMS = new MemoryOffset(0, 6);
         public static readonly MemoryOffset MAX_ON_PICKUP = new MemoryOffset(0, 6);
         public static readonly MemoryOffset KNOCKOUT_DURATION = new MemoryOffset(0, 7);
-        public static readonly MemoryOffset REMOVE_FILTER = new MemoryOffset(0, 9);
+        public static readonly MemoryOffset REMOVE_PLANT_FILTER = new MemoryOffset(0, 9);
         public static readonly MemoryOffset GUARD_ANIMATIONS = new MemoryOffset(0, 6);
+        public static readonly MemoryOffset REMOVE_PLANT_FOG = new MemoryOffset(0);
+        public static readonly MemoryOffset REMOVE_TANKER_FILTER = new MemoryOffset(9);
+        public static readonly MemoryOffset NIGHT_TIME = new MemoryOffset(0);
+        public static readonly MemoryOffset ENABLE_CUSTOM_FILTER = new MemoryOffset(0, 18);
+        public static readonly MemoryOffset CUSTOM_FILTERING = new MemoryOffset(-204, -202);
         #endregion
 
         #region Calculated From CurrentGripGauge

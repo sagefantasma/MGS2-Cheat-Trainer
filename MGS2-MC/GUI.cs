@@ -34,6 +34,7 @@ namespace MGS2_MC
         public static bool? GuiLoaded = false;
         private readonly ILogger _logger;
         private static bool UserHasBeenWarned = false;
+        private PeriodicTask _reapplyFilterTask;
 
         internal static void ShowGui()
         {
@@ -1764,6 +1765,7 @@ namespace MGS2_MC
                     {
                         Invoke(new MethodInvoker(() =>
                         {
+                            playerCurrentHpTrackBar.Maximum = MGS2MemoryManager.GetCurrentMaxHP();
                             playerCurrentHpTrackBar.Value = MGS2MemoryManager.GetCurrentHP();
                             ushort currentGripStamina = MGS2MemoryManager.GetCurrentGripGauge();
                             if (currentGripStamina > gripTrackBar.Maximum)
@@ -1773,6 +1775,7 @@ namespace MGS2_MC
                     }
                     else
                     {
+                        playerCurrentHpTrackBar.Maximum = MGS2MemoryManager.GetCurrentMaxHP();
                         playerCurrentHpTrackBar.Value = MGS2MemoryManager.GetCurrentHP();
                         ushort currentGripStamina = MGS2MemoryManager.GetCurrentGripGauge();
                         if (currentGripStamina > gripTrackBar.Maximum)
@@ -2053,7 +2056,7 @@ namespace MGS2_MC
             toolStripStatusLabel.Text = $"All guards' animations have been set to {guardAnimationComboBox.SelectedText}~!";
         }
 
-        private void filterColorButton_Click(object sender, EventArgs e)
+        private async void filterColorButton_Click(object sender, EventArgs e)
         {
             ColorDialog dialog = new ColorDialog();
             dialog.AnyColor = false;
@@ -2063,7 +2066,18 @@ namespace MGS2_MC
             if(result == DialogResult.OK)
             {
                 filterColorPictureBox.BackColor = dialog.Color;
+                if (enableCustomFilterColorCheckBox.Checked == false)
+                {
+                    Cheat.CheatActions.EnableCustomFilter(true);
+                    enableCustomFilterColorCheckBox.Checked = true;
+                }
+                await Cheat.CheatActions.ApplyColorFilter(filterColorPictureBox.BackColor);
             }
+        }
+
+        private void enableCustomFilterColorCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Cheat.CheatActions.EnableCustomFilter(enableCustomFilterColorCheckBox.Checked);
         }
     }
 }

@@ -147,6 +147,9 @@
             this.guardAnimationsGroupBox = new System.Windows.Forms.GroupBox();
             this.startAnimationButton = new System.Windows.Forms.Button();
             this.guardAnimationComboBox = new System.Windows.Forms.ComboBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.filterColorButton = new System.Windows.Forms.Button();
+            this.filterColorPictureBox = new System.Windows.Forms.PictureBox();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.hfBladeGroupBox = new System.Windows.Forms.GroupBox();
@@ -592,9 +595,7 @@
             this.viewLogsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.githubMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.joinOurDiscordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.filterColorPictureBox = new System.Windows.Forms.PictureBox();
-            this.filterColorButton = new System.Windows.Forms.Button();
+            this.enableCustomFilterColorCheckBox = new System.Windows.Forms.CheckBox();
             this.mgs2TabControl.SuspendLayout();
             this.tabPageItem.SuspendLayout();
             this.itemLayoutPanel.SuspendLayout();
@@ -658,6 +659,8 @@
             this.flowLayoutPanel2.SuspendLayout();
             this.cheatsLeftSideFlowPanel.SuspendLayout();
             this.guardAnimationsGroupBox.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.filterColorPictureBox)).BeginInit();
             this.statusStrip.SuspendLayout();
             this.hfBladeGroupBox.SuspendLayout();
             this.hfBladeLayoutPanel.SuspendLayout();
@@ -933,8 +936,6 @@
             this.stealthLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.stealthPictureBox)).BeginInit();
             this.mainMenuStrip.SuspendLayout();
-            this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.filterColorPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // mgs2TabControl
@@ -2395,16 +2396,18 @@
             this.guardAnimationsGroupBox.Controls.Add(this.guardAnimationComboBox);
             this.guardAnimationsGroupBox.Location = new System.Drawing.Point(3, 295);
             this.guardAnimationsGroupBox.Name = "guardAnimationsGroupBox";
-            this.guardAnimationsGroupBox.Size = new System.Drawing.Size(131, 80);
+            this.guardAnimationsGroupBox.Padding = new System.Windows.Forms.Padding(3, 15, 3, 3);
+            this.guardAnimationsGroupBox.Size = new System.Drawing.Size(110, 80);
             this.guardAnimationsGroupBox.TabIndex = 19;
             this.guardAnimationsGroupBox.TabStop = false;
             this.guardAnimationsGroupBox.Text = "Change Guard Animations";
             // 
             // startAnimationButton
             // 
-            this.startAnimationButton.Location = new System.Drawing.Point(4, 51);
+            this.startAnimationButton.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.startAnimationButton.Location = new System.Drawing.Point(3, 54);
             this.startAnimationButton.Name = "startAnimationButton";
-            this.startAnimationButton.Size = new System.Drawing.Size(121, 23);
+            this.startAnimationButton.Size = new System.Drawing.Size(104, 23);
             this.startAnimationButton.TabIndex = 19;
             this.startAnimationButton.Text = "Begin Animation";
             this.startAnimationButton.UseVisualStyleBackColor = true;
@@ -2412,12 +2415,45 @@
             // 
             // guardAnimationComboBox
             // 
+            this.guardAnimationComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.guardAnimationComboBox.FormattingEnabled = true;
-            this.guardAnimationComboBox.Location = new System.Drawing.Point(4, 28);
+            this.guardAnimationComboBox.Location = new System.Drawing.Point(3, 28);
             this.guardAnimationComboBox.Name = "guardAnimationComboBox";
-            this.guardAnimationComboBox.Size = new System.Drawing.Size(121, 21);
+            this.guardAnimationComboBox.Size = new System.Drawing.Size(104, 21);
             this.guardAnimationComboBox.TabIndex = 18;
-            this.guardAnimationComboBox.Text = "Select an Animation";
+            this.guardAnimationComboBox.Text = "Select Animation";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.enableCustomFilterColorCheckBox);
+            this.groupBox1.Controls.Add(this.filterColorButton);
+            this.groupBox1.Controls.Add(this.filterColorPictureBox);
+            this.groupBox1.Location = new System.Drawing.Point(119, 295);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(149, 100);
+            this.groupBox1.TabIndex = 20;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Color Filter";
+            // 
+            // filterColorButton
+            // 
+            this.filterColorButton.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.filterColorButton.Location = new System.Drawing.Point(3, 74);
+            this.filterColorButton.Name = "filterColorButton";
+            this.filterColorButton.Size = new System.Drawing.Size(143, 23);
+            this.filterColorButton.TabIndex = 1;
+            this.filterColorButton.Text = "Change Filter Color";
+            this.filterColorButton.UseVisualStyleBackColor = true;
+            this.filterColorButton.Click += new System.EventHandler(this.filterColorButton_Click);
+            // 
+            // filterColorPictureBox
+            // 
+            this.filterColorPictureBox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.filterColorPictureBox.Location = new System.Drawing.Point(3, 16);
+            this.filterColorPictureBox.Name = "filterColorPictureBox";
+            this.filterColorPictureBox.Size = new System.Drawing.Size(143, 35);
+            this.filterColorPictureBox.TabIndex = 0;
+            this.filterColorPictureBox.TabStop = false;
             // 
             // statusStrip
             // 
@@ -8338,36 +8374,17 @@
             this.joinOurDiscordToolStripMenuItem.Text = "Join Our Discord";
             this.joinOurDiscordToolStripMenuItem.Click += new System.EventHandler(this.JoinOurDiscordToolStripMenuItem_Click);
             // 
-            // groupBox1
+            // enableCustomFilterColorCheckBox
             // 
-            this.groupBox1.Controls.Add(this.filterColorButton);
-            this.groupBox1.Controls.Add(this.filterColorPictureBox);
-            this.groupBox1.Location = new System.Drawing.Point(140, 295);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(125, 100);
-            this.groupBox1.TabIndex = 20;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Color Filter";
-            // 
-            // filterColorPictureBox
-            // 
-            this.filterColorPictureBox.Dock = System.Windows.Forms.DockStyle.Top;
-            this.filterColorPictureBox.Location = new System.Drawing.Point(3, 16);
-            this.filterColorPictureBox.Name = "filterColorPictureBox";
-            this.filterColorPictureBox.Size = new System.Drawing.Size(119, 50);
-            this.filterColorPictureBox.TabIndex = 0;
-            this.filterColorPictureBox.TabStop = false;
-            // 
-            // filterColorButton
-            // 
-            this.filterColorButton.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.filterColorButton.Location = new System.Drawing.Point(3, 74);
-            this.filterColorButton.Name = "filterColorButton";
-            this.filterColorButton.Size = new System.Drawing.Size(119, 23);
-            this.filterColorButton.TabIndex = 1;
-            this.filterColorButton.Text = "Change Filter Color";
-            this.filterColorButton.UseVisualStyleBackColor = true;
-            this.filterColorButton.Click += new System.EventHandler(this.filterColorButton_Click);
+            this.enableCustomFilterColorCheckBox.AutoSize = true;
+            this.enableCustomFilterColorCheckBox.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.enableCustomFilterColorCheckBox.Location = new System.Drawing.Point(3, 57);
+            this.enableCustomFilterColorCheckBox.Name = "enableCustomFilterColorCheckBox";
+            this.enableCustomFilterColorCheckBox.Size = new System.Drawing.Size(143, 17);
+            this.enableCustomFilterColorCheckBox.TabIndex = 2;
+            this.enableCustomFilterColorCheckBox.Text = "Enable Custom Filter?";
+            this.enableCustomFilterColorCheckBox.UseVisualStyleBackColor = true;
+            this.enableCustomFilterColorCheckBox.CheckedChanged += new System.EventHandler(this.enableCustomFilterColorCheckBox_CheckedChanged);
             // 
             // GUI
             // 
@@ -8469,6 +8486,9 @@
             this.flowLayoutPanel2.PerformLayout();
             this.cheatsLeftSideFlowPanel.ResumeLayout(false);
             this.guardAnimationsGroupBox.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.filterColorPictureBox)).EndInit();
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
             this.hfBladeGroupBox.ResumeLayout(false);
@@ -8854,8 +8874,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.stealthPictureBox)).EndInit();
             this.mainMenuStrip.ResumeLayout(false);
             this.mainMenuStrip.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.filterColorPictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -9429,6 +9447,7 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button filterColorButton;
         private System.Windows.Forms.PictureBox filterColorPictureBox;
+        private System.Windows.Forms.CheckBox enableCustomFilterColorCheckBox;
     }
 }
 

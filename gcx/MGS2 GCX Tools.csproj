@@ -76,17 +76,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="gcx_comparator.cs" />
-    <Compile Include="gcx_editor.cs" />
-    <Compile Include="GCX_Explorer.cs">
+    <Compile Include="GcxTableMapping.cs" />
+    <Compile Include="GcxComparator.cs" />
+    <Compile Include="GcxEditor.cs" />
+    <Compile Include="GcxExplorer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GCX_Explorer.Designer.cs">
-      <DependentUpon>GCX_Explorer.cs</DependentUpon>
+    <Compile Include="GcxExplorer.Designer.cs">
+      <DependentUpon>GcxExplorer.cs</DependentUpon>
     </Compile>
-    <Compile Include="GCX_Object.cs" />
-    <Compile Include="GcxIds.cs" />
+    <Compile Include="GcxProcs.cs" />
     <Compile Include="ItemSets.cs" />
+    <Compile Include="MGS2Randomizer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -95,8 +96,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="GCX_Explorer.resx">
-      <DependentUpon>GCX_Explorer.cs</DependentUpon>
+    <EmbeddedResource Include="GcxExplorer.resx">
+      <DependentUpon>GcxExplorer.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

@@ -148,6 +148,7 @@
             this.startAnimationButton = new System.Windows.Forms.Button();
             this.guardAnimationComboBox = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.enableCustomFilterColorCheckBox = new System.Windows.Forms.CheckBox();
             this.filterColorButton = new System.Windows.Forms.Button();
             this.filterColorPictureBox = new System.Windows.Forms.PictureBox();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
@@ -595,7 +596,6 @@
             this.viewLogsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.githubMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.joinOurDiscordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.enableCustomFilterColorCheckBox = new System.Windows.Forms.CheckBox();
             this.mgs2TabControl.SuspendLayout();
             this.tabPageItem.SuspendLayout();
             this.itemLayoutPanel.SuspendLayout();
@@ -2434,6 +2434,18 @@
             this.groupBox1.TabIndex = 20;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Color Filter";
+            // 
+            // enableCustomFilterColorCheckBox
+            // 
+            this.enableCustomFilterColorCheckBox.AutoSize = true;
+            this.enableCustomFilterColorCheckBox.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.enableCustomFilterColorCheckBox.Location = new System.Drawing.Point(3, 57);
+            this.enableCustomFilterColorCheckBox.Name = "enableCustomFilterColorCheckBox";
+            this.enableCustomFilterColorCheckBox.Size = new System.Drawing.Size(143, 17);
+            this.enableCustomFilterColorCheckBox.TabIndex = 2;
+            this.enableCustomFilterColorCheckBox.Text = "Enable Custom Filter?";
+            this.enableCustomFilterColorCheckBox.UseVisualStyleBackColor = true;
+            this.enableCustomFilterColorCheckBox.CheckedChanged += new System.EventHandler(this.enableCustomFilterColorCheckBox_CheckedChanged);
             // 
             // filterColorButton
             // 
@@ -8373,18 +8385,6 @@
             this.joinOurDiscordToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.joinOurDiscordToolStripMenuItem.Text = "Join Our Discord";
             this.joinOurDiscordToolStripMenuItem.Click += new System.EventHandler(this.JoinOurDiscordToolStripMenuItem_Click);
-            // 
-            // enableCustomFilterColorCheckBox
-            // 
-            this.enableCustomFilterColorCheckBox.AutoSize = true;
-            this.enableCustomFilterColorCheckBox.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.enableCustomFilterColorCheckBox.Location = new System.Drawing.Point(3, 57);
-            this.enableCustomFilterColorCheckBox.Name = "enableCustomFilterColorCheckBox";
-            this.enableCustomFilterColorCheckBox.Size = new System.Drawing.Size(143, 17);
-            this.enableCustomFilterColorCheckBox.TabIndex = 2;
-            this.enableCustomFilterColorCheckBox.Text = "Enable Custom Filter?";
-            this.enableCustomFilterColorCheckBox.UseVisualStyleBackColor = true;
-            this.enableCustomFilterColorCheckBox.CheckedChanged += new System.EventHandler(this.enableCustomFilterColorCheckBox_CheckedChanged);
             // 
             // GUI
             // 

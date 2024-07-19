@@ -13,12 +13,12 @@ using System.Buffers.Binary;
 
 namespace gcx
 {
-    internal class gcx_editor
+    internal class GcxEditor
     {
         public string FileName { get; set; }
         private byte[] RawContents { get; set; }
         private byte[] TrimmedContents { get; set; }
-        internal List<GCX_Object.Procedure> Procedures { get; set; }
+        internal List<DecodedProc> Procedures { get; set; }
         private int _startOfOffsetBlock;
         private int _scriptOffset;
         private int _resourceTableOffset;
@@ -30,9 +30,9 @@ namespace gcx
         private int _mainBodySize;
         private int _mainDataLocation;
 
-        public gcx_editor()
+        public GcxEditor()
         {
-            Procedures = new List<GCX_Object.Procedure>();
+            Procedures = new List<DecodedProc>();
         }
 
         internal string CallDecompiler(string file)
@@ -111,7 +111,7 @@ namespace gcx
             }
         }
 
-        internal Dictionary<string,string> BuildContentTree()
+        internal List<DecodedProc> BuildContentTree()
         {
             //take the out file and break it down into main function and all procs
             string decompiledFile = "._sanitizedGcx_out";
@@ -119,7 +119,7 @@ namespace gcx
             string[] linedContents = File.ReadAllLines(decompiledFile);
             linedContents = linedContents.Where(line => line != "").ToArray();
 
-            Dictionary<string, string> functions = new Dictionary<string, string>();
+            List<DecodedProc> functions = new List<DecodedProc>();
 
             string currentFunction = "";
             string currentFunctionName = "";
@@ -131,7 +131,7 @@ namespace gcx
                     if (linedContents[i][0] == '}')
                     {
                         //end of function
-                        functions.Add(currentFunctionName, currentFunction);
+                        functions.Add(new DecodedProc(currentFunctionName, null, currentFunction, 0, 0));
                     }
                     else
                     {
@@ -149,16 +149,16 @@ namespace gcx
                 }
             }
 
-            foreach(KeyValuePair<string,string> kvp in functions)
+            foreach(DecodedProc proc in functions)
             {
-                byte[] functionData = GetFunctionByteData(kvp.Key, out int procTablePosition, out int scriptPos);
-                Procedures.Add(new GCX_Object.Procedure(kvp.Key, functionData, kvp.Value, procTablePosition, scriptPos));
+                byte[] functionData = GetFunctionByteData(proc.Name, out int procTablePosition, out int scriptPos);
+                Procedures.Add(new DecodedProc(proc.Name, functionData, proc.DecodedContents, procTablePosition, scriptPos));
             }
 
             return functions;
         }
 
-        internal void InsertNewProcedureToFile(GCX_Object.Procedure procedure)
+        internal void InsertNewProcedureToFile(DecodedProc procedure)
         {
             byte[] newTrimmedData = new byte[TrimmedContents.Length + procedure.ScriptLength + 8];
             //insert 8 bytes at end of proc list, before strres_block_top
@@ -339,12 +339,12 @@ namespace gcx
         {
             foreach(KeyValuePair<string, byte[]> modification in modifications)
             {
-                GCX_Object.Procedure modifiedProcedure = Procedures.Find(proc => proc.Name.Contains(modification.Key));
+                DecodedProc modifiedProcedure = Procedures.Find(proc => proc.Name.Contains(modification.Key));
 
                 modifiedProcedure.RawContents = modification.Value;
             }
 
-            foreach(GCX_Object.Procedure procedure in Procedures)
+            foreach(DecodedProc procedure in Procedures)
             {
                 Array.Copy(procedure.RawContents, 0, TrimmedContents, procedure.ScriptInitialPosition + _proceduresDataLocation, procedure.ScriptLength);
             }

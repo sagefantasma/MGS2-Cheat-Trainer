@@ -13,7 +13,7 @@ namespace gcx
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new GCX_Explorer());
+            Application.Run(new GcxExplorer());
         }
 
         [STAThread]
@@ -70,7 +70,7 @@ namespace gcx
                 } while (!successfulParse);
 
                 Console.Write("Examining files for matching contents...");
-                gcx_comparator.CompareGCXFiles(args.ToList(), minimumMatchLength * 3);
+                GcxComparator.CompareGCXFiles(args.ToList(), minimumMatchLength * 3);
                 
                 Console.Write("Press Y to restart, or any other key to quit: ");
                 rerun = true;

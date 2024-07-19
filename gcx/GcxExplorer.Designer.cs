@@ -1,6 +1,6 @@
 ﻿namespace gcx
 {
-    partial class GCX_Explorer
+    partial class GcxExplorer
     {
         /// <summary>
         /// Required designer variable.
@@ -171,6 +171,7 @@
             this.button2.TabIndex = 8;
             this.button2.Text = "Enumerate";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // hexCodeRichTextbox
             // 

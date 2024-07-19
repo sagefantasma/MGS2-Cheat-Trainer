@@ -13,16 +13,16 @@ using System.Windows.Forms;
 
 namespace gcx
 {
-    public partial class GCX_Explorer : Form
+    public partial class GcxExplorer : Form
     {
-        private Dictionary<string, string> contentTree = new Dictionary<string, string>();
-        private Dictionary<string, string> contentTreeCarbonCopy = new Dictionary<string, string>();
+        private List<DecodedProc> contentTree = new List<DecodedProc>();
+        private List<DecodedProc> contentTreeCarbonCopy = new List<DecodedProc>();
         private Dictionary<string, string> hexFunctionChanges = new Dictionary<string, string>();
-        private gcx_editor gcx_Editor;
+        private GcxEditor gcx_Editor;
         readonly Regex hexRegex = new Regex("^[0-9A-F]+$");
-        private Dictionary<Procedure, Color> quickIdProcs = new Dictionary<Procedure, Color>();
+        private Dictionary<RawProc, Color> quickIdProcs = new Dictionary<RawProc, Color>();
 
-        public GCX_Explorer()
+        public GcxExplorer()
         {
             InitializeComponent();
             BuildQuickIdProcs();
@@ -30,62 +30,62 @@ namespace gcx
 
         private void BuildQuickIdProcs()
         {
-            quickIdProcs.Add(ProcIds.AwardAksAmmo, Color.LightGreen);
-            quickIdProcs.Add(ProcIds.AwardAksGun, Color.Orange); //progression blocker
-            quickIdProcs.Add(ProcIds.AwardAksSuppressor, Color.LightCoral);
-            quickIdProcs.Add(ProcIds.AwardBandages, Color.LightCoral);
-            quickIdProcs.Add(ProcIds.AwardBodyArmor, Color.LightGreen);
-            quickIdProcs.Add(ProcIds.AwardBook, Color.LightGreen);
-            quickIdProcs.Add(ProcIds.AwardBox1, Color.LightCoral);
-            quickIdProcs.Add(ProcIds.AwardBox2, Color.LightCoral);
-            quickIdProcs.Add(ProcIds.AwardBox3, Color.LightCoral);
-            quickIdProcs.Add(ProcIds.AwardBox4, Color.LightCoral);
-            quickIdProcs.Add(ProcIds.AwardBox5, Color.LightCoral);
-            quickIdProcs.Add(ProcIds.AwardC4, Color.LightGreen);
-            quickIdProcs.Add(ProcIds.AwardChaffG, Color.LightGreen);
-            quickIdProcs.Add(ProcIds.AwardClaymore, Color.LightGreen);
-            quickIdProcs.Add(ProcIds.AwardColdMeds, Color.LightCoral);
-            quickIdProcs.Add(ProcIds.AwardColdMeds2, Color.LightCoral);
-            quickIdProcs.Add(ProcIds.AwardDigitalCamera, Color.LightCoral);
-            quickIdProcs.Add(ProcIds.AwardDirectionalMic, Color.Orange); //progression blocker
-            quickIdProcs.Add(ProcIds.AwardGrenade, Color.LightGreen);
-            quickIdProcs.Add(ProcIds.AwardM4Ammo, Color.LightGreen);
-            quickIdProcs.Add(ProcIds.AwardM4Gun, Color.Orange);
-            quickIdProcs.Add(ProcIds.AwardM9Ammo, Color.LightGreen);
-            quickIdProcs.Add(ProcIds.AwardM9Gun, Color.Orange);
-            quickIdProcs.Add(ProcIds.AwardMineDetector, Color.LightCoral);
-            quickIdProcs.Add(ProcIds.AwardNikitaAmmo, Color.LightGreen);
-            quickIdProcs.Add(ProcIds.AwardNikitaGun, Color.Orange); //progression blocker
-            quickIdProcs.Add(ProcIds.AwardNvg, Color.LightCoral);
-            quickIdProcs.Add(ProcIds.AwardPentazemin, Color.LightCoral);
-            quickIdProcs.Add(ProcIds.AwardPsg1Ammo, Color.LightGreen);
-            quickIdProcs.Add(ProcIds.AwardPsg1Gun, Color.Orange); //progression blocker
-            quickIdProcs.Add(ProcIds.AwardPsg1tAmmo, Color.LightGreen);
-            quickIdProcs.Add(ProcIds.AwardPsg1tGun, Color.Orange);
-            quickIdProcs.Add(ProcIds.AwardRation, Color.LightCoral);
-            quickIdProcs.Add(ProcIds.AwardRgbAmmo, Color.LightGreen);
-            quickIdProcs.Add(ProcIds.AwardRgbGun, Color.Orange);
-            quickIdProcs.Add(ProcIds.AwardSensorB, Color.LightCoral);
-            quickIdProcs.Add(ProcIds.AwardShaver, Color.LightCoral);
-            quickIdProcs.Add(ProcIds.AwardSocomAmmo, Color.LightGreen);
-            quickIdProcs.Add(ProcIds.AwardSocomSuppressor, Color.LightCoral);
-            quickIdProcs.Add(ProcIds.AwardStingerAmmo, Color.LightGreen);
-            quickIdProcs.Add(ProcIds.AwardStingerGun, Color.Orange);
-            quickIdProcs.Add(ProcIds.AwardStunG, Color.LightGreen);
-            quickIdProcs.Add(ProcIds.AwardThermalG, Color.LightCoral);
-            quickIdProcs.Add(ProcIds.AwardUspAmmo, Color.LightGreen);
-            quickIdProcs.Add(ProcIds.AwardWetBox, Color.LightCoral);
+            quickIdProcs.Add(KnownProc.AwardAksAmmo, Color.LightGreen);
+            quickIdProcs.Add(KnownProc.AwardAksGun, Color.Orange); //progression blocker
+            quickIdProcs.Add(KnownProc.AwardAksSuppressor, Color.LightCoral);
+            quickIdProcs.Add(KnownProc.AwardBandages, Color.LightCoral);
+            quickIdProcs.Add(KnownProc.AwardBodyArmor, Color.LightGreen);
+            quickIdProcs.Add(KnownProc.AwardBook, Color.LightGreen);
+            quickIdProcs.Add(KnownProc.AwardBox1, Color.LightCoral);
+            quickIdProcs.Add(KnownProc.AwardBox2, Color.LightCoral);
+            quickIdProcs.Add(KnownProc.AwardBox3, Color.LightCoral);
+            quickIdProcs.Add(KnownProc.AwardBox4, Color.LightCoral);
+            quickIdProcs.Add(KnownProc.AwardBox5, Color.LightCoral);
+            quickIdProcs.Add(KnownProc.AwardC4, Color.LightGreen);
+            quickIdProcs.Add(KnownProc.AwardChaffG, Color.LightGreen);
+            quickIdProcs.Add(KnownProc.AwardClaymore, Color.LightGreen);
+            quickIdProcs.Add(KnownProc.AwardColdMeds, Color.LightCoral);
+            quickIdProcs.Add(KnownProc.AwardColdMeds2, Color.LightCoral);
+            quickIdProcs.Add(KnownProc.AwardDigitalCamera, Color.LightCoral);
+            quickIdProcs.Add(KnownProc.AwardDirectionalMic, Color.Orange); //progression blocker
+            quickIdProcs.Add(KnownProc.AwardGrenade, Color.LightGreen);
+            quickIdProcs.Add(KnownProc.AwardM4Ammo, Color.LightGreen);
+            quickIdProcs.Add(KnownProc.AwardM4Gun, Color.Orange);
+            quickIdProcs.Add(KnownProc.AwardM9Ammo, Color.LightGreen);
+            quickIdProcs.Add(KnownProc.AwardM9Gun, Color.Orange);
+            quickIdProcs.Add(KnownProc.AwardMineDetector, Color.LightCoral);
+            quickIdProcs.Add(KnownProc.AwardNikitaAmmo, Color.LightGreen);
+            quickIdProcs.Add(KnownProc.AwardNikitaGun, Color.Orange); //progression blocker
+            quickIdProcs.Add(KnownProc.AwardNvg, Color.LightCoral);
+            quickIdProcs.Add(KnownProc.AwardPentazemin, Color.LightCoral);
+            quickIdProcs.Add(KnownProc.AwardPsg1Ammo, Color.LightGreen);
+            quickIdProcs.Add(KnownProc.AwardPsg1Gun, Color.Orange); //progression blocker
+            quickIdProcs.Add(KnownProc.AwardPsg1tAmmo, Color.LightGreen);
+            quickIdProcs.Add(KnownProc.AwardPsg1tGun, Color.Orange);
+            quickIdProcs.Add(KnownProc.AwardRation, Color.LightCoral);
+            quickIdProcs.Add(KnownProc.AwardRgbAmmo, Color.LightGreen);
+            quickIdProcs.Add(KnownProc.AwardRgbGun, Color.Orange);
+            quickIdProcs.Add(KnownProc.AwardSensorB, Color.LightCoral);
+            quickIdProcs.Add(KnownProc.AwardShaver, Color.LightCoral);
+            quickIdProcs.Add(KnownProc.AwardSocomAmmo, Color.LightGreen);
+            quickIdProcs.Add(KnownProc.AwardSocomSuppressor, Color.LightCoral);
+            quickIdProcs.Add(KnownProc.AwardStingerAmmo, Color.LightGreen);
+            quickIdProcs.Add(KnownProc.AwardStingerGun, Color.Orange);
+            quickIdProcs.Add(KnownProc.AwardStunG, Color.LightGreen);
+            quickIdProcs.Add(KnownProc.AwardThermalG, Color.LightCoral);
+            quickIdProcs.Add(KnownProc.AwardUspAmmo, Color.LightGreen);
+            quickIdProcs.Add(KnownProc.AwardWetBox, Color.LightCoral);
         }
 
         private void selectGcxFile_Click(object sender, EventArgs e)
         {
-            contentTree = new Dictionary<string, string>();
-            contentTreeCarbonCopy = new Dictionary<string, string>();
+            contentTree = new List<DecodedProc>();
+            contentTreeCarbonCopy = new List<DecodedProc>();
             contentsTreeView.Nodes.Clear();
             hexFunctionChanges = new Dictionary<string, string>();
             OpenFileDialog ofd = new OpenFileDialog();
             DialogResult result = ofd.ShowDialog(this);
-            gcx_Editor = new gcx_editor();
+            gcx_Editor = new GcxEditor();
 
             if (result == DialogResult.OK)
             {
@@ -102,16 +102,16 @@ namespace gcx
                 */
 
                 //filter out any procs that don't call any of our known, desired procs
-                foreach(KeyValuePair<string, string> entry in contentTree)
+                foreach(DecodedProc entry in contentTree)
                 {
-                    if (ProcIds.SpawnProcs.Any(knownProc => entry.Value.Contains(knownProc.BigEndianRepresentation)))
-                        contentTreeCarbonCopy.Add(entry.Key, entry.Value);
+                    if (KnownProc.SpawnProcs.Any(knownProc => entry.Name.Contains(knownProc.BigEndianRepresentation)))
+                        contentTreeCarbonCopy.Add(entry);
                 }
 
                 List<TreeNode> treeNodes = new List<TreeNode>();
-                foreach(KeyValuePair<string, string> item in contentTreeCarbonCopy)
+                foreach(DecodedProc item in contentTreeCarbonCopy)
                 {
-                    treeNodes.Add(new TreeNode(item.Key));
+                    treeNodes.Add(new TreeNode(item.Name));
                 }
                 contentsTreeView.Nodes.AddRange(treeNodes.ToArray());
             }
@@ -122,13 +122,13 @@ namespace gcx
             string selectedNode = e.Node.Text;
 
             nodeContentsGroupBox.Text = selectedNode;
-            functionContentsRichTextbox.Text = contentTree[selectedNode];
+            functionContentsRichTextbox.Text = contentTree.Find(proc => proc.Name == selectedNode).Name;
             functionContentsRichTextbox.Text = functionContentsRichTextbox.Text.Replace("\r\n", "");
             functionContentsRichTextbox.Text = functionContentsRichTextbox.Text.Replace("\t", "");
             functionContentsRichTextbox.Text = functionContentsRichTextbox.Text.Replace("}", "}\r\n");
 
             
-            foreach(KeyValuePair<Procedure, Color> kvp in quickIdProcs)
+            foreach(KeyValuePair<RawProc, Color> kvp in quickIdProcs)
             {
                 //this goes through and highlights all proc calls in the decoded text
                 List<int> positionsFound = new List<int>();
@@ -236,9 +236,14 @@ namespace gcx
         private void button1_Click(object sender, EventArgs e)
         {
             byte[] contents = new byte[] { 0x8D, 0x12, 0x6D, 0x0F, 0xC9, 0x2B, 0x08, 0x04, 0x06, 0xCB, 0xB5, 0x56, 0x55, 0x6D, 0x06, 0xE9, 0xB3, 0xCC };
-            GCX_Object.Procedure procedure = new GCX_Object.Procedure("40ADFE", contents, "doesnt matter", 0, 0);
+            DecodedProc procedure = new DecodedProc("40ADFE", contents, "doesnt matter", 0, 0);
 
             gcx_Editor.InsertNewProcedureToFile(procedure);
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

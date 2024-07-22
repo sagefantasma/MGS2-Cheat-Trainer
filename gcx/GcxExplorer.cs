@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -243,7 +244,16 @@ namespace gcx
 
         private void button2_Click(object sender, EventArgs e)
         {
+            FileInfo fileInfo = new FileInfo(@"C:\Users\yonan\Documents\Pinned Folders\C Drive Steam Games\MGS2\assets\gcx\eu\_bp\scenerio_stage_w00a.gcx");
+            MGS2Randomizer mgs2Randomizer = new MGS2Randomizer(fileInfo.DirectoryName);
 
+
+            int generatedSeed = mgs2Randomizer.RandomizeItemSpawns();
+            mgs2Randomizer.SaveRandomizationToDisk();
+            //I *think* this is working as designed, but it won't actually work yet as it's possible to have spawns without code to 
+            //support it(causing crashes). Before I go any further in this direction, I need to work on splicing functions in.
+            //if that doesn't work, then we may have no choice but to go the route of the SoL randomizer, but I think it should
+            //work in theory.
         }
     }
 }

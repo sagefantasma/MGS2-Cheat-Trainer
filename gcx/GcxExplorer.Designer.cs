@@ -169,7 +169,7 @@
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(113, 59);
             this.button2.TabIndex = 8;
-            this.button2.Text = "Enumerate";
+            this.button2.Text = "Randomize it, yo";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -183,13 +183,13 @@
             this.hexCodeRichTextbox.TabIndex = 6;
             this.hexCodeRichTextbox.Text = "";
             // 
-            // GCX_Explorer
+            // GcxExplorer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.guiControlsLayoutPanel);
-            this.Name = "GCX_Explorer";
+            this.Name = "GcxExplorer";
             this.Text = "GCX_Editor";
             this.guiControlsLayoutPanel.ResumeLayout(false);
             this.nodeContentsGroupBox.ResumeLayout(false);

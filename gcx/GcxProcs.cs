@@ -27,7 +27,7 @@ namespace gcx
         }
     }
 
-    internal class RawProc
+    public class RawProc
     {
         public string BigEndianRepresentation;
         public byte[] LittleEndianRepresentation;
@@ -39,6 +39,8 @@ namespace gcx
         #region MGS2 procs
         #region Placed objects
         #region Items
+        //box 2, 3 and 5 are fucking things up because they're 4 bytes long instead of just 3.
+        //for now, i'm just going to leave these out of logic, but we should find a way of bringing them back later
         public static readonly RawProc AwardAksSuppressor = new RawProc { BigEndianRepresentation = "A10594", LittleEndianRepresentation = new byte[] { 0x94, 0x05, 0xA1 } };
         public static readonly RawProc AwardBandages = new RawProc { BigEndianRepresentation = "D2A222", LittleEndianRepresentation = new byte[] { 0x22, 0xA2, 0xD2 } };
         public static readonly RawProc AwardBodyArmor = new RawProc { BigEndianRepresentation = "E6E562", LittleEndianRepresentation = new byte[] { 0x62, 0xE5, 0xE6 } };

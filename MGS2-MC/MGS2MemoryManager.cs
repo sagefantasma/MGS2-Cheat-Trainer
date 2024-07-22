@@ -549,13 +549,20 @@ namespace MGS2_MC
         {
             lock (MGS2Monitor.MGS2Process)
             {
-                using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                try
                 {
-                    IntPtr memoryPointedTo = proxy.FollowPointer(new IntPtr(MGS2Pointer.CurrentGrip), false);
-                    memoryPointedTo = IntPtr.Add(memoryPointedTo, MGS2Offset.CURRENT_GRIP_GAUGE.Start);
-                    byte[] gripGauge = proxy.GetMemoryFromPointer(memoryPointedTo, MGS2Offset.CURRENT_GRIP_GAUGE.Length);
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    {
+                        IntPtr memoryPointedTo = proxy.FollowPointer(new IntPtr(MGS2Pointer.CurrentGrip), false);
+                        memoryPointedTo = IntPtr.Add(memoryPointedTo, MGS2Offset.CURRENT_GRIP_GAUGE.Start);
+                        byte[] gripGauge = proxy.GetMemoryFromPointer(memoryPointedTo, MGS2Offset.CURRENT_GRIP_GAUGE.Length);
 
-                    return BitConverter.ToUInt16(gripGauge, 0);
+                        return BitConverter.ToUInt16(gripGauge, 0);
+                    }
+                }
+                catch
+                {
+                    return ushort.MinValue;
                 }
             }
         }

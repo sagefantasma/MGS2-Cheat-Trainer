@@ -76,15 +76,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="gcx_comparator.cs" />
-    <Compile Include="gcx_editor.cs" />
-    <Compile Include="GCX_Explorer.cs">
+    <Compile Include="GcxTableMapping.cs" />
+    <Compile Include="GcxComparator.cs" />
+    <Compile Include="GcxEditor.cs" />
+    <Compile Include="GcxExplorer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GCX_Explorer.Designer.cs">
-      <DependentUpon>GCX_Explorer.cs</DependentUpon>
+    <Compile Include="GcxExplorer.Designer.cs">
+      <DependentUpon>GcxExplorer.cs</DependentUpon>
     </Compile>
-    <Compile Include="GCX_Object.cs" />
+    <Compile Include="GcxProcs.cs" />
+    <Compile Include="ItemSets.cs" />
+    <Compile Include="MGS2Randomizer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -93,12 +96,33 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="GCX_Explorer.resx">
-      <DependentUpon>GCX_Explorer.cs</DependentUpon>
+    <EmbeddedResource Include="GcxExplorer.resx">
+      <DependentUpon>GcxExplorer.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="gcx_decompiler.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="dictionaries\mgs2_gcx_ascii_strings1.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="dictionaries\mgs2_gcx_google_10000_english1.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="dictionaries\mgs2_gcx_google_10000_english2.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="dictionaries\mgs2_pc_idlists.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="dictionaries\mgs2_reverse.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="dictionaries\mgs2_stage_names.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="dictionaries\mgs4_charas.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

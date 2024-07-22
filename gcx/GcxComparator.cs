@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace gcx
 {
-    internal class gcx_comparator
+    [Obsolete("This class was largely helpful for dipping into GCX files with no idea what I was doing, but isn't really useful at all now. Refer to our online documentation if you want to understand GCX files a bit better, or use our GcxExplorer to learn hands-on!")]
+    internal class GcxComparator
     {
         class ByteMatch
         {

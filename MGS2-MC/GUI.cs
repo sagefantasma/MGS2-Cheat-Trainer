@@ -34,6 +34,7 @@ namespace MGS2_MC
         public static bool? GuiLoaded = false;
         private readonly ILogger _logger;
         private static bool UserHasBeenWarned = false;
+        private PeriodicTask _reapplyFilterTask;
 
         internal static void ShowGui()
         {
@@ -570,6 +571,8 @@ namespace MGS2_MC
             stringsListBox.DataSource = MGS2Strings.MGS2_STRINGS;
             stringsListBox.DisplayMember = "Tag";
             stringsListBox.SelectedIndex = -1;
+            guardAnimationComboBox.DataSource = MGS2AoB.GuardAnimationList;
+            guardAnimationComboBox.DisplayMember = "Name";
 #if DEBUG
             aobTesterTablePanel.Visible = true;
 #endif
@@ -1762,6 +1765,7 @@ namespace MGS2_MC
                     {
                         Invoke(new MethodInvoker(() =>
                         {
+                            playerCurrentHpTrackBar.Maximum = MGS2MemoryManager.GetCurrentMaxHP();
                             playerCurrentHpTrackBar.Value = MGS2MemoryManager.GetCurrentHP();
                             ushort currentGripStamina = MGS2MemoryManager.GetCurrentGripGauge();
                             if (currentGripStamina > gripTrackBar.Maximum)
@@ -1771,6 +1775,7 @@ namespace MGS2_MC
                     }
                     else
                     {
+                        playerCurrentHpTrackBar.Maximum = MGS2MemoryManager.GetCurrentMaxHP();
                         playerCurrentHpTrackBar.Value = MGS2MemoryManager.GetCurrentHP();
                         ushort currentGripStamina = MGS2MemoryManager.GetCurrentGripGauge();
                         if (currentGripStamina > gripTrackBar.Maximum)
@@ -1998,6 +2003,81 @@ namespace MGS2_MC
         private void PlayerMaxHpUpDown_ValueChanged(object sender, EventArgs e)
         {
             //TODO: implement
+        }
+
+        private void forceSleepButton_Click(object sender, EventArgs e)
+        {
+            _logger.Information("User clicked on 'force guards to sleep' button");
+            toolStripStatusLabel.Text = $"Attempting to force all guards to sleep...";
+            //force undo of wake(if done)
+            byte[] currentWake = Cheat.CheatActions.ReadMemory(MGS2AoB.GuardsAreForcedToWake, MGS2Offset.FORCE_WAKE);
+
+            if (currentWake != null && currentWake.SequenceEqual(MGS2AoB.BytesToForceGuardsToWake))
+            {
+                _logger.Information("Guards are currently forced awake, attempting to disable that");
+                Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.GuardsAreForcedToWake, MGS2AoB.DontForceGuardsToWake, MGS2Offset.FORCE_WAKE);
+                _logger.Information("Guards are no longer forced awake");
+            }
+
+            Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.ForceGuardsToSleep, MGS2AoB.BytesToForceGuardsToSleep, MGS2Offset.FORCE_SLEEP);
+
+            toolStripStatusLabel.Text = $"All guards suddenly feel asleep!";
+        }
+
+
+
+        private void forceWakeButton_Click(object sender, EventArgs e)
+        {
+            _logger.Information("User clicked on 'force guards to wake' button");
+            toolStripStatusLabel.Text = $"Attempting to force all guards to wake...";
+            //force undo of sleep(if done)
+            byte[] currentSleep = Cheat.CheatActions.ReadMemory(MGS2AoB.GuardsAreForcedToSleep, MGS2Offset.FORCE_SLEEP);
+
+            
+            if (currentSleep != null && currentSleep.SequenceEqual(MGS2AoB.BytesToForceGuardsToSleep))
+            {
+                _logger.Information("Guards are currently forced asleep, attempting to disable that");
+                Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.GuardsAreForcedToSleep, MGS2AoB.DontForceGuardsToSleep, MGS2Offset.FORCE_SLEEP);
+                _logger.Information("Guards are no longer forced asleep");
+            }
+
+            Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.ForceGuardsToWake, MGS2AoB.BytesToForceGuardsToWake, MGS2Offset.FORCE_WAKE);
+
+            toolStripStatusLabel.Text = $"All guards have awoken!";
+        }
+
+        private void startAnimationButton_Click(object sender, EventArgs e)
+        {
+            _logger.Information($"User clicked on 'Start animation' button with {guardAnimationComboBox.SelectedText} animation selected");
+            toolStripStatusLabel.Text = $"Attempting to set all guards animation to :{guardAnimationComboBox.SelectedText}";
+
+            Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.GuardAnimations, (guardAnimationComboBox.SelectedItem as MGS2AoB.GuardAnimation).Bytes, MGS2Offset.GUARD_ANIMATIONS);
+
+            toolStripStatusLabel.Text = $"All guards' animations have been set to {guardAnimationComboBox.SelectedText}~!";
+        }
+
+        private async void filterColorButton_Click(object sender, EventArgs e)
+        {
+            ColorDialog dialog = new ColorDialog();
+            dialog.AnyColor = false;
+            dialog.FullOpen = true;
+            DialogResult result = dialog.ShowDialog();
+
+            if(result == DialogResult.OK)
+            {
+                filterColorPictureBox.BackColor = dialog.Color;
+                if (enableCustomFilterColorCheckBox.Checked == false)
+                {
+                    Cheat.CheatActions.EnableCustomFilter(true);
+                    enableCustomFilterColorCheckBox.Checked = true;
+                }
+                await Cheat.CheatActions.ApplyColorFilter(filterColorPictureBox.BackColor);
+            }
+        }
+
+        private void enableCustomFilterColorCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            Cheat.CheatActions.EnableCustomFilter(enableCustomFilterColorCheckBox.Checked);
         }
     }
 }

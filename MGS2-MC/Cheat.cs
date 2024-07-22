@@ -1,6 +1,14 @@
-﻿using SimplifiedMemoryManager;
+﻿using MGS2_MC.Helpers;
+using SimplifiedMemoryManager;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MGS2_MC
 {
@@ -10,6 +18,8 @@ namespace MGS2_MC
         public Action<bool> CheatAction { get; private set; }
         public byte[] OriginalBytes { get; private set; }
         public IntPtr CodeLocation { get; set; }
+        private static CancellationTokenSource customFilterCancellationTokenSource { get; set; }
+        private static Color customFilterColor { get; set; }
 
         public Cheat(string name, Action<bool> action, byte[] originalBytes)
         {
@@ -134,6 +144,83 @@ namespace MGS2_MC
                 return IntPtr.Zero;
             }
 
+            internal static IntPtr ReplaceWithSpecificCode(string patternToScan, byte[] replacementBytes, MemoryOffset offset)
+            {
+                lock (MGS2Monitor.MGS2Process)
+                {
+                    bool successful = false;
+                    int retries = 5;
+                    do
+                    {
+                        try
+                        {
+                            using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                            {
+                                SimplePattern pattern = new SimplePattern(patternToScan);
+                                int memoryLocation = spp.ScanMemoryForUniquePattern(pattern).ToInt32();
+
+                                if (memoryLocation != -1)
+                                {
+                                    byte[] memoryContent = spp.ReadProcessOffset(new IntPtr(memoryLocation + offset.Start), offset.Length);
+
+                                    for (int i = 0; i < replacementBytes.Length; i++)
+                                    {
+                                        memoryContent[i] = replacementBytes[i];
+                                    }
+
+                                    spp.ModifyProcessOffset(new IntPtr(memoryLocation + offset.Start), memoryContent, true);
+                                    successful = true;
+
+                                    return new IntPtr(memoryLocation);
+                                }
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            retries--;
+                        }
+                    } while (!successful && retries > 0);
+                }
+                throw new Exception("Failed to replace code, aborting the process");
+            }
+
+            internal static IntPtr ReplaceWithSpecificCode(IntPtr memoryLocation, byte[] replacementBytes, MemoryOffset offset)
+            {
+                lock (MGS2Monitor.MGS2Process)
+                {
+                    bool successful = false;
+                    int retries = 5;
+                    do
+                    {
+                        try
+                        {
+                            using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                            {
+                                if (memoryLocation != IntPtr.Zero)
+                                {
+                                    byte[] memoryContent = spp.ReadProcessOffset(IntPtr.Add(memoryLocation, offset.Start), offset.Length);
+
+                                    for (int i = 0; i < replacementBytes.Length; i++)
+                                    {
+                                        memoryContent[i] = replacementBytes[i];
+                                    }
+
+                                    spp.ModifyProcessOffset(memoryLocation, memoryContent, true);
+                                    successful = true;
+
+                                    return memoryLocation;
+                                }
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            retries--;
+                        }
+                    } while (!successful && retries > 0);
+                }
+                throw new Exception("Failed to replace code, aborting the process");
+            }
+
             private static IntPtr ModifySingleByte(string aob, MemoryOffset offset, byte replacementValue)
             {
                 lock (MGS2Monitor.MGS2Process)
@@ -195,7 +282,7 @@ namespace MGS2_MC
                 }
             }
 
-            private static byte[] ReadMemory(string aob, MemoryOffset offset)
+            internal static byte[] ReadMemory(string aob, MemoryOffset offset)
             {
                 lock (MGS2Monitor.MGS2Process)
                 {
@@ -590,6 +677,193 @@ namespace MGS2_MC
                     }
                 }
             }
+
+            internal static void InfiniteItems(bool activate)
+            {
+                Cheat activeCheat = MGS2Cheat.InfiniteItems;
+                if (activate)
+                {
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.InfiniteItemUse, MGS2Offset.INFINITE_ITEMS, 4);
+                        MGS2Cheat.InfiniteItems = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.INFINITE_ITEMS, 4);
+                    }
+                }
+                else
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.INFINITE_ITEMS, MGS2AoB.OriginalItemUseBytes);
+            }
+
+            internal static void MaxStackOnPickup(bool activate)
+            {
+                Cheat activeCheat = MGS2Cheat.MaxStackOnPickup;
+                if (activate)
+                {
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.MaxCountOnPickup, MGS2Offset.MAX_ON_PICKUP, 4);
+                        MGS2Cheat.MaxStackOnPickup = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.MAX_ON_PICKUP, 4);
+                    }
+                }
+                else
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.MAX_ON_PICKUP, MGS2AoB.OriginalCountOnPickup);
+            }
+
+            internal static void InfiniteKnockout(bool activate)
+            {
+                Cheat activeCheat = MGS2Cheat.InfiniteKnockout;
+                if (activate)
+                {
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.KnockoutDuration, MGS2Offset.KNOCKOUT_DURATION, 8);
+                        MGS2Cheat.InfiniteKnockout = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.KNOCKOUT_DURATION, 8);
+                    }
+                }
+                else
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.KNOCKOUT_DURATION, MGS2AoB.OriginalKnockoutDuration);
+                
+            }
+
+            internal static void RemovePlantFilter(bool activate)
+            {
+                Cheat activeCheat = MGS2Cheat.RemovePlantFilter;
+                if (activate)
+                {
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.RemovePlantFilter, MGS2Offset.REMOVE_PLANT_FILTER, 10);
+                        MGS2Cheat.RemovePlantFilter = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.REMOVE_PLANT_FILTER, 10);
+                    }
+                }
+                else
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.REMOVE_PLANT_FILTER, MGS2AoB.OriginalRemovePlantFilterBytes);
+            }
+
+            internal static void RemovePlantFog(bool activate)
+            {
+                byte[] DisableFog = new byte[] { 0x46 };
+
+                Cheat activeCheat = MGS2Cheat.RemovePlantFog;
+                if (activate)
+                {
+                    if(activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        byte[] originalValue = ReadMemory(MGS2AoB.RemovePlantFog, MGS2Offset.REMOVE_PLANT_FOG);
+                        activeCheat.CodeLocation = ReplaceWithSpecificCode(MGS2AoB.RemovePlantFog, DisableFog, MGS2Offset.REMOVE_PLANT_FOG);
+                        activeCheat.OriginalBytes = originalValue;
+                        MGS2Cheat.RemovePlantFog = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithSpecificCode(activeCheat.CodeLocation, DisableFog, MGS2Offset.REMOVE_PLANT_FOG);
+                    }
+                }
+                else
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.REMOVE_PLANT_FOG, activeCheat.OriginalBytes);
+            }
+
+            internal static void RemoveTankerEffects(bool activate)
+            {
+                byte[] disableFilter = new byte[] { 0x04 };
+                byte[] enableFilter = new byte[] { 0x03 };
+
+                Cheat activeCheat = MGS2Cheat.RemoveTankerFilter;
+                if (activate)
+                {
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithSpecificCode(MGS2AoB.RemoveTankerFilter, disableFilter, MGS2Offset.REMOVE_TANKER_FILTER);
+                        MGS2Cheat.RemoveTankerFilter = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithSpecificCode(activeCheat.CodeLocation, disableFilter, MGS2Offset.REMOVE_TANKER_FILTER);
+                    }
+                }
+                else
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.REMOVE_TANKER_FILTER, enableFilter);
+            }
+
+            internal static void NightTime(bool activate)
+            {
+                byte[] nightTime = new byte[] { 0x00 };
+                byte[] dayTime = new byte[] { 0xFF };
+
+                Cheat activeCheat = MGS2Cheat.NightTime;
+                if (activate)
+                {
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithSpecificCode(MGS2AoB.NightTime, nightTime, MGS2Offset.NIGHT_TIME);
+                        MGS2Cheat.NightTime = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithSpecificCode(activeCheat.CodeLocation, nightTime, MGS2Offset.NIGHT_TIME);
+                    }
+                }
+                else
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.NIGHT_TIME, dayTime);
+            }
+
+            internal static void EnableCustomFilter(bool activate)
+            {
+                Cheat activeCheat = MGS2Cheat.EnableCustomFilter;
+                if (activate)
+                {
+                    customFilterCancellationTokenSource = new CancellationTokenSource();
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.EnableCustomFiltering, MGS2Offset.ENABLE_CUSTOM_FILTER, MGS2AoB.OriginalCustomFilteringBytes.Length - 1);
+                        MGS2Cheat.EnableCustomFilter = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.ENABLE_CUSTOM_FILTER, MGS2AoB.OriginalCustomFilteringBytes.Length - 1);
+                    }
+                }
+                else
+                {
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.ENABLE_CUSTOM_FILTER, MGS2AoB.OriginalCustomFilteringBytes);
+                    customFilterCancellationTokenSource.Cancel();
+                }
+            }
+
+            internal static async Task ApplyColorFilter(Color chosenColor)
+            {
+                byte[] customColor = new byte[] { chosenColor.R, chosenColor.G, chosenColor.B };
+
+                ReplaceWithSpecificCode(MGS2AoB.CustomFilteringAoB, customColor, MGS2Offset.CUSTOM_FILTERING);
+                
+                if(!customFilterCancellationTokenSource.IsCancellationRequested)
+                    await PeriodicTask.Run(() => ReapplyColorFilter(customColor), TimeSpan.FromMilliseconds(100), customFilterCancellationTokenSource.Token);
+            }
+
+            private static void ReapplyColorFilter(byte[] chosenColor)
+            {
+                byte[] currentColor = ReadMemory(MGS2AoB.CustomFilteringAoB, MGS2Offset.CUSTOM_FILTERING);
+
+                if (!currentColor.SequenceEqual(chosenColor))
+                {
+                    ReplaceWithSpecificCode(MGS2AoB.CustomFilteringAoB, chosenColor, MGS2Offset.CUSTOM_FILTERING);
+                }
+            }
         }
     }    
 
@@ -611,6 +885,14 @@ namespace MGS2_MC
         public static Cheat DisablePauseButton { get; internal set; } = new Cheat("Disable Pause Button", Cheat.CheatActions.TurnOffPauseButton, MGS2AoB.OriginalPauseButtonBytes);
         public static Cheat DisableItemMenuPause { get; internal set; } = new Cheat("Disable Item Menu Pause", Cheat.CheatActions.TurnOffItemMenuPause, MGS2AoB.OriginalItemMenuPauseBytes);
         public static Cheat DisableWeaponMenuPause { get; internal set; } = new Cheat("Disable Weapon Menu Pause", Cheat.CheatActions.TurnOffWeaponMenuPause, MGS2AoB.OriginalWeaponMenuPauseBytes);
+        public static Cheat InfiniteItems { get; internal set; } = new Cheat("Infinite Item Uses", Cheat.CheatActions.InfiniteItems, MGS2AoB.OriginalItemUseBytes);
+        public static Cheat MaxStackOnPickup { get; internal set; } = new Cheat("Max Stack on Pickup", Cheat.CheatActions.MaxStackOnPickup, MGS2AoB.OriginalCountOnPickup);
+        public static Cheat InfiniteKnockout { get; internal set; } = new Cheat("Infinite Knockout/Tranq Duration", Cheat.CheatActions.InfiniteKnockout, MGS2AoB.OriginalKnockoutDuration);
+        public static Cheat RemovePlantFilter { get; internal set; } = new Cheat("Remove Plant Washout Filter", Cheat.CheatActions.RemovePlantFilter, MGS2AoB.OriginalRemovePlantFilterBytes);
+        public static Cheat RemovePlantFog { get; internal set; } = new Cheat("Remove Plant Fog", Cheat.CheatActions.RemovePlantFog, MGS2AoB.OriginalPlantFogBytes);
+        public static Cheat RemoveTankerFilter { get; internal set; } = new Cheat("Remove Tanker Filters & Effects", Cheat.CheatActions.RemoveTankerEffects, MGS2AoB.OriginalRemoveTankerFilterBytes);
+        public static Cheat NightTime { get; internal set; } = new Cheat("Make it Night-time", Cheat.CheatActions.NightTime, MGS2AoB.OriginalNightTimeBytes);
+        public static Cheat EnableCustomFilter { get; internal set; } = new Cheat("Enable Custom Filter", Cheat.CheatActions.EnableCustomFilter, MGS2AoB.OriginalCustomFilteringBytes);
 
         private static List<Cheat> _cheatList = null;
 
@@ -619,8 +901,9 @@ namespace MGS2_MC
             _cheatList = new List<Cheat>
             {
                 BlackScreen, NoBleedDamage, NoBurnDamage, InfiniteAmmo, InfiniteLife, InfiniteOxygen, NoGripDamage,
-                Letterboxing, NoClipWithGravity, NoClipNoGravity, NoReload,/*ZoomIn, ZoomOut,*/ DisablePauseButton,
-                DisableItemMenuPause, DisableWeaponMenuPause //zoom in and out aren't working as expected, and i cant be bothered to fix them right now.
+                Letterboxing, NoClipWithGravity, NoClipNoGravity, NoReload,/*ZoomIn, ZoomOut,*/ DisablePauseButton, //zoom in and out aren't working as expected, and i cant be bothered to fix them right now.
+                DisableItemMenuPause, DisableWeaponMenuPause, InfiniteItems, InfiniteKnockout, RemovePlantFilter,
+                RemovePlantFog, RemoveTankerFilter, NightTime, MaxStackOnPickup
             };
         }
 

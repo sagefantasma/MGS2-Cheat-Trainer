@@ -113,6 +113,7 @@ namespace gcx
                 foreach(DecodedProc item in contentTreeCarbonCopy)
                 {
                     treeNodes.Add(new TreeNode(item.Name));
+                    File.WriteAllBytes($"{item.Name}.proc", gcx_Editor.Procedures.Find(proc => proc.Name == item.Name).RawContents);
                 }
                 contentsTreeView.Nodes.AddRange(treeNodes.ToArray());
             }
@@ -123,7 +124,7 @@ namespace gcx
             string selectedNode = e.Node.Text;
 
             nodeContentsGroupBox.Text = selectedNode;
-            functionContentsRichTextbox.Text = contentTree.Find(proc => proc.Name == selectedNode).Name;
+            functionContentsRichTextbox.Text = contentTree.Find(proc => proc.Name == selectedNode).DecodedContents;
             functionContentsRichTextbox.Text = functionContentsRichTextbox.Text.Replace("\r\n", "");
             functionContentsRichTextbox.Text = functionContentsRichTextbox.Text.Replace("\t", "");
             functionContentsRichTextbox.Text = functionContentsRichTextbox.Text.Replace("}", "}\r\n");
@@ -236,10 +237,24 @@ namespace gcx
 
         private void button1_Click(object sender, EventArgs e)
         {
-            byte[] contents = new byte[] { 0x8D, 0x12, 0x6D, 0x0F, 0xC9, 0x2B, 0x08, 0x04, 0x06, 0xCB, 0xB5, 0x56, 0x55, 0x6D, 0x06, 0xE9, 0xB3, 0xCC };
-            DecodedProc procedure = new DecodedProc("40ADFE", contents, "doesnt matter", 0, 0);
-
-            gcx_Editor.InsertNewProcedureToFile(procedure);
+            /*byte[] contents = new byte[] { 0x8D, 0x12, 0x6D, 0x0F, 0xC9, 0x2B, 0x08, 0x04, 0x06, 0xCB, 0xB5, 0x56, 0x55, 0x6D, 0x06, 0xE9, 0xB3, 0xCC };
+            DecodedProc procedure = new DecodedProc("40ADFE", contents, "doesnt matter", 0, 0);*/
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.DefaultExt = ".proc";
+            ofd.Multiselect = true;
+            ofd.Filter = "Proc files (*.proc)|*.proc";
+            if(ofd.ShowDialog() == DialogResult.OK)
+            {
+                string[] filesSelected = ofd.FileNames;
+                foreach(string fileSelected in filesSelected)
+                {
+                    FileInfo fileInfo = new FileInfo(fileSelected);
+                    DecodedProc procedure = new DecodedProc(fileInfo.Name.Replace("proc_0x", "").Replace(".proc", ""), File.ReadAllBytes(fileSelected), null, 0, 0);
+                    gcx_Editor.InsertNewProcedureToFile(procedure);
+                }
+                
+                //this is quite close to working i think, but the resources are fucked, i think
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)

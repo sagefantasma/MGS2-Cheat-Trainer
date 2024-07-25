@@ -125,10 +125,10 @@
             // 
             // debugTextbox
             // 
-            this.debugTextbox.Enabled = false;
             this.debugTextbox.Location = new System.Drawing.Point(3, 3);
             this.debugTextbox.Multiline = true;
             this.debugTextbox.Name = "debugTextbox";
+            this.debugTextbox.ReadOnly = true;
             this.debugTextbox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.debugTextbox.Size = new System.Drawing.Size(247, 76);
             this.debugTextbox.TabIndex = 6;

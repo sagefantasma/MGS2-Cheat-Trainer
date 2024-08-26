@@ -6,6 +6,11 @@ using System.Windows.Forms;
 namespace MGS2_MC
 {
     #region Internals
+    internal class BossVitals
+    {
+        public int Health;
+        public int Stamina;
+    }
 
     internal class GameObject
     {

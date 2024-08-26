@@ -2079,5 +2079,58 @@ namespace MGS2_MC
         {
             Cheat.CheatActions.EnableCustomFilter(enableCustomFilterColorCheckBox.Checked);
         }
+
+        private void bossTreeView_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            bossHealthStaminaLayoutPanel.Visible = true;
+            if (e.Node.Text != "RAY Battle")
+            {
+                bossGroupBox.Text = e.Node.Text;
+
+                Task bossTask = Task.Factory.StartNew(() => LiveUpdateBossVitals(Constants.Boss.Olga));
+            }
+        }
+
+        private void UpdateBossVitals(Constants.Boss boss)
+        {
+            BossVitals vitals = MGS2MemoryManager.GetBossVitals(Constants.Boss.Olga); //TODO: replace placeholder
+
+            if (bossHpTrackbar.Maximum < vitals.Health)
+                bossHpTrackbar.Maximum = vitals.Health;
+            bossHpTrackbar.Value = vitals.Health;
+
+            if (bossStaminaTrackbar.Maximum < vitals.Stamina)
+                bossStaminaTrackbar.Maximum = vitals.Stamina;
+            bossStaminaTrackbar.Value = vitals.Stamina;
+        }
+
+        private void LiveUpdateBossVitals(Constants.Boss boss)
+        {
+            try
+            {
+                //only keep this task alive while the cheats tab is open to save system resources
+                while (CurrentTab == mgs2TabControl.TabPages.IndexOfKey("tabPageBosses"))
+                {
+                    if (InvokeRequired)
+                    {
+                        Invoke(new MethodInvoker(() =>
+                        {
+                            UpdateBossVitals(boss);
+                        }));
+                    }
+                    else
+                    {
+                        UpdateBossVitals(boss);
+                    }
+                    Thread.Sleep(333);
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Something went wrong when getting boss vitals. Going to wait 5 seconds before retrying.\n\nError information: {e}");
+                Thread.Sleep(5000);
+                LiveUpdateBossVitals(boss);
+            }
+        }
     }
 }

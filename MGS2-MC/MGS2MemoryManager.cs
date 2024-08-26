@@ -660,8 +660,89 @@ namespace MGS2_MC
             }
         }
 
+        private static IntPtr FindAoBReferencedPointer(string aobToFind, MemoryOffset memoryOffset)
+        {
+            //TODO: confirm this is working as expected
+            //find the pointer referenced in memory
+            byte[] aobReferencedPointer = ReadAoBOffsetValue(aobToFind, memoryOffset);
+            //return it as a pointer
+            return new IntPtr(BitConverter.ToInt64(aobReferencedPointer, 0));
+        }
+
+        private static byte[] GetDataFromNestedPointers(List<long> pointerOffsets, int destinationOffset, int bytesToReadAtDestination)
+        {
+            IntPtr pointerLocation = IntPtr.Zero;
+            for (int i = 0; i < pointerOffsets.Count; i++)
+            {
+                lock (MGS2Monitor.MGS2Process)
+                {
+                    using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    {
+                        if (pointerLocation == IntPtr.Zero)
+                        {
+                            pointerLocation = spp.FollowPointer(new IntPtr(pointerOffsets[i]), false);
+                        }
+                        else
+                        {
+                            IntPtr nestedPointer = new IntPtr(pointerLocation.ToInt64() + pointerOffsets[i]);
+                            pointerLocation = new IntPtr(BitConverter.ToInt64(spp.GetMemoryFromPointer(nestedPointer, 8), 0));
+                        }
+                    }
+                }
+            }
+            lock (MGS2Monitor.MGS2Process)
+            {
+                using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                {
+                    return spp.GetMemoryFromPointer(IntPtr.Add(pointerLocation, destinationOffset), bytesToReadAtDestination);
+                }
+            }
+        }
+
+        public static BossVitals GetBossVitals(Constants.Boss selectedBoss)
+        {
+            //TODO: finish implementation
+            BossVitals bossVitals = new BossVitals();
+            switch (selectedBoss)
+            {
+                case Constants.Boss.Olga:
+                    //IntPtr healthPointer = FindAoBReferencedPointer("HEALTHPOINTERAOB", new MemoryOffset());
+                    byte[] result = GetDataFromNestedPointers(new List<long> { 0x1534CF8, 0xF0, 0x8, 0x590 }, 0x1EA, 2);
+                    bossVitals.Health = BitConverter.ToInt16(result, 0);
+                    bossVitals.Stamina = BitConverter.ToInt16(GetDataFromNestedPointers(new List<long> { 0x1534CF8, 0xF0, 0x8, 0x590 }, 0x1EC, 2), 0);
+                    break;
+                case Constants.Boss.Fortune: break;
+                case Constants.Boss.Fatman: break;
+                case Constants.Boss.Harrier: break;
+                case Constants.Boss.Ray1: break;
+                case Constants.Boss.Ray2: break;
+                case Constants.Boss.Ray3: break;
+                case Constants.Boss.Ray4: break;
+                case Constants.Boss.Ray5: break;
+                case Constants.Boss.Ray6: break;
+                case Constants.Boss.Ray7: break;
+                case Constants.Boss.Ray8: break;
+                case Constants.Boss.Ray9: break;
+                case Constants.Boss.Ray10: break;
+                case Constants.Boss.Ray11: break;
+                case Constants.Boss.Ray12: break;
+                case Constants.Boss.Ray13: break;
+                case Constants.Boss.Ray14: break;
+                case Constants.Boss.Ray15: break;
+                case Constants.Boss.Ray16: break;
+                case Constants.Boss.Ray17: break;
+                case Constants.Boss.Ray18: break;
+                case Constants.Boss.Ray19: break;
+                case Constants.Boss.Ray20: break;
+                case Constants.Boss.Solidus: break;
+            }
+
+            return bossVitals;
+        }
+
         public static Constants.PlayableCharacter DetermineActiveCharacter()
         {
+            //return Constants.PlayableCharacter.Pliskin;
             string characterCode = GetCharacterCode();
             _logger.Debug($"Found character: {characterCode}");
 

@@ -943,12 +943,12 @@ namespace MGS2_MC
                     customFilterCancellationTokenSource = new CancellationTokenSource();
                     if (activeCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.VRNoHitDamageAoB, MGS2Offset.VR_NO_HIT_DMG, 7);
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.VRNoHitDamageAoB, MGS2Offset.VR_NO_HIT_DMG, 4);
                         MGS2Cheat.VRNoHitDamage = activeCheat;
                     }
                     else
                     {
-                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.VR_NO_HIT_DMG, 7);
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.VR_NO_HIT_DMG, 4);
                     }
                 }
                 else
@@ -1012,12 +1012,12 @@ namespace MGS2_MC
                     customFilterCancellationTokenSource = new CancellationTokenSource();
                     if (activeCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.VRGripDamageAoB, MGS2Offset.VR_TAKE_GRIP_DMG, 8);
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.VRGripDamageAoB, MGS2Offset.VR_TAKE_GRIP_DMG, 7);
                         MGS2Cheat.VRGripDamage = activeCheat;
                     }
                     else
                     {
-                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.VR_TAKE_GRIP_DMG, 8);
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.VR_TAKE_GRIP_DMG, 7);
                     }
                 }
                 else
@@ -1035,7 +1035,7 @@ namespace MGS2_MC
                     customFilterCancellationTokenSource = new CancellationTokenSource();
                     if (activeCheat.CodeLocation == IntPtr.Zero)
                     {
-                        ReplaceWithSpecificCode(MGS2AoB.VRAimStabilityAoB, new byte[] { 0xE9, 0x91, 0x01, 0x00, 0x00, 0x90 }, MGS2Offset.VR_AIM_STAB);
+                        activeCheat.CodeLocation = ReplaceWithSpecificCode(MGS2AoB.VRAimStabilityAoB, new byte[] { 0xE9, 0x91, 0x01, 0x00, 0x00, 0x90 }, MGS2Offset.VR_AIM_STAB);
                         MGS2Cheat.VRAimStability = activeCheat;
                     }
                     else

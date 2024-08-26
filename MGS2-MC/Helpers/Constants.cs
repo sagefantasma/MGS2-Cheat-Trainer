@@ -18,6 +18,18 @@
             NakedRaiden
         }
 
+        public enum Boss
+        {
+            Olga,
+            Fortune,
+            Fatman,
+            Harrier,
+            Vamp,
+            VampSnipe,
+            Ray1, Ray2, Ray3, Ray4, Ray5, Ray6, Ray7, Ray8, Ray9, Ray10, Ray11, Ray12, Ray13, Ray14, Ray15, Ray16, Ray17, Ray18, Ray19, Ray20,
+            Solidus
+        }
+
         #region Item Table
         public const int RATION = 0;
         public const int BROKEN_SCOPE = 2; //verify

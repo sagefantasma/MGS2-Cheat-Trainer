@@ -542,95 +542,116 @@ namespace MGS2_MC
 
             internal static void NoClipNoGravity(bool activate)
             {
-                NoClip(false, activate);
+                try
+                {
+                    NoClip(false, activate);
+                }
+                catch(Exception e)
+                {
+                    throw new AggregateException($"Could not set noclip -nogravity to {activate}", e);
+                }
             }
 
             internal static void NoClipWithGravity(bool activate)
             {
-                NoClip(true, activate);
+                try
+                {
+                    NoClip(true, activate);
+                }
+                catch(Exception e)
+                {
+                    throw new AggregateException($"Could not set noclip -gravity to {activate}", e);
+                }
             }
 
             private static void NoClip(bool gravity, bool activate)
             {
-                Constants.PlayableCharacter currentPc = MGS2MemoryManager.DetermineActiveCharacter();
-
-                lock (MGS2Monitor.MGS2Process)
+                try
                 {
-                    using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    Constants.PlayableCharacter currentPc = MGS2MemoryManager.DetermineActiveCharacter();
+
+                    lock (MGS2Monitor.MGS2Process)
                     {
-                        string activeCharacterAoB;
-                        switch (currentPc)
+                        using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                         {
-                            case Constants.PlayableCharacter.Raiden:
-                                activeCharacterAoB = MGS2AoB.RaidenClipping;
-                                break;
-                            case Constants.PlayableCharacter.NinjaRaiden:
-                                activeCharacterAoB = MGS2AoB.NinjaClipping;
-                                break;
-                            case Constants.PlayableCharacter.NakedRaiden:
-                                activeCharacterAoB = MGS2AoB.NakedRaidenClipping;
-                                break;
-                            case Constants.PlayableCharacter.Snake:
-                                activeCharacterAoB = MGS2AoB.SnakeClipping;
-                                break;
-                            case Constants.PlayableCharacter.Pliskin:
-                                activeCharacterAoB = MGS2AoB.PliskinClipping;
-                                break;
-                            case Constants.PlayableCharacter.MGS1Snake:
-                                activeCharacterAoB = MGS2AoB.MGS1SnakeClipping;
-                                break;
-                            case Constants.PlayableCharacter.TuxedoSnake:
-                                activeCharacterAoB = MGS2AoB.TuxedoSnakeClipping;
-                                break;
-                            default:
-                                activeCharacterAoB = MGS2AoB.VRClipping;
-                                break;
-                        }
-
-                        IntPtr pointerLocation = spp.FollowPointer(new IntPtr(MGS2Pointer.WalkThroughWalls), false);
-                        byte[] memoryContent = spp.GetMemoryFromPointer(new IntPtr(pointerLocation.ToInt64() + MGS2Offset.NO_CLIP.Start), MGS2Offset.NO_CLIP.Length);
-
-                        if (!activate)
-                        {
-                            if (memoryContent[4] == 0x15 || memoryContent[4] == 0x13)
+                            string activeCharacterAoB;
+                            switch (currentPc)
                             {
-                                memoryContent[4] = 0x14;
+                                case Constants.PlayableCharacter.Raiden:
+                                    activeCharacterAoB = MGS2AoB.RaidenClipping;
+                                    break;
+                                case Constants.PlayableCharacter.NinjaRaiden:
+                                    activeCharacterAoB = MGS2AoB.NinjaClipping;
+                                    break;
+                                case Constants.PlayableCharacter.NakedRaiden:
+                                    activeCharacterAoB = MGS2AoB.NakedRaidenClipping;
+                                    break;
+                                case Constants.PlayableCharacter.Snake:
+                                    activeCharacterAoB = MGS2AoB.SnakeClipping;
+                                    break;
+                                case Constants.PlayableCharacter.Pliskin:
+                                    activeCharacterAoB = MGS2AoB.PliskinClipping;
+                                    break;
+                                case Constants.PlayableCharacter.MGS1Snake:
+                                    activeCharacterAoB = MGS2AoB.MGS1SnakeClipping;
+                                    break;
+                                case Constants.PlayableCharacter.TuxedoSnake:
+                                    activeCharacterAoB = MGS2AoB.TuxedoSnakeClipping;
+                                    break;
+                                default:
+                                    activeCharacterAoB = MGS2AoB.VRClipping;
+                                    break;
                             }
-                            else if (memoryContent[4] == 0x25 || memoryContent[4] == 0x23)
+
+                            IntPtr pointerLocation = spp.FollowPointer(new IntPtr(MGS2Pointer.WalkThroughWalls), false);
+                            byte[] memoryContent = spp.GetMemoryFromPointer(new IntPtr(pointerLocation.ToInt64() + MGS2Offset.NO_CLIP.Start), MGS2Offset.NO_CLIP.Length);
+
+                            if (!activate)
                             {
-                                memoryContent[4] = 0x24;
-                            }
-                        }
-                        else
-                        {
-                            if (gravity)
-                            {
-                                //set byte to either 15 or 25
-                                if (memoryContent[4] == 0x24)
+                                if (memoryContent[4] == 0x15 || memoryContent[4] == 0x13)
                                 {
-                                    memoryContent[4] = 0x25;
+                                    memoryContent[4] = 0x14;
                                 }
-                                else
+                                else if (memoryContent[4] == 0x25 || memoryContent[4] == 0x23)
                                 {
-                                    memoryContent[4] = 0x15;
+                                    memoryContent[4] = 0x24;
                                 }
                             }
                             else
                             {
-                                //set byte to either 13 or 23
-                                if (memoryContent[4] == 0x24)
+                                if (gravity)
                                 {
-                                    memoryContent[4] = 0x23;
+                                    //set byte to either 15 or 25
+                                    if (memoryContent[4] == 0x24)
+                                    {
+                                        memoryContent[4] = 0x25;
+                                    }
+                                    else
+                                    {
+                                        memoryContent[4] = 0x15;
+                                    }
                                 }
                                 else
                                 {
-                                    memoryContent[4] = 0x13;
+                                    //set byte to either 13 or 23
+                                    if (memoryContent[4] == 0x24)
+                                    {
+                                        memoryContent[4] = 0x23;
+                                    }
+                                    else
+                                    {
+                                        memoryContent[4] = 0x13;
+                                    }
                                 }
                             }
-                        }
 
-                        spp.SetMemoryAtPointer(new IntPtr(pointerLocation.ToInt64() + MGS2Offset.NO_CLIP.Start), memoryContent);
+                            spp.SetMemoryAtPointer(new IntPtr(pointerLocation.ToInt64() + MGS2Offset.NO_CLIP.Start), memoryContent);
+                        }
                     }
+                }
+                catch(Exception e)
+                {
+                    throw new AggregateException("Could not toggle noclip functionality", e);
                 }
             }
 
@@ -864,6 +885,260 @@ namespace MGS2_MC
                     ReplaceWithSpecificCode(MGS2AoB.CustomFilteringAoB, chosenColor, MGS2Offset.CUSTOM_FILTERING);
                 }
             }
+
+            internal static void PauseVRTimer(bool activate)
+            {
+                Cheat activeCheat = MGS2Cheat.PauseVRTimer;
+                if (activate)
+                {
+                    customFilterCancellationTokenSource = new CancellationTokenSource();
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.OriginalBytes = ReadMemory(MGS2AoB.PauseVRAoB, MGS2Offset.PAUSE_VR_TIMER);
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.PauseVRAoB, MGS2Offset.PAUSE_VR_TIMER, 3);
+                        MGS2Cheat.PauseVRTimer = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.PAUSE_VR_TIMER, 3);
+                    }
+                }
+                else
+                {
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.PAUSE_VR_TIMER, activeCheat.OriginalBytes);
+                    customFilterCancellationTokenSource.Cancel();
+                }
+            }
+
+            internal static void AutoCompleteVRObjectives(bool activate)
+            {
+                Cheat activeCheat = MGS2Cheat.VRObjectiveAutoComplete;
+                if (activate)
+                {
+                    customFilterCancellationTokenSource = new CancellationTokenSource();
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.VRObjectiveAoB, MGS2Offset.VR_AUTO_COMPLETE_OBJECTIVES, 6);
+                        MGS2Cheat.VRObjectiveAutoComplete = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.VR_AUTO_COMPLETE_OBJECTIVES, 6);
+                    }
+                }
+                else
+                {
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.VR_AUTO_COMPLETE_OBJECTIVES, activeCheat.OriginalBytes);
+                    customFilterCancellationTokenSource.Cancel();
+                }
+            }
+
+            internal static void AutoCompleteVREnemies(bool activate)
+            {
+                Cheat activeCheat = MGS2Cheat.VREnemiesAutoComplete;
+                if (activate)
+                {
+                    customFilterCancellationTokenSource = new CancellationTokenSource();
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.VRObjectiveAoB, MGS2Offset.VR_AUTO_COMPLETE_ENEMIES, 2);
+                        MGS2Cheat.VREnemiesAutoComplete = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.VR_AUTO_COMPLETE_ENEMIES, 2);
+                    }
+                }
+                else
+                {
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.VR_AUTO_COMPLETE_ENEMIES, activeCheat.OriginalBytes);
+                    customFilterCancellationTokenSource.Cancel();
+                }
+            }
+
+            internal static void VRNoHitDamage(bool activate)
+            {
+                Cheat activeCheat = MGS2Cheat.VRNoHitDamage;
+                if (activate)
+                {
+                    customFilterCancellationTokenSource = new CancellationTokenSource();
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.VRNoHitDamageAoB, MGS2Offset.VR_NO_HIT_DMG, 4);
+                        MGS2Cheat.VRNoHitDamage = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.VR_NO_HIT_DMG, 4);
+                    }
+                }
+                else
+                {
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.VR_NO_HIT_DMG, activeCheat.OriginalBytes);
+                    customFilterCancellationTokenSource.Cancel();
+                }
+            }
+
+            internal static void VRNoFallDamage(bool activate)
+            {
+                Cheat activeCheat = MGS2Cheat.VRNoFallDamage;
+                if (activate)
+                {
+                    customFilterCancellationTokenSource = new CancellationTokenSource();
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.VRNoFallDamageAoB, MGS2Offset.VR_NO_FALL_DMG, 7);
+                        MGS2Cheat.VRNoFallDamage = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.VR_NO_FALL_DMG, 7);
+                    }
+                }
+                else
+                {
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.VR_NO_FALL_DMG, activeCheat.OriginalBytes);
+                    customFilterCancellationTokenSource.Cancel();
+                }
+            }
+
+            internal static void VRInfiniteStrength(bool activate)
+            {
+                Cheat activeCheat = MGS2Cheat.VRInfiniteStrength;
+                if (activate)
+                {
+                    customFilterCancellationTokenSource = new CancellationTokenSource();
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.VRInfiniteStrAoB, MGS2Offset.VR_INF_STR, 7);
+                        MGS2Cheat.VRInfiniteStrength = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.VR_INF_STR, 7);
+                    }
+                }
+                else
+                {
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.VR_INF_STR, activeCheat.OriginalBytes);
+                    customFilterCancellationTokenSource.Cancel();
+                }
+            }
+
+            internal static void VRGripDamage(bool activate)
+            {
+                Cheat activeCheat = MGS2Cheat.VRGripDamage;
+                if (activate)
+                {
+                    customFilterCancellationTokenSource = new CancellationTokenSource();
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.VRGripDamageAoB, MGS2Offset.VR_TAKE_GRIP_DMG, 7);
+                        MGS2Cheat.VRGripDamage = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.VR_TAKE_GRIP_DMG, 7);
+                    }
+                }
+                else
+                {
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.VR_TAKE_GRIP_DMG, activeCheat.OriginalBytes);
+                    customFilterCancellationTokenSource.Cancel();
+                }
+            }
+
+            internal static void VRAimStab(bool activate)
+            {
+                Cheat activeCheat = MGS2Cheat.VRAimStability;
+                if (activate)
+                {
+                    customFilterCancellationTokenSource = new CancellationTokenSource();
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithSpecificCode(MGS2AoB.VRAimStabilityAoB, new byte[] { 0xE9, 0x91, 0x01, 0x00, 0x00, 0x90 }, MGS2Offset.VR_AIM_STAB);
+                        MGS2Cheat.VRAimStability = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithSpecificCode(activeCheat.CodeLocation, new byte[] { 0xE9, 0x91, 0x01, 0x00, 0x00, 0x90 }, MGS2Offset.VR_AIM_STAB);
+                    }
+                }
+                else
+                {
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.VR_AIM_STAB, activeCheat.OriginalBytes);
+                    customFilterCancellationTokenSource.Cancel();
+                }
+            }
+
+            internal static void VRInfiniteAmmo(bool activate)
+            {
+                Cheat activeCheat = MGS2Cheat.VRInfiniteAmmo;
+                if (activate)
+                {
+                    customFilterCancellationTokenSource = new CancellationTokenSource();
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.VRInfiniteAmmoAoB, MGS2Offset.VR_INF_AMMO, 3);
+                        MGS2Cheat.VRInfiniteAmmo = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.VR_INF_AMMO, 3);
+                    }
+                }
+                else
+                {
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.VR_INF_AMMO, activeCheat.OriginalBytes);
+                    customFilterCancellationTokenSource.Cancel();
+                }
+            }
+
+            internal static void VRInfiniteItem(bool activate)
+            {
+                Cheat activeCheat = MGS2Cheat.VRInfiniteItem;
+                if (activate)
+                {
+                    customFilterCancellationTokenSource = new CancellationTokenSource();
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.VRInfiniteItemAoB, MGS2Offset.VR_INF_ITEM, 4);
+                        MGS2Cheat.VRInfiniteItem = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.VR_INF_ITEM, 4);
+                    }
+                }
+                else
+                {
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.VR_INF_ITEM, activeCheat.OriginalBytes);
+                    customFilterCancellationTokenSource.Cancel();
+                }
+            }
+
+            internal static void VRNoReload(bool activate)
+            {
+                Cheat activeCheat = MGS2Cheat.VRNoReload;
+                if (activate)
+                {
+                    customFilterCancellationTokenSource = new CancellationTokenSource();
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.VRNoReloadAoB, MGS2Offset.VR_NO_RELOAD, 2);
+                        MGS2Cheat.VRNoReload = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.VR_NO_RELOAD, 2);
+                    }
+                }
+                else
+                {
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.VR_NO_RELOAD, activeCheat.OriginalBytes);
+                    customFilterCancellationTokenSource.Cancel();
+                }
+            }
         }
     }    
 
@@ -893,6 +1168,17 @@ namespace MGS2_MC
         public static Cheat RemoveTankerFilter { get; internal set; } = new Cheat("Remove Tanker Filters & Effects", Cheat.CheatActions.RemoveTankerEffects, MGS2AoB.OriginalRemoveTankerFilterBytes);
         public static Cheat NightTime { get; internal set; } = new Cheat("Make it Night-time", Cheat.CheatActions.NightTime, MGS2AoB.OriginalNightTimeBytes);
         public static Cheat EnableCustomFilter { get; internal set; } = new Cheat("Enable Custom Filter", Cheat.CheatActions.EnableCustomFilter, MGS2AoB.OriginalCustomFilteringBytes);
+        public static Cheat PauseVRTimer { get; internal set; } = new Cheat("Pause VR Timer", Cheat.CheatActions.PauseVRTimer, MGS2AoB.OriginalPauseVRBytes);
+        public static Cheat VRObjectiveAutoComplete { get; internal set; } = new Cheat("Auto Complete VR objectives", Cheat.CheatActions.AutoCompleteVRObjectives, MGS2AoB.OriginalVRObjectiveBytes);
+        public static Cheat VREnemiesAutoComplete { get; internal set; } = new Cheat("Auto 'Kill' VR Enemies", Cheat.CheatActions.AutoCompleteVREnemies, MGS2AoB.OriginalVREnemiesBytes);
+        public static Cheat VRNoHitDamage { get; internal set; } = new Cheat("Take No Damage in VR", Cheat.CheatActions.VRNoHitDamage, MGS2AoB.OriginalVRNoHitDamageBytes);
+        public static Cheat VRNoFallDamage { get; internal set; } = new Cheat("Take No Fall Damage in VR", Cheat.CheatActions.VRNoFallDamage, MGS2AoB.OriginalVRNoFallDamageBytes);
+        public static Cheat VRInfiniteStrength { get; internal set; } = new Cheat("Infinite VR Strength", Cheat.CheatActions.VRInfiniteStrength, MGS2AoB.OriginalVRInfiniteStrBytes);
+        public static Cheat VRGripDamage { get; internal set; } = new Cheat("VR Grip Damage", Cheat.CheatActions.VRGripDamage, MGS2AoB.OriginalVRGripDamageBytes);
+        public static Cheat VRAimStability { get; internal set; } = new Cheat("VR Aim Stability", Cheat.CheatActions.VRAimStab, MGS2AoB.OriginalVRAimStabilityBytes);
+        public static Cheat VRInfiniteAmmo { get; internal set; } = new Cheat("VR Infinite Ammo", Cheat.CheatActions.VRInfiniteAmmo, MGS2AoB.OriginalVRInfiniteAmmoBytes);
+        public static Cheat VRInfiniteItem { get; internal set; } = new Cheat("VR Infinite Items", Cheat.CheatActions.VRInfiniteItem, MGS2AoB.OriginalVRInfiniteItemBytes);
+        public static Cheat VRNoReload { get; internal set; } = new Cheat("VR No Reload", Cheat.CheatActions.VRNoReload, MGS2AoB.OriginalVRNoReloadBytes);
 
         private static List<Cheat> _cheatList = null;
 
@@ -903,7 +1189,9 @@ namespace MGS2_MC
                 BlackScreen, NoBleedDamage, NoBurnDamage, InfiniteAmmo, InfiniteLife, InfiniteOxygen, NoGripDamage,
                 Letterboxing, NoClipWithGravity, NoClipNoGravity, NoReload,/*ZoomIn, ZoomOut,*/ DisablePauseButton, //zoom in and out aren't working as expected, and i cant be bothered to fix them right now.
                 DisableItemMenuPause, DisableWeaponMenuPause, InfiniteItems, InfiniteKnockout, RemovePlantFilter,
-                RemovePlantFog, RemoveTankerFilter, NightTime, MaxStackOnPickup
+                RemovePlantFog, RemoveTankerFilter, NightTime, MaxStackOnPickup, PauseVRTimer, VRObjectiveAutoComplete,
+                VREnemiesAutoComplete, VRNoHitDamage, VRNoFallDamage, VRInfiniteStrength, VRGripDamage, VRAimStability,
+                VRInfiniteAmmo, VRInfiniteItem, VRNoReload
             };
         }
 

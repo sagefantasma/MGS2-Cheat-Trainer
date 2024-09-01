@@ -34,6 +34,41 @@ namespace MGS2_MC
         internal static int ModifiableHP = 0x017C1A20;
         internal static int CurrentGrip = 0x016CBDA0;
         internal static int CurrentAmmo = 0x01523A00;
+        internal static List<int> OlgaNestedPointers = new List<int> { 0x01534CF8, 0xF0, 0x8, 0x590 };
+        internal static List<int> FortuneNestedPointers = null;
+        internal static List<int> FatmanNestedHealthPointers = new List<int> { 0x1795F88 };
+        internal static List<int> FatmanNestedStaminaPointers = new List<int> { 0x1534CF0 };
+        internal static List<int> HarrierNestedPointers = new List<int> { 0x17972A0, 0x70 };
+        internal static List<int> VampNestedPointers = new List<int> { 0x1534740 };
+        internal static List<int> VampSnipingHealthNestedPointers = new List<int> { 0x1795F98 };
+        internal static List<int> VampSnipingStaminaNestedPointers = new List<int> { 0x1534740, 0x68 };
+        internal static List<int> Ray1NestedPointers = new List<int> { 0x16CC378, 0x170 };
+        internal static List<int> Ray2NestedPointers = new List<int> { 0x16CC378, 0x190 };
+        internal static List<int> Ray3NestedPointers = new List<int> { 0x16CC378, 0x1B0 };
+        internal static List<int> Ray4NestedPointers = new List<int> { 0x16CC378, 0x1D0 };
+        internal static List<int> Ray5NestedPointers = new List<int> { 0x16CC378, 0x1F0 };
+        internal static List<int> Ray6NestedPointers = new List<int> { 0x16CC378, 0x210 };
+        internal static List<int> Ray7NestedPointers = new List<int> { 0x16CC378, 0x230 };
+        internal static List<int> Ray8NestedPointers = new List<int> { 0x16CC378, 0x250 };
+        internal static List<int> Ray9NestedPointers = new List<int> { 0x16CC378, 0x270 };
+        internal static List<int> Ray10NestedPointers = new List<int> { 0x16CC378, 0x290 };
+        internal static List<int> Ray11NestedPointers = new List<int> { 0x16CC378, 0x2B0 };
+        internal static List<int> Ray12NestedPointers = new List<int> { 0x16CC378, 0x2D0 };
+        internal static List<int> Ray13NestedPointers = new List<int> { 0x16CC378, 0x2F0 };
+        internal static List<int> Ray14NestedPointers = new List<int> { 0x16CC378, 0x310 };
+        internal static List<int> Ray15NestedPointers = new List<int> { 0x16CC378, 0x330 };
+        internal static List<int> Ray16NestedPointers = new List<int> { 0x16CC378, 0x350 };
+        internal static List<int> Ray17NestedPointers = new List<int> { 0x16CC378, 0x370 };
+        internal static List<int> Ray18NestedPointers = new List<int> { 0x16CC378, 0x390 };
+        internal static List<int> Ray19NestedPointers = new List<int> { 0x16CC378, 0x3B0 };
+        internal static List<int> Ray20NestedPointers = new List<int> { 0x16CC378, 0x3D0 };
+        internal static List<int> Ray21NestedPointers = new List<int> { 0x16CC378, 0x3F0 };
+        internal static List<int> Ray22NestedPointers = new List<int> { 0x16CC378, 0x410 };
+        internal static List<int> Ray23NestedPointers = new List<int> { 0x16CC378, 0x430 };
+        internal static List<int> Ray24NestedPointers = new List<int> { 0x16CC378, 0x450 };
+        internal static List<int> Ray25NestedPointers = new List<int> { 0x16CC378, 0x470 };
+        internal static List<int> SolidusNestedPointers = new List<int> { 0x17970B8, 0x70 };
+        //internal static List<int> SolidusNestedStaminaPointers = new List<>
     }
 
     internal struct MGS2AoB
@@ -132,8 +167,30 @@ namespace MGS2_MC
         internal static string EnableCustomFiltering = "88 0D BA C6 4B 01 88 15 B5 C6 4B 01 44 88 05 AF C6 4B 01 C3";
         internal static byte[] OriginalCustomFilteringBytes = { 0x88, 0x0D, 0xBA, 0xC6, 0x4B, 0x01, 0x88, 0x15, 0xB5, 0xC6, 0x4B, 0x01, 0x44, 0x88, 0x05, 0xAF, 0xC6, 0x4B, 0x01, 0xC3 };
         internal static string CustomFilteringAoB = "00 00 80 3F 00 00 00 00 E0 0B 00 00 00 00 00 00";
+        internal static string PauseVRAoB = "7E 51 FF 0D ?? ?? ?? 01";
+        internal static byte[] OriginalPauseVRBytes = { 0x7E, 0x51, 0xFF, 0x0D, 0x00, 0x00, 0x00, 0x01 };
+        internal static string VRObjectiveAoB = "0F 8C 9F 00 00 00 48 8B CB";
+        internal static byte[] OriginalVRObjectiveBytes = { 0x0F, 0x8C, 0x9F, 0x00, 0x00, 0x00, 0x48, 0x8B, 0xCB };
+        internal static string VREnemiesAoB = "7C 36 8B 83 98 00 00 00";
+        internal static byte[] OriginalVREnemiesBytes = { 0x7C, 0x36, 0x8B, 0x83, 0x98, 0x00, 0x00, 0x00 };
+        internal static string VRNoHitDamageAoB = "66 29 43 12 E9 67 FF FF FF";
+        internal static byte[] OriginalVRNoHitDamageBytes = { 0x66, 0x29, 0x43, 0x12, 0xE9, 0x67, 0xFF, 0xFF, 0xFF };
+        internal static string VRNoFallDamageAoB = "66 01 97 D2 08 00 00";
+        internal static byte[] OriginalVRNoFallDamageBytes = { 0x66, 0x01, 0x97, 0xD2, 0x08, 0x00, 0x00 };
+        internal static string VRInfiniteStrAoB = "66 89 BB 18 04 00 00";
+        internal static byte[] OriginalVRInfiniteStrBytes = { 0x66, 0x89, 0xBB, 0x18, 0x04, 0x00, 0x00 };
+        internal static string VRGripDamageAoB = "66 01 87 18 04 00 00 41";
+        internal static byte[] OriginalVRGripDamageBytes = { 0x66, 0x01, 0x87, 0x18, 0x04, 0x00, 0x00, 0x41 };
+        internal static string VRAimStabilityAoB = "0F 8F 90 01 00 00 48 8B";
+        internal static byte[] OriginalVRAimStabilityBytes = { 0x0F, 0x8F, 0x90, 0x01, 0x00, 0x00, 0x48, 0x8B };
+        internal static string VRInfiniteAmmoAoB = "66 2B CF 79 02";
+        internal static byte[] OriginalVRInfiniteAmmoBytes = { 0x66, 0x2B, 0xCF, 0x79, 0x02 };
+        internal static string VRInfiniteItemAoB = "66 41 89 09 0F BF C1";
+        internal static byte[] OriginalVRInfiniteItemBytes = { 0x66, 0x41, 0x89, 0x09, 0x0F, 0xBF, 0xC1 };
+        internal static string VRNoReloadAoB = "FF C8 89 05 ?? ?? ?? 01 C3 CC 48";
+        internal static byte[] OriginalVRNoReloadBytes = { 0xFF, 0xC8, 0x89, 0x05, 0x00, 0x00, 0x00, 0x01, 0xC3, 0xCC, 0x48 };
 
-
+        #region Guard animations
         internal static GuardAnimation WaitAnimation = new GuardAnimation { Name = "Wait", Bytes = new byte[] { 0xBA, 0x00, 0x00, 0x00, 0x00, 0x90, 0x90 } };
         internal static GuardAnimation PatrolAnimation = new GuardAnimation { Name = "Patrol", Bytes = new byte[] { 0xBA, 0x02, 0x00, 0x00, 0x00, 0x90, 0x90 } };
         internal static GuardAnimation MoveForwardAnimation = new GuardAnimation { Name = "Move Forward", Bytes = new byte[] { 0xBA, 0x03, 0x00, 0x00, 0x00, 0x90, 0x90 } };
@@ -172,7 +229,7 @@ namespace MGS2_MC
 
             public GuardAnimation() { }
         }
-
+        #endregion
 
 
         /*new offsets and shit found 4/17/24:
@@ -273,6 +330,8 @@ namespace MGS2_MC
 
         #region Calculated From FortuneName
         public static readonly MemoryOffset FORTUNE_HP_TEXT = new MemoryOffset(1188, 1194);
+        public static readonly MemoryOffset FORTUNE_HP_VALUE = new MemoryOffset(1212, 1213);
+        public static readonly MemoryOffset FORTUNE_STAMINA_VALUE = new MemoryOffset(1228, 1229);
         public static readonly MemoryOffset VAMP_HP_TEXT = new MemoryOffset(1908, 1911);
         #endregion
 
@@ -345,6 +404,17 @@ namespace MGS2_MC
         public static readonly MemoryOffset NIGHT_TIME = new MemoryOffset(0);
         public static readonly MemoryOffset ENABLE_CUSTOM_FILTER = new MemoryOffset(0, 18);
         public static readonly MemoryOffset CUSTOM_FILTERING = new MemoryOffset(-204, -202);
+        public static readonly MemoryOffset PAUSE_VR_TIMER = new MemoryOffset(0, 7);
+        public static readonly MemoryOffset VR_AUTO_COMPLETE_OBJECTIVES = new MemoryOffset(0, 7);
+        public static readonly MemoryOffset VR_AUTO_COMPLETE_ENEMIES = new MemoryOffset(0, 7);
+        public static readonly MemoryOffset VR_NO_HIT_DMG = new MemoryOffset(0, 8);
+        public static readonly MemoryOffset VR_NO_FALL_DMG = new MemoryOffset(0, 6);
+        public static readonly MemoryOffset VR_INF_STR = new MemoryOffset(0, 6);
+        public static readonly MemoryOffset VR_TAKE_GRIP_DMG = new MemoryOffset(0, 7);
+        public static readonly MemoryOffset VR_AIM_STAB = new MemoryOffset(0, 7);
+        public static readonly MemoryOffset VR_INF_AMMO = new MemoryOffset(0, 4);
+        public static readonly MemoryOffset VR_INF_ITEM = new MemoryOffset(0, 6);
+        public static readonly MemoryOffset VR_NO_RELOAD = new MemoryOffset(0, 10);
         #endregion
 
         #region Calculated From CurrentGripGauge

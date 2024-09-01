@@ -1,11 +1,96 @@
 ﻿using Serilog;
 using Serilog.Core;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace MGS2_MC
 {
     #region Internals
+    public class BossVitals
+    {
+        public List<int> NestedHealthPointers;
+        public List<int> NestedStaminaPointers;
+        public int HealthOffset;
+        public int Health;
+        public bool HasStamina;
+        public int StaminaOffset;
+        public int Stamina;
+
+        public static BossVitals ParseBossVitals(Constants.Boss boss)
+        {
+            switch(boss)
+            {
+                case Constants.Boss.Olga:
+                    return MGS2UsableObjects.Olga;
+                case Constants.Boss.Fortune:
+                    return MGS2UsableObjects.Fortune;
+                case Constants.Boss.Fatman:
+                    return MGS2UsableObjects.Fatman;
+                case Constants.Boss.Harrier:
+                    return MGS2UsableObjects.Harrier;
+                case Constants.Boss.Vamp:
+                    return MGS2UsableObjects.Vamp;
+                case Constants.Boss.VampSnipe:
+                    return MGS2UsableObjects.VampSniping;
+                case Constants.Boss.Solidus:
+                    return MGS2UsableObjects.Solidus;
+                case Constants.Boss.Ray1:
+                    return MGS2UsableObjects.Ray1;
+                case Constants.Boss.Ray2:
+                    return MGS2UsableObjects.Ray2;
+                case Constants.Boss.Ray3:
+                    return MGS2UsableObjects.Ray3;
+                case Constants.Boss.Ray4:
+                    return MGS2UsableObjects.Ray4;
+                case Constants.Boss.Ray5:
+                    return MGS2UsableObjects.Ray5;
+                case Constants.Boss.Ray6:
+                    return MGS2UsableObjects.Ray6;
+                case Constants.Boss.Ray7:
+                    return MGS2UsableObjects.Ray7;
+                case Constants.Boss.Ray8:
+                    return MGS2UsableObjects.Ray8;
+                case Constants.Boss.Ray9:
+                    return MGS2UsableObjects.Ray9;
+                case Constants.Boss.Ray10:
+                    return MGS2UsableObjects.Ray10;
+                case Constants.Boss.Ray11:
+                    return MGS2UsableObjects.Ray11;
+                case Constants.Boss.Ray12:
+                    return MGS2UsableObjects.Ray12;
+                case Constants.Boss.Ray13:
+                    return MGS2UsableObjects.Ray13;
+                case Constants.Boss.Ray14:
+                    return MGS2UsableObjects.Ray14;
+                case Constants.Boss.Ray15:
+                    return MGS2UsableObjects.Ray15;
+                case Constants.Boss.Ray16:
+                    return MGS2UsableObjects.Ray16;
+                case Constants.Boss.Ray17:
+                    return MGS2UsableObjects.Ray17;
+                case Constants.Boss.Ray18:
+                    return MGS2UsableObjects.Ray18;
+                case Constants.Boss.Ray19:
+                    return MGS2UsableObjects.Ray19;
+                case Constants.Boss.Ray20:
+                    return MGS2UsableObjects.Ray20;
+                case Constants.Boss.Ray21:
+                    return MGS2UsableObjects.Ray21;
+                case Constants.Boss.Ray22:
+                    return MGS2UsableObjects.Ray22;
+                case Constants.Boss.Ray23:
+                    return MGS2UsableObjects.Ray23;
+                case Constants.Boss.Ray24:
+                    return MGS2UsableObjects.Ray24;
+                case Constants.Boss.Ray25:
+                    return MGS2UsableObjects.Ray25;
+                default:
+                    throw new InvalidEnumArgumentException("Boss not recognized.");
+            }
+        }
+    }
 
     internal class GameObject
     {
@@ -453,6 +538,198 @@ namespace MGS2_MC
         #region Unknown Items
         public static readonly BasicItem BDU = new DurabilityItem("BDU", IntPtr.Zero, MGS2Offset.BASE_ITEM.Start + Constants.BDU);
         #endregion
+        #endregion
+
+        #region Bosses
+        public static readonly BossVitals Olga = new BossVitals { HasStamina = true,
+            NestedHealthPointers = MGS2Pointer.OlgaNestedPointers,
+            NestedStaminaPointers = MGS2Pointer.OlgaNestedPointers, HealthOffset = 0x1EA, StaminaOffset = 0x1EC };
+        public static readonly BossVitals Fortune = new BossVitals { HasStamina = true,
+            NestedHealthPointers = MGS2Pointer.FortuneNestedPointers,
+            NestedStaminaPointers = MGS2Pointer.FortuneNestedPointers,HealthOffset = MGS2Offset.FORTUNE_HP_VALUE.Start, 
+            StaminaOffset = MGS2Offset.FORTUNE_STAMINA_VALUE.Start
+        };
+        public static readonly BossVitals Fatman = new BossVitals { HasStamina = true, 
+            NestedHealthPointers = MGS2Pointer.FatmanNestedHealthPointers, NestedStaminaPointers = MGS2Pointer.FatmanNestedStaminaPointers,
+            HealthOffset = 0x2FE,
+            StaminaOffset = 0xB0
+        };
+        public static readonly BossVitals Harrier = new BossVitals { HasStamina = false,
+            NestedHealthPointers = MGS2Pointer.HarrierNestedPointers, //it works for tracking, but crashes the game when we modify it KEKW
+            HealthOffset = 0xE48
+        };
+        public static readonly BossVitals Vamp = new BossVitals { HasStamina = true,
+            NestedHealthPointers = MGS2Pointer.VampNestedPointers,
+            NestedStaminaPointers = MGS2Pointer.VampNestedPointers, 
+            HealthOffset = 0x180,
+            StaminaOffset = 0x182
+        };
+        public static readonly BossVitals VampSniping = new BossVitals { HasStamina = true,
+            NestedHealthPointers = MGS2Pointer.VampSnipingHealthNestedPointers,
+            NestedStaminaPointers = MGS2Pointer.VampSnipingStaminaNestedPointers,
+            HealthOffset = 0x2EE,
+            StaminaOffset = 0xC5E
+        };
+        #region Rays
+        public static readonly BossVitals Ray1 = new BossVitals
+        {
+            HasStamina = false,
+            NestedHealthPointers = MGS2Pointer.Ray1NestedPointers,
+            HealthOffset = 0x800
+        };
+        public static readonly BossVitals Ray2 = new BossVitals
+        {
+            HasStamina = false,
+            NestedHealthPointers = MGS2Pointer.Ray2NestedPointers,
+            HealthOffset = 0x800
+        };
+        public static readonly BossVitals Ray3 = new BossVitals
+        {
+            HasStamina = false,
+            NestedHealthPointers = MGS2Pointer.Ray3NestedPointers,
+            HealthOffset = 0x800
+        };
+        public static readonly BossVitals Ray4 = new BossVitals
+        {
+            HasStamina = false,
+            NestedHealthPointers = MGS2Pointer.Ray4NestedPointers,
+            HealthOffset = 0x800
+        };
+        public static readonly BossVitals Ray5 = new BossVitals
+        {
+            HasStamina = false,
+            NestedHealthPointers = MGS2Pointer.Ray5NestedPointers,
+            HealthOffset = 0x800
+        };
+        public static readonly BossVitals Ray6 = new BossVitals
+        {
+            HasStamina = false,
+            NestedHealthPointers = MGS2Pointer.Ray6NestedPointers,
+            HealthOffset = 0x800
+        };
+        public static readonly BossVitals Ray7 = new BossVitals
+        {
+            HasStamina = false,
+            NestedHealthPointers = MGS2Pointer.Ray7NestedPointers,
+            HealthOffset = 0x800
+        };
+        public static readonly BossVitals Ray8 = new BossVitals
+        {
+            HasStamina = false,
+            NestedHealthPointers = MGS2Pointer.Ray8NestedPointers,
+            HealthOffset = 0x800
+        };
+        public static readonly BossVitals Ray9 = new BossVitals
+        {
+            HasStamina = false,
+            NestedHealthPointers = MGS2Pointer.Ray9NestedPointers,
+            HealthOffset = 0x800
+        };
+        public static readonly BossVitals Ray10 = new BossVitals
+        {
+            HasStamina = false,
+            NestedHealthPointers = MGS2Pointer.Ray10NestedPointers,
+            HealthOffset = 0x800
+        };
+        public static readonly BossVitals Ray11 = new BossVitals
+        {
+            HasStamina = false,
+            NestedHealthPointers = MGS2Pointer.Ray11NestedPointers,
+            HealthOffset = 0x800
+        };
+        public static readonly BossVitals Ray12 = new BossVitals
+        {
+            HasStamina = false,
+            NestedHealthPointers = MGS2Pointer.Ray12NestedPointers,
+            HealthOffset = 0x800
+        };
+        public static readonly BossVitals Ray13 = new BossVitals
+        {
+            HasStamina = false,
+            NestedHealthPointers = MGS2Pointer.Ray13NestedPointers,
+            HealthOffset = 0x800
+        };
+        public static readonly BossVitals Ray14 = new BossVitals
+        {
+            HasStamina = false,
+            NestedHealthPointers = MGS2Pointer.Ray14NestedPointers,
+            HealthOffset = 0x800
+        };
+        public static readonly BossVitals Ray15 = new BossVitals
+        {
+            HasStamina = false,
+            NestedHealthPointers = MGS2Pointer.Ray15NestedPointers,
+            HealthOffset = 0x800
+        };
+        public static readonly BossVitals Ray16 = new BossVitals
+        {
+            HasStamina = false,
+            NestedHealthPointers = MGS2Pointer.Ray16NestedPointers,
+            HealthOffset = 0x800
+        };
+        public static readonly BossVitals Ray17 = new BossVitals
+        {
+            HasStamina = false,
+            NestedHealthPointers = MGS2Pointer.Ray17NestedPointers,
+            HealthOffset = 0x800
+        };
+        public static readonly BossVitals Ray18 = new BossVitals
+        {
+            HasStamina = false,
+            NestedHealthPointers = MGS2Pointer.Ray18NestedPointers,
+            HealthOffset = 0x800
+        };
+        public static readonly BossVitals Ray19 = new BossVitals
+        {
+            HasStamina = false,
+            NestedHealthPointers = MGS2Pointer.Ray19NestedPointers,
+            HealthOffset = 0x800
+        };
+        public static readonly BossVitals Ray20 = new BossVitals
+        {
+            HasStamina = false,
+            NestedHealthPointers = MGS2Pointer.Ray20NestedPointers,
+            HealthOffset = 0x800
+        };
+        public static readonly BossVitals Ray21 = new BossVitals
+        {
+            HasStamina = false,
+            NestedHealthPointers = MGS2Pointer.Ray21NestedPointers,
+            HealthOffset = 0x800
+        };
+        public static readonly BossVitals Ray22 = new BossVitals
+        {
+            HasStamina = false,
+            NestedHealthPointers = MGS2Pointer.Ray22NestedPointers,
+            HealthOffset = 0x800
+        };
+        public static readonly BossVitals Ray23 = new BossVitals
+        {
+            HasStamina = false,
+            NestedHealthPointers = MGS2Pointer.Ray23NestedPointers,
+            HealthOffset = 0x800
+        };
+        public static readonly BossVitals Ray24 = new BossVitals
+        {
+            HasStamina = false,
+            NestedHealthPointers = MGS2Pointer.Ray24NestedPointers,
+            HealthOffset = 0x800
+        };
+        public static readonly BossVitals Ray25 = new BossVitals
+        {
+            HasStamina = false,
+            NestedHealthPointers = MGS2Pointer.Ray25NestedPointers,
+            HealthOffset = 0x800
+        };
+        #endregion
+        public static readonly BossVitals Solidus = new BossVitals
+        {
+            HasStamina = true,
+            NestedHealthPointers = MGS2Pointer.SolidusNestedPointers, //these crash the game, sadge
+            NestedStaminaPointers = MGS2Pointer.SolidusNestedPointers, //these crash the game, sadge
+            HealthOffset = 0x98,
+            StaminaOffset = 0xA8
+        };
         #endregion
     }
 }

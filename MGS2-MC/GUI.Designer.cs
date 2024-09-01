@@ -28,6 +28,64 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Olga");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Fortune");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Fatman");
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Harrier");
+            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Vamp");
+            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Vamp (Sniping)");
+            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("RAY #01");
+            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("RAY #02");
+            System.Windows.Forms.TreeNode treeNode9 = new System.Windows.Forms.TreeNode("RAY #03");
+            System.Windows.Forms.TreeNode treeNode10 = new System.Windows.Forms.TreeNode("RAY #04");
+            System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("RAY #05");
+            System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("RAY #06");
+            System.Windows.Forms.TreeNode treeNode13 = new System.Windows.Forms.TreeNode("RAY #07");
+            System.Windows.Forms.TreeNode treeNode14 = new System.Windows.Forms.TreeNode("RAY #08");
+            System.Windows.Forms.TreeNode treeNode15 = new System.Windows.Forms.TreeNode("RAY #09");
+            System.Windows.Forms.TreeNode treeNode16 = new System.Windows.Forms.TreeNode("RAY #10");
+            System.Windows.Forms.TreeNode treeNode17 = new System.Windows.Forms.TreeNode("RAY #11");
+            System.Windows.Forms.TreeNode treeNode18 = new System.Windows.Forms.TreeNode("RAY #12");
+            System.Windows.Forms.TreeNode treeNode19 = new System.Windows.Forms.TreeNode("RAY #13");
+            System.Windows.Forms.TreeNode treeNode20 = new System.Windows.Forms.TreeNode("RAY #14");
+            System.Windows.Forms.TreeNode treeNode21 = new System.Windows.Forms.TreeNode("RAY #15");
+            System.Windows.Forms.TreeNode treeNode22 = new System.Windows.Forms.TreeNode("RAY #16");
+            System.Windows.Forms.TreeNode treeNode23 = new System.Windows.Forms.TreeNode("RAY #17");
+            System.Windows.Forms.TreeNode treeNode24 = new System.Windows.Forms.TreeNode("RAY #18");
+            System.Windows.Forms.TreeNode treeNode25 = new System.Windows.Forms.TreeNode("RAY #19");
+            System.Windows.Forms.TreeNode treeNode26 = new System.Windows.Forms.TreeNode("RAY #20");
+            System.Windows.Forms.TreeNode treeNode27 = new System.Windows.Forms.TreeNode("RAY #21");
+            System.Windows.Forms.TreeNode treeNode28 = new System.Windows.Forms.TreeNode("RAY #22");
+            System.Windows.Forms.TreeNode treeNode29 = new System.Windows.Forms.TreeNode("RAY #23");
+            System.Windows.Forms.TreeNode treeNode30 = new System.Windows.Forms.TreeNode("RAY #24");
+            System.Windows.Forms.TreeNode treeNode31 = new System.Windows.Forms.TreeNode("RAY #25");
+            System.Windows.Forms.TreeNode treeNode32 = new System.Windows.Forms.TreeNode("RAY Battle", new System.Windows.Forms.TreeNode[] {
+            treeNode7,
+            treeNode8,
+            treeNode9,
+            treeNode10,
+            treeNode11,
+            treeNode12,
+            treeNode13,
+            treeNode14,
+            treeNode15,
+            treeNode16,
+            treeNode17,
+            treeNode18,
+            treeNode19,
+            treeNode20,
+            treeNode21,
+            treeNode22,
+            treeNode23,
+            treeNode24,
+            treeNode25,
+            treeNode26,
+            treeNode27,
+            treeNode28,
+            treeNode29,
+            treeNode30,
+            treeNode31});
+            System.Windows.Forms.TreeNode treeNode33 = new System.Windows.Forms.TreeNode("Solidus");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GUI));
             this.mgs2TabControl = new System.Windows.Forms.TabControl();
             this.tabPageItem = new System.Windows.Forms.TabPage();
@@ -62,6 +120,21 @@
             this.label56 = new System.Windows.Forms.Label();
             this.numericUpDown4 = new System.Windows.Forms.NumericUpDown();
             this.button4 = new System.Windows.Forms.Button();
+            this.tabPageBosses = new System.Windows.Forms.TabPage();
+            this.bossLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.detectBossCheckbox = new System.Windows.Forms.CheckBox();
+            this.bossTreeView = new System.Windows.Forms.TreeView();
+            this.bossGroupBox = new System.Windows.Forms.GroupBox();
+            this.bossHealthStaminaLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.bossStaminaGroupBox = new System.Windows.Forms.GroupBox();
+            this.bossStaminaLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.bossStaminaTrackbar = new System.Windows.Forms.TrackBar();
+            this.bossStaminaLabel = new System.Windows.Forms.Label();
+            this.bossHpGroupBox = new System.Windows.Forms.GroupBox();
+            this.bossHpLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.bossHpTrackbar = new System.Windows.Forms.TrackBar();
+            this.bossHpLabel = new System.Windows.Forms.Label();
+            this.autoDetectBossLabel = new System.Windows.Forms.Label();
             this.tabPageStats = new System.Windows.Forms.TabPage();
             this.tabPageLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.alertsGroupBox = new System.Windows.Forms.GroupBox();
@@ -131,15 +204,6 @@
             this.playerCurrentHpTrackBar = new System.Windows.Forms.TrackBar();
             this.playerMaxHpLabel = new System.Windows.Forms.Label();
             this.playerMaxHpUpDown = new System.Windows.Forms.NumericUpDown();
-            this.aobTesterTablePanel = new System.Windows.Forms.TableLayoutPanel();
-            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
-            this.label50 = new System.Windows.Forms.Label();
-            this.aobTextbox = new System.Windows.Forms.TextBox();
-            this.memRange = new System.Windows.Forms.Label();
-            this.rangeTextbox = new System.Windows.Forms.TextBox();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
-            this.memContents = new System.Windows.Forms.TextBox();
             this.cheatsLeftSideFlowPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.cheatsCheckedListBox = new System.Windows.Forms.CheckedListBox();
             this.forceSleepButton = new System.Windows.Forms.Button();
@@ -617,6 +681,16 @@
             ((System.ComponentModel.ISupportInitialize)(this.weaponTestTabPictureBox)).BeginInit();
             this.weaponTabTestCurrentLayoutTable.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
+            this.tabPageBosses.SuspendLayout();
+            this.bossLayoutPanel.SuspendLayout();
+            this.bossGroupBox.SuspendLayout();
+            this.bossHealthStaminaLayoutPanel.SuspendLayout();
+            this.bossStaminaGroupBox.SuspendLayout();
+            this.bossStaminaLayoutPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bossStaminaTrackbar)).BeginInit();
+            this.bossHpGroupBox.SuspendLayout();
+            this.bossHpLayoutPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bossHpTrackbar)).BeginInit();
             this.tabPageStats.SuspendLayout();
             this.tabPageLayoutPanel.SuspendLayout();
             this.alertsGroupBox.SuspendLayout();
@@ -655,8 +729,6 @@
             this.playerHpTablePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.playerCurrentHpTrackBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.playerMaxHpUpDown)).BeginInit();
-            this.aobTesterTablePanel.SuspendLayout();
-            this.flowLayoutPanel2.SuspendLayout();
             this.cheatsLeftSideFlowPanel.SuspendLayout();
             this.guardAnimationsGroupBox.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -942,6 +1014,7 @@
             // 
             this.mgs2TabControl.Controls.Add(this.tabPageItem);
             this.mgs2TabControl.Controls.Add(this.tabPageWeapon);
+            this.mgs2TabControl.Controls.Add(this.tabPageBosses);
             this.mgs2TabControl.Controls.Add(this.tabPageStats);
             this.mgs2TabControl.Controls.Add(this.tabPageStrings);
             this.mgs2TabControl.Controls.Add(this.tabPageCheats);
@@ -1370,6 +1443,274 @@
             this.button4.TabIndex = 2;
             this.button4.Text = "Set!";
             this.button4.UseVisualStyleBackColor = true;
+            // 
+            // tabPageBosses
+            // 
+            this.tabPageBosses.Controls.Add(this.bossLayoutPanel);
+            this.tabPageBosses.Location = new System.Drawing.Point(4, 22);
+            this.tabPageBosses.Name = "tabPageBosses";
+            this.tabPageBosses.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageBosses.Size = new System.Drawing.Size(576, 414);
+            this.tabPageBosses.TabIndex = 5;
+            this.tabPageBosses.Text = "Bosses";
+            this.tabPageBosses.UseVisualStyleBackColor = true;
+            // 
+            // bossLayoutPanel
+            // 
+            this.bossLayoutPanel.ColumnCount = 2;
+            this.bossLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 24.38597F));
+            this.bossLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75.61404F));
+            this.bossLayoutPanel.Controls.Add(this.detectBossCheckbox, 0, 0);
+            this.bossLayoutPanel.Controls.Add(this.bossTreeView, 0, 1);
+            this.bossLayoutPanel.Controls.Add(this.bossGroupBox, 1, 1);
+            this.bossLayoutPanel.Controls.Add(this.autoDetectBossLabel, 1, 0);
+            this.bossLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bossLayoutPanel.Location = new System.Drawing.Point(3, 3);
+            this.bossLayoutPanel.Name = "bossLayoutPanel";
+            this.bossLayoutPanel.RowCount = 2;
+            this.bossLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.392157F));
+            this.bossLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 94.60784F));
+            this.bossLayoutPanel.Size = new System.Drawing.Size(570, 408);
+            this.bossLayoutPanel.TabIndex = 1;
+            // 
+            // detectBossCheckbox
+            // 
+            this.detectBossCheckbox.AutoSize = true;
+            this.detectBossCheckbox.Enabled = false;
+            this.detectBossCheckbox.Location = new System.Drawing.Point(3, 3);
+            this.detectBossCheckbox.Name = "detectBossCheckbox";
+            this.detectBossCheckbox.Size = new System.Drawing.Size(115, 16);
+            this.detectBossCheckbox.TabIndex = 0;
+            this.detectBossCheckbox.Text = "Auto-Detect Boss?";
+            this.detectBossCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // bossTreeView
+            // 
+            this.bossTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bossTreeView.HideSelection = false;
+            this.bossTreeView.Location = new System.Drawing.Point(3, 25);
+            this.bossTreeView.Name = "bossTreeView";
+            treeNode1.Name = "olgaNode";
+            treeNode1.Text = "Olga";
+            treeNode2.Name = "fortuneNode";
+            treeNode2.Text = "Fortune";
+            treeNode3.Name = "fatmanNode";
+            treeNode3.Text = "Fatman";
+            treeNode4.Name = "harrierNode";
+            treeNode4.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Strikeout, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            treeNode4.Text = "Harrier";
+            treeNode5.Name = "vampNode";
+            treeNode5.Text = "Vamp";
+            treeNode6.Name = "vamp2Node";
+            treeNode6.Text = "Vamp (Sniping)";
+            treeNode7.Name = "rayNode1";
+            treeNode7.Text = "RAY #01";
+            treeNode8.Name = "rayNode2";
+            treeNode8.Text = "RAY #02";
+            treeNode9.Name = "rayNode3";
+            treeNode9.Text = "RAY #03";
+            treeNode10.Name = "rayNode4";
+            treeNode10.Text = "RAY #04";
+            treeNode11.Name = "rayNode5";
+            treeNode11.Text = "RAY #05";
+            treeNode12.Name = "rayNode6";
+            treeNode12.Text = "RAY #06";
+            treeNode13.Name = "rayNode7";
+            treeNode13.Text = "RAY #07";
+            treeNode14.Name = "rayNode8";
+            treeNode14.Text = "RAY #08";
+            treeNode15.Name = "rayNode9";
+            treeNode15.Text = "RAY #09";
+            treeNode16.Name = "rayNode10";
+            treeNode16.Text = "RAY #10";
+            treeNode17.Name = "rayNode11";
+            treeNode17.Text = "RAY #11";
+            treeNode18.Name = "rayNode12";
+            treeNode18.Text = "RAY #12";
+            treeNode19.Name = "rayNode13";
+            treeNode19.Text = "RAY #13";
+            treeNode20.Name = "rayNode14";
+            treeNode20.Text = "RAY #14";
+            treeNode21.Name = "rayNode15";
+            treeNode21.Text = "RAY #15";
+            treeNode22.Name = "rayNode16";
+            treeNode22.Text = "RAY #16";
+            treeNode23.Name = "rayNode17";
+            treeNode23.Text = "RAY #17";
+            treeNode24.Name = "rayNode18";
+            treeNode24.Text = "RAY #18";
+            treeNode25.Name = "rayNode19";
+            treeNode25.Text = "RAY #19";
+            treeNode26.Name = "rayNode20";
+            treeNode26.Text = "RAY #20";
+            treeNode27.Name = "rayNode21";
+            treeNode27.Text = "RAY #21";
+            treeNode28.Name = "rayNode22";
+            treeNode28.Text = "RAY #22";
+            treeNode29.Name = "rayNode23";
+            treeNode29.Text = "RAY #23";
+            treeNode30.Name = "rayNode24";
+            treeNode30.Text = "RAY #24";
+            treeNode31.Name = "rayNode25";
+            treeNode31.Text = "RAY #25";
+            treeNode32.Name = "rayNode";
+            treeNode32.Text = "RAY Battle";
+            treeNode33.Name = "solidusNode";
+            treeNode33.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Strikeout, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            treeNode33.Text = "Solidus";
+            this.bossTreeView.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+            treeNode1,
+            treeNode2,
+            treeNode3,
+            treeNode4,
+            treeNode5,
+            treeNode6,
+            treeNode32,
+            treeNode33});
+            this.bossTreeView.Size = new System.Drawing.Size(133, 380);
+            this.bossTreeView.TabIndex = 1;
+            this.bossTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.bossTreeView_AfterSelect);
+            // 
+            // bossGroupBox
+            // 
+            this.bossGroupBox.Controls.Add(this.bossHealthStaminaLayoutPanel);
+            this.bossGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bossGroupBox.Location = new System.Drawing.Point(142, 25);
+            this.bossGroupBox.Name = "bossGroupBox";
+            this.bossGroupBox.Size = new System.Drawing.Size(425, 380);
+            this.bossGroupBox.TabIndex = 2;
+            this.bossGroupBox.TabStop = false;
+            this.bossGroupBox.Text = "No Currently Detected/Selected Boss";
+            // 
+            // bossHealthStaminaLayoutPanel
+            // 
+            this.bossHealthStaminaLayoutPanel.ColumnCount = 1;
+            this.bossHealthStaminaLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 23.86635F));
+            this.bossHealthStaminaLayoutPanel.Controls.Add(this.bossStaminaGroupBox, 0, 1);
+            this.bossHealthStaminaLayoutPanel.Controls.Add(this.bossHpGroupBox, 0, 0);
+            this.bossHealthStaminaLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bossHealthStaminaLayoutPanel.Location = new System.Drawing.Point(3, 16);
+            this.bossHealthStaminaLayoutPanel.Name = "bossHealthStaminaLayoutPanel";
+            this.bossHealthStaminaLayoutPanel.RowCount = 2;
+            this.bossHealthStaminaLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.bossHealthStaminaLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.bossHealthStaminaLayoutPanel.Size = new System.Drawing.Size(419, 361);
+            this.bossHealthStaminaLayoutPanel.TabIndex = 0;
+            this.bossHealthStaminaLayoutPanel.Visible = false;
+            // 
+            // bossStaminaGroupBox
+            // 
+            this.bossStaminaGroupBox.Controls.Add(this.bossStaminaLayoutPanel);
+            this.bossStaminaGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bossStaminaGroupBox.Location = new System.Drawing.Point(3, 183);
+            this.bossStaminaGroupBox.Name = "bossStaminaGroupBox";
+            this.bossStaminaGroupBox.Size = new System.Drawing.Size(413, 175);
+            this.bossStaminaGroupBox.TabIndex = 1;
+            this.bossStaminaGroupBox.TabStop = false;
+            this.bossStaminaGroupBox.Text = "Boss Stamina";
+            // 
+            // bossStaminaLayoutPanel
+            // 
+            this.bossStaminaLayoutPanel.ColumnCount = 2;
+            this.bossStaminaLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.bossStaminaLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 80F));
+            this.bossStaminaLayoutPanel.Controls.Add(this.bossStaminaTrackbar, 0, 0);
+            this.bossStaminaLayoutPanel.Controls.Add(this.bossStaminaLabel, 0, 0);
+            this.bossStaminaLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bossStaminaLayoutPanel.Location = new System.Drawing.Point(3, 16);
+            this.bossStaminaLayoutPanel.Name = "bossStaminaLayoutPanel";
+            this.bossStaminaLayoutPanel.RowCount = 1;
+            this.bossStaminaLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.bossStaminaLayoutPanel.Size = new System.Drawing.Size(407, 156);
+            this.bossStaminaLayoutPanel.TabIndex = 1;
+            // 
+            // bossStaminaTrackbar
+            // 
+            this.bossStaminaTrackbar.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.bossStaminaTrackbar.BackColor = System.Drawing.Color.MediumSlateBlue;
+            this.bossStaminaTrackbar.LargeChange = 10;
+            this.bossStaminaTrackbar.Location = new System.Drawing.Point(84, 55);
+            this.bossStaminaTrackbar.Maximum = 100;
+            this.bossStaminaTrackbar.Name = "bossStaminaTrackbar";
+            this.bossStaminaTrackbar.Size = new System.Drawing.Size(320, 45);
+            this.bossStaminaTrackbar.TabIndex = 4;
+            this.bossStaminaTrackbar.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.bossStaminaTrackbar.Value = 100;
+            this.bossStaminaTrackbar.Scroll += new System.EventHandler(this.bossStaminaTrackbar_Scroll);
+            // 
+            // bossStaminaLabel
+            // 
+            this.bossStaminaLabel.AutoSize = true;
+            this.bossStaminaLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bossStaminaLabel.Location = new System.Drawing.Point(3, 0);
+            this.bossStaminaLabel.Name = "bossStaminaLabel";
+            this.bossStaminaLabel.Size = new System.Drawing.Size(75, 156);
+            this.bossStaminaLabel.TabIndex = 3;
+            this.bossStaminaLabel.Text = "Current Stamina";
+            this.bossStaminaLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // bossHpGroupBox
+            // 
+            this.bossHpGroupBox.Controls.Add(this.bossHpLayoutPanel);
+            this.bossHpGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bossHpGroupBox.Location = new System.Drawing.Point(3, 3);
+            this.bossHpGroupBox.Name = "bossHpGroupBox";
+            this.bossHpGroupBox.Size = new System.Drawing.Size(413, 174);
+            this.bossHpGroupBox.TabIndex = 0;
+            this.bossHpGroupBox.TabStop = false;
+            this.bossHpGroupBox.Text = "Boss HP";
+            // 
+            // bossHpLayoutPanel
+            // 
+            this.bossHpLayoutPanel.ColumnCount = 2;
+            this.bossHpLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.bossHpLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 80F));
+            this.bossHpLayoutPanel.Controls.Add(this.bossHpTrackbar, 0, 0);
+            this.bossHpLayoutPanel.Controls.Add(this.bossHpLabel, 0, 0);
+            this.bossHpLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bossHpLayoutPanel.Location = new System.Drawing.Point(3, 16);
+            this.bossHpLayoutPanel.Name = "bossHpLayoutPanel";
+            this.bossHpLayoutPanel.RowCount = 1;
+            this.bossHpLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.bossHpLayoutPanel.Size = new System.Drawing.Size(407, 155);
+            this.bossHpLayoutPanel.TabIndex = 0;
+            // 
+            // bossHpTrackbar
+            // 
+            this.bossHpTrackbar.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.bossHpTrackbar.BackColor = System.Drawing.Color.Aquamarine;
+            this.bossHpTrackbar.LargeChange = 10;
+            this.bossHpTrackbar.Location = new System.Drawing.Point(84, 55);
+            this.bossHpTrackbar.Maximum = 100;
+            this.bossHpTrackbar.Name = "bossHpTrackbar";
+            this.bossHpTrackbar.Size = new System.Drawing.Size(320, 45);
+            this.bossHpTrackbar.TabIndex = 4;
+            this.bossHpTrackbar.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.bossHpTrackbar.Value = 100;
+            this.bossHpTrackbar.Scroll += new System.EventHandler(this.bossHpTrackbar_Scroll);
+            // 
+            // bossHpLabel
+            // 
+            this.bossHpLabel.AutoSize = true;
+            this.bossHpLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bossHpLabel.Location = new System.Drawing.Point(3, 0);
+            this.bossHpLabel.Name = "bossHpLabel";
+            this.bossHpLabel.Size = new System.Drawing.Size(75, 155);
+            this.bossHpLabel.TabIndex = 3;
+            this.bossHpLabel.Text = "Current HP";
+            this.bossHpLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // autoDetectBossLabel
+            // 
+            this.autoDetectBossLabel.AutoSize = true;
+            this.autoDetectBossLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.autoDetectBossLabel.Enabled = false;
+            this.autoDetectBossLabel.Location = new System.Drawing.Point(142, 0);
+            this.autoDetectBossLabel.Name = "autoDetectBossLabel";
+            this.autoDetectBossLabel.Size = new System.Drawing.Size(425, 22);
+            this.autoDetectBossLabel.TabIndex = 3;
+            this.autoDetectBossLabel.Text = "Auto-detect boss functionality not yet implemented, sorry ;(";
+            this.autoDetectBossLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // tabPageStats
             // 
@@ -2046,7 +2387,6 @@
             this.cheatTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.cheatTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.cheatTablePanel.Controls.Add(this.healthAndGripTablePanel, 1, 0);
-            this.cheatTablePanel.Controls.Add(this.aobTesterTablePanel, 1, 1);
             this.cheatTablePanel.Controls.Add(this.cheatsLeftSideFlowPanel, 0, 0);
             this.cheatTablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cheatTablePanel.Location = new System.Drawing.Point(3, 3);
@@ -2253,98 +2593,6 @@
             0,
             0});
             this.playerMaxHpUpDown.ValueChanged += new System.EventHandler(this.PlayerMaxHpUpDown_ValueChanged);
-            // 
-            // aobTesterTablePanel
-            // 
-            this.aobTesterTablePanel.ColumnCount = 2;
-            this.aobTesterTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.aobTesterTablePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.aobTesterTablePanel.Controls.Add(this.flowLayoutPanel2, 0, 0);
-            this.aobTesterTablePanel.Controls.Add(this.button5, 1, 0);
-            this.aobTesterTablePanel.Controls.Add(this.button6, 1, 1);
-            this.aobTesterTablePanel.Controls.Add(this.memContents, 0, 1);
-            this.aobTesterTablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.aobTesterTablePanel.Location = new System.Drawing.Point(288, 207);
-            this.aobTesterTablePanel.Name = "aobTesterTablePanel";
-            this.aobTesterTablePanel.RowCount = 2;
-            this.aobTesterTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.aobTesterTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.aobTesterTablePanel.Size = new System.Drawing.Size(279, 198);
-            this.aobTesterTablePanel.TabIndex = 15;
-            this.aobTesterTablePanel.Visible = false;
-            // 
-            // flowLayoutPanel2
-            // 
-            this.flowLayoutPanel2.Controls.Add(this.label50);
-            this.flowLayoutPanel2.Controls.Add(this.aobTextbox);
-            this.flowLayoutPanel2.Controls.Add(this.memRange);
-            this.flowLayoutPanel2.Controls.Add(this.rangeTextbox);
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(3, 3);
-            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(133, 93);
-            this.flowLayoutPanel2.TabIndex = 0;
-            // 
-            // label50
-            // 
-            this.label50.AutoSize = true;
-            this.label50.Location = new System.Drawing.Point(3, 0);
-            this.label50.Name = "label50";
-            this.label50.Size = new System.Drawing.Size(59, 13);
-            this.label50.TabIndex = 2;
-            this.label50.Text = "AoB to find";
-            // 
-            // aobTextbox
-            // 
-            this.aobTextbox.Location = new System.Drawing.Point(3, 16);
-            this.aobTextbox.Name = "aobTextbox";
-            this.aobTextbox.Size = new System.Drawing.Size(100, 20);
-            this.aobTextbox.TabIndex = 1;
-            // 
-            // memRange
-            // 
-            this.memRange.AutoSize = true;
-            this.memRange.Location = new System.Drawing.Point(3, 39);
-            this.memRange.Name = "memRange";
-            this.memRange.Size = new System.Drawing.Size(74, 13);
-            this.memRange.TabIndex = 3;
-            this.memRange.Text = "Range to load";
-            // 
-            // rangeTextbox
-            // 
-            this.rangeTextbox.Location = new System.Drawing.Point(3, 55);
-            this.rangeTextbox.Name = "rangeTextbox";
-            this.rangeTextbox.Size = new System.Drawing.Size(100, 20);
-            this.rangeTextbox.TabIndex = 0;
-            // 
-            // button5
-            // 
-            this.button5.Location = new System.Drawing.Point(142, 3);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(104, 78);
-            this.button5.TabIndex = 1;
-            this.button5.Text = "Find AoB and load Range";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
-            // 
-            // button6
-            // 
-            this.button6.Location = new System.Drawing.Point(142, 102);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(115, 48);
-            this.button6.TabIndex = 2;
-            this.button6.Text = "Modify Bytes";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
-            // 
-            // memContents
-            // 
-            this.memContents.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.memContents.Location = new System.Drawing.Point(3, 102);
-            this.memContents.Multiline = true;
-            this.memContents.Name = "memContents";
-            this.memContents.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.memContents.Size = new System.Drawing.Size(133, 93);
-            this.memContents.TabIndex = 3;
             // 
             // cheatsLeftSideFlowPanel
             // 
@@ -8427,6 +8675,19 @@
             this.weaponTabTestCurrentLayoutTable.ResumeLayout(false);
             this.weaponTabTestCurrentLayoutTable.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).EndInit();
+            this.tabPageBosses.ResumeLayout(false);
+            this.bossLayoutPanel.ResumeLayout(false);
+            this.bossLayoutPanel.PerformLayout();
+            this.bossGroupBox.ResumeLayout(false);
+            this.bossHealthStaminaLayoutPanel.ResumeLayout(false);
+            this.bossStaminaGroupBox.ResumeLayout(false);
+            this.bossStaminaLayoutPanel.ResumeLayout(false);
+            this.bossStaminaLayoutPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bossStaminaTrackbar)).EndInit();
+            this.bossHpGroupBox.ResumeLayout(false);
+            this.bossHpLayoutPanel.ResumeLayout(false);
+            this.bossHpLayoutPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bossHpTrackbar)).EndInit();
             this.tabPageStats.ResumeLayout(false);
             this.tabPageLayoutPanel.ResumeLayout(false);
             this.tabPageLayoutPanel.PerformLayout();
@@ -8480,10 +8741,6 @@
             this.playerHpTablePanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.playerCurrentHpTrackBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.playerMaxHpUpDown)).EndInit();
-            this.aobTesterTablePanel.ResumeLayout(false);
-            this.aobTesterTablePanel.PerformLayout();
-            this.flowLayoutPanel2.ResumeLayout(false);
-            this.flowLayoutPanel2.PerformLayout();
             this.cheatsLeftSideFlowPanel.ResumeLayout(false);
             this.guardAnimationsGroupBox.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
@@ -9427,15 +9684,6 @@
         private System.Windows.Forms.TrackBar playerCurrentHpTrackBar;
         private System.Windows.Forms.Label playerMaxHpLabel;
         private System.Windows.Forms.NumericUpDown playerMaxHpUpDown;
-        private System.Windows.Forms.TableLayoutPanel aobTesterTablePanel;
-        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
-        private System.Windows.Forms.Label label50;
-        private System.Windows.Forms.TextBox aobTextbox;
-        private System.Windows.Forms.Label memRange;
-        private System.Windows.Forms.TextBox rangeTextbox;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.TextBox memContents;
         private System.Windows.Forms.CheckBox disableStatsTrackingCheckBox;
         private System.Windows.Forms.FlowLayoutPanel cheatsLeftSideFlowPanel;
         private System.Windows.Forms.CheckedListBox cheatsCheckedListBox;
@@ -9448,6 +9696,21 @@
         private System.Windows.Forms.Button filterColorButton;
         private System.Windows.Forms.PictureBox filterColorPictureBox;
         private System.Windows.Forms.CheckBox enableCustomFilterColorCheckBox;
+        private System.Windows.Forms.TabPage tabPageBosses;
+        private System.Windows.Forms.TableLayoutPanel bossLayoutPanel;
+        private System.Windows.Forms.CheckBox detectBossCheckbox;
+        private System.Windows.Forms.TreeView bossTreeView;
+        private System.Windows.Forms.GroupBox bossGroupBox;
+        private System.Windows.Forms.TableLayoutPanel bossHealthStaminaLayoutPanel;
+        private System.Windows.Forms.GroupBox bossHpGroupBox;
+        private System.Windows.Forms.GroupBox bossStaminaGroupBox;
+        private System.Windows.Forms.TableLayoutPanel bossStaminaLayoutPanel;
+        private System.Windows.Forms.TrackBar bossStaminaTrackbar;
+        private System.Windows.Forms.Label bossStaminaLabel;
+        private System.Windows.Forms.TableLayoutPanel bossHpLayoutPanel;
+        private System.Windows.Forms.TrackBar bossHpTrackbar;
+        private System.Windows.Forms.Label bossHpLabel;
+        private System.Windows.Forms.Label autoDetectBossLabel;
     }
 }
 

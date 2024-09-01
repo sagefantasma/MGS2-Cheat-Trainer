@@ -131,7 +131,12 @@ namespace gcx
                     if (linedContents[i][0] == '}')
                     {
                         //end of function
-                        functions.Add(new DecodedProc(currentFunctionName, null, currentFunction, 0, 0));
+                        if (currentFunctionName.Contains("40ADFE"))
+                        {
+                            int a = 2 + 2;
+                        }
+                        byte[] functionData = GetFunctionByteData(currentFunctionName, out int procTablePosition, out int scriptPos);
+                        functions.Add(new DecodedProc(currentFunctionName, functionData, currentFunction, procTablePosition, scriptPos));
                     }
                     else
                     {
@@ -149,17 +154,16 @@ namespace gcx
                 }
             }
 
-            foreach(DecodedProc proc in functions)
-            {
-                byte[] functionData = GetFunctionByteData(proc.Name, out int procTablePosition, out int scriptPos);
-                Procedures.Add(new DecodedProc(proc.Name, functionData, proc.DecodedContents, procTablePosition, scriptPos));
-            }
-
+            Procedures = functions;
             return functions;
         }
 
         internal void InsertNewProcedureToFile(DecodedProc procedure)
         {
+            //7/21/24 notes: I think we're getting pretty damn close now. I am able to at least insert the script without breaking the decoder,
+            //and without crashing the game. But, the decoder isn't reading the data, and it doesnt change anything in MGS2.
+            //It's very possible there's still even more work required to make this work(i.e. modifying the manifests and shit), but next
+            //i need to get the decoder to actually recognize the spliced in script on reload.
             byte[] newTrimmedData = new byte[TrimmedContents.Length + procedure.ScriptLength + 8];
             //insert 8 bytes at end of proc list, before strres_block_top
             int newTrimmedDataIndex = 0;
@@ -178,15 +182,19 @@ namespace gcx
             _proceduresDataLocation += 8;
 
             //set last 4 of step 1's bytes to proc offset
-            int procLocation = _mainDataLocation - 4; // -4 to get at start of main body size, then +8 to account for the added proc table value?
+            //TODO: instead of going back from main data location, let's try advancing by the size of the proc body size(before it was increased by new script)
+            //to see if that would fix this problem with only some files letting us splice shit in? would also allow us to confirm something different isnt wrong
+            //int procLocation = _mainDataLocation - 4; // -4 to get at start of main body size, then +8 to account for the added proc table value?
+            int procLocation = _proceduresDataLocation + _proceduresBodySize - procedure.ScriptLength - 8;
             procLocation &= 0xFFFFFF;
-            byte[] byteLocation = BitConverter.GetBytes(procLocation);
+            byte[] byteLocation = BitConverter.GetBytes(procLocation - _proceduresDataLocation + 8); 
             byteLocation.CopyTo(newProcBlock, 4);
             newProcBlock.CopyTo(newTrimmedData, newTrimmedDataIndex);
             newTrimmedDataIndex += 16;
 
             //set inserted data to proc's data
-            int lengthToCopy = procLocation; //TODO: verify
+            //right now we are at the startOfOffsetBlock. We want to copy all the way from there to where main starts.
+            int lengthToCopy = procLocation - _startOfOffsetBlock; //TODO: verify... the logic seems sound to me?
             
             Array.Copy(TrimmedContents, oldContentsIndex, newTrimmedData, newTrimmedDataIndex, lengthToCopy);
             oldContentsIndex += lengthToCopy;
@@ -273,8 +281,7 @@ namespace gcx
                     procTablePosition = FindSubArray(TrimmedContents, functionNameBytes);
                     scriptPos = BitConverter.ToInt32(TrimmedContents, procTablePosition + 4);
                     scriptPos = scriptPos & 0xFFFFFF;
-
-                    functionData = new byte[TrimmedContents[_scriptOffset + scriptPos + 1]];
+                    functionData = new byte[TrimmedContents[_proceduresDataLocation + scriptPos + 1]];
                 }
                 else
                 {
@@ -285,7 +292,7 @@ namespace gcx
                     scriptPos = BitConverter.ToInt32(TrimmedContents, procTablePosition + 4);
                     scriptPos = scriptPos & 0xFFFFFF;
 
-                    functionData = new byte[TrimmedContents[_scriptOffset + scriptPos + 1]];
+                    functionData = new byte[TrimmedContents[_proceduresDataLocation + scriptPos + 1]];
                 }
 
                 Array.Copy(TrimmedContents, _proceduresDataLocation + scriptPos, functionData, 0, functionData.Length);

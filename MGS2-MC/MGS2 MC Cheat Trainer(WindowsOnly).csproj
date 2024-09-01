@@ -199,6 +199,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\BossParser.cs" />
     <Compile Include="Helpers\ConfigEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>

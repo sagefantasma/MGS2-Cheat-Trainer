@@ -96,7 +96,7 @@ namespace gcx
     internal static class MGS2Weapons
     {
         public static readonly Item M9 = new Item { Name = "M9", Id = GcxTableMapping.M9, ProcId = KnownProc.AwardM9Gun };
-        public static readonly Item M9Ammo = new Item { Name = "M9 Ammo", Id = GcxTableMapping.M9, ProcId = KnownProc.AwardM9Gun };
+        public static readonly Item M9Ammo = new Item { Name = "M9 Ammo", Id = GcxTableMapping.M9, ProcId = KnownProc.AwardM9Ammo };
         public static readonly Item Usp = new Item { Name = "USP", Id = GcxTableMapping.Usp };
         public static readonly Item UspAmmo = new Item { Name = "USP Ammo", Id = GcxTableMapping.Usp, ProcId = KnownProc.AwardUspAmmo };
         public static readonly Item Socom = new Item { Name = "SOCOM", Id = GcxTableMapping.Socom };

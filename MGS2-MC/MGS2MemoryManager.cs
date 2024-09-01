@@ -60,56 +60,72 @@ namespace MGS2_MC
         #region Private methods
         internal static Constants.PlayableCharacter CheckIfUsable(MGS2Object mgs2Object)
         {
-            Constants.PlayableCharacter currentPC = DetermineActiveCharacter();
-            switch (currentPC)
+            try
             {
-                case Constants.PlayableCharacter.Snake:
-                    if (!Snake.UsableObjects.Contains(mgs2Object))
-                    {
-                        _logger.Warning($"Snake cannot use {mgs2Object.Name}");
-                        throw new InvalidOperationException($"Snake cannot use {mgs2Object.Name}");
-                    }
-                    break;
-                case Constants.PlayableCharacter.Raiden:
-                    if (!Raiden.UsableObjects.Contains(mgs2Object))
-                    {
-                        _logger.Warning($"Raiden cannot use {mgs2Object.Name}");
-                        throw new InvalidOperationException($"Raiden cannot use {mgs2Object.Name}");
-                    }
-                    break;
-                default:
-                    break;
-            }
+                Constants.PlayableCharacter currentPC = DetermineActiveCharacter();
+                switch (currentPC)
+                {
+                    case Constants.PlayableCharacter.Snake:
+                        if (!Snake.UsableObjects.Contains(mgs2Object))
+                        {
+                            _logger.Warning($"Snake cannot use {mgs2Object.Name}");
+                            throw new InvalidOperationException($"Snake cannot use {mgs2Object.Name}");
+                        }
+                        break;
+                    case Constants.PlayableCharacter.Raiden:
+                        if (!Raiden.UsableObjects.Contains(mgs2Object))
+                        {
+                            _logger.Warning($"Raiden cannot use {mgs2Object.Name}");
+                            throw new InvalidOperationException($"Raiden cannot use {mgs2Object.Name}");
+                        }
+                        break;
+                    default:
+                        break;
+                }
 
-            return currentPC;
+                return currentPC;
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Could not check if {mgs2Object.Name} is usable: {e}");
+                throw new AggregateException("Failed to check if item is usable", e);
+            }
         }
 
         private static List<IntPtr> GetStageOffsets()
         {
-            lock (MGS2Monitor.MGS2Process)
+            try
             {
-                using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                lock (MGS2Monitor.MGS2Process)
                 {
-                    if(_lastKnownStageOffsets != default)
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                     {
-                        if (ValidateLastKnownOffsets(proxy, _lastKnownStageOffsets, MGS2AoB.StageInfo))
+                        if (_lastKnownStageOffsets != default)
                         {
-                            _logger.Verbose($"Last known stageOffsets are still valid, reusing...");
-                            return _lastKnownStageOffsets;
+                            if (ValidateLastKnownOffsets(proxy, _lastKnownStageOffsets, MGS2AoB.StageInfo))
+                            {
+                                _logger.Verbose($"Last known stageOffsets are still valid, reusing...");
+                                return _lastKnownStageOffsets;
+                            }
                         }
+                        SimplePattern stageOffsetPattern = new SimplePattern(MGS2AoB.StageInfoString);
+                        List<IntPtr> stageOffsets = proxy.ScanMemoryForPattern(stageOffsetPattern);
+
+                        _logger.Verbose($"We found {stageOffsets.Count} stage offsets in memory");
+
+                        //ignore all results except for the final two if more than 2 are found.
+                        if (stageOffsets.Count > 1)
+                            stageOffsets = stageOffsets.GetRange(stageOffsets.Count - 2, 2);
+
+                        _lastKnownStageOffsets = new List<IntPtr>(stageOffsets);
+                        return _lastKnownStageOffsets;
                     }
-                    SimplePattern stageOffsetPattern = new SimplePattern(MGS2AoB.StageInfoString);
-                    List<IntPtr> stageOffsets = proxy.ScanMemoryForPattern(stageOffsetPattern);
-
-                    _logger.Verbose($"We found {stageOffsets.Count} stage offsets in memory");
-
-                    //ignore all results except for the final two if more than 2 are found.
-                    if (stageOffsets.Count > 1)
-                        stageOffsets = stageOffsets.GetRange(stageOffsets.Count - 2, 2);
-
-                    _lastKnownStageOffsets = new List<IntPtr>(stageOffsets);
-                    return _lastKnownStageOffsets;
                 }
+            }
+            catch(Exception e)
+            {
+                _logger.Error($"Could not get stage offsets: {e}");
+                throw new AggregateException("Failed to get stage offsets", e);
             }
         }
 
@@ -193,20 +209,36 @@ namespace MGS2_MC
 
         private static string GetCharacterCode()
         {
-            List<IntPtr> stageMemoryOffsets = GetStageOffsets();
-            string stringInMemory = Encoding.UTF8.GetString(ReadValueFromMemory(stageMemoryOffsets.First() + MGS2Offset.CURRENT_CHARACTER.Start, MGS2Offset.CURRENT_CHARACTER.Length));
+            try
+            {
+                List<IntPtr> stageMemoryOffsets = GetStageOffsets();
+                string stringInMemory = Encoding.UTF8.GetString(ReadValueFromMemory(stageMemoryOffsets.First() + MGS2Offset.CURRENT_CHARACTER.Start, MGS2Offset.CURRENT_CHARACTER.Length));
 
-            return stringInMemory;
+                return stringInMemory;
+            }
+            catch(Exception e)
+            {
+                _logger.Error($"Could not get character code: {e}");
+                throw new AggregateException("Failed to get character code", e);
+            }
         }
 
         internal static Stage GetStage()
         {
-            List<IntPtr> stageMemoryOffsets = GetStageOffsets();
-            string stringInMemory = Encoding.UTF8.GetString(ReadValueFromMemory(stageMemoryOffsets.First() + MGS2Offset.CURRENT_STAGE.Start, MGS2Offset.CURRENT_STAGE.Length));
+            try
+            {
+                List<IntPtr> stageMemoryOffsets = GetStageOffsets();
+                string stringInMemory = Encoding.UTF8.GetString(ReadValueFromMemory(stageMemoryOffsets.First() + MGS2Offset.CURRENT_STAGE.Start, MGS2Offset.CURRENT_STAGE.Length));
 
-            Stage currentStage = Stage.Parse(stringInMemory);
-            _logger.Verbose($"User is currently in stage: {stringInMemory}. Parsed as {currentStage}");
-            return currentStage;
+                Stage currentStage = Stage.Parse(stringInMemory);
+                _logger.Verbose($"User is currently in stage: {stringInMemory}. Parsed as {currentStage}");
+                return currentStage;
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Failed to get stage: {e}");
+                throw new AggregateException($"Could not get stage", e);
+            }
         }
 
         private static void SetStringValue(IntPtr stringOffset, string valueToSet)
@@ -334,215 +366,310 @@ namespace MGS2_MC
 
         public static void UpdateGameString(MGS2Strings.MGS2String gameString, string newValue)
         {
-            _logger.Debug($"Attempting to set string {gameString.Tag} to {newValue}...");
-            lock (MGS2Monitor.MGS2Process)
+            try
             {
-                using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                _logger.Debug($"Attempting to set string {gameString.Tag} to {newValue}...");
+                lock (MGS2Monitor.MGS2Process)
                 {
-                    IntPtr offset = proxy.ScanMemoryForUniquePattern(new SimplePattern(gameString.FinderAoB));
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    {
+                        IntPtr offset = proxy.ScanMemoryForUniquePattern(new SimplePattern(gameString.FinderAoB));
 
-                    SetStringValue(IntPtr.Add(offset, gameString.MemoryOffset.Start), newValue);
+                        SetStringValue(IntPtr.Add(offset, gameString.MemoryOffset.Start), newValue);
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Failed to update game string for {gameString.Tag}: {e}");
+                throw new AggregateException($"Could not update game string for {gameString.Tag}", e);
             }
         }
 
         public static string ReadGameString(MGS2Strings.MGS2String gameString)
         {
-            lock (MGS2Monitor.MGS2Process)
+            try
             {
-                using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                lock (MGS2Monitor.MGS2Process)
                 {
-                    IntPtr offset = proxy.ScanMemoryForUniquePattern(new SimplePattern(gameString.FinderAoB));
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    {
+                        IntPtr offset = proxy.ScanMemoryForUniquePattern(new SimplePattern(gameString.FinderAoB));
 
-                    byte[] memoryValue = ReadValueFromMemory(IntPtr.Add(offset, gameString.MemoryOffset.Start), gameString.MemoryOffset.Length);
+                        byte[] memoryValue = ReadValueFromMemory(IntPtr.Add(offset, gameString.MemoryOffset.Start), gameString.MemoryOffset.Length);
 
-                    return Encoding.UTF8.GetString(memoryValue);
+                        return Encoding.UTF8.GetString(memoryValue);
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Failed to read the game string for {gameString.Tag}: {e}");
+                throw new AggregateException($"Could not read game string for {gameString.Tag}", e);
             }
         }
 
         public static byte[] GetPlayerInfoBasedValue(int valueOffset, int sizeToRead, Constants.PlayableCharacter character)
         {
-            lock (MGS2Monitor.MGS2Process)
+            try
             {
-                using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                lock (MGS2Monitor.MGS2Process)
                 {
-                    IntPtr ammoOffset = proxy.FollowPointer(new IntPtr(MGS2Pointer.CurrentAmmo), false);
-                    return proxy.GetMemoryFromPointer(IntPtr.Add(ammoOffset, valueOffset), sizeToRead);
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    {
+                        IntPtr ammoOffset = proxy.FollowPointer(new IntPtr(MGS2Pointer.CurrentAmmo), false);
+                        return proxy.GetMemoryFromPointer(IntPtr.Add(ammoOffset, valueOffset), sizeToRead);
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Failed to get player info based value: {e}");
+                throw new AggregateException($"Could not get player info based value", e);
             }
         }
 
         public static void UpdateObjectBaseValue(MGS2Object mgs2Object, ushort value, Constants.PlayableCharacter character)
         {
-            switch (mgs2Object)
+            try
             {
-                case StackableItem stackableItem:
-                    _logger.Debug($"mgs2Object parsed as StackableItem, setting base value to: {value}");
-                    SetPlayerOffsetBasedByteValueObject(stackableItem.CurrentCountOffset, BitConverter.GetBytes(value), character);
-                    break;
-                case DurabilityItem durabilityItem:
-                    _logger.Debug($"mgs2Object parsed as DurabilityItem, setting base value to: {value}");
-                    SetPlayerOffsetBasedByteValueObject(durabilityItem.DurabilityOffset, BitConverter.GetBytes(value), character);
-                    break;
-                case AmmoWeapon ammoWeapon:
-                    _logger.Debug($"mgs2Object parsed as AmmoWeapon, setting base value to: {value}");
-                    SetPlayerOffsetBasedByteValueObject(ammoWeapon.CurrentAmmoOffset, BitConverter.GetBytes(value), character);
-                    break;
-                case SpecialWeapon specialWeapon:
-                    _logger.Debug($"mgs2Object parsed as SpecialWeapon, setting base value to: {value}");
-                    SetPlayerOffsetBasedByteValueObject(specialWeapon.SpecialOffset, BitConverter.GetBytes(value), character);
-                    break;
-                case LevelableItem levelableItem:
-                    _logger.Debug($"mgs2Object parsed as LevelableItem, setting base value to: {value}");
-                    SetPlayerOffsetBasedByteValueObject(levelableItem.LevelOffset, BitConverter.GetBytes(value), character);
-                    break;
-                case BasicItem basicItem:
-                    _logger.Debug($"mgs2Object parsed as BasicItem, setting base value to: {value}");
-                    SetPlayerOffsetBasedByteValueObject(basicItem.InventoryOffset, BitConverter.GetBytes(value), character);
-                    break;
+                switch (mgs2Object)
+                {
+                    case StackableItem stackableItem:
+                        _logger.Debug($"mgs2Object parsed as StackableItem, setting base value to: {value}");
+                        SetPlayerOffsetBasedByteValueObject(stackableItem.CurrentCountOffset, BitConverter.GetBytes(value), character);
+                        break;
+                    case DurabilityItem durabilityItem:
+                        _logger.Debug($"mgs2Object parsed as DurabilityItem, setting base value to: {value}");
+                        SetPlayerOffsetBasedByteValueObject(durabilityItem.DurabilityOffset, BitConverter.GetBytes(value), character);
+                        break;
+                    case AmmoWeapon ammoWeapon:
+                        _logger.Debug($"mgs2Object parsed as AmmoWeapon, setting base value to: {value}");
+                        SetPlayerOffsetBasedByteValueObject(ammoWeapon.CurrentAmmoOffset, BitConverter.GetBytes(value), character);
+                        break;
+                    case SpecialWeapon specialWeapon:
+                        _logger.Debug($"mgs2Object parsed as SpecialWeapon, setting base value to: {value}");
+                        SetPlayerOffsetBasedByteValueObject(specialWeapon.SpecialOffset, BitConverter.GetBytes(value), character);
+                        break;
+                    case LevelableItem levelableItem:
+                        _logger.Debug($"mgs2Object parsed as LevelableItem, setting base value to: {value}");
+                        SetPlayerOffsetBasedByteValueObject(levelableItem.LevelOffset, BitConverter.GetBytes(value), character);
+                        break;
+                    case BasicItem basicItem:
+                        _logger.Debug($"mgs2Object parsed as BasicItem, setting base value to: {value}");
+                        SetPlayerOffsetBasedByteValueObject(basicItem.InventoryOffset, BitConverter.GetBytes(value), character);
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Failed to update the base value for {mgs2Object.Name}: {e}");
+                throw new AggregateException($"Could not update base value for {mgs2Object.Name}", e);
             }
         }
 
         public static void UpdateObjectMaxValue(MGS2Object mgs2Object, ushort count, Constants.PlayableCharacter character)
         {
-            switch (mgs2Object)
+            try
             {
-                case StackableItem stackableItem:
-                    _logger.Debug($"mgs2Object parsed as StackableItem, setting max count to: {count}");
-                    SetPlayerOffsetBasedByteValueObject(stackableItem.MaxCountOffset, BitConverter.GetBytes(count), character); 
-                    break;
-                case AmmoWeapon ammoWeapon:
-                    _logger.Debug($"mgs2Object parsed as AmmoWeapon, setting max count to: {count}");
-                    SetPlayerOffsetBasedByteValueObject(ammoWeapon.MaxAmmoOffset, BitConverter.GetBytes(count), character);
-                    break;
+                switch (mgs2Object)
+                {
+                    case StackableItem stackableItem:
+                        _logger.Debug($"mgs2Object parsed as StackableItem, setting max count to: {count}");
+                        SetPlayerOffsetBasedByteValueObject(stackableItem.MaxCountOffset, BitConverter.GetBytes(count), character);
+                        break;
+                    case AmmoWeapon ammoWeapon:
+                        _logger.Debug($"mgs2Object parsed as AmmoWeapon, setting max count to: {count}");
+                        SetPlayerOffsetBasedByteValueObject(ammoWeapon.MaxAmmoOffset, BitConverter.GetBytes(count), character);
+                        break;
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Failed to update the max value for {mgs2Object.Name}: {e}");
+                throw new AggregateException($"Could not update max value for {mgs2Object.Name}", e);
             }
         }
 
         public static void ToggleObject(MGS2Object mgs2Object, Constants.PlayableCharacter character, bool enable = true)
         {
-            _logger.Debug($"Attempting to toggle {mgs2Object.Name} for {character}...");
-
-            if (enable)
-                UpdateObjectBaseValue(mgs2Object, 1, character);
-            else
+            try
             {
-                if (mgs2Object is BasicItem)
-                    UpdateObjectBaseValue(mgs2Object, 0, character);
+                _logger.Debug($"Attempting to toggle {mgs2Object.Name} for {character}...");
+
+                if (enable)
+                    UpdateObjectBaseValue(mgs2Object, 1, character);
                 else
-                    UpdateObjectBaseValue(mgs2Object, ushort.MaxValue, character);
+                {
+                    if (mgs2Object is BasicItem)
+                        UpdateObjectBaseValue(mgs2Object, 0, character);
+                    else
+                        UpdateObjectBaseValue(mgs2Object, ushort.MaxValue, character);
+                }
             }
-            
+            catch (Exception e)
+            {
+                _logger.Error($"Failed to toggle {mgs2Object.Name}: {e}");
+                throw new AggregateException($"Could not toggle {mgs2Object.Name}", e);
+            }
         }
 
         public static GameStats ReadGameStats()
         {
-            _logger.Verbose("Reading game stats...");
-            IntPtr stageOffset = GetStageOffsets().First();
-            byte[] gameStatsBytes = ReadValueFromMemory(stageOffset + MGS2Offset.GAME_STATS_BLOCK.Start, MGS2Offset.GAME_STATS_BLOCK.Length);
-            short continues = BitConverter.ToInt16(gameStatsBytes, 4);
-            short saves = BitConverter.ToInt16(gameStatsBytes, 8);
-            int playTime = BitConverter.ToInt32(gameStatsBytes, 10);
-            short mechsDestroyed = BitConverter.ToInt16(gameStatsBytes, 42);
-            short shots = BitConverter.ToInt16(gameStatsBytes, 18);
-            short alerts = BitConverter.ToInt16(gameStatsBytes, 20);
-            short kills = BitConverter.ToInt16(gameStatsBytes, 22);
-            short damageTaken = BitConverter.ToInt16(gameStatsBytes, 24);
-            byte[] rationsUsedBytes = ReadValueFromMemory(stageOffset + MGS2Offset.RATIONS_USED.Start, MGS2Offset.RATIONS_USED.Length);
-            short rationsUsed = BitConverter.ToInt16(rationsUsedBytes, 0);
-            byte[] specialItemsBytes = ReadValueFromMemory(stageOffset + MGS2Offset.SPECIAL_ITEMS_USED.Start, MGS2Offset.SPECIAL_ITEMS_USED.Length);
-            short specialItems = BitConverter.ToInt16(specialItemsBytes, 0);
-
-            GameStats gameStats = new GameStats
+            try
             {
-                Continues = continues,
-                Kills = kills,
-                DamageTaken = damageTaken,
-                PlayTime = playTime,
-                Rations = rationsUsed,
-                Saves = saves,
-                Shots = shots,
-                SpecialItems = specialItems,
-                Alerts = alerts,
-                MechsDestroyed = mechsDestroyed
-            };
+                _logger.Verbose("Reading game stats...");
+                IntPtr stageOffset = GetStageOffsets().First();
+                byte[] gameStatsBytes = ReadValueFromMemory(stageOffset + MGS2Offset.GAME_STATS_BLOCK.Start, MGS2Offset.GAME_STATS_BLOCK.Length);
+                short continues = BitConverter.ToInt16(gameStatsBytes, 4);
+                short saves = BitConverter.ToInt16(gameStatsBytes, 8);
+                int playTime = BitConverter.ToInt32(gameStatsBytes, 10);
+                short mechsDestroyed = BitConverter.ToInt16(gameStatsBytes, 42);
+                short shots = BitConverter.ToInt16(gameStatsBytes, 18);
+                short alerts = BitConverter.ToInt16(gameStatsBytes, 20);
+                short kills = BitConverter.ToInt16(gameStatsBytes, 22);
+                short damageTaken = BitConverter.ToInt16(gameStatsBytes, 24);
+                byte[] rationsUsedBytes = ReadValueFromMemory(stageOffset + MGS2Offset.RATIONS_USED.Start, MGS2Offset.RATIONS_USED.Length);
+                short rationsUsed = BitConverter.ToInt16(rationsUsedBytes, 0);
+                byte[] specialItemsBytes = ReadValueFromMemory(stageOffset + MGS2Offset.SPECIAL_ITEMS_USED.Start, MGS2Offset.SPECIAL_ITEMS_USED.Length);
+                short specialItems = BitConverter.ToInt16(specialItemsBytes, 0);
 
-            _logger.Verbose($"Current game stats: {gameStats}");
+                GameStats gameStats = new GameStats
+                {
+                    Continues = continues,
+                    Kills = kills,
+                    DamageTaken = damageTaken,
+                    PlayTime = playTime,
+                    Rations = rationsUsed,
+                    Saves = saves,
+                    Shots = shots,
+                    SpecialItems = specialItems,
+                    Alerts = alerts,
+                    MechsDestroyed = mechsDestroyed
+                };
 
-            return gameStats;
+                _logger.Verbose($"Current game stats: {gameStats}");
+
+                return gameStats;
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Failed to get current game stats: {e}");
+                throw new AggregateException("Could not get current game stats", e);
+            }
         }
 
         public static void ChangeGameStat(GameStats.ModifiableStats gameStat, short value)
         {
-            IntPtr stageOffset = GetStageOffsets().First();
-            MemoryOffset gameStatOffset;
-            switch (gameStat)
+            try
             {
-                case GameStats.ModifiableStats.Alerts:
-                    gameStatOffset = MGS2Offset.ALERT_COUNT;
-                    break;
-                case GameStats.ModifiableStats.Continues:
-                    gameStatOffset = MGS2Offset.CONTINUE_COUNT;
-                    break;
-                case GameStats.ModifiableStats.DamageTaken:
-                    gameStatOffset = MGS2Offset.DAMAGE_TAKEN;
-                    break;
-                case GameStats.ModifiableStats.Kills:
-                    gameStatOffset = MGS2Offset.KILL_COUNT;
-                    break;
-                case GameStats.ModifiableStats.MechsDestroyed:
-                    gameStatOffset = MGS2Offset.MECHS_DESTROYED;
-                    break;
-                case GameStats.ModifiableStats.Rations:
-                    gameStatOffset = MGS2Offset.RATIONS_USED;
-                    break;
-                case GameStats.ModifiableStats.Saves:
-                    gameStatOffset = MGS2Offset.SAVE_COUNT;
-                    break;
-                case GameStats.ModifiableStats.Shots:
-                    gameStatOffset = MGS2Offset.SHOT_COUNT;
-                    break;
-                default:
-                    throw new Exception("You must provide a valid game stat to modify");
-            }
+                IntPtr stageOffset = GetStageOffsets().First();
+                MemoryOffset gameStatOffset;
+                switch (gameStat)
+                {
+                    case GameStats.ModifiableStats.Alerts:
+                        gameStatOffset = MGS2Offset.ALERT_COUNT;
+                        break;
+                    case GameStats.ModifiableStats.Continues:
+                        gameStatOffset = MGS2Offset.CONTINUE_COUNT;
+                        break;
+                    case GameStats.ModifiableStats.DamageTaken:
+                        gameStatOffset = MGS2Offset.DAMAGE_TAKEN;
+                        break;
+                    case GameStats.ModifiableStats.Kills:
+                        gameStatOffset = MGS2Offset.KILL_COUNT;
+                        break;
+                    case GameStats.ModifiableStats.MechsDestroyed:
+                        gameStatOffset = MGS2Offset.MECHS_DESTROYED;
+                        break;
+                    case GameStats.ModifiableStats.Rations:
+                        gameStatOffset = MGS2Offset.RATIONS_USED;
+                        break;
+                    case GameStats.ModifiableStats.Saves:
+                        gameStatOffset = MGS2Offset.SAVE_COUNT;
+                        break;
+                    case GameStats.ModifiableStats.Shots:
+                        gameStatOffset = MGS2Offset.SHOT_COUNT;
+                        break;
+                    default:
+                        throw new Exception("You must provide a valid game stat to modify");
+                }
 
-            SetKnownOffsetValue(stageOffset + gameStatOffset.Start, (byte) value);
+                SetKnownOffsetValue(stageOffset + gameStatOffset.Start, (byte)value);
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Failed to modify {gameStat}: {e}");
+                throw new AggregateException($"Could not modify {gameStat}", e);
+            }
         }
 
         public static Difficulty ReadCurrentDifficulty()
         {
-            IntPtr stageOffset = GetStageOffsets().First();
-            byte[] difficultyByte = ReadValueFromMemory(stageOffset + MGS2Offset.CURRENT_DIFFICULTY.Start, MGS2Offset.CURRENT_DIFFICULTY.Length);
+            try
+            {
+                IntPtr stageOffset = GetStageOffsets().First();
+                byte[] difficultyByte = ReadValueFromMemory(stageOffset + MGS2Offset.CURRENT_DIFFICULTY.Start, MGS2Offset.CURRENT_DIFFICULTY.Length);
 
-            int convertedDifficulty = difficultyByte[0];
-            
-            return (Difficulty) convertedDifficulty;
+                int convertedDifficulty = difficultyByte[0];
+
+                return (Difficulty)convertedDifficulty;
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Failed to get current difficulty: {e}");
+                throw new AggregateException("Could not get current difficulty", e);
+            }
         }
 
         public static GameType ReadGameType()
         {
-            IntPtr stageOffset = GetStageOffsets().First();
-            byte[] gameTypeByte = ReadValueFromMemory(stageOffset + MGS2Offset.CURRENT_GAMETYPE.Start, MGS2Offset.CURRENT_GAMETYPE.Length);
+            try
+            {
+                IntPtr stageOffset = GetStageOffsets().First();
+                byte[] gameTypeByte = ReadValueFromMemory(stageOffset + MGS2Offset.CURRENT_GAMETYPE.Start, MGS2Offset.CURRENT_GAMETYPE.Length);
 
-            int convertedGameType = gameTypeByte[0];
+                int convertedGameType = gameTypeByte[0];
 
-            return (GameType)convertedGameType;
+                return (GameType)convertedGameType;
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Failed to get current game type: {e}");
+                throw new AggregateException("Could not get current game type", e);
+            }
         }
 
         public static ushort GetCurrentHP()
         {
-            IntPtr stageOffset = GetStageOffsets().First();
-            byte[] currentHpBytes = ReadValueFromMemory(stageOffset + MGS2Offset.CURRENT_HP.Start, MGS2Offset.CURRENT_HP.Length);
+            try
+            {
+                IntPtr stageOffset = GetStageOffsets().First();
+                byte[] currentHpBytes = ReadValueFromMemory(stageOffset + MGS2Offset.CURRENT_HP.Start, MGS2Offset.CURRENT_HP.Length);
 
-            return BitConverter.ToUInt16(currentHpBytes, 0);
+                return BitConverter.ToUInt16(currentHpBytes, 0);
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Failed to get current HP: {e}");
+                throw new AggregateException("Could not get current HP", e);
+            }
         }
 
         public static ushort GetCurrentMaxHP()
         {
-            IntPtr stageOffset = GetStageOffsets().First();
-            byte[] currentMaxHpBytes = ReadValueFromMemory(stageOffset + MGS2Offset.CURRENT_MAX_HP.Start, MGS2Offset.CURRENT_MAX_HP.Length);
+            try
+            {
+                IntPtr stageOffset = GetStageOffsets().First();
+                byte[] currentMaxHpBytes = ReadValueFromMemory(stageOffset + MGS2Offset.CURRENT_MAX_HP.Start, MGS2Offset.CURRENT_MAX_HP.Length);
 
-            return BitConverter.ToUInt16(currentMaxHpBytes, 0);
+                return BitConverter.ToUInt16(currentMaxHpBytes, 0);
+            }
+            catch(Exception e)
+            {
+                _logger.Error($"Failed to get current max HP: {e}");
+                throw new AggregateException("Could not get current max HP", e);
+            }
         }
 
         public static ushort GetCurrentGripGauge()
@@ -662,6 +789,8 @@ namespace MGS2_MC
 
         private static IntPtr FindAoBReferencedPointer(string aobToFind, MemoryOffset memoryOffset)
         {
+            //TODO: remove the auto-return
+            return IntPtr.Zero;
             //TODO: confirm this is working as expected
             //find the pointer referenced in memory
             byte[] aobReferencedPointer = ReadAoBOffsetValue(aobToFind, memoryOffset);
@@ -669,9 +798,59 @@ namespace MGS2_MC
             return new IntPtr(BitConverter.ToInt64(aobReferencedPointer, 0));
         }
 
-        private static byte[] GetDataFromNestedPointers(List<long> pointerOffsets, int destinationOffset, int bytesToReadAtDestination)
+        private static void SetDataInNestedPointers(IntPtr initialPointer, List<int> pointerOffsets, int destinationOffset, byte[] dataToSet)
+        {
+            try
+            {
+                IntPtr nestedPointerEndpoint = FollowNestedPointers(initialPointer, pointerOffsets);
+
+                lock (MGS2Monitor.MGS2Process)
+                {
+                    using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    {
+                        spp.SetMemoryAtPointer(IntPtr.Add(nestedPointerEndpoint, destinationOffset), dataToSet);   
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                _logger.Error($"Failed to set data within nested pointers: {e}");
+                throw new AggregateException("Could not set nested pointer data", e);
+            }
+        }
+
+        private static IntPtr FollowNestedPointers(IntPtr initialPointer, List<int> pointerOffsets)
+        {
+            IntPtr pointerLocation = initialPointer;
+
+            try
+            {
+                for (int i = 0; i < pointerOffsets.Count; i++)
+                {
+                    lock (MGS2Monitor.MGS2Process)
+                    {
+                        using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                        {
+                            IntPtr nestedPointer = new IntPtr(pointerLocation.ToInt64() + pointerOffsets[i]);
+                            pointerLocation = new IntPtr(BitConverter.ToInt64(spp.GetMemoryFromPointer(nestedPointer, 8), 0));
+                        }
+                    }
+                }
+
+                return pointerLocation;
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Failed to follow nested pointers: {e}");
+                throw new AggregateException("Could not follow nested pointers provided", e);
+            }
+        }
+
+        private static byte[] GetDataFromNestedPointers(IntPtr initialPointer, List<int> pointerOffsets, int destinationOffset, int bytesToReadAtDestination)
         {
             IntPtr pointerLocation = IntPtr.Zero;
+
+            //pointerLocation = initialPointer;
             for (int i = 0; i < pointerOffsets.Count; i++)
             {
                 lock (MGS2Monitor.MGS2Process)
@@ -699,95 +878,123 @@ namespace MGS2_MC
             }
         }
 
+        private static byte[] GetDataFromNestedPointers(List<int> pointerOffsets, int destinationOffset, int bytesToReadAtDestination)
+        {
+            try
+            {
+                IntPtr pointerLocation = MGS2Monitor.MGS2Process.MainModule.BaseAddress;
+                pointerLocation = FollowNestedPointers(pointerLocation, pointerOffsets);
+
+                lock (MGS2Monitor.MGS2Process)
+                {
+                    using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    {
+                        return spp.GetMemoryFromPointer(IntPtr.Add(pointerLocation, destinationOffset), bytesToReadAtDestination);
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                _logger.Error($"Failed to get data from nested pointers: {e}");
+                throw new AggregateException("Could not get value from nested pointers provided", e);
+            }
+        }
+
+        public static void SetBossVitals(BossVitals updatedVitals)
+        {
+            try
+            {
+                IntPtr pointerLocation = MGS2Monitor.MGS2Process.MainModule.BaseAddress;
+                SetDataInNestedPointers(pointerLocation, updatedVitals.NestedHealthPointers, updatedVitals.HealthOffset, BitConverter.GetBytes(updatedVitals.Health));
+                if (updatedVitals.HasStamina)
+                {
+                    SetDataInNestedPointers(pointerLocation, updatedVitals.NestedStaminaPointers, updatedVitals.StaminaOffset, BitConverter.GetBytes(updatedVitals.Stamina));
+                }
+            }
+            catch(Exception e)
+            {
+                _logger.Error($"Failed to set boss vitals: {e}");
+                throw new AggregateException($"Could not set boss vitals", e);
+            }
+        }
+
         public static BossVitals GetBossVitals(Constants.Boss selectedBoss)
         {
-            //TODO: finish implementation
-            BossVitals bossVitals = new BossVitals();
-            switch (selectedBoss)
+            try
             {
-                case Constants.Boss.Olga:
-                    //IntPtr healthPointer = FindAoBReferencedPointer("HEALTHPOINTERAOB", new MemoryOffset());
-                    byte[] result = GetDataFromNestedPointers(new List<long> { 0x1534CF8, 0xF0, 0x8, 0x590 }, 0x1EA, 2);
-                    bossVitals.Health = BitConverter.ToInt16(result, 0);
-                    bossVitals.Stamina = BitConverter.ToInt16(GetDataFromNestedPointers(new List<long> { 0x1534CF8, 0xF0, 0x8, 0x590 }, 0x1EC, 2), 0);
-                    break;
-                case Constants.Boss.Fortune: break;
-                case Constants.Boss.Fatman: break;
-                case Constants.Boss.Harrier: break;
-                case Constants.Boss.Ray1: break;
-                case Constants.Boss.Ray2: break;
-                case Constants.Boss.Ray3: break;
-                case Constants.Boss.Ray4: break;
-                case Constants.Boss.Ray5: break;
-                case Constants.Boss.Ray6: break;
-                case Constants.Boss.Ray7: break;
-                case Constants.Boss.Ray8: break;
-                case Constants.Boss.Ray9: break;
-                case Constants.Boss.Ray10: break;
-                case Constants.Boss.Ray11: break;
-                case Constants.Boss.Ray12: break;
-                case Constants.Boss.Ray13: break;
-                case Constants.Boss.Ray14: break;
-                case Constants.Boss.Ray15: break;
-                case Constants.Boss.Ray16: break;
-                case Constants.Boss.Ray17: break;
-                case Constants.Boss.Ray18: break;
-                case Constants.Boss.Ray19: break;
-                case Constants.Boss.Ray20: break;
-                case Constants.Boss.Solidus: break;
-            }
+                BossVitals bossVitals = BossVitals.ParseBossVitals(selectedBoss);
 
-            return bossVitals;
+                bossVitals.Health = BitConverter.ToInt16(GetDataFromNestedPointers(bossVitals.NestedHealthPointers, bossVitals.HealthOffset, 2), 0);
+                if (bossVitals.HasStamina)
+                {
+                    bossVitals.Stamina = BitConverter.ToInt16(GetDataFromNestedPointers(bossVitals.NestedStaminaPointers, bossVitals.StaminaOffset, 2), 0);
+                }
+
+                return bossVitals;
+            }
+            catch(Exception e)
+            {
+                _logger.Error($"Failed to get boss vitals: {e}");
+                throw new AggregateException($"Could not get boss vitals", e);
+            }
         }
 
         public static Constants.PlayableCharacter DetermineActiveCharacter()
         {
             //return Constants.PlayableCharacter.Pliskin;
-            string characterCode = GetCharacterCode();
-            _logger.Debug($"Found character: {characterCode}");
+            try
+            {
+                string characterCode = GetCharacterCode();
+                _logger.Debug($"Found character: {characterCode}");
 
-            if (characterCode.Contains("tnk") || characterCode.Contains("r_vr_s"))
-            {
-                _logger.Verbose("Currently playing as Snake");
-                if (characterCode.Contains("tnk"))
-                    return Constants.PlayableCharacter.Snake;
+                if (characterCode.Contains("tnk") || characterCode.Contains("r_vr_s"))
+                {
+                    _logger.Verbose("Currently playing as Snake");
+                    if (characterCode.Contains("tnk"))
+                        return Constants.PlayableCharacter.Snake;
+                    else
+                        return Constants.PlayableCharacter.Pliskin; //technically you're not playing as Pliskin, but this fixes the VR/Snake tales issue for Snake
+                }
+                else if (characterCode.Contains("plt"))
+                {
+                    _logger.Verbose("Currently playing as Raiden");
+                    return Constants.PlayableCharacter.Raiden;
+                }
+                else if (characterCode.Contains("vr_1"))
+                {
+                    _logger.Verbose("Currently playing as MGS1 Snake");
+                    return Constants.PlayableCharacter.MGS1Snake;
+                }
+                else if (characterCode.Contains("r_vr_t"))
+                {
+                    _logger.Verbose("Currently playing as Tuxedo Snake");
+                    return Constants.PlayableCharacter.TuxedoSnake;
+                }
+                else if (characterCode.Contains("r_vr_p"))
+                {
+                    _logger.Verbose("Currently playing as Pliskin");
+                    return Constants.PlayableCharacter.Pliskin;
+                }
+                else if (characterCode.Contains("r_vr_b"))
+                {
+                    _logger.Verbose("Currently playing as Ninja Raiden");
+                    return Constants.PlayableCharacter.NinjaRaiden;
+                }
+                else if (characterCode.Contains("r_vr_x"))
+                {
+                    _logger.Verbose("Currently playing as Naked Raiden");
+                    return Constants.PlayableCharacter.NakedRaiden;
+                }
                 else
-                    return Constants.PlayableCharacter.Pliskin; //technically you're not playing as Pliskin, but this fixes the VR/Snake tales issue for Snake
+                {
+                    _logger.Warning("Unable to determine what the active character is!");
+                    throw new NotImplementedException("Unknown stage! Can't safely determine what the active character is");
+                }
             }
-            else if (characterCode.Contains("plt"))
+            catch(Exception e)
             {
-                _logger.Verbose("Currently playing as Raiden");
-                return Constants.PlayableCharacter.Raiden;
-            }
-            else if (characterCode.Contains("vr_1"))
-            {
-                _logger.Verbose("Currently playing as MGS1 Snake");
-                return Constants.PlayableCharacter.MGS1Snake;
-            }
-            else if (characterCode.Contains("r_vr_t"))
-            {
-                _logger.Verbose("Currently playing as Tuxedo Snake");
-                return Constants.PlayableCharacter.TuxedoSnake;
-            }
-            else if (characterCode.Contains("r_vr_p"))
-            {
-                _logger.Verbose("Currently playing as Pliskin");
-                return Constants.PlayableCharacter.Pliskin;
-            }
-            else if (characterCode.Contains("r_vr_b"))
-            {
-                _logger.Verbose("Currently playing as Ninja Raiden");
-                return Constants.PlayableCharacter.NinjaRaiden;
-            }
-            else if (characterCode.Contains("r_vr_x"))
-            {
-                _logger.Verbose("Currently playing as Naked Raiden");
-                return Constants.PlayableCharacter.NakedRaiden;
-            }
-            else
-            {
-                _logger.Warning("Unable to determine what the active character is!");
-                throw new NotImplementedException("Unknown stage! Can't safely determine what the active character is");
+                _logger.Error($"Failed to determine active character: {e}");
+                throw new AggregateException("Could not determine active character", e);
             }
         }
     }

@@ -34,6 +34,41 @@ namespace MGS2_MC
         internal static int ModifiableHP = 0x017C1A20;
         internal static int CurrentGrip = 0x016CBDA0;
         internal static int CurrentAmmo = 0x01523A00;
+        internal static List<int> OlgaNestedPointers = new List<int> { 0x01534CF8, 0xF0, 0x8, 0x590 };
+        internal static List<int> FortuneNestedPointers = null;
+        internal static List<int> FatmanNestedHealthPointers = new List<int> { 0x1795F88 };
+        internal static List<int> FatmanNestedStaminaPointers = new List<int> { 0x1534CF0 };
+        internal static List<int> HarrierNestedPointers = new List<int> { 0x17972A0, 0x70 };
+        internal static List<int> VampNestedPointers = new List<int> { 0x1534740 };
+        internal static List<int> VampSnipingHealthNestedPointers = new List<int> { 0x1795F98 };
+        internal static List<int> VampSnipingStaminaNestedPointers = new List<int> { 0x1534740, 0x68 };
+        internal static List<int> Ray1NestedPointers = new List<int> { 0x16CC378, 0x170 };
+        internal static List<int> Ray2NestedPointers = new List<int> { 0x16CC378, 0x190 };
+        internal static List<int> Ray3NestedPointers = new List<int> { 0x16CC378, 0x1B0 };
+        internal static List<int> Ray4NestedPointers = new List<int> { 0x16CC378, 0x1D0 };
+        internal static List<int> Ray5NestedPointers = new List<int> { 0x16CC378, 0x1F0 };
+        internal static List<int> Ray6NestedPointers = new List<int> { 0x16CC378, 0x210 };
+        internal static List<int> Ray7NestedPointers = new List<int> { 0x16CC378, 0x230 };
+        internal static List<int> Ray8NestedPointers = new List<int> { 0x16CC378, 0x250 };
+        internal static List<int> Ray9NestedPointers = new List<int> { 0x16CC378, 0x270 };
+        internal static List<int> Ray10NestedPointers = new List<int> { 0x16CC378, 0x290 };
+        internal static List<int> Ray11NestedPointers = new List<int> { 0x16CC378, 0x2B0 };
+        internal static List<int> Ray12NestedPointers = new List<int> { 0x16CC378, 0x2D0 };
+        internal static List<int> Ray13NestedPointers = new List<int> { 0x16CC378, 0x2F0 };
+        internal static List<int> Ray14NestedPointers = new List<int> { 0x16CC378, 0x310 };
+        internal static List<int> Ray15NestedPointers = new List<int> { 0x16CC378, 0x330 };
+        internal static List<int> Ray16NestedPointers = new List<int> { 0x16CC378, 0x350 };
+        internal static List<int> Ray17NestedPointers = new List<int> { 0x16CC378, 0x370 };
+        internal static List<int> Ray18NestedPointers = new List<int> { 0x16CC378, 0x390 };
+        internal static List<int> Ray19NestedPointers = new List<int> { 0x16CC378, 0x3B0 };
+        internal static List<int> Ray20NestedPointers = new List<int> { 0x16CC378, 0x3D0 };
+        internal static List<int> Ray21NestedPointers = new List<int> { 0x16CC378, 0x3F0 };
+        internal static List<int> Ray22NestedPointers = new List<int> { 0x16CC378, 0x410 };
+        internal static List<int> Ray23NestedPointers = new List<int> { 0x16CC378, 0x430 };
+        internal static List<int> Ray24NestedPointers = new List<int> { 0x16CC378, 0x450 };
+        internal static List<int> Ray25NestedPointers = new List<int> { 0x16CC378, 0x470 };
+        internal static List<int> SolidusNestedPointers = new List<int> { 0x17970B8, 0x70 };
+        //internal static List<int> SolidusNestedStaminaPointers = new List<>
     }
 
     internal struct MGS2AoB
@@ -295,6 +330,8 @@ namespace MGS2_MC
 
         #region Calculated From FortuneName
         public static readonly MemoryOffset FORTUNE_HP_TEXT = new MemoryOffset(1188, 1194);
+        public static readonly MemoryOffset FORTUNE_HP_VALUE = new MemoryOffset(1212, 1213);
+        public static readonly MemoryOffset FORTUNE_STAMINA_VALUE = new MemoryOffset(1228, 1229);
         public static readonly MemoryOffset VAMP_HP_TEXT = new MemoryOffset(1908, 1911);
         #endregion
 

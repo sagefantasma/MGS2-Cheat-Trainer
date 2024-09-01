@@ -542,95 +542,116 @@ namespace MGS2_MC
 
             internal static void NoClipNoGravity(bool activate)
             {
-                NoClip(false, activate);
+                try
+                {
+                    NoClip(false, activate);
+                }
+                catch(Exception e)
+                {
+                    throw new AggregateException($"Could not set noclip -nogravity to {activate}", e);
+                }
             }
 
             internal static void NoClipWithGravity(bool activate)
             {
-                NoClip(true, activate);
+                try
+                {
+                    NoClip(true, activate);
+                }
+                catch(Exception e)
+                {
+                    throw new AggregateException($"Could not set noclip -gravity to {activate}", e);
+                }
             }
 
             private static void NoClip(bool gravity, bool activate)
             {
-                Constants.PlayableCharacter currentPc = MGS2MemoryManager.DetermineActiveCharacter();
-
-                lock (MGS2Monitor.MGS2Process)
+                try
                 {
-                    using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    Constants.PlayableCharacter currentPc = MGS2MemoryManager.DetermineActiveCharacter();
+
+                    lock (MGS2Monitor.MGS2Process)
                     {
-                        string activeCharacterAoB;
-                        switch (currentPc)
+                        using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                         {
-                            case Constants.PlayableCharacter.Raiden:
-                                activeCharacterAoB = MGS2AoB.RaidenClipping;
-                                break;
-                            case Constants.PlayableCharacter.NinjaRaiden:
-                                activeCharacterAoB = MGS2AoB.NinjaClipping;
-                                break;
-                            case Constants.PlayableCharacter.NakedRaiden:
-                                activeCharacterAoB = MGS2AoB.NakedRaidenClipping;
-                                break;
-                            case Constants.PlayableCharacter.Snake:
-                                activeCharacterAoB = MGS2AoB.SnakeClipping;
-                                break;
-                            case Constants.PlayableCharacter.Pliskin:
-                                activeCharacterAoB = MGS2AoB.PliskinClipping;
-                                break;
-                            case Constants.PlayableCharacter.MGS1Snake:
-                                activeCharacterAoB = MGS2AoB.MGS1SnakeClipping;
-                                break;
-                            case Constants.PlayableCharacter.TuxedoSnake:
-                                activeCharacterAoB = MGS2AoB.TuxedoSnakeClipping;
-                                break;
-                            default:
-                                activeCharacterAoB = MGS2AoB.VRClipping;
-                                break;
-                        }
-
-                        IntPtr pointerLocation = spp.FollowPointer(new IntPtr(MGS2Pointer.WalkThroughWalls), false);
-                        byte[] memoryContent = spp.GetMemoryFromPointer(new IntPtr(pointerLocation.ToInt64() + MGS2Offset.NO_CLIP.Start), MGS2Offset.NO_CLIP.Length);
-
-                        if (!activate)
-                        {
-                            if (memoryContent[4] == 0x15 || memoryContent[4] == 0x13)
+                            string activeCharacterAoB;
+                            switch (currentPc)
                             {
-                                memoryContent[4] = 0x14;
+                                case Constants.PlayableCharacter.Raiden:
+                                    activeCharacterAoB = MGS2AoB.RaidenClipping;
+                                    break;
+                                case Constants.PlayableCharacter.NinjaRaiden:
+                                    activeCharacterAoB = MGS2AoB.NinjaClipping;
+                                    break;
+                                case Constants.PlayableCharacter.NakedRaiden:
+                                    activeCharacterAoB = MGS2AoB.NakedRaidenClipping;
+                                    break;
+                                case Constants.PlayableCharacter.Snake:
+                                    activeCharacterAoB = MGS2AoB.SnakeClipping;
+                                    break;
+                                case Constants.PlayableCharacter.Pliskin:
+                                    activeCharacterAoB = MGS2AoB.PliskinClipping;
+                                    break;
+                                case Constants.PlayableCharacter.MGS1Snake:
+                                    activeCharacterAoB = MGS2AoB.MGS1SnakeClipping;
+                                    break;
+                                case Constants.PlayableCharacter.TuxedoSnake:
+                                    activeCharacterAoB = MGS2AoB.TuxedoSnakeClipping;
+                                    break;
+                                default:
+                                    activeCharacterAoB = MGS2AoB.VRClipping;
+                                    break;
                             }
-                            else if (memoryContent[4] == 0x25 || memoryContent[4] == 0x23)
+
+                            IntPtr pointerLocation = spp.FollowPointer(new IntPtr(MGS2Pointer.WalkThroughWalls), false);
+                            byte[] memoryContent = spp.GetMemoryFromPointer(new IntPtr(pointerLocation.ToInt64() + MGS2Offset.NO_CLIP.Start), MGS2Offset.NO_CLIP.Length);
+
+                            if (!activate)
                             {
-                                memoryContent[4] = 0x24;
-                            }
-                        }
-                        else
-                        {
-                            if (gravity)
-                            {
-                                //set byte to either 15 or 25
-                                if (memoryContent[4] == 0x24)
+                                if (memoryContent[4] == 0x15 || memoryContent[4] == 0x13)
                                 {
-                                    memoryContent[4] = 0x25;
+                                    memoryContent[4] = 0x14;
                                 }
-                                else
+                                else if (memoryContent[4] == 0x25 || memoryContent[4] == 0x23)
                                 {
-                                    memoryContent[4] = 0x15;
+                                    memoryContent[4] = 0x24;
                                 }
                             }
                             else
                             {
-                                //set byte to either 13 or 23
-                                if (memoryContent[4] == 0x24)
+                                if (gravity)
                                 {
-                                    memoryContent[4] = 0x23;
+                                    //set byte to either 15 or 25
+                                    if (memoryContent[4] == 0x24)
+                                    {
+                                        memoryContent[4] = 0x25;
+                                    }
+                                    else
+                                    {
+                                        memoryContent[4] = 0x15;
+                                    }
                                 }
                                 else
                                 {
-                                    memoryContent[4] = 0x13;
+                                    //set byte to either 13 or 23
+                                    if (memoryContent[4] == 0x24)
+                                    {
+                                        memoryContent[4] = 0x23;
+                                    }
+                                    else
+                                    {
+                                        memoryContent[4] = 0x13;
+                                    }
                                 }
                             }
-                        }
 
-                        spp.SetMemoryAtPointer(new IntPtr(pointerLocation.ToInt64() + MGS2Offset.NO_CLIP.Start), memoryContent);
+                            spp.SetMemoryAtPointer(new IntPtr(pointerLocation.ToInt64() + MGS2Offset.NO_CLIP.Start), memoryContent);
+                        }
                     }
+                }
+                catch(Exception e)
+                {
+                    throw new AggregateException("Could not toggle noclip functionality", e);
                 }
             }
 

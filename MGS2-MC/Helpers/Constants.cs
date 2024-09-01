@@ -1,6 +1,6 @@
 ﻿namespace MGS2_MC
 {
-    internal class Constants
+    public class Constants
     {
         public const string MGS2_PROCESS_NAME = "METAL GEAR SOLID2";
         internal const string SteamAppId = "2131640";
@@ -26,7 +26,7 @@
             Harrier,
             Vamp,
             VampSnipe,
-            Ray1, Ray2, Ray3, Ray4, Ray5, Ray6, Ray7, Ray8, Ray9, Ray10, Ray11, Ray12, Ray13, Ray14, Ray15, Ray16, Ray17, Ray18, Ray19, Ray20,
+            Ray1, Ray2, Ray3, Ray4, Ray5, Ray6, Ray7, Ray8, Ray9, Ray10, Ray11, Ray12, Ray13, Ray14, Ray15, Ray16, Ray17, Ray18, Ray19, Ray20, Ray21, Ray22, Ray23, Ray24, Ray25,
             Solidus
         }
 

@@ -35,6 +35,7 @@ namespace MGS2_MC
         private readonly ILogger _logger;
         private static bool UserHasBeenWarned = false;
         private PeriodicTask _reapplyFilterTask;
+        private TreeNode CurrentBossNode = null;
 
         internal static void ShowGui()
         {
@@ -1542,16 +1543,25 @@ namespace MGS2_MC
 
         private void AdjustStat(string stat, Button statButton, TextBox statTextBox, MGS2MemoryManager.GameStats.ModifiableStats statType)
         {
-            if(statButton.Text == $"Adjust {stat}")
+            try
             {
-                MGS2Monitor.EnableGameStats = false;
-                statButton.Text = $"Save {stat} Count";
+                if (statButton.Text == $"Adjust {stat}")
+                {
+                    MGS2Monitor.EnableGameStats = false;
+                    statButton.Text = $"Save {stat} Count";
+                }
+                else
+                {
+                    MGS2MemoryManager.ChangeGameStat(statType, short.Parse(statTextBox.Text));
+                    MGS2Monitor.EnableGameStats = true;
+                    statButton.Text = $"Adjust {stat}";
+                }
             }
-            else
+            catch (Exception ex)
             {
-                MGS2MemoryManager.ChangeGameStat(statType, short.Parse(statTextBox.Text));
-                MGS2Monitor.EnableGameStats = true;
-                statButton.Text = $"Adjust {stat}";
+                _logger.Error($"Failed to adjust {stat}: {ex}");
+                toolStripStatusLabel.Text = $"Failed to adjust {stat}!";
+                MessageBox.Show(toolStripStatusLabel.Text);
             }
         }
 
@@ -1706,6 +1716,12 @@ namespace MGS2_MC
                 #if DEBUG
                 UserHasBeenWarned = true;
                 #endif
+                /*if(CurrentTab != mgs2TabControl.TabPages.IndexOfKey("tabPageBosses"))
+                {
+                    bossTreeView.SelectedNode = null;
+                    bossGroupBox.Text = "No Currently Detected/Selected Boss";
+                    bossHealthStaminaLayoutPanel.Visible = false;
+                }*/
                 if (CurrentTab == mgs2TabControl.TabPages.IndexOfKey("tabPageCheats"))
                 {
                     if (!UserHasBeenWarned)
@@ -1828,8 +1844,17 @@ namespace MGS2_MC
             if(configEditorForm.ShowDialog() == DialogResult.OK)
             {
                 _logger.Verbose("Finished modifying config, loading new config");
-                MGS2Monitor.LoadConfig();
-                _logger.Verbose($"Config loaded");
+                try
+                {
+                    MGS2Monitor.LoadConfig();
+                    _logger.Verbose($"Config loaded");
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error($"Failed to load config: {ex}");
+                    toolStripStatusLabel.Text = $"Failed to load config!";
+                    MessageBox.Show(toolStripStatusLabel.Text);
+                }
             }            
         }
 
@@ -1896,70 +1921,37 @@ namespace MGS2_MC
         {
             CheckedListBox cheatsBox = sender as CheckedListBox;
 
-            if (cheatsBox?.SelectedItem != null)
+            try
             {
-                Cheat selectedCheat = (Cheat)cheatsBox.SelectedItem;
-                _logger.Debug($"Trying to toggle cheat: {selectedCheat.Name}");
-
-                if (!cheatsBox.CheckedItems.Contains(cheatsBox.SelectedItem)) 
+                if (cheatsBox?.SelectedItem != null)
                 {
-                    //cheat is enabled already, so now disable it
-                    toolStripStatusLabel.Text = $"Attempting to disable {selectedCheat.Name}, this may take a long time...";
-                    Application.DoEvents();
-                    selectedCheat.CheatAction(false);
-                    toolStripStatusLabel.Text = $"Finished trying to disable {selectedCheat.Name}. Did it work?!?";
-                }
-                else
-                {
-                    //cheat is not yet enabled, so enable it
-                    toolStripStatusLabel.Text = $"Attempting to enable {selectedCheat.Name}, this may take a long time...";
-                    Application.DoEvents();
-                    selectedCheat.CheatAction(true);
-                    toolStripStatusLabel.Text = $"Finished trying to enable {selectedCheat.Name}. Did it work?!?";
-                }
-                _logger.Debug($"Finished trying to toggle cheat: {selectedCheat.Name}");
-            }
-        }
+                    Cheat selectedCheat = (Cheat)cheatsBox.SelectedItem;
+                    _logger.Debug($"Trying to toggle cheat: {selectedCheat.Name}");
 
-        private void button5_Click(object sender, EventArgs e)
-        {
-            string aob = aobTextbox.Text;
-            string[] range = rangeTextbox.Text.Split(',');
-
-
-            _memoryLocation = 0;
-            lock (MGS2Monitor.MGS2Process)
-            {
-                using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
-                {
-                    SimplePattern pattern = new SimplePattern(aob);
-                    _memoryLocation = spp.ScanMemoryForUniquePattern(pattern).ToInt32();
-
-                    byte[] memoryContent = spp.ReadProcessOffset(new IntPtr(_memoryLocation), (long)(int.Parse(range[1]) - int.Parse(range[0])));
-
-                    memContents.Text = BitConverter.ToString(memoryContent);
-                }
-            }
-        }
-
-        int _memoryLocation = 0;
-
-        private void button6_Click(object sender, EventArgs e)
-        {
-            lock (MGS2Monitor.MGS2Process)
-            {
-                using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
-                {
-                    string strippedText = memContents.Text.Replace("-", "");
-                    byte[] convertedMem = new byte[strippedText.Length / 2];
-                    for(int i = 0; i < convertedMem.Length; i++)
+                    if (!cheatsBox.CheckedItems.Contains(cheatsBox.SelectedItem))
                     {
-                        string oneByte = strippedText.Substring(i * 2, 2);
-                        convertedMem[i] = byte.Parse(oneByte, NumberStyles.HexNumber, CultureInfo.InvariantCulture);
+                        //cheat is enabled already, so now disable it
+                        toolStripStatusLabel.Text = $"Attempting to disable {selectedCheat.Name}, this may take a long time...";
+                        Application.DoEvents();
+                        selectedCheat.CheatAction(false);
+                        toolStripStatusLabel.Text = $"Finished trying to disable {selectedCheat.Name}. Did it work?!?";
                     }
-                    //byte[] convertedMemory = Encoding.Default.GetBytes(memContents.Text.Replace('-',' '));
-                    spp.ModifyProcessOffset(new IntPtr(_memoryLocation), convertedMem, true);
+                    else
+                    {
+                        //cheat is not yet enabled, so enable it
+                        toolStripStatusLabel.Text = $"Attempting to enable {selectedCheat.Name}, this may take a long time...";
+                        Application.DoEvents();
+                        selectedCheat.CheatAction(true);
+                        toolStripStatusLabel.Text = $"Finished trying to enable {selectedCheat.Name}. Did it work?!?";
+                    }
+                    _logger.Debug($"Finished trying to toggle cheat: {selectedCheat.Name}");
                 }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Failed to toggle selected cheat: {ex}");
+                toolStripStatusLabel.Text = $"Failed to toggle selected cheat!";
+                MessageBox.Show(toolStripStatusLabel.Text);
             }
         }
 
@@ -1967,36 +1959,74 @@ namespace MGS2_MC
         {
             _logger.Information("User clicked -100 pushups button");
             toolStripStatusLabel.Text = $"Attempting to reduce pushup count by 100 pushups...";
-            ushort currentPushups = MGS2MemoryManager.ModifyGripLevel(false);
-            toolStripStatusLabel.Text = $"Pushup count set to {currentPushups} for this character. This may not actually change anything.";
+            try
+            {
+                ushort currentPushups = MGS2MemoryManager.ModifyGripLevel(false);
+                toolStripStatusLabel.Text = $"Pushup count set to {currentPushups} for this character. This may not actually change anything.";
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Failed to remove 100 pushups from the pushup count: {ex}");
+                toolStripStatusLabel.Text = $"Failed to decrease pushup count for the current character!";
+                MessageBox.Show(toolStripStatusLabel.Text);
+            }
         }
 
         private void RaiseGripButton_Click(object sender, EventArgs e)
         {
             _logger.Information("User clicked +100 pushups button");
             toolStripStatusLabel.Text = $"Attempting to increase pushup count by 100 pushups...";
-            ushort currentPushups = MGS2MemoryManager.ModifyGripLevel(true);
-            toolStripStatusLabel.Text = $"Pushup count set to {currentPushups} for this character. Perform one manual pull-up to set grip level.";
+            try
+            {
+                ushort currentPushups = MGS2MemoryManager.ModifyGripLevel(true);
+                toolStripStatusLabel.Text = $"Pushup count set to {currentPushups} for this character. Perform one manual pull-up to set grip level.";
+            }
+            catch(Exception ex)
+            {
+                _logger.Error($"Failed to add 100 pushups to the pushup count: {ex}");
+                toolStripStatusLabel.Text = $"Failed to increase pushup count for the current character!";
+                MessageBox.Show(toolStripStatusLabel.Text);
+            }
         }
 
         private void PlayerCurrentHpTrackBar_Scroll(object sender, EventArgs e)
         {
             //lock the trackbar so modifying the hp feels more natural(by preventing auto-updates)
-            lock (playerCurrentHpTrackBar)
+            try
             {
-                //modify hp
-                MGS2MemoryManager.ModifyCurrentHp((ushort)playerCurrentHpTrackBar.Value);
+                lock (playerCurrentHpTrackBar)
+                {
+                    //modify hp
+                    _logger.Verbose($"Setting current HP to: {playerCurrentHpTrackBar.Value}");
+                    MGS2MemoryManager.ModifyCurrentHp((ushort)playerCurrentHpTrackBar.Value);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Failed to modify player current HP: {ex}");
+                toolStripStatusLabel.Text = $"Failed to modify character's current HP!";
+                MessageBox.Show(toolStripStatusLabel.Text);
             }
         }
 
         private void GripTrackBar_Scroll(object sender, EventArgs e)
         {
             //lock the trackbar so modifying the grip feels more natural(by preventing auto-updates)
-            lock (gripTrackBar)
+            try
             {
-                //modify grip
-                //can use current grip stamina
-                MGS2MemoryManager.ModifyCurrentGripGauge((ushort)gripTrackBar.Value);
+                lock (gripTrackBar)
+                {
+                    //modify grip
+                    //can use current grip stamina
+                    _logger.Verbose($"Setting current grip stamina to: {gripTrackBar.Value}");
+                    MGS2MemoryManager.ModifyCurrentGripGauge((ushort)gripTrackBar.Value);
+                }
+            }
+            catch(Exception ex)
+            {
+                _logger.Error($"Failed to modify current grip stamina: {ex}");
+                toolStripStatusLabel.Text = $"Failed to modify current grip stamina!";
+                MessageBox.Show(toolStripStatusLabel.Text);
             }
         }
 
@@ -2007,120 +2037,202 @@ namespace MGS2_MC
 
         private void forceSleepButton_Click(object sender, EventArgs e)
         {
-            _logger.Information("User clicked on 'force guards to sleep' button");
-            toolStripStatusLabel.Text = $"Attempting to force all guards to sleep...";
-            //force undo of wake(if done)
-            byte[] currentWake = Cheat.CheatActions.ReadMemory(MGS2AoB.GuardsAreForcedToWake, MGS2Offset.FORCE_WAKE);
-
-            if (currentWake != null && currentWake.SequenceEqual(MGS2AoB.BytesToForceGuardsToWake))
+            try
             {
-                _logger.Information("Guards are currently forced awake, attempting to disable that");
-                Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.GuardsAreForcedToWake, MGS2AoB.DontForceGuardsToWake, MGS2Offset.FORCE_WAKE);
-                _logger.Information("Guards are no longer forced awake");
+                _logger.Information("User clicked on 'force guards to sleep' button");
+                toolStripStatusLabel.Text = $"Attempting to force all guards to sleep...";
+                //force undo of wake(if done)
+                byte[] currentWake = Cheat.CheatActions.ReadMemory(MGS2AoB.GuardsAreForcedToWake, MGS2Offset.FORCE_WAKE);
+
+                if (currentWake != null && currentWake.SequenceEqual(MGS2AoB.BytesToForceGuardsToWake))
+                {
+                    _logger.Information("Guards are currently forced awake, attempting to disable that");
+                    Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.GuardsAreForcedToWake, MGS2AoB.DontForceGuardsToWake, MGS2Offset.FORCE_WAKE);
+                    _logger.Information("Guards are no longer forced awake");
+                }
+
+                Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.ForceGuardsToSleep, MGS2AoB.BytesToForceGuardsToSleep, MGS2Offset.FORCE_SLEEP);
+
+                toolStripStatusLabel.Text = $"All guards suddenly feel asleep!";
             }
-
-            Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.ForceGuardsToSleep, MGS2AoB.BytesToForceGuardsToSleep, MGS2Offset.FORCE_SLEEP);
-
-            toolStripStatusLabel.Text = $"All guards suddenly feel asleep!";
+            catch(Exception ex)
+            {
+                _logger.Error($"Failed to force guard sleep: {ex}");
+                toolStripStatusLabel.Text = $"Failed to force all guards to sleep!";
+                MessageBox.Show(toolStripStatusLabel.Text);
+            }
         }
-
-
 
         private void forceWakeButton_Click(object sender, EventArgs e)
         {
-            _logger.Information("User clicked on 'force guards to wake' button");
-            toolStripStatusLabel.Text = $"Attempting to force all guards to wake...";
-            //force undo of sleep(if done)
-            byte[] currentSleep = Cheat.CheatActions.ReadMemory(MGS2AoB.GuardsAreForcedToSleep, MGS2Offset.FORCE_SLEEP);
-
-            
-            if (currentSleep != null && currentSleep.SequenceEqual(MGS2AoB.BytesToForceGuardsToSleep))
+            try
             {
-                _logger.Information("Guards are currently forced asleep, attempting to disable that");
-                Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.GuardsAreForcedToSleep, MGS2AoB.DontForceGuardsToSleep, MGS2Offset.FORCE_SLEEP);
-                _logger.Information("Guards are no longer forced asleep");
+                _logger.Information("User clicked on 'force guards to wake' button");
+                toolStripStatusLabel.Text = $"Attempting to force all guards to wake...";
+                //force undo of sleep(if done)
+                byte[] currentSleep = Cheat.CheatActions.ReadMemory(MGS2AoB.GuardsAreForcedToSleep, MGS2Offset.FORCE_SLEEP);
+
+
+                if (currentSleep != null && currentSleep.SequenceEqual(MGS2AoB.BytesToForceGuardsToSleep))
+                {
+                    _logger.Information("Guards are currently forced asleep, attempting to disable that");
+                    Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.GuardsAreForcedToSleep, MGS2AoB.DontForceGuardsToSleep, MGS2Offset.FORCE_SLEEP);
+                    _logger.Information("Guards are no longer forced asleep");
+                }
+
+                Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.ForceGuardsToWake, MGS2AoB.BytesToForceGuardsToWake, MGS2Offset.FORCE_WAKE);
+
+                toolStripStatusLabel.Text = $"All guards have awoken!";
             }
-
-            Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.ForceGuardsToWake, MGS2AoB.BytesToForceGuardsToWake, MGS2Offset.FORCE_WAKE);
-
-            toolStripStatusLabel.Text = $"All guards have awoken!";
+            catch (Exception ex)
+            {
+                _logger.Error($"Failed to force guard wake: {ex}");
+                toolStripStatusLabel.Text = $"Failed to force all guards to wake!";
+                MessageBox.Show(toolStripStatusLabel.Text);
+            }
         }
 
         private void startAnimationButton_Click(object sender, EventArgs e)
         {
-            _logger.Information($"User clicked on 'Start animation' button with {guardAnimationComboBox.SelectedText} animation selected");
-            toolStripStatusLabel.Text = $"Attempting to set all guards animation to :{guardAnimationComboBox.SelectedText}";
+            try
+            {
+                _logger.Information($"User clicked on 'Start animation' button with {guardAnimationComboBox.SelectedText} animation selected");
+                toolStripStatusLabel.Text = $"Attempting to set all guards animation to :{guardAnimationComboBox.SelectedText}";
 
-            Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.GuardAnimations, (guardAnimationComboBox.SelectedItem as MGS2AoB.GuardAnimation).Bytes, MGS2Offset.GUARD_ANIMATIONS);
+                Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.GuardAnimations, (guardAnimationComboBox.SelectedItem as MGS2AoB.GuardAnimation).Bytes, MGS2Offset.GUARD_ANIMATIONS);
 
-            toolStripStatusLabel.Text = $"All guards' animations have been set to {guardAnimationComboBox.SelectedText}~!";
+                toolStripStatusLabel.Text = $"All guards' animations have been set to {guardAnimationComboBox.SelectedText}~!";
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Failed to start guard animation: {ex}");
+                toolStripStatusLabel.Text = $"Failed to force guard animation!";
+                MessageBox.Show(toolStripStatusLabel.Text);
+            }
         }
 
         private async void filterColorButton_Click(object sender, EventArgs e)
         {
-            ColorDialog dialog = new ColorDialog();
-            dialog.AnyColor = false;
-            dialog.FullOpen = true;
-            DialogResult result = dialog.ShowDialog();
-
-            if(result == DialogResult.OK)
+            try
             {
-                filterColorPictureBox.BackColor = dialog.Color;
-                if (enableCustomFilterColorCheckBox.Checked == false)
+                ColorDialog dialog = new ColorDialog();
+                dialog.AnyColor = false;
+                dialog.FullOpen = true;
+                DialogResult result = dialog.ShowDialog();
+
+                if (result == DialogResult.OK)
                 {
-                    Cheat.CheatActions.EnableCustomFilter(true);
-                    enableCustomFilterColorCheckBox.Checked = true;
+                    filterColorPictureBox.BackColor = dialog.Color;
+                    if (enableCustomFilterColorCheckBox.Checked == false)
+                    {
+                        Cheat.CheatActions.EnableCustomFilter(true);
+                        enableCustomFilterColorCheckBox.Checked = true;
+                    }
+                    await Cheat.CheatActions.ApplyColorFilter(filterColorPictureBox.BackColor);
                 }
-                await Cheat.CheatActions.ApplyColorFilter(filterColorPictureBox.BackColor);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Failed to set custom filter: {ex}");
+                toolStripStatusLabel.Text = $"Failed to set custom filter!";
+                MessageBox.Show(toolStripStatusLabel.Text);
             }
         }
 
         private void enableCustomFilterColorCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            Cheat.CheatActions.EnableCustomFilter(enableCustomFilterColorCheckBox.Checked);
+            try
+            {
+                Cheat.CheatActions.EnableCustomFilter(enableCustomFilterColorCheckBox.Checked);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Failed to enable custom filter: {ex}");
+                toolStripStatusLabel.Text = $"Failed to enable custom filter!";
+                MessageBox.Show(toolStripStatusLabel.Text);
+            }
         }
 
         private void bossTreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            bossHealthStaminaLayoutPanel.Visible = true;
+            if(e.Node.Text == "Harrier" || e.Node.Text == "Solidus")
+            {
+                MessageBox.Show("Sorry, modifying this boss' vitals with the trainer currently crashes the game. We're trying to find a " +
+                    "solution to this issue and hope to enable modification of this boss' vitals in a future update! Thank you " +
+                    "for your understanding :)", $"{e.Node.Text} Vitals Modification Not Supported");
+                return;
+            }
             if (e.Node.Text != "RAY Battle")
             {
-                bossGroupBox.Text = e.Node.Text;
+                try
+                {
+                    bossHealthStaminaLayoutPanel.Visible = true;
+                    CurrentBossNode = e.Node;
+                    bossGroupBox.Text = e.Node.Text;
 
-                Task bossTask = Task.Factory.StartNew(() => LiveUpdateBossVitals(Constants.Boss.Olga));
+                    Task.Factory.StartNew(() => LiveUpdateBossVitals(BossParser.ParseNode(e.Node.Text)));
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error($"Failed to start live boss vitals tracking: {ex}");
+                    toolStripStatusLabel.Text = $"Failed to start live boss vitals tracking!";
+                    MessageBox.Show(toolStripStatusLabel.Text);
+                }
             }
         }
 
         private void UpdateBossVitals(Constants.Boss boss)
         {
-            BossVitals vitals = MGS2MemoryManager.GetBossVitals(Constants.Boss.Olga); //TODO: replace placeholder
+            try
+            {
+                BossVitals vitals = MGS2MemoryManager.GetBossVitals(boss);
 
-            if (bossHpTrackbar.Maximum < vitals.Health)
-                bossHpTrackbar.Maximum = vitals.Health;
-            bossHpTrackbar.Value = vitals.Health;
 
-            if (bossStaminaTrackbar.Maximum < vitals.Stamina)
-                bossStaminaTrackbar.Maximum = vitals.Stamina;
-            bossStaminaTrackbar.Value = vitals.Stamina;
+                if (bossHpTrackbar.Maximum < vitals.Health)
+                    bossHpTrackbar.Maximum = vitals.Health;
+                bossHpTrackbar.Value = vitals.Health;
+
+                if (vitals.HasStamina)
+                {
+                    bossStaminaGroupBox.Enabled = true;
+                    if (bossStaminaTrackbar.Maximum < vitals.Stamina)
+                        bossStaminaTrackbar.Maximum = vitals.Stamina;
+                    bossStaminaTrackbar.Value = vitals.Stamina;
+                }
+                else
+                {
+                    bossStaminaGroupBox.Enabled = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Failed to update boss vitals: {ex}");
+            }
         }
 
         private void LiveUpdateBossVitals(Constants.Boss boss)
         {
             try
             {
-                //only keep this task alive while the cheats tab is open to save system resources
-                while (CurrentTab == mgs2TabControl.TabPages.IndexOfKey("tabPageBosses"))
+                //only keep this task alive while the boss tab is open to save system resources
+                while (true)
                 {
-                    if (InvokeRequired)
+                    if (BossParser.ParseNode(CurrentBossNode.Text) != boss)
+                        return;
+                        
+                    if (CurrentTab == mgs2TabControl.TabPages.IndexOfKey("tabPageBosses"))
                     {
-                        Invoke(new MethodInvoker(() =>
+                        if (InvokeRequired)
+                        {
+                            Invoke(new MethodInvoker(() =>
+                            {
+                                UpdateBossVitals(boss);
+                            }));
+                        }
+                        else
                         {
                             UpdateBossVitals(boss);
-                        }));
-                    }
-                    else
-                    {
-                        UpdateBossVitals(boss);
+                        }
                     }
                     Thread.Sleep(333);
                 }
@@ -2130,6 +2242,52 @@ namespace MGS2_MC
                 _logger.Error($"Something went wrong when getting boss vitals. Going to wait 5 seconds before retrying.\n\nError information: {e}");
                 Thread.Sleep(5000);
                 LiveUpdateBossVitals(boss);
+            }
+        }
+
+        private void bossHpTrackbar_Scroll(object sender, EventArgs e)
+        {
+            //lock the trackbar so modifying the hp feels more natural(by preventing auto-updates)
+            if (bossTreeView.SelectedNode != null)
+            {
+                try
+                {
+                    lock (bossHpTrackbar)
+                    {
+                        BossVitals bossVitals = BossVitals.ParseBossVitals(BossParser.ParseNode(bossTreeView.SelectedNode.Text));
+                        bossVitals.Health = bossHpTrackbar.Value;
+                        MGS2MemoryManager.SetBossVitals(bossVitals);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error($"Failed to modify boss HP: {ex}");
+                    toolStripStatusLabel.Text = $"Failed to modify boss' HP!";
+                    MessageBox.Show(toolStripStatusLabel.Text);
+                }
+            }
+        }
+
+        private void bossStaminaTrackbar_Scroll(object sender, EventArgs e)
+        {
+            //lock the trackbar so modifying the stamina feels more natural(by preventing auto-updates)
+            if (bossTreeView.SelectedNode != null)
+            {
+                try
+                {
+                    lock (bossStaminaTrackbar)
+                    {
+                        BossVitals bossVitals = BossVitals.ParseBossVitals(BossParser.ParseNode(bossTreeView.SelectedNode.Text));
+                        bossVitals.Stamina = bossStaminaTrackbar.Value;
+                        MGS2MemoryManager.SetBossVitals(bossVitals);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error($"Failed to modify boss stamina: {ex}");
+                    toolStripStatusLabel.Text = $"Failed to modify boss stamina!";
+                    MessageBox.Show(toolStripStatusLabel.Text);
+                }
             }
         }
     }

@@ -574,9 +574,6 @@ namespace MGS2_MC
             stringsListBox.SelectedIndex = -1;
             guardAnimationComboBox.DataSource = MGS2AoB.GuardAnimationList;
             guardAnimationComboBox.DisplayMember = "Name";
-#if DEBUG
-            aobTesterTablePanel.Visible = true;
-#endif
             GuiLoaded = true;
         }
 

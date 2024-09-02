@@ -459,6 +459,10 @@ namespace MGS2_MC
                         _logger.Debug($"mgs2Object parsed as BasicItem, setting base value to: {value}");
                         SetPlayerOffsetBasedByteValueObject(basicItem.InventoryOffset, BitConverter.GetBytes(value), character);
                         break;
+                    case BasicWeapon basicWeapon:
+                        _logger.Debug($"mgs2Object parsed as BasicWeapon, setting base value to: {value}");
+                        SetPlayerOffsetBasedByteValueObject(basicWeapon.InventoryOffset, BitConverter.GetBytes(value), character);
+                        break;
                 }
             }
             catch (Exception e)

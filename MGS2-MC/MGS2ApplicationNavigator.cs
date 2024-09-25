@@ -30,10 +30,10 @@ namespace MGS2_MC
 
     internal struct MGS2Pointer
     {
-        internal static int WalkThroughWalls = 0x01534E68;
-        internal static int ModifiableHP = 0x017C1A20;
-        internal static int CurrentGrip = 0x016CBDA0;
-        internal static int CurrentAmmo = 0x01523A00;
+        internal static int WalkThroughWalls = 0x01551078;
+        internal static int ModifiableHP = 0x017DE780; 
+        internal static int CurrentGrip = 0x016E8B20;
+        internal static int CurrentAmmo = 0x0153FC10;
         internal static List<int> OlgaNestedPointers = new List<int> { 0x01534CF8, 0xF0, 0x8, 0x590 };
         internal static List<int> FortuneNestedPointers = null;
         internal static List<int> FatmanNestedHealthPointers = new List<int> { 0x1795F88 };
@@ -259,10 +259,10 @@ namespace MGS2_MC
         #region Offsets
         #region String offsets
         #region Calculated From LifeAndGripNames
-        public static readonly MemoryOffset LIFE_TEXT = new MemoryOffset(9, 12); 
-        public static readonly MemoryOffset GRIP_Lv1_TEXT = new MemoryOffset(21, 28);
-        public static readonly MemoryOffset GRIP_Lv2_TEXT = new MemoryOffset(-156, -149);
-        public static readonly MemoryOffset GRIP_Lv3_TEXT = new MemoryOffset(-172, -165);
+        public static readonly MemoryOffset LIFE_TEXT = new MemoryOffset(10, 13); 
+        public static readonly MemoryOffset GRIP_Lv1_TEXT = new MemoryOffset(18, 25);
+        public static readonly MemoryOffset GRIP_Lv2_TEXT = new MemoryOffset(-150, -143);
+        public static readonly MemoryOffset GRIP_Lv3_TEXT = new MemoryOffset(-166, -159);
         #endregion
 
         #region Calculated From RationMedsBandagePentazeminDescriptions
@@ -270,7 +270,7 @@ namespace MGS2_MC
         #endregion
 
         #region Calculated From RayNames
-        public static readonly MemoryOffset RAY_01 = new MemoryOffset(70, 77);
+        public static readonly MemoryOffset RAY_01 = new MemoryOffset(75, 82);
         public static readonly MemoryOffset RAY_02 = new MemoryOffset(RAY_01.Start + 16, RAY_01.End + 16);
         public static readonly MemoryOffset RAY_03 = new MemoryOffset(RAY_02.Start + 16, RAY_02.End + 16);
         public static readonly MemoryOffset RAY_04 = new MemoryOffset(RAY_03.Start + 16, RAY_03.End + 16);
@@ -298,7 +298,7 @@ namespace MGS2_MC
         #endregion
 
         #region Calculated From SolidusName
-        public static readonly MemoryOffset SOLIDUS_HP_TEXT = new MemoryOffset(60, 66);
+        public static readonly MemoryOffset SOLIDUS_HP_TEXT = new MemoryOffset(65, 71);
         #endregion
 
         #region Calculated From EmmaO2
@@ -307,21 +307,21 @@ namespace MGS2_MC
         #endregion
 
         #region Calculated From EmmaName
-        public static readonly MemoryOffset EMMA_HP_TEXT = new MemoryOffset(390, 393);
+        public static readonly MemoryOffset EMMA_HP_TEXT = new MemoryOffset(395, 398);
         #endregion
 
         #region Calculated From FatmanName
-        public static readonly MemoryOffset FATMAN_HP_TEXT = new MemoryOffset(88, 93);
+        public static readonly MemoryOffset FATMAN_HP_TEXT = new MemoryOffset(93, 98);
         #endregion
 
         #region Calculated From OlgaName
-        public static readonly MemoryOffset OLGA_HP_TEXT = new MemoryOffset(292, 295);
+        public static readonly MemoryOffset OLGA_HP_TEXT = new MemoryOffset(297, 300);
                                                                                        //there is also a meryl string right next to OLGA... but idk what it is used for so i'm not bothering to add it atm
-                                                                                       //guessing the meryl^^ string is related to the OLGA boss fight!
+                                                                                       //guessing the meryl^^ string is related to the OLGA boss fight! OLGAMERYL
         #endregion
 
         #region Calculated From HarrierName
-        public static readonly MemoryOffset HARRIER_HP_TEXT = new MemoryOffset(-109, -103);
+        public static readonly MemoryOffset HARRIER_HP_TEXT = new MemoryOffset(-104, -98);
         #endregion
 
         #region Calculated From KasatkaName
@@ -329,14 +329,14 @@ namespace MGS2_MC
         #endregion
 
         #region Calculated From FortuneName
-        public static readonly MemoryOffset FORTUNE_HP_TEXT = new MemoryOffset(1188, 1194);
-        public static readonly MemoryOffset FORTUNE_HP_VALUE = new MemoryOffset(1212, 1213);
-        public static readonly MemoryOffset FORTUNE_STAMINA_VALUE = new MemoryOffset(1228, 1229);
-        public static readonly MemoryOffset VAMP_HP_TEXT = new MemoryOffset(1908, 1911);
+        public static readonly MemoryOffset FORTUNE_HP_TEXT = new MemoryOffset(1193, 1199);
+        public static readonly MemoryOffset FORTUNE_HP_VALUE = new MemoryOffset(1217, 1218);
+        public static readonly MemoryOffset FORTUNE_STAMINA_VALUE = new MemoryOffset(1233, 1234);
+        public static readonly MemoryOffset VAMP_HP_TEXT = new MemoryOffset(1913, 1916);
         #endregion
 
         #region Calculated From Vamp02
-        public static readonly MemoryOffset VAMP_02_TEXT = new MemoryOffset(8, 14);
+        public static readonly MemoryOffset VAMP_02_TEXT = new MemoryOffset(13, 19);
         #endregion
         #endregion
 

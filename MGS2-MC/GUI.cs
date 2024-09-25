@@ -575,6 +575,7 @@ namespace MGS2_MC
             guardAnimationComboBox.DataSource = MGS2AoB.GuardAnimationList;
             guardAnimationComboBox.DisplayMember = "Name";
             GuiLoaded = true;
+            MessageBox.Show("As of MGS2 version 2.0, a lot of this trainer's functionalities have been heavily affected. We're fixing things up as quickly as we can, please be patient and bear with us as we continue to work. Thank you!\n\n Please note: This message box will stop appearing on trainer launch once all functionalities have been restored.", "Trainer under maintenance");
         }
 
         #region GUI getters
@@ -1713,17 +1714,20 @@ namespace MGS2_MC
                 #if DEBUG
                 UserHasBeenWarned = true;
                 #endif
-                /*if(CurrentTab != mgs2TabControl.TabPages.IndexOfKey("tabPageBosses"))
+                if(CurrentTab == mgs2TabControl.TabPages.IndexOfKey("tabPageBosses"))
                 {
+                    MessageBox.Show("As of MGS2 version 2.0, the bosses tab is non-functional. We're working on a fix, please be patient!", "Warning");
+                    /*
                     bossTreeView.SelectedNode = null;
                     bossGroupBox.Text = "No Currently Detected/Selected Boss";
-                    bossHealthStaminaLayoutPanel.Visible = false;
-                }*/
+                    bossHealthStaminaLayoutPanel.Visible = false;*/
+                }
                 if (CurrentTab == mgs2TabControl.TabPages.IndexOfKey("tabPageCheats"))
                 {
                     if (!UserHasBeenWarned)
                     {
-                        MessageBox.Show("WARNING! Use the contents of this tab at your own risk. USE OF THESE CHEATS MAY CRASH YOUR GAME! All of these have worked at some point or another, but may not always. Results not guaranteed.");
+                        //MessageBox.Show("WARNING! Use the contents of this tab at your own risk. USE OF THESE CHEATS MAY CRASH YOUR GAME! All of these have worked at some point or another, but may not always. Results not guaranteed.");
+                        MessageBox.Show("As of MGS2 version 2.0, the cheats tab is very hit-or-miss. We're working on a fix, please be patient!", "Warning");
                         UserHasBeenWarned = true;
                     }
                     try

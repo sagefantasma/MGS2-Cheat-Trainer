@@ -764,12 +764,12 @@ namespace MGS2_MC
                 {
                     if (activeCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.RemovePlantFilter, MGS2Offset.REMOVE_PLANT_FILTER, 10);
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.RemovePlantFilter, MGS2Offset.REMOVE_PLANT_FILTER, 7);
                         MGS2Cheat.RemovePlantFilter = activeCheat;
                     }
                     else
                     {
-                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.REMOVE_PLANT_FILTER, 10);
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.REMOVE_PLANT_FILTER, 7);
                     }
                 }
                 else
@@ -786,13 +786,13 @@ namespace MGS2_MC
                     if(activeCheat.CodeLocation == IntPtr.Zero)
                     {
                         byte[] originalValue = ReadMemory(MGS2AoB.RemovePlantFog, MGS2Offset.REMOVE_PLANT_FOG);
-                        activeCheat.CodeLocation = ReplaceWithSpecificCode(MGS2AoB.RemovePlantFog, DisableFog, MGS2Offset.REMOVE_PLANT_FOG);
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.RemovePlantFog, MGS2Offset.REMOVE_PLANT_FOG, 5);
                         activeCheat.OriginalBytes = originalValue;
                         MGS2Cheat.RemovePlantFog = activeCheat;
                     }
                     else
                     {
-                        ReplaceWithSpecificCode(activeCheat.CodeLocation, DisableFog, MGS2Offset.REMOVE_PLANT_FOG);
+                        ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.REMOVE_PLANT_FOG, MGS2AoB.OriginalPlantFogBytes);
                     }
                 }
                 else

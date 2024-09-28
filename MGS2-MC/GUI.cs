@@ -2043,16 +2043,16 @@ namespace MGS2_MC
                 _logger.Information("User clicked on 'force guards to sleep' button");
                 toolStripStatusLabel.Text = $"Attempting to force all guards to sleep...";
                 //force undo of wake(if done)
-                byte[] currentWake = Cheat.CheatActions.ReadMemory(MGS2AoB.GuardsAreForcedToWake, MGS2Offset.FORCE_WAKE);
+                byte[] currentWake = Cheat.CheatActions.ReadMemory(MGS2AoB.ForceGuardsToWake, MGS2Offset.FORCE_WAKE);
 
-                if (currentWake != null && currentWake.SequenceEqual(MGS2AoB.BytesToForceGuardsToWake))
+                if (currentWake != null && currentWake.SequenceEqual(MGS2AoB.ForceGuardsToWakeBytes))
                 {
                     _logger.Information("Guards are currently forced awake, attempting to disable that");
-                    Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.GuardsAreForcedToWake, MGS2AoB.DontForceGuardsToWake, MGS2Offset.FORCE_WAKE);
+                    Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.ForceGuardsToWake, MGS2AoB.StandardGuardWakeBytes, MGS2Offset.FORCE_WAKE);
                     _logger.Information("Guards are no longer forced awake");
                 }
 
-                Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.ForceGuardsToSleep, MGS2AoB.BytesToForceGuardsToSleep, MGS2Offset.FORCE_SLEEP);
+                Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.StandardGuardSleep, MGS2AoB.ForceGuardsToSleepBytes, MGS2Offset.FORCE_SLEEP);
 
                 toolStripStatusLabel.Text = $"All guards suddenly feel asleep!";
             }
@@ -2071,17 +2071,17 @@ namespace MGS2_MC
                 _logger.Information("User clicked on 'force guards to wake' button");
                 toolStripStatusLabel.Text = $"Attempting to force all guards to wake...";
                 //force undo of sleep(if done)
-                byte[] currentSleep = Cheat.CheatActions.ReadMemory(MGS2AoB.GuardsAreForcedToSleep, MGS2Offset.FORCE_SLEEP);
+                byte[] currentSleep = Cheat.CheatActions.ReadMemory(MGS2AoB.ForceGuardsToSleep, MGS2Offset.FORCE_SLEEP);
 
 
-                if (currentSleep != null && currentSleep.SequenceEqual(MGS2AoB.BytesToForceGuardsToSleep))
+                if (currentSleep != null && currentSleep.SequenceEqual(MGS2AoB.ForceGuardsToSleepBytes))
                 {
                     _logger.Information("Guards are currently forced asleep, attempting to disable that");
-                    Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.GuardsAreForcedToSleep, MGS2AoB.DontForceGuardsToSleep, MGS2Offset.FORCE_SLEEP);
+                    Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.ForceGuardsToSleep, MGS2AoB.StandardGuardSleepBytes, MGS2Offset.FORCE_SLEEP);
                     _logger.Information("Guards are no longer forced asleep");
                 }
 
-                Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.ForceGuardsToWake, MGS2AoB.BytesToForceGuardsToWake, MGS2Offset.FORCE_WAKE);
+                Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.StandardGuardWake, MGS2AoB.ForceGuardsToWakeBytes, MGS2Offset.FORCE_WAKE);
 
                 toolStripStatusLabel.Text = $"All guards have awoken!";
             }

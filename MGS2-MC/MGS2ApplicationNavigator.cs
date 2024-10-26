@@ -221,6 +221,10 @@ namespace MGS2_MC
             DeactivateAIAnimation, CommandSoldiersAnimation, RadioCheckinAnimation, PeeAnimation, PeeWiggleAnimation, LeanRightAnimation,
             LeanLeftAnimation, RollRightAnimation, RollLeftAnimation
         };
+        public static string EmmaInfiniteHpAoB = "66 29 9F AE 03 00 00";
+        public static byte[] OriginalEmmaHpBytes = { 0x66, 0x29, 0x9F, 0xAE, 0x03, 0x00, 0x00 };
+        public static string EmmaInfiniteO2AoB = "66 89 46 18 F3 0F 11 87 38 0F 00 00";
+        public static byte[] OriginalEmmaO2Bytes = { 0x66, 0x89, 0x46, 0x18 };
 
         internal class GuardAnimation
         {
@@ -415,6 +419,8 @@ namespace MGS2_MC
         public static readonly MemoryOffset VR_INF_AMMO = new MemoryOffset(0, 4);
         public static readonly MemoryOffset VR_INF_ITEM = new MemoryOffset(0, 6);
         public static readonly MemoryOffset VR_NO_RELOAD = new MemoryOffset(0, 10);
+        public static readonly MemoryOffset EMMA_INF_HP = new MemoryOffset(0, 3);
+        public static readonly MemoryOffset EMMA_INF_O2 = new MemoryOffset(0, 6);
         #endregion
 
         #region Calculated From CurrentGripGauge

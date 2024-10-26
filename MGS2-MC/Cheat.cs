@@ -1139,6 +1139,52 @@ namespace MGS2_MC
                     customFilterCancellationTokenSource.Cancel();
                 }
             }
+
+            internal static void EmmaInfiniteHp(bool activate)
+            {
+                Cheat activeCheat = MGS2Cheat.EmmaInfiniteHealth;
+                if (activate)
+                {
+                    customFilterCancellationTokenSource = new CancellationTokenSource();
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.EmmaInfiniteHpAoB, MGS2Offset.EMMA_INF_HP, 2);
+                        MGS2Cheat.EmmaInfiniteHealth = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.EMMA_INF_HP, 2);
+                    }
+                }
+                else
+                {
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.EMMA_INF_HP, activeCheat.OriginalBytes);
+                    customFilterCancellationTokenSource.Cancel();
+                }
+            }
+
+            internal static void EmmaInfiniteO2(bool activate)
+            {
+                Cheat activeCheat = MGS2Cheat.EmmaInfiniteO2;
+                if (activate)
+                {
+                    customFilterCancellationTokenSource = new CancellationTokenSource();
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.EmmaInfiniteO2AoB, MGS2Offset.EMMA_INF_O2, 2);
+                        MGS2Cheat.EmmaInfiniteO2 = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.EMMA_INF_O2, 2);
+                    }
+                }
+                else
+                {
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.EMMA_INF_O2, activeCheat.OriginalBytes);
+                    customFilterCancellationTokenSource.Cancel();
+                }
+            }
         }
     }    
 
@@ -1179,6 +1225,8 @@ namespace MGS2_MC
         public static Cheat VRInfiniteAmmo { get; internal set; } = new Cheat("VR Infinite Ammo", Cheat.CheatActions.VRInfiniteAmmo, MGS2AoB.OriginalVRInfiniteAmmoBytes);
         public static Cheat VRInfiniteItem { get; internal set; } = new Cheat("VR Infinite Items", Cheat.CheatActions.VRInfiniteItem, MGS2AoB.OriginalVRInfiniteItemBytes);
         public static Cheat VRNoReload { get; internal set; } = new Cheat("VR No Reload", Cheat.CheatActions.VRNoReload, MGS2AoB.OriginalVRNoReloadBytes);
+        public static Cheat EmmaInfiniteHealth { get; internal set; } = new Cheat("Emma Infinite Health", Cheat.CheatActions.EmmaInfiniteHp, MGS2AoB.OriginalEmmaHpBytes);
+        public static Cheat EmmaInfiniteO2 { get; internal set; } = new Cheat("Emma Infinite O2", Cheat.CheatActions.EmmaInfiniteO2, MGS2AoB.OriginalEmmaO2Bytes);
 
         private static List<Cheat> _cheatList = null;
 
@@ -1186,12 +1234,13 @@ namespace MGS2_MC
         {
             _cheatList = new List<Cheat>
             {
-                BlackScreen, NoBleedDamage, NoBurnDamage, InfiniteAmmo, InfiniteLife, InfiniteOxygen, NoGripDamage,
-                Letterboxing, NoClipWithGravity, NoClipNoGravity, NoReload,/*ZoomIn, ZoomOut,*/ DisablePauseButton, //zoom in and out aren't working as expected, and i cant be bothered to fix them right now.
+                NoBleedDamage, NoBurnDamage, InfiniteAmmo, InfiniteLife, InfiniteOxygen, NoGripDamage, 
+                EmmaInfiniteHealth, EmmaInfiniteO2, NoClipWithGravity, NoClipNoGravity, 
+                NoReload,/*ZoomIn, ZoomOut,*/ DisablePauseButton, //zoom in and out aren't working as expected, and i cant be bothered to fix them right now.
                 DisableItemMenuPause, DisableWeaponMenuPause, InfiniteItems, InfiniteKnockout, RemovePlantFilter,
                 RemovePlantFog, RemoveTankerFilter, NightTime, MaxStackOnPickup, PauseVRTimer, VRObjectiveAutoComplete,
                 VREnemiesAutoComplete, VRNoHitDamage, VRNoFallDamage, VRInfiniteStrength, VRGripDamage, VRAimStability,
-                VRInfiniteAmmo, VRInfiniteItem, VRNoReload
+                VRInfiniteAmmo, VRInfiniteItem, VRNoReload, BlackScreen, Letterboxing
             };
         }
 

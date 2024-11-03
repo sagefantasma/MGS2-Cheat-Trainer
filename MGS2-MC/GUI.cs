@@ -1232,12 +1232,12 @@ namespace MGS2_MC
 
         private void C4CurrentBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.C4.UpdateCurrentAmmoCount(ClaymoreCurrentAmmoCount(), _logger, toolStripStatusLabel);
+            MGS2UsableObjects.C4.UpdateCurrentAmmoCount(C4CurrentAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void C4MaxBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.C4.UpdateMaxAmmoCount(ClaymoreMaxAmmoCount(), _logger, toolStripStatusLabel);
+            MGS2UsableObjects.C4.UpdateMaxAmmoCount(C4CurrentAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void BookCurrentBtn_Click(object sender, EventArgs e)

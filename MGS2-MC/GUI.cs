@@ -575,7 +575,7 @@ namespace MGS2_MC
             guardAnimationComboBox.DataSource = MGS2AoB.GuardAnimationList;
             guardAnimationComboBox.DisplayMember = "Name";
             GuiLoaded = true;
-            MessageBox.Show("As of MGS2 version 2.0, a lot of this trainer's functionalities have been heavily affected. We're fixing things up as quickly as we can, please be patient and bear with us as we continue to work. Thank you!\n\n Please note: This message box will stop appearing on trainer launch once all functionalities have been restored.", "Trainer under maintenance");
+            //MessageBox.Show("As of MGS2 version 2.0, a lot of this trainer's functionalities have been heavily affected. We're fixing things up as quickly as we can, please be patient and bear with us as we continue to work. Thank you!\n\n Please note: This message box will stop appearing on trainer launch once all functionalities have been restored.", "Trainer under maintenance");
         }
 
         #region GUI getters

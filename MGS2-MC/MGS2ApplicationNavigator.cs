@@ -135,10 +135,10 @@ namespace MGS2_MC
         internal static string IncrementGripGauge = "90 90 BB 18 04 00 00";
         internal static string InGamePause = "A9 00 07 00 00 0F 85 C4";
         internal static byte[] OriginalPauseButtonBytes = { 0xA9, 0x00, 0x07, 0x00, 0x00 };
-        internal static string ItemMenuPause = "09 35 B1 EF 5D 01";
-        internal static byte[] OriginalItemMenuPauseBytes = { 0x09, 0x35, 0xB1, 0xEF, 0x5D, 0x01 };
-        internal static string WeaponMenuPause = "09 35 14 D5 5D 01";
-        internal static byte[] OriginalWeaponMenuPauseBytes = { 0x09, 0x35, 0x14, 0xD5, 0x5D, 0x01 };
+        internal static string ItemMenuPause = "09 2D FD BE 5E 01";
+        internal static byte[] OriginalItemMenuPauseBytes = { 0x09, 0x2D, 0xFD, 0xBE, 0x5E, 0x01 };
+        internal static string WeaponMenuPause = "09 2D FF A3 5E 01";
+        internal static byte[] OriginalWeaponMenuPauseBytes = { 0x09, 0x2D, 0xFF, 0xA3, 0x5E, 0x01 };
         internal static string StandardGuardSleep = "66 44 29 82 52 13 00 00";
         internal static byte[] StandardGuardSleepBytes = { 0x66, 0x44, 0x29, 0x82, 0x52, 0x13, 0x00, 0x00 };
         internal static string ForceGuardsToSleep = "83 AA 52 13 00 00 35 90";

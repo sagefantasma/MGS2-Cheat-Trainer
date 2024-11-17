@@ -9,6 +9,7 @@ namespace gcx
     public class DecodedProc
     {
         public string Name { get; private set; }
+        public uint Order { get; private set; }
         public string DecodedContents { get; private set; }
         public byte[] RawContents { get; set; }
 
@@ -16,9 +17,10 @@ namespace gcx
         public readonly int ScriptLength;
         public readonly int ScriptInitialPosition;
 
-        public DecodedProc(string name, byte[] raw, string decoded, int procTablePosition, int scriptPosition)
+        public DecodedProc(string name, uint order, byte[] raw, string decoded, int procTablePosition, int scriptPosition)
         {
             Name = name;
+            Order = order;
             DecodedContents = decoded;
             RawContents = raw;
             ScriptLength = raw.Length;

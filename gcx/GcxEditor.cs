@@ -16,6 +16,7 @@ namespace gcx
     internal class GcxEditor
     {
         public string FileName { get; set; }
+        private byte[] Signature { get; set; }
         private byte[] RawContents { get; set; }
         private byte[] TrimmedContents { get; set; }
         internal List<DecodedProc> Procedures { get; set; }
@@ -41,7 +42,9 @@ namespace gcx
             //make note of the output as we will use it for the rest of the explorer
             FileName = file;
             RawContents = File.ReadAllBytes(FileName);
+            Signature = new byte[4];
             TrimmedContents = new byte[RawContents.Length - 4];
+            Array.Copy(RawContents, Signature, Signature.Length);
             Array.Copy(RawContents, 4, TrimmedContents, 0, TrimmedContents.Length);
             File.WriteAllBytes("sanitizedGcx", TrimmedContents);
 
@@ -136,7 +139,14 @@ namespace gcx
                             int a = 2 + 2;
                         }
                         byte[] functionData = GetFunctionByteData(currentFunctionName, out int procTablePosition, out int scriptPos);
-                        functions.Add(new DecodedProc(currentFunctionName, functionData, currentFunction, procTablePosition, scriptPos));
+                        if (!currentFunctionName.ToLower().Contains("main"))
+                        {
+                            uint order = Convert.ToUInt32(currentFunctionName.Replace("proc_0x", "").Trim(), 16);
+                            functions.Add(new DecodedProc(currentFunctionName, order, functionData, currentFunction, procTablePosition, scriptPos));
+
+                        }
+                        else
+                            functions.Add(new DecodedProc(currentFunctionName, 0, functionData, currentFunction, procTablePosition, scriptPos));
                     }
                     else
                     {

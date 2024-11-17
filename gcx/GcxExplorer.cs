@@ -249,7 +249,9 @@ namespace gcx
                 foreach(string fileSelected in filesSelected)
                 {
                     FileInfo fileInfo = new FileInfo(fileSelected);
-                    DecodedProc procedure = new DecodedProc(fileInfo.Name.Replace("proc_0x", "").Replace(".proc", ""), File.ReadAllBytes(fileSelected), null, 0, 0);
+                    string procName = fileInfo.Name.Replace("proc_0x", "").Replace(".proc", "");
+                    uint order = Convert.ToUInt32(procName.Trim(), 16);
+                    DecodedProc procedure = new DecodedProc(procName, order, File.ReadAllBytes(fileSelected), null, 0, 0);
                     gcx_Editor.InsertNewProcedureToFile(procedure);
                 }
                 

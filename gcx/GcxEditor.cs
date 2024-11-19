@@ -45,14 +45,18 @@ namespace gcx
         {
             List<byte> gcxContents = new List<byte>();
 
+            byte[] procBlock = BuildProcBlock();
+            byte[] procTable = BuildProcTable();
+            byte[] mainBodySize = BitConverter.GetBytes(_mainBodySize);
+
             gcxContents.AddRange(Timestamp);
             gcxContents.AddRange(FileVersion);
-            gcxContents.AddRange(BuildProcTable());
+            gcxContents.AddRange(procTable);
             gcxContents.AddRange(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
             gcxContents.AddRange(OffsetTable);
             gcxContents.AddRange(Resources);
-            gcxContents.AddRange(BuildProcBlock());
-            gcxContents.AddRange(BitConverter.GetBytes(_mainBodySize));
+            gcxContents.AddRange(procBlock);
+            gcxContents.AddRange(mainBodySize);
             gcxContents.AddRange(MainBytes);
             //TODO: add some zero bytes at the end to make it divisible by 16;
 
@@ -61,7 +65,20 @@ namespace gcx
 
         private byte[] BuildProcTable()
         {
-            List<DecodedProc> decodedProcCopy = new List<DecodedProc>();
+            //TODO: verify this new methodology
+            List<byte> procTable = new List<byte>();
+            Procedures.OrderBy(proc => proc.Order); //i believe this is a requirement for the gcx format
+
+            foreach (DecodedProc proc in Procedures)
+            {
+                if (proc.Name.Contains("main"))
+                    continue;
+                procTable.AddRange(BitConverter.GetBytes(proc.Order));
+                procTable.AddRange(BitConverter.GetBytes(proc.ScriptInitialPosition));
+            }
+
+            return procTable.ToArray();
+            /*List<DecodedProc> decodedProcCopy = new List<DecodedProc>();
             foreach(DecodedProc proc in Procedures)
             {
                 decodedProcCopy.Add(proc);
@@ -79,7 +96,7 @@ namespace gcx
                 procTable.AddRange(BitConverter.GetBytes(proc.ScriptInitialPosition));
             }
 
-            return procTable.ToArray();
+            return procTable.ToArray();*/
         }
 
         private byte[] BuildProcBlock()
@@ -87,29 +104,37 @@ namespace gcx
             //is it possible to entirely rebuild the offsets, so in the event that we want to add new procs, it would be significantly easier?
             //from comparing MGS2 PC SoL to MGS2 Substance MC, the functions are stored in the proc tables in the same order, but different offsets,
             //so it would seem like this would indeed be possible. Pog?
-            List<DecodedProc> decodedProcCopy = new List<DecodedProc>();
+            /*List<DecodedProc> decodedProcCopy = new List<DecodedProc>();
             foreach (DecodedProc proc in Procedures)
             {
                 decodedProcCopy.Add(proc);
             }
-            List<DecodedProc> orderedProcs = decodedProcCopy.OrderBy(proc => proc.ScriptInitialPosition).ToList();
+            List<DecodedProc> orderedProcs = decodedProcCopy.OrderBy(proc => proc.ScriptInitialPosition).ToList();*/
             List<byte> procBlock = new List<byte>();
 
             //we have the right amount of procedures coming in, and it _looks_ like they have the right data
-            procBlock.AddRange(BitConverter.GetBytes(_proceduresBodySize));
-            foreach (DecodedProc proc in orderedProcs)
+            //procBlock.AddRange(BitConverter.GetBytes(_proceduresBodySize));
+            int position = 0;
+            foreach (DecodedProc proc in Procedures)
             {
                 if (proc.Name.Contains("main"))
                     continue;
+                proc.ScriptInitialPosition = position;
                 procBlock.AddRange(proc.RawContents);
-                if(proc.RawContents.SequenceEqual(new byte[] {0x81, 0x00}) || proc.RawContents[0] == 0x89 || proc.RawContents[0] == 0x8D)
+                position += proc.RawContents.Length;
+                if (proc.RawContents.SequenceEqual(new byte[] { 0x81, 0x00 }) || proc.RawContents[0] == 0x89 || proc.RawContents[0] == 0x8D)
                 {
                     //no padding
                 }
                 else
+                {
                     procBlock.AddRange(new byte[] { 0x00, 0x00 }); //all procs must be ended with the double zero byte, unless its an empty proc
+                    position += 2;
+                }
             }
 
+            int procBodySize = procBlock.Count;
+            procBlock.InsertRange(0, BitConverter.GetBytes(procBodySize)); //TODO: verify
             return procBlock.ToArray();
         }
 

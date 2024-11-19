@@ -15,7 +15,7 @@ namespace gcx
 
         public readonly int ProcTablePosition;
         public readonly int ScriptLength;
-        public readonly int ScriptInitialPosition;
+        public int ScriptInitialPosition;
 
         public DecodedProc(string name, uint order, byte[] raw, string decoded, int procTablePosition, int scriptPosition)
         {

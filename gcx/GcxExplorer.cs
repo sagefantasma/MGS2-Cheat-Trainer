@@ -105,7 +105,7 @@ namespace gcx
                 //filter out any procs that don't call any of our known, desired procs
                 foreach(DecodedProc entry in contentTree)
                 {
-                    if (KnownProc.SpawnProcs.Any(knownProc => entry.Name.Contains(knownProc.BigEndianRepresentation)))
+                    //if (KnownProc.SpawnProcs.Any(knownProc => entry.Name.Contains(knownProc.BigEndianRepresentation)))
                         contentTreeCarbonCopy.Add(entry);
                 }
 
@@ -113,7 +113,7 @@ namespace gcx
                 foreach(DecodedProc item in contentTreeCarbonCopy)
                 {
                     treeNodes.Add(new TreeNode(item.Name));
-                    File.WriteAllBytes($"{item.Name}.proc", gcx_Editor.Procedures.Find(proc => proc.Name == item.Name).RawContents);
+                    File.WriteAllBytes($"{item.Name}.proc", contentTree.Find(proc => proc.Name == item.Name).RawContents);
                 }
                 contentsTreeView.Nodes.AddRange(treeNodes.ToArray());
             }
@@ -147,7 +147,7 @@ namespace gcx
                 }
             }
 
-            string hexContents = BitConverter.ToString(gcx_Editor.Procedures.Find(proc => proc.Name == selectedNode).RawContents);
+            string hexContents = BitConverter.ToString(contentTree.Find(proc => proc.Name == selectedNode).RawContents);
             hexCodeRichTextbox.MaxLength = hexContents.Length;
             hexCodeRichTextbox.Text = hexContents;
 
@@ -215,6 +215,7 @@ namespace gcx
 
         private void saveFileButton_Click(object sender, EventArgs e)
         {
+            /*
             Dictionary<string, byte[]> formattedChanges = new Dictionary<string, byte[]>();
             foreach(KeyValuePair<string, string> unformattedChange in hexFunctionChanges)
             {
@@ -226,7 +227,10 @@ namespace gcx
                 formattedChanges.Add(unformattedChange.Key, derivedBytes.ToArray());
             }
 
-            gcx_Editor.SaveGcxFile(formattedChanges);
+            gcx_Editor.SaveGcxFile(formattedChanges);*/
+            byte[] newGcxBytes = gcx_Editor.BuildGcxFile();
+            string date = $"{DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss")}_custom.gcx"; 
+            File.WriteAllBytes(date, newGcxBytes);
             MessageBox.Show("GCX file saved!");
         }
 

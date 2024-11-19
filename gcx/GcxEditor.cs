@@ -10,16 +10,21 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Buffers.Binary;
+using System.Diagnostics.Eventing.Reader;
 
 namespace gcx
 {
     internal class GcxEditor
     {
         public string FileName { get; set; }
-        private byte[] Signature { get; set; }
+        private byte[] Timestamp { get; set; }
+        private byte[] FileVersion { get; set; }
+        private byte[] OffsetTable { get; set; }
+        private byte[] Resources { get; set; }
+        private byte[] MainBytes { get; set; }
         private byte[] RawContents { get; set; }
         private byte[] TrimmedContents { get; set; }
-        internal List<DecodedProc> Procedures { get; set; }
+        private List<DecodedProc> Procedures { get; set; }
         private int _startOfOffsetBlock;
         private int _scriptOffset;
         private int _resourceTableOffset;
@@ -36,15 +41,90 @@ namespace gcx
             Procedures = new List<DecodedProc>();
         }
 
+        internal byte[] BuildGcxFile()
+        {
+            List<byte> gcxContents = new List<byte>();
+
+            gcxContents.AddRange(Timestamp);
+            gcxContents.AddRange(FileVersion);
+            gcxContents.AddRange(BuildProcTable());
+            gcxContents.AddRange(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
+            gcxContents.AddRange(OffsetTable);
+            gcxContents.AddRange(Resources);
+            gcxContents.AddRange(BuildProcBlock());
+            gcxContents.AddRange(BitConverter.GetBytes(_mainBodySize));
+            gcxContents.AddRange(MainBytes);
+            //TODO: add some zero bytes at the end to make it divisible by 16;
+
+            return gcxContents.ToArray();
+        }
+
+        private byte[] BuildProcTable()
+        {
+            List<DecodedProc> decodedProcCopy = new List<DecodedProc>();
+            foreach(DecodedProc proc in Procedures)
+            {
+                decodedProcCopy.Add(proc);
+            }
+            decodedProcCopy.OrderBy(proc => proc.Order);
+
+            List<byte> procTable = new List<byte>();
+
+            foreach(DecodedProc proc in decodedProcCopy)
+            {
+                //TODO: verify (looks like its working properly)
+                if (proc.Name.Contains("main"))
+                    continue;
+                procTable.AddRange(BitConverter.GetBytes(proc.Order));
+                procTable.AddRange(BitConverter.GetBytes(proc.ScriptInitialPosition));
+            }
+
+            return procTable.ToArray();
+        }
+
+        private byte[] BuildProcBlock()
+        {
+            //is it possible to entirely rebuild the offsets, so in the event that we want to add new procs, it would be significantly easier?
+            //from comparing MGS2 PC SoL to MGS2 Substance MC, the functions are stored in the proc tables in the same order, but different offsets,
+            //so it would seem like this would indeed be possible. Pog?
+            List<DecodedProc> decodedProcCopy = new List<DecodedProc>();
+            foreach (DecodedProc proc in Procedures)
+            {
+                decodedProcCopy.Add(proc);
+            }
+            List<DecodedProc> orderedProcs = decodedProcCopy.OrderBy(proc => proc.ScriptInitialPosition).ToList();
+            List<byte> procBlock = new List<byte>();
+
+            //we have the right amount of procedures coming in, and it _looks_ like they have the right data
+            procBlock.AddRange(BitConverter.GetBytes(_proceduresBodySize));
+            foreach (DecodedProc proc in orderedProcs)
+            {
+                if (proc.Name.Contains("main"))
+                    continue;
+                procBlock.AddRange(proc.RawContents);
+                if(proc.RawContents.SequenceEqual(new byte[] {0x81, 0x00}) || proc.RawContents[0] == 0x89 || proc.RawContents[0] == 0x8D)
+                {
+                    //no padding
+                }
+                else
+                    procBlock.AddRange(new byte[] { 0x00, 0x00 }); //all procs must be ended with the double zero byte, unless its an empty proc
+            }
+
+            return procBlock.ToArray();
+        }
+
+
         internal string CallDecompiler(string file)
         {
             //remove first 4 bytes, then call python script
             //make note of the output as we will use it for the rest of the explorer
             FileName = file;
             RawContents = File.ReadAllBytes(FileName);
-            Signature = new byte[4];
+            Timestamp = new byte[4]; //LCGB
+            FileVersion = new byte[4];
             TrimmedContents = new byte[RawContents.Length - 4];
-            Array.Copy(RawContents, Signature, Signature.Length);
+            Array.Copy(RawContents, Timestamp, Timestamp.Length);
+            Array.Copy(RawContents, 4, FileVersion, 0, FileVersion.Length); //TODO: verify
             Array.Copy(RawContents, 4, TrimmedContents, 0, TrimmedContents.Length);
             File.WriteAllBytes("sanitizedGcx", TrimmedContents);
 
@@ -70,7 +150,13 @@ namespace gcx
                 string value = kvp[1].Trim();
                 ParseKeyValuePair(key, value);
             }
+            OffsetTable = new byte[20];
+            Array.Copy(TrimmedContents, _startOfOffsetBlock, OffsetTable, 0, OffsetTable.Length); //TODO: VERIFY (might be okay?)
+            Resources = new byte[_scriptOffset - 20];
+            Array.Copy(TrimmedContents, _startOfOffsetBlock + 20, Resources, 0, Resources.Length);
             _mainDataLocation = _proceduresDataLocation + _proceduresBodySize + 4;
+            MainBytes = new byte[_mainBodySize];
+            Array.Copy(TrimmedContents, _mainDataLocation, MainBytes, 0, _mainBodySize); //TODO: verify
             return decompilingOutput;
         }
 
@@ -165,7 +251,12 @@ namespace gcx
             }
 
             Procedures = functions;
-            return functions;
+            List<DecodedProc> carbonCopy = new List<DecodedProc>();
+            foreach(DecodedProc proc in functions)
+            {
+                carbonCopy.Add(proc);
+            }
+            return carbonCopy;
         }
 
         internal void InsertNewProcedureToFile(DecodedProc procedure)
@@ -279,7 +370,8 @@ namespace gcx
 
         private byte[] GetFunctionByteData(string functionName, out int procTablePosition, out int scriptPos)
         { 
-            //TODO: this isnt quite working correctly, sadge
+            //TODO: this isnt quite working correctly, sadge - but it seems like its because gcx files don't follow their own rules for some reason...
+            //its fucking overflow shit. fuck you, konami
             byte[] functionData = null;
 
             if (functionName.ToLower().Trim() != "main")
@@ -291,7 +383,40 @@ namespace gcx
                     procTablePosition = FindSubArray(TrimmedContents, functionNameBytes);
                     scriptPos = BitConverter.ToInt32(TrimmedContents, procTablePosition + 4);
                     scriptPos = scriptPos & 0xFFFFFF;
-                    functionData = new byte[TrimmedContents[_proceduresDataLocation + scriptPos + 1]];
+                    int procLocation = _proceduresDataLocation + scriptPos;
+                    byte procByte = TrimmedContents[procLocation]; 
+
+                    //DOING A BRAINDUMP THAT MIGHT CHANGE HOW I DO THIS IN A MUCH MORE INTELLIGENT WAY GOING FORWARD:
+                    //i THINK, in actuality, the length of each function does NOT include the first few bytes
+                    //INSTEAD, i think it starts after the length denomination, which i believe would make absolutely everything fall into place(maybe?)
+                    //that would fix the issue i am seeing with the 8D functions sometimes ending in A0 00 or 00 00,
+                    //it would also fix the issue with the empty 81 functions
+                    //i believe it would fix the stupid fuckin 8E functions as well
+                    //i dont know for certain about 89 or 86, but it would make sense for those too i think(in some way)
+                    if (procByte == 0x8D)
+                        functionData = new byte[TrimmedContents[procLocation + 1] + 2]; //to try and capture the A0 00 endings and 00 00 endings
+                    else if(procByte == 0x81)
+                        functionData = new byte[TrimmedContents[procLocation + 1]]; //could probably just sent len to 2 here
+                    else if(procByte == 0x89)
+                    {
+                        functionData = new byte[10]; // this seems to work correctly
+                        //i'm doing 10 instead of 9 to capture the zero padding
+                    }
+                    else if(procByte == 0x86)
+                    {
+                        functionData = new byte[5]; // this seems to work correctly
+                    }
+                    else
+                    {
+                        //this seems to work!
+                        int size = BitConverter.ToInt16(TrimmedContents, procLocation + 1) + 1;
+                        //this didnt work.
+                        //byte size = TrimmedContents[procLocation + 1];
+                        //size = (byte)(size + (byte)(TrimmedContents[procLocation] - 0x8D));
+                        functionData = new byte[size];
+                    }
+                    if (functionData.Length == 0)
+                        functionData = new byte[2];
                 }
                 else
                 {

@@ -41,7 +41,7 @@ namespace gcx
             Procedures = new List<DecodedProc>();
         }
 
-        internal byte[] BuildGcxFile()
+        internal byte[] BuildGcxFile(bool functionsHaveBeenAdded = false)
         {
             List<byte> gcxContents = new List<byte>();
 
@@ -58,14 +58,13 @@ namespace gcx
             gcxContents.AddRange(procBlock);
             gcxContents.AddRange(mainBodySize);
             gcxContents.AddRange(MainBytes);
-            //TODO: add some zero bytes at the end to make it divisible by 16;
 
             return gcxContents.ToArray();
         }
 
         private byte[] BuildProcTable()
         {
-            //TODO: verify this new methodology
+            //this new method seems to work perfectly, huzzah
             List<byte> procTable = new List<byte>();
             Procedures.OrderBy(proc => proc.Order); //i believe this is a requirement for the gcx format
 
@@ -78,42 +77,12 @@ namespace gcx
             }
 
             return procTable.ToArray();
-            /*List<DecodedProc> decodedProcCopy = new List<DecodedProc>();
-            foreach(DecodedProc proc in Procedures)
-            {
-                decodedProcCopy.Add(proc);
-            }
-            decodedProcCopy.OrderBy(proc => proc.Order);
-
-            List<byte> procTable = new List<byte>();
-
-            foreach(DecodedProc proc in decodedProcCopy)
-            {
-                //TODO: verify (looks like its working properly)
-                if (proc.Name.Contains("main"))
-                    continue;
-                procTable.AddRange(BitConverter.GetBytes(proc.Order));
-                procTable.AddRange(BitConverter.GetBytes(proc.ScriptInitialPosition));
-            }
-
-            return procTable.ToArray();*/
         }
 
         private byte[] BuildProcBlock()
         {
-            //is it possible to entirely rebuild the offsets, so in the event that we want to add new procs, it would be significantly easier?
-            //from comparing MGS2 PC SoL to MGS2 Substance MC, the functions are stored in the proc tables in the same order, but different offsets,
-            //so it would seem like this would indeed be possible. Pog?
-            /*List<DecodedProc> decodedProcCopy = new List<DecodedProc>();
-            foreach (DecodedProc proc in Procedures)
-            {
-                decodedProcCopy.Add(proc);
-            }
-            List<DecodedProc> orderedProcs = decodedProcCopy.OrderBy(proc => proc.ScriptInitialPosition).ToList();*/
             List<byte> procBlock = new List<byte>();
 
-            //we have the right amount of procedures coming in, and it _looks_ like they have the right data
-            //procBlock.AddRange(BitConverter.GetBytes(_proceduresBodySize));
             int position = 0;
             foreach (DecodedProc proc in Procedures)
             {
@@ -134,10 +103,9 @@ namespace gcx
             }
 
             int procBodySize = procBlock.Count;
-            procBlock.InsertRange(0, BitConverter.GetBytes(procBodySize)); //TODO: verify
+            procBlock.InsertRange(0, BitConverter.GetBytes(procBodySize));
             return procBlock.ToArray();
         }
-
 
         internal string CallDecompiler(string file)
         {
@@ -149,7 +117,7 @@ namespace gcx
             FileVersion = new byte[4];
             TrimmedContents = new byte[RawContents.Length - 4];
             Array.Copy(RawContents, Timestamp, Timestamp.Length);
-            Array.Copy(RawContents, 4, FileVersion, 0, FileVersion.Length); //TODO: verify
+            Array.Copy(RawContents, 4, FileVersion, 0, FileVersion.Length);
             Array.Copy(RawContents, 4, TrimmedContents, 0, TrimmedContents.Length);
             File.WriteAllBytes("sanitizedGcx", TrimmedContents);
 
@@ -181,7 +149,7 @@ namespace gcx
             Array.Copy(TrimmedContents, _startOfOffsetBlock + 20, Resources, 0, Resources.Length);
             _mainDataLocation = _proceduresDataLocation + _proceduresBodySize + 4;
             MainBytes = new byte[_mainBodySize];
-            Array.Copy(TrimmedContents, _mainDataLocation, MainBytes, 0, _mainBodySize); //TODO: verify
+            Array.Copy(TrimmedContents, _mainDataLocation, MainBytes, 0, _mainBodySize); //TODO: verify (seems okay)
             return decompilingOutput;
         }
 
@@ -286,6 +254,7 @@ namespace gcx
 
         internal void InsertNewProcedureToFile(DecodedProc procedure)
         {
+            //TODO: redo all this shit
             //7/21/24 notes: I think we're getting pretty damn close now. I am able to at least insert the script without breaking the decoder,
             //and without crashing the game. But, the decoder isn't reading the data, and it doesnt change anything in MGS2.
             //It's very possible there's still even more work required to make this work(i.e. modifying the manifests and shit), but next
@@ -395,8 +364,7 @@ namespace gcx
 
         private byte[] GetFunctionByteData(string functionName, out int procTablePosition, out int scriptPos)
         { 
-            //TODO: this isnt quite working correctly, sadge - but it seems like its because gcx files don't follow their own rules for some reason...
-            //its fucking overflow shit. fuck you, konami
+            //this seems to be working correctly(for now). need to do more extensive testing and such to be 100% certain
             byte[] functionData = null;
 
             if (functionName.ToLower().Trim() != "main")
@@ -435,9 +403,6 @@ namespace gcx
                     {
                         //this seems to work!
                         int size = BitConverter.ToInt16(TrimmedContents, procLocation + 1) + 1;
-                        //this didnt work.
-                        //byte size = TrimmedContents[procLocation + 1];
-                        //size = (byte)(size + (byte)(TrimmedContents[procLocation] - 0x8D));
                         functionData = new byte[size];
                     }
                     if (functionData.Length == 0)
@@ -495,38 +460,6 @@ namespace gcx
             }
 
             return -1; // Subarray not found
-        }
-
-        internal void BuildElementList()
-        {
-            //TODO: should we even bother keeping this?
-        }
-
-        internal void SaveGcxFile(Dictionary<string, byte[]> modifications)
-        {
-            foreach(KeyValuePair<string, byte[]> modification in modifications)
-            {
-                DecodedProc modifiedProcedure = Procedures.Find(proc => proc.Name.Contains(modification.Key));
-
-                modifiedProcedure.RawContents = modification.Value;
-            }
-
-            foreach(DecodedProc procedure in Procedures)
-            {
-                Array.Copy(procedure.RawContents, 0, TrimmedContents, procedure.ScriptInitialPosition + _proceduresDataLocation, procedure.ScriptLength);
-            }
-
-            Array.Copy(TrimmedContents, 0, RawContents, 4, TrimmedContents.Length);
-
-            File.WriteAllBytes(FileName, RawContents);
-        }
-
-        internal void CompareFunctionWithOriginal(string currentContents, string originalContents)
-        {
-            string sanitizedCurrentContents = Regex.Replace(currentContents, @"\s+", ""); //all the whitespace has been added artificially by the decompiler and i am 
-            string sanitizedOriginalContents = Regex.Replace(originalContents, @"\s+", ""); //also editing it for readability in this. so we need to get rid of all of it
-
-
         }
     }
 }

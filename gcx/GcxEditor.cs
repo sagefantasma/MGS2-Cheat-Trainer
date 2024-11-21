@@ -66,9 +66,9 @@ namespace gcx
         {
             //this new method seems to work perfectly, huzzah
             List<byte> procTable = new List<byte>();
-            Procedures.OrderBy(proc => proc.Order); //i believe this is a requirement for the gcx format
+            List<DecodedProc> newOrderedProcs = Procedures.OrderBy(proc => proc.Order).ToList(); //i believe this is a requirement for the gcx format
 
-            foreach (DecodedProc proc in Procedures)
+            foreach (DecodedProc proc in newOrderedProcs)
             {
                 if (proc.Name.Contains("main"))
                     continue;
@@ -254,68 +254,8 @@ namespace gcx
 
         internal void InsertNewProcedureToFile(DecodedProc procedure)
         {
-            //TODO: redo all this shit
-            //7/21/24 notes: I think we're getting pretty damn close now. I am able to at least insert the script without breaking the decoder,
-            //and without crashing the game. But, the decoder isn't reading the data, and it doesnt change anything in MGS2.
-            //It's very possible there's still even more work required to make this work(i.e. modifying the manifests and shit), but next
-            //i need to get the decoder to actually recognize the spliced in script on reload.
-            byte[] newTrimmedData = new byte[TrimmedContents.Length + procedure.ScriptLength + 8];
-            //insert 8 bytes at end of proc list, before strres_block_top
-            int newTrimmedDataIndex = 0;
-            int oldContentsIndex = 0;
-            Array.Copy(TrimmedContents, newTrimmedData, _startOfOffsetBlock);
-            oldContentsIndex += _startOfOffsetBlock;
-            newTrimmedDataIndex += _startOfOffsetBlock - 8;
-
-            //set first 4 bytes to reversed proc name
-            byte[] procId = ConvertFunctionNameToByteRepresentation(procedure.Name);
-            byte[] newProcBlock = new byte[8];
-            procId.CopyTo(newProcBlock, 0);
-
-            //increase proc body size by procedure's data length
-            _proceduresBodySize += procedure.ScriptLength;
-            _proceduresDataLocation += 8;
-
-            //set last 4 of step 1's bytes to proc offset
-            //TODO: instead of going back from main data location, let's try advancing by the size of the proc body size(before it was increased by new script)
-            //to see if that would fix this problem with only some files letting us splice shit in? would also allow us to confirm something different isnt wrong
-            //int procLocation = _mainDataLocation - 4; // -4 to get at start of main body size, then +8 to account for the added proc table value?
-            int procLocation = _proceduresDataLocation + _proceduresBodySize - procedure.ScriptLength - 8;
-            procLocation &= 0xFFFFFF;
-            byte[] byteLocation = BitConverter.GetBytes(procLocation - _proceduresDataLocation + 8); 
-            byteLocation.CopyTo(newProcBlock, 4);
-            newProcBlock.CopyTo(newTrimmedData, newTrimmedDataIndex);
-            newTrimmedDataIndex += 16;
-
-            //set inserted data to proc's data
-            //right now we are at the startOfOffsetBlock. We want to copy all the way from there to where main starts.
-            int lengthToCopy = procLocation - _startOfOffsetBlock; //TODO: verify... the logic seems sound to me?
-            
-            Array.Copy(TrimmedContents, oldContentsIndex, newTrimmedData, newTrimmedDataIndex, lengthToCopy);
-            oldContentsIndex += lengthToCopy;
-            newTrimmedDataIndex += lengthToCopy;
-            procedure.RawContents.CopyTo(newTrimmedData, newTrimmedDataIndex);
-            newTrimmedDataIndex += procedure.ScriptLength;
-
-            Array.Copy(TrimmedContents, oldContentsIndex, newTrimmedData, newTrimmedDataIndex, TrimmedContents.Length - oldContentsIndex);
-            byte[] newProcBodySize = BitConverter.GetBytes(_proceduresBodySize);
-            Array.Copy(newProcBodySize, 0, newTrimmedData, _proceduresDataLocation - 4, 4);
-
-            byte[] extendedRawContents = new byte[RawContents.Length + 8 + procedure.ScriptLength];
-            
-
-            Array.Copy(RawContents, extendedRawContents, 4);
-            Array.Copy(newTrimmedData, 0, extendedRawContents, 4, newTrimmedData.Length);
-
-
-            if (extendedRawContents.Length % 16 != 0)
-            {
-                byte[] squaredOffContents = new byte[extendedRawContents.Length + 16 - extendedRawContents.Length % 16];
-                Array.Copy(extendedRawContents, squaredOffContents, extendedRawContents.Length);
-                File.WriteAllBytes(FileName, squaredOffContents);
-            }
-            else
-                File.WriteAllBytes(FileName, extendedRawContents);
+            Procedures.Add(procedure);
+            //is it really just that simple?
         }
 
         private byte[] ConvertFunctionNameToByteRepresentation(string functionName)
@@ -377,7 +317,7 @@ namespace gcx
                     scriptPos = BitConverter.ToInt32(TrimmedContents, procTablePosition + 4);
                     scriptPos = scriptPos & 0xFFFFFF;
                     int procLocation = _proceduresDataLocation + scriptPos;
-                    byte procByte = TrimmedContents[procLocation]; 
+                    byte procByte = TrimmedContents[procLocation];
 
                     //DOING A BRAINDUMP THAT MIGHT CHANGE HOW I DO THIS IN A MUCH MORE INTELLIGENT WAY GOING FORWARD:
                     //i THINK, in actuality, the length of each function does NOT include the first few bytes
@@ -387,15 +327,20 @@ namespace gcx
                     //i believe it would fix the stupid fuckin 8E functions as well
                     //i dont know for certain about 89 or 86, but it would make sense for those too i think(in some way)
                     if (procByte == 0x8D)
+                    {
                         functionData = new byte[TrimmedContents[procLocation + 1] + 2]; //to try and capture the A0 00 endings and 00 00 endings
-                    else if(procByte == 0x81)
+                    }
+                    else if (procByte == 0x81)
+                    {
                         functionData = new byte[TrimmedContents[procLocation + 1]]; //could probably just sent len to 2 here
-                    else if(procByte == 0x89)
+
+                    }
+                    else if (procByte == 0x89)
                     {
                         functionData = new byte[10]; // this seems to work correctly
-                        //i'm doing 10 instead of 9 to capture the zero padding
+                                                     //i'm doing 10 instead of 9 to capture the zero padding
                     }
-                    else if(procByte == 0x86)
+                    else if (procByte == 0x86)
                     {
                         functionData = new byte[5]; // this seems to work correctly
                     }

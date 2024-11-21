@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Buffers.Binary;
 using System.Diagnostics.Eventing.Reader;
+using System.Windows.Forms;
 
 namespace gcx
 {
@@ -66,7 +67,7 @@ namespace gcx
         {
             //this new method seems to work perfectly, huzzah
             List<byte> procTable = new List<byte>();
-            List<DecodedProc> newOrderedProcs = Procedures.OrderBy(proc => proc.Order).ToList(); //i believe this is a requirement for the gcx format
+            List<DecodedProc> newOrderedProcs = Procedures.OrderBy(proc => proc.Order).ToList(); //this is a requirement for the gcx format
 
             foreach (DecodedProc proc in newOrderedProcs)
             {
@@ -91,6 +92,8 @@ namespace gcx
                 proc.ScriptInitialPosition = position;
                 procBlock.AddRange(proc.RawContents);
                 position += proc.RawContents.Length;
+                /*
+                 * We are capturing all the padding now I believe, so I think this can go.
                 if (proc.RawContents.SequenceEqual(new byte[] { 0x81, 0x00 }) || proc.RawContents[0] == 0x89 || proc.RawContents[0] == 0x8D)
                 {
                     //no padding
@@ -100,6 +103,7 @@ namespace gcx
                     procBlock.AddRange(new byte[] { 0x00, 0x00 }); //all procs must be ended with the double zero byte, unless its an empty proc
                     position += 2;
                 }
+                */
             }
 
             int procBodySize = procBlock.Count;
@@ -254,8 +258,9 @@ namespace gcx
 
         internal void InsertNewProcedureToFile(DecodedProc procedure)
         {
-            Procedures.Add(procedure);
-            //is it really just that simple?
+            if(!Procedures.Any(proc => proc.Name == procedure.Name))
+                Procedures.Add(procedure);
+            //is it really just that simple? yep. i did well for once FeelsGoodMan
         }
 
         private byte[] ConvertFunctionNameToByteRepresentation(string functionName)
@@ -302,6 +307,59 @@ namespace gcx
             return functionNameBytes;
         }
 
+        private byte[] GetFunctionSize(byte procByte, int procLocation)
+        {
+            switch (procByte)
+            {
+                case 0x81:
+                    //empty function, size 2
+                    return new byte[2];
+                case 0x82:
+                    //unknown, size 3
+                    return new byte[3];
+                case 0x83:
+                    //unknown, size 4
+                    return new byte[4];
+                case 0x84:
+                    //unknown, size 5
+                    return new byte[5];
+                case 0x85:
+                    //unknown, size 6
+                    return new byte[6];
+                case 0x86:
+                    //call another function, size 7(including procByte)
+                    return new byte[7];
+                case 0x87:
+                    //unknown, size 8
+                    return new byte[8];
+                case 0x88:
+                    //unknown, size 9
+                    return new byte[9];
+                case 0x89:
+                    //set a variable, size 10(including procByte)
+                    return new byte[10];
+                case 0x8A:
+                    //seems like calling a function with a variable param, size 11(including procByte)
+                    return new byte[11];
+                case 0x8B:
+                    //call two functions, size 12(including procByte)
+                    return new byte[12];
+                case 0x8C:
+                    //gonna go out on a limb here and guess size 13(including procByte)
+                    return new byte[13];
+                case 0x8D:
+                    //"normal function", size == next byte + 2(to capture header of procByte & size)
+                    return new byte[TrimmedContents[procLocation + 1] + 2];
+                case 0x8E:
+                    //"large function", size == next two bytes + 3(to capture header of procByte & size)
+                    return new byte[BitConverter.ToInt16(TrimmedContents, procLocation + 1) + 3];
+                default:
+                    //need to add, not sure what other cases there may be;
+                    MessageBox.Show($"Unknown function call at: {procLocation} - {procByte}");
+                    throw new NotImplementedException();
+            }
+        }
+
         private byte[] GetFunctionByteData(string functionName, out int procTablePosition, out int scriptPos)
         { 
             //this seems to be working correctly(for now). need to do more extensive testing and such to be 100% certain
@@ -319,6 +377,7 @@ namespace gcx
                     int procLocation = _proceduresDataLocation + scriptPos;
                     byte procByte = TrimmedContents[procLocation];
 
+                    functionData = GetFunctionSize(procByte, procLocation);
                     //DOING A BRAINDUMP THAT MIGHT CHANGE HOW I DO THIS IN A MUCH MORE INTELLIGENT WAY GOING FORWARD:
                     //i THINK, in actuality, the length of each function does NOT include the first few bytes
                     //INSTEAD, i think it starts after the length denomination, which i believe would make absolutely everything fall into place(maybe?)
@@ -326,7 +385,8 @@ namespace gcx
                     //it would also fix the issue with the empty 81 functions
                     //i believe it would fix the stupid fuckin 8E functions as well
                     //i dont know for certain about 89 or 86, but it would make sense for those too i think(in some way)
-                    if (procByte == 0x8D)
+                    //^ implemented this in GetFunctionSize(), looks like its working perfectly
+                    /*if (procByte == 0x8D)
                     {
                         functionData = new byte[TrimmedContents[procLocation + 1] + 2]; //to try and capture the A0 00 endings and 00 00 endings
                     }
@@ -347,11 +407,12 @@ namespace gcx
                     else
                     {
                         //this seems to work!
-                        int size = BitConverter.ToInt16(TrimmedContents, procLocation + 1) + 1;
+                        uint size = (uint) BitConverter.ToUInt16(TrimmedContents, procLocation + 1) + 1;
                         functionData = new byte[size];
                     }
                     if (functionData.Length == 0)
                         functionData = new byte[2];
+                    */
                 }
                 else
                 {
@@ -364,7 +425,7 @@ namespace gcx
 
                     functionData = new byte[TrimmedContents[_proceduresDataLocation + scriptPos + 1]];
                 }
-
+                //8E functions are breaking this for some functions I think. need to determine how and why(maybe related to the dumb way of doing things im doing them now)
                 Array.Copy(TrimmedContents, _proceduresDataLocation + scriptPos, functionData, 0, functionData.Length);
             }
             else

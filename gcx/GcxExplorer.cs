@@ -105,7 +105,8 @@ namespace gcx
                 //filter out any procs that don't call any of our known, desired procs
                 foreach(DecodedProc entry in contentTree)
                 {
-                    //if (KnownProc.SpawnProcs.Any(knownProc => entry.Name.Contains(knownProc.BigEndianRepresentation)))
+                    if (KnownProc.SpawnProcs.Any(knownProc => entry.Name.Contains(knownProc.BigEndianRepresentation)))
+                    //if(ContainsSpawningFunctions(entry))
                         contentTreeCarbonCopy.Add(entry);
                 }
 
@@ -113,10 +114,21 @@ namespace gcx
                 foreach(DecodedProc item in contentTreeCarbonCopy)
                 {
                     treeNodes.Add(new TreeNode(item.Name));
-                    File.WriteAllBytes($"{item.Name.Trim()}.proc", contentTree.Find(proc => proc.Name == item.Name).RawContents);
+                    if(!item.Name.Contains("main"))
+                        File.WriteAllBytes($"{item.Name.Trim()}.proc", contentTree.Find(proc => proc.Name == item.Name).RawContents);
                 }
                 contentsTreeView.Nodes.AddRange(treeNodes.ToArray());
             }
+        }
+
+        private bool ContainsSpawningFunctions(DecodedProc func)
+        {
+            List<string> spawningFunctions = new List<string>();
+            foreach(RawProc spawningFunc in KnownProc.SpawnProcs)
+            {
+                spawningFunctions.Add(spawningFunc.BigEndianRepresentation);
+            }
+            return spawningFunctions.Any(function => func.DecodedContents.Contains(function));
         }
 
         private void contentsTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
@@ -241,9 +253,6 @@ namespace gcx
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //not quite working correctly, unsure if its because of the procs or because of this method. the level still loaded, but i cant decompile
-            /*byte[] contents = new byte[] { 0x8D, 0x12, 0x6D, 0x0F, 0xC9, 0x2B, 0x08, 0x04, 0x06, 0xCB, 0xB5, 0x56, 0x55, 0x6D, 0x06, 0xE9, 0xB3, 0xCC };
-            DecodedProc procedure = new DecodedProc("40ADFE", contents, "doesnt matter", 0, 0);*/
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.DefaultExt = ".proc";
             ofd.Multiselect = true;
@@ -259,8 +268,6 @@ namespace gcx
                     DecodedProc procedure = new DecodedProc(procName, order, File.ReadAllBytes(fileSelected), null, 0, 0);
                     gcx_Editor.InsertNewProcedureToFile(procedure);
                 }
-                
-                //this is quite close to working i think, but the resources are fucked, i think
             }
         }
 

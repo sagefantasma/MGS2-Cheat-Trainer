@@ -47,10 +47,10 @@ namespace gcx
         public static readonly RawProc AwardBandages = new RawProc { BigEndianRepresentation = "D2A222", LittleEndianRepresentation = new byte[] { 0x22, 0xA2, 0xD2 } };
         public static readonly RawProc AwardBodyArmor = new RawProc { BigEndianRepresentation = "E6E562", LittleEndianRepresentation = new byte[] { 0x62, 0xE5, 0xE6 } };
         public static readonly RawProc AwardBox1 = new RawProc { BigEndianRepresentation = "97D665", LittleEndianRepresentation = new byte[] { 0x65, 0xD6, 0x97 } };
-        public static readonly RawProc AwardBox2 = new RawProc { BigEndianRepresentation = "3E997CF", LittleEndianRepresentation = new byte[] { 0xCF, 0x97, 0xE9, 0x3 } };
-        public static readonly RawProc AwardBox3 = new RawProc { BigEndianRepresentation = "9E997CF", LittleEndianRepresentation = new byte[] { 0xCF, 0x97, 0xE9, 0x9 } }; //check
+        public static readonly RawProc AwardBox2 = new RawProc { BigEndianRepresentation = "3E997CF", LittleEndianRepresentation = new byte[] { 0xCF, 0x97, 0xE9, 0x3 } }; //none of these seem to exist in the list of procs?
+        public static readonly RawProc AwardBox3 = new RawProc { BigEndianRepresentation = "9E997CF", LittleEndianRepresentation = new byte[] { 0xCF, 0x97, 0xE9, 0x9 } }; //none of these seem to exist in the list of procs?
         public static readonly RawProc AwardBox4 = new RawProc { BigEndianRepresentation = "7E97CF", LittleEndianRepresentation = new byte[] { 0xCF, 0x97, 0x7E } };
-        public static readonly RawProc AwardBox5 = new RawProc { BigEndianRepresentation = "9E997CF", LittleEndianRepresentation = new byte[] { 0xCF, 0x97, 0xE9, 0x9 } }; //check... its valid????
+        public static readonly RawProc AwardBox5 = new RawProc { BigEndianRepresentation = "9E997CF", LittleEndianRepresentation = new byte[] { 0xCF, 0x97, 0xE9, 0x9 } }; //none of these seem to exist in the list of procs?
         public static readonly RawProc AwardWetBox = new RawProc { BigEndianRepresentation = "CAF11B", LittleEndianRepresentation = new byte[] { 0x1B, 0xF1, 0xCA } };
         public static readonly RawProc AwardColdMeds = new RawProc { BigEndianRepresentation = "AD455F", LittleEndianRepresentation = new byte[] { 0x5F, 0x45, 0xAD } };
         public static readonly RawProc AwardColdMeds2 = new RawProc { BigEndianRepresentation = "42E8F1", LittleEndianRepresentation = new byte[] { 0xF1, 0xE8, 0x42 } };

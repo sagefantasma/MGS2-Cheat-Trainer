@@ -113,7 +113,7 @@ namespace gcx
                 foreach(DecodedProc item in contentTreeCarbonCopy)
                 {
                     treeNodes.Add(new TreeNode(item.Name));
-                    File.WriteAllBytes($"{item.Name}.proc", contentTree.Find(proc => proc.Name == item.Name).RawContents);
+                    File.WriteAllBytes($"{item.Name.Trim()}.proc", contentTree.Find(proc => proc.Name == item.Name).RawContents);
                 }
                 contentsTreeView.Nodes.AddRange(treeNodes.ToArray());
             }
@@ -241,6 +241,7 @@ namespace gcx
 
         private void button1_Click(object sender, EventArgs e)
         {
+            //not quite working correctly, unsure if its because of the procs or because of this method. the level still loaded, but i cant decompile
             /*byte[] contents = new byte[] { 0x8D, 0x12, 0x6D, 0x0F, 0xC9, 0x2B, 0x08, 0x04, 0x06, 0xCB, 0xB5, 0x56, 0x55, 0x6D, 0x06, 0xE9, 0xB3, 0xCC };
             DecodedProc procedure = new DecodedProc("40ADFE", contents, "doesnt matter", 0, 0);*/
             OpenFileDialog ofd = new OpenFileDialog();
@@ -275,6 +276,11 @@ namespace gcx
             //support it(causing crashes). Before I go any further in this direction, I need to work on splicing functions in.
             //if that doesn't work, then we may have no choice but to go the route of the SoL randomizer, but I think it should
             //work in theory.
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            button1_Click(sender, e);
         }
     }
 }

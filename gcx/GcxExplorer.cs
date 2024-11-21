@@ -253,22 +253,23 @@ namespace gcx
 
         private void button1_Click(object sender, EventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.DefaultExt = ".proc";
-            ofd.Multiselect = true;
-            ofd.Filter = "Proc files (*.proc)|*.proc";
-            if(ofd.ShowDialog() == DialogResult.OK)
+            List<DecodedProc> procsToAdd = SelectProcsToAdd();
+            if (procsToAdd.Count == 0)
+                return;
+            foreach (DecodedProc proc in procsToAdd)
             {
-                string[] filesSelected = ofd.FileNames;
-                foreach(string fileSelected in filesSelected)
-                {
-                    FileInfo fileInfo = new FileInfo(fileSelected);
-                    string procName = fileInfo.Name.Replace("proc_0x", "").Replace(".proc", "");
-                    uint order = Convert.ToUInt32(procName.Trim(), 16);
-                    DecodedProc procedure = new DecodedProc(procName, order, File.ReadAllBytes(fileSelected), null, 0, 0);
-                    gcx_Editor.InsertNewProcedureToFile(procedure);
-                }
+                gcx_Editor.InsertNewProcedureToFile(proc);
             }
+        }
+
+        private List<DecodedProc> SelectProcsToAdd()
+        {
+            using (ProcSelector procSelector = new ProcSelector())
+                if (procSelector.ShowDialog() == DialogResult.OK)
+                {
+                    return procSelector.ProcsToAdd;
+                }
+            return null;
         }
 
         private void button2_Click(object sender, EventArgs e)

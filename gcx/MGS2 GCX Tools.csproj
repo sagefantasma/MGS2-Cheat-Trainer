@@ -88,16 +88,61 @@
     <Compile Include="GcxProcs.cs" />
     <Compile Include="ItemSets.cs" />
     <Compile Include="MGS2Randomizer.cs" />
+    <Compile Include="ProcSelector.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProcSelector.Designer.cs">
+      <DependentUpon>ProcSelector.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="MGS2 Known Procs\proc_0x2F31D6.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x37D629.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x42E8F1.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x53A62E.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x8A7EAF.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x97D665.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0xAD455F.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0xAFCC9B.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0xCAF11B.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0xD2A222.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0xF57D47.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0xF71E5B.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GcxExplorer.resx">
       <DependentUpon>GcxExplorer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProcSelector.resx">
+      <DependentUpon>ProcSelector.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -126,5 +171,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

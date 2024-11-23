@@ -290,5 +290,25 @@ namespace gcx
         {
             button1_Click(sender, e);
         }
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.DefaultExt = ".proc";
+            ofd.Multiselect = true;
+            ofd.Filter = "Proc files (*.proc)|*.proc";
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                string[] filesSelected = ofd.FileNames;
+                foreach (string fileSelected in filesSelected)
+                {
+                    FileInfo fileInfo = new FileInfo(fileSelected);
+                    string procName = fileInfo.Name.Replace("proc_0x", "").Replace(".proc", "");
+                    uint order = Convert.ToUInt32(procName.Trim(), 16);
+                    DecodedProc procedure = new DecodedProc(procName, order, File.ReadAllBytes(fileSelected), null, 0, 0);
+                    gcx_Editor.InsertNewProcedureToFile(procedure);
+                }
+            }
+        }
     }
 }

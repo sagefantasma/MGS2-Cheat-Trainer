@@ -99,6 +99,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="MGS2 Known Procs\proc_0x19F8BB.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="MGS2 Known Procs\proc_0x2F31D6.proc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

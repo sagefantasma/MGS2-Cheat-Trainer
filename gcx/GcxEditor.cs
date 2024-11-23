@@ -36,6 +36,7 @@ namespace gcx
         private int _proceduresDataLocation;
         private int _mainBodySize;
         private int _mainDataLocation;
+        private string currentDecompiledFile;
 
         public GcxEditor()
         {
@@ -116,6 +117,7 @@ namespace gcx
             //remove first 4 bytes, then call python script
             //make note of the output as we will use it for the rest of the explorer
             FileName = file;
+            FileInfo fileInfo = new FileInfo(FileName);
             RawContents = File.ReadAllBytes(FileName);
             Timestamp = new byte[4]; //LCGB
             FileVersion = new byte[4];
@@ -123,12 +125,14 @@ namespace gcx
             Array.Copy(RawContents, Timestamp, Timestamp.Length);
             Array.Copy(RawContents, 4, FileVersion, 0, FileVersion.Length);
             Array.Copy(RawContents, 4, TrimmedContents, 0, TrimmedContents.Length);
-            File.WriteAllBytes("sanitizedGcx", TrimmedContents);
+            string sanitizedGcx = $"{Path.GetFileNameWithoutExtension(fileInfo.FullName)}_sanitized";
+            string outputFile = $"{sanitizedGcx}.gcxOutput";
+            File.WriteAllBytes($"{sanitizedGcx}.gcx", TrimmedContents);
 
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
                 FileName = "gcx_decompiler.exe",
-                Arguments = @".\sanitizedGcx .",
+                Arguments = $@".\{sanitizedGcx}.gcx {outputFile}",
                 RedirectStandardOutput = true,
                 UseShellExecute = false
             };
@@ -136,6 +140,7 @@ namespace gcx
 
             decompilingProcess.WaitForExit();
 
+            currentDecompiledFile = outputFile;
             string decompilingOutput = decompilingProcess.StandardOutput.ReadToEnd();
             string[] decompilingOutputs = decompilingOutput.Split('\n');
             foreach(string output in decompilingOutputs)
@@ -200,7 +205,7 @@ namespace gcx
         internal List<DecodedProc> BuildContentTree()
         {
             //take the out file and break it down into main function and all procs
-            string decompiledFile = "._sanitizedGcx_out";
+            string decompiledFile = currentDecompiledFile;
 
             string[] linedContents = File.ReadAllLines(decompiledFile);
             linedContents = linedContents.Where(line => line != "").ToArray();

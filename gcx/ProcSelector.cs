@@ -37,7 +37,7 @@ namespace gcx
                 KnownProc.AwardBook, KnownProc.AwardRation, KnownProc.AwardBandages, KnownProc.AwardPentazemin };
         }
 
-        private DecodedProc ConvertRawProcToDecodedProc(RawProc rawProc)
+        public static DecodedProc ConvertRawProcToDecodedProc(RawProc rawProc)
         {
             FileInfo procFile = new FileInfo($"MGS2 Known Procs/proc_0x{rawProc.BigEndianRepresentation}.proc");
             string procName = procFile.Name.Replace("proc_0x", "").Replace(".proc", "");

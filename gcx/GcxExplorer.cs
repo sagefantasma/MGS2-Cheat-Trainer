@@ -75,6 +75,7 @@ namespace gcx
             quickIdProcs.Add(KnownProc.AwardStunG, Color.LightGreen);
             quickIdProcs.Add(KnownProc.AwardThermalG, Color.LightCoral);
             quickIdProcs.Add(KnownProc.AwardUspAmmo, Color.LightGreen);
+            quickIdProcs.Add(KnownProc.AwardUspSuppressor, Color.LightCoral);
             quickIdProcs.Add(KnownProc.AwardWetBox, Color.LightCoral);
         }
 
@@ -105,8 +106,8 @@ namespace gcx
                 //filter out any procs that don't call any of our known, desired procs
                 foreach(DecodedProc entry in contentTree)
                 {
-                    if (KnownProc.SpawnProcs.Any(knownProc => entry.Name.Contains(knownProc.BigEndianRepresentation)))
-                    //if(ContainsSpawningFunctions(entry))
+                    //if (KnownProc.SpawnProcs.Any(knownProc => entry.Name.Contains(knownProc.BigEndianRepresentation)))
+                    if(ContainsSpawningFunctions(entry))
                         contentTreeCarbonCopy.Add(entry);
                 }
 
@@ -309,6 +310,18 @@ namespace gcx
                     gcx_Editor.InsertNewProcedureToFile(procedure);
                 }
             }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            List<DecodedProc> spawnerProcsInFile = new List<DecodedProc>();
+            foreach(DecodedProc spawnerProc in contentTreeCarbonCopy)
+            {
+                spawnerProcsInFile.Add(spawnerProc);
+            }
+            ProcEditor procEditor = new ProcEditor(spawnerProcsInFile);
+            procEditor.ShowDialog();
+            int a = 2 + 2;
         }
     }
 }

@@ -446,7 +446,7 @@ namespace gcx
             return functionData;
         }
 
-        private static int FindSubArray(byte[] largeArray, byte[] subArray)
+        public static int FindSubArray(byte[] largeArray, byte[] subArray)
         {
             if (largeArray == null || subArray == null)
                 throw new ArgumentNullException("Arrays cannot be null");
@@ -471,6 +471,38 @@ namespace gcx
             }
 
             return -1; // Subarray not found
+        }
+
+        public static List<int> FindAllSubArray(byte[] largeArray, byte[] subArray)
+        {
+            if (largeArray == null || subArray == null)
+                throw new ArgumentNullException("Arrays cannot be null");
+
+            if (subArray.Length == 0)
+                return null;
+
+            List<int> matches = new List<int>();
+            for (int i = 0; i <= largeArray.Length - subArray.Length; i++)
+            {
+                bool match = true;
+                for (int j = 0; j < subArray.Length; j++)
+                {
+                    if (largeArray[i + j] != subArray[j])
+                    {
+                        match = false;
+                        break;
+                    }
+                }
+
+                if (match)
+                    matches.Add(i);
+            }
+
+            if(matches.Count != 0)
+            {
+                return matches;
+            }
+            return null; // Subarray not found
         }
     }
 }

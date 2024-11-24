@@ -12,12 +12,19 @@ namespace gcx
 {
     public partial class ProcEditor : Form
     {
-        private class ItemSpawn
+        public class ItemSpawn
         {
             public DecodedProc spawnerProc { get; set; }
             public int positionInSpawnerProc { get; set; }
             public RawProc itemProc { get; set; }
             public ComboBox uiComboBox { get; set; }
+
+            public ItemSpawn(DecodedProc spawnerProc, int positionInSpawnerProc, RawProc itemProc)
+            {
+                this.spawnerProc = spawnerProc;
+                this.positionInSpawnerProc = positionInSpawnerProc;
+                this.itemProc = itemProc;
+            }
 
             public ItemSpawn(DecodedProc spawnerProc, int positionInSpawnerProc, RawProc itemProc, ComboBox comboBox)
             {
@@ -28,7 +35,7 @@ namespace gcx
             }
         }
 
-        List<ItemSpawn> spawnProcsCalled = new List<ItemSpawn>();
+        #region Manual Modification
         public ProcEditor(List<DecodedProc> spawnerProcs)
         {
             InitializeComponent();
@@ -36,15 +43,14 @@ namespace gcx
             {
                 CreateUIElements(procToEdit);
             }
-            int a = 2 + 2;
         }
 
         private void CreateUIElements(DecodedProc procToEdit)
         {
-            foreach(RawProc knownProc in KnownProc.SpawnProcs)
+            foreach (RawProc knownProc in KnownProc.SpawnProcs)
             {
                 List<int> positions = GcxEditor.FindAllSubArray(procToEdit.RawContents, knownProc.LittleEndianRepresentation);
-                if(positions == null || positions.Count == 0)
+                if (positions == null || positions.Count == 0)
                 {
                     continue;
                 }
@@ -62,7 +68,7 @@ namespace gcx
                         };
                         flowLayoutPanel1.Controls.Add(comboBox);
                         source.Position = index;
-                        spawnProcsCalled.Add(new ItemSpawn(procToEdit, position, knownProc, comboBox));
+                        _spawnProcsCalled.Add(new ItemSpawn(procToEdit, position, knownProc, comboBox));
                     }
                 }
             }
@@ -70,16 +76,60 @@ namespace gcx
 
         private void button1_Click(object sender, EventArgs e)
         {
-            foreach(ItemSpawn spawnProc in spawnProcsCalled)
-            {
-                RawProc selectedProc = (spawnProc.uiComboBox.SelectedItem as RawProc);
-                if (selectedProc != spawnProc.itemProc)
-                {
-                    //the proc has been updated
-                    Array.Copy(selectedProc.LittleEndianRepresentation, 0, spawnProc.spawnerProc.RawContents, spawnProc.positionInSpawnerProc, selectedProc.LittleEndianRepresentation.Length);
-                }
-            }
+            SaveChanges();
             Close();
         }
+        #endregion
+
+        private static List<ItemSpawn> _spawnProcsCalled = new List<ItemSpawn>();
+        public static List<ItemSpawn> SpawningProcs {  get { return _spawnProcsCalled; } }
+
+
+        #region Automated Modification
+        public static void InitializeEditor(List<DecodedProc> spawnerProcs)
+        {
+            foreach(DecodedProc procToEdit in spawnerProcs)
+            {
+                EnumerateSpawnProcs(procToEdit);
+            }
+        }
+
+        private static void EnumerateSpawnProcs(DecodedProc procToEdit)
+        {
+            foreach (RawProc knownProc in KnownProc.SpawnProcs)
+            {
+                List<int> positions = GcxEditor.FindAllSubArray(procToEdit.RawContents, knownProc.LittleEndianRepresentation);
+                if (positions == null || positions.Count == 0)
+                {
+                    continue;
+                }
+                foreach (int position in positions)
+                {
+                    if (procToEdit.RawContents[position - 2] == 0x7D)
+                    {
+                        _spawnProcsCalled.Add(new ItemSpawn(procToEdit, position, knownProc));
+                    }
+                }
+            }
+        }
+
+        public static void ModifySpawnProc(ItemSpawn spawnToEdit, RawProc replacementProc)
+        {
+            ItemSpawn localSpawn = _spawnProcsCalled.Find(x => x.spawnerProc == spawnToEdit.spawnerProc 
+                                                          && x.itemProc == spawnToEdit.itemProc 
+                                                          && x.positionInSpawnerProc == spawnToEdit.positionInSpawnerProc);
+            localSpawn.itemProc = replacementProc;
+        }
+
+        public static void SaveChanges()
+        {
+            foreach (ItemSpawn spawnProc in _spawnProcsCalled)
+            {
+                RawProc selectedProc = spawnProc.itemProc;
+                Array.Copy(selectedProc.LittleEndianRepresentation, 0, spawnProc.spawnerProc.RawContents, spawnProc.positionInSpawnerProc, selectedProc.LittleEndianRepresentation.Length);
+            }
+        }
+
+        #endregion
     }
 }

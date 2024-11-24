@@ -268,9 +268,19 @@ namespace gcx
             using (ProcSelector procSelector = new ProcSelector())
                 if (procSelector.ShowDialog() == DialogResult.OK)
                 {
-                    return procSelector.ProcsToAdd;
+                    return ProcSelector.ProcsToAdd;
                 }
             return null;
+        }
+
+        private void AddAllProcs()
+        {
+            ProcSelector.GetAllProcs();
+            
+            foreach(DecodedProc proc in ProcSelector.ProcsToAdd)
+            {
+                gcx_Editor.InsertNewProcedureToFile(proc);
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -292,7 +302,27 @@ namespace gcx
             button1_Click(sender, e);
         }
 
-        private void button2_Click_1(object sender, EventArgs e)
+        private void OopsAllShavers(object sender, EventArgs e)
+        {
+            List<DecodedProc> spawnerProcsInFile = new List<DecodedProc>();
+            foreach (DecodedProc spawnerProc in contentTreeCarbonCopy)
+            {
+                spawnerProcsInFile.Add(spawnerProc);
+            }
+            ProcEditor.InitializeEditor(spawnerProcsInFile);
+            //Technically, adding all procs is TOTAL overkill, but it's literally just 5.4KB. Unless something doesn't load as a result
+            //I think this is the easiest and most straight-forward solution.
+            AddAllProcs();
+            List<ProcEditor.ItemSpawn> list = ProcEditor.SpawningProcs;
+            foreach (ProcEditor.ItemSpawn spawn in list) 
+            {
+                ProcEditor.ModifySpawnProc(spawn, KnownProc.AwardShaver);
+            }
+            ProcEditor.SaveChanges();
+            saveFileButton_Click(null, null);
+        }
+
+        private void ManuallyLoadProc()
         {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.DefaultExt = ".proc";
@@ -321,7 +351,6 @@ namespace gcx
             }
             ProcEditor procEditor = new ProcEditor(spawnerProcsInFile);
             procEditor.ShowDialog();
-            int a = 2 + 2;
         }
     }
 }

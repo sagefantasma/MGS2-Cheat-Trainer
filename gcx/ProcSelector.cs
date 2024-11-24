@@ -14,7 +14,7 @@ namespace gcx
 {
     public partial class ProcSelector : Form
     {
-        public List<DecodedProc> ProcsToAdd = new List<DecodedProc>();
+        public static List<DecodedProc> ProcsToAdd = new List<DecodedProc>();
         public ProcSelector()
         {
             InitializeComponent();
@@ -28,7 +28,7 @@ namespace gcx
             InitializeProcDependencies();
         }
 
-        private void InitializeProcDependencies()
+        private static void InitializeProcDependencies()
         {
             KnownProc.GunCheck.ProcDependencies = new RawProc[] { KnownProc.AwardM9Ammo, KnownProc.AwardUspAmmo,
                 KnownProc.AwardSocomAmmo, KnownProc.AwardM4Ammo, KnownProc.AwardPsg1Ammo, KnownProc.AwardPsg1tAmmo,
@@ -59,7 +59,18 @@ namespace gcx
             Close();
         }
 
-        private void AddDependencies(RawProc proc)
+        public static void GetAllProcs()
+        {
+            InitializeProcDependencies();
+            foreach(RawProc proc in KnownProc.SpawnProcs)
+            {
+                DecodedProc procedure = ConvertRawProcToDecodedProc(proc);
+                ProcsToAdd.Add(procedure);
+                AddDependencies(proc);
+            }
+        }
+
+        private static void AddDependencies(RawProc proc)
         {
             if (proc.ProcDependencies != null)
             {

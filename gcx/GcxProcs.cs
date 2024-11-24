@@ -174,6 +174,13 @@ namespace gcx
             LittleEndianRepresentation = new byte[] { 0x1B, 0xF1, 0xCA },
             ProcDependencies = null
         };
+        public static readonly RawProc AwardRation = new RawProc
+        {
+            CommonName = "Ration",
+            BigEndianRepresentation = "53A62E",
+            LittleEndianRepresentation = new byte[] { 0x2E, 0xA6, 0x53 },
+            ProcDependencies = new RawProc[] { InventoryCheck }
+        }; //technically there are multiple versions of this with different dependencies. need to be careful about this
         public static readonly RawProc AwardColdMeds = new RawProc
         {
             CommonName = "Cold Meds",
@@ -216,13 +223,7 @@ namespace gcx
             LittleEndianRepresentation = new byte[] { 0x5B, 0x1E, 0xF7 },
             ProcDependencies = new RawProc[] { InventoryCheck }
         };
-        public static readonly RawProc AwardRation = new RawProc
-        {
-            CommonName = "Ration",
-            BigEndianRepresentation = "53A62E",
-            LittleEndianRepresentation = new byte[] { 0x2E, 0xA6, 0x53 },
-            ProcDependencies = new RawProc[] { InventoryCheck }
-        }; //technically there are multiple versions of this with different dependencies. need to be careful about this
+        
         public static readonly RawProc AwardSensorB = new RawProc
         {
             CommonName = "Sensor B",

@@ -76,7 +76,21 @@ namespace gcx
 
         private void button1_Click(object sender, EventArgs e)
         {
-            SaveChanges();
+            SaveManualChanges();
+            Close();
+        }
+
+        private void SaveManualChanges()
+        {
+            foreach (ItemSpawn spawnProc in _spawnProcsCalled)
+            {
+                RawProc selectedProc = (spawnProc.uiComboBox.SelectedItem as RawProc);
+                if (selectedProc != spawnProc.itemProc)
+                {
+                    //the proc has been updated
+                    Array.Copy(selectedProc.LittleEndianRepresentation, 0, spawnProc.spawnerProc.RawContents, spawnProc.positionInSpawnerProc, selectedProc.LittleEndianRepresentation.Length);
+                }
+            }
             Close();
         }
         #endregion
@@ -121,7 +135,7 @@ namespace gcx
             localSpawn.itemProc = replacementProc;
         }
 
-        public static void SaveChanges()
+        public static void SaveAutomatedChanges()
         {
             foreach (ItemSpawn spawnProc in _spawnProcsCalled)
             {

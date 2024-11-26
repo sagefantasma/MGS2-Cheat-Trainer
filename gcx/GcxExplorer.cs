@@ -302,6 +302,12 @@ namespace gcx
             button1_Click(sender, e);
         }
 
+        private void InsertAllKnownProcs(object sender, EventArgs e)
+        {
+            AddAllProcs();
+            saveFileButton_Click(null, null);
+        }
+
         private void OopsAllShavers(object sender, EventArgs e)
         {
             List<DecodedProc> spawnerProcsInFile = new List<DecodedProc>();
@@ -314,7 +320,7 @@ namespace gcx
             //I think this is the easiest and most straight-forward solution.
             AddAllProcs();
             List<ProcEditor.ItemSpawn> list = ProcEditor.SpawningProcs;
-            foreach (ProcEditor.ItemSpawn spawn in list) 
+            foreach (ProcEditor.ItemSpawn spawn in list)
             {
                 ProcEditor.ModifySpawnProc(spawn, KnownProc.AwardShaver);
             }

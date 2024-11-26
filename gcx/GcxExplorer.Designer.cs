@@ -38,8 +38,8 @@
             this.saveFileButton = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.hexCodeRichTextbox = new System.Windows.Forms.RichTextBox();
             this.button3 = new System.Windows.Forms.Button();
+            this.hexCodeRichTextbox = new System.Windows.Forms.RichTextBox();
             this.guiControlsLayoutPanel.SuspendLayout();
             this.nodeContentsGroupBox.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
@@ -159,19 +159,9 @@
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(113, 66);
             this.button2.TabIndex = 8;
-            this.button2.Text = "Auto Replace All Spawns with Shaver xdd";
+            this.button2.Text = "Insert All Known Procs";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.OopsAllShavers);
-            // 
-            // hexCodeRichTextbox
-            // 
-            this.hexCodeRichTextbox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hexCodeRichTextbox.Location = new System.Drawing.Point(535, 3);
-            this.hexCodeRichTextbox.Name = "hexCodeRichTextbox";
-            this.hexCodeRichTextbox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.hexCodeRichTextbox.Size = new System.Drawing.Size(262, 219);
-            this.hexCodeRichTextbox.TabIndex = 6;
-            this.hexCodeRichTextbox.Text = "";
+            this.button2.Click += new System.EventHandler(this.InsertAllKnownProcs);
             // 
             // button3
             // 
@@ -182,6 +172,16 @@
             this.button3.Text = "Change Spawner Function(s)";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // hexCodeRichTextbox
+            // 
+            this.hexCodeRichTextbox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.hexCodeRichTextbox.Location = new System.Drawing.Point(535, 3);
+            this.hexCodeRichTextbox.Name = "hexCodeRichTextbox";
+            this.hexCodeRichTextbox.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.hexCodeRichTextbox.Size = new System.Drawing.Size(262, 219);
+            this.hexCodeRichTextbox.TabIndex = 6;
+            this.hexCodeRichTextbox.Text = "";
             // 
             // GcxExplorer
             // 

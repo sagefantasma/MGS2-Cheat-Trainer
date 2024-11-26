@@ -324,7 +324,7 @@ namespace gcx
             {
                 ProcEditor.ModifySpawnProc(spawn, KnownProc.AwardShaver);
             }
-            ProcEditor.SaveChanges();
+            ProcEditor.SaveAutomatedChanges();
             saveFileButton_Click(null, null);
         }
 

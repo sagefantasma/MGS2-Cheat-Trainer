@@ -76,6 +76,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GcxLevelResourceMapper.cs" />
     <Compile Include="GcxTableMapping.cs" />
     <Compile Include="GcxComparator.cs" />
     <Compile Include="GcxEditor.cs" />

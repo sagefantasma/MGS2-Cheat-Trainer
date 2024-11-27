@@ -124,9 +124,23 @@ namespace gcx
             GoggleIbox, GoggleSh, CboxLabel, DetectorIbox, DetectorSh, DMicIbox, DMicSh
         }; // 70 resources
 
+        static List<string> AllPlantWeaponItemResources = new List<string>()
+        {
+            AKAmmoLabel, AKWeaponLabel, MagazineIbox, MagazineLabel, MagazineSh, C4Label, ChaffLabel,
+            ClaymoreLabel, DMicLabel, GrenadeLabel, M4AmmoLabel, M4WeaponLabel, M9AmmoLabel, M9WeaponLabel,
+            NikitaAmmoLabel, NikitaWeaponLabel, PSG1AmmoLabel, PSG1WeaponLabel, PSG1TAmmoLabel, PSG1TWeaponLabel, RGB6AmmoLabel,
+            RGB6WeaponLabel, SocomAmmoLabel, StingerAmmoLabel, StingerWeaponLabel, StunLabel, AKSuppressorLabel,
+            BandagesLabel, BodyArmorLabel, RationIbox, RationSh , RationLabel, ColdMedsLabel, DigitalCameraIbox,
+            DigitalCameraLabel, DigitalCameraSh, PentazeminLabel, SensorBLabel, ShaverLabel, SocomSuppressorLabel, ThermalGogglesLabel,
+            MineDetectorLabel, NVGLabel, RifleAmmoIbox, RifleAmmoSh, RifleIbox, RifleSh,
+            LauncherAmmoIbox, LauncherAmmoSh, LauncherIbox, LauncherSh, GrenadeIbox, GrenadeSh, HandgunAmmoIbox,
+            HandgunAmmoSh, MedicineIbox, MedicineSh, HandgunIbox, HandgunSh, Box2Ibox, Box2Sh,
+            GoggleIbox, GoggleSh, CboxLabel, DetectorIbox, DetectorSh, DMicIbox, DMicSh
+        };
+
         static List<string> AllTankerWeaponItemResources = new List<string>()
         {
-            MagazineIbox, MagazineLabel, MagazineSh, ChaffLabel, GrenadeLabel, M9AmmoLabel, StunLabel, USPAmmoLabel, BandagesLabel,
+            ChaffLabel, GrenadeLabel, M9AmmoLabel, StunLabel, USPAmmoLabel, BandagesLabel,
             RationIbox, RationSh, RationLabel, ColdMedsLabel, PentazeminLabel, ThermalGogglesLabel, USPSuppressorLabel, GrenadeIbox,
             GrenadeSh, HandgunAmmoIbox, HandgunAmmoSh, MedicineIbox, MedicineSh, Box2Ibox, Box2Sh, GoggleIbox, GoggleSh, CboxLabel
         };
@@ -153,17 +167,21 @@ namespace gcx
                 resourceMapping.Add(new GcxResources(parsedStageName, resources));
             }
 
+            List<GcxResources> missingAssets = new List<GcxResources>();
             foreach (GcxResources resourceMap in resourceMapping)
             {
-                if (resourceMap._gcxFile.StartsWith("w0"))
+                if (!resourceMap._gcxFile.StartsWith("w0"))
                 {
-                    foreach (string resource in AllTankerWeaponItemResources)
+                    List<string> missingResources = new List<string>();
+                    foreach (string resource in AllPlantWeaponItemResources)
                     {
                         if (!resourceMap._resources.Contains($"{resource}.kms"))
                         {
-
+                            missingResources.Add(resource);
                         }
                     }
+                    if(missingResources.Count > 0)
+                        missingAssets.Add(new GcxResources(resourceMap._gcxFile, missingResources));
                 }
             }
 

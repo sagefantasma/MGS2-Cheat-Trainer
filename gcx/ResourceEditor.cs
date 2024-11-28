@@ -98,15 +98,67 @@ namespace gcx
             int index = 0;
 
             if (resource.IsManifestFile) 
-            { 
-            
+            {
+                //manifest files will be just .kms
+                byte[] startOfKms = Encoding.UTF8.GetBytes("assets/kms");
+                byte[] startOfCv2 = Encoding.UTF8.GetBytes("assets/cv2");
+                byte[] eol = new byte[] { 0x0D, 0x0D, 0x0A };
+                index = GcxEditor.FindSubArray(_manifestContents.ToArray(), startOfKms);
+                //we now have the start of the kms array
+                //next we need to find the asset that would come AFTER the asset we're adding
+                //(i.e.: if we're adding dog.kms, we need to find cat.kms after dump.kms)
+                int endSplitIndex = GcxEditor.FindSubArray(_manifestContents.ToArray(), startOfCv2);
+                byte[] kmsArray = new byte[endSplitIndex - index];
+                Array.Copy(_manifestContents.ToArray(), kmsArray, kmsArray.Length);
+                List<int> splittingIndices = GcxEditor.FindAllSubArray(kmsArray, eol);
+
+                List<byte[]> individualizedResources = SplitResources(splittingIndices, kmsArray);
+
+
             }
             else 
             {
-            
+                //assets files will be .ctxr and .cmdl
             }
 
             return index;
+        }
+
+        private static object FindPositionInAlphabeticalOrder(List<byte[]> existingResources, byte[] newResource, int indexToCompare, bool reverse=false)
+        {
+            for (int i = 0; i < existingResources.Count; i++)
+            {
+                if (existingResources[i][indexToCompare] < newResource[indexToCompare])
+                {
+                    //letter is earlier in alphabet than new resource
+                }
+                else if (existingResources[i][indexToCompare] > newResource[indexToCompare])
+                {
+                    //letter is later in alphabet than new resource
+                }
+                else
+                {
+                    //letter is same in alphabet as new resource
+                }
+            }
+        }
+
+        private static List<byte[]> SplitResources(List<int> splittingIndices, byte[] resourceArray)
+        {
+            //I _think_ this will work to split all the kms resources individually?
+            List<byte[]> existingResources = new List<byte[]>();
+            for (int i = 0; i < splittingIndices.Count; i++)
+            {
+                byte[] splitResource;
+                if (i < splittingIndices.Count)
+                    splitResource = new byte[splittingIndices[i + 1] - splittingIndices[i]];
+                else
+                    splitResource = new byte[resourceArray.Length - splittingIndices[i]];
+                Array.Copy(resourceArray, splittingIndices[i], splitResource, 0, splitResource.Length);
+                existingResources.Add(splitResource);
+            }
+
+            return existingResources;
         }
 
         private static List<MGS2ResourceData> PrepareListOfMissingData(string resourceToAdd)

@@ -8,7 +8,10 @@ namespace gcx
 {
     public struct MGS2Resource
     {
-        public static Resource ColdMeds = new Resource("ColdMeds", "assets/kms/us/cold_medicine_label_stage_a03b.kms,us/stage/w00a/cache/00f971fb.kms,cache/00f971fb.kms\r\r\n", "", "");
+        public static Resource ColdMeds = new Resource("ColdMeds", 
+            kms: "assets/kms/us/cold_medicine_label_stage_a03b.kms,us/stage/w00a/cache/00f971fb.kms,cache/00f971fb.kms\r\r\n", 
+            cmdl: "assets/kms/us/cold_medicine_label_stage_a03b.cmdl,us/stage/w00a/cache/00f971fb.cmdl,eu/stage/w00a/cache/00f971fb.cmdl\r\r\n",
+            ctxr: "textures/flatlist/coldmedicine_tx_alp.bmp.ctxr,stage/w00a/cache/coldmedicine_tx_alp.bmp.ctxr,eu/stage/w00a/cache/00573de0/00ed17f6.ctxr\r\r\n");
     }
 
     public class Resource

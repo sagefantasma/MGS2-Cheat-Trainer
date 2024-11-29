@@ -89,6 +89,7 @@
     <Compile Include="GcxProcs.cs" />
     <Compile Include="ItemSets.cs" />
     <Compile Include="MGS2Randomizer.cs" />
+    <Compile Include="MGS2Resource.cs" />
     <Compile Include="ProcEditor.cs">
       <SubType>Form</SubType>
     </Compile>

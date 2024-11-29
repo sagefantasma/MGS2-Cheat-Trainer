@@ -49,6 +49,8 @@ namespace gcx
         static List<byte> _manifestContents { get; set; }
         static List<byte> _bpAssetsContents { get; set; }
 
+        static byte[] EOL = new byte[] { 0x0D, 0x0D, 0x0A };
+
         private class MGS2ResourceData
         {
             public string Name { get; set; }
@@ -71,19 +73,19 @@ namespace gcx
                 List<MGS2ResourceData> missingData = PrepareListOfMissingData(resourceToAdd);
                 foreach (MGS2ResourceData dataToAdd in missingData)
                 {
-                    int insertionPoint = FindInsertionPoint(dataToAdd);
-                    byte[] bytesToAdd = AppendLineEnding(Encoding.UTF8.GetBytes(dataToAdd.Text));
+                    int insertionPoint = FindInsertionIndex(dataToAdd);
                     if (dataToAdd.IsManifestFile)
                     {
-                        _manifestContents.InsertRange(insertionPoint, bytesToAdd);
+                        _manifestContents.InsertRange(insertionPoint, Encoding.UTF8.GetBytes(dataToAdd.Text));
+                        break;
                     }
                     else
                     {
-                        _bpAssetsContents.InsertRange(insertionPoint, bytesToAdd);
+                        _bpAssetsContents.InsertRange(insertionPoint, Encoding.UTF8.GetBytes(dataToAdd.Text));
                     }
                 }
 
-                File.WriteAllBytes(bpAssets.FullName, _bpAssetsContents.ToArray());
+                //File.WriteAllBytes(bpAssets.FullName, _bpAssetsContents.ToArray());
                 File.WriteAllBytes(manifest.FullName, _manifestContents.ToArray());
                 return true;
             }
@@ -93,7 +95,7 @@ namespace gcx
             }
         }
 
-        private static int FindInsertionPoint(MGS2ResourceData resource)
+        private static int FindInsertionIndex(MGS2ResourceData resource)
         {
             int index = 0;
 
@@ -101,20 +103,36 @@ namespace gcx
             {
                 //manifest files will be just .kms
                 byte[] startOfKms = Encoding.UTF8.GetBytes("assets/kms");
-                byte[] startOfCv2 = Encoding.UTF8.GetBytes("assets/cv2");
-                byte[] eol = new byte[] { 0x0D, 0x0D, 0x0A };
+                byte[] endOfKms = Encoding.UTF8.GetBytes(".kms");
+                byte[] encodedText = Encoding.UTF8.GetBytes(resource.Text);
                 index = GcxEditor.FindSubArray(_manifestContents.ToArray(), startOfKms);
                 //we now have the start of the kms array
                 //next we need to find the asset that would come AFTER the asset we're adding
                 //(i.e.: if we're adding dog.kms, we need to find cat.kms after dump.kms)
-                int endSplitIndex = GcxEditor.FindSubArray(_manifestContents.ToArray(), startOfCv2);
+                int endSplitIndex = GcxEditor.FindAllSubArray(_manifestContents.ToArray(), endOfKms).LastOrDefault() + 7; //we want the .kms\r\r\n
                 byte[] kmsArray = new byte[endSplitIndex - index];
-                Array.Copy(_manifestContents.ToArray(), kmsArray, kmsArray.Length);
-                List<int> splittingIndices = GcxEditor.FindAllSubArray(kmsArray, eol);
-
+                Array.Copy(_manifestContents.ToArray(), index, kmsArray, 0, kmsArray.Length);
+                List<int> splittingIndices = GcxEditor.FindAllSubArray(kmsArray, EOL);
+                for(int i = 0; i < splittingIndices.Count; i++) //want to include the EOL in each item
+                {
+                    splittingIndices[i] += 3;
+                }
                 List<byte[]> individualizedResources = SplitResources(splittingIndices, kmsArray);
+                individualizedResources = AlphabetizeResources(individualizedResources, encodedText, true);
+                int kmsIndex = 0;
+                foreach (byte[] kms in individualizedResources)
+                {
+                    if (!kms.SequenceEqual(encodedText))
+                    {
+                        kmsIndex += kms.Length;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
 
-
+                index += kmsIndex;
             }
             else 
             {
@@ -124,38 +142,48 @@ namespace gcx
             return index;
         }
 
-        private static object FindPositionInAlphabeticalOrder(List<byte[]> existingResources, byte[] newResource, int indexToCompare, bool reverse=false)
+        private static List<byte[]> AlphabetizeResources(List<byte[]> existingResources, byte[] newResource, bool reverse = false)
         {
-            for (int i = 0; i < existingResources.Count; i++)
+            existingResources.Add(newResource);
+            
+            List<string> stringedResources = new List<string>();
+
+            foreach (byte[] resource in existingResources)
             {
-                if (existingResources[i][indexToCompare] < newResource[indexToCompare])
-                {
-                    //letter is earlier in alphabet than new resource
-                }
-                else if (existingResources[i][indexToCompare] > newResource[indexToCompare])
-                {
-                    //letter is later in alphabet than new resource
-                }
-                else
-                {
-                    //letter is same in alphabet as new resource
-                }
+                stringedResources.Add(Encoding.UTF8.GetString(resource));
             }
+
+            stringedResources.Sort();
+            if (reverse)
+                stringedResources.Reverse();
+
+            existingResources.Clear();
+            foreach(string resource in stringedResources)
+            {
+                existingResources.Add(Encoding.UTF8.GetBytes(resource));
+            }
+
+            return existingResources;
         }
 
         private static List<byte[]> SplitResources(List<int> splittingIndices, byte[] resourceArray)
-        {
-            //I _think_ this will work to split all the kms resources individually?
+        {             
             List<byte[]> existingResources = new List<byte[]>();
+            int positionInArray = 0;
             for (int i = 0; i < splittingIndices.Count; i++)
             {
                 byte[] splitResource;
-                if (i < splittingIndices.Count)
-                    splitResource = new byte[splittingIndices[i + 1] - splittingIndices[i]];
+                if(i == 0)
+                {
+                    splitResource = new byte[splittingIndices[i]];
+                }
+                else if (i < splittingIndices.Count - 1)
+                    splitResource = new byte[splittingIndices[i] - splittingIndices[i-1]];
                 else
                     splitResource = new byte[resourceArray.Length - splittingIndices[i]];
-                Array.Copy(resourceArray, splittingIndices[i], splitResource, 0, splitResource.Length);
+                Array.Copy(resourceArray, positionInArray, splitResource, 0, splitResource.Length);
                 existingResources.Add(splitResource);
+                positionInArray += splitResource.Length;
             }
 
             return existingResources;
@@ -163,7 +191,28 @@ namespace gcx
 
         private static List<MGS2ResourceData> PrepareListOfMissingData(string resourceToAdd)
         {
+            //TODO: implement
             List<MGS2ResourceData> resourceData = new List<MGS2ResourceData>();
+
+            Resource resource = Resource.LookupResource(resourceToAdd);
+
+            MGS2ResourceData kmsFile = new MGS2ResourceData();
+
+            kmsFile.Text = resource.Kms;
+            kmsFile.IsManifestFile = true;
+            resourceData.Add(kmsFile);
+
+            MGS2ResourceData ctxrFile = new MGS2ResourceData();
+
+            ctxrFile.Text = resource.Ctxr;
+            ctxrFile.IsManifestFile = false;
+            resourceData.Add(ctxrFile);
+
+            MGS2ResourceData cmdlFile = new MGS2ResourceData();
+
+            cmdlFile.Text = resource.Cmdl;
+            cmdlFile.IsManifestFile = false;
+            resourceData.Add(cmdlFile);
 
             return resourceData;
         }

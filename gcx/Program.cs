@@ -19,6 +19,7 @@ namespace gcx
         [STAThread]
         static void Main(string[] args)
         {
+            ResourceEditor.AddResource("w04a", "C:\\Users\\yonan\\Documents\\Pinned Folders\\C Drive Steam Games\\MGS2\\eu\\stage", "");
             /*GcxLevelResourceMapper.MapLevelsToResources("C:\\Users\\yonan\\Source\\Repos\\MGS2-Cheat-Trainer\\gcx\\bin\\Debug\\main game",
                 "C:\\Users\\yonan\\Documents\\Pinned Folders\\C Drive Steam Games\\MGS2\\eu\\stage");
             return;*/

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
@@ -184,6 +185,16 @@ namespace gcx
                         missingAssets.Add(new GcxResources(resourceMap._gcxFile, missingResources));
                 }
             }
+
+            string assetResourcing = "";
+
+            foreach(GcxResources missingAsset in missingAssets)
+            {
+                assetResourcing += JsonConvert.SerializeObject(missingAsset, Formatting.Indented);
+                assetResourcing += Environment.NewLine;
+            }
+
+            File.WriteAllText("missingResources.json", JsonConvert.SerializeObject(missingAssets, Formatting.Indented));
 
             string csvFormattedContents = FormatToCsv(resourceMapping);
             File.WriteAllText(csv, csvFormattedContents);

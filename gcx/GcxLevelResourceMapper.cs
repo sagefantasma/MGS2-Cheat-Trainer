@@ -70,7 +70,7 @@ namespace gcx
         static string StingerWeaponLabel = "0068cf91";
         static string StunLabel = "00686a51";
         static string USPAmmoLabel = "003e24dd";
-        static string AKSuppressorLabel = "00b4cb72";
+        static string AKSuppressorLabel = "00b4cb62";
         static string BandagesLabel = "00684291";
         static string BodyArmorLabel = "00573911";
         static string CboxLabel = "005843d1";

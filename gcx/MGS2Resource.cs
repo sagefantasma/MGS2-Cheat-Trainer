@@ -23,7 +23,15 @@ namespace gcx
         public static Resource GoggleSh = new Resource("gogglesh", //00eac2fd
             kms: "assets/kms/us/cartridge_amo_ibox_sh.kms,us/stage/w00a/cache/00eac2fd.kms,cache/00eac2fd.kms\r\r\n",
             cmdl: "assets/kms/us/cartridge_amo_ibox_sh.cmdl,us/stage/w00a/cache/00eac2fd.cmdl,eu/stage/w00a/cache/00eac2fd.cmdl\r\r\n",
-            ctxr: ""); 
+            ctxr: "");
+        public static Resource AKAmmoLabel = new Resource("akammolabel", //003ce0e9
+            kms: "assets/kms/us/aks_amo_label_stage_a03b.kms,us/stage/w22a/cache/003ce0e9.kms,cache/003ce0e9.kms\r\r\n",
+            cmdl: "assets/kms/us/aks_amo_label_stage_a03b.cmdl,us/stage/w22a/cache/003ce0e9.cmdl,eu/stage/w22a/cache/003ce0e9.cmdl\r\r\n",
+            ctxr: "");
+        public static Resource AKWeaponLabel = new Resource("akweaponlabel", //00f53890
+            kms: "assets/kms/us/ak_label_stage_a03b.kms,us/stage/w22a/cache/00f53890.kms,cache/00f53890.kms\r\r\n",
+            cmdl: "assets/kms/us/ak_label_stage_a03b.cmdl,us/stage/w22a/cache/00f53890.cmdl,eu/stage/w22a/cache/00f53890.cmdl\r\r\n",
+            ctxr: "");
     }
 
     public class Resource

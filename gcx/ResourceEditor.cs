@@ -44,9 +44,6 @@ namespace gcx
          * gcx file
          */
 
-        static string _manifestFile { get; set; }
-        static string _bpAssetsFile { get; set; }
-
         static List<byte> _manifestContents { get; set; }
         static List<byte> _bpAssetsContents { get; set; }
 
@@ -78,10 +75,15 @@ namespace gcx
                 _bpAssetsContents = File.ReadAllBytes(bpAssets.FullName).ToList();
                 _manifestContents = File.ReadAllBytes(manifest.FullName).ToList();
 
-                List<MGS2ResourceData> missingData = PrepareListOfMissingData(resourceToAdd);
+                List<MGS2ResourceData> missingData = PrepareListOfDataToAdd(resourceToAdd);
+                ReplaceStageNames(missingData, gcxFile);
                 foreach (MGS2ResourceData dataToAdd in missingData)
                 {
                     int insertionPoint = FindInsertionIndex(dataToAdd);
+                    if(insertionPoint == -1) //-1 means the new resource would be a duplicate, so don't add it
+                    {
+                        continue;
+                    }
                     if (dataToAdd.FileType == FileType.Kms)
                     {
                         _manifestContents.InsertRange(insertionPoint, Encoding.UTF8.GetBytes(dataToAdd.Text));
@@ -141,6 +143,11 @@ namespace gcx
 
             List<byte[]> individualizedResources = SplitResources(resourceArray);
 
+            if (DetermineIfDuplicate(individualizedResources, encodedText))
+            {
+                return -1;
+            }
+
             int resourceArrayIndex = DetermineNewOrdering(individualizedResources, encodedText, storedAlphabetically);
 
             index += resourceArrayIndex;
@@ -177,7 +184,7 @@ namespace gcx
             {
                 stringedResources.Add(Encoding.UTF8.GetString(resource));
             }
-
+            
             stringedResources.Sort();
             if (!storedAlphabetically)
                 stringedResources.Reverse();
@@ -220,9 +227,8 @@ namespace gcx
             return resourceList;
         }
 
-        private static List<MGS2ResourceData> PrepareListOfMissingData(string resourceToAdd)
+        private static List<MGS2ResourceData> PrepareListOfDataToAdd(string resourceToAdd)
         {
-            //TODO: implement
             List<MGS2ResourceData> resourceData = new List<MGS2ResourceData>();
 
             Resource resource = Resource.LookupResource(resourceToAdd);
@@ -248,14 +254,24 @@ namespace gcx
             return resourceData;
         }
 
-        private static byte[] AppendLineEnding(byte[] text)
+        private static void ReplaceStageNames(List<MGS2ResourceData> resourceData, string stageName)
         {
-            byte[] appendedText = new byte[text.Length + 3];
-            Array.Copy(text, appendedText, text.Length);
-            appendedText[text.Length] = 0x0D;
-            appendedText[text.Length + 1] = 0x0D;
-            appendedText[text.Length + 2] = 0x0A;
-            return appendedText;
+            foreach(MGS2ResourceData resource in resourceData)
+            {
+                string replacementString = $"stage/{stageName}/cache";
+                resource.Text = resource.Text.Replace("stage/XXXX/cache", replacementString);
+            }
+        }
+
+        private static bool DetermineIfDuplicate(List<byte[]> existingResources, byte[] newResource)
+        {
+            foreach (byte[] existingResource in existingResources)
+            {
+                if (existingResource.SequenceEqual(newResource))
+                    return true;
+            }
+
+            return false;
         }
     }
 }

@@ -77,6 +77,8 @@ namespace gcx
 
                 List<MGS2ResourceData> missingData = PrepareListOfDataToAdd(resourceToAdd);
                 ReplaceStageNames(missingData, gcxFile);
+                bool modifiedManifest = false;
+                bool modifiedBpAssets = false;
                 foreach (MGS2ResourceData dataToAdd in missingData)
                 {
                     int insertionPoint = FindInsertionIndex(dataToAdd);
@@ -87,15 +89,23 @@ namespace gcx
                     if (dataToAdd.FileType == FileType.Kms)
                     {
                         _manifestContents.InsertRange(insertionPoint, Encoding.UTF8.GetBytes(dataToAdd.Text));
+                        modifiedManifest = true;
                     }
                     else
                     {
                         _bpAssetsContents.InsertRange(insertionPoint, Encoding.UTF8.GetBytes(dataToAdd.Text));
+                        modifiedBpAssets = true;
                     }
                 }
 
-                File.WriteAllBytes(bpAssets.FullName, _bpAssetsContents.ToArray());
-                File.WriteAllBytes(manifest.FullName, _manifestContents.ToArray());
+                if (modifiedBpAssets)
+                {
+                    File.WriteAllBytes(bpAssets.FullName, _bpAssetsContents.ToArray());
+                }
+                if (modifiedManifest)
+                {
+                    File.WriteAllBytes(manifest.FullName, _manifestContents.ToArray());
+                }
                 return true;
             }
             catch (Exception ex)

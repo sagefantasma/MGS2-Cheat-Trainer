@@ -8,45 +8,44 @@ namespace gcx
 {
     public struct MGS2Resource
     {
-        //TODO: might be fine with these precoded w##a stages, but we shouldn't have those. fix it.
         //TODO: should all of these have ctxr's associated with them?
-        public static Resource ColdMedsLabel = new Resource("coldmeds", //00f971fb
+        public static Resource ColdMedsLabel = new Resource("coldmeds", 
             kms: "assets/kms/us/cold_medicine_label_stage_a03b.kms,us/stage/XXXX/cache/00f971fb.kms,cache/00f971fb.kms\r\r\n", 
             cmdl: "assets/kms/us/cold_medicine_label_stage_a03b.cmdl,us/stage/XXXX/cache/00f971fb.cmdl,eu/stage/XXXX/cache/00f971fb.cmdl\r\r\n",
             ctxr: "textures/flatlist/coldmedicine_tx_alp.bmp.ctxr,stage/XXXX/cache/coldmedicine_tx_alp.bmp.ctxr,eu/stage/XXXX/cache/00573de0/00ed17f6.ctxr\r\r\n"); 
-        public static Resource ThermalGogglesLabel = new Resource("thermalgoggles", //006968d1
+        public static Resource ThermalGogglesLabel = new Resource("thermalgoggles", 
             kms: "assets/kms/us/tgl_label_stage_a03b.kms,us/stage/XXXX/cache/006968d1.kms,cache/006968d1.kms\r\r\n",
             cmdl: "assets/kms/us/tgl_label_stage_a03b.cmdl,us/stage/XXXX/cache/006968d1.cmdl,eu/stage/XXXX/cache/006968d1.cmdl\r\r\n",
             ctxr: ""); 
-        public static Resource GoggleIbox = new Resource("goggleibox", //00706bd2
+        public static Resource GoggleIbox = new Resource("goggleibox", 
             kms: "assets/kms/us/goggle_ibox_stage_a03b.kms,us/stage/XXXX/cache/00706bd2.kms,cache/00706bd2.kms\r\r\n",
             cmdl: "assets/kms/us/goggle_ibox_stage_a03b.cmdl,us/stage/XXXX/cache/00706bd2.cmdl,eu/stage/XXXX/cache/00706bd2.cmdl\r\r\n",
             ctxr: ""); 
-        public static Resource GoggleSh = new Resource("gogglesh", //00eac2fd
+        public static Resource GoggleSh = new Resource("gogglesh", 
             kms: "assets/kms/us/cartridge_amo_ibox_sh.kms,us/stage/XXXX/cache/00eac2fd.kms,cache/00eac2fd.kms\r\r\n",
             cmdl: "assets/kms/us/cartridge_amo_ibox_sh.cmdl,us/stage/XXXX/cache/00eac2fd.cmdl,eu/stage/XXXX/cache/00eac2fd.cmdl\r\r\n",
             ctxr: "");
-        public static Resource AKAmmoLabel = new Resource("akammolabel", //003ce0e9
+        public static Resource AKAmmoLabel = new Resource("akammolabel", 
             kms: "assets/kms/us/aks_amo_label_stage_a03b.kms,us/stage/XXXX/cache/003ce0e9.kms,cache/003ce0e9.kms\r\r\n",
             cmdl: "assets/kms/us/aks_amo_label_stage_a03b.cmdl,us/stage/XXXX/cache/003ce0e9.cmdl,eu/stage/XXXX/cache/003ce0e9.cmdl\r\r\n",
             ctxr: "");
-        public static Resource AKWeaponLabel = new Resource("akweaponlabel", //00f53890
+        public static Resource AKWeaponLabel = new Resource("akweaponlabel", 
             kms: "assets/kms/us/ak_label_stage_a03b.kms,us/stage/XXXX/cache/00f53890.kms,cache/00f53890.kms\r\r\n",
             cmdl: "assets/kms/us/ak_label_stage_a03b.cmdl,us/stage/XXXX/cache/00f53890.cmdl,eu/stage/XXXX/cache/00f53890.cmdl\r\r\n",
             ctxr: "");
-        public static Resource MagazineIbox = new Resource("magazineibox", //00ca7cd0
+        public static Resource MagazineIbox = new Resource("magazineibox", 
             kms: "assets/kms/us/magazine_ibox_stage_a03b.kms,us/stage/XXXX/cache/00ca7cd0.kms,cache/00ca7cd0.kms\r\r\n",
             cmdl: "assets/kms/us/magazine_ibox_stage_a03b.cmdl,us/stage/XXXX/cache/00ca7cd0.cmdl,eu/stage/XXXX/cache/00ca7cd0.cmdl\r\r\n",
             ctxr: "");
-        public static Resource MagazineLabel = new Resource("magazinelabel", //007ee425
+        public static Resource MagazineLabel = new Resource("magazinelabel", 
             kms: "assets/kms/us/magazine_label_stage_a03b.kms,us/stage/XXXX/cache/007ee425.kms,cache/007ee425.kms\r\r\n",
             cmdl: "assets/kms/us/magazine_label_stage_a03b.cmdl,us/stage/XXXX/cache/007ee425.cmdl,eu/stage/XXXX/cache/007ee425.cmdl\r\r\n",
             ctxr: "");
-        public static Resource MagazineSh = new Resource("magazinesh", //009e33e1
+        public static Resource MagazineSh = new Resource("magazinesh", 
             kms: "assets/kms/us/magazine_sh_stage_a03b.kms,us/stage/XXXX/cache/009e33e1.kms,cache/009e33e1.kms\r\r\n",
             cmdl: "assets/kms/us/magazine_sh_stage_a03b.cmdl,us/stage/XXXX/cache/009e33e1.cmdl,eu/stage/XXXX/cache/009e33e1.cmdl\r\r\n",
             ctxr: "");
-        public static Resource C4Label = new Resource("c4label", //00586251
+        public static Resource C4Label = new Resource("c4label", 
             kms: "assets/kms/us/cfr_label_stage_a03b.kms,us/stage/XXXX/cache/00586251.kms,cache/00586251.kms\r\r\n",
             cmdl: "assets/kms/us/cfr_label_stage_a03b.cmdl,us/stage/XXXX/cache/00586251.cmdl,eu/stage/XXXX/cache/00586251.cmdl\r\r\n",
             ctxr: "");
@@ -201,7 +200,7 @@ namespace gcx
         public static Resource DmicIbox = new Resource("dmicibox",
             kms: "assets/kms/us/box_ibox_stage_a03b.kms,us/stage/XXXX/cache/0029430e.kms,cache/0029430e.kms\r\r\n",
             cmdl: "assets/kms/us/box_ibox_stage_a03b.cmdl,us/stage/XXXX/cache/0029430e.cmdl,eu/stage/XXXX/cache/0029430e.cmdl\r\r\n",
-            ctxr: "");
+            ctxr: "textures/flatlist/dmp_ibx_label_alp.bmp.ctxr,stage/XXXX/cache/dmp_ibx_label_alp.bmp.ctxr,eu/stage/XXXX/cache/00573de0/00055db2.ctxr\r\r\n");
         public static Resource DmicSh = new Resource("dmicsh",
             kms: "assets/kms/us/box_ibox_sh_stage_a03b.kms,us/stage/XXXX/cache/00889f69.kms,cache/00889f69.kms\r\r\n",
             cmdl: "assets/kms/us/box_ibox_sh_stage_a03b.cmdl,us/stage/XXXX/cache/00889f69.cmdl,eu/stage/XXXX/cache/00889f69.cmdl\r\r\n",

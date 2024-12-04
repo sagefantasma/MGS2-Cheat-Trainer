@@ -543,32 +543,32 @@ namespace MGS2_MC
         #region Bosses
         public static readonly BossVitals Olga = new BossVitals { HasStamina = true,
             NestedHealthPointers = MGS2Pointer.OlgaNestedPointers,
-            NestedStaminaPointers = MGS2Pointer.OlgaNestedPointers, HealthOffset = 0x1EA, StaminaOffset = 0x1EC };
+            NestedStaminaPointers = MGS2Pointer.OlgaNestedPointers, HealthOffset = 0x14A, StaminaOffset = 0x14C };
         public static readonly BossVitals Fortune = new BossVitals { HasStamina = true,
             NestedHealthPointers = MGS2Pointer.FortuneNestedPointers,
             NestedStaminaPointers = MGS2Pointer.FortuneNestedPointers,HealthOffset = MGS2Offset.FORTUNE_HP_VALUE.Start, 
             StaminaOffset = MGS2Offset.FORTUNE_STAMINA_VALUE.Start
         };
         public static readonly BossVitals Fatman = new BossVitals { HasStamina = true, 
-            NestedHealthPointers = MGS2Pointer.FatmanNestedHealthPointers, NestedStaminaPointers = MGS2Pointer.FatmanNestedStaminaPointers,
-            HealthOffset = 0x2FE,
-            StaminaOffset = 0xB0
+            NestedHealthPointers = MGS2Pointer.FatmanNestedPointers, NestedStaminaPointers = MGS2Pointer.FatmanNestedPointers,
+            HealthOffset = 0x23A,
+            StaminaOffset = 0x214C
         };
         public static readonly BossVitals Harrier = new BossVitals { HasStamina = false,
             NestedHealthPointers = MGS2Pointer.HarrierNestedPointers, //it works for tracking, but crashes the game when we modify it KEKW
-            HealthOffset = 0xE48
+            HealthOffset = 0x78
         };
         public static readonly BossVitals Vamp = new BossVitals { HasStamina = true,
             NestedHealthPointers = MGS2Pointer.VampNestedPointers,
             NestedStaminaPointers = MGS2Pointer.VampNestedPointers, 
-            HealthOffset = 0x180,
-            StaminaOffset = 0x182
+            HealthOffset = 0xFD0,
+            StaminaOffset = 0xFD2
         };
         public static readonly BossVitals VampSniping = new BossVitals { HasStamina = true,
-            NestedHealthPointers = MGS2Pointer.VampSnipingHealthNestedPointers,
-            NestedStaminaPointers = MGS2Pointer.VampSnipingStaminaNestedPointers,
-            HealthOffset = 0x2EE,
-            StaminaOffset = 0xC5E
+            NestedHealthPointers = MGS2Pointer.VampSnipingNestedPointers,
+            NestedStaminaPointers = MGS2Pointer.VampSnipingNestedPointers,
+            HealthOffset = 0x22A,
+            StaminaOffset = 0x119A
         };
         #region Rays
         public static readonly BossVitals Ray1 = new BossVitals
@@ -727,8 +727,8 @@ namespace MGS2_MC
             HasStamina = true,
             NestedHealthPointers = MGS2Pointer.SolidusNestedPointers, //these crash the game, sadge
             NestedStaminaPointers = MGS2Pointer.SolidusNestedPointers, //these crash the game, sadge
-            HealthOffset = 0x98,
-            StaminaOffset = 0xA8
+            HealthOffset = 0x348,
+            StaminaOffset = 0x358
         };
         #endregion
     }

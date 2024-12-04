@@ -1714,20 +1714,12 @@ namespace MGS2_MC
                 #if DEBUG
                 UserHasBeenWarned = true;
                 #endif
-                if(CurrentTab == mgs2TabControl.TabPages.IndexOfKey("tabPageBosses"))
-                {
-                    MessageBox.Show("As of MGS2 version 2.0, the bosses tab is non-functional. We're working on a fix, please be patient!", "Warning");
-                    /*
-                    bossTreeView.SelectedNode = null;
-                    bossGroupBox.Text = "No Currently Detected/Selected Boss";
-                    bossHealthStaminaLayoutPanel.Visible = false;*/
-                }
                 if (CurrentTab == mgs2TabControl.TabPages.IndexOfKey("tabPageCheats"))
                 {
                     if (!UserHasBeenWarned)
                     {
-                        //MessageBox.Show("WARNING! Use the contents of this tab at your own risk. USE OF THESE CHEATS MAY CRASH YOUR GAME! All of these have worked at some point or another, but may not always. Results not guaranteed.");
-                        MessageBox.Show("As of MGS2 version 2.0, the cheats tab is very hit-or-miss. We're working on a fix, please be patient!", "Warning");
+                        MessageBox.Show("WARNING! Use the contents of this tab at your own risk. USE OF THESE CHEATS MAY CRASH YOUR GAME! All of these have worked at some point or another, but may not always. Results not guaranteed.");
+                        //MessageBox.Show("As of MGS2 version 2.0, the cheats tab is very hit-or-miss. We're working on a fix, please be patient!", "Warning");
                         UserHasBeenWarned = true;
                     }
                     try
@@ -1958,8 +1950,8 @@ namespace MGS2_MC
 
         private void LowerGripButton_Click(object sender, EventArgs e)
         {
-            _logger.Information("User clicked -100 pushups button");
-            toolStripStatusLabel.Text = $"Attempting to reduce pushup count by 100 pushups...";
+            _logger.Information("User clicked -100 pull-ups button");
+            toolStripStatusLabel.Text = $"Attempting to reduce pull-up count by 100 pull-ups...";
             try
             {
                 ushort currentPushups = MGS2MemoryManager.ModifyGripLevel(false);
@@ -1967,16 +1959,16 @@ namespace MGS2_MC
             }
             catch (Exception ex)
             {
-                _logger.Error($"Failed to remove 100 pushups from the pushup count: {ex}");
-                toolStripStatusLabel.Text = $"Failed to decrease pushup count for the current character!";
+                _logger.Error($"Failed to remove 100 pull-ups from the pull-up count: {ex}");
+                toolStripStatusLabel.Text = $"Failed to decrease pull-up count for the current character!";
                 MessageBox.Show(toolStripStatusLabel.Text);
             }
         }
 
         private void RaiseGripButton_Click(object sender, EventArgs e)
         {
-            _logger.Information("User clicked +100 pushups button");
-            toolStripStatusLabel.Text = $"Attempting to increase pushup count by 100 pushups...";
+            _logger.Information("User clicked +100 pull-ups button");
+            toolStripStatusLabel.Text = $"Attempting to increase pull-up count by 100 pull-ups...";
             try
             {
                 ushort currentPushups = MGS2MemoryManager.ModifyGripLevel(true);
@@ -1984,8 +1976,8 @@ namespace MGS2_MC
             }
             catch(Exception ex)
             {
-                _logger.Error($"Failed to add 100 pushups to the pushup count: {ex}");
-                toolStripStatusLabel.Text = $"Failed to increase pushup count for the current character!";
+                _logger.Error($"Failed to add 100 pull-ups to the pull-up count: {ex}");
+                toolStripStatusLabel.Text = $"Failed to increase pull-up count for the current character!";
                 MessageBox.Show(toolStripStatusLabel.Text);
             }
         }

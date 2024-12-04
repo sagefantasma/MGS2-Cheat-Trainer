@@ -10,6 +10,8 @@ namespace gcx
     internal class MGS2Randomizer
     {
         public static string GcxDirectory { get; private set; }
+        public static string ResourceDirectory { get; private set; }
+        private static DirectoryInfo ResourceSuperDirectory { get; set; }
         private static List<string> filesInDirectory;
         static GcxEditor gcxEditor = new GcxEditor();
 
@@ -18,9 +20,33 @@ namespace gcx
         public static Random Randomizer { get; set; }
         private static int _seed;
 
-        public MGS2Randomizer(string gcxDirectory, int seed = 0)
+        public MGS2Randomizer(string mgs2Directory, int seed = 0)
+        {
+            DirectoryInfo mgs2DirectoryInfo = new DirectoryInfo(mgs2Directory);
+            DirectoryInfo gcxDirectory = new DirectoryInfo(mgs2DirectoryInfo.FullName + "\\assets\\gcx\\eu\\_bp");
+            filesInDirectory = Directory.EnumerateFiles(gcxDirectory.FullName).ToList();
+            ResourceSuperDirectory = new DirectoryInfo(mgs2DirectoryInfo.FullName + "\\eu\\stage");
+
+            if (seed == 0)
+            {
+                _seed = new Random(DateTime.UtcNow.Hour + DateTime.UtcNow.Minute + DateTime.UtcNow.Second + DateTime.UtcNow.Millisecond).Next();
+            }
+            else
+            {
+                _seed = seed;
+            }
+
+            Randomizer = new Random(_seed);
+            VanillaItems.BuildVanillaItems();
+            BuildVanillaItemSet();
+        }
+
+        [Obsolete]
+        public MGS2Randomizer(string gcxDirectory, string resourceDirectory, int seed = 0)
         {
             GcxDirectory = gcxDirectory;
+            ResourceDirectory = resourceDirectory;
+            ResourceSuperDirectory = new DirectoryInfo(ResourceDirectory);
             filesInDirectory = Directory.EnumerateFiles(GcxDirectory).ToList();
             if (seed == 0)
             {
@@ -77,14 +103,32 @@ namespace gcx
                 //TODO: verify if this is correct... it feels very much not so
                 if (itemsAssigned < VanillaItems.TankerPart1.Entities.Count)
                 {
+                    if(VanillaItems.TankerPart1.ItemsNeededToProgress.Contains(randomChoice.Value) && !VanillaItems.TankerPart1.Entities.ElementAt(itemsAssigned).Key.MandatorySpawn)
+                    {
+                        //if the spawn being modified isn't a mandatory spawn and we're currently trying to assign an item needed to progress, skip
+                        //these are entirely inconsequential at the moment, as the mandatory items are automatically given by the game
+                        continue;
+                    }
                     _randomizedItems.TankerPart1.Entities.Add(VanillaItems.TankerPart1.Entities.ElementAt(itemsAssigned).Key, randomChoice.Value);                    
                 }
                 else if (itemsAssigned < VanillaItems.TankerPart2.Entities.Count)
                 {
+                    if (VanillaItems.TankerPart2.ItemsNeededToProgress.Contains(randomChoice.Value) && !VanillaItems.TankerPart2.Entities.ElementAt(itemsAssigned).Key.MandatorySpawn)
+                    {
+                        //if the spawn being modified isn't a mandatory spawn and we're currently trying to assign an item needed to progress, skip
+                        //these are entirely inconsequential at the moment, as the mandatory items are automatically given by the game
+                        continue;
+                    }
                     _randomizedItems.TankerPart2.Entities.Add(VanillaItems.TankerPart2.Entities.ElementAt(itemsAssigned).Key, randomChoice.Value);
                 }
                 else
                 {
+                    if (VanillaItems.TankerPart3.ItemsNeededToProgress.Contains(randomChoice.Value) && !VanillaItems.TankerPart3.Entities.ElementAt(itemsAssigned).Key.MandatorySpawn)
+                    {
+                        //if the spawn being modified isn't a mandatory spawn and we're currently trying to assign an item needed to progress, skip
+                        //these are entirely inconsequential at the moment, as the mandatory items are automatically given by the game
+                        continue;
+                    }
                     _randomizedItems.TankerPart3.Entities.Add(VanillaItems.TankerPart3.Entities.ElementAt(itemsAssigned).Key, randomChoice.Value);
                 }
 
@@ -187,56 +231,34 @@ namespace gcx
             return true;
         }
 
-        private static bool FindAndReplaceCalledProcInGcx(Location locationToFind, Item replacingItem)
+        public bool SaveRandomizationToDisk(List<DecodedProc> spawnerProcs, string gcxFile)
         {
-            string desiredGcxFile = filesInDirectory.Find(file => file.EndsWith($"scenerio_stage_{locationToFind.GcxFile}.gcx"));
-            byte[] gcxFileContents = File.ReadAllBytes(desiredGcxFile);
+            //TODO: clean this up and polish it off
 
-            for(int i = 0; i < gcxFileContents.Length - locationToFind.ParameterBytes.Count; i++)
+            GcxEditor gcx_Editor = new GcxEditor();
+            ProcEditor.InitializeEditor(spawnerProcs);
+            //Technically, adding all procs is TOTAL overkill, but it's literally just 5.4KB. Unless something doesn't load as a result
+            //I think this is the easiest and most straight-forward solution.
+            AddAllProcs(gcx_Editor);
+            foreach (KeyValuePair<Location, Item> spawn in _randomizedItems.TankerPart3.Entities)
             {
-                for(int j = 0; j < locationToFind.ParameterBytes.Count; j++)
-                {
-                    if (gcxFileContents[i+j] != locationToFind.ParameterBytes[j])
-                    {
-                        break;
-                    }
-                    if(j > 2)
-                    {
-                        //okay, so we're only getting as far as 3 files BECAUSE: [w04a reference]
-                        //calling m9 ammo drop(AF7E8A) the bytes are: 06 4935B8 01 08D5 01 D8DC 01 0CFE C1 000000 
-                        //                                            06 F4B975 01 CE31 01 78EC 09 6678FEFF C1 000000
-                        //we have MOST of what we're looking for in these, but there are some random bytes fucking shit up
-                        //specifically, this 06, 01, 01, 01 C1 shit. the FUCK are these???? 
-                        int a = 2 + 2;
-                    }
-                    if(j+1 ==  locationToFind.ParameterBytes.Count)
-                    {
-                        ReplaceProc(i - 3, replacingItem, desiredGcxFile);
-                        return true;
-                    }
-                }
+                ProcEditor.ModifySpawnProc(spawn.Key.SpawnId, spawn.Value.ProcId);
             }
-
-            return false;
-        }
-
-        private static void ReplaceProc(int i, Item replacingItem, string gcxFileToModify)
-        {
-            using(BinaryWriter binWriter = new BinaryWriter(File.OpenWrite(gcxFileToModify)))
-            {
-                binWriter.Seek(i, SeekOrigin.Begin);
-                binWriter.Write(replacingItem.ProcId.LittleEndianRepresentation);
-                binWriter.Close();
-            }
-        }
-
-        public bool SaveRandomizationToDisk()
-        {
-            foreach(var kvp in _randomizedItems.TankerPart3.Entities)
-            {
-                bool itWorked = FindAndReplaceCalledProcInGcx(kvp.Key, kvp.Value);
-            }
+            ProcEditor.SaveAutomatedChanges();
+            byte[] newGcxBytes = gcx_Editor.BuildGcxFile();
+            string date = $"{gcxFile}_custom.gcx";
+            File.WriteAllBytes(date, newGcxBytes);
             return true;
+        }
+
+        private void AddAllProcs(GcxEditor gcx_Editor)
+        {
+            ProcSelector.GetAllProcs();
+
+            foreach (DecodedProc proc in ProcSelector.ProcsToAdd)
+            {
+                gcx_Editor.InsertNewProcedureToFile(proc);
+            }
         }
     }
 }

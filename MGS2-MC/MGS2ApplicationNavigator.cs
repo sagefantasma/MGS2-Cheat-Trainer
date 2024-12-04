@@ -30,45 +30,43 @@ namespace MGS2_MC
 
     internal struct MGS2Pointer
     {
-        internal static int WalkThroughWalls = 0x01551078;
+        internal static int WalkThroughWalls = 0x01552078;
         internal static int ModifiableHP = 0x017DE780; 
-        internal static int CurrentGrip = 0x016E8B20;
-        internal static int CurrentAmmo = 0x0153FC10;
-        internal static List<int> OlgaNestedPointers = new List<int> { 0x01534CF8, 0xF0, 0x8, 0x590 };
+        internal static int CurrentGrip = 0x016E9B20;
+        internal static int CurrentAmmo = 0x01540C20;
+        internal static int PullupCount = 0x00949340;
+        internal static List<int> OlgaNestedPointers = new List<int> { 0x01551F10, 0x120 }; //fixed
         internal static List<int> FortuneNestedPointers = null;
-        internal static List<int> FatmanNestedHealthPointers = new List<int> { 0x1795F88 };
-        internal static List<int> FatmanNestedStaminaPointers = new List<int> { 0x1534CF0 };
-        internal static List<int> HarrierNestedPointers = new List<int> { 0x17972A0, 0x70 };
-        internal static List<int> VampNestedPointers = new List<int> { 0x1534740 };
-        internal static List<int> VampSnipingHealthNestedPointers = new List<int> { 0x1795F98 };
-        internal static List<int> VampSnipingStaminaNestedPointers = new List<int> { 0x1534740, 0x68 };
-        internal static List<int> Ray1NestedPointers = new List<int> { 0x16CC378, 0x170 };
-        internal static List<int> Ray2NestedPointers = new List<int> { 0x16CC378, 0x190 };
-        internal static List<int> Ray3NestedPointers = new List<int> { 0x16CC378, 0x1B0 };
-        internal static List<int> Ray4NestedPointers = new List<int> { 0x16CC378, 0x1D0 };
-        internal static List<int> Ray5NestedPointers = new List<int> { 0x16CC378, 0x1F0 };
-        internal static List<int> Ray6NestedPointers = new List<int> { 0x16CC378, 0x210 };
-        internal static List<int> Ray7NestedPointers = new List<int> { 0x16CC378, 0x230 };
-        internal static List<int> Ray8NestedPointers = new List<int> { 0x16CC378, 0x250 };
-        internal static List<int> Ray9NestedPointers = new List<int> { 0x16CC378, 0x270 };
-        internal static List<int> Ray10NestedPointers = new List<int> { 0x16CC378, 0x290 };
-        internal static List<int> Ray11NestedPointers = new List<int> { 0x16CC378, 0x2B0 };
-        internal static List<int> Ray12NestedPointers = new List<int> { 0x16CC378, 0x2D0 };
-        internal static List<int> Ray13NestedPointers = new List<int> { 0x16CC378, 0x2F0 };
-        internal static List<int> Ray14NestedPointers = new List<int> { 0x16CC378, 0x310 };
-        internal static List<int> Ray15NestedPointers = new List<int> { 0x16CC378, 0x330 };
-        internal static List<int> Ray16NestedPointers = new List<int> { 0x16CC378, 0x350 };
-        internal static List<int> Ray17NestedPointers = new List<int> { 0x16CC378, 0x370 };
-        internal static List<int> Ray18NestedPointers = new List<int> { 0x16CC378, 0x390 };
-        internal static List<int> Ray19NestedPointers = new List<int> { 0x16CC378, 0x3B0 };
-        internal static List<int> Ray20NestedPointers = new List<int> { 0x16CC378, 0x3D0 };
-        internal static List<int> Ray21NestedPointers = new List<int> { 0x16CC378, 0x3F0 };
-        internal static List<int> Ray22NestedPointers = new List<int> { 0x16CC378, 0x410 };
-        internal static List<int> Ray23NestedPointers = new List<int> { 0x16CC378, 0x430 };
-        internal static List<int> Ray24NestedPointers = new List<int> { 0x16CC378, 0x450 };
-        internal static List<int> Ray25NestedPointers = new List<int> { 0x16CC378, 0x470 };
-        internal static List<int> SolidusNestedPointers = new List<int> { 0x17970B8, 0x70 };
-        //internal static List<int> SolidusNestedStaminaPointers = new List<>
+        internal static List<int> FatmanNestedPointers = new List<int> { 0x1551F10, 0x10 }; //fixed
+        internal static List<int> HarrierNestedPointers = new List<int> { 0x1551F10, 0x120 }; //fixed
+        internal static List<int> VampNestedPointers = new List<int> { 0x1551F10, 0x8 }; //fixed
+        internal static List<int> VampSnipingNestedPointers = new List<int> { 0x1551F10, 0x38, 0x10 }; //fixed
+        internal static List<int> Ray1NestedPointers = new List<int> { 0x016EA0F8, 0x170 }; //all fixed
+        internal static List<int> Ray2NestedPointers = new List<int> { 0x016EA0F8, 0x190 };
+        internal static List<int> Ray3NestedPointers = new List<int> { 0x016EA0F8, 0x1B0 };
+        internal static List<int> Ray4NestedPointers = new List<int> { 0x016EA0F8, 0x1D0 };
+        internal static List<int> Ray5NestedPointers = new List<int> { 0x016EA0F8, 0x1F0 };
+        internal static List<int> Ray6NestedPointers = new List<int> { 0x016EA0F8, 0x210 };
+        internal static List<int> Ray7NestedPointers = new List<int> { 0x016EA0F8, 0x230 };
+        internal static List<int> Ray8NestedPointers = new List<int> { 0x016EA0F8, 0x250 };
+        internal static List<int> Ray9NestedPointers = new List<int> { 0x016EA0F8, 0x270 };
+        internal static List<int> Ray10NestedPointers = new List<int> { 0x016EA0F8, 0x290 };
+        internal static List<int> Ray11NestedPointers = new List<int> { 0x016EA0F8, 0x2B0 };
+        internal static List<int> Ray12NestedPointers = new List<int> { 0x016EA0F8, 0x2D0 };
+        internal static List<int> Ray13NestedPointers = new List<int> { 0x016EA0F8, 0x2F0 };
+        internal static List<int> Ray14NestedPointers = new List<int> { 0x016EA0F8, 0x310 };
+        internal static List<int> Ray15NestedPointers = new List<int> { 0x016EA0F8, 0x330 };
+        internal static List<int> Ray16NestedPointers = new List<int> { 0x016EA0F8, 0x350 };
+        internal static List<int> Ray17NestedPointers = new List<int> { 0x016EA0F8, 0x370 };
+        internal static List<int> Ray18NestedPointers = new List<int> { 0x016EA0F8, 0x390 };
+        internal static List<int> Ray19NestedPointers = new List<int> { 0x016EA0F8, 0x3B0 };
+        internal static List<int> Ray20NestedPointers = new List<int> { 0x016EA0F8, 0x3D0 };
+        internal static List<int> Ray21NestedPointers = new List<int> { 0x016EA0F8, 0x3F0 };
+        internal static List<int> Ray22NestedPointers = new List<int> { 0x016EA0F8, 0x410 };
+        internal static List<int> Ray23NestedPointers = new List<int> { 0x016EA0F8, 0x430 };
+        internal static List<int> Ray24NestedPointers = new List<int> { 0x016EA0F8, 0x450 };
+        internal static List<int> Ray25NestedPointers = new List<int> { 0x016EA0F8, 0x470 }; //all fixed
+        internal static List<int> SolidusNestedPointers = new List<int> { 0x1551F10, 0x20 }; //"fixed", probably still causes crashes
     }
 
     internal struct MGS2AoB
@@ -101,6 +99,7 @@ namespace MGS2_MC
         internal static byte[] StageInfo = new byte[] { 0x10, 0x0E, 0x18, 0x15, 0x00, 0x00 };
         internal static string StageInfoString = "10 0E 18 15 00 00";
         //current "stage" == -267 from the above AoB, 5 bytes long. If it has r_tnk, it is Snake. if it is r_plt, it is raiden :)
+        #region Cheats AoBs
         internal static byte[] OriginalAmmoBytes = new byte[] { 0x66, 0x89, 0x0C, 0x1A, 0x48, 0x8B, 0x5C, 0x24, 0x30, 0x0F, 0xBF, 0xC1, 0x48, 0x83, 0xC4, 0x20 };
         internal static string RestoreAmmo = "90 90 90 90 48 8B 5C 24 30 0F BF C1 48 83 C4 20";
         internal static string InfiniteAmmo = "66 89 0C 1A 48 8B 5C 24 30 0F BF C1 48 83 C4 20";
@@ -135,37 +134,37 @@ namespace MGS2_MC
         internal static string IncrementGripGauge = "90 90 BB 18 04 00 00";
         internal static string InGamePause = "A9 00 07 00 00 0F 85 C4";
         internal static byte[] OriginalPauseButtonBytes = { 0xA9, 0x00, 0x07, 0x00, 0x00 };
-        internal static string ItemMenuPause = "09 35 B1 EF 5D 01";
-        internal static byte[] OriginalItemMenuPauseBytes = { 0x09, 0x35, 0xB1, 0xEF, 0x5D, 0x01 };
-        internal static string WeaponMenuPause = "09 35 14 D5 5D 01";
-        internal static byte[] OriginalWeaponMenuPauseBytes = { 0x09, 0x35, 0x14, 0xD5, 0x5D, 0x01 };
-        internal static string ForceGuardsToSleep = "66 44 29 82 52 13 00 00";
-        internal static byte[] DontForceGuardsToSleep = { 0x66, 0x44, 0x29, 0x82, 0x52, 0x13, 0x00, 0x00 };
-        internal static string GuardsAreForcedToSleep = "83 AA 52 13 00 00 35 90";
-        internal static byte[] BytesToForceGuardsToSleep = { 0x83, 0xAA, 0x52, 0x13, 0x00, 0x00, 0x35, 0x90 };
-        internal static string ForceGuardsToWake = "66 83 AB 5A 13 00 00 01 79 07";
-        internal static byte[] DontForceGuardsToWake = { 0x66, 0x83, 0xAB, 0x5A, 0x13, 0x00, 0x00, 0x01, 0x79, 0x07 };
-        internal static string GuardsAreForcedToWake = "66 81 AB 5A 13 00 00 00 10 90";
-        internal static byte[] BytesToForceGuardsToWake = { 0x66, 0x81, 0xAB, 0x5A, 0x13, 0x00, 0x00, 0x00, 0x10, 0x90 };
+        internal static string ItemMenuPause = "09 2D DD CB 5E 01";
+        internal static byte[] OriginalItemMenuPauseBytes = { 0x09, 0x2D, 0xFD, 0xBE, 0x5E, 0x01 };
+        internal static string WeaponMenuPause = "09 2D DF B0 5E 01";
+        internal static byte[] OriginalWeaponMenuPauseBytes = { 0x09, 0x2D, 0xFF, 0xA3, 0x5E, 0x01 };
+        internal static string StandardGuardSleep = "66 44 29 82 52 13 00 00";
+        internal static byte[] StandardGuardSleepBytes = { 0x66, 0x44, 0x29, 0x82, 0x52, 0x13, 0x00, 0x00 };
+        internal static string ForceGuardsToSleep = "83 AA 52 13 00 00 35 90";
+        internal static byte[] ForceGuardsToSleepBytes = { 0x83, 0xAA, 0x52, 0x13, 0x00, 0x00, 0x35, 0x90 };
+        internal static string StandardGuardWake = "66 83 AB 5A 13 00 00 01 79 07";
+        internal static byte[] StandardGuardWakeBytes = { 0x66, 0x83, 0xAB, 0x5A, 0x13, 0x00, 0x00, 0x01, 0x79, 0x07 };
+        internal static string ForceGuardsToWake = "66 81 AB 5A 13 00 00 00 10 90";
+        internal static byte[] ForceGuardsToWakeBytes = { 0x66, 0x81, 0xAB, 0x5A, 0x13, 0x00, 0x00, 0x00, 0x10, 0x90 };
         internal static string InfiniteItemUse = "66 41 89 09 0F BF C1";
         internal static byte[] OriginalItemUseBytes = { 0x66, 0x41, 0x89, 0x09, 0x0F, 0xBF, 0xC1 };
         internal static string MaxCountOnPickup = "44 8B 47 60 8B 57 5C";
         internal static byte[] OriginalCountOnPickup = { 0x44, 0x8B, 0x47, 0x60, 0x8B, 0x57, 0x5C };
         internal static string KnockoutDuration = "66 83 AB 5A 13 00 00 01";
         internal static byte[] OriginalKnockoutDuration = { 0x66, 0x83, 0xAB, 0x5A, 0x13, 0x00, 0x00, 0x01 };
-        internal static string RemovePlantFilter = "F3 41 0F 10 94 19 3C 02 00 00";
-        internal static byte[] OriginalRemovePlantFilterBytes = { 0xF3, 0x41, 0x0F, 0x10, 0x94, 0x19, 0x3C, 0x02, 0x00, 0x00 };
+        internal static string RemovePlantFilter = "F6 05 0F BF 4C 01 01";
+        internal static byte[] OriginalRemovePlantFilterBytes = { 0xF6, 0x05, 0x0F, 0xBF, 0x4C, 0x01, 0x01 };
         internal static string GuardAnimations = "?? ?? ?? ?? ?? ?? ?? 48 8B 41 20 89 90 40 14 00 00 48 8B 49 20 8B 81 40 14";
         internal static byte[] OriginalGuardAnimationsBytes = { 0x0F, 0xBF, 0x90, 0x00, 0x0C, 0x00, 0x00, 0x48, 0x8B, 0x41, 0x20, 0x89, 0x90, 0x40, 0x14, 0x00, 0x00, 0x48, 0x8B, 0x49, 0x20, 0x8B, 0x81, 0x40, 0x14 };
         internal static byte[] StaticGuardAnimationBytes = { 0x48, 0x8B, 0x41, 0x20, 0x89, 0x90, 0x40, 0x14, 0x00, 0x00, 0x48, 0x8B, 0x49, 0x20, 0x8B, 0x81, 0x40, 0x14 };
-        internal static string RemovePlantFog = "?? 02 00 00 F3 0F 10 9B D0 01";
-        internal static byte[] OriginalPlantFogBytes = { 0x00, 0x02, 0x00, 0x00, 0xF3, 0x0F, 0x10, 0x9B, 0xD0, 0x01 };
-        internal static string RemoveTankerFilter = "B9 F9 FF 66 41 0F 6E 8F 2C 03";
-        internal static byte[] OriginalRemoveTankerFilterBytes = { 0xB9, 0xF9, 0xFF, 0x66, 0x41, 0x0F, 0x6E, 0x8F, 0x2C, 0x03 };
+        internal static string RemovePlantFog = "B9 1C 00 00 00 89 18 8B 96 20 05";
+        internal static byte[] OriginalPlantFogBytes = { 0xB9, 0x1C, 0x00, 0x00, 0x00, 0x89, 0x18, 0x8B, 0x96, 0x20, 0x05 };
+        internal static string RemoveTankerFilter = "E7 F8 FF 66 41 0F 6E 8F 2C 03";
+        internal static byte[] OriginalRemoveTankerFilterBytes = { 0xE7, 0xF8, 0xFF, 0x66, 0x41, 0x0F, 0x6E, 0x8F, 0x2C, 0x03 };
         internal static string NightTime = "FF 00 00 00 4C 6B C8 70 0F B6 83 C8 01";
         internal static byte[] OriginalNightTimeBytes = { 0xFF, 0x00, 0x00, 0x00, 0x4C, 0x6B, 0xC8, 0x70, 0x0F, 0xB6, 0x83, 0xC8, 0x01 };
-        internal static string EnableCustomFiltering = "88 0D BA C6 4B 01 88 15 B5 C6 4B 01 44 88 05 AF C6 4B 01 C3";
-        internal static byte[] OriginalCustomFilteringBytes = { 0x88, 0x0D, 0xBA, 0xC6, 0x4B, 0x01, 0x88, 0x15, 0xB5, 0xC6, 0x4B, 0x01, 0x44, 0x88, 0x05, 0xAF, 0xC6, 0x4B, 0x01, 0xC3 };
+        internal static string EnableCustomFiltering = "89 05 F5 BE 4C 01";
+        internal static byte[] OriginalCustomFilteringBytes = { 0x89, 0x05, 0xF5, 0xBE, 0x4C, 0x01 };
         internal static string CustomFilteringAoB = "00 00 80 3F 00 00 00 00 E0 0B 00 00 00 00 00 00";
         internal static string PauseVRAoB = "7E 51 FF 0D ?? ?? ?? 01";
         internal static byte[] OriginalPauseVRBytes = { 0x7E, 0x51, 0xFF, 0x0D, 0x00, 0x00, 0x00, 0x01 };
@@ -189,7 +188,7 @@ namespace MGS2_MC
         internal static byte[] OriginalVRInfiniteItemBytes = { 0x66, 0x41, 0x89, 0x09, 0x0F, 0xBF, 0xC1 };
         internal static string VRNoReloadAoB = "FF C8 89 05 ?? ?? ?? 01 C3 CC 48";
         internal static byte[] OriginalVRNoReloadBytes = { 0xFF, 0xC8, 0x89, 0x05, 0x00, 0x00, 0x00, 0x01, 0xC3, 0xCC, 0x48 };
-
+        #endregion
         #region Guard animations
         internal static GuardAnimation WaitAnimation = new GuardAnimation { Name = "Wait", Bytes = new byte[] { 0xBA, 0x00, 0x00, 0x00, 0x00, 0x90, 0x90 } };
         internal static GuardAnimation PatrolAnimation = new GuardAnimation { Name = "Patrol", Bytes = new byte[] { 0xBA, 0x02, 0x00, 0x00, 0x00, 0x90, 0x90 } };
@@ -221,6 +220,10 @@ namespace MGS2_MC
             DeactivateAIAnimation, CommandSoldiersAnimation, RadioCheckinAnimation, PeeAnimation, PeeWiggleAnimation, LeanRightAnimation,
             LeanLeftAnimation, RollRightAnimation, RollLeftAnimation
         };
+        public static string EmmaInfiniteHpAoB = "66 29 9F AE 03 00 00";
+        public static byte[] OriginalEmmaHpBytes = { 0x66, 0x29, 0x9F, 0xAE, 0x03, 0x00, 0x00 };
+        public static string EmmaInfiniteO2AoB = "66 89 46 18 F3 0F 11 87 38 0F 00 00";
+        public static byte[] OriginalEmmaO2Bytes = { 0x66, 0x89, 0x46, 0x18 };
 
         internal class GuardAnimation
         {
@@ -257,12 +260,17 @@ namespace MGS2_MC
     internal struct MGS2Offset
     {
         #region Offsets
+        #region Pointer offsets
+        public static readonly MemoryOffset SNAKE_PULLUPS = new MemoryOffset(0x12E);
+        public static readonly MemoryOffset RAIDEN_PULLUPS = new MemoryOffset(0x130);
+        #endregion
+
         #region String offsets
         #region Calculated From LifeAndGripNames
-        public static readonly MemoryOffset LIFE_TEXT = new MemoryOffset(10, 13); 
-        public static readonly MemoryOffset GRIP_Lv1_TEXT = new MemoryOffset(18, 25);
-        public static readonly MemoryOffset GRIP_Lv2_TEXT = new MemoryOffset(-150, -143);
-        public static readonly MemoryOffset GRIP_Lv3_TEXT = new MemoryOffset(-166, -159);
+        public static readonly MemoryOffset LIFE_TEXT = new MemoryOffset(9, 12); 
+        public static readonly MemoryOffset GRIP_Lv1_TEXT = new MemoryOffset(21, 28);
+        public static readonly MemoryOffset GRIP_Lv2_TEXT = new MemoryOffset(-155, -148);
+        public static readonly MemoryOffset GRIP_Lv3_TEXT = new MemoryOffset(-171, -164);
         #endregion
 
         #region Calculated From RationMedsBandagePentazeminDescriptions
@@ -270,7 +278,7 @@ namespace MGS2_MC
         #endregion
 
         #region Calculated From RayNames
-        public static readonly MemoryOffset RAY_01 = new MemoryOffset(75, 82);
+        public static readonly MemoryOffset RAY_01 = new MemoryOffset(86, 93);
         public static readonly MemoryOffset RAY_02 = new MemoryOffset(RAY_01.Start + 16, RAY_01.End + 16);
         public static readonly MemoryOffset RAY_03 = new MemoryOffset(RAY_02.Start + 16, RAY_02.End + 16);
         public static readonly MemoryOffset RAY_04 = new MemoryOffset(RAY_03.Start + 16, RAY_03.End + 16);
@@ -298,7 +306,7 @@ namespace MGS2_MC
         #endregion
 
         #region Calculated From SolidusName
-        public static readonly MemoryOffset SOLIDUS_HP_TEXT = new MemoryOffset(65, 71);
+        public static readonly MemoryOffset SOLIDUS_HP_TEXT = new MemoryOffset(60, 66);
         #endregion
 
         #region Calculated From EmmaO2
@@ -307,21 +315,21 @@ namespace MGS2_MC
         #endregion
 
         #region Calculated From EmmaName
-        public static readonly MemoryOffset EMMA_HP_TEXT = new MemoryOffset(395, 398);
+        public static readonly MemoryOffset EMMA_HP_TEXT = new MemoryOffset(390, 393);
         #endregion
 
         #region Calculated From FatmanName
-        public static readonly MemoryOffset FATMAN_HP_TEXT = new MemoryOffset(93, 98);
+        public static readonly MemoryOffset FATMAN_HP_TEXT = new MemoryOffset(88, 93);
         #endregion
 
         #region Calculated From OlgaName
-        public static readonly MemoryOffset OLGA_HP_TEXT = new MemoryOffset(297, 300);
+        public static readonly MemoryOffset OLGA_HP_TEXT = new MemoryOffset(292, 295);
                                                                                        //there is also a meryl string right next to OLGA... but idk what it is used for so i'm not bothering to add it atm
                                                                                        //guessing the meryl^^ string is related to the OLGA boss fight! OLGAMERYL
         #endregion
 
         #region Calculated From HarrierName
-        public static readonly MemoryOffset HARRIER_HP_TEXT = new MemoryOffset(-104, -98);
+        public static readonly MemoryOffset HARRIER_HP_TEXT = new MemoryOffset(-109, -103);
         #endregion
 
         #region Calculated From KasatkaName
@@ -329,14 +337,14 @@ namespace MGS2_MC
         #endregion
 
         #region Calculated From FortuneName
-        public static readonly MemoryOffset FORTUNE_HP_TEXT = new MemoryOffset(1193, 1199);
-        public static readonly MemoryOffset FORTUNE_HP_VALUE = new MemoryOffset(1217, 1218);
-        public static readonly MemoryOffset FORTUNE_STAMINA_VALUE = new MemoryOffset(1233, 1234);
-        public static readonly MemoryOffset VAMP_HP_TEXT = new MemoryOffset(1913, 1916);
+        public static readonly MemoryOffset FORTUNE_HP_TEXT = new MemoryOffset(1188, 1194);
+        public static readonly MemoryOffset FORTUNE_HP_VALUE = new MemoryOffset(1212, 1213);
+        public static readonly MemoryOffset FORTUNE_STAMINA_VALUE = new MemoryOffset(1228, 1229);
+        public static readonly MemoryOffset VAMP_HP_TEXT = new MemoryOffset(1908, 1911);
         #endregion
 
         #region Calculated From Vamp02
-        public static readonly MemoryOffset VAMP_02_TEXT = new MemoryOffset(13, 19);
+        public static readonly MemoryOffset VAMP_02_TEXT = new MemoryOffset(8, 14);
         #endregion
         #endregion
 
@@ -415,6 +423,8 @@ namespace MGS2_MC
         public static readonly MemoryOffset VR_INF_AMMO = new MemoryOffset(0, 4);
         public static readonly MemoryOffset VR_INF_ITEM = new MemoryOffset(0, 6);
         public static readonly MemoryOffset VR_NO_RELOAD = new MemoryOffset(0, 10);
+        public static readonly MemoryOffset EMMA_INF_HP = new MemoryOffset(0, 3);
+        public static readonly MemoryOffset EMMA_INF_O2 = new MemoryOffset(0, 6);
         #endregion
 
         #region Calculated From CurrentGripGauge

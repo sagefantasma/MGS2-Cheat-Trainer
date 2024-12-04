@@ -575,7 +575,7 @@ namespace MGS2_MC
             guardAnimationComboBox.DataSource = MGS2AoB.GuardAnimationList;
             guardAnimationComboBox.DisplayMember = "Name";
             GuiLoaded = true;
-            MessageBox.Show("As of MGS2 version 2.0, a lot of this trainer's functionalities have been heavily affected. We're fixing things up as quickly as we can, please be patient and bear with us as we continue to work. Thank you!\n\n Please note: This message box will stop appearing on trainer launch once all functionalities have been restored.", "Trainer under maintenance");
+            //MessageBox.Show("As of MGS2 version 2.0, a lot of this trainer's functionalities have been heavily affected. We're fixing things up as quickly as we can, please be patient and bear with us as we continue to work. Thank you!\n\n Please note: This message box will stop appearing on trainer launch once all functionalities have been restored.", "Trainer under maintenance");
         }
 
         #region GUI getters
@@ -1232,12 +1232,12 @@ namespace MGS2_MC
 
         private void C4CurrentBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.C4.UpdateCurrentAmmoCount(ClaymoreCurrentAmmoCount(), _logger, toolStripStatusLabel);
+            MGS2UsableObjects.C4.UpdateCurrentAmmoCount(C4CurrentAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void C4MaxBtn_Click(object sender, EventArgs e)
         {
-            MGS2UsableObjects.C4.UpdateMaxAmmoCount(ClaymoreMaxAmmoCount(), _logger, toolStripStatusLabel);
+            MGS2UsableObjects.C4.UpdateMaxAmmoCount(C4CurrentAmmoCount(), _logger, toolStripStatusLabel);
         }
 
         private void BookCurrentBtn_Click(object sender, EventArgs e)
@@ -1714,20 +1714,12 @@ namespace MGS2_MC
                 #if DEBUG
                 UserHasBeenWarned = true;
                 #endif
-                if(CurrentTab == mgs2TabControl.TabPages.IndexOfKey("tabPageBosses"))
-                {
-                    MessageBox.Show("As of MGS2 version 2.0, the bosses tab is non-functional. We're working on a fix, please be patient!", "Warning");
-                    /*
-                    bossTreeView.SelectedNode = null;
-                    bossGroupBox.Text = "No Currently Detected/Selected Boss";
-                    bossHealthStaminaLayoutPanel.Visible = false;*/
-                }
                 if (CurrentTab == mgs2TabControl.TabPages.IndexOfKey("tabPageCheats"))
                 {
                     if (!UserHasBeenWarned)
                     {
-                        //MessageBox.Show("WARNING! Use the contents of this tab at your own risk. USE OF THESE CHEATS MAY CRASH YOUR GAME! All of these have worked at some point or another, but may not always. Results not guaranteed.");
-                        MessageBox.Show("As of MGS2 version 2.0, the cheats tab is very hit-or-miss. We're working on a fix, please be patient!", "Warning");
+                        MessageBox.Show("WARNING! Use the contents of this tab at your own risk. USE OF THESE CHEATS MAY CRASH YOUR GAME! All of these have worked at some point or another, but may not always. Results not guaranteed.");
+                        //MessageBox.Show("As of MGS2 version 2.0, the cheats tab is very hit-or-miss. We're working on a fix, please be patient!", "Warning");
                         UserHasBeenWarned = true;
                     }
                     try
@@ -1958,8 +1950,8 @@ namespace MGS2_MC
 
         private void LowerGripButton_Click(object sender, EventArgs e)
         {
-            _logger.Information("User clicked -100 pushups button");
-            toolStripStatusLabel.Text = $"Attempting to reduce pushup count by 100 pushups...";
+            _logger.Information("User clicked -100 pull-ups button");
+            toolStripStatusLabel.Text = $"Attempting to reduce pull-up count by 100 pull-ups...";
             try
             {
                 ushort currentPushups = MGS2MemoryManager.ModifyGripLevel(false);
@@ -1967,16 +1959,16 @@ namespace MGS2_MC
             }
             catch (Exception ex)
             {
-                _logger.Error($"Failed to remove 100 pushups from the pushup count: {ex}");
-                toolStripStatusLabel.Text = $"Failed to decrease pushup count for the current character!";
+                _logger.Error($"Failed to remove 100 pull-ups from the pull-up count: {ex}");
+                toolStripStatusLabel.Text = $"Failed to decrease pull-up count for the current character!";
                 MessageBox.Show(toolStripStatusLabel.Text);
             }
         }
 
         private void RaiseGripButton_Click(object sender, EventArgs e)
         {
-            _logger.Information("User clicked +100 pushups button");
-            toolStripStatusLabel.Text = $"Attempting to increase pushup count by 100 pushups...";
+            _logger.Information("User clicked +100 pull-ups button");
+            toolStripStatusLabel.Text = $"Attempting to increase pull-up count by 100 pull-ups...";
             try
             {
                 ushort currentPushups = MGS2MemoryManager.ModifyGripLevel(true);
@@ -1984,8 +1976,8 @@ namespace MGS2_MC
             }
             catch(Exception ex)
             {
-                _logger.Error($"Failed to add 100 pushups to the pushup count: {ex}");
-                toolStripStatusLabel.Text = $"Failed to increase pushup count for the current character!";
+                _logger.Error($"Failed to add 100 pull-ups to the pull-up count: {ex}");
+                toolStripStatusLabel.Text = $"Failed to increase pull-up count for the current character!";
                 MessageBox.Show(toolStripStatusLabel.Text);
             }
         }
@@ -2043,16 +2035,16 @@ namespace MGS2_MC
                 _logger.Information("User clicked on 'force guards to sleep' button");
                 toolStripStatusLabel.Text = $"Attempting to force all guards to sleep...";
                 //force undo of wake(if done)
-                byte[] currentWake = Cheat.CheatActions.ReadMemory(MGS2AoB.GuardsAreForcedToWake, MGS2Offset.FORCE_WAKE);
+                byte[] currentWake = Cheat.CheatActions.ReadMemory(MGS2AoB.ForceGuardsToWake, MGS2Offset.FORCE_WAKE);
 
-                if (currentWake != null && currentWake.SequenceEqual(MGS2AoB.BytesToForceGuardsToWake))
+                if (currentWake != null && currentWake.SequenceEqual(MGS2AoB.ForceGuardsToWakeBytes))
                 {
                     _logger.Information("Guards are currently forced awake, attempting to disable that");
-                    Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.GuardsAreForcedToWake, MGS2AoB.DontForceGuardsToWake, MGS2Offset.FORCE_WAKE);
+                    Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.ForceGuardsToWake, MGS2AoB.StandardGuardWakeBytes, MGS2Offset.FORCE_WAKE);
                     _logger.Information("Guards are no longer forced awake");
                 }
 
-                Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.ForceGuardsToSleep, MGS2AoB.BytesToForceGuardsToSleep, MGS2Offset.FORCE_SLEEP);
+                Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.StandardGuardSleep, MGS2AoB.ForceGuardsToSleepBytes, MGS2Offset.FORCE_SLEEP);
 
                 toolStripStatusLabel.Text = $"All guards suddenly feel asleep!";
             }
@@ -2071,17 +2063,17 @@ namespace MGS2_MC
                 _logger.Information("User clicked on 'force guards to wake' button");
                 toolStripStatusLabel.Text = $"Attempting to force all guards to wake...";
                 //force undo of sleep(if done)
-                byte[] currentSleep = Cheat.CheatActions.ReadMemory(MGS2AoB.GuardsAreForcedToSleep, MGS2Offset.FORCE_SLEEP);
+                byte[] currentSleep = Cheat.CheatActions.ReadMemory(MGS2AoB.ForceGuardsToSleep, MGS2Offset.FORCE_SLEEP);
 
 
-                if (currentSleep != null && currentSleep.SequenceEqual(MGS2AoB.BytesToForceGuardsToSleep))
+                if (currentSleep != null && currentSleep.SequenceEqual(MGS2AoB.ForceGuardsToSleepBytes))
                 {
                     _logger.Information("Guards are currently forced asleep, attempting to disable that");
-                    Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.GuardsAreForcedToSleep, MGS2AoB.DontForceGuardsToSleep, MGS2Offset.FORCE_SLEEP);
+                    Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.ForceGuardsToSleep, MGS2AoB.StandardGuardSleepBytes, MGS2Offset.FORCE_SLEEP);
                     _logger.Information("Guards are no longer forced asleep");
                 }
 
-                Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.ForceGuardsToWake, MGS2AoB.BytesToForceGuardsToWake, MGS2Offset.FORCE_WAKE);
+                Cheat.CheatActions.ReplaceWithSpecificCode(MGS2AoB.StandardGuardWake, MGS2AoB.ForceGuardsToWakeBytes, MGS2Offset.FORCE_WAKE);
 
                 toolStripStatusLabel.Text = $"All guards have awoken!";
             }

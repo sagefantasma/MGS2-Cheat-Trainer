@@ -750,12 +750,12 @@ namespace MGS2_MC
                 
                     using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                     {
-                        IntPtr memoryLocation = proxy.FollowPointer(new IntPtr(MGS2Pointer.CurrentAmmo), false);
+                        IntPtr memoryLocation = proxy.FollowPointer(new IntPtr(MGS2Pointer.PullupCount), false);
 
                         if (currentCharacter == Constants.PlayableCharacter.Snake)
-                            memoryLocation = IntPtr.Add(memoryLocation, MGS2Offset.GRIP_LEVEL_SNAKE.Start);
+                            memoryLocation = IntPtr.Add(memoryLocation, MGS2Offset.SNAKE_PULLUPS.Start);
                         else
-                            memoryLocation = IntPtr.Add(memoryLocation, MGS2Offset.GRIP_LEVEL_RAIDEN.Start);
+                            memoryLocation = IntPtr.Add(memoryLocation, MGS2Offset.RAIDEN_PULLUPS.Start);
 
                         byte[] gripLevelBytes = proxy.GetMemoryFromPointer(memoryLocation, 2);
                         ushort gripLevel = BitConverter.ToUInt16(gripLevelBytes, 0);

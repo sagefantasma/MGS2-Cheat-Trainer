@@ -7,6 +7,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -167,89 +168,12 @@ namespace gcx
             //TODO: highlight the procs in the hexCodeRichTextBox as well
         }
 
-        private void saveFunctionChangesBtn_Click(object sender, EventArgs e)
-        {
-            if (!ForceProperHexFormat(hexCodeRichTextbox))
-            {
-                return;
-            } 
-            if (hexCodeRichTextbox.TextLength != hexCodeRichTextbox.MaxLength)
-            {
-                //TODO: verify this works
-                if (hexCodeRichTextbox.Text[hexCodeRichTextbox.Text.Length - 1] == '-')
-                {
-                    hexCodeRichTextbox.Text.Remove(hexCodeRichTextbox.TextLength -1, 1);
-                }
-                while(hexCodeRichTextbox.TextLength != hexCodeRichTextbox.MaxLength)
-                {
-                    hexCodeRichTextbox.Text += "-00";
-                }
-            }
-            string selectedFunction = contentsTreeView.SelectedNode.Text;
-            if (!hexFunctionChanges.ContainsKey(selectedFunction))
-                hexFunctionChanges.Add(selectedFunction, hexCodeRichTextbox.Text);
-            else
-                hexFunctionChanges[selectedFunction] = hexCodeRichTextbox.Text;
-
-            MessageBox.Show("Function changes saved!");
-        }
-
-        private bool ForceProperHexFormat(RichTextBox textbox)
-        {
-            //TODO: fix this, cuz it isn't working correctly
-            return true;
-            bool validFormatting = true;
-            
-            for(int i = 0; i < textbox.MaxLength; i++)
-            {
-                if (i != 0 && i % 3 == 0)
-                {
-                    //must be a hyphen
-                    if (textbox.Text[i] != '-')
-                    {
-                        validFormatting = false;
-                    }
-                }
-                else
-                {
-                    //must not be a hyphen
-                    if (!hexRegex.IsMatch(textbox.Text[i].ToString()))
-                    {
-                        validFormatting = false;
-                    }
-                }
-            }
-
-            if (!validFormatting)
-            {
-                MessageBox.Show("Invalid hex code format - values can only be 0-9, A-F. Every third character must be a hyphen('-').");
-            }
-        }
-
         private void saveFileButton_Click(object sender, EventArgs e)
         {
-            /*
-            Dictionary<string, byte[]> formattedChanges = new Dictionary<string, byte[]>();
-            foreach(KeyValuePair<string, string> unformattedChange in hexFunctionChanges)
-            {
-                List<byte> derivedBytes = new List<byte>();
-                foreach(string substring in unformattedChange.Value.Split('-'))
-                {
-                    derivedBytes.Add(byte.Parse(substring, NumberStyles.HexNumber));
-                }
-                formattedChanges.Add(unformattedChange.Key, derivedBytes.ToArray());
-            }
-
-            gcx_Editor.SaveGcxFile(formattedChanges);*/
             byte[] newGcxBytes = gcx_Editor.BuildGcxFile();
             string date = $"{DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss")}_custom.gcx"; 
             File.WriteAllBytes(date, newGcxBytes);
             MessageBox.Show("GCX file saved!");
-        }
-
-        private void hexCodeTextbox_TextChanged(object sender, EventArgs e)
-        {
-            //TODO: should we do anything here?            
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -283,18 +207,49 @@ namespace gcx
             }
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void ExecuteRandomization(object sender, EventArgs e)
         {
+            string mgs2Directory = @"C:\Users\yonan\Documents\Pinned Folders\C Drive Steam Games\MGS2\";
+            MGS2Randomizer mgs2Randomizer = new MGS2Randomizer(mgs2Directory, 0);
+
+            mgs2Randomizer.RandomizeItemSpawns();
+        }
+
+        private void OldRandomizationInit(object sender, EventArgs e)
+        {
+            /*
+             * So while leveraging this old method would probably _work_, it's designed in a weird way that I don't really understand anymore
+             * and I think trying to reimplement it might end up causing a lot of headaches. I think, instead, I'll retool the randomizer to work
+             * in a more intelligent way from the beginning and continue from there. I do think there are some solid ideas I had in there that I
+             * will want to re-use, but the flow is so strange it needs redoing, I think.
+             */
             FileInfo fileInfo = new FileInfo(@"C:\Users\yonan\Documents\Pinned Folders\C Drive Steam Games\MGS2\assets\gcx\eu\_bp\scenerio_stage_w00a.gcx");
-            MGS2Randomizer mgs2Randomizer = new MGS2Randomizer(fileInfo.DirectoryName);
-
-
+            MGS2Randomizer mgs2Randomizer = new MGS2Randomizer(fileInfo.DirectoryName, null);
             int generatedSeed = mgs2Randomizer.RandomizeItemSpawns();
-            mgs2Randomizer.SaveRandomizationToDisk();
-            //I *think* this is working as designed, but it won't actually work yet as it's possible to have spawns without code to 
-            //support it(causing crashes). Before I go any further in this direction, I need to work on splicing functions in.
-            //if that doesn't work, then we may have no choice but to go the route of the SoL randomizer, but I think it should
-            //work in theory.
+
+            gcx_Editor.CallDecompiler(fileInfo.FullName);
+            List<DecodedProc> decodedProcs = gcx_Editor.BuildContentTree();
+            /* this will show you all the (known) functions within the gcx file responsible for item/weapon spawns.
+             * this can give you a good idea of _what_ each level has in it as possible spawns.
+            foreach(KeyValuePair<string, string> entry in contentTree)
+            {
+                if(ProcIds.SpawnProcs.Any(knownProc => entry.Key.Contains(knownProc.BigEndianRepresentation))) //this works fine to do what it is designed to
+                    contentTreeCarbonCopy.Add(entry.Key, entry.Value);
+            }
+            */
+
+            //filter out any procs that don't call any of our known, desired procs
+            List<DecodedProc> filteredProcs = new List<DecodedProc>();
+            foreach (DecodedProc entry in decodedProcs)
+            {
+                //if (KnownProc.SpawnProcs.Any(knownProc => entry.Name.Contains(knownProc.BigEndianRepresentation)))
+                if (ContainsSpawningFunctions(entry))
+                    filteredProcs.Add(entry);
+            }
+
+
+            
+            //mgs2Randomizer.SaveRandomizationToDisk(filteredProcs);
         }
 
         private void button1_Click_1(object sender, EventArgs e)
@@ -322,7 +277,7 @@ namespace gcx
             List<ProcEditor.ItemSpawn> list = ProcEditor.SpawningProcs;
             foreach (ProcEditor.ItemSpawn spawn in list)
             {
-                ProcEditor.ModifySpawnProc(spawn, KnownProc.AwardShaver);
+                ProcEditor.ModifySpawnProc(spawn.Id, KnownProc.AwardShaver);
             }
             ProcEditor.SaveAutomatedChanges();
             saveFileButton_Click(null, null);

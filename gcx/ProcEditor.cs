@@ -12,18 +12,30 @@ namespace gcx
 {
     public partial class ProcEditor : Form
     {
+        public class Coordinates
+        {
+            public long X { get; set; }
+            public long Z { get; set; }
+            public long Y { get; set; }
+            public long Rotation { get; set; }
+        }
+
         public class ItemSpawn
         {
             public DecodedProc spawnerProc { get; set; }
             public int positionInSpawnerProc { get; set; }
             public RawProc itemProc { get; set; }
             public ComboBox uiComboBox { get; set; }
+            public Coordinates Coordinates { get; set; }
+            public byte[] Id { get; set; }
 
-            public ItemSpawn(DecodedProc spawnerProc, int positionInSpawnerProc, RawProc itemProc)
+            public ItemSpawn(DecodedProc spawnerProc, int positionInSpawnerProc, RawProc itemProc, Coordinates coordinates = null, byte[] id = null)
             {
                 this.spawnerProc = spawnerProc;
                 this.positionInSpawnerProc = positionInSpawnerProc;
                 this.itemProc = itemProc;
+                Coordinates = coordinates;
+                Id = id;
             }
 
             public ItemSpawn(DecodedProc spawnerProc, int positionInSpawnerProc, RawProc itemProc, ComboBox comboBox)
@@ -112,26 +124,79 @@ namespace gcx
         {
             foreach (RawProc knownProc in KnownProc.SpawnProcs)
             {
-                List<int> positions = GcxEditor.FindAllSubArray(procToEdit.RawContents, knownProc.LittleEndianRepresentation);
-                if (positions == null || positions.Count == 0)
+                List<int> indices = GcxEditor.FindAllSubArray(procToEdit.RawContents, knownProc.LittleEndianRepresentation);
+                if (indices == null || indices.Count == 0)
                 {
                     continue;
                 }
-                foreach (int position in positions)
+                foreach (int index in indices)
                 {
-                    if (procToEdit.RawContents[position - 2] == 0x7D)
+                    if (procToEdit.RawContents[index - 2] == 0x7D)
                     {
-                        _spawnProcsCalled.Add(new ItemSpawn(procToEdit, position, knownProc));
+                        Coordinates spawnCoordinates = GetCoordinates(procToEdit.RawContents, index);
+                        byte[] spawnId = GetSpawnId(procToEdit.RawContents, index);
+                        _spawnProcsCalled.Add(new ItemSpawn(procToEdit, index, knownProc, spawnCoordinates, spawnId));
                     }
                 }
             }
         }
 
-        public static void ModifySpawnProc(ItemSpawn spawnToEdit, RawProc replacementProc)
+        private static Coordinates GetCoordinates(byte[] contents, int index)
         {
-            ItemSpawn localSpawn = _spawnProcsCalled.Find(x => x.spawnerProc == spawnToEdit.spawnerProc 
-                                                          && x.itemProc == spawnToEdit.itemProc 
-                                                          && x.positionInSpawnerProc == spawnToEdit.positionInSpawnerProc);
+            Coordinates coordinates = new Coordinates();
+
+            //need to do some complex calculations to get these i think. leaving an analysis of just 2 spawns to illustrate and deal with this later
+            /*
+             * 7D-12- (call proc, 18 bytes long)
+
+47-7D-F5 (proc to call)
+
+-06-A9-42-8B (spawn ID)
+
+-01-10-27- (X position)
+
+01-D0-07- (Z position)
+
+01-0C-FE- (Y position)
+
+C2-00 (rotation, denotes a value of 1)
+
+
+
+
+7D-10- (call proc, 16 bytes long)
+
+22-A2-D2- (proc to call)
+
+06-4F-9E-26- (spawn ID)
+
+01-BA-E1- (X position)
+
+C1- (Z position, denotes a value of 0)
+
+01-94-11- (Y position)
+
+C2-00 (rotation, denotes a value of 1)
+             * 
+             */
+
+            return coordinates;
+        }
+
+        private static byte[] GetSpawnId(byte[] contents, int index)
+        {
+            //TODO: validate
+            byte[] spawnId = new byte[3];
+
+            Array.Copy(contents, index + 4, spawnId, 0, 3); //i _believe_ this is correct all of the time
+
+            return spawnId;
+        }
+
+        public static void ModifySpawnProc(byte[] spawnId, RawProc replacementProc)
+        {
+            ItemSpawn localSpawn = _spawnProcsCalled.Find(x => x.Id.SequenceEqual(spawnId));
+
             localSpawn.itemProc = replacementProc;
         }
 

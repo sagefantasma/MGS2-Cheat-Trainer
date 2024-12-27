@@ -16,15 +16,46 @@ namespace gcx
             Application.Run(new GcxExplorer());
         }
 
+
+
         [STAThread]
         static void Main(string[] args)
         {
-            /*ResourceEditor.AddResource("w04b", "C:\\Users\\yonan\\Documents\\Pinned Folders\\C Drive Steam Games\\MGS2\\eu\\stage", "ThermalGoggles");
-            ResourceEditor.AddResource("w04b", "C:\\Users\\yonan\\Documents\\Pinned Folders\\C Drive Steam Games\\MGS2\\eu\\stage", "GoggleIbox");
-            ResourceEditor.AddResource("w04b", "C:\\Users\\yonan\\Documents\\Pinned Folders\\C Drive Steam Games\\MGS2\\eu\\stage", "GoggleSh");*/
+            //this did something funky when adding files to the manifest - seemed like it was bad indexing for some reason?
+            //doing this and only this resulted in only the "coldmedslabel" showing up, but not the actual medicine box... why?
+            //adding assets/tri/us/itembox.tri,us/stage/w00a/cache/00883186.tri,cache/00883186.tri to the manifest got a box to show up, but not with textures. i think this is because 00883186 is not attached to the correct ibox texture in the bpassets
+            //adding what i thought was all the relevant textures actually wasnt enough either... i'm genuinely considering just adding every texture at this point and seeing what happens xdd
+            //either way i think that is a good experiment, and could possibly reveal quite a bit. i want to try this
+            //1. develop a tool that will go through all manifest & bp_assets files, and collate a master list. (separate items by 0x0D, 0x0D, 0x0A)
+            //2. create a test manifest & bp_assets file with ALL items from master list, correcting for the stage name.
+            //3. test it out
+            //4. ???
+            //5. Profit
+
+            //for bpassets:
+            //textures/flatlist, then kms files
+
+            //for manifest:
+            //
             /*GcxLevelResourceMapper.MapLevelsToResources("C:\\Users\\yonan\\Source\\Repos\\MGS2-Cheat-Trainer\\gcx\\bin\\Debug\\main game",
-                "C:\\Users\\yonan\\Documents\\Pinned Folders\\C Drive Steam Games\\MGS2\\eu\\stage");
+                "C:\\Users\\yonan\\Documents\\Pinned Folders\\C Drive Steam Games\\MGS2\\eu\\stage");*/
+            /*GcxLevelResourceMapper.BuildMasterResourceList("C:\\Users\\yonan\\Source\\Repos\\MGS2-Cheat-Trainer\\gcx\\bin\\Debug\\main game",
+                "C:\\Users\\yonan\\Documents\\Pinned Folders\\C Drive Steam Games\\MGS2\\eu\\stage");*/
+            /*ResourceEditor.AddResource("w04a", "C:\\Users\\yonan\\Documents\\Pinned Folders\\C Drive Steam Games\\MGS2\\eu\\stage", "coldmedslabel");
+            ResourceEditor.AddResource("w04a", "C:\\Users\\yonan\\Documents\\Pinned Folders\\C Drive Steam Games\\MGS2\\eu\\stage", "medicineibox");
+            ResourceEditor.AddResource("w04a", "C:\\Users\\yonan\\Documents\\Pinned Folders\\C Drive Steam Games\\MGS2\\eu\\stage", "medicinesh");
+            /*
             return;*/
+            /*foreach(Resource value in Resource.ResourceList)
+            {
+                ResourceEditor.AddResource("w04a", "C:\\Users\\yonan\\Documents\\Pinned Folders\\C Drive Steam Games\\MGS2\\eu\\stage", value.CommonName);
+            }*/
+            List<string> strings = new List<string>();
+            foreach(Resource value in Resource.ResourceList)
+            {
+                strings.Add(value.CommonName);
+            }
+            ResourceEditor.AddResources("w02a", "C:\\Users\\yonan\\Documents\\Pinned Folders\\C Drive Steam Games\\MGS2\\eu\\stage", strings);
             ShowGui();
             return;
             bool rerun = false;

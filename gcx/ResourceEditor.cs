@@ -3,47 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace gcx
 {
     internal static class ResourceEditor
     {
-        /*
-         * In order to successfully edit a resource file, we need to do the following:
-         * 1. Identify the missing resource
-         * 2. Find the bp_assets.txt and manifest.txt
-         * (this class' responsibility starts here)
-         * 3. Prepare the list of missing data (ctxr, cmdl, kms)
-         * 4. Find where the ctxr and cmdl files will fit into bp_assets, and where kms will fit into manifest
-         *          (grouped by filetype, then alphabetical order(ish xdd))
-         * 5. Add kms line(s) to the manifest (end with 0D 0D 0A)
-         * 6. Add ctxr and cmdl lines to bp_assets (end with 0D 0D 0A)
-         */
-
-        /*
-         * bp_assets file order:
-         * 
-         * alphabetically stored ctxr files
-         * alphabetically stored evm files
-         * alphabetically stored kms files
-         */
-
-        /*
-         * manifest file order:
-         * alphabetically stored tri files
-         * alphabetically stored? hzx files
-         * var files
-         * sar files
-         * reverse-alphabetically stored? row files
-         * mar files
-         * lt2 files
-         * reverse-alphabetically stored kms files
-         * reverse-alphabetically stored cv2 files
-         * gcx file
-         */
-
         static List<byte> _manifestContents { get; set; }
         static List<byte> _bpAssetsContents { get; set; }
 
@@ -56,6 +24,150 @@ namespace gcx
             public FileType FileType { get; set; }
         }
 
+        private class LevelResources
+        {
+            public BpAssets BpAssets { get; set; } = new BpAssets();
+            public Manifest Manifest { get; set; } = new Manifest();
+        }
+
+        private class BpAssets
+        {
+            public List<string> CtxrFiles { get; set; } = new List<string>();
+            public List<string> EvmFiles { get; set; } = new List<string>(); //can be null
+            public List<string> KmsFiles { get; set; } = new List<string>();
+
+            /*
+         * bp_assets file order:
+         * 
+         * alphabetically stored ctxr files
+         * alphabetically stored evm files
+         * alphabetically stored kms files
+         */
+            public byte[] ToBytes()
+            {
+                List<byte> bytes = new List<byte>();
+                CtxrFiles.Sort();
+                KmsFiles.Sort();
+                foreach (string resource in this.CtxrFiles)
+                {
+                    bytes.AddRange(Encoding.UTF8.GetBytes(resource));
+                    //bytes.AddRange(EOL);
+                }
+                foreach (string resource in this.EvmFiles)
+                {
+                    bytes.AddRange(Encoding.UTF8.GetBytes(resource));
+                    //bytes.AddRange(EOL);
+                }
+                foreach (string resource in this.KmsFiles)
+                {
+                    bytes.AddRange(Encoding.UTF8.GetBytes(resource));
+                    //bytes.AddRange(EOL);
+                }
+
+                return bytes.ToArray();
+            }
+        }
+
+        private class Manifest
+        {
+            public List<string> TriFiles { get; set; } = new List<string>();
+            public List<string> HzxFiles { get; set; } = new List<string>();
+            public List<string> VarFiles { get; set; } = new List<string>();
+            public List<string> SarFiles { get; set; } = new List<string>();
+            public List<string> RowFiles { get; set; } = new List<string>();
+            public List<string> MarFiles { get; set; } = new List<string>();
+            public List<string> Lt2Files { get; set; } = new List<string>();
+            public List<string> KmsFiles { get; set; } = new List<string>();
+            public List<string> EvmFiles { get; set; } = new List<string>(); //can be null
+            public List<string> Cv2Files { get; set; } = new List<string>();
+            public List<string> AnmFiles { get; set; } = new List<string>();
+            public List<string> GcxFiles { get; set; } = new List<string>();
+
+
+            /*
+         * manifest file order:
+         * alphabetically stored tri files
+         * alphabetically stored? hzx files
+         * var files
+         * sar files
+         * reverse-alphabetically stored? row files
+         * mar files
+         * lt2 files
+         * reverse-alphabetically stored kms files
+         * reverse-alphabetically stored cv2 files
+         * gcx file
+         */
+            public byte[] ToBytes()
+            {
+                List<byte> bytes = new List<byte>();
+                KmsFiles.Sort();
+                KmsFiles.Reverse();
+
+                foreach(string resource in this.TriFiles)
+                {
+                    bytes.AddRange(Encoding.UTF8.GetBytes(resource));
+                    //bytes.AddRange(EOL);
+                }
+                foreach (string resource in this.HzxFiles)
+                {
+                    bytes.AddRange(Encoding.UTF8.GetBytes(resource));
+                    //bytes.AddRange(EOL);
+                }
+                foreach (string resource in this.VarFiles)
+                {
+                    bytes.AddRange(Encoding.UTF8.GetBytes(resource));
+                    //bytes.AddRange(EOL);
+                }
+                foreach (string resource in this.SarFiles)
+                {
+                    bytes.AddRange(Encoding.UTF8.GetBytes(resource));
+                    //bytes.AddRange(EOL);
+                }
+                foreach (string resource in this.RowFiles)
+                {
+                    bytes.AddRange(Encoding.UTF8.GetBytes(resource));
+                    //bytes.AddRange(EOL);
+                }
+                foreach (string resource in this.MarFiles)
+                {
+                    bytes.AddRange(Encoding.UTF8.GetBytes(resource));
+                    //bytes.AddRange(EOL);
+                }
+                foreach (string resource in this.Lt2Files)
+                {
+                    bytes.AddRange(Encoding.UTF8.GetBytes(resource));
+                    //bytes.AddRange(EOL);
+                }
+                foreach (string resource in this.KmsFiles)
+                {
+                    bytes.AddRange(Encoding.UTF8.GetBytes(resource));
+                    //bytes.AddRange(EOL);
+                }
+                foreach (string resource in this.EvmFiles)
+                {
+                    bytes.AddRange(Encoding.UTF8.GetBytes(resource));
+                    //bytes.AddRange(EOL);
+                }
+                foreach (string resource in this.Cv2Files)
+                {
+                    bytes.AddRange(Encoding.UTF8.GetBytes(resource));
+                    //bytes.AddRange(EOL);
+                }
+                foreach (string resource in this.AnmFiles)
+                {
+                    bytes.AddRange(Encoding.UTF8.GetBytes(resource));
+                    //bytes.AddRange(EOL);
+                }
+                foreach (string resource in this.GcxFiles)
+                {
+                    bytes.AddRange(Encoding.UTF8.GetBytes(resource));
+                    //bytes.AddRange(EOL);
+                }
+
+                return bytes.ToArray();
+            }
+        }
+
         enum FileType
         {
             Kms,
@@ -63,11 +175,153 @@ namespace gcx
             Ctxr
         }
 
+        private static LevelResources CollectExistingResources()
+        {
+            LevelResources existingResources = new LevelResources();
+            List<byte[]> individualizedBpAssets = SplitResources(_bpAssetsContents.ToArray());
+            List<byte[]> individualizedManifest = SplitResources(_manifestContents.ToArray());
 
-        public static bool AddResource(string gcxFile, string resourceSuperDirectory, string resourceToAdd)
+            foreach (byte[] resource in individualizedBpAssets)
+            {
+                string resourceString = Encoding.UTF8.GetString(resource);
+                if (resourceString.StartsWith("textures/"))
+                {
+                    existingResources.BpAssets.CtxrFiles.Add(resourceString);
+                }
+                else if (resourceString.StartsWith("assets/evm/"))
+                {
+                    existingResources.BpAssets.EvmFiles.Add(resourceString);
+                }
+                else if (resourceString.StartsWith("assets/kms/"))
+                {
+                    existingResources.BpAssets.KmsFiles.Add(resourceString);
+                }
+                else if(resourceString != "")
+                {
+                    throw new NotImplementedException("Unexpected asset type!");
+                }
+            }
+
+            foreach (byte[] resource in individualizedManifest)
+            {
+                string resourceString = Encoding.UTF8.GetString(resource);
+                if (resourceString.StartsWith("assets/tri/"))
+                {
+                    existingResources.Manifest.TriFiles.Add(resourceString);
+                }
+                else if (resourceString.StartsWith("assets/hzx/"))
+                {
+                    existingResources.Manifest.HzxFiles.Add(resourceString);
+                }
+                else if (resourceString.StartsWith("assets/var/"))
+                {
+                    existingResources.Manifest.VarFiles.Add(resourceString);
+                }
+                else if (resourceString.StartsWith("assets/sar/"))
+                {
+                    existingResources.Manifest.SarFiles.Add(resourceString);
+                }
+                else if (resourceString.StartsWith("assets/row/"))
+                {
+                    existingResources.Manifest.SarFiles.Add(resourceString);
+                }
+                else if (resourceString.StartsWith("assets/mar/"))
+                {
+                    existingResources.Manifest.MarFiles.Add(resourceString);
+                }
+                else if (resourceString.StartsWith("assets/lt2/"))
+                {
+                    existingResources.Manifest.Lt2Files.Add(resourceString);
+                }
+                else if (resourceString.StartsWith("assets/kms/"))
+                {
+                    existingResources.Manifest.KmsFiles.Add(resourceString);
+                }
+                else if (resourceString.StartsWith("assets/evm/"))
+                {
+                    existingResources.Manifest.EvmFiles.Add(resourceString);
+                }
+                else if (resourceString.StartsWith("assets/cv2/"))
+                {
+                    existingResources.Manifest.Cv2Files.Add(resourceString);
+                }
+                else if (resourceString.StartsWith("assets/anm/"))
+                {
+                    existingResources.Manifest.AnmFiles.Add(resourceString);
+                }
+                else if (resourceString.StartsWith("assets/gcx/"))
+                {
+                    existingResources.Manifest.GcxFiles.Add(resourceString);
+                }
+                else if(resourceString != "")
+                {
+                    throw new NotImplementedException("Unexpected asset type!");
+                }
+            }
+
+            return existingResources;
+        }
+
+        public static void AddResources(string gcxFile, string resourceSuperDirectory, List<string> resourcesToAdd)
         {
             try
             {
+                //TODO: need to add a duplicate checker
+                DirectoryInfo resourceSuperDirectoryInfo = new DirectoryInfo(resourceSuperDirectory);
+                DirectoryInfo gcxResourceDirectory = resourceSuperDirectoryInfo.GetDirectories(gcxFile).FirstOrDefault();
+                FileInfo bpAssets = gcxResourceDirectory.GetFiles("bp_assets.txt").FirstOrDefault();
+                FileInfo manifest = gcxResourceDirectory.GetFiles("manifest.txt").FirstOrDefault();
+                _bpAssetsContents = File.ReadAllBytes(bpAssets.FullName).ToList();
+                _manifestContents = File.ReadAllBytes(manifest.FullName).ToList();
+
+                List<MGS2ResourceData> missingData = new List<MGS2ResourceData>();
+                foreach(string resourceToAdd in resourcesToAdd)
+                {
+                    missingData.AddRange(PrepareListOfDataToAdd(resourceToAdd));
+                }
+                ReplaceStageNames(missingData, gcxFile);
+
+                bool modifiedManifest = false;
+                bool modifiedBpAssets = false;
+
+                LevelResources levelResources = CollectExistingResources();
+
+                foreach(MGS2ResourceData dataToAdd in missingData)
+                {
+                    switch (dataToAdd.FileType)
+                    {
+                        case FileType.Cmdl:
+                            levelResources.BpAssets.KmsFiles.Add(dataToAdd.Text);
+                            break;
+                        case FileType.Ctxr:
+                            levelResources.BpAssets.CtxrFiles.Add(dataToAdd.Text);
+                            break;
+                        case FileType.Kms:
+                            levelResources.Manifest.KmsFiles.Add(dataToAdd.Text);
+                            break;
+                    }
+                }
+
+                File.WriteAllBytes("bp_assets.txt", levelResources.BpAssets.ToBytes());
+                File.WriteAllBytes("manifest.txt", levelResources.Manifest.ToBytes());
+            }
+            catch(Exception ex)
+            {
+
+            }
+        }
+
+        public static bool AddResource(string gcxFile, string resourceSuperDirectory, string resourceToAdd)
+        {
+            //TODO: retool this. This is causing problems(weirdly only with the manifest)
+            //that are entirely avoidable. Instead of _inserting_ data, let's do something
+            //similar to what we did with the gcx: just entirely recreate the data. The master files
+            //seemed to reveal that it at least _somewhat_ works in theory. So, if we instead
+            //create lists of all of the file types and create the file from those lists, that
+            //should, in theory, make this work more reliably.
+            try
+            {
+                //Thread.Sleep(2000); //determined this is NOT an I/O timing issue
                 DirectoryInfo resourceSuperDirectoryInfo = new DirectoryInfo(resourceSuperDirectory);
                 DirectoryInfo gcxResourceDirectory = resourceSuperDirectoryInfo.GetDirectories(gcxFile).FirstOrDefault();
                 FileInfo bpAssets = gcxResourceDirectory.GetFiles("bp_assets.txt").FirstOrDefault();
@@ -228,7 +482,7 @@ namespace gcx
                 else if (i < splittingIndices.Count - 1)
                     splitResource = new byte[splittingIndices[i] - splittingIndices[i-1]];
                 else
-                    splitResource = new byte[resourceArray.Length - splittingIndices[i]];
+                    splitResource = new byte[resourceArray.Length - splittingIndices[i - 1]];
                 Array.Copy(resourceArray, positionInArray, splitResource, 0, splitResource.Length);
                 resourceList.Add(splitResource);
                 positionInArray += splitResource.Length;

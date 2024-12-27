@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -39,6 +40,12 @@ namespace gcx
                 _gcxFile = gcxFile;
                 _resources = resources;
             }
+        }
+
+        internal class Resourcing
+        {
+            public List<string> bpAssetsResources = new List<string>();
+            public List<string> manifestResources = new List<string>();
         }
 
         static string AKAmmoLabel = "003ce0e9";
@@ -125,7 +132,7 @@ namespace gcx
             GoggleIbox, GoggleSh, CboxLabel, DetectorIbox, DetectorSh, DMicIbox, DMicSh
         }; // 70 resources
 
-        static List<string> AllPlantWeaponItemResources = new List<string>()
+        public static List<string> AllPlantWeaponItemResources = new List<string>()
         {
             AKAmmoLabel, AKWeaponLabel, MagazineIbox, MagazineLabel, MagazineSh, C4Label, ChaffLabel,
             ClaymoreLabel, DMicLabel, GrenadeLabel, M4AmmoLabel, M4WeaponLabel, M9AmmoLabel, M9WeaponLabel,
@@ -139,12 +146,102 @@ namespace gcx
             GoggleIbox, GoggleSh, CboxLabel, DetectorIbox, DetectorSh, DMicIbox, DMicSh
         };
 
-        static List<string> AllTankerWeaponItemResources = new List<string>()
+        public static List<string> AllTankerWeaponItemResources = new List<string>()
         {
             ChaffLabel, GrenadeLabel, M9AmmoLabel, StunLabel, USPAmmoLabel, BandagesLabel,
             RationIbox, RationSh, RationLabel, ColdMedsLabel, PentazeminLabel, ThermalGogglesLabel, USPSuppressorLabel, GrenadeIbox,
             GrenadeSh, HandgunAmmoIbox, HandgunAmmoSh, MedicineIbox, MedicineSh, Box2Ibox, Box2Sh, GoggleIbox, GoggleSh, CboxLabel
         };
+
+        private static string AnonymizeAssetName(string asset)
+        {
+            int stageNameStartingIndex1 = asset.IndexOf("/cache/") - 5;
+            int stageNameStartingIndex2 = asset.LastIndexOf("/cache/") - 5;
+            string stageName = asset.Substring(stageNameStartingIndex1, 6);
+
+            return asset.Replace(stageName, "/XXXX/");
+            /*
+             * So i think this stuff is not required, but keeping it here in case i find use for it later
+            if (stageNameStartingIndex1 == stageNameStartingIndex2)
+            {
+                //manifest file, only one stage id to anonymize
+                
+            }
+            else
+            {
+                //bp_asset, two stage ids to anonymize
+            }
+            */
+        }
+
+        [Obsolete]
+        ///Although this was a novel idea, it didn't work lmao
+        public static void BuildMasterResourceList(string gcxDirectory, string resourceSuperDirectory)
+        {
+            _gcxDirectory = gcxDirectory;
+            _resourceSuperDirectory = resourceSuperDirectory;
+
+            DirectoryInfo gcxDirectoryInfo = new DirectoryInfo(_gcxDirectory);
+            DirectoryInfo resourceSuperDirectoryInfo = new DirectoryInfo(_resourceSuperDirectory);
+
+            List<Resourcing> fullResourcing = new List<Resourcing>();
+            foreach (FileInfo file in gcxDirectoryInfo.GetFiles())
+            {
+                string parsedStageName = file.Name.Replace("scenerio_stage_", "").Replace(".gcx", "");
+                DirectoryInfo gcxResourceDirectory = resourceSuperDirectoryInfo.GetDirectories(parsedStageName).FirstOrDefault();
+                FileInfo bpAssets = gcxResourceDirectory.GetFiles("bp_assets.txt").FirstOrDefault();
+                FileInfo manifest = gcxResourceDirectory.GetFiles("manifest.txt").FirstOrDefault();
+                string bpAssetsContents = File.ReadAllText(bpAssets.FullName);
+                string manifestContents = File.ReadAllText(manifest.FullName);
+                Resourcing resources = AggregateFullResources(bpAssetsContents, manifestContents);
+                fullResourcing.Add(resources);
+            }
+
+            List<string> masterBpAssets = new List<string>();
+            List<string> masterManifest = new List<string>();
+            foreach(Resourcing resource in fullResourcing)
+            {
+                masterBpAssets.AddRange(resource.bpAssetsResources);
+                masterManifest.AddRange(resource.manifestResources);
+            }
+            masterBpAssets = masterBpAssets.Distinct().ToList();
+            masterManifest = masterManifest.Distinct().ToList();
+            Resourcing masterResourcing = new Resourcing();
+            masterResourcing.bpAssetsResources = masterBpAssets;
+            masterResourcing.manifestResources = masterManifest;
+
+            List<byte[]> individualizedBpAssets = new List<byte[]>();
+            foreach(string bpAsset in masterResourcing.bpAssetsResources)
+            {
+                individualizedBpAssets.Add(Encoding.UTF8.GetBytes(bpAsset));
+            }
+            List<byte[]> individualizedManifest = new List<byte[]>();
+
+            foreach(string  manifest in masterResourcing.manifestResources)
+            {
+                if (!manifest.Contains(".gcx")) //definitely do not want to add the .gcx to each file
+                {
+                    individualizedManifest.Add(Encoding.UTF8.GetBytes(manifest));
+                }
+            }
+
+            List<byte> masterBpAssetsContents = new List<byte>();
+            foreach (byte[] asset in individualizedBpAssets)
+            {
+                masterBpAssetsContents.AddRange(asset);
+                masterBpAssetsContents.AddRange(new byte[] { 0x0D, 0x0D, 0x0A });
+            }
+
+            List<byte> masterManifestContents = new List<byte>();
+            foreach (byte[] manifest in individualizedManifest)
+            {
+                masterManifestContents.AddRange(manifest);
+                masterManifestContents.AddRange(new byte[] { 0x0D, 0x0D, 0x0A });
+            }
+
+            File.WriteAllBytes("masterBpAssets.txt", masterBpAssetsContents.ToArray());
+            File.WriteAllBytes("masterManifest.txt", masterManifestContents.ToArray());
+        }
 
         public static string MapLevelsToResources(string gcxDirectory, string resourceSuperDirectory)
         {
@@ -164,7 +261,7 @@ namespace gcx
                 FileInfo manifest = gcxResourceDirectory.GetFiles("manifest.txt").FirstOrDefault();
                 string bpAssetsContents = File.ReadAllText(bpAssets.FullName);
                 string manifestContents = File.ReadAllText(manifest.FullName);
-                List<string> resources = AggregateResources(bpAssetsContents, manifestContents);
+                List<string> resources = AggregateShortenedResources(bpAssetsContents, manifestContents);
                 resourceMapping.Add(new GcxResources(parsedStageName, resources));
             }
 
@@ -195,14 +292,34 @@ namespace gcx
             }
 
             File.WriteAllText("missingResources.json", JsonConvert.SerializeObject(missingAssets, Formatting.Indented));
-
             string csvFormattedContents = FormatToCsv(resourceMapping);
             File.WriteAllText(csv, csvFormattedContents);
 
             return csv;
         }
 
-        private static List<string> AggregateResources(string assets, string manifest)
+        private static Resourcing AggregateFullResources(string assets, string manifest)
+        {
+            //each line ends with \r\r\n for both files
+            List<string> assetsResources = assets.Split(new string[] { "\r\r\n" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            List<string> manifestResources = manifest.Split(new string[] { "\r\r\n" }, StringSplitOptions.RemoveEmptyEntries).ToList();
+
+            Resourcing resourcing = new Resourcing();
+            foreach (string resource in assetsResources)
+            {
+                string anonymizedResource = AnonymizeAssetName(resource);
+                resourcing.bpAssetsResources.Add(anonymizedResource);
+            }
+            foreach (string resource in manifestResources)
+            {
+                string anonymizedResource = AnonymizeAssetName(resource);
+                resourcing.manifestResources.Add(anonymizedResource);
+            }
+
+            return resourcing;
+        }
+
+        private static List<string> AggregateShortenedResources(string assets, string manifest)
         {
             //each line ends with \r\r\n for both files
             List<string> assetsResources = assets.Split(new string[] { "\r\r\n" }, StringSplitOptions.RemoveEmptyEntries).ToList();

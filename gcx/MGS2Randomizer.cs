@@ -12,7 +12,7 @@ namespace gcx
         public static string GcxDirectory { get; private set; }
         public static string ResourceDirectory { get; private set; }
         private static DirectoryInfo ResourceSuperDirectory { get; set; }
-        private static List<string> filesInDirectory;
+        private static List<string> gcxFileDirectory;
         static GcxEditor gcxEditor = new GcxEditor();
 
         private static MGS2ItemSet _vanillaItems;
@@ -24,7 +24,7 @@ namespace gcx
         {
             DirectoryInfo mgs2DirectoryInfo = new DirectoryInfo(mgs2Directory);
             DirectoryInfo gcxDirectory = new DirectoryInfo(mgs2DirectoryInfo.FullName + "\\assets\\gcx\\eu\\_bp");
-            filesInDirectory = Directory.EnumerateFiles(gcxDirectory.FullName).ToList();
+            gcxFileDirectory = Directory.EnumerateFiles(gcxDirectory.FullName).ToList();
             ResourceSuperDirectory = new DirectoryInfo(mgs2DirectoryInfo.FullName + "\\eu\\stage");
 
             if (seed == 0)
@@ -47,7 +47,7 @@ namespace gcx
             GcxDirectory = gcxDirectory;
             ResourceDirectory = resourceDirectory;
             ResourceSuperDirectory = new DirectoryInfo(ResourceDirectory);
-            filesInDirectory = Directory.EnumerateFiles(GcxDirectory).ToList();
+            gcxFileDirectory = Directory.EnumerateFiles(GcxDirectory).ToList();
             if (seed == 0)
             {
                 _seed = new Random(DateTime.UtcNow.Hour + DateTime.UtcNow.Minute + DateTime.UtcNow.Second + DateTime.UtcNow.Millisecond).Next();
@@ -159,6 +159,7 @@ namespace gcx
                 RandomizeItemSpawns();
             }
 
+            AddAllResources();
             return _seed;
         }
 
@@ -237,7 +238,7 @@ namespace gcx
 
             GcxEditor gcx_Editor = new GcxEditor();
             ProcEditor.InitializeEditor(spawnerProcs);
-            //Technically, adding all procs is TOTAL overkill, but it's literally just 5.4KB. Unless something doesn't load as a result
+            //Technically, adding all procs is overkill, but it's literally just 5.4KB. Unless something doesn't load as a result
             //I think this is the easiest and most straight-forward solution.
             AddAllProcs(gcx_Editor);
             foreach (KeyValuePair<Location, Item> spawn in _randomizedItems.TankerPart3.Entities)
@@ -246,9 +247,28 @@ namespace gcx
             }
             ProcEditor.SaveAutomatedChanges();
             byte[] newGcxBytes = gcx_Editor.BuildGcxFile();
-            string date = $"{gcxFile}_custom.gcx";
+            string date = $"{gcxFile}_randomized.gcx";
             File.WriteAllBytes(date, newGcxBytes);
             return true;
+        }
+
+        private void AddAllResources()
+        {
+            
+            foreach(string level in gcxFileDirectory.Where(x=>x.StartsWith("scenerio_stage_w") && x.Length == "scenerio_stage_w00a.gcx".Length))
+            {
+                string levelName = level.Substring(level.IndexOf("w"), 4);
+                string levelResourceDirectory = ResourceSuperDirectory.GetFiles(levelName)[0].FullName;
+                if (levelName.StartsWith("w0"))
+                {
+                    //Tanker
+
+                }
+                else
+                {
+                    //Plant
+                }
+            }
         }
 
         private void AddAllProcs(GcxEditor gcx_Editor)

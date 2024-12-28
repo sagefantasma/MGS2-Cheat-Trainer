@@ -55,7 +55,14 @@ namespace gcx
             {
                 strings.Add(value.CommonName);
             }
-            ResourceEditor.AddResources("w02a", "C:\\Users\\yonan\\Documents\\Pinned Folders\\C Drive Steam Games\\MGS2\\eu\\stage", strings);
+            List<string> stages = new List<string> { "w00a", "w00b", "w00c", "w01a", "w01b", "w01c", "w01d", "w01e", "w01f",
+            "w02a", "w03a", "w03b", "w04a", "w04b", "w04c", "w11a", "w11b", "w11c", "w12a", "w12b", "w12c", "w13a", "w13b",
+            "w14a", "w15a", "w15b", "w16a", "w16b", "w17a", "w18a", "w19a", "w20a", "w20b", "w20c", "w20d", "w21a", "w21b",
+            "w22a", "w23a", "w23b", "w24a", "w24b", "w24c", "w24d", "w24e", "w25a", "w25b", "w25c", "w25d", "w28a", "w31a",
+            "w31b", "w31c", "w31d", "w31f", "w32a", "w32b", "w41a", "w42a", "w43a", "w44a", "w45a", "w46a", "w51a", "w61a"};
+            //w31f is in the list of stages, but doesn't have its own gcx... it just reuses w31c's gcx file??? so weird.
+            foreach(string stage in stages)
+                ResourceEditor.AddResources(stage, "C:\\Users\\yonan\\Documents\\Pinned Folders\\C Drive Steam Games\\MGS2\\eu\\stage", strings);
             ShowGui();
             return;
             bool rerun = false;

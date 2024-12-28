@@ -624,6 +624,16 @@ namespace gcx
         };
         #endregion
 
+        #region Other Functions
+        public static readonly RawProc EnableBlade = new RawProc
+        {
+            CommonName = "EnableBlade",
+            BigEndianRepresentation = "40ADFE",
+            LittleEndianRepresentation = new byte[] { 0xFE, 0xAD, 0x40 },
+            ProcDependencies = null
+        };
+        #endregion
+
         #endregion
 
         public static readonly List<RawProc> SpawnProcs = new List<RawProc>
@@ -636,7 +646,7 @@ namespace gcx
             AwardM9Gun, AwardNikitaAmmo, AwardNikitaGun, AwardPsg1Ammo, AwardPsg1Gun, 
             AwardPsg1tAmmo, AwardPsg1tGun, AwardRgbAmmo, AwardRgbGun, AwardSocomAmmo,
             AwardSocomSuppressor, AwardStingerAmmo, AwardStingerGun, AwardUspAmmo, AwardPentazemin,
-            AwardRation, AwardSensorB, AwardShaver, AwardUspSuppressor, AwardThermalG
+            AwardRation, AwardSensorB, AwardShaver, AwardUspSuppressor, AwardThermalG, EnableBlade //TODO: remove EnableBlade after testing
         };
     }
 }

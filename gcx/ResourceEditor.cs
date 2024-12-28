@@ -22,10 +22,38 @@ namespace gcx
             public string Name { get; set; }
             public string Text { get; set; }
             public FileType FileType { get; set; }
+            public Resource Resource { get; set; }
         }
 
         private class LevelResources
         {
+            public bool CheckForDuplicates(MGS2ResourceData resource)
+            {
+                switch (resource.FileType)
+                {
+                    case FileType.Kms:
+                        if (Manifest.KmsFiles.Any(kms => kms.Contains(resource.Resource.CommonName)))
+                            return false;
+                        break;
+                    case FileType.Ctxr:
+                        //technically this wont work correctly
+                        if (BpAssets.CtxrFiles.Any(ctxr => ctxr.Contains(resource.Resource.CommonName)))
+                            return false;
+                        break;
+                    case FileType.Cmdl:
+                        if (BpAssets.KmsFiles.Any(cmdl => cmdl.Contains(resource.Resource.CommonName)))
+                            return false;
+                        break;
+                    case FileType.Tri:
+                        //technically this wont work correctly
+                        if (Manifest.TriFiles.Any(tri => tri.Contains(resource.Resource.CommonName)))
+                            return false;
+                        break;
+                }
+
+                return true;
+            }
+
             public BpAssets BpAssets { get; set; } = new BpAssets();
             public Manifest Manifest { get; set; } = new Manifest();
         }
@@ -75,9 +103,11 @@ namespace gcx
             public List<string> VarFiles { get; set; } = new List<string>();
             public List<string> SarFiles { get; set; } = new List<string>();
             public List<string> RowFiles { get; set; } = new List<string>();
+            public List<string> O2dFiles { get; set; } = new List<string>();
             public List<string> MarFiles { get; set; } = new List<string>();
             public List<string> Lt2Files { get; set; } = new List<string>();
             public List<string> KmsFiles { get; set; } = new List<string>();
+            public List<string> FarFiles { get; set; } = new List<string>();
             public List<string> EvmFiles { get; set; } = new List<string>(); //can be null
             public List<string> Cv2Files { get; set; } = new List<string>();
             public List<string> AnmFiles { get; set; } = new List<string>();
@@ -100,6 +130,7 @@ namespace gcx
             public byte[] ToBytes()
             {
                 List<byte> bytes = new List<byte>();
+                TriFiles.Sort();
                 KmsFiles.Sort();
                 KmsFiles.Reverse();
 
@@ -128,6 +159,11 @@ namespace gcx
                     bytes.AddRange(Encoding.UTF8.GetBytes(resource));
                     //bytes.AddRange(EOL);
                 }
+                foreach (string resource in this.O2dFiles)
+                {
+                    bytes.AddRange(Encoding.UTF8.GetBytes(resource));
+                    //bytes.AddRange(EOL);
+                }
                 foreach (string resource in this.MarFiles)
                 {
                     bytes.AddRange(Encoding.UTF8.GetBytes(resource));
@@ -139,6 +175,11 @@ namespace gcx
                     //bytes.AddRange(EOL);
                 }
                 foreach (string resource in this.KmsFiles)
+                {
+                    bytes.AddRange(Encoding.UTF8.GetBytes(resource));
+                    //bytes.AddRange(EOL);
+                }
+                foreach (string resource in this.FarFiles)
                 {
                     bytes.AddRange(Encoding.UTF8.GetBytes(resource));
                     //bytes.AddRange(EOL);
@@ -172,7 +213,8 @@ namespace gcx
         {
             Kms,
             Cmdl,
-            Ctxr
+            Ctxr,
+            Tri
         }
 
         private static LevelResources CollectExistingResources()
@@ -225,6 +267,10 @@ namespace gcx
                 {
                     existingResources.Manifest.SarFiles.Add(resourceString);
                 }
+                else if (resourceString.StartsWith("assets/o2d"))
+                {
+                    existingResources.Manifest.O2dFiles.Add(resourceString);
+                }
                 else if (resourceString.StartsWith("assets/mar/"))
                 {
                     existingResources.Manifest.MarFiles.Add(resourceString);
@@ -236,6 +282,10 @@ namespace gcx
                 else if (resourceString.StartsWith("assets/kms/"))
                 {
                     existingResources.Manifest.KmsFiles.Add(resourceString);
+                }
+                else if (resourceString.StartsWith("assets/far/"))
+                {
+                    existingResources.Manifest.FarFiles.Add(resourceString);
                 }
                 else if (resourceString.StartsWith("assets/evm/"))
                 {
@@ -288,6 +338,11 @@ namespace gcx
 
                 foreach(MGS2ResourceData dataToAdd in missingData)
                 {
+                    if (!levelResources.CheckForDuplicates(dataToAdd))
+                    {
+                        continue;
+                    }
+
                     switch (dataToAdd.FileType)
                     {
                         case FileType.Cmdl:
@@ -299,11 +354,15 @@ namespace gcx
                         case FileType.Kms:
                             levelResources.Manifest.KmsFiles.Add(dataToAdd.Text);
                             break;
+                        case FileType.Tri:
+                            levelResources.Manifest.TriFiles.Add(dataToAdd.Text);
+                            break;
                     }
                 }
 
-                File.WriteAllBytes("bp_assets.txt", levelResources.BpAssets.ToBytes());
-                File.WriteAllBytes("manifest.txt", levelResources.Manifest.ToBytes());
+                Directory.CreateDirectory(gcxFile);
+                File.WriteAllBytes($"{gcxFile}/bp_assets.txt", levelResources.BpAssets.ToBytes());
+                File.WriteAllBytes($"{gcxFile}/manifest.txt", levelResources.Manifest.ToBytes());
             }
             catch(Exception ex)
             {
@@ -501,19 +560,35 @@ namespace gcx
 
             kmsFile.Text = resource.Kms;
             kmsFile.FileType = FileType.Kms;
+            kmsFile.Resource = resource;
             resourceData.Add(kmsFile);
 
-            MGS2ResourceData ctxrFile = new MGS2ResourceData();
+            if (resource.Ctxr != "")
+            {
+                MGS2ResourceData ctxrFile = new MGS2ResourceData();
 
-            ctxrFile.Text = resource.Ctxr;
-            ctxrFile.FileType = FileType.Ctxr;
-            resourceData.Add(ctxrFile);
+                ctxrFile.Text = resource.Ctxr;
+                ctxrFile.FileType = FileType.Ctxr;
+                ctxrFile.Resource = resource;
+                resourceData.Add(ctxrFile);
+            }
 
             MGS2ResourceData cmdlFile = new MGS2ResourceData();
 
             cmdlFile.Text = resource.Cmdl;
             cmdlFile.FileType = FileType.Cmdl;
+            cmdlFile.Resource = resource;
             resourceData.Add(cmdlFile);
+
+            if(resource.Tri != "")
+            {
+                MGS2ResourceData triFile = new MGS2ResourceData();
+
+                triFile.Text = resource.Tri;
+                triFile.FileType = FileType.Tri;
+                triFile.Resource = resource;
+                resourceData.Add(triFile);
+            }
 
             return resourceData;
         }

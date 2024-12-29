@@ -277,11 +277,11 @@ namespace gcx
             TankerPart1.Entities.Add(new Location ( gcxFile : "w00a", spawnId : new byte[] { 0x4F, 0x9E, 0x26 }, posX : 0xE1BA, posZ : 0, posY : 0x1194, rot : 1, true), MGS2Items.Bandage);
             TankerPart1.Entities.Add(new Location ( gcxFile : "w00a", spawnId : new byte[] { 0xDD, 0xC2, 0xAD }, posX : 0x4844, posZ : 0, posY : 0xBBA4, rot : 1, true), MGS2Items.Pentazemin);
             TankerPart1.Entities.Add(new Location ( gcxFile : "w00a", spawnId : new byte[] { 0xA9, 0x42, 0x8B }, posX : 0x2710, posZ : 0x7D0, posY : 0xFE0C, rot : 1, true), MGS2Weapons.Chaff);
-            TankerPart1.Entities.Add(new Location ( gcxFile : "w00a", spawnId : new byte[] { 0x57, 0x6C}, posX : 0x1770, posZ : 0x157C, posY : 0x0, rot : 3 ), MGS2Items.ColdMeds); //not guaranteed spawn
+            TankerPart1.Entities.Add(new Location ( gcxFile : "w00a", spawnId : new byte[] { 0x57, 0x6C, 0x00}, posX : 0x1770, posZ : 0x157C, posY : 0x0, rot : 3 ), MGS2Items.ColdMeds); //not guaranteed spawn
             #endregion            
             #region w01a
             TankerPart1.Entities.Add(new Location ( gcxFile : "w01a", spawnId : new byte[] { 0x79, 0x7E, 0x24 }, posX : 0x1194, posZ : 0, posY : 0xDDE, rot : 0, true), MGS2Weapons.M9Ammo);
-            TankerPart1.Entities.Add(new Location ( gcxFile : "w01a", spawnId : new byte[] { 0x57, 0x69, 0xFE }, posX : 0xEE58, posZ : 0, posY : 0xDDE, rot : 0 ), MGS2Items.Ration);
+            TankerPart1.Entities.Add(new Location ( gcxFile : "w01a", spawnId : new byte[] { 0xFE, 0x69, 0x57 }, posX : 0xEE58, posZ : 0, posY : 0xDDE, rot : 0 ), MGS2Items.Ration);
             #endregion
             #region w01b
             TankerPart1.Entities.Add(new Location ( gcxFile : "w01b", spawnId : new byte[] { 0x40, 0x14, 0x9B }, posX : 0x2AF8, posZ : 0xBB8, posY : 0xC662, rot : 0, true), MGS2Weapons.M9Ammo);
@@ -360,6 +360,7 @@ namespace gcx
             #endregion
             #endregion
 
+            #region Plant
             PlantSet1.Name = "Before Pliskin";
             PlantSet1.Entities = new Dictionary<Location, Item>();
             //no items needed to progress beyond this
@@ -402,6 +403,7 @@ namespace gcx
             PlantSet9.Entities = new Dictionary<Location, Item>();
             PlantSet9.ItemsNeededToProgress.AddRange(PlantSet8.ItemsNeededToProgress);
             PlantSet9.ItemsNeededToProgress.Add(MGS2Items.Card); //level 5 card
+            #endregion
         }
     }
 }

@@ -215,43 +215,6 @@ namespace gcx
             mgs2Randomizer.RandomizeItemSpawns();
         }
 
-        private void OldRandomizationInit(object sender, EventArgs e)
-        {
-            /*
-             * So while leveraging this old method would probably _work_, it's designed in a weird way that I don't really understand anymore
-             * and I think trying to reimplement it might end up causing a lot of headaches. I think, instead, I'll retool the randomizer to work
-             * in a more intelligent way from the beginning and continue from there. I do think there are some solid ideas I had in there that I
-             * will want to re-use, but the flow is so strange it needs redoing, I think.
-             */
-            FileInfo fileInfo = new FileInfo(@"C:\Users\yonan\Documents\Pinned Folders\C Drive Steam Games\MGS2\assets\gcx\eu\_bp\scenerio_stage_w00a.gcx");
-            MGS2Randomizer mgs2Randomizer = new MGS2Randomizer(fileInfo.DirectoryName, null);
-            int generatedSeed = mgs2Randomizer.RandomizeItemSpawns();
-
-            gcx_Editor.CallDecompiler(fileInfo.FullName);
-            List<DecodedProc> decodedProcs = gcx_Editor.BuildContentTree();
-            /* this will show you all the (known) functions within the gcx file responsible for item/weapon spawns.
-             * this can give you a good idea of _what_ each level has in it as possible spawns.
-            foreach(KeyValuePair<string, string> entry in contentTree)
-            {
-                if(ProcIds.SpawnProcs.Any(knownProc => entry.Key.Contains(knownProc.BigEndianRepresentation))) //this works fine to do what it is designed to
-                    contentTreeCarbonCopy.Add(entry.Key, entry.Value);
-            }
-            */
-
-            //filter out any procs that don't call any of our known, desired procs
-            List<DecodedProc> filteredProcs = new List<DecodedProc>();
-            foreach (DecodedProc entry in decodedProcs)
-            {
-                //if (KnownProc.SpawnProcs.Any(knownProc => entry.Name.Contains(knownProc.BigEndianRepresentation)))
-                if (ContainsSpawningFunctions(entry))
-                    filteredProcs.Add(entry);
-            }
-
-
-            
-            //mgs2Randomizer.SaveRandomizationToDisk(filteredProcs);
-        }
-
         private void button1_Click_1(object sender, EventArgs e)
         {
             button1_Click(sender, e);
@@ -263,7 +226,7 @@ namespace gcx
             saveFileButton_Click(null, null);
         }
 
-        private void OopsAllShavers(object sender, EventArgs e)
+        /*private void OopsAllShavers(object sender, EventArgs e)
         {
             List<DecodedProc> spawnerProcsInFile = new List<DecodedProc>();
             foreach (DecodedProc spawnerProc in contentTreeCarbonCopy)
@@ -281,7 +244,7 @@ namespace gcx
             }
             ProcEditor.SaveAutomatedChanges();
             saveFileButton_Click(null, null);
-        }
+        }*/
 
         private void ManuallyLoadProc()
         {

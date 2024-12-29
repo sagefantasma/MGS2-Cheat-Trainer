@@ -107,20 +107,26 @@ namespace gcx
         }
         #endregion
 
-        private static List<ItemSpawn> _spawnProcsCalled = new List<ItemSpawn>();
-        public static List<ItemSpawn> SpawningProcs {  get { return _spawnProcsCalled; } }
+        private List<ItemSpawn> _spawnProcsCalled = new List<ItemSpawn>();
+        public List<ItemSpawn> SpawningProcs {  get { return _spawnProcsCalled; } }
 
 
         #region Automated Modification
-        public static void InitializeEditor(List<DecodedProc> spawnerProcs)
+        public ProcEditor(List<DecodedProc> spawnerProcs, bool automated)
         {
+            InitializeEditor(spawnerProcs);
+        }
+
+        public void InitializeEditor(List<DecodedProc> spawnerProcs)
+        {
+            _spawnProcsCalled = new List<ItemSpawn>();
             foreach(DecodedProc procToEdit in spawnerProcs)
             {
                 EnumerateSpawnProcs(procToEdit);
             }
         }
 
-        private static void EnumerateSpawnProcs(DecodedProc procToEdit)
+        private void EnumerateSpawnProcs(DecodedProc procToEdit)
         {
             foreach (RawProc knownProc in KnownProc.SpawnProcs)
             {
@@ -141,7 +147,7 @@ namespace gcx
             }
         }
 
-        private static Coordinates GetCoordinates(byte[] contents, int index)
+        private Coordinates GetCoordinates(byte[] contents, int index)
         {
             Coordinates coordinates = new Coordinates();
 
@@ -183,24 +189,29 @@ C2-00 (rotation, denotes a value of 1)
             return coordinates;
         }
 
-        private static byte[] GetSpawnId(byte[] contents, int index)
+        private byte[] GetSpawnId(byte[] contents, int index)
         {
             //TODO: validate
-            byte[] spawnId = new byte[3];
+            byte[] spawnId;
+            byte byteAfterSpawn = contents[index + 8];
+            if (byteAfterSpawn == 0x01 && contents[index+7] != 0xC1)
+                spawnId = new byte[4];
+            else
+                spawnId = new byte[3];
 
-            Array.Copy(contents, index + 4, spawnId, 0, 3); //i _believe_ this is correct all of the time
+            Array.Copy(contents, index + 4, spawnId, 0, spawnId.Length); //i _believe_ this is correct all of the time
 
             return spawnId;
         }
 
-        public static void ModifySpawnProc(byte[] spawnId, RawProc replacementProc)
+        public void ModifySpawnProc(byte[] spawnId, RawProc replacementProc)
         {
             ItemSpawn localSpawn = _spawnProcsCalled.Find(x => x.Id.SequenceEqual(spawnId));
 
             localSpawn.itemProc = replacementProc;
         }
 
-        public static void SaveAutomatedChanges()
+        public void SaveAutomatedChanges()
         {
             foreach (ItemSpawn spawnProc in _spawnProcsCalled)
             {

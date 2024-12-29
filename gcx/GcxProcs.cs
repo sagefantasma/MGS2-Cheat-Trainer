@@ -645,7 +645,7 @@ namespace gcx
             AwardM4Ammo, AwardM4Gun, AwardMineDetector, AwardNvg, AwardM9Ammo, 
             AwardM9Gun, AwardNikitaAmmo, AwardNikitaGun, AwardPsg1Ammo, AwardPsg1Gun, 
             AwardPsg1tAmmo, AwardPsg1tGun, AwardRgbAmmo, AwardRgbGun, AwardSocomAmmo,
-            AwardSocomSuppressor, AwardStingerAmmo, AwardStingerGun, AwardUspAmmo, AwardPentazemin,
+            AwardSocomSuppressor, AwardStingerAmmo, AwardStingerGun, AwardStunG, AwardUspAmmo, AwardPentazemin,
             AwardRation, AwardSensorB, AwardShaver, AwardUspSuppressor, AwardThermalG, EnableBlade //TODO: remove EnableBlade after testing
         };
     }

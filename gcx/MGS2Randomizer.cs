@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace gcx
 {
     internal class MGS2Randomizer
     {
-        public static string GcxDirectory { get; private set; }
-        public static string ResourceDirectory { get; private set; }
         private static DirectoryInfo ResourceSuperDirectory { get; set; }
-        private static List<string> gcxFileDirectory;
+        private static List<string> GcxFileDirectory { get; set; }
         static GcxEditor gcxEditor = new GcxEditor();
 
         private static MGS2ItemSet _vanillaItems;
@@ -22,48 +23,34 @@ namespace gcx
 
         public MGS2Randomizer(string mgs2Directory, int seed = 0)
         {
-            DirectoryInfo mgs2DirectoryInfo = new DirectoryInfo(mgs2Directory);
-            DirectoryInfo gcxDirectory = new DirectoryInfo(mgs2DirectoryInfo.FullName + "\\assets\\gcx\\eu\\_bp");
-            gcxFileDirectory = Directory.EnumerateFiles(gcxDirectory.FullName).ToList();
-            ResourceSuperDirectory = new DirectoryInfo(mgs2DirectoryInfo.FullName + "\\eu\\stage");
-
-            if (seed == 0)
+            if (Directory.Exists(mgs2Directory))
             {
-                _seed = new Random(DateTime.UtcNow.Hour + DateTime.UtcNow.Minute + DateTime.UtcNow.Second + DateTime.UtcNow.Millisecond).Next();
+                DirectoryInfo gcxDirectory = new DirectoryInfo(mgs2Directory + "\\assets\\gcx\\eu\\_bp");
+                GcxFileDirectory = Directory.EnumerateFiles(gcxDirectory.FullName).ToList();
+                ResourceSuperDirectory = new DirectoryInfo(mgs2Directory + "\\eu\\stage");
+
+                if (seed == 0)
+                {
+                    _seed = new Random(DateTime.UtcNow.Hour + DateTime.UtcNow.Minute + DateTime.UtcNow.Second + DateTime.UtcNow.Millisecond).Next();
+                }
+                else
+                {
+                    _seed = seed;
+                }
+
+                Randomizer = new Random(_seed);
+                BuildVanillaItemSet();
             }
             else
             {
-                _seed = seed;
+                throw new DirectoryNotFoundException("Invalid directory provided, please provide the full path to your MGS2 install location.");
             }
-
-            Randomizer = new Random(_seed);
-            VanillaItems.BuildVanillaItems();
-            BuildVanillaItemSet();
-        }
-
-        [Obsolete]
-        public MGS2Randomizer(string gcxDirectory, string resourceDirectory, int seed = 0)
-        {
-            GcxDirectory = gcxDirectory;
-            ResourceDirectory = resourceDirectory;
-            ResourceSuperDirectory = new DirectoryInfo(ResourceDirectory);
-            gcxFileDirectory = Directory.EnumerateFiles(GcxDirectory).ToList();
-            if (seed == 0)
-            {
-                _seed = new Random(DateTime.UtcNow.Hour + DateTime.UtcNow.Minute + DateTime.UtcNow.Second + DateTime.UtcNow.Millisecond).Next();
-            }
-            else
-            {
-                _seed = seed;
-            }
-
-            Randomizer = new Random(_seed);
-            VanillaItems.BuildVanillaItems();
-            BuildVanillaItemSet();
         }
 
         private void BuildVanillaItemSet()
         {
+            VanillaItems.BuildVanillaItems();
+
             _vanillaItems = new MGS2ItemSet
             {
                 TankerPart1 = new ItemSet(VanillaItems.TankerPart1),
@@ -84,52 +71,37 @@ namespace gcx
 
         public int RandomizeItemSpawns()
         {
+            //TODO: in the future, we should have something to randomize the "auto-awarded" items, and
+            //also to have an option to not randomize optional spawns
             _randomizedItems = new MGS2ItemSet();
 
-            //TODO: randomize it, yo
-            List<KeyValuePair<Location, Item>> TankerSpawnsLeft = new List<KeyValuePair<Location, Item>>();
+            //Create a list of all spawns on the tanker chapter
+            List<Item> TankerSpawnsLeft = new List<Item>();
             foreach (var kvp in VanillaItems.TankerPart3.Entities)
             {
-                TankerSpawnsLeft.Add(kvp);
+                TankerSpawnsLeft.Add(kvp.Value);
             }
 
+            //assign each spawn on the tanker a random item from the list of available spawns
             int itemsAssigned = 0;
             while(TankerSpawnsLeft.Count> 0)
             {
                 int randomNum = Randomizer.Next();
                 int modValue = randomNum % TankerSpawnsLeft.Count;
-                var randomChoice = TankerSpawnsLeft[modValue];
+                Item randomChoice = TankerSpawnsLeft[modValue];
                 
-                //TODO: verify if this is correct... it feels very much not so
+                //iteratively go through spawns in "sequential" order, setting random items to each
                 if (itemsAssigned < VanillaItems.TankerPart1.Entities.Count)
                 {
-                    if(VanillaItems.TankerPart1.ItemsNeededToProgress.Contains(randomChoice.Value) && !VanillaItems.TankerPart1.Entities.ElementAt(itemsAssigned).Key.MandatorySpawn)
-                    {
-                        //if the spawn being modified isn't a mandatory spawn and we're currently trying to assign an item needed to progress, skip
-                        //these are entirely inconsequential at the moment, as the mandatory items are automatically given by the game
-                        continue;
-                    }
-                    _randomizedItems.TankerPart1.Entities.Add(VanillaItems.TankerPart1.Entities.ElementAt(itemsAssigned).Key, randomChoice.Value);                    
+                    _randomizedItems.TankerPart1.Entities.Add(VanillaItems.TankerPart3.Entities.ElementAt(itemsAssigned).Key, randomChoice);                    
                 }
                 else if (itemsAssigned < VanillaItems.TankerPart2.Entities.Count)
                 {
-                    if (VanillaItems.TankerPart2.ItemsNeededToProgress.Contains(randomChoice.Value) && !VanillaItems.TankerPart2.Entities.ElementAt(itemsAssigned).Key.MandatorySpawn)
-                    {
-                        //if the spawn being modified isn't a mandatory spawn and we're currently trying to assign an item needed to progress, skip
-                        //these are entirely inconsequential at the moment, as the mandatory items are automatically given by the game
-                        continue;
-                    }
-                    _randomizedItems.TankerPart2.Entities.Add(VanillaItems.TankerPart2.Entities.ElementAt(itemsAssigned).Key, randomChoice.Value);
+                    _randomizedItems.TankerPart2.Entities.Add(VanillaItems.TankerPart3.Entities.ElementAt(itemsAssigned).Key, randomChoice);
                 }
                 else
                 {
-                    if (VanillaItems.TankerPart3.ItemsNeededToProgress.Contains(randomChoice.Value) && !VanillaItems.TankerPart3.Entities.ElementAt(itemsAssigned).Key.MandatorySpawn)
-                    {
-                        //if the spawn being modified isn't a mandatory spawn and we're currently trying to assign an item needed to progress, skip
-                        //these are entirely inconsequential at the moment, as the mandatory items are automatically given by the game
-                        continue;
-                    }
-                    _randomizedItems.TankerPart3.Entities.Add(VanillaItems.TankerPart3.Entities.ElementAt(itemsAssigned).Key, randomChoice.Value);
+                    _randomizedItems.TankerPart3.Entities.Add(VanillaItems.TankerPart3.Entities.ElementAt(itemsAssigned).Key, randomChoice);
                 }
 
                 TankerSpawnsLeft.Remove(randomChoice);
@@ -145,12 +117,13 @@ namespace gcx
                 _randomizedItems.TankerPart3.Entities.Add(entity.Key, entity.Value);
             }
 
+            /* TODO: implement later
             List<KeyValuePair<Location, Item>> PlantSpawns = new List<KeyValuePair<Location, Item>>();
             foreach(var kvp in VanillaItems.PlantSet9.Entities)
             {
                 PlantSpawns.Add(kvp);
             }
-            
+            */
 
             //if the itemset isn't logically sound, re-randomize.
             if(!VerifyItemSetLogicValidity(_randomizedItems))
@@ -159,7 +132,6 @@ namespace gcx
                 RandomizeItemSpawns();
             }
 
-            AddAllResources();
             return _seed;
         }
 
@@ -232,43 +204,118 @@ namespace gcx
             return true;
         }
 
-        public bool SaveRandomizationToDisk(List<DecodedProc> spawnerProcs, string gcxFile)
+        class OpenedFileData
+        {
+            public GcxEditor GcxEditor { get; set; }
+            public List<DecodedProc> DecodedProcs { get; set; }
+            public ProcEditor ProcEditor { get; set; }
+        }
+
+        private bool ContainsSpawningFunctions(DecodedProc func)
+        {
+            List<string> spawningFunctions = new List<string>();
+            foreach (RawProc spawningFunc in KnownProc.SpawnProcs)
+            {
+                spawningFunctions.Add(spawningFunc.BigEndianRepresentation);
+            }
+            return spawningFunctions.Any(function => func.DecodedContents.Contains(function));
+        }
+
+        public bool SaveRandomizationToDisk()
         {
             //TODO: clean this up and polish it off
+            AddAllResources();
+             
 
-            GcxEditor gcx_Editor = new GcxEditor();
-            ProcEditor.InitializeEditor(spawnerProcs);
-            //Technically, adding all procs is overkill, but it's literally just 5.4KB. Unless something doesn't load as a result
-            //I think this is the easiest and most straight-forward solution.
-            AddAllProcs(gcx_Editor);
-            foreach (KeyValuePair<Location, Item> spawn in _randomizedItems.TankerPart3.Entities)
+            //since some levels are part of multiple different logic sets,
+            //we should instead go spawn by spawn rather than file by file
+            Dictionary<string, OpenedFileData> openedFiles = new Dictionary<string, OpenedFileData>();
+            foreach(KeyValuePair<Location, Item> spawnToEdit in _randomizedItems.TankerPart3.Entities)
             {
-                ProcEditor.ModifySpawnProc(spawn.Key.SpawnId, spawn.Value.ProcId);
+                string gcxFile = GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_{spawnToEdit.Key.GcxFile}"));
+                GcxEditor gcx_Editor;
+                List<DecodedProc> spawns;
+                ProcEditor procEditor;
+                if(spawnToEdit.Key.GcxFile == "w01f")
+                {
+                    int a = 2 + 2;
+                }
+                if (!openedFiles.ContainsKey(spawnToEdit.Key.GcxFile))
+                {
+                    gcx_Editor = new GcxEditor();
+                    gcx_Editor.CallDecompiler(gcxFile);
+                    List<DecodedProc> allFileFunctions = gcx_Editor.BuildContentTree();
+                    spawns = new List<DecodedProc>();
+                    foreach (DecodedProc entry in allFileFunctions)
+                    {
+                        if (ContainsSpawningFunctions(entry))
+                            spawns.Add(entry);
+                    }
+                    AddAllProcs(gcx_Editor);
+                    procEditor = new ProcEditor(spawns, true);
+                    openedFiles.Add(spawnToEdit.Key.GcxFile, new OpenedFileData { GcxEditor = gcx_Editor, DecodedProcs = spawns, ProcEditor = procEditor });
+                }
+                else
+                {
+                    OpenedFileData openedFileData = openedFiles[spawnToEdit.Key.GcxFile];
+                    gcx_Editor = openedFileData.GcxEditor;
+                    spawns = openedFileData.DecodedProcs;
+                    procEditor = openedFileData.ProcEditor;
+                }
+                
+                procEditor.ModifySpawnProc(spawnToEdit.Key.SpawnId, spawnToEdit.Value.ProcId);
+                procEditor.SaveAutomatedChanges();
             }
-            ProcEditor.SaveAutomatedChanges();
-            byte[] newGcxBytes = gcx_Editor.BuildGcxFile();
-            string date = $"{gcxFile}_randomized.gcx";
-            File.WriteAllBytes(date, newGcxBytes);
+
+            foreach(KeyValuePair<string, OpenedFileData> kvp in openedFiles)
+            {
+                OpenedFileData openedFileData = kvp.Value;
+                byte[] newGcxBytes = openedFileData.GcxEditor.BuildGcxFile();
+                string date = $"{kvp.Key}_randomized.gcx";
+                File.WriteAllBytes(date, newGcxBytes);
+            }
+
+            /*
+            foreach (string gcxFile in GcxFileDirectory)
+            {
+                if (gcxFile.Contains("scenerio_stage_w0")) //limiting this for tanker testing
+                {
+                    GcxEditor gcx_Editor = new GcxEditor();
+                    gcx_Editor.CallDecompiler(gcxFile);
+                    var spawns = gcx_Editor.BuildContentTree();
+                    ProcEditor.InitializeEditor(spawns);
+                    //Technically, adding all procs is overkill, but it's literally just 5.4KB. Unless something doesn't load as a result
+                    //I think this is the easiest and most straight-forward solution.
+                    AddAllProcs(gcx_Editor);
+                    List<KeyValuePair<Location, Item>> spawnsToEdit = _randomizedItems.TankerPart3.Entities.Where(spawn => gcxFile.Contains(spawn.Key.GcxFile)).ToList();
+                    foreach (KeyValuePair<Location, Item> spawn in spawnsToEdit)
+                    {
+                        ProcEditor.ModifySpawnProc(spawn.Key.SpawnId, spawn.Value.ProcId);
+                    }
+                    ProcEditor.SaveAutomatedChanges();
+                    byte[] newGcxBytes = gcx_Editor.BuildGcxFile();
+                    string date = $"{gcxFile}_randomized.gcx";
+                    File.WriteAllBytes(date, newGcxBytes);
+                }
+            }
+            */
             return true;
         }
 
         private void AddAllResources()
         {
-            
-            foreach(string level in gcxFileDirectory.Where(x=>x.StartsWith("scenerio_stage_w") && x.Length == "scenerio_stage_w00a.gcx".Length))
+            List<string> strings = new List<string>();
+            foreach (Resource value in Resource.ResourceList)
             {
-                string levelName = level.Substring(level.IndexOf("w"), 4);
-                string levelResourceDirectory = ResourceSuperDirectory.GetFiles(levelName)[0].FullName;
-                if (levelName.StartsWith("w0"))
-                {
-                    //Tanker
-
-                }
-                else
-                {
-                    //Plant
-                }
+                strings.Add(value.CommonName);
             }
+            List<string> stages = new List<string> { "w00a", "w00b", "w00c", "w01a", "w01b", "w01c", "w01d", "w01e", "w01f",
+            "w02a", "w03a", "w03b", "w04a", "w04b", "w04c", "w11a", "w11b", "w11c", "w12a", "w12b", "w12c", "w13a", "w13b",
+            "w14a", "w15a", "w15b", "w16a", "w16b", "w17a", "w18a", "w19a", "w20a", "w20b", "w20c", "w20d", "w21a", "w21b",
+            "w22a", "w23a", "w23b", "w24a", "w24b", "w24c", "w24d", "w24e", "w25a", "w25b", "w25c", "w25d", "w28a", "w31a",
+            "w31b", "w31c", "w31d", "w31f", "w32a", "w32b", "w41a", "w42a", "w43a", "w44a", "w45a", "w46a", "w51a", "w61a"};
+            foreach (string stage in stages)
+                ResourceEditor.AddResources(stage, ResourceSuperDirectory.FullName, strings);
         }
 
         private void AddAllProcs(GcxEditor gcx_Editor)

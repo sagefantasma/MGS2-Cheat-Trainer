@@ -136,7 +136,7 @@ namespace gcx
                 //gcxFile : "w00a", spawnId : new byte[] { 0x6E, 0x0E, 0xA8 },
                 //posX : 0xB7BC, posZ : 0, posY : 0xBBA4, rot : 1), MGS2Items.Ration); //not guaranteed spawn
 
-                string spawnInfo = $"Entities.Add.newLocation(gcxFile: \"{gcxFile}\", spawnId: new byte[] {{";
+                string spawnInfo = $"Entities.Add(new Location(gcxFile: \"{gcxFile}\", spawnId: new byte[] {{";
                 for(int i = 0; i<spawnProc.Id.Length; i++)
                 {
                     spawnInfo += $"0x{spawnProc.Id[i]}";
@@ -232,9 +232,10 @@ C2-00 (rotation, denotes a value of 1)
 
         public void ModifySpawnProc(byte[] spawnId, RawProc replacementProc)
         {
-            ItemSpawn localSpawn = _spawnProcsCalled.Find(x => x.Id.SequenceEqual(spawnId));
+            List<ItemSpawn> localSpawns = _spawnProcsCalled.FindAll(x => x.Id.SequenceEqual(spawnId));
 
-            localSpawn.itemProc = replacementProc;
+            foreach(ItemSpawn localSpawn in localSpawns)
+                localSpawn.itemProc = replacementProc;
         }
 
         public void SaveAutomatedChanges()

@@ -267,38 +267,14 @@ namespace gcx
                 procEditor.SaveAutomatedChanges();
             }
 
-            foreach(KeyValuePair<string, OpenedFileData> kvp in openedFiles)
+            DirectoryInfo createdDirectory = Directory.CreateDirectory($"{DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss")}_randomizedGcxFiles");
+            foreach (KeyValuePair<string, OpenedFileData> kvp in openedFiles)
             {
                 OpenedFileData openedFileData = kvp.Value;
                 byte[] newGcxBytes = openedFileData.GcxEditor.BuildGcxFile();
-                string date = $"{kvp.Key}_randomized.gcx";
+                string date = $"{createdDirectory.Name}/scenerio_stage_{kvp.Key}.gcx";
                 File.WriteAllBytes(date, newGcxBytes);
             }
-
-            /*
-            foreach (string gcxFile in GcxFileDirectory)
-            {
-                if (gcxFile.Contains("scenerio_stage_w0")) //limiting this for tanker testing
-                {
-                    GcxEditor gcx_Editor = new GcxEditor();
-                    gcx_Editor.CallDecompiler(gcxFile);
-                    var spawns = gcx_Editor.BuildContentTree();
-                    ProcEditor.InitializeEditor(spawns);
-                    //Technically, adding all procs is overkill, but it's literally just 5.4KB. Unless something doesn't load as a result
-                    //I think this is the easiest and most straight-forward solution.
-                    AddAllProcs(gcx_Editor);
-                    List<KeyValuePair<Location, Item>> spawnsToEdit = _randomizedItems.TankerPart3.Entities.Where(spawn => gcxFile.Contains(spawn.Key.GcxFile)).ToList();
-                    foreach (KeyValuePair<Location, Item> spawn in spawnsToEdit)
-                    {
-                        ProcEditor.ModifySpawnProc(spawn.Key.SpawnId, spawn.Value.ProcId);
-                    }
-                    ProcEditor.SaveAutomatedChanges();
-                    byte[] newGcxBytes = gcx_Editor.BuildGcxFile();
-                    string date = $"{gcxFile}_randomized.gcx";
-                    File.WriteAllBytes(date, newGcxBytes);
-                }
-            }
-            */
             return true;
         }
 

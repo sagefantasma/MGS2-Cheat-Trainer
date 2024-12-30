@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -124,6 +125,31 @@ namespace gcx
             {
                 EnumerateSpawnProcs(procToEdit);
             }
+        }
+
+        public void WriteOutSpawns(string gcxFile)
+        {
+            string fileContents = "";
+            foreach(ItemSpawn spawnProc in _spawnProcsCalled)
+            {
+                //TankerPart1.Entities.Add(new Location (
+                //gcxFile : "w00a", spawnId : new byte[] { 0x6E, 0x0E, 0xA8 },
+                //posX : 0xB7BC, posZ : 0, posY : 0xBBA4, rot : 1), MGS2Items.Ration); //not guaranteed spawn
+
+                string spawnInfo = $"Entities.Add.newLocation(gcxFile: \"{gcxFile}\", spawnId: new byte[] {{";
+                for(int i = 0; i<spawnProc.Id.Length; i++)
+                {
+                    spawnInfo += $"0x{spawnProc.Id[i]}";
+                    if(i != spawnProc.Id.Length - 1)
+                    {
+                        spawnInfo += ", ";
+                    }
+                }
+                spawnInfo += $"}}, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.{spawnProc.itemProc.CommonName}\n";
+                fileContents += spawnInfo;
+            }
+
+            File.WriteAllText($"{gcxFile}spawns.txt", fileContents);
         }
 
         private void EnumerateSpawnProcs(DecodedProc procToEdit)

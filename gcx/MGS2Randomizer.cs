@@ -211,7 +211,7 @@ namespace gcx
             public ProcEditor ProcEditor { get; set; }
         }
 
-        private bool ContainsSpawningFunctions(DecodedProc func)
+        public static bool ContainsSpawningFunctions(DecodedProc func)
         {
             List<string> spawningFunctions = new List<string>();
             foreach (RawProc spawningFunc in KnownProc.SpawnProcs)

@@ -102,30 +102,30 @@ namespace MGS2_MC
             #region Playable Stages
             //comments are related to randomizer development
             public static readonly Stage SeaDock = new Stage { Name = "SeaDock", AreaCode = "w11a" }; //added
-            public static readonly Stage SeaDockBombDisposal = new Stage { Name = "SeaDockBombDisposal", AreaCode = "w11b" }; //TODO: needs special handling
+            public static readonly Stage SeaDockBombDisposal = new Stage { Name = "SeaDockBombDisposal", AreaCode = "w11b" }; //there are no unique spawns here
             public static readonly Stage SeaDockFortune = new Stage { Name = "SeaDockFortune", AreaCode = "w11c" }; //will not add
             public static readonly Stage StrutARoof = new Stage { Name = "StrutARoof", AreaCode = "w12a" }; //added
-            public static readonly Stage StrutARoofBomb = new Stage { Name = "StrutARoofBomb", AreaCode = "w12c" };
-            public static readonly Stage StrutAPumpRoom = new Stage { Name = "StrutAPumpRoom", AreaCode = "w12b" }; //added(still need to figure out other spawns behind carded door)
+            public static readonly Stage StrutARoofBomb = new Stage { Name = "StrutARoofBomb", AreaCode = "w12c" }; //handled by w12a sister spawn(s)
+            public static readonly Stage StrutAPumpRoom = new Stage { Name = "StrutAPumpRoom", AreaCode = "w12b" }; //added
             public static readonly Stage ABConnectingBridge = new Stage { Name = "ABConnectingBridge", AreaCode = "w13a" }; //no spawns
             public static readonly Stage ABConnectingBridgeSensorB = new Stage { Name = "ABConnectingBridgeSensorB", AreaCode = "w13b" }; //no spawns
             public static readonly Stage TransformerRoom = new Stage { Name = "TransformerRoom", AreaCode = "w14a" }; //added
             public static readonly Stage BCConnectingBridge = new Stage { Name = "BCConnectingBridge", AreaCode = "w15a" }; //added
-            public static readonly Stage BCConnectingBridgeAfterStillman = new Stage { Name = "BCConnectingBridgeAfterStillman", AreaCode = "w15b" }; //TODO: needs special handling
+            public static readonly Stage BCConnectingBridgeAfterStillman = new Stage { Name = "BCConnectingBridgeAfterStillman", AreaCode = "w15b" }; //handled by w15a sister spawn(s)
             public static readonly Stage DiningHall = new Stage { Name = "DiningHall", AreaCode = "w16a" }; //added
-            public static readonly Stage DiningHallAfterStillman = new Stage { Name = "DiningHallAfterStillman", AreaCode = "w16b" }; //TODO: needs special handling
+            public static readonly Stage DiningHallAfterStillman = new Stage { Name = "DiningHallAfterStillman", AreaCode = "w16b" }; //handled by w16a sister spawn(s)
             public static readonly Stage CDConnectingBridge = new Stage { Name = "CDConnectingBridge", AreaCode = "w17a" }; //no spawns
             public static readonly Stage SedimentPool = new Stage { Name = "SedimentPool", AreaCode = "w18a" }; //added
             public static readonly Stage DEConnectingBridge = new Stage { Name = "DEConnectingBridge", AreaCode = "w19a" }; //added
             public static readonly Stage ParcelRoom = new Stage { Name = "ParcelRoom", AreaCode = "w20a" }; //added
             public static readonly Stage Heliport = new Stage { Name = "Heliport", AreaCode = "w20b" }; //added
             public static readonly Stage HeliportBomb = new Stage { Name = "HeliportBomb", AreaCode = "w20c" }; //will not add
-            public static readonly Stage HeliportPostNinja = new Stage { Name = "HeliportPostNinja", AreaCode = "w20d" }; //TODO: needs special handling
+            public static readonly Stage HeliportPostNinja = new Stage { Name = "HeliportPostNinja", AreaCode = "w20d" }; //handled by w20b sister spawn(s)
             public static readonly Stage EFConnectingBridge = new Stage { Name = "EFConnectingBridge", AreaCode = "w21a" }; //added
-            public static readonly Stage EFConnectingBridge2 = new Stage { Name = "EFConnectingBridge", AreaCode = "w21b" }; //TODO: needs special handling
-            public static readonly Stage Warehouse = new Stage { Name = "Warehouse", AreaCode = "w22a" };
+            public static readonly Stage EFConnectingBridge2 = new Stage { Name = "EFConnectingBridge", AreaCode = "w21b" }; //handled by w21a sister spawn(s)
+            public static readonly Stage Warehouse = new Stage { Name = "Warehouse", AreaCode = "w22a" }; //added
             public static readonly Stage FAConnectingBridge = new Stage { Name = "FAConnectingBridge", AreaCode = "w23a" }; //added
-            public static readonly Stage FAConnectingBridge2 = new Stage { Name = "FAConnectingBridge", AreaCode = "w23b" }; //TODO: needs special handling for AK ammo spawn
+            public static readonly Stage FAConnectingBridge2 = new Stage { Name = "FAConnectingBridge", AreaCode = "w23b" }; //handled by w23a sister spawn(s)
             public static readonly Stage Shell1Core = new Stage { Name = "Shell1Core", AreaCode = "w24a" }; //added
             public static readonly Stage Shell1CoreB1 = new Stage { Name = "Shell1CoreB1", AreaCode = "w24b" }; //added
             public static readonly Stage Shell1CoreB2 = new Stage { Name = "Shell1CoreB2", AreaCode = "w24d" }; //added
@@ -137,7 +137,7 @@ namespace MGS2_MC
             public static readonly Stage SewageTreatment = new Stage { Name = "SewageTreatment", AreaCode = "w28a" }; //added
             public static readonly Stage Shell2Core = new Stage { Name = "Shell2Core", AreaCode = "w31a" }; //added
             public static readonly Stage Shell2FiltrationChamber1 = new Stage { Name = "Shell2FiltrationChamber1", AreaCode = "w31b" }; //added
-            public static readonly Stage Shell2FiltrationChamber2 = new Stage { Name = "Shell2FiltrationChamber2", AreaCode = "w31c" }; //is this where vamp is? what spawns can i add to the mix?
+            public static readonly Stage Shell2FiltrationChamber2 = new Stage { Name = "Shell2FiltrationChamber2", AreaCode = "w31c" }; //added non-boss room spawns
             public static readonly Stage Shell2CoreWithEmma = new Stage { Name = "Shell2CoreWithEmma", AreaCode = "w31d" }; //added
             public static readonly Stage OilFence = new Stage { Name = "OilFence", AreaCode = "w32a" }; //will not add
             public static readonly Stage OilFenceVamp = new Stage { Name = "OilFenceVamp", AreaCode = "w32b" }; //will not add

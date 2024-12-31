@@ -333,7 +333,6 @@ namespace gcx
             //TODO: clean this up and polish it off
             AddAllResources();
              
-
             //since some levels are part of multiple different logic sets,
             //we should instead go spawn by spawn rather than file by file
             Dictionary<string, OpenedFileData> openedFiles = new Dictionary<string, OpenedFileData>();
@@ -367,7 +366,7 @@ namespace gcx
                     procEditor = openedFileData.ProcEditor;
                 }
 
-                cheatSheet += $"{spawnToEdit.Key.GcxFile}: {spawnToEdit.Key.SpawnId} is now {spawnToEdit.Value.Name}\n";
+                cheatSheet += $"{spawnToEdit.Key.GcxFile}: now has a {spawnToEdit.Value.Name}\n";
                 procEditor.ModifySpawnProc(spawnToEdit.Key.SpawnId, spawnToEdit.Value.ProcId);
                 procEditor.SaveAutomatedChanges();
                 if(spawnToEdit.Key.SisterSpawn != null)
@@ -397,7 +396,7 @@ namespace gcx
                         procEditor = openedFileData.ProcEditor;
                     }
 
-                    cheatSheet += $"{spawnToEdit.Key.SisterSpawn}: {spawnToEdit.Key.SpawnId} is now {spawnToEdit.Value.Name}\n";
+                    cheatSheet += $"{spawnToEdit.Key.SisterSpawn}: now has a  {spawnToEdit.Value.Name}\n";
                     procEditor.ModifySpawnProc(spawnToEdit.Key.SpawnId, spawnToEdit.Value.ProcId);
                     procEditor.SaveAutomatedChanges();
                 }
@@ -432,7 +431,7 @@ namespace gcx
                     procEditor = openedFileData.ProcEditor;
                 }
 
-                cheatSheet += $"{spawnToEdit.Key.GcxFile}: {spawnToEdit.Key.SpawnId} is now {spawnToEdit.Value.Name}\n";
+                cheatSheet += $"{spawnToEdit.Key.GcxFile}: now has a {spawnToEdit.Value.Name}\n";
                 procEditor.ModifySpawnProc(spawnToEdit.Key.SpawnId, spawnToEdit.Value.ProcId);
                 procEditor.SaveAutomatedChanges();
                 if (spawnToEdit.Key.SisterSpawn != null)
@@ -462,7 +461,7 @@ namespace gcx
                         procEditor = openedFileData.ProcEditor;
                     }
 
-                    cheatSheet += $"{spawnToEdit.Key.SisterSpawn}: {spawnToEdit.Key.SpawnId} is now {spawnToEdit.Value.Name}\n";
+                    cheatSheet += $"{spawnToEdit.Key.SisterSpawn}: now has a {spawnToEdit.Value.Name}\n";
                     procEditor.ModifySpawnProc(spawnToEdit.Key.SpawnId, spawnToEdit.Value.ProcId);
                     procEditor.SaveAutomatedChanges();
                 }

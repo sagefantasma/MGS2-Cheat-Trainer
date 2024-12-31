@@ -219,11 +219,19 @@ C2-00 (rotation, denotes a value of 1)
         {
             //TODO: validate
             byte[] spawnId;
-            byte byteAfterSpawn = contents[index + 8];
-            if (byteAfterSpawn == 0x01 && contents[index+7] != 0xC1)
+            byte byteAfterSpawn = contents[index + 3];
+            //i am seeing a possible pattern:
+            //immediately after item declaration there is either a 06 or a 0D
+            //from the three files i have checked thus far, 06 is before a 3 byte ID
+            //and 0D is before a 4 byte ID. Please tell me this is real. IT LOOKS LIKE IT BOYS.
+            if (byteAfterSpawn == 0x0D)
                 spawnId = new byte[4];
-            else
+            else if (byteAfterSpawn == 0x06)
                 spawnId = new byte[3];
+            else
+            {
+                throw new Exception("my idea is was bad and i feel bad");
+            }
 
             Array.Copy(contents, index + 4, spawnId, 0, spawnId.Length); //i _believe_ this is correct all of the time
 

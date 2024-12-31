@@ -117,16 +117,105 @@ namespace gcx
                 _randomizedItems.TankerPart3.Entities.Add(entity.Key, entity.Value);
             }
 
-            /* TODO: implement later
-            List<KeyValuePair<Location, Item>> PlantSpawns = new List<KeyValuePair<Location, Item>>();
-            foreach(var kvp in VanillaItems.PlantSet9.Entities)
+
+            List<Item> PlantSpawns = new List<Item>();
+            foreach(var kvp in VanillaItems.PlantSet10.Entities)
             {
-                PlantSpawns.Add(kvp);
+                PlantSpawns.Add(kvp.Value);
             }
-            */
+
+            itemsAssigned = 0;
+            while (PlantSpawns.Count > 0)
+            {
+                int randomNum = Randomizer.Next();
+                int modValue = randomNum % PlantSpawns.Count;
+                Item randomChoice = PlantSpawns[modValue];
+
+                //iteratively go through spawns in "sequential" order, setting random items to each
+                if (itemsAssigned < VanillaItems.PlantSet1.Entities.Count)
+                {
+                    _randomizedItems.PlantSet1.Entities.Add(VanillaItems.PlantSet10.Entities.ElementAt(itemsAssigned).Key, randomChoice);
+                }
+                else if (itemsAssigned < VanillaItems.PlantSet2.Entities.Count)
+                {
+                    _randomizedItems.PlantSet2.Entities.Add(VanillaItems.PlantSet10.Entities.ElementAt(itemsAssigned).Key, randomChoice);
+                }
+                else if (itemsAssigned < VanillaItems.PlantSet3.Entities.Count)
+                {
+                    _randomizedItems.PlantSet3.Entities.Add(VanillaItems.PlantSet10.Entities.ElementAt(itemsAssigned).Key, randomChoice);
+                }
+                else if (itemsAssigned < VanillaItems.PlantSet4.Entities.Count)
+                {
+                    _randomizedItems.PlantSet4.Entities.Add(VanillaItems.PlantSet10.Entities.ElementAt(itemsAssigned).Key, randomChoice);
+                }
+                else if (itemsAssigned < VanillaItems.PlantSet5.Entities.Count)
+                {
+                    _randomizedItems.PlantSet5.Entities.Add(VanillaItems.PlantSet10.Entities.ElementAt(itemsAssigned).Key, randomChoice);
+                }
+                else if (itemsAssigned < VanillaItems.PlantSet6.Entities.Count)
+                {
+                    _randomizedItems.PlantSet6.Entities.Add(VanillaItems.PlantSet10.Entities.ElementAt(itemsAssigned).Key, randomChoice);
+                }
+                else if (itemsAssigned < VanillaItems.PlantSet7.Entities.Count)
+                {
+                    _randomizedItems.PlantSet7.Entities.Add(VanillaItems.PlantSet10.Entities.ElementAt(itemsAssigned).Key, randomChoice);
+                }
+                else if (itemsAssigned < VanillaItems.PlantSet8.Entities.Count)
+                {
+                    _randomizedItems.PlantSet8.Entities.Add(VanillaItems.PlantSet10.Entities.ElementAt(itemsAssigned).Key, randomChoice);
+                }
+                else if (itemsAssigned < VanillaItems.PlantSet9.Entities.Count)
+                {
+                    _randomizedItems.PlantSet9.Entities.Add(VanillaItems.PlantSet10.Entities.ElementAt(itemsAssigned).Key, randomChoice);
+                }
+                else
+                {
+                    _randomizedItems.PlantSet10.Entities.Add(VanillaItems.PlantSet10.Entities.ElementAt(itemsAssigned).Key, randomChoice);
+                }
+
+                PlantSpawns.Remove(randomChoice);
+                itemsAssigned++;
+            }
+
+            foreach (var entity in _randomizedItems.PlantSet1.Entities)
+            {
+                _randomizedItems.PlantSet2.Entities.Add(entity.Key, entity.Value);
+            }
+            foreach (var entity in _randomizedItems.PlantSet2.Entities)
+            {
+                _randomizedItems.PlantSet3.Entities.Add(entity.Key, entity.Value);
+            }
+            foreach (var entity in _randomizedItems.PlantSet3.Entities)
+            {
+                _randomizedItems.PlantSet4.Entities.Add(entity.Key, entity.Value);
+            }
+            foreach (var entity in _randomizedItems.PlantSet4.Entities)
+            {
+                _randomizedItems.PlantSet5.Entities.Add(entity.Key, entity.Value);
+            }
+            foreach (var entity in _randomizedItems.PlantSet5.Entities)
+            {
+                _randomizedItems.PlantSet6.Entities.Add(entity.Key, entity.Value);
+            }
+            foreach (var entity in _randomizedItems.PlantSet6.Entities)
+            {
+                _randomizedItems.PlantSet7.Entities.Add(entity.Key, entity.Value);
+            }
+            foreach (var entity in _randomizedItems.PlantSet7.Entities)
+            {
+                _randomizedItems.PlantSet8.Entities.Add(entity.Key, entity.Value);
+            }
+            foreach (var entity in _randomizedItems.PlantSet8.Entities)
+            {
+                _randomizedItems.PlantSet9.Entities.Add(entity.Key, entity.Value);
+            }
+            foreach (var entity in _randomizedItems.PlantSet9.Entities)
+            {
+                _randomizedItems.PlantSet10.Entities.Add(entity.Key, entity.Value);
+            }
 
             //if the itemset isn't logically sound, re-randomize.
-            if(!VerifyItemSetLogicValidity(_randomizedItems))
+            if (!VerifyItemSetLogicValidity(_randomizedItems))
             {
                 Randomizer = new Random(DateTime.UtcNow.Hour + DateTime.UtcNow.Minute + DateTime.UtcNow.Second + DateTime.UtcNow.Millisecond);
                 RandomizeItemSpawns();
@@ -236,10 +325,6 @@ namespace gcx
                 GcxEditor gcx_Editor;
                 List<DecodedProc> spawns;
                 ProcEditor procEditor;
-                if(spawnToEdit.Key.GcxFile == "w01f")
-                {
-                    int a = 2 + 2;
-                }
                 if (!openedFiles.ContainsKey(spawnToEdit.Key.GcxFile))
                 {
                     gcx_Editor = new GcxEditor();
@@ -267,7 +352,96 @@ namespace gcx
                 procEditor.SaveAutomatedChanges();
                 if(spawnToEdit.Key.SisterSpawn != null)
                 {
-                    //TODO: implement sister spawn duplication
+                    //TODO: implement sister spawn duplication better
+                    gcxFile = GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_{spawnToEdit.Key.GcxFile}"));
+                    if (!openedFiles.ContainsKey(spawnToEdit.Key.GcxFile))
+                    {
+                        gcx_Editor = new GcxEditor();
+                        gcx_Editor.CallDecompiler(gcxFile);
+                        List<DecodedProc> allFileFunctions = gcx_Editor.BuildContentTree();
+                        spawns = new List<DecodedProc>();
+                        foreach (DecodedProc entry in allFileFunctions)
+                        {
+                            if (ContainsSpawningFunctions(entry))
+                                spawns.Add(entry);
+                        }
+                        AddAllProcs(gcx_Editor);
+                        procEditor = new ProcEditor(spawns, true);
+                        openedFiles.Add(spawnToEdit.Key.GcxFile, new OpenedFileData { GcxEditor = gcx_Editor, DecodedProcs = spawns, ProcEditor = procEditor });
+                    }
+                    else
+                    {
+                        OpenedFileData openedFileData = openedFiles[spawnToEdit.Key.GcxFile];
+                        gcx_Editor = openedFileData.GcxEditor;
+                        spawns = openedFileData.DecodedProcs;
+                        procEditor = openedFileData.ProcEditor;
+                    }
+
+                    procEditor.ModifySpawnProc(spawnToEdit.Key.SpawnId, spawnToEdit.Value.ProcId);
+                    procEditor.SaveAutomatedChanges();
+                }
+            }
+
+            foreach (KeyValuePair<Location, Item> spawnToEdit in _randomizedItems.PlantSet10.Entities)
+            {
+                string gcxFile = GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_{spawnToEdit.Key.GcxFile}"));
+                GcxEditor gcx_Editor;
+                List<DecodedProc> spawns;
+                ProcEditor procEditor;
+                if (!openedFiles.ContainsKey(spawnToEdit.Key.GcxFile))
+                {
+                    gcx_Editor = new GcxEditor();
+                    gcx_Editor.CallDecompiler(gcxFile);
+                    List<DecodedProc> allFileFunctions = gcx_Editor.BuildContentTree();
+                    spawns = new List<DecodedProc>();
+                    foreach (DecodedProc entry in allFileFunctions)
+                    {
+                        if (ContainsSpawningFunctions(entry))
+                            spawns.Add(entry);
+                    }
+                    AddAllProcs(gcx_Editor);
+                    procEditor = new ProcEditor(spawns, true);
+                    openedFiles.Add(spawnToEdit.Key.GcxFile, new OpenedFileData { GcxEditor = gcx_Editor, DecodedProcs = spawns, ProcEditor = procEditor });
+                }
+                else
+                {
+                    OpenedFileData openedFileData = openedFiles[spawnToEdit.Key.GcxFile];
+                    gcx_Editor = openedFileData.GcxEditor;
+                    spawns = openedFileData.DecodedProcs;
+                    procEditor = openedFileData.ProcEditor;
+                }
+
+                procEditor.ModifySpawnProc(spawnToEdit.Key.SpawnId, spawnToEdit.Value.ProcId);
+                procEditor.SaveAutomatedChanges();
+                if (spawnToEdit.Key.SisterSpawn != null)
+                {
+                    //TODO: implement sister spawn duplication better
+                    gcxFile = GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_{spawnToEdit.Key.GcxFile}"));
+                    if (!openedFiles.ContainsKey(spawnToEdit.Key.GcxFile))
+                    {
+                        gcx_Editor = new GcxEditor();
+                        gcx_Editor.CallDecompiler(gcxFile);
+                        List<DecodedProc> allFileFunctions = gcx_Editor.BuildContentTree();
+                        spawns = new List<DecodedProc>();
+                        foreach (DecodedProc entry in allFileFunctions)
+                        {
+                            if (ContainsSpawningFunctions(entry))
+                                spawns.Add(entry);
+                        }
+                        AddAllProcs(gcx_Editor);
+                        procEditor = new ProcEditor(spawns, true);
+                        openedFiles.Add(spawnToEdit.Key.GcxFile, new OpenedFileData { GcxEditor = gcx_Editor, DecodedProcs = spawns, ProcEditor = procEditor });
+                    }
+                    else
+                    {
+                        OpenedFileData openedFileData = openedFiles[spawnToEdit.Key.GcxFile];
+                        gcx_Editor = openedFileData.GcxEditor;
+                        spawns = openedFileData.DecodedProcs;
+                        procEditor = openedFileData.ProcEditor;
+                    }
+
+                    procEditor.ModifySpawnProc(spawnToEdit.Key.SpawnId, spawnToEdit.Value.ProcId);
+                    procEditor.SaveAutomatedChanges();
                 }
             }
 

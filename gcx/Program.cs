@@ -41,9 +41,24 @@ namespace gcx
                 ProcEditor procEditor = new ProcEditor(spawns, true);
                 procEditor.WriteOutSpawns(gcxFile);
             }*/
+            int seed = 0;
             MGS2Randomizer mgs2Randomizer = new MGS2Randomizer("C:\\Users\\yonan\\Documents\\Pinned Folders\\C Drive Steam Games\\MGS2\\");
-            mgs2Randomizer.RandomizeItemSpawns();
-            mgs2Randomizer.SaveRandomizationToDisk();
+            while (seed == 0)
+            {
+                try
+                {
+                    seed = mgs2Randomizer.RandomizeItemSpawns(new MGS2Randomizer.RandomizationOptions { AlwaysLogicallySafe = true });
+                    mgs2Randomizer.SaveRandomizationToDisk();
+                }
+                catch(OutOfMemoryException oome)
+                {
+
+                }
+                catch(Exception e) {
+                    mgs2Randomizer.Seed = new Random(DateTime.UtcNow.Hour + DateTime.UtcNow.Minute + DateTime.UtcNow.Second + DateTime.UtcNow.Millisecond).Next();
+                    mgs2Randomizer.Randomizer = new Random(mgs2Randomizer.Seed);
+                }
+            }
 
             ShowGui();
             return;

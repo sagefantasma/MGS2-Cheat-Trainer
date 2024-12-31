@@ -18,8 +18,8 @@ namespace gcx
 
         private static MGS2ItemSet _vanillaItems;
         private static MGS2ItemSet _randomizedItems;
-        public static Random Randomizer { get; set; }
-        private static int _seed;
+        public Random Randomizer { get; set; }
+        public int Seed { get; set; }
 
         public MGS2Randomizer(string mgs2Directory, int seed = 0)
         {
@@ -31,14 +31,14 @@ namespace gcx
 
                 if (seed == 0)
                 {
-                    _seed = new Random(DateTime.UtcNow.Hour + DateTime.UtcNow.Minute + DateTime.UtcNow.Second + DateTime.UtcNow.Millisecond).Next();
+                    Seed = new Random(DateTime.UtcNow.Hour + DateTime.UtcNow.Minute + DateTime.UtcNow.Second + DateTime.UtcNow.Millisecond).Next();
                 }
                 else
                 {
-                    _seed = seed;
+                    Seed = seed;
                 }
 
-                Randomizer = new Random(_seed);
+                Randomizer = new Random(Seed);
                 BuildVanillaItemSet();
             }
             else
@@ -53,10 +53,12 @@ namespace gcx
 
             _vanillaItems = new MGS2ItemSet
             {
+                //0x30 spawns in tanker
                 TankerPart1 = new ItemSet(VanillaItems.TankerPart1),
                 TankerPart2 = new ItemSet(VanillaItems.TankerPart2),
                 TankerPart3 = new ItemSet(VanillaItems.TankerPart3),
-
+                 
+                //0xd3 spawns in plant
                 PlantSet1 = new ItemSet(VanillaItems.PlantSet1),
                 PlantSet2 = new ItemSet(VanillaItems.PlantSet2),
                 PlantSet3 = new ItemSet(VanillaItems.PlantSet3),
@@ -65,15 +67,22 @@ namespace gcx
                 PlantSet6 = new ItemSet(VanillaItems.PlantSet6),
                 PlantSet7 = new ItemSet(VanillaItems.PlantSet7),
                 PlantSet8 = new ItemSet(VanillaItems.PlantSet8),
-                PlantSet9 = new ItemSet(VanillaItems.PlantSet9)
+                PlantSet9 = new ItemSet(VanillaItems.PlantSet9),
+                PlantSet10 = new ItemSet(VanillaItems.PlantSet10)
             };
         }
 
-        public int RandomizeItemSpawns()
+        public class RandomizationOptions
+        {
+            public bool AlwaysLogicallySafe { get; set; }
+        }
+
+        public int RandomizeItemSpawns(RandomizationOptions options)
         {
             //TODO: in the future, we should have something to randomize the "auto-awarded" items, and
             //also to have an option to not randomize optional spawns
             _randomizedItems = new MGS2ItemSet();
+            bool mustBeCompleteable = options.AlwaysLogicallySafe;
 
             //Create a list of all spawns on the tanker chapter
             List<Item> TankerSpawnsLeft = new List<Item>();
@@ -89,7 +98,12 @@ namespace gcx
                 int randomNum = Randomizer.Next();
                 int modValue = randomNum % TankerSpawnsLeft.Count;
                 Item randomChoice = TankerSpawnsLeft[modValue];
-                
+
+                if (mustBeCompleteable && 
+                    LogicRequirements.ProgressionItems.Contains(randomChoice.Name) && 
+                    !VanillaItems.TankerPart3.Entities.ElementAt(itemsAssigned).Key.MandatorySpawn)
+                    continue;
+
                 //iteratively go through spawns in "sequential" order, setting random items to each
                 if (itemsAssigned < VanillaItems.TankerPart1.Entities.Count)
                 {
@@ -125,11 +139,22 @@ namespace gcx
             }
 
             itemsAssigned = 0;
+            int retries = 10;
             while (PlantSpawns.Count > 0)
             {
                 int randomNum = Randomizer.Next();
                 int modValue = randomNum % PlantSpawns.Count;
                 Item randomChoice = PlantSpawns[modValue];
+
+                if (mustBeCompleteable &&
+                    LogicRequirements.ProgressionItems.Contains(randomChoice.Name) &&
+                    !VanillaItems.PlantSet10.Entities.ElementAt(itemsAssigned).Key.MandatorySpawn)
+                {
+                    retries--;
+                    if (retries == 0)
+                        break;
+                    continue;
+                }
 
                 //iteratively go through spawns in "sequential" order, setting random items to each
                 if (itemsAssigned < VanillaItems.PlantSet1.Entities.Count)
@@ -217,17 +242,15 @@ namespace gcx
             //if the itemset isn't logically sound, re-randomize.
             if (!VerifyItemSetLogicValidity(_randomizedItems))
             {
-                Randomizer = new Random(DateTime.UtcNow.Hour + DateTime.UtcNow.Minute + DateTime.UtcNow.Second + DateTime.UtcNow.Millisecond);
-                RandomizeItemSpawns();
+                throw new Exception("bad randomization seed");
             }
 
-            return _seed;
+            return Seed;
         }
 
         private bool VerifyItemSetLogicValidity(MGS2ItemSet setToCheck)
         {
-            return true;
-            //TODO: check it, yo
+            /* For now, the Tanker is always completeable. When we figure out auto-given items, this will be needed
             foreach (Item item in VanillaItems.TankerPart1.ItemsNeededToProgress) 
             {
                 if (!setToCheck.TankerPart1.Entities.ContainsValue(item))
@@ -243,12 +266,8 @@ namespace gcx
                 if (!setToCheck.TankerPart3.Entities.ContainsValue(item))
                     return false;
             }
-            /*
-            foreach (Item item in VanillaItems.PlantSet1.ItemsNeededToProgress)
-            {
-                if (!setToCheck.PlantSet1.Entities.ContainsValue(item))
-                    return false;
-            }
+            */
+
             foreach (Item item in VanillaItems.PlantSet2.ItemsNeededToProgress)
             {
                 if (!setToCheck.PlantSet2.Entities.ContainsValue(item))
@@ -289,7 +308,6 @@ namespace gcx
                 if (!setToCheck.PlantSet9.Entities.ContainsValue(item))
                     return false;
             }
-            */
             return true;
         }
 
@@ -319,6 +337,7 @@ namespace gcx
             //since some levels are part of multiple different logic sets,
             //we should instead go spawn by spawn rather than file by file
             Dictionary<string, OpenedFileData> openedFiles = new Dictionary<string, OpenedFileData>();
+            string cheatSheet = "";
             foreach(KeyValuePair<Location, Item> spawnToEdit in _randomizedItems.TankerPart3.Entities)
             {
                 string gcxFile = GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_{spawnToEdit.Key.GcxFile}"));
@@ -347,14 +366,15 @@ namespace gcx
                     spawns = openedFileData.DecodedProcs;
                     procEditor = openedFileData.ProcEditor;
                 }
-                
+
+                cheatSheet += $"{spawnToEdit.Key.GcxFile}: {spawnToEdit.Key.SpawnId} is now {spawnToEdit.Value.Name}\n";
                 procEditor.ModifySpawnProc(spawnToEdit.Key.SpawnId, spawnToEdit.Value.ProcId);
                 procEditor.SaveAutomatedChanges();
                 if(spawnToEdit.Key.SisterSpawn != null)
                 {
                     //TODO: implement sister spawn duplication better
-                    gcxFile = GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_{spawnToEdit.Key.GcxFile}"));
-                    if (!openedFiles.ContainsKey(spawnToEdit.Key.GcxFile))
+                    gcxFile = GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_{spawnToEdit.Key.SisterSpawn}"));
+                    if (!openedFiles.ContainsKey(spawnToEdit.Key.SisterSpawn))
                     {
                         gcx_Editor = new GcxEditor();
                         gcx_Editor.CallDecompiler(gcxFile);
@@ -367,16 +387,17 @@ namespace gcx
                         }
                         AddAllProcs(gcx_Editor);
                         procEditor = new ProcEditor(spawns, true);
-                        openedFiles.Add(spawnToEdit.Key.GcxFile, new OpenedFileData { GcxEditor = gcx_Editor, DecodedProcs = spawns, ProcEditor = procEditor });
+                        openedFiles.Add(spawnToEdit.Key.SisterSpawn, new OpenedFileData { GcxEditor = gcx_Editor, DecodedProcs = spawns, ProcEditor = procEditor });
                     }
                     else
                     {
-                        OpenedFileData openedFileData = openedFiles[spawnToEdit.Key.GcxFile];
+                        OpenedFileData openedFileData = openedFiles[spawnToEdit.Key.SisterSpawn];
                         gcx_Editor = openedFileData.GcxEditor;
                         spawns = openedFileData.DecodedProcs;
                         procEditor = openedFileData.ProcEditor;
                     }
 
+                    cheatSheet += $"{spawnToEdit.Key.SisterSpawn}: {spawnToEdit.Key.SpawnId} is now {spawnToEdit.Value.Name}\n";
                     procEditor.ModifySpawnProc(spawnToEdit.Key.SpawnId, spawnToEdit.Value.ProcId);
                     procEditor.SaveAutomatedChanges();
                 }
@@ -411,13 +432,14 @@ namespace gcx
                     procEditor = openedFileData.ProcEditor;
                 }
 
+                cheatSheet += $"{spawnToEdit.Key.GcxFile}: {spawnToEdit.Key.SpawnId} is now {spawnToEdit.Value.Name}\n";
                 procEditor.ModifySpawnProc(spawnToEdit.Key.SpawnId, spawnToEdit.Value.ProcId);
                 procEditor.SaveAutomatedChanges();
                 if (spawnToEdit.Key.SisterSpawn != null)
                 {
                     //TODO: implement sister spawn duplication better
-                    gcxFile = GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_{spawnToEdit.Key.GcxFile}"));
-                    if (!openedFiles.ContainsKey(spawnToEdit.Key.GcxFile))
+                    gcxFile = GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_{spawnToEdit.Key.SisterSpawn}"));
+                    if (!openedFiles.ContainsKey(spawnToEdit.Key.SisterSpawn))
                     {
                         gcx_Editor = new GcxEditor();
                         gcx_Editor.CallDecompiler(gcxFile);
@@ -430,16 +452,17 @@ namespace gcx
                         }
                         AddAllProcs(gcx_Editor);
                         procEditor = new ProcEditor(spawns, true);
-                        openedFiles.Add(spawnToEdit.Key.GcxFile, new OpenedFileData { GcxEditor = gcx_Editor, DecodedProcs = spawns, ProcEditor = procEditor });
+                        openedFiles.Add(spawnToEdit.Key.SisterSpawn, new OpenedFileData { GcxEditor = gcx_Editor, DecodedProcs = spawns, ProcEditor = procEditor });
                     }
                     else
                     {
-                        OpenedFileData openedFileData = openedFiles[spawnToEdit.Key.GcxFile];
+                        OpenedFileData openedFileData = openedFiles[spawnToEdit.Key.SisterSpawn];
                         gcx_Editor = openedFileData.GcxEditor;
                         spawns = openedFileData.DecodedProcs;
                         procEditor = openedFileData.ProcEditor;
                     }
 
+                    cheatSheet += $"{spawnToEdit.Key.SisterSpawn}: {spawnToEdit.Key.SpawnId} is now {spawnToEdit.Value.Name}\n";
                     procEditor.ModifySpawnProc(spawnToEdit.Key.SpawnId, spawnToEdit.Value.ProcId);
                     procEditor.SaveAutomatedChanges();
                 }
@@ -453,6 +476,7 @@ namespace gcx
                 string date = $"{createdDirectory.Name}/scenerio_stage_{kvp.Key}.gcx";
                 File.WriteAllBytes(date, newGcxBytes);
             }
+            File.WriteAllText($"{createdDirectory.Name}/spoiler_seed-{Seed}.txt", cheatSheet);
             return true;
         }
 

@@ -212,7 +212,7 @@ namespace gcx
             string mgs2Directory = @"C:\Users\yonan\Documents\Pinned Folders\C Drive Steam Games\MGS2\";
             MGS2Randomizer mgs2Randomizer = new MGS2Randomizer(mgs2Directory, 0);
 
-            mgs2Randomizer.RandomizeItemSpawns();
+            mgs2Randomizer.RandomizeItemSpawns(new MGS2Randomizer.RandomizationOptions { AlwaysLogicallySafe = true });
         }
 
         private void button1_Click_1(object sender, EventArgs e)

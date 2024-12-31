@@ -102,7 +102,7 @@ namespace MGS2_MC
             #region Playable Stages
             //comments are related to randomizer development
             public static readonly Stage SeaDock = new Stage { Name = "SeaDock", AreaCode = "w11a" }; //added
-            public static readonly Stage SeaDockBombDisposal = new Stage { Name = "SeaDockBombDisposal", AreaCode = "w11b" }; //there are no unique spawns here
+            public static readonly Stage SeaDockBombDisposal = new Stage { Name = "SeaDockBombDisposal", AreaCode = "w11b" }; //no unique spawns
             public static readonly Stage SeaDockFortune = new Stage { Name = "SeaDockFortune", AreaCode = "w11c" }; //will not add
             public static readonly Stage StrutARoof = new Stage { Name = "StrutARoof", AreaCode = "w12a" }; //added
             public static readonly Stage StrutARoofBomb = new Stage { Name = "StrutARoofBomb", AreaCode = "w12c" }; //handled by w12a sister spawn(s)

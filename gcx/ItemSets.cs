@@ -369,27 +369,31 @@ namespace gcx
             PlantSet1.Entities = new Dictionary<Location, Item>();
             //no items needed to progress beyond this
             #region w11a
-            PlantSet1.Entities.Add(new Location(gcxFile: "w11a", spawnId: new byte[] { 254, 105, 87, 3 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w11b"), MGS2Items.Ration);
+            //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             PlantSet1.Entities.Add(new Location(gcxFile: "w11a", spawnId: new byte[] { 121, 126, 36, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w11b"), MGS2Weapons.M9Ammo);
             PlantSet1.Entities.Add(new Location(gcxFile: "w11a", spawnId: new byte[] { 121, 126, 36, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w11b"), MGS2Weapons.M9Ammo);
             PlantSet1.Entities.Add(new Location(gcxFile: "w11a", spawnId: new byte[] { 159, 85, 254 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w11b"), MGS2Weapons.M9);
             PlantSet1.Entities.Add(new Location(gcxFile: "w11a", spawnId: new byte[] { 254, 105, 87, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w11b"), MGS2Items.Ration);
             PlantSet1.Entities.Add(new Location(gcxFile: "w11a", spawnId: new byte[] { 254, 105, 87, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w11b"), MGS2Items.Ration);
+            PlantSet1.Entities.Add(new Location(gcxFile: "w11a", spawnId: new byte[] { 6, 175, 197 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Shaver);
             PlantSet1.Entities.Add(new Location(gcxFile: "w11a", spawnId: new byte[] { 61, 199, 51 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w11b"), MGS2Items.Thermals);
             #endregion
             #region w12a
+            //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             PlantSet1.Entities.Add(new Location(gcxFile: "w12a", spawnId: new byte[] { 162, 73, 79, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w12c"), MGS2Items.Bandage);
             PlantSet1.Entities.Add(new Location(gcxFile: "w12a", spawnId: new byte[] { 203, 34, 102, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w12c"), MGS2Weapons.Chaff);
             PlantSet1.Entities.Add(new Location(gcxFile: "w12a", spawnId: new byte[] { 5, 255, 249, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w12c"), MGS2Weapons.M9Ammo);
             PlantSet1.Entities.Add(new Location(gcxFile: "w12a", spawnId: new byte[] { 25, 201, 84, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w12c"), MGS2Weapons.M9);
             #endregion
             #region w12b
+            //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             PlantSet1.Entities.Add(new Location(gcxFile: "w12b", spawnId: new byte[] { 5, 255, 249 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.M9Ammo);
             PlantSet1.Entities.Add(new Location(gcxFile: "w12b", spawnId: new byte[] { 5, 255, 249, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.M9Ammo);
             PlantSet1.Entities.Add(new Location(gcxFile: "w12b", spawnId: new byte[] { 161, 8, 199, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.SocomAmmo);
             PlantSet1.Entities.Add(new Location(gcxFile: "w12b", spawnId: new byte[] { 254, 105, 87, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Ration);
             #endregion
             #region w23a
+            //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             PlantSet1.Entities.Add(new Location(gcxFile: "w23a", spawnId: new byte[] { 203, 34, 102, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w23b"), MGS2Weapons.Chaff);
             #endregion
             #region w22a
@@ -410,78 +414,89 @@ namespace gcx
 
             PlantSet2.Name = "Before Stillman";
             PlantSet2.Entities = new Dictionary<Location, Item>();
+            PlantSet1.Entities.ToList().ForEach(entity => PlantSet2.Entities.Add(entity.Key, entity.Value));
             PlantSet2.ItemsNeededToProgress.AddRange(new Item[] { MGS2Weapons.Coolant, MGS2Items.Card }); //level 1 card;
             #region w14a
-            PlantSet2.Entities.Add(new Location(gcxFile: "w14a", spawnId: new byte[] { 5, 255, 249 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.M9Ammo);
-            PlantSet2.Entities.Add(new Location(gcxFile: "w14a", spawnId: new byte[] { 161, 8, 199 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.SocomAmmo);
+            //verified with new ID acquisiton(still not crazy about decimal instead of hex)
+            PlantSet2.Entities.Add(new Location(gcxFile: "w14a", spawnId: new byte[] { 5, 255, 249, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.M9Ammo);
+            PlantSet2.Entities.Add(new Location(gcxFile: "w14a", spawnId: new byte[] { 161, 8, 199, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.SocomAmmo);
+            PlantSet2.Entities.Add(new Location(gcxFile: "w14a", spawnId: new byte[] { 161, 8, 199, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.SocomAmmo);
             PlantSet2.Entities.Add(new Location(gcxFile: "w14a", spawnId: new byte[] { 106, 106, 9 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.SocomSupp);
-            PlantSet2.Entities.Add(new Location(gcxFile: "w14a", spawnId: new byte[] { 254, 105, 87 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Ration);
+            PlantSet2.Entities.Add(new Location(gcxFile: "w14a", spawnId: new byte[] { 254, 105, 87, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Ration);
             #endregion
             #region w15a
-            PlantSet2.Entities.Add(new Location(gcxFile: "w15a", spawnId: new byte[] { 203, 34, 102 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w15b"), MGS2Weapons.Chaff);
+            //verified with new ID acquisiton(still not crazy about decimal instead of hex)
+            PlantSet2.Entities.Add(new Location(gcxFile: "w15a", spawnId: new byte[] { 203, 34, 102, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w15b"), MGS2Weapons.Chaff);
             #endregion
 
             PlantSet3.Name = "Before Fatman";
             PlantSet3.Entities = new Dictionary<Location, Item>();
+            PlantSet2.Entities.ToList().ForEach(entity => PlantSet3.Entities.Add(entity.Key, entity.Value));
             PlantSet3.ItemsNeededToProgress.AddRange(PlantSet2.ItemsNeededToProgress);
             PlantSet3.ItemsNeededToProgress.AddRange(new Item[] { MGS2Weapons.M9, MGS2Weapons.Socom });
             #region w12b
+            //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             PlantSet3.Entities.Add(new Location(gcxFile: "w12b", spawnId: new byte[] { 254, 105, 87, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Ration);
             PlantSet3.Entities.Add(new Location(gcxFile: "w12b", spawnId: new byte[] { 161, 8, 199, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.SocomAmmo);
             PlantSet3.Entities.Add(new Location(gcxFile: "w12b", spawnId: new byte[] { 162, 73, 79, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Bandage);
             PlantSet3.Entities.Add(new Location(gcxFile: "w12b", spawnId: new byte[] { 184, 235, 120, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Box1);
             #endregion
             #region w16a
-            PlantSet3.Entities.Add(new Location(gcxFile: "w16a", spawnId: new byte[] { 5, 255, 249 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w16b"), MGS2Weapons.M9Ammo);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w16a", spawnId: new byte[] { 161, 8, 199 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w16b"), MGS2Weapons.SocomAmmo);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w16a", spawnId: new byte[] { 107, 43, 115 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w16b"), MGS2Items.Pentazemin);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w16a", spawnId: new byte[] { 254, 105, 87 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w16b"), MGS2Items.Ration);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w16a", spawnId: new byte[] { 77, 235, 3 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w16b"), MGS2Items.SensorB);
+            //verified with new ID acquisiton(still not crazy about decimal instead of hex)
+            PlantSet3.Entities.Add(new Location(gcxFile: "w16a", spawnId: new byte[] { 5, 255, 249, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w16b"), MGS2Weapons.M9Ammo);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w16a", spawnId: new byte[] { 161, 8, 199, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w16b"), MGS2Weapons.SocomAmmo);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w16a", spawnId: new byte[] { 107, 43, 115, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w16b"), MGS2Items.Pentazemin);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w16a", spawnId: new byte[] { 254, 105, 87, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w16b"), MGS2Items.Ration);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w16a", spawnId: new byte[] { 77, 235, 3, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w16b"), MGS2Items.SensorB);
             #endregion
             #region w18a
+            //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             PlantSet3.Entities.Add(new Location(gcxFile: "w18a", spawnId: new byte[] { 121, 126, 36 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.M9Ammo);
             PlantSet3.Entities.Add(new Location(gcxFile: "w18a", spawnId: new byte[] { 77, 171, 249 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.Psg1Ammo);
             PlantSet3.Entities.Add(new Location(gcxFile: "w18a", spawnId: new byte[] { 187, 113, 139 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.SocomAmmo);
             PlantSet3.Entities.Add(new Location(gcxFile: "w18a", spawnId: new byte[] { 254, 105, 87 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Ration);
             #endregion
             #region w19a
+            //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             PlantSet3.Entities.Add(new Location(gcxFile: "w19a", spawnId: new byte[] { 187, 113, 139, 0x1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.SocomAmmo);
             PlantSet3.Entities.Add(new Location(gcxFile: "w19a", spawnId: new byte[] { 232, 146, 229, 0x1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.Stun);
             #endregion
             #region w20a
-            //TODO: go through and verify these aren't messed up
+            //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 217, 115, 234 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.MineDetector);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 254, 105, 87 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Ration);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 254, 105, 87, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Ration);
             PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 156, 53, 76 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Box5);
             PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 150, 156, 218 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.DigitalCamera);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 187, 113, 139 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.SocomAmmo);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 187, 113, 139, 3 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.SocomAmmo);
             PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 156, 53, 76 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Box5);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 121, 106, 36 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.M4Ammo);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 121, 126, 36 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.M9Ammo);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 152, 131, 164 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.Psg1tAmmo);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 187, 113, 139 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.SocomAmmo);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 187, 113, 139 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.SocomAmmo);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 233, 212, 177 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.StingerAmmo);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 232, 146, 229 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.Stun);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 121, 106, 36, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.M4Ammo);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 121, 126, 36, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.M9Ammo);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 152, 131, 164, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.Psg1tAmmo);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 187, 113, 139, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.SocomAmmo);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 187, 113, 139, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.SocomAmmo);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 233, 212, 177, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.StingerAmmo);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 232, 146, 229, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.Stun);
             #endregion
             #region w20b
-            //TODO: go through and verify these aren't messed up
-            PlantSet3.Entities.Add(new Location(gcxFile: "w20b", spawnId: new byte[] { 184, 235, 120 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w20d"), MGS2Items.Box3);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w20b", spawnId: new byte[] { 171, 129, 234 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w20d"), MGS2Weapons.Claymore);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w20b", spawnId: new byte[] { 5, 255, 249 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w20d"), MGS2Weapons.M9Ammo);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w20b", spawnId: new byte[] { 5, 255, 249 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w20d"), MGS2Weapons.M9Ammo);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w20b", spawnId: new byte[] { 161, 8, 199 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w20d"), MGS2Weapons.SocomAmmo);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w20b", spawnId: new byte[] { 161, 8, 199 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w20d"), MGS2Weapons.SocomAmmo);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w20b", spawnId: new byte[] { 161, 8, 199 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w20d"), MGS2Weapons.SocomAmmo);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w20b", spawnId: new byte[] { 161, 8, 199 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w20d"), MGS2Weapons.SocomAmmo);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w20b", spawnId: new byte[] { 161, 8, 199 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w20d"), MGS2Weapons.SocomAmmo);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w20b", spawnId: new byte[] { 161, 8, 199 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w20d"), MGS2Weapons.SocomAmmo);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w20b", spawnId: new byte[] { 161, 8, 199 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w20d"), MGS2Weapons.SocomAmmo);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w20b", spawnId: new byte[] { 232, 146, 229 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w20d"), MGS2Weapons.Stun);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w20b", spawnId: new byte[] { 254, 105, 87 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w20d"), MGS2Items.Ration);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w20b", spawnId: new byte[] { 254, 105, 87 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w20d"), MGS2Items.Ration);
+            //TODO: go through and verify these aren't messed up(irt boss fight)
+            //verified with new ID acquisiton(still not crazy about decimal instead of hex)
+            PlantSet3.Entities.Add(new Location(gcxFile: "w20b", spawnId: new byte[] { 184, 235, 120, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w20d"), MGS2Items.Box3);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w20b", spawnId: new byte[] { 171, 129, 234, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w20d"), MGS2Weapons.Claymore);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w20b", spawnId: new byte[] { 5, 255, 249, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w20d"), MGS2Weapons.M9Ammo);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w20b", spawnId: new byte[] { 5, 255, 249, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w20d"), MGS2Weapons.M9Ammo);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w20b", spawnId: new byte[] { 161, 8, 199, 4 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w20d"), MGS2Weapons.SocomAmmo);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w20b", spawnId: new byte[] { 161, 8, 199, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w20d"), MGS2Weapons.SocomAmmo);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w20b", spawnId: new byte[] { 161, 8, 199, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w20d"), MGS2Weapons.SocomAmmo);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w20b", spawnId: new byte[] { 161, 8, 199, 3 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w20d"), MGS2Weapons.SocomAmmo);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w20b", spawnId: new byte[] { 161, 8, 199, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w20d"), MGS2Weapons.SocomAmmo);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w20b", spawnId: new byte[] { 161, 8, 199, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w20d"), MGS2Weapons.SocomAmmo);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w20b", spawnId: new byte[] { 161, 8, 199, 3 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w20d"), MGS2Weapons.SocomAmmo);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w20b", spawnId: new byte[] { 232, 146, 229, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w20d"), MGS2Weapons.Stun);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w20b", spawnId: new byte[] { 254, 105, 87, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w20d"), MGS2Items.Ration);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w20b", spawnId: new byte[] { 254, 105, 87, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w20d"), MGS2Items.Ration);
             #endregion
             #region w21a
+            //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             PlantSet3.Entities.Add(new Location(gcxFile: "w21a", spawnId: new byte[] { 120, 198, 100, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w21b"), MGS2Weapons.Aks74uAmmo);
             #endregion
             #region w22a
@@ -498,6 +513,7 @@ namespace gcx
 
             PlantSet4.Name = "Before Shell 1 Elevator";
             PlantSet4.Entities = new Dictionary<Location, Item>();
+            PlantSet3.Entities.ToList().ForEach(entity => PlantSet4.Entities.Add(entity.Key, entity.Value));
             PlantSet4.ItemsNeededToProgress.AddRange(PlantSet3.ItemsNeededToProgress);
             PlantSet4.ItemsNeededToProgress.AddRange(new Item[] { MGS2Items.Card, MGS2Items.BDU, MGS2Weapons.Aks74u }); //level 2 card;
             #region w22a
@@ -524,6 +540,7 @@ namespace gcx
             PlantSet4.Entities.Add(new Location(gcxFile: "w22a", spawnId: new byte[] { 0x4D, 0xAB, 0xF9, 0x1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.Psg1Ammo);
             #endregion
             #region w24a
+            //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             PlantSet4.Entities.Add(new Location(gcxFile: "w24a", spawnId: new byte[] { 133, 194, 100 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.Aks74u);
             PlantSet4.Entities.Add(new Location(gcxFile: "w24a", spawnId: new byte[] { 168, 139, 53 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.Book);
             PlantSet4.Entities.Add(new Location(gcxFile: "w24a", spawnId: new byte[] { 20, 161, 84 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.C4);
@@ -539,20 +556,24 @@ namespace gcx
 
             PlantSet5.Name = "Before Ames";
             PlantSet5.Entities = new Dictionary<Location, Item>();
+            PlantSet4.Entities.ToList().ForEach(entity => PlantSet5.Entities.Add(entity.Key, entity.Value));
             PlantSet5.ItemsNeededToProgress.AddRange(PlantSet4.ItemsNeededToProgress);
             PlantSet5.ItemsNeededToProgress.Add(MGS2Weapons.Dmic1);
             #region w24b
+            //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             PlantSet5.Entities.Add(new Location(gcxFile: "w24b", spawnId: new byte[] { 73, 33, 184 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.M4Ammo);
             PlantSet5.Entities.Add(new Location(gcxFile: "w24b", spawnId: new byte[] { 245, 3, 119 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.SocomAmmo);
             PlantSet5.Entities.Add(new Location(gcxFile: "w24b", spawnId: new byte[] { 167, 184, 75 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.Stun);
             PlantSet5.Entities.Add(new Location(gcxFile: "w24b", spawnId: new byte[] { 110, 14, 168 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Ration);
             #endregion
             #region w24c
+            //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             PlantSet5.Entities.Add(new Location(gcxFile: "w24c", spawnId: new byte[] { 78, 158, 38 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Bandage);
             PlantSet5.Entities.Add(new Location(gcxFile: "w24c", spawnId: new byte[] { 110, 14, 168 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Ration);
             PlantSet5.Entities.Add(new Location(gcxFile: "w24c", spawnId: new byte[] { 61, 199, 51 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Thermals);
             #endregion
             #region w24d
+            //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             PlantSet5.Entities.Add(new Location(gcxFile: "w24d", spawnId: new byte[] { 73, 125, 248 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.Aks74uAmmo);
             PlantSet5.Entities.Add(new Location(gcxFile: "w24d", spawnId: new byte[] { 162, 73, 79 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Bandage);
             PlantSet5.Entities.Add(new Location(gcxFile: "w24d", spawnId: new byte[] { 7, 247, 174 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Box4);
@@ -565,6 +586,7 @@ namespace gcx
 
             PlantSet6.Name = "Before Shells Connecting Bridge";
             PlantSet6.Entities = new Dictionary<Location, Item>();
+            PlantSet5.Entities.ToList().ForEach(entity => PlantSet6.Entities.Add(entity.Key, entity.Value));
             PlantSet6.ItemsNeededToProgress.AddRange(PlantSet5.ItemsNeededToProgress);
             PlantSet6.ItemsNeededToProgress.AddRange(new Item[] { MGS2Weapons.Psg1, MGS2Items.Card }); //level 3 card
             #region w22a
@@ -588,9 +610,11 @@ namespace gcx
 
             PlantSet7.Name = "Before Johnson";
             PlantSet7.Entities = new Dictionary<Location, Item>();
+            PlantSet6.Entities.ToList().ForEach(entity => PlantSet7.Entities.Add(entity.Key, entity.Value));
             PlantSet7.ItemsNeededToProgress.AddRange(PlantSet6.ItemsNeededToProgress);
             PlantSet7.ItemsNeededToProgress.Add(MGS2Weapons.Nikita);
             #region w25b
+            //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             PlantSet7.Entities.Add(new Location(gcxFile: "w25b", spawnId: new byte[] { 47, 220, 148 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.Aks74uAmmo);
             PlantSet7.Entities.Add(new Location(gcxFile: "w25b", spawnId: new byte[] { 48, 101, 194 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.AkSupp);
             PlantSet7.Entities.Add(new Location(gcxFile: "w25b", spawnId: new byte[] { 77, 171, 249 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.Psg1Ammo);
@@ -600,6 +624,7 @@ namespace gcx
             PlantSet7.Entities.Add(new Location(gcxFile: "w25b", spawnId: new byte[] { 70, 8, 124 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Ration);
             #endregion
             #region w25c
+            //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             PlantSet7.Entities.Add(new Location(gcxFile: "w25c", spawnId: new byte[] { 185, 46, 10 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.Aks74uAmmo);
             PlantSet7.Entities.Add(new Location(gcxFile: "w25c", spawnId: new byte[] { 191, 66, 139 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.Chaff);
             PlantSet7.Entities.Add(new Location(gcxFile: "w25c", spawnId: new byte[] { 77, 171, 249 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.Psg1Ammo);
@@ -607,6 +632,7 @@ namespace gcx
             PlantSet7.Entities.Add(new Location(gcxFile: "w25c", spawnId: new byte[] { 254, 105, 87 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Ration);
             #endregion
             #region w25d
+            //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             PlantSet7.Entities.Add(new Location(gcxFile: "w25d", spawnId: new byte[] { 203, 34, 102 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.Chaff);
             PlantSet7.Entities.Add(new Location(gcxFile: "w25d", spawnId: new byte[] { 121, 106, 36 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.M4Ammo);
             PlantSet7.Entities.Add(new Location(gcxFile: "w25d", spawnId: new byte[] { 77, 171, 249 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.Psg1Ammo);
@@ -614,6 +640,7 @@ namespace gcx
             PlantSet7.Entities.Add(new Location(gcxFile: "w25d", spawnId: new byte[] { 254, 105, 87 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Ration);
             #endregion
             #region w31a
+            //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             PlantSet7.Entities.Add(new Location(gcxFile: "w31a", spawnId: new byte[] { 79, 56, 96, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.Book);
             PlantSet7.Entities.Add(new Location(gcxFile: "w31a", spawnId: new byte[] { 203, 34, 102, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.Chaff);
             PlantSet7.Entities.Add(new Location(gcxFile: "w31a", spawnId: new byte[] { 121, 106, 36, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.M4Ammo);
@@ -631,6 +658,7 @@ namespace gcx
             PlantSet7.Entities.Add(new Location(gcxFile: "w31a", spawnId: new byte[] { 254, 105, 87, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Ration);
             #endregion
             #region w31b
+            //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             PlantSet7.Entities.Add(new Location(gcxFile: "w31b", spawnId: new byte[] { 213, 233, 120 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.Grenade);
             PlantSet7.Entities.Add(new Location(gcxFile: "w31b", spawnId: new byte[] { 121, 106, 36 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.M4Ammo);
             PlantSet7.Entities.Add(new Location(gcxFile: "w31b", spawnId: new byte[] { 121, 126, 36 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.M4Ammo);
@@ -646,6 +674,7 @@ namespace gcx
 
             PlantSet8.Name = "Before Emma";
             PlantSet8.Entities = new Dictionary<Location, Item>();
+            PlantSet7.Entities.ToList().ForEach(entity => PlantSet8.Entities.Add(entity.Key, entity.Value));
             PlantSet8.ItemsNeededToProgress.AddRange(PlantSet7.ItemsNeededToProgress);
             PlantSet8.ItemsNeededToProgress.Add(MGS2Items.Card); //level 4 card
             #region w31c
@@ -670,9 +699,11 @@ namespace gcx
 
             PlantSet9.Name = "Before Strut L";
             PlantSet9.Entities = new Dictionary<Location, Item>();
+            PlantSet8.Entities.ToList().ForEach(entity => PlantSet9.Entities.Add(entity.Key, entity.Value));
             PlantSet9.ItemsNeededToProgress.AddRange(PlantSet8.ItemsNeededToProgress);
             PlantSet9.ItemsNeededToProgress.Add(MGS2Items.Card); //level 5 card
             #region w31d
+            //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             PlantSet9.Entities.Add(new Location(gcxFile: "w31d", spawnId: new byte[] { 185, 46, 10, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.Aks74uAmmo);
             PlantSet9.Entities.Add(new Location(gcxFile: "w31d", spawnId: new byte[] { 185, 46, 10, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.Aks74uAmmo);
             PlantSet9.Entities.Add(new Location(gcxFile: "w31d", spawnId: new byte[] { 121, 126, 36, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.M9Ammo);
@@ -687,25 +718,32 @@ namespace gcx
 
             PlantSet10.Name = "After Strut L";
             PlantSet10.Entities = new Dictionary<Location, Item>();
+            PlantSet9.Entities.ToList().ForEach(entity => PlantSet10.Entities.Add(entity.Key, entity.Value));
             PlantSet10.ItemsNeededToProgress.AddRange(PlantSet9.ItemsNeededToProgress);
-            #region w23b
-            PlantSet10.Entities.Add(new Location(gcxFile: "w21b", spawnId: new byte[] { 203, 34, 102 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.Chaff);
+            #region w21b
+            //verified with new ID acquisiton(still not crazy about decimal instead of hex)
+            PlantSet10.Entities.Add(new Location(gcxFile: "w21b", spawnId: new byte[] { 203, 34, 102, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.Chaff);
             #endregion
             #region w28a
+            //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             PlantSet10.Entities.Add(new Location(gcxFile: "w28a", spawnId: new byte[] { 187, 113, 139 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.SocomAmmo);
             #endregion
             #region w41a
+            //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             PlantSet10.Entities.Add(new Location(gcxFile: "w41a", spawnId: new byte[] { 254, 105, 87, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Ration);
             #endregion
             #region w42a
+            //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             PlantSet10.Entities.Add(new Location(gcxFile: "w42a", spawnId: new byte[] { 8, 247, 174, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Box5);
             PlantSet10.Entities.Add(new Location(gcxFile: "w42a", spawnId: new byte[] { 21, 128, 209, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.ColdMeds);
             PlantSet10.Entities.Add(new Location(gcxFile: "w42a", spawnId: new byte[] { 254, 105, 87, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Ration);
             #endregion
             #region w43a
-            PlantSet10.Entities.Add(new Location(gcxFile: "w43a", spawnId: new byte[] { 254, 105, 87 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Ration);
+            //verified with new ID acquisiton(still not crazy about decimal instead of hex)
+            PlantSet10.Entities.Add(new Location(gcxFile: "w43a", spawnId: new byte[] { 254, 105, 87, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Ration);
             #endregion
             #region w45a
+            //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             PlantSet10.Entities.Add(new Location(gcxFile: "w45a", spawnId: new byte[] { 254, 105, 87, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Ration);
             #endregion
             #endregion

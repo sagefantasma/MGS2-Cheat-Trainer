@@ -265,6 +265,10 @@ namespace gcx
                 
                 procEditor.ModifySpawnProc(spawnToEdit.Key.SpawnId, spawnToEdit.Value.ProcId);
                 procEditor.SaveAutomatedChanges();
+                if(spawnToEdit.Key.SisterSpawn != null)
+                {
+                    //TODO: implement sister spawn duplication
+                }
             }
 
             DirectoryInfo createdDirectory = Directory.CreateDirectory($"{DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss")}_randomizedGcxFiles");

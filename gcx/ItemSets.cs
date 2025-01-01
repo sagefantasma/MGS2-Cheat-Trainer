@@ -14,15 +14,15 @@ namespace gcx
         public long PosZ;
         public long Rot;
         public byte[] SpawnId;
-        public List<byte> ParameterBytes;
+        public string Name;
         public bool MandatorySpawn;
         public string SisterSpawn;
 
         public Location()
         {
-            BuildParameterBytes();
+            
         }
-        public Location(string gcxFile, byte[] spawnId, long posX, long posZ, long posY, long rot, bool mandatorySpawn = false, string sisterSpawn = null)
+        public Location(string gcxFile, byte[] spawnId, long posX, long posZ, long posY, long rot, bool mandatorySpawn = false, string sisterSpawn = null, string name = null)
         {
             GcxFile = gcxFile;
             PosX = posX;
@@ -30,22 +30,9 @@ namespace gcx
             PosZ = posZ;
             Rot = rot;
             SpawnId = spawnId;
-            BuildParameterBytes();
             MandatorySpawn = mandatorySpawn;
             SisterSpawn = sisterSpawn;
-        }
-
-        private void BuildParameterBytes()
-        {
-            //TODO: confirm this logic works on plant as well. it definitely works on all of Tanker.
-            ParameterBytes = new List<byte>();
-            ParameterBytes.Add(0x06);
-            ParameterBytes.AddRange(SpawnId);
-            ParameterBytes.Add(0x01);
-            /*ParameterBytes.AddRange(BitConverter.GetBytes(PosX));
-            ParameterBytes.AddRange(BitConverter.GetBytes(PosZ));
-            ParameterBytes.AddRange(BitConverter.GetBytes(PosY));*/
-            //is rot really sent as a 0, or as C1? 
+            Name = name;
         }
     }
 
@@ -285,45 +272,45 @@ namespace gcx
             TankerPart1.Entities = new Dictionary<Location, Item>();
             TankerPart1.ItemsNeededToProgress.Add(MGS2Weapons.M9);
             #region w00a
-            TankerPart1.Entities.Add(new Location ( gcxFile : "w00a", spawnId : new byte[] { 0x6E, 0x0E, 0xA8 }, posX : 0xB7BC, posZ : 0, posY : 0xBBA4, rot : 1), MGS2Items.Ration); //not guaranteed spawn
-            TankerPart1.Entities.Add(new Location ( gcxFile : "w00a", spawnId : new byte[] { 0x6F, 0x0E, 0xA8 }, posX : 0x1388, posZ : 0, posY : 0x493E, rot : 1), MGS2Items.Ration); //not guaranteed spawn
-            TankerPart1.Entities.Add(new Location ( gcxFile : "w00a", spawnId : new byte[] { 0x4E, 0x9E, 0x26 }, posX : 0x3E80, posZ : 0xBB8, posY : 0xBD98, rot : 1, mandatorySpawn: true), MGS2Items.Bandage);
-            TankerPart1.Entities.Add(new Location ( gcxFile : "w00a", spawnId : new byte[] { 0x4F, 0x9E, 0x26 }, posX : 0xE1BA, posZ : 0, posY : 0x1194, rot : 1, mandatorySpawn: true), MGS2Items.Bandage);
-            TankerPart1.Entities.Add(new Location ( gcxFile : "w00a", spawnId : new byte[] { 0xDD, 0xC2, 0xAD }, posX : 0x4844, posZ : 0, posY : 0xBBA4, rot : 1, mandatorySpawn: true), MGS2Items.Pentazemin);
-            TankerPart1.Entities.Add(new Location ( gcxFile : "w00a", spawnId : new byte[] { 0xA9, 0x42, 0x8B }, posX : 0x2710, posZ : 0x7D0, posY : 0xFE0C, rot : 1, mandatorySpawn: true), MGS2Weapons.Chaff);
-            TankerPart1.Entities.Add(new Location ( gcxFile : "w00a", spawnId : new byte[] { 0x57, 0x6C, 0x00}, posX : 0x1770, posZ : 0x157C, posY : 0x0, rot : 3 ), MGS2Items.ColdMeds); //not guaranteed spawn
+            TankerPart1.Entities.Add(new Location ( gcxFile : "w00a", spawnId : new byte[] { 0x6E, 0x0E, 0xA8 }, posX : 0xB7BC, posZ : 0, posY : 0xBBA4, rot : 1, name: "NearbyLeftsideBodyDump"), MGS2Items.Ration); //not guaranteed spawn
+            TankerPart1.Entities.Add(new Location ( gcxFile : "w00a", spawnId : new byte[] { 0x6F, 0x0E, 0xA8 }, posX : 0x1388, posZ : 0, posY : 0x493E, rot : 1, name:"NearSnakeSpawn"), MGS2Items.Ration); //not guaranteed spawn
+            TankerPart1.Entities.Add(new Location ( gcxFile : "w00a", spawnId : new byte[] { 0x4E, 0x9E, 0x26 }, posX : 0x3E80, posZ : 0xBB8, posY : 0xBD98, rot : 1, name: "RightsideLifeboats", mandatorySpawn: true), MGS2Items.Bandage);
+            TankerPart1.Entities.Add(new Location ( gcxFile : "w00a", spawnId : new byte[] { 0x4F, 0x9E, 0x26 }, posX : 0xE1BA, posZ : 0, posY : 0x1194, rot : 1, name: "UnderLeftsideStairs", mandatorySpawn: true), MGS2Items.Bandage);
+            TankerPart1.Entities.Add(new Location ( gcxFile : "w00a", spawnId : new byte[] { 0xDD, 0xC2, 0xAD }, posX : 0x4844, posZ : 0, posY : 0xBBA4, rot : 1, mandatorySpawn: true, name: "NearbyRightsideBodyDump"), MGS2Items.Pentazemin);
+            TankerPart1.Entities.Add(new Location ( gcxFile : "w00a", spawnId : new byte[] { 0xA9, 0x42, 0x8B }, posX : 0x2710, posZ : 0x7D0, posY : 0xFE0C, rot : 1, name: "RightsideBehindCrates", mandatorySpawn: true), MGS2Weapons.Chaff);
+            TankerPart1.Entities.Add(new Location ( gcxFile : "w00a", spawnId : new byte[] { 0x57, 0x6C, 0x00}, posX : 0x1770, posZ : 0x157C, posY : 0x0, rot : 3, name: "Overlook" ), MGS2Items.ColdMeds); //not guaranteed spawn
             #endregion            
             #region w01a
-            TankerPart1.Entities.Add(new Location ( gcxFile : "w01a", spawnId : new byte[] { 0x79, 0x7E, 0x24 }, posX : 0x1194, posZ : 0, posY : 0xDDE, rot : 0, mandatorySpawn: true), MGS2Weapons.M9Ammo);
-            TankerPart1.Entities.Add(new Location ( gcxFile : "w01a", spawnId : new byte[] { 0xFE, 0x69, 0x57 }, posX : 0xEE58, posZ : 0, posY : 0xDDE, rot : 0 ), MGS2Items.Ration);
+            TankerPart1.Entities.Add(new Location ( gcxFile : "w01a", spawnId : new byte[] { 0x79, 0x7E, 0x24 }, posX : 0x1194, posZ : 0, posY : 0xDDE, rot : 0, name: "Locker1", mandatorySpawn: true), MGS2Weapons.M9Ammo);
+            TankerPart1.Entities.Add(new Location ( gcxFile : "w01a", spawnId : new byte[] { 0xFE, 0x69, 0x57 }, posX : 0xEE58, posZ : 0, posY : 0xDDE, rot : 0, name: "Locker2" ), MGS2Items.Ration);
             #endregion
             #region w01b
-            TankerPart1.Entities.Add(new Location ( gcxFile : "w01b", spawnId : new byte[] { 0x40, 0x14, 0x9B }, posX : 0x2AF8, posZ : 0xBB8, posY : 0xC662, rot : 0, mandatorySpawn: true), MGS2Weapons.M9Ammo);
-            TankerPart1.Entities.Add(new Location ( gcxFile : "w01b", spawnId : new byte[] { 0xFE, 0x69, 0x57, 0x1 }, posX : 0xDAC, posZ : 0xBB8, posY : 0x8CA, rot : 0), MGS2Items.Ration);
-            TankerPart1.Entities.Add(new Location ( gcxFile : "w01b", spawnId : new byte[] { 0x9C, 0x7F, 0xD1, 0x2 }, posX : 0x3E8, posZ : 0xBB8, posY : 0x157C, rot : 0, mandatorySpawn: true), MGS2Weapons.UspAmmo);
+            TankerPart1.Entities.Add(new Location ( gcxFile : "w01b", spawnId : new byte[] { 0x40, 0x14, 0x9B }, posX : 0x2AF8, posZ : 0xBB8, posY : 0xC662, rot : 0, name: "UnderRightsideStairs", mandatorySpawn: true), MGS2Weapons.M9Ammo);
+            TankerPart1.Entities.Add(new Location ( gcxFile : "w01b", spawnId : new byte[] { 0xFE, 0x69, 0x57, 0x1 }, posX : 0xDAC, posZ : 0xBB8, posY : 0x8CA, rot : 0, name: "RightsideAlcove"), MGS2Items.Ration);
+            TankerPart1.Entities.Add(new Location ( gcxFile : "w01b", spawnId : new byte[] { 0x9C, 0x7F, 0xD1, 0x2 }, posX : 0x3E8, posZ : 0xBB8, posY : 0x157C, rot : 0, name: "Locker", mandatorySpawn: true), MGS2Weapons.UspAmmo);
             #endregion
             #region w01c
-            TankerPart1.Entities.Add(new Location ( gcxFile : "w01c", spawnId : new byte[] { 0xFE, 0x69, 0x57 }, posX : 0x251C, posZ : 0x1770, posY : 0xC086, rot : 0 ), MGS2Items.Ration); //not guaranteed spawn
-            TankerPart1.Entities.Add(new Location ( gcxFile : "w01c", spawnId : new byte[] { 0xCB, 0x22, 0x66 }, posX : 0xFA24, posZ : 0x1838, posY : 0xB910, rot : 0, mandatorySpawn: true), MGS2Weapons.Chaff);
+            TankerPart1.Entities.Add(new Location ( gcxFile : "w01c", spawnId : new byte[] { 0xFE, 0x69, 0x57 }, posX : 0x251C, posZ : 0x1770, posY : 0xC086, rot : 0, name: "Crawlspace" ), MGS2Items.Ration); //not guaranteed spawn
+            TankerPart1.Entities.Add(new Location ( gcxFile : "w01c", spawnId : new byte[] { 0xCB, 0x22, 0x66 }, posX : 0xFA24, posZ : 0x1838, posY : 0xB910, rot : 0, name: "Locker", mandatorySpawn: true), MGS2Weapons.Chaff);
             #endregion
             #region w01d
-            TankerPart1.Entities.Add(new Location ( gcxFile : "w01d", spawnId : new byte[] { 0x49, 0x35, 0xB8 }, posX : 0xED72, posZ : 0x2292, posY : 0xCD38, rot : 0, mandatorySpawn: true), MGS2Weapons.M9Ammo);
-            TankerPart1.Entities.Add(new Location ( gcxFile : "w01d", spawnId : new byte[] { 0x6E, 0x0E, 0xA8 }, posX : 0xD8F0, posZ : 0x2328, posY : 0xB7BC, rot : 0 ), MGS2Items.Ration); //not guaranteed spawn
-            TankerPart1.Entities.Add(new Location ( gcxFile : "w01d", spawnId : new byte[] { 0xF3, 0xB9, 0x75 }, posX : 0xDBDE, posZ : 0x2292, posY : 0xCD38, rot : 0, mandatorySpawn: true), MGS2Weapons.UspAmmo);
-            TankerPart1.Entities.Add(new Location ( gcxFile : "w01d", spawnId : new byte[] { 0xF4, 0xB9, 0x75 }, posX : 0xF63C, posZ : 0x2328, posY : 0xD19D, rot : 0, mandatorySpawn: true), MGS2Weapons.UspAmmo);
+            TankerPart1.Entities.Add(new Location ( gcxFile : "w01d", spawnId : new byte[] { 0x49, 0x35, 0xB8 }, posX : 0xED72, posZ : 0x2292, posY : 0xCD38, rot : 0, name: "UnderTable1", mandatorySpawn: true), MGS2Weapons.M9Ammo);
+            TankerPart1.Entities.Add(new Location ( gcxFile : "w01d", spawnId : new byte[] { 0x6E, 0x0E, 0xA8 }, posX : 0xD8F0, posZ : 0x2328, posY : 0xB7BC, rot : 0, name: "Stove" ), MGS2Items.Ration); //not guaranteed spawn
+            TankerPart1.Entities.Add(new Location ( gcxFile : "w01d", spawnId : new byte[] { 0xF3, 0xB9, 0x75 }, posX : 0xDBDE, posZ : 0x2292, posY : 0xCD38, rot : 0, name: "UnderTable2", mandatorySpawn: true), MGS2Weapons.UspAmmo);
+            TankerPart1.Entities.Add(new Location ( gcxFile : "w01d", spawnId : new byte[] { 0xF4, 0xB9, 0x75 }, posX : 0xF63C, posZ : 0x2328, posY : 0xD19D, rot : 0, name: "NextToCamera", mandatorySpawn: true), MGS2Weapons.UspAmmo);
             //Box room spawns
-            TankerPart1.Entities.Add(new Location ( gcxFile : "w01d", spawnId : new byte[] { 0x4A, 0x35, 0xB8 }, posX : 0x1E14, posZ : 0x2328, posY : 0xD1B6, rot : 0, mandatorySpawn: true), MGS2Weapons.M9Ammo);
-            TankerPart1.Entities.Add(new Location ( gcxFile : "w01d", spawnId : new byte[] { 0xF4, 0xF6, 0xAE }, posX : 0x2710, posZ : 0x2328, posY : 0xD8F0, rot : 0), MGS2Items.Box1); //TODO: is this dependent on not having the item?
+            TankerPart1.Entities.Add(new Location ( gcxFile : "w01d", spawnId : new byte[] { 0x4A, 0x35, 0xB8 }, posX : 0x1E14, posZ : 0x2328, posY : 0xD1B6, rot : 0, name: "BottomsidePantry", mandatorySpawn: true), MGS2Weapons.M9Ammo);
+            TankerPart1.Entities.Add(new Location ( gcxFile : "w01d", spawnId : new byte[] { 0xF4, 0xF6, 0xAE }, posX : 0x2710, posZ : 0x2328, posY : 0xD8F0, rot : 0, name: "LeftsidePantry"), MGS2Items.Box1); //TODO: is this dependent on not having the item?
             #endregion
             #region w01e
-            TankerPart1.Entities.Add(new Location ( gcxFile : "w01e", spawnId : new byte[] { 0xFE, 0x69, 0x57 }, posX : 0xEE6C, posZ : 0x2EE0, posY : 0xC27A, rot : 0 ), MGS2Items.Ration); //not guaranteed spawn
-            TankerPart1.Entities.Add(new Location ( gcxFile : "w01e", spawnId : new byte[] { 0x9C, 0x7F, 0xD1 }, posX : 0x12D1, posZ : 0x2EE0, posY : 0xB706, rot : 0, mandatorySpawn: true), MGS2Weapons.UspAmmo);
+            TankerPart1.Entities.Add(new Location ( gcxFile : "w01e", spawnId : new byte[] { 0xFE, 0x69, 0x57 }, posX : 0xEE6C, posZ : 0x2EE0, posY : 0xC27A, rot : 0, name: "NearLeftDoor" ), MGS2Items.Ration); //not guaranteed spawn
+            TankerPart1.Entities.Add(new Location ( gcxFile : "w01e", spawnId : new byte[] { 0x9C, 0x7F, 0xD1 }, posX : 0x12D1, posZ : 0x2EE0, posY : 0xB706, rot : 0, name: "NearRightDoor", mandatorySpawn: true), MGS2Weapons.UspAmmo);
             #endregion
             #region w01f
             //possible thermal spawn?
-            TankerPart1.Entities.Add(new Location ( gcxFile : "w01f", spawnId : new byte[] { 0x40, 0x14, 0x9B }, posX : 0x2328, posZ : 0, posY : 0xB7BC, rot : 0, mandatorySpawn: true), MGS2Weapons.M9Ammo);
-            TankerPart1.Entities.Add(new Location ( gcxFile : "w01f", spawnId : new byte[] { 0xFE, 0x69, 0x57 }, posX : 0xDE68, posZ : 0, posY : 0xB8B6, rot : 0 ), MGS2Items.Ration); //not guaranteed spawn
-            TankerPart1.Entities.Add(new Location ( gcxFile : "w01f", spawnId : new byte[] { 0x9C, 0x7F, 0xD1 }, posX : 0xCF2C, posZ : 0xEC78, posY : 0xCF2C, rot : 0, mandatorySpawn: true), MGS2Weapons.UspAmmo);
+            TankerPart1.Entities.Add(new Location ( gcxFile : "w01f", spawnId : new byte[] { 0x40, 0x14, 0x9B }, posX : 0x2328, posZ : 0, posY : 0xB7BC, rot : 0, name: "Bar", mandatorySpawn: true), MGS2Weapons.M9Ammo);
+            TankerPart1.Entities.Add(new Location ( gcxFile : "w01f", spawnId : new byte[] { 0xFE, 0x69, 0x57 }, posX : 0xDE68, posZ : 0, posY : 0xB8B6, rot : 0, name: "TV" ), MGS2Items.Ration); //not guaranteed spawn
+            TankerPart1.Entities.Add(new Location ( gcxFile : "w01f", spawnId : new byte[] { 0x9C, 0x7F, 0xD1 }, posX : 0xCF2C, posZ : 0xEC78, posY : 0xCF2C, rot : 0, name: "StinkyRationMan", mandatorySpawn: true), MGS2Weapons.UspAmmo);
             #endregion
 
             TankerPart2.Name = "After Olga, Before Deck 2";
@@ -332,19 +319,19 @@ namespace gcx
             TankerPart2.ItemsNeededToProgress.AddRange(TankerPart1.ItemsNeededToProgress);
             TankerPart2.ItemsNeededToProgress.Add(MGS2Weapons.Usp);
             #region w00c
-            TankerPart2.Entities.Add(new Location (gcxFile: "w00c", spawnId: new byte[] { 0x6E, 0x0E, 0xA8 }, posX: 0xD314, posZ: 0x2EE0, posY: 0xB6C2, rot: 1),MGS2Items.Ration);
-            TankerPart2.Entities.Add(new Location (gcxFile: "w00c", spawnId: new byte[] { 0x6A, 0xC1, 0x11 }, posX: 0x4650, posZ: 0x31CE, posY: 0xC568, rot: 3),MGS2Items.WetBox); //TODO: is this dependent on not having the item?
-            TankerPart2.Entities.Add(new Location (gcxFile: "w00c", spawnId: new byte[] { 0x3D, 0xC7, 0x33 }, posX: 0x2EE, posZ: 0x6B6C, posY: 0xCD38, rot: 1),MGS2Items.Thermals); //TODO: is this dependent on not having the item?
-            TankerPart2.Entities.Add(new Location (gcxFile: "w00c", spawnId: new byte[] { 0x92, 0x8A, 0x3 }, posX: 0xFD12, posZ: 0x5DC0, posY: 0xCC3E, rot: 0 ),MGS2Items.UspSupp); //not guaranteed spawn
+            TankerPart2.Entities.Add(new Location (gcxFile: "w00c", spawnId: new byte[] { 0x6E, 0x0E, 0xA8 }, posX: 0xD314, posZ: 0x2EE0, posY: 0xB6C2, rot: 1, name: "NearLeftsidePlatform"),MGS2Items.Ration);
+            TankerPart2.Entities.Add(new Location (gcxFile: "w00c", spawnId: new byte[] { 0x6A, 0xC1, 0x11 }, posX: 0x4650, posZ: 0x31CE, posY: 0xC568, rot: 3, name: "RightsidePlatform"),MGS2Items.WetBox); //TODO: is this dependent on not having the item?
+            TankerPart2.Entities.Add(new Location (gcxFile: "w00c", spawnId: new byte[] { 0x3D, 0xC7, 0x33 }, posX: 0x2EE, posZ: 0x6B6C, posY: 0xCD38, rot: 1, name: "CrowsNest1"),MGS2Items.Thermals); //TODO: is this dependent on not having the item?
+            TankerPart2.Entities.Add(new Location (gcxFile: "w00c", spawnId: new byte[] { 0x92, 0x8A, 0x3 }, posX: 0xFD12, posZ: 0x5DC0, posY: 0xCC3E, rot: 0, name: "CrowsNest2"),MGS2Items.UspSupp); //not guaranteed spawn
             #endregion
             #region w01f
-            TankerPart2.Entities.Add(new Location (gcxFile: "w01f", spawnId: new byte[] { 0xE8, 0x92, 0xE5 }, posX: 0x30D4, posZ: 0xEC78, posY: 0xCF2C, rot: 0, mandatorySpawn: true),MGS2Weapons.Stun);
+            TankerPart2.Entities.Add(new Location (gcxFile: "w01f", spawnId: new byte[] { 0xE8, 0x92, 0xE5 }, posX: 0x30D4, posZ: 0xEC78, posY: 0xCF2C, rot: 0, name: "EngineRoomAccess", mandatorySpawn: true),MGS2Weapons.Stun);
             #endregion
             #region w02a
             TankerPart2.Entities.Add(new Location (gcxFile: "w02a", spawnId: new byte[] { 0xA2, 0xF9, 0xF9 }, posX: 0x1B58, posZ: 0xCD38, posY: 0xB3D4, rot: 0, mandatorySpawn: true),MGS2Weapons.M9Ammo);
             TankerPart2.Entities.Add(new Location (gcxFile: "w02a", spawnId: new byte[] { 0x6E, 0x0E, 0xA8 }, posX: 0x8CA, posZ: 0xC950, posY: 0xB9B0, rot: 0 ),MGS2Items.Ration);
             TankerPart2.Entities.Add(new Location (gcxFile: "w02a", spawnId: new byte[] { 0x3A, 0xFB, 0x9E }, posX: 0xEA84, posZ: 0xCD38, posY: 0xAC04, rot: 0, mandatorySpawn: true),MGS2Weapons.UspAmmo);
-            TankerPart2.Entities.Add(new Location (gcxFile: "w02a", spawnId: new byte[] { 0xF4, 0x6A, 0xA7 }, posX: 0xD120, posZ: 0xCD38, posY: 0x3E8, rot: 0 ),MGS2Weapons.Grenade); //not guaranteed spawn
+            TankerPart2.Entities.Add(new Location (gcxFile: "w02a", spawnId: new byte[] { 0xF4, 0x6A, 0xA7 }, posX: 0xD120, posZ: 0xCD38, posY: 0x3E8, rot: 0, name: "LeftsideBottomFront" ),MGS2Weapons.Grenade); //not guaranteed spawn
             TankerPart2.Entities.Add(new Location (gcxFile: "w02a", spawnId: new byte[] { 0x3B, 0xFB, 0x9E }, posX: 0xE69C, posZ: 0xDCD8, posY: 0xD8F0, rot: 0, mandatorySpawn: true),MGS2Weapons.UspAmmo);
             TankerPart2.Entities.Add(new Location (gcxFile: "w02a", spawnId: new byte[] { 0x3C, 0xFB, 0x9E }, posX: 0xC180, posZ: 0xF060, posY: 0xA916, rot: 0, mandatorySpawn: true),MGS2Weapons.UspAmmo);
             TankerPart2.Entities.Add(new Location (gcxFile: "w02a", spawnId: new byte[] { 0x3D, 0xFB, 0x9E }, posX: 0x3F60, posZ: 0xF060, posY: 0xA7A6, rot: 0, mandatorySpawn: true),MGS2Weapons.UspAmmo);

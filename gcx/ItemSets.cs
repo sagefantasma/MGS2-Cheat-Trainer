@@ -281,8 +281,8 @@ namespace gcx
             TankerPart1.Entities.Add(new Location ( gcxFile : "w00a", spawnId : new byte[] { 0x57, 0x6C, 0x00}, posX : 0x1770, posZ : 0x157C, posY : 0x0, rot : 3, name: "Overlook" ), MGS2Items.ColdMeds); //not guaranteed spawn
             #endregion            
             #region w01a
-            TankerPart1.Entities.Add(new Location ( gcxFile : "w01a", spawnId : new byte[] { 0x79, 0x7E, 0x24 }, posX : 0x1194, posZ : 0, posY : 0xDDE, rot : 0, name: "Locker1", mandatorySpawn: true), MGS2Weapons.M9Ammo);
-            TankerPart1.Entities.Add(new Location ( gcxFile : "w01a", spawnId : new byte[] { 0xFE, 0x69, 0x57 }, posX : 0xEE58, posZ : 0, posY : 0xDDE, rot : 0, name: "Locker2" ), MGS2Items.Ration);
+            TankerPart1.Entities.Add(new Location ( gcxFile : "w01a", spawnId : new byte[] { 0x79, 0x7E, 0x24 }, posX : 0x1194, posZ : 0, posY : 0xDDE, rot : 0, name: "Locker2", mandatorySpawn: true), MGS2Weapons.M9Ammo);
+            TankerPart1.Entities.Add(new Location ( gcxFile : "w01a", spawnId : new byte[] { 0xFE, 0x69, 0x57 }, posX : 0xEE58, posZ : 0, posY : 0xDDE, rot : 0, name: "Locker1" ), MGS2Items.Ration);
             #endregion
             #region w01b
             TankerPart1.Entities.Add(new Location ( gcxFile : "w01b", spawnId : new byte[] { 0x40, 0x14, 0x9B }, posX : 0x2AF8, posZ : 0xBB8, posY : 0xC662, rot : 0, name: "UnderRightsideStairs", mandatorySpawn: true), MGS2Weapons.M9Ammo);
@@ -299,8 +299,8 @@ namespace gcx
             TankerPart1.Entities.Add(new Location ( gcxFile : "w01d", spawnId : new byte[] { 0xF3, 0xB9, 0x75 }, posX : 0xDBDE, posZ : 0x2292, posY : 0xCD38, rot : 0, name: "UnderTable2", mandatorySpawn: true), MGS2Weapons.UspAmmo);
             TankerPart1.Entities.Add(new Location ( gcxFile : "w01d", spawnId : new byte[] { 0xF4, 0xB9, 0x75 }, posX : 0xF63C, posZ : 0x2328, posY : 0xD19D, rot : 0, name: "NextToCamera", mandatorySpawn: true), MGS2Weapons.UspAmmo);
             //Box room spawns
-            TankerPart1.Entities.Add(new Location ( gcxFile : "w01d", spawnId : new byte[] { 0x4A, 0x35, 0xB8 }, posX : 0x1E14, posZ : 0x2328, posY : 0xD1B6, rot : 0, name: "BottomsidePantry", mandatorySpawn: true), MGS2Weapons.M9Ammo);
-            TankerPart1.Entities.Add(new Location ( gcxFile : "w01d", spawnId : new byte[] { 0xF4, 0xF6, 0xAE }, posX : 0x2710, posZ : 0x2328, posY : 0xD8F0, rot : 0, name: "LeftsidePantry"), MGS2Items.Box1); //TODO: is this dependent on not having the item?
+            TankerPart1.Entities.Add(new Location ( gcxFile : "w01d", spawnId : new byte[] { 0x4A, 0x35, 0xB8 }, posX : 0x1E14, posZ : 0x2328, posY : 0xD1B6, rot : 0, name: "LeftsidePantry", mandatorySpawn: true), MGS2Weapons.M9Ammo);
+            TankerPart1.Entities.Add(new Location ( gcxFile : "w01d", spawnId : new byte[] { 0xF4, 0xF6, 0xAE }, posX : 0x2710, posZ : 0x2328, posY : 0xD8F0, rot : 0, name: "BottomsidePantry"), MGS2Items.Box1); //TODO: is this dependent on not having the item?
             #endregion
             #region w01e
             TankerPart1.Entities.Add(new Location ( gcxFile : "w01e", spawnId : new byte[] { 0xFE, 0x69, 0x57 }, posX : 0xEE6C, posZ : 0x2EE0, posY : 0xC27A, rot : 0, name: "NearLeftDoor" ), MGS2Items.Ration); //not guaranteed spawn
@@ -329,13 +329,13 @@ namespace gcx
             #endregion
             #region w02a
             //TODO: give spawns names
-            TankerPart2.Entities.Add(new Location (gcxFile: "w02a", spawnId: new byte[] { 0xA2, 0xF9, 0xF9 }, posX: 0x1B58, posZ: 0xCD38, posY: 0xB3D4, rot: 0, mandatorySpawn: true),MGS2Weapons.M9Ammo);
-            TankerPart2.Entities.Add(new Location (gcxFile: "w02a", spawnId: new byte[] { 0x6E, 0x0E, 0xA8 }, posX: 0x8CA, posZ: 0xC950, posY: 0xB9B0, rot: 0 ),MGS2Items.Ration);
-            TankerPart2.Entities.Add(new Location (gcxFile: "w02a", spawnId: new byte[] { 0x3A, 0xFB, 0x9E }, posX: 0xEA84, posZ: 0xCD38, posY: 0xAC04, rot: 0, mandatorySpawn: true),MGS2Weapons.UspAmmo);
+            TankerPart2.Entities.Add(new Location (gcxFile: "w02a", spawnId: new byte[] { 0xA2, 0xF9, 0xF9 }, posX: 0x1B58, posZ: 0xCD38, posY: 0xB3D4, rot: 0, name: "RavenCrates", mandatorySpawn: true),MGS2Weapons.M9Ammo);
+            TankerPart2.Entities.Add(new Location (gcxFile: "w02a", spawnId: new byte[] { 0x6E, 0x0E, 0xA8 }, posX: 0x8CA, posZ: 0xC950, posY: 0xB9B0, rot: 0, name: "RightsideConnectingCatwalk"),MGS2Items.Ration);
+            TankerPart2.Entities.Add(new Location (gcxFile: "w02a", spawnId: new byte[] { 0x3A, 0xFB, 0x9E }, posX: 0xEA84, posZ: 0xCD38, posY: 0xAC04, rot: 0, name: "UnderLeftsideStairs", mandatorySpawn: true),MGS2Weapons.UspAmmo);
             TankerPart2.Entities.Add(new Location (gcxFile: "w02a", spawnId: new byte[] { 0xF4, 0x6A, 0xA7 }, posX: 0xD120, posZ: 0xCD38, posY: 0x3E8, rot: 0, name: "LeftsideBottomFront" ),MGS2Weapons.Grenade); //not guaranteed spawn
-            TankerPart2.Entities.Add(new Location (gcxFile: "w02a", spawnId: new byte[] { 0x3B, 0xFB, 0x9E }, posX: 0xE69C, posZ: 0xDCD8, posY: 0xD8F0, rot: 0, mandatorySpawn: true),MGS2Weapons.UspAmmo);
-            TankerPart2.Entities.Add(new Location (gcxFile: "w02a", spawnId: new byte[] { 0x3C, 0xFB, 0x9E }, posX: 0xC180, posZ: 0xF060, posY: 0xA916, rot: 0, mandatorySpawn: true),MGS2Weapons.UspAmmo);
-            TankerPart2.Entities.Add(new Location (gcxFile: "w02a", spawnId: new byte[] { 0x3D, 0xFB, 0x9E }, posX: 0x3F60, posZ: 0xF060, posY: 0xA7A6, rot: 0, mandatorySpawn: true),MGS2Weapons.UspAmmo);
+            TankerPart2.Entities.Add(new Location (gcxFile: "w02a", spawnId: new byte[] { 0x3B, 0xFB, 0x9E }, posX: 0xE69C, posZ: 0xDCD8, posY: 0xD8F0, rot: 0, name: "LeftsideAlcove", mandatorySpawn: true),MGS2Weapons.UspAmmo);
+            TankerPart2.Entities.Add(new Location (gcxFile: "w02a", spawnId: new byte[] { 0x3C, 0xFB, 0x9E }, posX: 0xC180, posZ: 0xF060, posY: 0xA916, rot: 0, name: "UnderRightsideStairs", mandatorySpawn: true),MGS2Weapons.UspAmmo);
+            TankerPart2.Entities.Add(new Location (gcxFile: "w02a", spawnId: new byte[] { 0x3D, 0xFB, 0x9E }, posX: 0x3F60, posZ: 0xF060, posY: 0xA7A6, rot: 0, name: "SmallPortSideRoom", mandatorySpawn: true),MGS2Weapons.UspAmmo);
             #endregion
 
             TankerPart3.Name = "Deck 2 & Beyond";
@@ -344,24 +344,23 @@ namespace gcx
             TankerPart3.ItemsNeededToProgress.AddRange(TankerPart2.ItemsNeededToProgress);
             TankerPart3.ItemsNeededToProgress.Add(MGS2Items.Camera1);
             #region w03a
-            //TODO: give spawns names
-            TankerPart3.Entities.Add(new Location (gcxFile: "w03a", spawnId: new byte[] { 0x6E, 0x0E, 0xA8 }, posX: 0xD026, posZ: 0xEC78, posY: 0xFFFF5BF0, rot: 0 ),MGS2Items.Ration);
-            TankerPart3.Entities.Add(new Location (gcxFile: "w03a", spawnId: new byte[] { 0xF3, 0xB9, 0x75 }, posX: 0xC950, posZ: 0xEC78, posY: 0xFFFEF46C, rot: 0, mandatorySpawn: true),MGS2Weapons.UspAmmo);
-            TankerPart3.Entities.Add(new Location (gcxFile: "w03a", spawnId: new byte[] { 0xF4, 0xB9, 0x75 }, posX: 0xF060, posZ: 0xEC78, posY: 0xFFFE0C00, rot: 0, mandatorySpawn: true),MGS2Weapons.UspAmmo);
+            TankerPart3.Entities.Add(new Location (gcxFile: "w03a", spawnId: new byte[] { 0x6E, 0x0E, 0xA8 }, posX: 0xD026, posZ: 0xEC78, posY: 0xFFFF5BF0, rot: 0, name: "CloseSideRoom"),MGS2Items.Ration);
+            TankerPart3.Entities.Add(new Location (gcxFile: "w03a", spawnId: new byte[] { 0xF3, 0xB9, 0x75 }, posX: 0xC950, posZ: 0xEC78, posY: 0xFFFEF46C, rot: 0, name: "DeadguySideRoom", mandatorySpawn: true),MGS2Weapons.UspAmmo);
+            TankerPart3.Entities.Add(new Location (gcxFile: "w03a", spawnId: new byte[] { 0xF4, 0xB9, 0x75 }, posX: 0xF060, posZ: 0xEC78, posY: 0xFFFE0C00, rot: 0, name: "EndOfLongHallway", mandatorySpawn: true),MGS2Weapons.UspAmmo);
+            //looks like we're missing 2 spawns?
             #endregion
             #region w03b
-            //TODO: give spawns names
-            TankerPart3.Entities.Add(new Location (gcxFile: "w03b", spawnId: new byte[] { 0xF3, 0xB9, 0x75 }, posX: 0x3D86, posZ: 0xEC78, posY: 0xFFFE0A0C, rot: 0, mandatorySpawn: true),MGS2Weapons.UspAmmo);
-            TankerPart3.Entities.Add(new Location (gcxFile: "w03b", spawnId: new byte[] { 0xF4, 0xB9, 0x75 }, posX: 0x31CE, posZ: 0xEC78, posY: 0xFFFE7866, rot: 0, mandatorySpawn: true),MGS2Weapons.UspAmmo);
-            TankerPart3.Entities.Add(new Location (gcxFile: "w03b", spawnId: new byte[] { 0x6E, 0x0E, 0xA8 }, posX: 0x32C8, posZ: 0xEC78, posY: 0xFFFE841E, rot: 0 ),MGS2Items.Ration);
-            TankerPart3.Entities.Add(new Location (gcxFile: "w03b", spawnId: new byte[] { 0x49, 0x35, 0xB8 }, posX: 0x300C, posZ: 0xEC78, posY: 0xFFFE0912, rot: 0, mandatorySpawn: true),MGS2Weapons.M9Ammo);
+            TankerPart3.Entities.Add(new Location (gcxFile: "w03b", spawnId: new byte[] { 0xF3, 0xB9, 0x75 }, posX: 0x3D86, posZ: 0xEC78, posY: 0xFFFE0A0C, rot: 0, name: "StartOfHallway", mandatorySpawn: true),MGS2Weapons.UspAmmo);
+            TankerPart3.Entities.Add(new Location (gcxFile: "w03b", spawnId: new byte[] { 0xF4, 0xB9, 0x75 }, posX: 0x31CE, posZ: 0xEC78, posY: 0xFFFE7866, rot: 0, name: "SideRoomPipes", mandatorySpawn: true),MGS2Weapons.UspAmmo);
+            TankerPart3.Entities.Add(new Location (gcxFile: "w03b", spawnId: new byte[] { 0x6E, 0x0E, 0xA8 }, posX: 0x32C8, posZ: 0xEC78, posY: 0xFFFE841E, rot: 0, name: "Sideroom"),MGS2Items.Ration);
+            TankerPart3.Entities.Add(new Location (gcxFile: "w03b", spawnId: new byte[] { 0x49, 0x35, 0xB8 }, posX: 0x300C, posZ: 0xEC78, posY: 0xFFFE0912, rot: 0, name: "EntrywayPipes", mandatorySpawn: true),MGS2Weapons.M9Ammo);
             #endregion
             #region w04a
             //TODO: give spawns names
             TankerPart3.Entities.Add(new Location (gcxFile: "w04a", spawnId: new byte[] { 0x49, 0x35, 0xB8 }, posX: 0xD508, posZ: 0xDCD8, posY: 0xFE0C, rot: 0, mandatorySpawn: true),MGS2Weapons.M9Ammo);
             TankerPart3.Entities.Add(new Location (gcxFile: "w04a", spawnId: new byte[] { 0x4A, 0x35, 0xB8 }, posX: 0x1B58, posZ: 0xEC78, posY: 0x6D6, rot: 0, mandatorySpawn: true),MGS2Weapons.M9Ammo);
             TankerPart3.Entities.Add(new Location (gcxFile: "w04a", spawnId: new byte[] { 0x6E, 0x0E, 0xA8 }, posX: 0x2710, posZ: 0xEC78, posY: 0xCB2, rot: 0 ),MGS2Items.Ration);
-            TankerPart3.Entities.Add(new Location (gcxFile: "w04a", spawnId: new byte[] { 0x3D, 0xC7, 0x33 }, posX: 0xD6FC, posZ: 0xEC78, posY: 0xF254, rot: 0, true),MGS2Items.NVG); //this is natively a thermal goggle, but i want to put NVGs in for shits and gigs
+            TankerPart3.Entities.Add(new Location (gcxFile: "w04a", spawnId: new byte[] { 0x3D, 0xC7, 0x33 }, posX: 0xD6FC, posZ: 0xEC78, posY: 0xF254, rot: 0, true),MGS2Items.ColdMeds); //this is natively a thermal goggle
             #endregion
             #endregion
 
@@ -372,11 +371,11 @@ namespace gcx
             #region w11a
             //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             //TODO: give spawns names
-            PlantSet1.Entities.Add(new Location(gcxFile: "w11a", spawnId: new byte[] { 121, 126, 36, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w11b"), MGS2Weapons.M9Ammo);
-            PlantSet1.Entities.Add(new Location(gcxFile: "w11a", spawnId: new byte[] { 121, 126, 36, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w11b"), MGS2Weapons.M9Ammo);
+            PlantSet1.Entities.Add(new Location(gcxFile: "w11a", spawnId: new byte[] { 121, 126, 36, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "WhiteCrates2", sisterSpawn: "w11b"), MGS2Weapons.M9Ammo);
+            PlantSet1.Entities.Add(new Location(gcxFile: "w11a", spawnId: new byte[] { 121, 126, 36, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "WhiteCrates1", sisterSpawn: "w11b"), MGS2Weapons.M9Ammo);
             PlantSet1.Entities.Add(new Location(gcxFile: "w11a", spawnId: new byte[] { 159, 85, 254 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "UnderWireRack", sisterSpawn: "w11b"), MGS2Weapons.M9);
-            PlantSet1.Entities.Add(new Location(gcxFile: "w11a", spawnId: new byte[] { 254, 105, 87, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w11b"), MGS2Items.Ration);
-            PlantSet1.Entities.Add(new Location(gcxFile: "w11a", spawnId: new byte[] { 254, 105, 87, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, sisterSpawn: "w11b"), MGS2Items.Ration);
+            PlantSet1.Entities.Add(new Location(gcxFile: "w11a", spawnId: new byte[] { 254, 105, 87, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "Locker", sisterSpawn: "w11b"), MGS2Items.Ration);
+            PlantSet1.Entities.Add(new Location(gcxFile: "w11a", spawnId: new byte[] { 254, 105, 87, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "RightSideAlcove", sisterSpawn: "w11b"), MGS2Items.Ration);
             PlantSet1.Entities.Add(new Location(gcxFile: "w11a", spawnId: new byte[] { 6, 175, 197 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "DivingCage"), MGS2Items.Shaver);
             PlantSet1.Entities.Add(new Location(gcxFile: "w11a", spawnId: new byte[] { 61, 199, 51 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "Pool", sisterSpawn: "w11b", mandatorySpawn: true), MGS2Items.Thermals);
             #endregion
@@ -391,8 +390,8 @@ namespace gcx
             //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             PlantSet1.Entities.Add(new Location(gcxFile: "w12b", spawnId: new byte[] { 5, 255, 249, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "UnderDeskNearNode", mandatorySpawn: true), MGS2Weapons.M9Ammo);
             PlantSet1.Entities.Add(new Location(gcxFile: "w12b", spawnId: new byte[] { 5, 255, 249, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "TopOfStairs", mandatorySpawn: true), MGS2Weapons.M9Ammo);
-            PlantSet1.Entities.Add(new Location(gcxFile: "w12b", spawnId: new byte[] { 161, 8, 199, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "Locker2", mandatorySpawn: true), MGS2Weapons.SocomAmmo);
-            PlantSet1.Entities.Add(new Location(gcxFile: "w12b", spawnId: new byte[] { 254, 105, 87, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "Locker1" ), MGS2Items.Ration);
+            PlantSet1.Entities.Add(new Location(gcxFile: "w12b", spawnId: new byte[] { 161, 8, 199, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "Locker", mandatorySpawn: true), MGS2Weapons.SocomAmmo);
+            PlantSet1.Entities.Add(new Location(gcxFile: "w12b", spawnId: new byte[] { 254, 105, 87, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "Locker" ), MGS2Items.Ration);
             #endregion
             #region w23a
             //verified with new ID acquisiton(still not crazy about decimal instead of hex)
@@ -421,11 +420,11 @@ namespace gcx
             #region w14a
             //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             //TODO: give spawns names
-            PlantSet2.Entities.Add(new Location(gcxFile: "w14a", spawnId: new byte[] { 5, 255, 249, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, mandatorySpawn: true), MGS2Weapons.M9Ammo);
-            PlantSet2.Entities.Add(new Location(gcxFile: "w14a", spawnId: new byte[] { 161, 8, 199, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, mandatorySpawn: true), MGS2Weapons.SocomAmmo);
-            PlantSet2.Entities.Add(new Location(gcxFile: "w14a", spawnId: new byte[] { 161, 8, 199, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, mandatorySpawn: true), MGS2Weapons.SocomAmmo);
+            PlantSet2.Entities.Add(new Location(gcxFile: "w14a", spawnId: new byte[] { 5, 255, 249, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "Catwalk", mandatorySpawn: true), MGS2Weapons.M9Ammo);
+            PlantSet2.Entities.Add(new Location(gcxFile: "w14a", spawnId: new byte[] { 161, 8, 199, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "Node", mandatorySpawn: true), MGS2Weapons.SocomAmmo);
+            PlantSet2.Entities.Add(new Location(gcxFile: "w14a", spawnId: new byte[] { 161, 8, 199, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "Locker", mandatorySpawn: true), MGS2Weapons.SocomAmmo);
             PlantSet2.Entities.Add(new Location(gcxFile: "w14a", spawnId: new byte[] { 106, 106, 9 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "BottomSideElectrical"), MGS2Items.SocomSupp);
-            PlantSet2.Entities.Add(new Location(gcxFile: "w14a", spawnId: new byte[] { 254, 105, 87, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Ration);
+            PlantSet2.Entities.Add(new Location(gcxFile: "w14a", spawnId: new byte[] { 254, 105, 87, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "Locker"), MGS2Items.Ration);
             #endregion
             #region w15a
             //verified with new ID acquisiton(still not crazy about decimal instead of hex)
@@ -440,25 +439,25 @@ namespace gcx
             //PlantSet3.ItemsNeededToProgress.AddRange(new Item[] { MGS2Weapons.M9, MGS2Weapons.Socom });
             #region w12b
             //verified with new ID acquisiton(still not crazy about decimal instead of hex)
-            PlantSet3.Entities.Add(new Location(gcxFile: "w12b", spawnId: new byte[] { 254, 105, 87, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "UnderCamera"), MGS2Items.Ration);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w12b", spawnId: new byte[] { 161, 8, 199, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "UnderPipes", mandatorySpawn: true), MGS2Weapons.SocomAmmo);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w12b", spawnId: new byte[] { 162, 73, 79, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "LowerRight", mandatorySpawn: true), MGS2Items.Bandage);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w12b", spawnId: new byte[] { 254, 105, 87, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "UnderPipes"), MGS2Items.Ration);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w12b", spawnId: new byte[] { 161, 8, 199, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "UnderCamera", mandatorySpawn: true), MGS2Weapons.SocomAmmo);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w12b", spawnId: new byte[] { 162, 73, 79, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "UpperLeft", mandatorySpawn: true), MGS2Items.Bandage);
             //TODO: is this missing a spawn?
             PlantSet3.Entities.Add(new Location(gcxFile: "w12b", spawnId: new byte[] { 184, 235, 120, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "LowerLeft"), MGS2Items.Box1); //TODO: is this dependent on not having the item?
             #endregion
             #region w16a
             //verified with new ID acquisiton(still not crazy about decimal instead of hex)
-            PlantSet3.Entities.Add(new Location(gcxFile: "w16a", spawnId: new byte[] { 5, 255, 249, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "LadiesRoom", sisterSpawn: "w16b", mandatorySpawn: true), MGS2Weapons.M9Ammo);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w16a", spawnId: new byte[] { 5, 255, 249, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "LadiesRoom1", sisterSpawn: "w16b", mandatorySpawn: true), MGS2Weapons.M9Ammo);
             PlantSet3.Entities.Add(new Location(gcxFile: "w16a", spawnId: new byte[] { 161, 8, 199, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "MensRoom", sisterSpawn: "w16b", mandatorySpawn: true), MGS2Weapons.SocomAmmo);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w16a", spawnId: new byte[] { 107, 43, 115, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "LadiesRoom", sisterSpawn: "w16b", mandatorySpawn: true), MGS2Items.Pentazemin);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w16a", spawnId: new byte[] { 107, 43, 115, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "LadiesRoom2", sisterSpawn: "w16b", mandatorySpawn: true), MGS2Items.Pentazemin);
             PlantSet3.Entities.Add(new Location(gcxFile: "w16a", spawnId: new byte[] { 254, 105, 87, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "DiningRoom", sisterSpawn: "w16b"), MGS2Items.Ration);
             PlantSet3.Entities.Add(new Location(gcxFile: "w16a", spawnId: new byte[] { 77, 235, 3, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "PantryRoom", sisterSpawn: "w16b"), MGS2Items.SensorB); //TODO: is this dependent on not having the item?
             #endregion
             #region w18a
             //verified with new ID acquisiton(still not crazy about decimal instead of hex)
-            PlantSet3.Entities.Add(new Location(gcxFile: "w18a", spawnId: new byte[] { 121, 126, 36 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name:"LeftsideDoor", mandatorySpawn: true), MGS2Weapons.M9Ammo);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w18a", spawnId: new byte[] { 121, 126, 36 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name:"UnderStairs", mandatorySpawn: true), MGS2Weapons.M9Ammo);
             PlantSet3.Entities.Add(new Location(gcxFile: "w18a", spawnId: new byte[] { 77, 171, 249 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name:"RightsideDoor", mandatorySpawn: true), MGS2Weapons.Psg1Ammo);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w18a", spawnId: new byte[] { 187, 113, 139 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "UnderStairs", mandatorySpawn: true), MGS2Weapons.SocomAmmo);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w18a", spawnId: new byte[] { 187, 113, 139 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "LeftsideDoor", mandatorySpawn: true), MGS2Weapons.SocomAmmo);
             PlantSet3.Entities.Add(new Location(gcxFile: "w18a", spawnId: new byte[] { 254, 105, 87 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "CenterAlcove"), MGS2Items.Ration);
             #endregion
             #region w19a
@@ -470,17 +469,17 @@ namespace gcx
             //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             //TODO: give spawns names
             PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 217, 115, 234 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.MineDetector); //TODO: is this dependent on not having the item?
-            PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 254, 105, 87, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Ration);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 156, 53, 76 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name:"RightsideFastTravel"), MGS2Items.Box5); //TODO: is this dependent on not having the item?
+            PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 254, 105, 87, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "BottomFloorCrawlspace"), MGS2Items.Ration);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 156, 53, 76 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Box5); //TODO: is this dependent on not having the item?
             PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 187, 113, 139, 3 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, mandatorySpawn: true), MGS2Weapons.SocomAmmo);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 156, 53, 76 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Bandage); //TODO: is this dependent on not having the item? - normally Box5, trying to cut down on randomization issues
-            PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 121, 106, 36, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, mandatorySpawn: true), MGS2Weapons.M4Ammo);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 156, 53, 76 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "RightsideFastTravel"), MGS2Items.Bandage); //TODO: is this dependent on not having the item? - normally Box5, trying to cut down on randomization issues
+            PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 121, 106, 36, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "BottomsideMiddleBoxes", mandatorySpawn: true), MGS2Weapons.M4Ammo);
             PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 121, 126, 36, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, mandatorySpawn: true), MGS2Weapons.M9Ammo);
             PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 152, 131, 164, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, mandatorySpawn: true), MGS2Weapons.Psg1tAmmo);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 187, 113, 139, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, mandatorySpawn: true), MGS2Weapons.SocomAmmo);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 187, 113, 139, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, mandatorySpawn: true), MGS2Weapons.SocomAmmo);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 187, 113, 139, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "UnderWireRackByEDBridge", mandatorySpawn: true), MGS2Weapons.SocomAmmo);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 187, 113, 139, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "UnderWireRackByNode", mandatorySpawn: true), MGS2Weapons.SocomAmmo);
             PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 233, 212, 177, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, mandatorySpawn: true), MGS2Weapons.StingerAmmo);
-            PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 232, 146, 229, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, mandatorySpawn: true), MGS2Weapons.Stun);
+            PlantSet3.Entities.Add(new Location(gcxFile: "w20a", spawnId: new byte[] { 232, 146, 229, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "UnderConveyerBelt", mandatorySpawn: true), MGS2Weapons.Stun);
             #endregion
             #region w20b
             //TODO: go through and verify these aren't messed up(irt boss fight)
@@ -507,9 +506,9 @@ namespace gcx
             #endregion
             #region w22a
             PlantSet3.Entities.Add(new Location(gcxFile: "w22a", spawnId: new byte[] { 0xBB, 0x71, 0x8B, 0x4 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name:"RoomAcrossNode1", mandatorySpawn: true), MGS2Weapons.SocomAmmo); //room across from node
-            PlantSet3.Entities.Add(new Location(gcxFile: "w22a", spawnId: new byte[] { 0xD9, 0x73, 0xEA }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name:"RoomAcrossNode2"), MGS2Items.Bandage); //room across from node - dependent on not having? -yes, normally mine detector
+            PlantSet3.Entities.Add(new Location(gcxFile: "w22a", spawnId: new byte[] { 0xD9, 0x73, 0xEA }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name:"RoomAcrossNode3.1"), MGS2Items.Bandage); //room across from node - dependent on not having? -yes, normally mine detector
             PlantSet3.Entities.Add(new Location(gcxFile: "w22a", spawnId: new byte[] { 0xBB, 0x71, 0x8B, 0x05 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name:"RoomAcrossNode3.2"), MGS2Weapons.SocomAmmo); //room across from node(if suppressor has been picked up)
-            PlantSet3.Entities.Add(new Location(gcxFile: "w22a", spawnId: new byte[] { 0x6A, 0x6A, 0x9 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name:"RoomAcrossNode3.1"), MGS2Weapons.SocomAmmo); //room across from node - dependent on not having?
+            PlantSet3.Entities.Add(new Location(gcxFile: "w22a", spawnId: new byte[] { 0x6A, 0x6A, 0x9 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name:"RoomAcrossNode2"), MGS2Weapons.SocomAmmo); //room across from node - dependent on not having?
             PlantSet3.Entities.Add(new Location(gcxFile: "w22a", spawnId: new byte[] { 33, 142, 94 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name:"RoomWithNode", mandatorySpawn: true), MGS2Items.Box2); //room with node
             PlantSet3.Entities.Add(new Location(gcxFile: "w22a", spawnId: new byte[] { 107, 43, 115 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name:"LockerNearNode1", mandatorySpawn: true), MGS2Items.Pentazemin); //locker near node
             PlantSet3.Entities.Add(new Location(gcxFile: "w22a", spawnId: new byte[] { 254, 105, 87, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "LockerNearNode2"), MGS2Items.Ration); //locker near node
@@ -548,17 +547,17 @@ namespace gcx
             #region w24a
             //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             //TODO: give spawns names
-            PlantSet4.Entities.Add(new Location(gcxFile: "w24a", spawnId: new byte[] { 133, 194, 100 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.Aks74uAmmo); //normally aks74u
-            PlantSet4.Entities.Add(new Location(gcxFile: "w24a", spawnId: new byte[] { 168, 139, 53 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, mandatorySpawn: true), MGS2Weapons.Book);
-            PlantSet4.Entities.Add(new Location(gcxFile: "w24a", spawnId: new byte[] { 20, 161, 84 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, mandatorySpawn: true), MGS2Weapons.C4);
-            PlantSet4.Entities.Add(new Location(gcxFile: "w24a", spawnId: new byte[] { 203, 34, 102 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, mandatorySpawn: true), MGS2Weapons.Chaff);
-            PlantSet4.Entities.Add(new Location(gcxFile: "w24a", spawnId: new byte[] { 171, 129, 234 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, mandatorySpawn: true), MGS2Weapons.Claymore);
-            PlantSet4.Entities.Add(new Location(gcxFile: "w24a", spawnId: new byte[] { 121, 106, 36 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, mandatorySpawn: true), MGS2Weapons.M4Ammo);
-            PlantSet4.Entities.Add(new Location(gcxFile: "w24a", spawnId: new byte[] { 121, 126, 36 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, mandatorySpawn: true), MGS2Weapons.M9Ammo);
+            PlantSet4.Entities.Add(new Location(gcxFile: "w24a", spawnId: new byte[] { 133, 194, 100 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "LockerRoom"), MGS2Weapons.Aks74uAmmo); //normally aks74u
+            PlantSet4.Entities.Add(new Location(gcxFile: "w24a", spawnId: new byte[] { 168, 139, 53 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "LockerRoom", mandatorySpawn: true), MGS2Weapons.Book);
+            PlantSet4.Entities.Add(new Location(gcxFile: "w24a", spawnId: new byte[] { 20, 161, 84 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "LockerRoom", mandatorySpawn: true), MGS2Weapons.C4);
+            PlantSet4.Entities.Add(new Location(gcxFile: "w24a", spawnId: new byte[] { 203, 34, 102 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "LockerRoom", mandatorySpawn: true), MGS2Weapons.Chaff);
+            PlantSet4.Entities.Add(new Location(gcxFile: "w24a", spawnId: new byte[] { 171, 129, 234 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "LockerRoom", mandatorySpawn: true), MGS2Weapons.Claymore);
+            PlantSet4.Entities.Add(new Location(gcxFile: "w24a", spawnId: new byte[] { 121, 106, 36 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "LockerRoom", mandatorySpawn: true), MGS2Weapons.M4Ammo);
+            PlantSet4.Entities.Add(new Location(gcxFile: "w24a", spawnId: new byte[] { 121, 126, 36 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "LockerRoom", mandatorySpawn: true), MGS2Weapons.M9Ammo);
             PlantSet4.Entities.Add(new Location(gcxFile: "w24a", spawnId: new byte[] { 79, 43, 183 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, mandatorySpawn: true), MGS2Weapons.M9Ammo);
-            PlantSet4.Entities.Add(new Location(gcxFile: "w24a", spawnId: new byte[] { 187, 113, 139 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, mandatorySpawn: true), MGS2Weapons.SocomAmmo);
-            PlantSet4.Entities.Add(new Location(gcxFile: "w24a", spawnId: new byte[] { 6, 204, 62 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, mandatorySpawn: true), MGS2Weapons.SocomAmmo);
-            PlantSet4.Entities.Add(new Location(gcxFile: "w24a", spawnId: new byte[] { 242, 132, 47 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.SocomAmmo); //normally socom suppressor
+            PlantSet4.Entities.Add(new Location(gcxFile: "w24a", spawnId: new byte[] { 187, 113, 139 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name:"BrokenDoor", mandatorySpawn: true), MGS2Weapons.SocomAmmo);
+            PlantSet4.Entities.Add(new Location(gcxFile: "w24a", spawnId: new byte[] { 6, 204, 62 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "BrokenDoor", mandatorySpawn: true), MGS2Weapons.SocomAmmo);
+            PlantSet4.Entities.Add(new Location(gcxFile: "w24a", spawnId: new byte[] { 242, 132, 47 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "LockerRoom"), MGS2Weapons.SocomAmmo); //normally socom suppressor
             #endregion
 
             PlantSet5.Name = "Before Ames";
@@ -569,29 +568,29 @@ namespace gcx
             #region w24b
             //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             //TODO: give spawns names
-            PlantSet5.Entities.Add(new Location(gcxFile: "w24b", spawnId: new byte[] { 73, 33, 184 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, mandatorySpawn: true), MGS2Weapons.M4Ammo);
-            PlantSet5.Entities.Add(new Location(gcxFile: "w24b", spawnId: new byte[] { 245, 3, 119 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, mandatorySpawn: true), MGS2Weapons.SocomAmmo);
-            PlantSet5.Entities.Add(new Location(gcxFile: "w24b", spawnId: new byte[] { 167, 184, 75 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, mandatorySpawn: true), MGS2Weapons.Stun);
-            PlantSet5.Entities.Add(new Location(gcxFile: "w24b", spawnId: new byte[] { 110, 14, 168 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Ration);
+            PlantSet5.Entities.Add(new Location(gcxFile: "w24b", spawnId: new byte[] { 73, 33, 184 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "Hallway", mandatorySpawn: true), MGS2Weapons.M4Ammo);
+            PlantSet5.Entities.Add(new Location(gcxFile: "w24b", spawnId: new byte[] { 245, 3, 119 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "LoungeLocker", mandatorySpawn: true), MGS2Weapons.SocomAmmo);
+            PlantSet5.Entities.Add(new Location(gcxFile: "w24b", spawnId: new byte[] { 167, 184, 75 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "LoungeLocker", mandatorySpawn: true), MGS2Weapons.Stun);
+            PlantSet5.Entities.Add(new Location(gcxFile: "w24b", spawnId: new byte[] { 110, 14, 168 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "NodeLocker"), MGS2Items.Ration);
             #endregion
             #region w24c
             //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             //TODO: give spawns names
-            PlantSet5.Entities.Add(new Location(gcxFile: "w24c", spawnId: new byte[] { 78, 158, 38 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, mandatorySpawn: true), MGS2Items.Bandage);
-            PlantSet5.Entities.Add(new Location(gcxFile: "w24c", spawnId: new byte[] { 110, 14, 168 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Ration);
-            PlantSet5.Entities.Add(new Location(gcxFile: "w24c", spawnId: new byte[] { 61, 199, 51 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Pentazemin); //normally Thermals
+            PlantSet5.Entities.Add(new Location(gcxFile: "w24c", spawnId: new byte[] { 78, 158, 38 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "BottomLeft", mandatorySpawn: true), MGS2Items.Bandage);
+            PlantSet5.Entities.Add(new Location(gcxFile: "w24c", spawnId: new byte[] { 110, 14, 168 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "BottomRight"), MGS2Items.Ration);
+            PlantSet5.Entities.Add(new Location(gcxFile: "w24c", spawnId: new byte[] { 61, 199, 51 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "Podium"), MGS2Items.Pentazemin); //normally Thermals
             #endregion
             #region w24d
             //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             //TODO: give spawns names
-            PlantSet5.Entities.Add(new Location(gcxFile: "w24d", spawnId: new byte[] { 73, 125, 248 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, mandatorySpawn: true), MGS2Weapons.Aks74uAmmo);
-            PlantSet5.Entities.Add(new Location(gcxFile: "w24d", spawnId: new byte[] { 162, 73, 79 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, mandatorySpawn: true), MGS2Items.Bandage);
-            PlantSet5.Entities.Add(new Location(gcxFile: "w24d", spawnId: new byte[] { 7, 247, 174 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Box4); //is this dependent on not having the item?
-            PlantSet5.Entities.Add(new Location(gcxFile: "w24d", spawnId: new byte[] { 167, 38, 53 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.Dmic1); //is this dependent on not having the item?
-            PlantSet5.Entities.Add(new Location(gcxFile: "w24d", spawnId: new byte[] { 3, 46, 14 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, mandatorySpawn: true), MGS2Weapons.M4Ammo);
-            PlantSet5.Entities.Add(new Location(gcxFile: "w24d", spawnId: new byte[] { 8, 46, 14 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, mandatorySpawn: true), MGS2Weapons.M9Ammo);
-            PlantSet5.Entities.Add(new Location(gcxFile: "w24d", spawnId: new byte[] { 187, 29, 185 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, mandatorySpawn: true), MGS2Weapons.SocomAmmo);
-            PlantSet5.Entities.Add(new Location(gcxFile: "w24d", spawnId: new byte[] { 254, 105, 87 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Ration);
+            PlantSet5.Entities.Add(new Location(gcxFile: "w24d", spawnId: new byte[] { 73, 125, 248 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "Node", mandatorySpawn: true), MGS2Weapons.Aks74uAmmo);
+            PlantSet5.Entities.Add(new Location(gcxFile: "w24d", spawnId: new byte[] { 162, 73, 79 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "UnderDesk", mandatorySpawn: true), MGS2Items.Bandage);
+            PlantSet5.Entities.Add(new Location(gcxFile: "w24d", spawnId: new byte[] { 7, 247, 174 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "Node"), MGS2Items.Box4); //is this dependent on not having the item?
+            PlantSet5.Entities.Add(new Location(gcxFile: "w24d", spawnId: new byte[] { 167, 38, 53 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "Parrot"), MGS2Weapons.Dmic1); //is this dependent on not having the item?
+            PlantSet5.Entities.Add(new Location(gcxFile: "w24d", spawnId: new byte[] { 3, 46, 14 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "Locker", mandatorySpawn: true), MGS2Weapons.M4Ammo);
+            PlantSet5.Entities.Add(new Location(gcxFile: "w24d", spawnId: new byte[] { 8, 46, 14 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "Locker", mandatorySpawn: true), MGS2Weapons.M9Ammo);
+            PlantSet5.Entities.Add(new Location(gcxFile: "w24d", spawnId: new byte[] { 187, 29, 185 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "Locker", mandatorySpawn: true), MGS2Weapons.SocomAmmo);
+            PlantSet5.Entities.Add(new Location(gcxFile: "w24d", spawnId: new byte[] { 254, 105, 87 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "RightAlcove"), MGS2Items.Ration);
             #endregion
 
             PlantSet6.Name = "Before Shells Connecting Bridge";
@@ -756,7 +755,7 @@ namespace gcx
             //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             //TODO: give spawns names
             PlantSet10.Entities.Add(new Location(gcxFile: "w42a", spawnId: new byte[] { 8, 247, 174, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Pentazemin); //normally box5
-            PlantSet10.Entities.Add(new Location(gcxFile: "w42a", spawnId: new byte[] { 21, 128, 209, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.ColdMeds);
+            PlantSet10.Entities.Add(new Location(gcxFile: "w42a", spawnId: new byte[] { 21, 128, 209, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Pentazemin); //normally coldmeds
             PlantSet10.Entities.Add(new Location(gcxFile: "w42a", spawnId: new byte[] { 254, 105, 87, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Items.Ration);
             #endregion
             #region w43a

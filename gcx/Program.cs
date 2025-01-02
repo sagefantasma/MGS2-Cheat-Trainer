@@ -47,7 +47,7 @@ namespace gcx
             {
                 try
                 {
-                    seed = mgs2Randomizer.RandomizeItemSpawns(new MGS2Randomizer.RandomizationOptions { AlwaysLogicallySafe = true });
+                    seed = mgs2Randomizer.RandomizeItemSpawns(new MGS2Randomizer.RandomizationOptions { NoHardLogicLocks = true });
                     mgs2Randomizer.SaveRandomizationToDisk();
                 }
                 catch(OutOfMemoryException oome)
@@ -59,6 +59,7 @@ namespace gcx
                     mgs2Randomizer.Randomizer = new Random(mgs2Randomizer.Seed);
                 }
             }
+            return;
 
             ShowGui();
             return;

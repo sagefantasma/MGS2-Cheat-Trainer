@@ -74,7 +74,8 @@ namespace gcx
 
         public class RandomizationOptions
         {
-            public bool AlwaysLogicallySafe { get; set; }
+            public bool NoHardLogicLocks { get; set; }
+            public bool NoSoftLogicLocks { get; set; }
         }
 
         public int RandomizeItemSpawns(RandomizationOptions options)
@@ -82,7 +83,7 @@ namespace gcx
             //TODO: in the future, we should have something to randomize the "auto-awarded" items, and
             //also to have an option to not randomize optional spawns
             _randomizedItems = new MGS2ItemSet();
-            bool mustBeCompleteable = options.AlwaysLogicallySafe;
+            bool mustBeCompleteable = options.NoHardLogicLocks;
 
             //Create a list of all spawns on the tanker chapter
             List<Item> TankerSpawnsLeft = new List<Item>();
@@ -366,7 +367,7 @@ namespace gcx
                     procEditor = openedFileData.ProcEditor;
                 }
 
-                cheatSheet += $"{spawnToEdit.Key.GcxFile}: now has a {spawnToEdit.Value.Name}\n";
+                cheatSheet += $"{spawnToEdit.Key.GcxFile}: {spawnToEdit.Key.Name} now has a {spawnToEdit.Value.Name}\n";
                 procEditor.ModifySpawnProc(spawnToEdit.Key.SpawnId, spawnToEdit.Value.ProcId);
                 procEditor.SaveAutomatedChanges();
                 if(spawnToEdit.Key.SisterSpawn != null)
@@ -396,7 +397,7 @@ namespace gcx
                         procEditor = openedFileData.ProcEditor;
                     }
 
-                    cheatSheet += $"{spawnToEdit.Key.SisterSpawn}: now has a  {spawnToEdit.Value.Name}\n";
+                    cheatSheet += $"{spawnToEdit.Key.SisterSpawn}: {spawnToEdit.Key.Name} now has a  {spawnToEdit.Value.Name}\n";
                     procEditor.ModifySpawnProc(spawnToEdit.Key.SpawnId, spawnToEdit.Value.ProcId);
                     procEditor.SaveAutomatedChanges();
                 }
@@ -431,7 +432,7 @@ namespace gcx
                     procEditor = openedFileData.ProcEditor;
                 }
 
-                cheatSheet += $"{spawnToEdit.Key.GcxFile}: now has a {spawnToEdit.Value.Name}\n";
+                cheatSheet += $"{spawnToEdit.Key.GcxFile}: {spawnToEdit.Key.Name} now has a {spawnToEdit.Value.Name}\n";
                 procEditor.ModifySpawnProc(spawnToEdit.Key.SpawnId, spawnToEdit.Value.ProcId);
                 procEditor.SaveAutomatedChanges();
                 if (spawnToEdit.Key.SisterSpawn != null)
@@ -461,7 +462,7 @@ namespace gcx
                         procEditor = openedFileData.ProcEditor;
                     }
 
-                    cheatSheet += $"{spawnToEdit.Key.SisterSpawn}: now has a {spawnToEdit.Value.Name}\n";
+                    cheatSheet += $"{spawnToEdit.Key.SisterSpawn}: {spawnToEdit.Key.Name} now has a {spawnToEdit.Value.Name}\n";
                     procEditor.ModifySpawnProc(spawnToEdit.Key.SpawnId, spawnToEdit.Value.ProcId);
                     procEditor.SaveAutomatedChanges();
                 }

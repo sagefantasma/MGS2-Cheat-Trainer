@@ -36,8 +36,7 @@ namespace gcx
                             return false;
                         break;
                     case FileType.Ctxr:
-                        //technically this wont work correctly
-                        if (BpAssets.CtxrFiles.Any(ctxr => ctxr.Contains(resource.Resource.CommonName)))
+                        if (BpAssets.CtxrFiles.Any(ctxr => ctxr.Contains(resource.Text)))
                             return false;
                         break;
                     case FileType.Cmdl:
@@ -45,8 +44,7 @@ namespace gcx
                             return false;
                         break;
                     case FileType.Tri:
-                        //technically this wont work correctly
-                        if (Manifest.TriFiles.Any(tri => tri.Contains(resource.Resource.CommonName)))
+                        if (Manifest.TriFiles.Any(tri => tri.Contains(resource.Text)))
                             return false;
                         break;
                 }
@@ -316,7 +314,6 @@ namespace gcx
         {
             try
             {
-                //TODO: need to add a duplicate checker
                 DirectoryInfo resourceSuperDirectoryInfo = new DirectoryInfo(resourceSuperDirectory);
                 DirectoryInfo gcxResourceDirectory = resourceSuperDirectoryInfo.GetDirectories(gcxFile).FirstOrDefault();
                 FileInfo bpAssets = gcxResourceDirectory.GetFiles("bp_assets.txt").FirstOrDefault();
@@ -346,23 +343,29 @@ namespace gcx
                     switch (dataToAdd.FileType)
                     {
                         case FileType.Cmdl:
+                            modifiedBpAssets = true;
                             levelResources.BpAssets.KmsFiles.Add(dataToAdd.Text);
                             break;
                         case FileType.Ctxr:
+                            modifiedBpAssets = true;
                             levelResources.BpAssets.CtxrFiles.Add(dataToAdd.Text);
                             break;
                         case FileType.Kms:
+                            modifiedManifest = true;
                             levelResources.Manifest.KmsFiles.Add(dataToAdd.Text);
                             break;
                         case FileType.Tri:
+                            modifiedManifest = true;
                             levelResources.Manifest.TriFiles.Add(dataToAdd.Text);
                             break;
                     }
                 }
 
-                Directory.CreateDirectory(gcxFile);
-                File.WriteAllBytes($"{gcxFile}/bp_assets.txt", levelResources.BpAssets.ToBytes());
-                File.WriteAllBytes($"{gcxFile}/manifest.txt", levelResources.Manifest.ToBytes());
+                //Directory.CreateDirectory(gcxFile);
+                if(modifiedBpAssets)
+                    File.WriteAllBytes(bpAssets.FullName, levelResources.BpAssets.ToBytes());
+                if(modifiedManifest)
+                    File.WriteAllBytes(manifest.FullName, levelResources.Manifest.ToBytes());
             }
             catch(Exception ex)
             {
@@ -370,9 +373,10 @@ namespace gcx
             }
         }
 
+        [Obsolete("Use AddResources instead. This is error-prone, without duplicate detection, and just kind of crap.")]
         public static bool AddResource(string gcxFile, string resourceSuperDirectory, string resourceToAdd)
         {
-            //TODO: retool this. This is causing problems(weirdly only with the manifest)
+            //retooled this. This is causing problems(weirdly only with the manifest)
             //that are entirely avoidable. Instead of _inserting_ data, let's do something
             //similar to what we did with the gcx: just entirely recreate the data. The master files
             //seemed to reveal that it at least _somewhat_ works in theory. So, if we instead

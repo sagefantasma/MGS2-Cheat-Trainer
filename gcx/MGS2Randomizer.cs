@@ -10,8 +10,15 @@ using System.Windows.Forms;
 
 namespace gcx
 {
-    internal class MGS2Randomizer
+    public class MGS2Randomizer
     {
+        public class RandomizerException : Exception
+        {
+            public RandomizerException(string message) : base(message)
+            {
+            }
+        }
+
         private static DirectoryInfo ResourceSuperDirectory { get; set; }
         private static List<string> GcxFileDirectory { get; set; }
         static GcxEditor gcxEditor = new GcxEditor();
@@ -78,12 +85,16 @@ namespace gcx
             public bool NoSoftLogicLocks { get; set; }
         }
 
+        public void DerandomizeItemSpawns()
+        {
+
+        }
+
         public int RandomizeItemSpawns(RandomizationOptions options)
         {
             //TODO: in the future, we should have something to randomize the "auto-awarded" items, and
             //also to have an option to not randomize optional spawns
             _randomizedItems = new MGS2ItemSet();
-            bool mustBeCompleteable = options.NoHardLogicLocks;
 
             //Create a list of all spawns on the tanker chapter
             List<Item> TankerSpawnsLeft = new List<Item>();
@@ -100,7 +111,7 @@ namespace gcx
                 int modValue = randomNum % TankerSpawnsLeft.Count;
                 Item randomChoice = TankerSpawnsLeft[modValue];
 
-                if (mustBeCompleteable && 
+                if (options.NoHardLogicLocks && 
                     LogicRequirements.ProgressionItems.Contains(randomChoice.Name) && 
                     !VanillaItems.TankerPart3.Entities.ElementAt(itemsAssigned).Key.MandatorySpawn)
                     continue;
@@ -147,7 +158,7 @@ namespace gcx
                 int modValue = randomNum % PlantSpawns.Count;
                 Item randomChoice = PlantSpawns[modValue];
 
-                if (mustBeCompleteable &&
+                if (options.NoHardLogicLocks &&
                     LogicRequirements.ProgressionItems.Contains(randomChoice.Name) &&
                     !VanillaItems.PlantSet10.Entities.ElementAt(itemsAssigned).Key.MandatorySpawn)
                 {
@@ -155,6 +166,18 @@ namespace gcx
                     if (retries == 0)
                         break;
                     continue;
+                }
+
+                if(randomChoice.Name == "Nikita" && options.NoSoftLogicLocks)
+                {
+                    //currently, only the Nikita can cause a soft logic lock if the spawn is not in Shell 2
+                    if(!(new[] { "w31a", "w31b" }.Contains(VanillaItems.PlantSet10.Entities.ElementAt(itemsAssigned).Key.GcxFile)))
+                    {
+                        retries--;
+                        if (retries == 0)
+                            break;
+                        continue;
+                    }
                 }
 
                 //iteratively go through spawns in "sequential" order, setting random items to each
@@ -243,7 +266,7 @@ namespace gcx
             //if the itemset isn't logically sound, re-randomize.
             if (!VerifyItemSetLogicValidity(_randomizedItems))
             {
-                throw new Exception("bad randomization seed");
+                throw new RandomizerException("bad randomization seed");
             }
 
             return Seed;
@@ -329,9 +352,8 @@ namespace gcx
             return spawningFunctions.Any(function => func.DecodedContents.Contains(function));
         }
 
-        public bool SaveRandomizationToDisk()
+        public bool SaveRandomizationToDisk(bool makeSpoilerFile = true, bool customDirectory = true)
         {
-            //TODO: clean this up and polish it off
             AddAllResources();
              
             //since some levels are part of multiple different logic sets,
@@ -366,8 +388,8 @@ namespace gcx
                     spawns = openedFileData.DecodedProcs;
                     procEditor = openedFileData.ProcEditor;
                 }
-
-                cheatSheet += $"{spawnToEdit.Key.GcxFile}: {spawnToEdit.Key.Name} now has a {spawnToEdit.Value.Name}\n";
+                
+                cheatSheet += $"{spawnToEdit.Key.GcxFile}({MGS2Levels.MainGameStages.PlayableStageList.FirstOrDefault(x=>x.AreaCode == spawnToEdit.Key.GcxFile).Name}): {spawnToEdit.Key.Name} now has a {spawnToEdit.Value.Name}\n";
                 procEditor.ModifySpawnProc(spawnToEdit.Key.SpawnId, spawnToEdit.Value.ProcId);
                 procEditor.SaveAutomatedChanges();
                 if(spawnToEdit.Key.SisterSpawn != null)
@@ -397,7 +419,7 @@ namespace gcx
                         procEditor = openedFileData.ProcEditor;
                     }
 
-                    cheatSheet += $"{spawnToEdit.Key.SisterSpawn}: {spawnToEdit.Key.Name} now has a  {spawnToEdit.Value.Name}\n";
+                    cheatSheet += $"{spawnToEdit.Key.SisterSpawn}({MGS2Levels.MainGameStages.PlayableStageList.FirstOrDefault(x => x.AreaCode == spawnToEdit.Key.GcxFile).Name}): {spawnToEdit.Key.Name} now has a  {spawnToEdit.Value.Name}\n";
                     procEditor.ModifySpawnProc(spawnToEdit.Key.SpawnId, spawnToEdit.Value.ProcId);
                     procEditor.SaveAutomatedChanges();
                 }
@@ -432,7 +454,7 @@ namespace gcx
                     procEditor = openedFileData.ProcEditor;
                 }
 
-                cheatSheet += $"{spawnToEdit.Key.GcxFile}: {spawnToEdit.Key.Name} now has a {spawnToEdit.Value.Name}\n";
+                cheatSheet += $"{spawnToEdit.Key.GcxFile}({MGS2Levels.MainGameStages.PlayableStageList.FirstOrDefault(x => x.AreaCode == spawnToEdit.Key.GcxFile).Name}): {spawnToEdit.Key.Name} now has a {spawnToEdit.Value.Name}\n";
                 procEditor.ModifySpawnProc(spawnToEdit.Key.SpawnId, spawnToEdit.Value.ProcId);
                 procEditor.SaveAutomatedChanges();
                 if (spawnToEdit.Key.SisterSpawn != null)
@@ -462,21 +484,27 @@ namespace gcx
                         procEditor = openedFileData.ProcEditor;
                     }
 
-                    cheatSheet += $"{spawnToEdit.Key.SisterSpawn}: {spawnToEdit.Key.Name} now has a {spawnToEdit.Value.Name}\n";
+                    cheatSheet += $"{spawnToEdit.Key.SisterSpawn}({MGS2Levels.MainGameStages.PlayableStageList.FirstOrDefault(x => x.AreaCode == spawnToEdit.Key.GcxFile).Name}): {spawnToEdit.Key.Name} now has a {spawnToEdit.Value.Name}\n";
                     procEditor.ModifySpawnProc(spawnToEdit.Key.SpawnId, spawnToEdit.Value.ProcId);
                     procEditor.SaveAutomatedChanges();
                 }
             }
 
-            DirectoryInfo createdDirectory = Directory.CreateDirectory($"{DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss")}_randomizedGcxFiles");
+            DirectoryInfo createdDirectory = new DirectoryInfo(Environment.CurrentDirectory);
+            if (customDirectory)
+                createdDirectory = Directory.CreateDirectory($"{DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss")}_randomizedGcxFiles");
             foreach (KeyValuePair<string, OpenedFileData> kvp in openedFiles)
             {
                 OpenedFileData openedFileData = kvp.Value;
                 byte[] newGcxBytes = openedFileData.GcxEditor.BuildGcxFile();
                 string date = $"{createdDirectory.Name}/scenerio_stage_{kvp.Key}.gcx";
-                File.WriteAllBytes(date, newGcxBytes);
+                if (customDirectory)
+                    File.WriteAllBytes(date, newGcxBytes);
+                else
+                    File.WriteAllBytes(GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_{kvp.Key}")), newGcxBytes);
             }
-            File.WriteAllText($"{createdDirectory.Name}/spoiler_seed-{Seed}.txt", cheatSheet);
+            if(makeSpoilerFile)
+                File.WriteAllText($"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}/spoiler_seed-{Seed}.txt", cheatSheet);
             return true;
         }
 

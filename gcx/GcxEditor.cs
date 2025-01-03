@@ -134,7 +134,8 @@ namespace gcx
                 FileName = "gcx_decompiler.exe",
                 Arguments = $@".\{sanitizedGcx}.gcx {outputFile}",
                 RedirectStandardOutput = true,
-                UseShellExecute = false
+                UseShellExecute = false,
+                CreateNoWindow = true
             };
             Process decompilingProcess = Process.Start(startInfo);
 
@@ -153,12 +154,12 @@ namespace gcx
                 ParseKeyValuePair(key, value);
             }
             OffsetTable = new byte[20];
-            Array.Copy(TrimmedContents, _startOfOffsetBlock, OffsetTable, 0, OffsetTable.Length); //TODO: VERIFY (might be okay?)
+            Array.Copy(TrimmedContents, _startOfOffsetBlock, OffsetTable, 0, OffsetTable.Length);
             Resources = new byte[_scriptOffset - 20];
             Array.Copy(TrimmedContents, _startOfOffsetBlock + 20, Resources, 0, Resources.Length);
             _mainDataLocation = _proceduresDataLocation + _proceduresBodySize + 4;
             MainBytes = new byte[_mainBodySize];
-            Array.Copy(TrimmedContents, _mainDataLocation, MainBytes, 0, _mainBodySize); //TODO: verify (seems okay)
+            Array.Copy(TrimmedContents, _mainDataLocation, MainBytes, 0, _mainBodySize);
             return decompilingOutput;
         }
 
@@ -263,9 +264,8 @@ namespace gcx
 
         internal void InsertNewProcedureToFile(DecodedProc procedure)
         {
-            if(!Procedures.Any(proc => proc.Name == procedure.Name))
+            if(!Procedures.Any(proc => proc.Name.Contains(procedure.Name)))
                 Procedures.Add(procedure);
-            //is it really just that simple? yep. i did well for once FeelsGoodMan
         }
 
         private byte[] ConvertFunctionNameToByteRepresentation(string functionName)

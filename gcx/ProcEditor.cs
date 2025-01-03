@@ -217,7 +217,6 @@ C2-00 (rotation, denotes a value of 1)
 
         private byte[] GetSpawnId(byte[] contents, int index)
         {
-            //TODO: validate
             byte[] spawnId;
             byte byteAfterSpawn = contents[index + 3];
             //i am seeing a possible pattern:

@@ -231,6 +231,12 @@
     <Compile Include="MGS2MemoryManager.cs" />
     <Compile Include="MGS2ApplicationNavigator.cs" />
     <Compile Include="Helpers\StageNames.cs" />
+    <Compile Include="MGS2RandomizationTool.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MGS2RandomizationTool.Designer.cs">
+      <DependentUpon>MGS2RandomizationTool.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helpers\PlayableCharacters\Raiden.cs" />
@@ -242,6 +248,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI.resx">
       <DependentUpon>GUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MGS2RandomizationTool.resx">
+      <DependentUpon>MGS2RandomizationTool.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -738,6 +747,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\Documentation\assets\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\gcx\MGS2 GCX Tools.csproj">
+      <Project>{b44c0c3f-4b96-43fc-93b9-294d6bf5ac29}</Project>
+      <Name>MGS2 GCX Tools</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions />

@@ -138,6 +138,9 @@
     <None Include="MGS2 Known Procs\proc_0x3E97CF.proc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="MGS2 Known Procs\proc_0x40ADFE.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="MGS2 Known Procs\proc_0x42E8F1.proc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

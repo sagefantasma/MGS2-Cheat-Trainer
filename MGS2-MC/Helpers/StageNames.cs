@@ -125,7 +125,7 @@ namespace MGS2_MC
             public static readonly Stage EFConnectingBridge2 = new Stage { Name = "EFConnectingBridge", AreaCode = "w21b" }; //handled by w21a sister spawn(s)
             public static readonly Stage Warehouse = new Stage { Name = "Warehouse", AreaCode = "w22a" }; //added
             public static readonly Stage FAConnectingBridge = new Stage { Name = "FAConnectingBridge", AreaCode = "w23a" }; //added
-            public static readonly Stage FAConnectingBridge2 = new Stage { Name = "FAConnectingBridge", AreaCode = "w23b" }; //handled by w23a sister spawn(s)
+            public static readonly Stage FAConnectingBridge2 = new Stage { Name = "FAConnectingBridgeAfterShell2", AreaCode = "w23b" }; //handled by w23a sister spawn(s)
             public static readonly Stage Shell1Core = new Stage { Name = "Shell1Core", AreaCode = "w24a" }; //added
             public static readonly Stage Shell1CoreB1 = new Stage { Name = "Shell1CoreB1", AreaCode = "w24b" }; //added
             public static readonly Stage Shell1CoreB2 = new Stage { Name = "Shell1CoreB2", AreaCode = "w24d" }; //added

@@ -183,10 +183,20 @@ namespace gcx
                 //iteratively go through spawns in "sequential" order, setting random items to each
                 if (itemsAssigned < VanillaItems.PlantSet1.Entities.Count)
                 {
+                    if (randomChoice.Name == "Directional Microphone" && options.NoHardLogicLocks)
+                    {
+                        //getting the Dmic before meeting Stillman crashes the game
+                        continue;
+                    }
                     _randomizedItems.PlantSet1.Entities.Add(VanillaItems.PlantSet10.Entities.ElementAt(itemsAssigned).Key, randomChoice);
                 }
                 else if (itemsAssigned < VanillaItems.PlantSet2.Entities.Count)
                 {
+                    if (randomChoice.Name == "Directional Microphone" && options.NoHardLogicLocks)
+                    {
+                        //getting the Dmic before meeting Stillman crashes the game
+                        continue;
+                    }
                     _randomizedItems.PlantSet2.Entities.Add(VanillaItems.PlantSet10.Entities.ElementAt(itemsAssigned).Key, randomChoice);
                 }
                 else if (itemsAssigned < VanillaItems.PlantSet3.Entities.Count)

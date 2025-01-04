@@ -76,6 +76,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GcxLevelResourceMapper.cs" />
     <Compile Include="GcxTableMapping.cs" />
     <Compile Include="GcxComparator.cs" />
     <Compile Include="GcxEditor.cs" />
@@ -88,16 +89,201 @@
     <Compile Include="GcxProcs.cs" />
     <Compile Include="ItemSets.cs" />
     <Compile Include="MGS2Randomizer.cs" />
+    <Compile Include="MGS2Resource.cs" />
+    <Compile Include="ProcEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProcEditor.Designer.cs">
+      <DependentUpon>ProcEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProcSelector.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProcSelector.Designer.cs">
+      <DependentUpon>ProcSelector.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResourceEditor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="MGS2 Known Procs\proc_0x134D11.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x135211.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x19F8BB.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x261E2F.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x293658.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x2F31D6.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x35513F.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x3579CF.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x37D629.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x3E97CF.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x40ADFE.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x42E8F1.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x4ADA9.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x4B0A61.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x53A62E.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x57208.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x5E97CF.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x60924.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x616ECF.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x640C81.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x6428F0.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x66D67C.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x6F5DC3.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x74BFF8.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x7A253E.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x7E97CF.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x7F6915.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x8A7EAF.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x92DCE.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x96A6A.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x97D665.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0x9E97CF.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0xA10594.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0xA1F64B.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0xA56B4B.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0xAD455F.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0xAFCC9B.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0xB35211.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0xB35BC1.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0xC60769.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0xC92A40.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0xCAF11B.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0xD2A222.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0xD5B259.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0xDC4E11.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0xDC748A.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0xDD51D.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0xE6E562.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0xE7C89B.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0xEA7EAE.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0xEB47E6.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0xF57D47.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0xF71E5B.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0xF76B84.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MGS2 Known Procs\proc_0xFFDCA5.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GcxExplorer.resx">
       <DependentUpon>GcxExplorer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProcEditor.resx">
+      <DependentUpon>ProcEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProcSelector.resx">
+      <DependentUpon>ProcSelector.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -126,5 +312,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

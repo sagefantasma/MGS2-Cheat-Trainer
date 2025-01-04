@@ -35,10 +35,10 @@
             this.functionContentsRichTextbox = new System.Windows.Forms.RichTextBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.debugTextbox = new System.Windows.Forms.TextBox();
-            this.saveFunctionChangesBtn = new System.Windows.Forms.Button();
             this.saveFileButton = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             this.hexCodeRichTextbox = new System.Windows.Forms.RichTextBox();
             this.guiControlsLayoutPanel.SuspendLayout();
             this.nodeContentsGroupBox.SuspendLayout();
@@ -113,10 +113,10 @@
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.Controls.Add(this.debugTextbox);
-            this.flowLayoutPanel1.Controls.Add(this.saveFunctionChangesBtn);
             this.flowLayoutPanel1.Controls.Add(this.saveFileButton);
             this.flowLayoutPanel1.Controls.Add(this.button1);
             this.flowLayoutPanel1.Controls.Add(this.button2);
+            this.flowLayoutPanel1.Controls.Add(this.button3);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(535, 228);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -133,19 +133,9 @@
             this.debugTextbox.Size = new System.Drawing.Size(247, 76);
             this.debugTextbox.TabIndex = 6;
             // 
-            // saveFunctionChangesBtn
-            // 
-            this.saveFunctionChangesBtn.Location = new System.Drawing.Point(3, 85);
-            this.saveFunctionChangesBtn.Name = "saveFunctionChangesBtn";
-            this.saveFunctionChangesBtn.Size = new System.Drawing.Size(128, 65);
-            this.saveFunctionChangesBtn.TabIndex = 5;
-            this.saveFunctionChangesBtn.Text = "Save Changes to Function";
-            this.saveFunctionChangesBtn.UseVisualStyleBackColor = true;
-            this.saveFunctionChangesBtn.Click += new System.EventHandler(this.saveFunctionChangesBtn_Click);
-            // 
             // saveFileButton
             // 
-            this.saveFileButton.Location = new System.Drawing.Point(137, 85);
+            this.saveFileButton.Location = new System.Drawing.Point(3, 85);
             this.saveFileButton.Name = "saveFileButton";
             this.saveFileButton.Size = new System.Drawing.Size(113, 66);
             this.saveFileButton.TabIndex = 4;
@@ -155,23 +145,33 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(3, 157);
+            this.button1.Location = new System.Drawing.Point(122, 85);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(128, 62);
+            this.button1.Size = new System.Drawing.Size(113, 66);
             this.button1.TabIndex = 7;
-            this.button1.Text = "Insert Blade Function Into This GCX File";
+            this.button1.Text = "Insert Proc (Guided)";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(137, 157);
+            this.button2.Location = new System.Drawing.Point(3, 157);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(113, 59);
+            this.button2.Size = new System.Drawing.Size(113, 66);
             this.button2.TabIndex = 8;
-            this.button2.Text = "Randomize it, yo";
+            this.button2.Text = "Insert All Known Procs";
             this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.button2.Click += new System.EventHandler(this.InsertAllKnownProcs);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(122, 157);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(113, 66);
+            this.button3.TabIndex = 9;
+            this.button3.Text = "Change Spawner Function(s)";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // hexCodeRichTextbox
             // 
@@ -206,12 +206,12 @@
         private System.Windows.Forms.TreeView contentsTreeView;
         private System.Windows.Forms.GroupBox nodeContentsGroupBox;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
-        private System.Windows.Forms.Button saveFunctionChangesBtn;
         private System.Windows.Forms.Button saveFileButton;
         private System.Windows.Forms.TextBox debugTextbox;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
         private System.Windows.Forms.RichTextBox hexCodeRichTextbox;
         private System.Windows.Forms.RichTextBox functionContentsRichTextbox;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
     }
 }

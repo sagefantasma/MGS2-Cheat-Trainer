@@ -2283,5 +2283,16 @@ namespace MGS2_MC
                 }
             }
         }
+
+        private void randomizerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _logger.Verbose("Opening randomization tool...");
+            
+            MGS2RandomizationTool randomizationTool = new MGS2RandomizationTool();
+            if (randomizationTool.ShowDialog() == DialogResult.OK)
+            {
+                _logger.Verbose("Finished with randomization tool");
+            }
+        }
     }
 }

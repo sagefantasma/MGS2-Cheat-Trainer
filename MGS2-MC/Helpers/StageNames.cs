@@ -100,52 +100,55 @@ namespace MGS2_MC
         public static class PlantStages
         {
             #region Playable Stages
-            public static readonly Stage SeaDock = new Stage { Name = "SeaDock", AreaCode = "w11a" };
-            public static readonly Stage SeaDockBombDisposal = new Stage { Name = "SeaDockBombDisposal", AreaCode = "w11b" };
-            public static readonly Stage SeaDockFortune = new Stage { Name = "SeaDockFortune", AreaCode = "w11c" };
-            public static readonly Stage StrutARoof = new Stage { Name = "StrutARoof", AreaCode = "w12a" };
-            public static readonly Stage StrutARoofBomb = new Stage { Name = "StrutARoofBomb", AreaCode = "w12c" };
-            public static readonly Stage StrutAPumpRoom = new Stage { Name = "StrutAPumpRoom", AreaCode = "w12b" };
-            public static readonly Stage ABConnectingBridge = new Stage { Name = "ABConnectingBridge", AreaCode = "w13a" };
-            public static readonly Stage ABConnectingBridgeSensorB = new Stage { Name = "ABConnectingBridgeSensorB", AreaCode = "w13b" };
-            public static readonly Stage TransformerRoom = new Stage { Name = "TransformerRoom", AreaCode = "w14a" };
-            public static readonly Stage BCConnectingBridge = new Stage { Name = "BCConnectingBridge", AreaCode = "w15a" };
-            public static readonly Stage BCConnectingBridgeAfterStillman = new Stage { Name = "BCConnectingBridgeAfterStillman", AreaCode = "w15b" };
-            public static readonly Stage DiningHall = new Stage { Name = "DiningHall", AreaCode = "w16a" };
-            public static readonly Stage DiningHallAfterStillman = new Stage { Name = "DiningHallAfterStillman", AreaCode = "w16b" };
-            public static readonly Stage CDConnectingBridge = new Stage { Name = "CDConnectingBridge", AreaCode = "w17a" };
-            public static readonly Stage SedimentPool = new Stage { Name = "SedimentPool", AreaCode = "w18a" };
-            public static readonly Stage DEConnectingBridge = new Stage { Name = "DEConnectingBridge", AreaCode = "w19a" };
-            public static readonly Stage ParcelRoom = new Stage { Name = "ParcelRoom", AreaCode = "w20a" };
-            public static readonly Stage Heliport = new Stage { Name = "Heliport", AreaCode = "w20b" };
-            public static readonly Stage HeliportBomb = new Stage { Name = "HeliportBomb", AreaCode = "w20c" };
-            public static readonly Stage HeliportPostNinja = new Stage { Name = "HeliportPostNinja", AreaCode = "w20d" };
-            public static readonly Stage EFConnectingBridge = new Stage { Name = "EFConnectingBridge", AreaCode = "w21a" };
-            public static readonly Stage Warehouse = new Stage { Name = "Warehouse", AreaCode = "w22a" };
-            public static readonly Stage FAConnectingBridge = new Stage { Name = "FAConnectingBridge", AreaCode = "w23b" };
-            public static readonly Stage Shell1Core = new Stage { Name = "Shell1Core", AreaCode = "w24a" };
-            public static readonly Stage Shell1CoreB1 = new Stage { Name = "Shell1CoreB1", AreaCode = "w24b" };
-            public static readonly Stage Shell1CoreB2 = new Stage { Name = "Shell1CoreB2", AreaCode = "w24d" };
-            public static readonly Stage Shell1CoreHostageRoom = new Stage { Name = "Shell1CoreHostageRoom", AreaCode = "w24c" };
-            public static readonly Stage ShellsConnectingBridge = new Stage { Name = "ShellsConnectingBridge", AreaCode = "w25a" };
-            public static readonly Stage ShellsConnectingBridgeDestroyed = new Stage { Name = "ShellsConnectingBridgeDestroyed", AreaCode = "w25b" };
-            public static readonly Stage StrutLPerimeter = new Stage { Name = "StrutLPerimeter", AreaCode = "w25c" };
-            public static readonly Stage KLConnectingBridge = new Stage { Name = "KLConnectingBridge", AreaCode = "w25d" };
-            public static readonly Stage SewageTreatment = new Stage { Name = "SewageTreatment", AreaCode = "w28a" };
-            public static readonly Stage Shell2Core = new Stage { Name = "Shell2Core", AreaCode = "w31a" };
-            public static readonly Stage Shell2FiltrationChamber1 = new Stage { Name = "Shell2FiltrationChamber1", AreaCode = "w31b" };
-            public static readonly Stage Shell2FiltrationChamber2 = new Stage { Name = "Shell2FiltrationChamber2", AreaCode = "w31c" };
-            public static readonly Stage Shell2CoreWithEmma = new Stage { Name = "Shell2CoreWithEmma", AreaCode = "w31d" };
-            public static readonly Stage OilFence = new Stage { Name = "OilFence", AreaCode = "w32a" };
-            public static readonly Stage OilFenceVamp = new Stage { Name = "OilFenceVamp", AreaCode = "w32b" };
-            public static readonly Stage Stomach = new Stage { Name = "Stomach", AreaCode = "w41a" };
-            public static readonly Stage Jujenum = new Stage { Name = "Jujenum", AreaCode = "w42a" };
-            public static readonly Stage AscendingColon = new Stage { Name = "AscendingColon", AreaCode = "w43a" };
-            public static readonly Stage Ileum = new Stage { Name = "Ileum", AreaCode = "w44a" };
-            public static readonly Stage SigmoidColon = new Stage { Name = "SigmoidColon", AreaCode = "w45a" };
-            public static readonly Stage Rectum = new Stage { Name = "Rectum", AreaCode = "w46a" };
-            public static readonly Stage ArsenalGear = new Stage { Name = "ArsenalGear", AreaCode = "w51a" };
-            public static readonly Stage FederalHall = new Stage { Name = "FederalHall", AreaCode = "w61a" };
+            //comments are related to randomizer development
+            public static readonly Stage SeaDock = new Stage { Name = "SeaDock", AreaCode = "w11a" }; //added
+            public static readonly Stage SeaDockBombDisposal = new Stage { Name = "SeaDockBombDisposal", AreaCode = "w11b" }; //no unique spawns
+            public static readonly Stage SeaDockFortune = new Stage { Name = "SeaDockFortune", AreaCode = "w11c" }; //will not add
+            public static readonly Stage StrutARoof = new Stage { Name = "StrutARoof", AreaCode = "w12a" }; //added
+            public static readonly Stage StrutARoofBomb = new Stage { Name = "StrutARoofBomb", AreaCode = "w12c" }; //handled by w12a sister spawn(s)
+            public static readonly Stage StrutAPumpRoom = new Stage { Name = "StrutAPumpRoom", AreaCode = "w12b" }; //added
+            public static readonly Stage ABConnectingBridge = new Stage { Name = "ABConnectingBridge", AreaCode = "w13a" }; //no spawns
+            public static readonly Stage ABConnectingBridgeSensorB = new Stage { Name = "ABConnectingBridgeSensorB", AreaCode = "w13b" }; //no spawns
+            public static readonly Stage TransformerRoom = new Stage { Name = "TransformerRoom", AreaCode = "w14a" }; //added
+            public static readonly Stage BCConnectingBridge = new Stage { Name = "BCConnectingBridge", AreaCode = "w15a" }; //added
+            public static readonly Stage BCConnectingBridgeAfterStillman = new Stage { Name = "BCConnectingBridgeAfterStillman", AreaCode = "w15b" }; //handled by w15a sister spawn(s)
+            public static readonly Stage DiningHall = new Stage { Name = "DiningHall", AreaCode = "w16a" }; //added
+            public static readonly Stage DiningHallAfterStillman = new Stage { Name = "DiningHallAfterStillman", AreaCode = "w16b" }; //handled by w16a sister spawn(s)
+            public static readonly Stage CDConnectingBridge = new Stage { Name = "CDConnectingBridge", AreaCode = "w17a" }; //no spawns
+            public static readonly Stage SedimentPool = new Stage { Name = "SedimentPool", AreaCode = "w18a" }; //added
+            public static readonly Stage DEConnectingBridge = new Stage { Name = "DEConnectingBridge", AreaCode = "w19a" }; //added
+            public static readonly Stage ParcelRoom = new Stage { Name = "ParcelRoom", AreaCode = "w20a" }; //added
+            public static readonly Stage Heliport = new Stage { Name = "Heliport", AreaCode = "w20b" }; //added
+            public static readonly Stage HeliportBomb = new Stage { Name = "HeliportBomb", AreaCode = "w20c" }; //will not add
+            public static readonly Stage HeliportPostNinja = new Stage { Name = "HeliportPostNinja", AreaCode = "w20d" }; //handled by w20b sister spawn(s)
+            public static readonly Stage EFConnectingBridge = new Stage { Name = "EFConnectingBridge", AreaCode = "w21a" }; //added
+            public static readonly Stage EFConnectingBridge2 = new Stage { Name = "EFConnectingBridge", AreaCode = "w21b" }; //handled by w21a sister spawn(s)
+            public static readonly Stage Warehouse = new Stage { Name = "Warehouse", AreaCode = "w22a" }; //added
+            public static readonly Stage FAConnectingBridge = new Stage { Name = "FAConnectingBridge", AreaCode = "w23a" }; //added
+            public static readonly Stage FAConnectingBridge2 = new Stage { Name = "FAConnectingBridgeAfterShell2", AreaCode = "w23b" }; //handled by w23a sister spawn(s)
+            public static readonly Stage Shell1Core = new Stage { Name = "Shell1Core", AreaCode = "w24a" }; //added
+            public static readonly Stage Shell1CoreB1 = new Stage { Name = "Shell1CoreB1", AreaCode = "w24b" }; //added
+            public static readonly Stage Shell1CoreB2 = new Stage { Name = "Shell1CoreB2", AreaCode = "w24d" }; //added
+            public static readonly Stage Shell1CoreHostageRoom = new Stage { Name = "Shell1CoreHostageRoom", AreaCode = "w24c" }; //added
+            public static readonly Stage ShellsConnectingBridge = new Stage { Name = "ShellsConnectingBridge", AreaCode = "w25a" }; //will not add, is used for Harrier fight
+            public static readonly Stage ShellsConnectingBridgeDestroyed = new Stage { Name = "ShellsConnectingBridgeDestroyed", AreaCode = "w25b" }; //added
+            public static readonly Stage StrutLPerimeter = new Stage { Name = "StrutLPerimeter", AreaCode = "w25c" }; //added
+            public static readonly Stage KLConnectingBridge = new Stage { Name = "KLConnectingBridge", AreaCode = "w25d" }; //added
+            public static readonly Stage SewageTreatment = new Stage { Name = "SewageTreatment", AreaCode = "w28a" }; //added
+            public static readonly Stage Shell2Core = new Stage { Name = "Shell2Core", AreaCode = "w31a" }; //added
+            public static readonly Stage Shell2FiltrationChamber1 = new Stage { Name = "Shell2FiltrationChamber1", AreaCode = "w31b" }; //added
+            public static readonly Stage Shell2FiltrationChamber2 = new Stage { Name = "Shell2FiltrationChamber2", AreaCode = "w31c" }; //added non-boss room spawns
+            public static readonly Stage Shell2CoreWithEmma = new Stage { Name = "Shell2CoreWithEmma", AreaCode = "w31d" }; //added
+            public static readonly Stage OilFence = new Stage { Name = "OilFence", AreaCode = "w32a" }; //will not add
+            public static readonly Stage OilFenceVamp = new Stage { Name = "OilFenceVamp", AreaCode = "w32b" }; //will not add
+            public static readonly Stage Stomach = new Stage { Name = "Stomach", AreaCode = "w41a" }; //added
+            public static readonly Stage Jujenum = new Stage { Name = "Jujenum", AreaCode = "w42a" }; //added
+            public static readonly Stage AscendingColon = new Stage { Name = "AscendingColon", AreaCode = "w43a" }; //added
+            public static readonly Stage Ileum = new Stage { Name = "Ileum", AreaCode = "w44a" }; //no spawns
+            public static readonly Stage SigmoidColon = new Stage { Name = "SigmoidColon", AreaCode = "w45a" }; //added
+            public static readonly Stage Rectum = new Stage { Name = "Rectum", AreaCode = "w46a" }; //no spawns
+            public static readonly Stage ArsenalGear = new Stage { Name = "ArsenalGear", AreaCode = "w51a" }; //will not add
+            public static readonly Stage FederalHall = new Stage { Name = "FederalHall", AreaCode = "w61a" }; //will not add
 
             public static readonly List<Stage> PlayableStageList = new List<Stage> { SeaDock, SeaDockBombDisposal, SeaDockFortune, StrutARoof, StrutARoofBomb, StrutAPumpRoom,
                 ABConnectingBridge, ABConnectingBridgeSensorB, TransformerRoom, BCConnectingBridge, BCConnectingBridgeAfterStillman, DiningHall, DiningHallAfterStillman,

@@ -10,15 +10,22 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Buffers.Binary;
+using System.Diagnostics.Eventing.Reader;
+using System.Windows.Forms;
 
 namespace gcx
 {
     internal class GcxEditor
     {
         public string FileName { get; set; }
+        private byte[] Timestamp { get; set; }
+        private byte[] FileVersion { get; set; }
+        private byte[] OffsetTable { get; set; }
+        private byte[] Resources { get; set; }
+        private byte[] MainBytes { get; set; }
         private byte[] RawContents { get; set; }
         private byte[] TrimmedContents { get; set; }
-        internal List<DecodedProc> Procedures { get; set; }
+        private List<DecodedProc> Procedures { get; set; }
         private int _startOfOffsetBlock;
         private int _scriptOffset;
         private int _resourceTableOffset;
@@ -29,10 +36,80 @@ namespace gcx
         private int _proceduresDataLocation;
         private int _mainBodySize;
         private int _mainDataLocation;
+        private string currentDecompiledFile;
 
         public GcxEditor()
         {
             Procedures = new List<DecodedProc>();
+        }
+
+        internal byte[] BuildGcxFile(bool functionsHaveBeenAdded = false)
+        {
+            List<byte> gcxContents = new List<byte>();
+
+            byte[] procBlock = BuildProcBlock();
+            byte[] procTable = BuildProcTable();
+            byte[] mainBodySize = BitConverter.GetBytes(_mainBodySize);
+
+            gcxContents.AddRange(Timestamp);
+            gcxContents.AddRange(FileVersion);
+            gcxContents.AddRange(procTable);
+            gcxContents.AddRange(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
+            gcxContents.AddRange(OffsetTable);
+            gcxContents.AddRange(Resources);
+            gcxContents.AddRange(procBlock);
+            gcxContents.AddRange(mainBodySize);
+            gcxContents.AddRange(MainBytes);
+
+            return gcxContents.ToArray();
+        }
+
+        private byte[] BuildProcTable()
+        {
+            //this new method seems to work perfectly, huzzah
+            List<byte> procTable = new List<byte>();
+            List<DecodedProc> newOrderedProcs = Procedures.OrderBy(proc => proc.Order).ToList(); //this is a requirement for the gcx format
+
+            foreach (DecodedProc proc in newOrderedProcs)
+            {
+                if (proc.Name.Contains("main"))
+                    continue;
+                procTable.AddRange(BitConverter.GetBytes(proc.Order));
+                procTable.AddRange(BitConverter.GetBytes(proc.ScriptInitialPosition));
+            }
+
+            return procTable.ToArray();
+        }
+
+        private byte[] BuildProcBlock()
+        {
+            List<byte> procBlock = new List<byte>();
+
+            int position = 0;
+            foreach (DecodedProc proc in Procedures)
+            {
+                if (proc.Name.Contains("main"))
+                    continue;
+                proc.ScriptInitialPosition = position;
+                procBlock.AddRange(proc.RawContents);
+                position += proc.RawContents.Length;
+                /*
+                 * We are capturing all the padding now I believe, so I think this can go.
+                if (proc.RawContents.SequenceEqual(new byte[] { 0x81, 0x00 }) || proc.RawContents[0] == 0x89 || proc.RawContents[0] == 0x8D)
+                {
+                    //no padding
+                }
+                else
+                {
+                    procBlock.AddRange(new byte[] { 0x00, 0x00 }); //all procs must be ended with the double zero byte, unless its an empty proc
+                    position += 2;
+                }
+                */
+            }
+
+            int procBodySize = procBlock.Count;
+            procBlock.InsertRange(0, BitConverter.GetBytes(procBodySize));
+            return procBlock.ToArray();
         }
 
         internal string CallDecompiler(string file)
@@ -40,22 +117,31 @@ namespace gcx
             //remove first 4 bytes, then call python script
             //make note of the output as we will use it for the rest of the explorer
             FileName = file;
+            FileInfo fileInfo = new FileInfo(FileName);
             RawContents = File.ReadAllBytes(FileName);
+            Timestamp = new byte[4]; //LCGB
+            FileVersion = new byte[4];
             TrimmedContents = new byte[RawContents.Length - 4];
+            Array.Copy(RawContents, Timestamp, Timestamp.Length);
+            Array.Copy(RawContents, 4, FileVersion, 0, FileVersion.Length);
             Array.Copy(RawContents, 4, TrimmedContents, 0, TrimmedContents.Length);
-            File.WriteAllBytes("sanitizedGcx", TrimmedContents);
+            string sanitizedGcx = $"{Path.GetFileNameWithoutExtension(fileInfo.FullName)}_sanitized";
+            string outputFile = $"{sanitizedGcx}.gcxOutput";
+            File.WriteAllBytes($"{sanitizedGcx}.gcx", TrimmedContents);
 
             ProcessStartInfo startInfo = new ProcessStartInfo
             {
                 FileName = "gcx_decompiler.exe",
-                Arguments = @".\sanitizedGcx .",
+                Arguments = $@".\{sanitizedGcx}.gcx {outputFile}",
                 RedirectStandardOutput = true,
-                UseShellExecute = false
+                UseShellExecute = false,
+                CreateNoWindow = true
             };
             Process decompilingProcess = Process.Start(startInfo);
 
             decompilingProcess.WaitForExit();
 
+            currentDecompiledFile = outputFile;
             string decompilingOutput = decompilingProcess.StandardOutput.ReadToEnd();
             string[] decompilingOutputs = decompilingOutput.Split('\n');
             foreach(string output in decompilingOutputs)
@@ -67,7 +153,13 @@ namespace gcx
                 string value = kvp[1].Trim();
                 ParseKeyValuePair(key, value);
             }
+            OffsetTable = new byte[20];
+            Array.Copy(TrimmedContents, _startOfOffsetBlock, OffsetTable, 0, OffsetTable.Length);
+            Resources = new byte[_scriptOffset - 20];
+            Array.Copy(TrimmedContents, _startOfOffsetBlock + 20, Resources, 0, Resources.Length);
             _mainDataLocation = _proceduresDataLocation + _proceduresBodySize + 4;
+            MainBytes = new byte[_mainBodySize];
+            Array.Copy(TrimmedContents, _mainDataLocation, MainBytes, 0, _mainBodySize);
             return decompilingOutput;
         }
 
@@ -114,7 +206,7 @@ namespace gcx
         internal List<DecodedProc> BuildContentTree()
         {
             //take the out file and break it down into main function and all procs
-            string decompiledFile = "._sanitizedGcx_out";
+            string decompiledFile = currentDecompiledFile;
 
             string[] linedContents = File.ReadAllLines(decompiledFile);
             linedContents = linedContents.Where(line => line != "").ToArray();
@@ -136,7 +228,14 @@ namespace gcx
                             int a = 2 + 2;
                         }
                         byte[] functionData = GetFunctionByteData(currentFunctionName, out int procTablePosition, out int scriptPos);
-                        functions.Add(new DecodedProc(currentFunctionName, functionData, currentFunction, procTablePosition, scriptPos));
+                        if (!currentFunctionName.ToLower().Contains("main"))
+                        {
+                            uint order = Convert.ToUInt32(currentFunctionName.Replace("proc_0x", "").Trim(), 16);
+                            functions.Add(new DecodedProc(currentFunctionName, order, functionData, currentFunction, procTablePosition, scriptPos));
+
+                        }
+                        else
+                            functions.Add(new DecodedProc(currentFunctionName, 0, functionData, currentFunction, procTablePosition, scriptPos));
                     }
                     else
                     {
@@ -155,72 +254,18 @@ namespace gcx
             }
 
             Procedures = functions;
-            return functions;
+            List<DecodedProc> carbonCopy = new List<DecodedProc>();
+            foreach(DecodedProc proc in functions)
+            {
+                carbonCopy.Add(proc);
+            }
+            return carbonCopy;
         }
 
         internal void InsertNewProcedureToFile(DecodedProc procedure)
         {
-            //7/21/24 notes: I think we're getting pretty damn close now. I am able to at least insert the script without breaking the decoder,
-            //and without crashing the game. But, the decoder isn't reading the data, and it doesnt change anything in MGS2.
-            //It's very possible there's still even more work required to make this work(i.e. modifying the manifests and shit), but next
-            //i need to get the decoder to actually recognize the spliced in script on reload.
-            byte[] newTrimmedData = new byte[TrimmedContents.Length + procedure.ScriptLength + 8];
-            //insert 8 bytes at end of proc list, before strres_block_top
-            int newTrimmedDataIndex = 0;
-            int oldContentsIndex = 0;
-            Array.Copy(TrimmedContents, newTrimmedData, _startOfOffsetBlock);
-            oldContentsIndex += _startOfOffsetBlock;
-            newTrimmedDataIndex += _startOfOffsetBlock - 8;
-
-            //set first 4 bytes to reversed proc name
-            byte[] procId = ConvertFunctionNameToByteRepresentation(procedure.Name);
-            byte[] newProcBlock = new byte[8];
-            procId.CopyTo(newProcBlock, 0);
-
-            //increase proc body size by procedure's data length
-            _proceduresBodySize += procedure.ScriptLength;
-            _proceduresDataLocation += 8;
-
-            //set last 4 of step 1's bytes to proc offset
-            //TODO: instead of going back from main data location, let's try advancing by the size of the proc body size(before it was increased by new script)
-            //to see if that would fix this problem with only some files letting us splice shit in? would also allow us to confirm something different isnt wrong
-            //int procLocation = _mainDataLocation - 4; // -4 to get at start of main body size, then +8 to account for the added proc table value?
-            int procLocation = _proceduresDataLocation + _proceduresBodySize - procedure.ScriptLength - 8;
-            procLocation &= 0xFFFFFF;
-            byte[] byteLocation = BitConverter.GetBytes(procLocation - _proceduresDataLocation + 8); 
-            byteLocation.CopyTo(newProcBlock, 4);
-            newProcBlock.CopyTo(newTrimmedData, newTrimmedDataIndex);
-            newTrimmedDataIndex += 16;
-
-            //set inserted data to proc's data
-            //right now we are at the startOfOffsetBlock. We want to copy all the way from there to where main starts.
-            int lengthToCopy = procLocation - _startOfOffsetBlock; //TODO: verify... the logic seems sound to me?
-            
-            Array.Copy(TrimmedContents, oldContentsIndex, newTrimmedData, newTrimmedDataIndex, lengthToCopy);
-            oldContentsIndex += lengthToCopy;
-            newTrimmedDataIndex += lengthToCopy;
-            procedure.RawContents.CopyTo(newTrimmedData, newTrimmedDataIndex);
-            newTrimmedDataIndex += procedure.ScriptLength;
-
-            Array.Copy(TrimmedContents, oldContentsIndex, newTrimmedData, newTrimmedDataIndex, TrimmedContents.Length - oldContentsIndex);
-            byte[] newProcBodySize = BitConverter.GetBytes(_proceduresBodySize);
-            Array.Copy(newProcBodySize, 0, newTrimmedData, _proceduresDataLocation - 4, 4);
-
-            byte[] extendedRawContents = new byte[RawContents.Length + 8 + procedure.ScriptLength];
-            
-
-            Array.Copy(RawContents, extendedRawContents, 4);
-            Array.Copy(newTrimmedData, 0, extendedRawContents, 4, newTrimmedData.Length);
-
-
-            if (extendedRawContents.Length % 16 != 0)
-            {
-                byte[] squaredOffContents = new byte[extendedRawContents.Length + 16 - extendedRawContents.Length % 16];
-                Array.Copy(extendedRawContents, squaredOffContents, extendedRawContents.Length);
-                File.WriteAllBytes(FileName, squaredOffContents);
-            }
-            else
-                File.WriteAllBytes(FileName, extendedRawContents);
+            if(!Procedures.Any(proc => proc.Name.Contains(procedure.Name)))
+                Procedures.Add(procedure);
         }
 
         private byte[] ConvertFunctionNameToByteRepresentation(string functionName)
@@ -267,9 +312,62 @@ namespace gcx
             return functionNameBytes;
         }
 
+        private byte[] GetFunctionSize(byte procByte, int procLocation)
+        {
+            switch (procByte)
+            {
+                case 0x81:
+                    //empty function, size 2
+                    return new byte[2];
+                case 0x82:
+                    //unknown, size 3
+                    return new byte[3];
+                case 0x83:
+                    //unknown, size 4
+                    return new byte[4];
+                case 0x84:
+                    //unknown, size 5
+                    return new byte[5];
+                case 0x85:
+                    //unknown, size 6
+                    return new byte[6];
+                case 0x86:
+                    //call another function, size 7(including procByte)
+                    return new byte[7];
+                case 0x87:
+                    //unknown, size 8
+                    return new byte[8];
+                case 0x88:
+                    //unknown, size 9
+                    return new byte[9];
+                case 0x89:
+                    //set a variable, size 10(including procByte)
+                    return new byte[10];
+                case 0x8A:
+                    //seems like calling a function with a variable param, size 11(including procByte)
+                    return new byte[11];
+                case 0x8B:
+                    //call two functions, size 12(including procByte)
+                    return new byte[12];
+                case 0x8C:
+                    //gonna go out on a limb here and guess size 13(including procByte)
+                    return new byte[13];
+                case 0x8D:
+                    //"normal function", size == next byte + 2(to capture header of procByte & size)
+                    return new byte[TrimmedContents[procLocation + 1] + 2];
+                case 0x8E:
+                    //"large function", size == next two bytes + 3(to capture header of procByte & size)
+                    return new byte[BitConverter.ToInt16(TrimmedContents, procLocation + 1) + 3];
+                default:
+                    //need to add, not sure what other cases there may be;
+                    MessageBox.Show($"Unknown function call at: {procLocation} - {procByte}");
+                    throw new NotImplementedException();
+            }
+        }
+
         private byte[] GetFunctionByteData(string functionName, out int procTablePosition, out int scriptPos)
         { 
-            //TODO: this isnt quite working correctly, sadge
+            //this seems to be working correctly(for now). need to do more extensive testing and such to be 100% certain
             byte[] functionData = null;
 
             if (functionName.ToLower().Trim() != "main")
@@ -281,7 +379,45 @@ namespace gcx
                     procTablePosition = FindSubArray(TrimmedContents, functionNameBytes);
                     scriptPos = BitConverter.ToInt32(TrimmedContents, procTablePosition + 4);
                     scriptPos = scriptPos & 0xFFFFFF;
-                    functionData = new byte[TrimmedContents[_proceduresDataLocation + scriptPos + 1]];
+                    int procLocation = _proceduresDataLocation + scriptPos;
+                    byte procByte = TrimmedContents[procLocation];
+
+                    functionData = GetFunctionSize(procByte, procLocation);
+                    //DOING A BRAINDUMP THAT MIGHT CHANGE HOW I DO THIS IN A MUCH MORE INTELLIGENT WAY GOING FORWARD:
+                    //i THINK, in actuality, the length of each function does NOT include the first few bytes
+                    //INSTEAD, i think it starts after the length denomination, which i believe would make absolutely everything fall into place(maybe?)
+                    //that would fix the issue i am seeing with the 8D functions sometimes ending in A0 00 or 00 00,
+                    //it would also fix the issue with the empty 81 functions
+                    //i believe it would fix the stupid fuckin 8E functions as well
+                    //i dont know for certain about 89 or 86, but it would make sense for those too i think(in some way)
+                    //^ implemented this in GetFunctionSize(), looks like its working perfectly
+                    /*if (procByte == 0x8D)
+                    {
+                        functionData = new byte[TrimmedContents[procLocation + 1] + 2]; //to try and capture the A0 00 endings and 00 00 endings
+                    }
+                    else if (procByte == 0x81)
+                    {
+                        functionData = new byte[TrimmedContents[procLocation + 1]]; //could probably just sent len to 2 here
+
+                    }
+                    else if (procByte == 0x89)
+                    {
+                        functionData = new byte[10]; // this seems to work correctly
+                                                     //i'm doing 10 instead of 9 to capture the zero padding
+                    }
+                    else if (procByte == 0x86)
+                    {
+                        functionData = new byte[5]; // this seems to work correctly
+                    }
+                    else
+                    {
+                        //this seems to work!
+                        uint size = (uint) BitConverter.ToUInt16(TrimmedContents, procLocation + 1) + 1;
+                        functionData = new byte[size];
+                    }
+                    if (functionData.Length == 0)
+                        functionData = new byte[2];
+                    */
                 }
                 else
                 {
@@ -294,7 +430,7 @@ namespace gcx
 
                     functionData = new byte[TrimmedContents[_proceduresDataLocation + scriptPos + 1]];
                 }
-
+                //8E functions are breaking this for some functions I think. need to determine how and why(maybe related to the dumb way of doing things im doing them now)
                 Array.Copy(TrimmedContents, _proceduresDataLocation + scriptPos, functionData, 0, functionData.Length);
             }
             else
@@ -310,7 +446,7 @@ namespace gcx
             return functionData;
         }
 
-        private static int FindSubArray(byte[] largeArray, byte[] subArray)
+        public static int FindSubArray(byte[] largeArray, byte[] subArray)
         {
             if (largeArray == null || subArray == null)
                 throw new ArgumentNullException("Arrays cannot be null");
@@ -337,36 +473,36 @@ namespace gcx
             return -1; // Subarray not found
         }
 
-        internal void BuildElementList()
+        public static List<int> FindAllSubArray(byte[] largeArray, byte[] subArray)
         {
-            //TODO: should we even bother keeping this?
-        }
+            if (largeArray == null || subArray == null)
+                throw new ArgumentNullException("Arrays cannot be null");
 
-        internal void SaveGcxFile(Dictionary<string, byte[]> modifications)
-        {
-            foreach(KeyValuePair<string, byte[]> modification in modifications)
+            if (subArray.Length == 0)
+                return null;
+
+            List<int> matches = new List<int>();
+            for (int i = 0; i <= largeArray.Length - subArray.Length; i++)
             {
-                DecodedProc modifiedProcedure = Procedures.Find(proc => proc.Name.Contains(modification.Key));
+                bool match = true;
+                for (int j = 0; j < subArray.Length; j++)
+                {
+                    if (largeArray[i + j] != subArray[j])
+                    {
+                        match = false;
+                        break;
+                    }
+                }
 
-                modifiedProcedure.RawContents = modification.Value;
+                if (match)
+                    matches.Add(i);
             }
 
-            foreach(DecodedProc procedure in Procedures)
+            if(matches.Count != 0)
             {
-                Array.Copy(procedure.RawContents, 0, TrimmedContents, procedure.ScriptInitialPosition + _proceduresDataLocation, procedure.ScriptLength);
+                return matches;
             }
-
-            Array.Copy(TrimmedContents, 0, RawContents, 4, TrimmedContents.Length);
-
-            File.WriteAllBytes(FileName, RawContents);
-        }
-
-        internal void CompareFunctionWithOriginal(string currentContents, string originalContents)
-        {
-            string sanitizedCurrentContents = Regex.Replace(currentContents, @"\s+", ""); //all the whitespace has been added artificially by the decompiler and i am 
-            string sanitizedOriginalContents = Regex.Replace(originalContents, @"\s+", ""); //also editing it for readability in this. so we need to get rid of all of it
-
-
+            return null; // Subarray not found
         }
     }
 }

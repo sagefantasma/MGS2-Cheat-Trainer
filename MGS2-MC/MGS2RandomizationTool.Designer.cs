@@ -215,7 +215,7 @@
             this.restoreBaseGameButton.Name = "restoreBaseGameButton";
             this.restoreBaseGameButton.Size = new System.Drawing.Size(160, 41);
             this.restoreBaseGameButton.TabIndex = 3;
-            this.restoreBaseGameButton.Text = "Restore Base Game Files";
+            this.restoreBaseGameButton.Text = "Restore to Vanilla State";
             this.restoreBaseGameButton.UseVisualStyleBackColor = false;
             this.restoreBaseGameButton.Click += new System.EventHandler(this.restoreBaseGameButton_Click);
             // 

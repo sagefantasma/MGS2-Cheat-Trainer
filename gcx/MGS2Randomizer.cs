@@ -183,20 +183,22 @@ namespace gcx
                 //iteratively go through spawns in "sequential" order, setting random items to each
                 if (itemsAssigned < VanillaItems.PlantSet1.Entities.Count)
                 {
-                    if (randomChoice.Name == "Directional Microphone" && options.NoHardLogicLocks)
+                    /*if (randomChoice.Name == "Sensor B" && options.NoHardLogicLocks)
                     {
-                        //getting the Dmic before meeting Stillman crashes the game
+                        //if people report this issue, I'll create a new option for "reduce crash risk" and include this and others reported
+                        //getting the Sensor B before meeting Stillman crashes the game(sometimes?)
                         continue;
-                    }
+                    }*/
                     _randomizedItems.PlantSet1.Entities.Add(VanillaItems.PlantSet10.Entities.ElementAt(itemsAssigned).Key, randomChoice);
                 }
                 else if (itemsAssigned < VanillaItems.PlantSet2.Entities.Count)
                 {
-                    if (randomChoice.Name == "Directional Microphone" && options.NoHardLogicLocks)
+                    /*if (randomChoice.Name == "Sensor B" && options.NoHardLogicLocks)
                     {
-                        //getting the Dmic before meeting Stillman crashes the game
+                        //if people report this issue, I'll create a new option for "reduce crash risk" and include this and others reported
+                        //getting the Sensor B before meeting Stillman crashes the game(sometimes?)
                         continue;
-                    }
+                    }*/
                     _randomizedItems.PlantSet2.Entities.Add(VanillaItems.PlantSet10.Entities.ElementAt(itemsAssigned).Key, randomChoice);
                 }
                 else if (itemsAssigned < VanillaItems.PlantSet3.Entities.Count)

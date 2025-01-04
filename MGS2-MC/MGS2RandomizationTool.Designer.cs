@@ -211,7 +211,6 @@
             // restoreBaseGameButton
             // 
             this.restoreBaseGameButton.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.restoreBaseGameButton.Enabled = false;
             this.restoreBaseGameButton.Location = new System.Drawing.Point(3, 29);
             this.restoreBaseGameButton.Name = "restoreBaseGameButton";
             this.restoreBaseGameButton.Size = new System.Drawing.Size(160, 41);

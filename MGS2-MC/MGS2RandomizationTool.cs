@@ -56,7 +56,7 @@ namespace MGS2_MC
         {
             MGS2Randomizer randomizer = new MGS2Randomizer(_installLocation);
             randomizer.DerandomizeItemSpawns();
-            randomizer.SaveRandomizationToDisk(false);
+            randomizer.SaveRandomizationToDisk(false, false);
         }
 
         private async void randomizeButton_Click(object sender, EventArgs e)

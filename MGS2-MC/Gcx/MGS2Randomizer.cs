@@ -85,9 +85,78 @@ namespace MGS2_MC
             public bool NoSoftLogicLocks { get; set; }
         }
 
+        private void FixOneOffItems()
+        {
+            var thermalGoggleSpawn = _randomizedItems.TankerPart3.Entities.FirstOrDefault(x => x.Key.Name == "LeftLadder2" && x.Key.GcxFile == "w04a");
+            _randomizedItems.TankerPart3.Entities[thermalGoggleSpawn.Key] = MGS2Items.Thermals;
+
+            var m9SpawnA = _randomizedItems.PlantSet10.Entities.FirstOrDefault(x => x.Key.Name == "LeftCage" && x.Key.GcxFile == "w12a");
+            _randomizedItems.PlantSet10.Entities[m9SpawnA.Key] = MGS2Weapons.M9;
+
+            var m9SpawnC = _randomizedItems.PlantSet10.Entities.FirstOrDefault(x => x.Key.Name == "M9Room1" && x.Key.GcxFile == "w22a");
+            _randomizedItems.PlantSet10.Entities[m9SpawnC.Key] = MGS2Weapons.M9;
+
+            var box5Spawn = _randomizedItems.PlantSet10.Entities.FirstOrDefault(x => x.Key.Name == "RightsideFastTravel" && x.Key.GcxFile == "w20a");
+            _randomizedItems.PlantSet10.Entities[box5Spawn.Key] = MGS2Items.Box5;
+
+            var mineDetectorSpawn = _randomizedItems.PlantSet10.Entities.FirstOrDefault(x => x.Key.Name == "RoomAcrossNode3.1" && x.Key.GcxFile == "w22a");
+            _randomizedItems.PlantSet10.Entities[mineDetectorSpawn.Key] = MGS2Items.MineDetector;
+
+            var aks74uSpawn = _randomizedItems.PlantSet10.Entities.FirstOrDefault(x => x.Key.Name == "LockerRoom1" && x.Key.GcxFile == "w24a");
+            _randomizedItems.PlantSet10.Entities[aks74uSpawn.Key] = MGS2Weapons.Aks74u;
+
+            var socomSuppressorSpawn = _randomizedItems.PlantSet10.Entities.FirstOrDefault(x => x.Key.Name == "LockerRoom8" && x.Key.GcxFile == "w24a");
+            _randomizedItems.PlantSet10.Entities[socomSuppressorSpawn.Key] = MGS2Items.SocomSupp;
+
+            var thermalGogglePlantSpawnA = _randomizedItems.PlantSet10.Entities.FirstOrDefault(x => x.Key.Name == "Podium" && x.Key.GcxFile == "w24c");
+            _randomizedItems.PlantSet10.Entities[thermalGogglePlantSpawnA.Key] = MGS2Items.Thermals;
+
+            var akSuppSpawn = _randomizedItems.PlantSet10.Entities.FirstOrDefault(x => x.Key.Name == "BehindFire" && x.Key.GcxFile == "w25b");
+            _randomizedItems.PlantSet10.Entities[akSuppSpawn.Key] = MGS2Items.AkSupp;
+
+            var m4Spawn = _randomizedItems.PlantSet10.Entities.FirstOrDefault(x => x.Key.Name == "RightsideStairs" && x.Key.GcxFile == "w31a");
+            _randomizedItems.PlantSet10.Entities[m4Spawn.Key] = MGS2Weapons.M4;
+
+            var rgb6Spawn = _randomizedItems.PlantSet10.Entities.FirstOrDefault(x => x.Key.Name == "RightsideAlcove2" && x.Key.GcxFile == "w31a");
+            _randomizedItems.PlantSet10.Entities[rgb6Spawn.Key] = MGS2Weapons.Rgb6;
+
+            var nikitaSpawnA = _randomizedItems.PlantSet10.Entities.FirstOrDefault(x => x.Key.Name == "NikitaSpawn2" && x.Key.GcxFile == "w31b");
+            _randomizedItems.PlantSet10.Entities[nikitaSpawnA.Key] = MGS2Weapons.Nikita;
+
+            var nikitaSpawnB = _randomizedItems.PlantSet10.Entities.FirstOrDefault(x => x.Key.Name == "NikitaSpawn3" && x.Key.GcxFile == "w31b");
+            _randomizedItems.PlantSet10.Entities[nikitaSpawnB.Key] = MGS2Weapons.Nikita;
+
+            var psg1tSpawn = _randomizedItems.PlantSet10.Entities.FirstOrDefault(x => x.Key.Name == "CollapsedRoom1" && x.Key.GcxFile == "w31b");
+            _randomizedItems.PlantSet10.Entities[psg1tSpawn.Key] = MGS2Weapons.Psg1t;
+
+            var rgb6SpawnB = _randomizedItems.PlantSet10.Entities.FirstOrDefault(x => x.Key.Name == "AirPocket2" && x.Key.GcxFile == "w31b");
+            _randomizedItems.PlantSet10.Entities[rgb6SpawnB.Key] = MGS2Weapons.Rgb6;
+
+            var thermalGogglePlantSpawnB = _randomizedItems.PlantSet10.Entities.FirstOrDefault(x => x.Key.Name == "Locker4" && x.Key.GcxFile == "w31c");
+            _randomizedItems.PlantSet10.Entities[thermalGogglePlantSpawnB.Key] = MGS2Items.Thermals;
+
+            var box5SpawnB = _randomizedItems.PlantSet10.Entities.FirstOrDefault(x => x.Key.Name == "LeftCatwalk" && x.Key.GcxFile == "w42a");
+            _randomizedItems.PlantSet10.Entities[box5SpawnB.Key] = MGS2Items.Box5;
+
+            var coldMedsSpawn = _randomizedItems.PlantSet10.Entities.FirstOrDefault(x => x.Key.Name == "BackLeftMainArea" && x.Key.GcxFile == "w42a");
+            _randomizedItems.PlantSet10.Entities[coldMedsSpawn.Key] = MGS2Items.ColdMeds;
+        }
+
         public void DerandomizeItemSpawns()
         {
+            _randomizedItems = new MGS2ItemSet();
 
+            foreach(var kvp in VanillaItems.TankerPart3.Entities)
+            {
+                _randomizedItems.TankerPart3.Entities.Add(kvp.Key, kvp.Value);
+            }
+
+            foreach (var kvp in VanillaItems.PlantSet10.Entities)
+            {
+                _randomizedItems.PlantSet10.Entities.Add(kvp.Key, kvp.Value);
+            }
+
+            FixOneOffItems();
         }
 
         public int RandomizeItemSpawns(RandomizationOptions options)

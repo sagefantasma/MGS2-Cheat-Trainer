@@ -32,7 +32,7 @@
     <ErrorReportUrl>https://github.com/sagefantasma/MGS2-Cheat-Trainer/issues</ErrorReportUrl>
     <ProductName>MGS2 Master Collection Cheat Trainer</ProductName>
     <PublisherName>ANTIBigBoss</PublisherName>
-    <ApplicationRevision>3</ApplicationRevision>
+    <ApplicationRevision>4</ApplicationRevision>
     <ApplicationVersion>1.9.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -135,6 +135,9 @@
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=8.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.AsyncInterfaces.8.0.0\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpDX.4.2.0\lib\net45\SharpDX.dll</HintPath>
     </Reference>
@@ -199,6 +202,33 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Gcx\GcxComparator.cs" />
+    <Compile Include="Gcx\GcxEditor.cs" />
+    <Compile Include="Gcx\GcxExplorer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gcx\GcxExplorer.Designer.cs">
+      <DependentUpon>GcxExplorer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gcx\GcxLevelResourceMapper.cs" />
+    <Compile Include="Gcx\GcxProcs.cs" />
+    <Compile Include="Gcx\GcxTableMapping.cs" />
+    <Compile Include="Gcx\ItemSets.cs" />
+    <Compile Include="Gcx\MGS2Randomizer.cs" />
+    <Compile Include="Gcx\MGS2Resource.cs" />
+    <Compile Include="Gcx\ProcEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gcx\ProcEditor.Designer.cs">
+      <DependentUpon>ProcEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gcx\ProcSelector.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gcx\ProcSelector.Designer.cs">
+      <DependentUpon>ProcSelector.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gcx\ResourceEditor.cs" />
     <Compile Include="Helpers\BossParser.cs" />
     <Compile Include="Helpers\ConfigEditorForm.cs">
       <SubType>Form</SubType>
@@ -243,6 +273,15 @@
     <Compile Include="Helpers\PlayableCharacters\Snake.cs" />
     <Compile Include="MGS2Strings.cs" />
     <Compile Include="Helpers\TrainerConfigStructure.cs" />
+    <EmbeddedResource Include="Gcx\GcxExplorer.resx">
+      <DependentUpon>GcxExplorer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gcx\ProcEditor.resx">
+      <DependentUpon>ProcEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gcx\ProcSelector.resx">
+      <DependentUpon>ProcSelector.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Helpers\ConfigEditorForm.resx">
       <DependentUpon>ConfigEditorForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -263,6 +302,171 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include=".editorconfig" />
+    <None Include="Gcx\MGS2 Known Procs\proc_0x134D11.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0x135211.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0x19F8BB.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0x261E2F.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0x293658.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0x2F31D6.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0x35513F.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0x3579CF.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0x37D629.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0x3E97CF.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0x40ADFE.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0x42E8F1.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0x4ADA9.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0x4B0A61.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0x53A62E.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0x57208.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0x5E97CF.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0x60924.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0x616ECF.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0x640C81.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0x6428F0.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0x66D67C.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0x6F5DC3.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0x74BFF8.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0x7A253E.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0x7E97CF.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0x7F6915.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0x8A7EAF.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0x92DCE.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0x96A6A.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0x97D665.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0x9E97CF.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0xA10594.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0xA1F64B.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0xA56B4B.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0xAD455F.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0xAFCC9B.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0xB35211.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0xB35BC1.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0xC60769.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0xC92A40.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0xCAF11B.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0xD2A222.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0xD5B259.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0xDC4E11.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0xDC748A.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0xDD51D.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0xE6E562.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0xE7C89B.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0xEA7EAE.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0xEB47E6.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0xF57D47.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0xF71E5B.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0xF76B84.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Gcx\MGS2 Known Procs\proc_0xFFDCA5.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\Documentation\mgs2_memory_print.CEM" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
@@ -278,6 +482,30 @@
     </Compile>
     <None Include="Resources\METAL GEAR SOLID 2 SONS OF LIBERTY.CT" />
     <None Include="Resources\mgs2_sse_hackzinglyhack7.CT" />
+    <Content Include="Gcx\dictionaries\mgs2_gcx_ascii_strings1.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Gcx\dictionaries\mgs2_gcx_google_10000_english1.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Gcx\dictionaries\mgs2_gcx_google_10000_english2.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Gcx\dictionaries\mgs2_pc_idlists.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Gcx\dictionaries\mgs2_reverse.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Gcx\dictionaries\mgs2_stage_names.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Gcx\dictionaries\mgs4_charas.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Gcx\gcx_decompiler.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Helpers\TrainerConfig.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -747,12 +975,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\Documentation\assets\" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\gcx\MGS2 GCX Tools.csproj">
-      <Project>{b44c0c3f-4b96-43fc-93b9-294d6bf5ac29}</Project>
-      <Name>MGS2 GCX Tools</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions />

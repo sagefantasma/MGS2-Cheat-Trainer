@@ -38,7 +38,7 @@ namespace MGS2_MC
         private readonly int ItemIndexOffset = 6;
         private readonly int ItemCountOffset = 7;
         private readonly byte WeaponIndexBase = 0xBB; 
-        private readonly byte ItemIndexBase = 0xBD; 
+        private readonly byte ItemIndexBase = 0xBD;
 
         public MGS2Randomizer(string mgs2Directory, int seed = 0)
         {
@@ -540,7 +540,6 @@ namespace MGS2_MC
             {
                 RandomizeC4Locations();
             }
-
             //Create a list of all spawns on the tanker chapter
             List<Item> TankerSpawnsLeft = new List<Item>();
             foreach (var kvp in VanillaItems.TankerPart3.Entities)
@@ -638,7 +637,7 @@ namespace MGS2_MC
                         break;
                     continue;
                 }
-
+              
                 //iteratively go through spawns in "sequential" order, setting random items to each
                 if (itemsAssigned < VanillaItems.PlantSet1.Entities.Count)
                 {

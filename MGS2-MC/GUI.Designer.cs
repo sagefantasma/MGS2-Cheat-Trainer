@@ -661,6 +661,7 @@
             this.viewLogsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.githubMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.joinOurDiscordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.randomizerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mgs2TabControl.SuspendLayout();
             this.tabPageItem.SuspendLayout();
             this.itemLayoutPanel.SuspendLayout();
@@ -8594,7 +8595,7 @@
             // modifyConfigMenuItem
             // 
             this.modifyConfigMenuItem.Name = "modifyConfigMenuItem";
-            this.modifyConfigMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.modifyConfigMenuItem.Size = new System.Drawing.Size(180, 22);
             this.modifyConfigMenuItem.Text = "Modify Config";
             this.modifyConfigMenuItem.Click += new System.EventHandler(this.ModifyConfigMenuItem_Click);
             // 
@@ -8608,7 +8609,7 @@
             // launchMgs2MenuItem
             // 
             this.launchMgs2MenuItem.Name = "launchMgs2MenuItem";
-            this.launchMgs2MenuItem.Size = new System.Drawing.Size(151, 22);
+            this.launchMgs2MenuItem.Size = new System.Drawing.Size(180, 22);
             this.launchMgs2MenuItem.Text = "Launch MGS2";
             this.launchMgs2MenuItem.Click += new System.EventHandler(this.LaunchMgs2MenuItem_Click);
             // 
@@ -8642,6 +8643,13 @@
             this.joinOurDiscordToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
             this.joinOurDiscordToolStripMenuItem.Text = "Join Our Discord";
             this.joinOurDiscordToolStripMenuItem.Click += new System.EventHandler(this.JoinOurDiscordToolStripMenuItem_Click);
+            // 
+            // randomizerToolStripMenuItem
+            // 
+            this.randomizerToolStripMenuItem.Name = "randomizerToolStripMenuItem";
+            this.randomizerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.randomizerToolStripMenuItem.Text = "Randomizer";
+            this.randomizerToolStripMenuItem.Click += new System.EventHandler(this.randomizerToolStripMenuItem_Click);
             // 
             // GUI
             // 

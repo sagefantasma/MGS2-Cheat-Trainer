@@ -21,7 +21,6 @@ namespace MGS2_MC
 
         public Location()
         {
-
         }
         public Location(string gcxFile, byte[] spawnId, long posX, long posZ, long posY, long rot, bool mandatorySpawn = false, string sisterSpawn = null, string name = null)
         {
@@ -444,6 +443,7 @@ namespace MGS2_MC
             TankerPart3.Entities.Add(new Location(gcxFile: "w04a", spawnId: new byte[] { 0x4A, 0x35, 0xB8 }, posX: 0x1B58, posZ: 0xEC78, posY: 0x6D6, rot: 0, name: "BehindHatch1", mandatorySpawn: true), MGS2Weapons.M9Ammo);
             TankerPart3.Entities.Add(new Location(gcxFile: "w04a", spawnId: new byte[] { 0x6E, 0x0E, 0xA8 }, posX: 0x2710, posZ: 0xEC78, posY: 0xCB2, rot: 0, name: "BehindHatch2"), MGS2Items.Ration);
             TankerPart3.Entities.Add(new Location(gcxFile: "w04a", spawnId: new byte[] { 0x3D, 0xC7, 0x33 }, posX: 0xD6FC, posZ: 0xEC78, posY: 0xF254, rot: 0, name: "LeftLadder2"), MGS2Items.ColdMeds); //this is natively a thermal goggle
+
             #endregion
             #endregion
 

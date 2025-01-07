@@ -81,7 +81,6 @@
             // allWeaponsWillSpawnCheckbox
             // 
             this.allWeaponsWillSpawnCheckbox.AutoSize = true;
-            this.allWeaponsWillSpawnCheckbox.Enabled = false;
             this.allWeaponsWillSpawnCheckbox.Location = new System.Drawing.Point(12, 59);
             this.allWeaponsWillSpawnCheckbox.Name = "allWeaponsWillSpawnCheckbox";
             this.allWeaponsWillSpawnCheckbox.Size = new System.Drawing.Size(142, 17);
@@ -94,7 +93,6 @@
             this.randomizeRationsCheckbox.AutoSize = true;
             this.randomizeRationsCheckbox.Checked = true;
             this.randomizeRationsCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.randomizeRationsCheckbox.Enabled = false;
             this.randomizeRationsCheckbox.Location = new System.Drawing.Point(12, 82);
             this.randomizeRationsCheckbox.Name = "randomizeRationsCheckbox";
             this.randomizeRationsCheckbox.Size = new System.Drawing.Size(118, 17);
@@ -105,7 +103,6 @@
             // randomizeEFConnectingBridgeClaymores
             // 
             this.randomizeEFConnectingBridgeClaymores.AutoSize = true;
-            this.randomizeEFConnectingBridgeClaymores.Enabled = false;
             this.randomizeEFConnectingBridgeClaymores.Location = new System.Drawing.Point(12, 174);
             this.randomizeEFConnectingBridgeClaymores.Name = "randomizeEFConnectingBridgeClaymores";
             this.randomizeEFConnectingBridgeClaymores.Size = new System.Drawing.Size(236, 17);
@@ -211,12 +208,11 @@
             // restoreBaseGameButton
             // 
             this.restoreBaseGameButton.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.restoreBaseGameButton.Enabled = false;
             this.restoreBaseGameButton.Location = new System.Drawing.Point(3, 29);
             this.restoreBaseGameButton.Name = "restoreBaseGameButton";
             this.restoreBaseGameButton.Size = new System.Drawing.Size(160, 41);
             this.restoreBaseGameButton.TabIndex = 3;
-            this.restoreBaseGameButton.Text = "Restore Base Game Files";
+            this.restoreBaseGameButton.Text = "Restore to Vanilla State";
             this.restoreBaseGameButton.UseVisualStyleBackColor = false;
             this.restoreBaseGameButton.Click += new System.EventHandler(this.restoreBaseGameButton_Click);
             // 

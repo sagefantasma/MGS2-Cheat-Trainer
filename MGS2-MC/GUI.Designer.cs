@@ -655,6 +655,7 @@
             this.mainMenuStrip = new System.Windows.Forms.MenuStrip();
             this.optionsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.modifyConfigMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.randomizerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.launchMgs2MenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewLogsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -8597,6 +8598,13 @@
             this.modifyConfigMenuItem.Size = new System.Drawing.Size(180, 22);
             this.modifyConfigMenuItem.Text = "Modify Config";
             this.modifyConfigMenuItem.Click += new System.EventHandler(this.ModifyConfigMenuItem_Click);
+            // 
+            // randomizerToolStripMenuItem
+            // 
+            this.randomizerToolStripMenuItem.Name = "randomizerToolStripMenuItem";
+            this.randomizerToolStripMenuItem.Size = new System.Drawing.Size(151, 22);
+            this.randomizerToolStripMenuItem.Text = "Randomizer";
+            this.randomizerToolStripMenuItem.Click += new System.EventHandler(this.randomizerToolStripMenuItem_Click);
             // 
             // launchMgs2MenuItem
             // 

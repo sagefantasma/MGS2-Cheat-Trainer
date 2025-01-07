@@ -2289,9 +2289,17 @@ namespace MGS2_MC
             _logger.Verbose("Opening randomization tool...");
             
             MGS2RandomizationTool randomizationTool = new MGS2RandomizationTool();
-            if (randomizationTool.ShowDialog() == DialogResult.OK)
+            try
             {
-                _logger.Verbose("Finished with randomization tool");
+                if (randomizationTool.ShowDialog() == DialogResult.OK)
+                {
+                    _logger.Verbose("Finished with randomization tool");
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show($"Something went wrong with the randomizer!: {ex.Message}");
+                _logger.Error($"RANDOMIZER UNHANDLED ERROR: {ex.Message}");
             }
         }
     }

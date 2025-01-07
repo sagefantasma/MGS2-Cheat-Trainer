@@ -52,17 +52,37 @@ namespace MGS2_MC
             seedUpDown.Enabled = customSeedCheckbox.Checked;
         }
 
+        private void ToggleControls(bool enable)
+        {
+            randomizeButton.Enabled = enable;
+            restoreBaseGameButton.Enabled = enable;
+            seedAlwaysBeatableCheckbox.Enabled = enable;
+            restrictNikitaCheckbox.Enabled = enable;
+            allWeaponsWillSpawnCheckbox.Enabled = enable;
+            randomizeRationsCheckbox.Enabled = enable;
+            randomizeStartingItemsCheckbox.Enabled = enable;
+            //randomizeAutomaticRewardsCheckbox.Enabled = enable;
+            //randomizeBombLocations.Enabled = enable;
+            randomizeEFConnectingBridgeClaymores.Enabled = enable;
+            if (enable && customSeedCheckbox.Checked)
+                seedUpDown.Enabled = enable;
+            customSeedCheckbox.Enabled = enable;
+        }
+
         private void restoreBaseGameButton_Click(object sender, EventArgs e)
         {
+            MessageBox.Show("Restoring MGS2's base game files, this will take but a moment...");
+            ToggleControls(false);
             MGS2Randomizer randomizer = new MGS2Randomizer(_installLocation);
-            randomizer.DerandomizeItemSpawns();
-            randomizer.SaveRandomizationToDisk(false, false);
+            randomizer.Derandomize();
+            ToggleControls(true);
+            MessageBox.Show("MGS2's base game files are restored! Enjoy vanilla MGS2!");
         }
 
         private async void randomizeButton_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Randomizing MGS2's game files to your specifications, this may take some time...", "Heads up!");
-            randomizeButton.Enabled = false;
+            ToggleControls(false);
             Application.DoEvents();
             await Task.Run(() =>
             {
@@ -70,7 +90,13 @@ namespace MGS2_MC
                 MGS2Randomizer.RandomizationOptions randomizationOptions = new MGS2Randomizer.RandomizationOptions
                 {
                     NoHardLogicLocks = seedAlwaysBeatableCheckbox.Checked,
-                    NoSoftLogicLocks = restrictNikitaCheckbox.Checked
+                    NoSoftLogicLocks = restrictNikitaCheckbox.Checked,
+                    AllWeaponsSpawnable = allWeaponsWillSpawnCheckbox.Checked,
+                    IncludeRations = randomizeRationsCheckbox.Checked,
+                    RandomizeStartingItems = randomizeStartingItemsCheckbox.Checked,
+                    RandomizeAutomaticRewards = randomizeAutomaticRewardsCheckbox.Checked,
+                    RandomizeC4 = randomizeBombLocations.Checked,
+                    RandomizeClaymores = randomizeEFConnectingBridgeClaymores.Checked
                 };
                 int seed = 0;
                 while (seed == 0)
@@ -82,7 +108,7 @@ namespace MGS2_MC
                     }
                     catch (OutOfMemoryException oome)
                     {
-
+                        throw oome; //rethrow to help debug
                     }
                     catch (MGS2Randomizer.RandomizerException ee)
                     {
@@ -91,12 +117,12 @@ namespace MGS2_MC
                     }
                     catch (Exception ee)
                     {
-
+                        throw ee; //rethrow to help debug
                     }
                 }
             });
             MessageBox.Show("Finished! Spoiler file available in your Documents folder.", "Randomization Complete!");
-            randomizeButton.Enabled = true;
+            ToggleControls(true);
         }
     }
 }

@@ -124,7 +124,6 @@
             // randomizeAutomaticRewardsCheckbox
             // 
             this.randomizeAutomaticRewardsCheckbox.AutoSize = true;
-            this.randomizeAutomaticRewardsCheckbox.Enabled = false;
             this.randomizeAutomaticRewardsCheckbox.Location = new System.Drawing.Point(12, 128);
             this.randomizeAutomaticRewardsCheckbox.Name = "randomizeAutomaticRewardsCheckbox";
             this.randomizeAutomaticRewardsCheckbox.Size = new System.Drawing.Size(174, 17);

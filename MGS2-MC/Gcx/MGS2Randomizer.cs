@@ -429,7 +429,6 @@ namespace MGS2_MC
 
         private string RandomizeAutomaticRewards()
         {
-            //TODO: test and confirm
             #region Olga USP
             string spoiler = "";
             string gcxFile = GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_w00c"));
@@ -517,7 +516,7 @@ namespace MGS2_MC
             //looks like d021p01 gives the phone[20,48]
             //still none of it working? huh?
             //d036p03, d036p05, wmovie(probably useless), d11t - not seeing anything in any of these
-            gcxFile = GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_w20d"));
+            gcxFile = GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_w20d")); //now all working :)
             gcxContents = File.ReadAllBytes(gcxFile);
             raidenItemAward = GcxEditor.FindAllSubArray(gcxContents, PlantItemArray);
 
@@ -543,6 +542,21 @@ namespace MGS2_MC
             gcxContents = File.ReadAllBytes(gcxFile);
             raidenItemAward = GcxEditor.FindAllSubArray(gcxContents, PlantItemArray);
             
+            gcxContents[raidenItemAward[1] + ItemIndexOffset] = randomizedReward.Index;
+            gcxContents[raidenItemAward[1] + ItemCountOffset] = randomizedReward.Count;
+
+            gcxContents[raidenItemAward[2] + ItemIndexOffset] = randomizedReward2.Index;
+            gcxContents[raidenItemAward[2] + ItemCountOffset] = randomizedReward2.Count;
+
+            gcxContents[raidenItemAward[3] + ItemIndexOffset] = randomizedReward3.Index;
+            gcxContents[raidenItemAward[3] + ItemCountOffset] = randomizedReward3.Count;
+
+            File.WriteAllBytes(gcxFile, gcxContents);
+
+            gcxFile = GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_w20c"));
+            gcxContents = File.ReadAllBytes(gcxFile);
+            raidenItemAward = GcxEditor.FindAllSubArray(gcxContents, PlantItemArray);
+
             gcxContents[raidenItemAward[1] + ItemIndexOffset] = randomizedReward.Index;
             gcxContents[raidenItemAward[1] + ItemCountOffset] = randomizedReward.Count;
 

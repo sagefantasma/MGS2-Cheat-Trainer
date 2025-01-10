@@ -142,6 +142,7 @@
             this.restrictNikitaCheckbox.TabIndex = 1;
             this.restrictNikitaCheckbox.Text = "Restrict Nikita to Shell 2";
             this.restrictNikitaCheckbox.UseVisualStyleBackColor = true;
+            this.restrictNikitaCheckbox.CheckedChanged += new System.EventHandler(this.restrictNikitaCheckbox_CheckedChanged);
             // 
             // seedAlwaysBeatableCheckbox
             // 

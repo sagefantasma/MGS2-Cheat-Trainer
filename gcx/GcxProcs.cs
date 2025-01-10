@@ -195,6 +195,13 @@ namespace gcx
             LittleEndianRepresentation = new byte[] { 0xF1, 0xE8, 0x42 },
             ProcDependencies = new RawProc[] { InventoryCheck }
         };
+        public static readonly RawProc AwardCoolantSpray = new RawProc
+        {
+            CommonName = "Coolant Spray",
+            BigEndianRepresentation = "7F5DC3",
+            LittleEndianRepresentation = new byte[] { 0xC3, 0x5D, 0x7F },
+            ProcDependencies = new RawProc[] { UnknownCheck3 }
+        };
         public static readonly RawProc AwardDigitalCamera = new RawProc
         {
             CommonName = "Digital Camera",
@@ -258,6 +265,97 @@ namespace gcx
             BigEndianRepresentation = "C92A40",
             LittleEndianRepresentation = new byte[] { 0x40, 0x2A, 0xC9 },
             ProcDependencies = null
+        };
+        public static readonly RawProc AwardCigarettes = new RawProc
+        {
+            CommonName = "Cigarettes",
+            BigEndianRepresentation = "FFDAC8",
+            LittleEndianRepresentation = new byte[] { 0xC8, 0xDA, 0xFF },
+            ProcDependencies = new RawProc[] { InventoryCheck }
+        };
+        public static readonly RawProc AwardSensorA = new RawProc
+        {
+            CommonName = "Sensor A",
+            BigEndianRepresentation = "FFDAC9",
+            LittleEndianRepresentation = new byte[] { 0xC9, 0xDA, 0xFF },
+            ProcDependencies = new RawProc[] { InventoryCheck }
+        };
+        public static readonly RawProc AwardAPSensor = new RawProc
+        {
+            CommonName = "AP Sensor",
+            BigEndianRepresentation = "FFDACA",
+            LittleEndianRepresentation = new byte[] { 0xCA, 0xDA, 0xFF },
+            ProcDependencies = new RawProc[] { InventoryCheck }
+        };
+        public static readonly RawProc AwardPhone = new RawProc
+        {
+            CommonName = "Phone",
+            BigEndianRepresentation = "FFDACB",
+            LittleEndianRepresentation = new byte[] { 0xCB, 0xDA, 0xFF },
+            ProcDependencies = new RawProc[] { InventoryCheck }
+        };
+        public static readonly RawProc AwardScope = new RawProc
+        {
+            CommonName = "Scope",
+            BigEndianRepresentation = "FFDACC",
+            LittleEndianRepresentation = new byte[] { 0xCC, 0xDA, 0xFF },
+            ProcDependencies = new RawProc[] { InventoryCheck }
+        };
+        public static readonly RawProc AwardMODisk = new RawProc
+        {
+            CommonName = "MO Disk",
+            BigEndianRepresentation = "FFDACD",
+            LittleEndianRepresentation = new byte[] { 0xCD, 0xDA, 0xFF },
+            ProcDependencies = new RawProc[] { InventoryCheck }
+        };
+        public static readonly RawProc AwardCamera = new RawProc
+        {
+            CommonName = "Camera",
+            BigEndianRepresentation = "FFDACE",
+            LittleEndianRepresentation = new byte[] { 0xCE, 0xDA, 0xFF },
+            ProcDependencies = new RawProc[] { InventoryCheck }
+        };
+        public static readonly RawProc AwardBDU = new RawProc
+        {
+            CommonName = "BDU",
+            BigEndianRepresentation = "FFDACF",
+            LittleEndianRepresentation = new byte[] { 0xCF, 0xDA, 0xFF },
+            ProcDependencies = new RawProc[] { InventoryCheck }
+        };
+        public static readonly RawProc AwardCard1 = new RawProc
+        {
+            CommonName = "Card 1",
+            BigEndianRepresentation = "FFDAD0",
+            LittleEndianRepresentation = new byte[] { 0xD0, 0xDA, 0xFF },
+            ProcDependencies = new RawProc[] { InventoryCheck }
+        };
+        public static readonly RawProc AwardCard2 = new RawProc
+        {
+            CommonName = "Card 2",
+            BigEndianRepresentation = "FFDAD1",
+            LittleEndianRepresentation = new byte[] { 0xD1, 0xDA, 0xFF },
+            ProcDependencies = new RawProc[] { InventoryCheck }
+        };
+        public static readonly RawProc AwardCard3 = new RawProc
+        {
+            CommonName = "Card 3",
+            BigEndianRepresentation = "FFDAD2",
+            LittleEndianRepresentation = new byte[] { 0xD2, 0xDA, 0xFF },
+            ProcDependencies = new RawProc[] { InventoryCheck }
+        };
+        public static readonly RawProc AwardCard4 = new RawProc
+        {
+            CommonName = "Card 4",
+            BigEndianRepresentation = "FFDAD3",
+            LittleEndianRepresentation = new byte[] { 0xD3, 0xDA, 0xFF },
+            ProcDependencies = new RawProc[] { InventoryCheck }
+        };
+        public static readonly RawProc AwardCard5 = new RawProc
+        {
+            CommonName = "Card 5",
+            BigEndianRepresentation = "FFDAD4",
+            LittleEndianRepresentation = new byte[] { 0xD4, 0xDA, 0xFF },
+            ProcDependencies = new RawProc[] { InventoryCheck }
         };
         #endregion
         #region Weapons
@@ -434,6 +532,20 @@ namespace gcx
             CommonName = "USP Ammo",
             BigEndianRepresentation = "AFCC9B",
             LittleEndianRepresentation = new byte[] { 0x9B, 0xCC, 0xAF },
+            ProcDependencies = new RawProc[] { InventoryCheck }
+        };
+        public static readonly RawProc AwardUsp = new RawProc
+        {
+            CommonName = "USP",
+            BigEndianRepresentation = "FFDAC6",
+            LittleEndianRepresentation = new byte[] { 0xC6, 0xDA, 0xFF },
+            ProcDependencies = new RawProc[] { InventoryCheck }
+        };
+        public static readonly RawProc AwardSocom = new RawProc
+        {
+            CommonName = "Socom",
+            BigEndianRepresentation = "FFDAC7",
+            LittleEndianRepresentation = new byte[] { 0xC7, 0xDA, 0xFF },
             ProcDependencies = new RawProc[] { InventoryCheck }
         };
         #endregion
@@ -641,12 +753,14 @@ namespace gcx
             AwardAksAmmo, AwardAksGun, AwardAksSuppressor, AwardBandages, AwardBodyArmor,
             AwardBook, AwardBox1, AwardBox2, AwardBox3, AwardBox4, 
             AwardBox5, AwardWetBox, AwardC4, AwardChaffG, AwardClaymore, 
-            AwardColdMeds, AwardColdMeds2, AwardDigitalCamera, AwardDirectionalMic, AwardGrenade, 
+            AwardColdMeds, AwardColdMeds2, AwardCoolantSpray, AwardDigitalCamera, AwardDirectionalMic, AwardGrenade, 
             AwardM4Ammo, AwardM4Gun, AwardMineDetector, AwardNvg, AwardM9Ammo, 
             AwardM9Gun, AwardNikitaAmmo, AwardNikitaGun, AwardPsg1Ammo, AwardPsg1Gun, 
             AwardPsg1tAmmo, AwardPsg1tGun, AwardRgbAmmo, AwardRgbGun, AwardSocomAmmo,
             AwardSocomSuppressor, AwardStingerAmmo, AwardStingerGun, AwardStunG, AwardUspAmmo, AwardPentazemin,
-            AwardRation, AwardSensorB, AwardShaver, AwardUspSuppressor, AwardThermalG, //EnableBlade
+            AwardRation, AwardSensorB, AwardShaver, AwardUspSuppressor, AwardThermalG,
+            AwardCigarettes, AwardSensorA, AwardAPSensor, AwardUsp, AwardSocom, AwardPhone, AwardScope,
+            AwardMODisk, AwardCamera, AwardBDU, AwardCard1, AwardCard2, AwardCard3, AwardCard4, AwardCard5 //EnableBlade
         };
     }
 }

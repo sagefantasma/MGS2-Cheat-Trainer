@@ -49,6 +49,13 @@ namespace MGS2_MC
 
         private void EnableCustomSeed_CheckedChanged(object sender, EventArgs e)
         {
+            //Ideally, going forward, the seed will automagically set your settings for you, but for now, just warn the user
+            /*ToggleControls(!customSeedCheckbox.Checked);
+            randomizeButton.Enabled = true;
+            restoreBaseGameButton.Enabled = true;
+            customSeedCheckbox.Enabled = true;*/
+            if (customSeedCheckbox.Checked)
+                MessageBox.Show("Heads up: be sure to check your settings to get accurate seed results. If you have different settings than the seed's original settings, you will get different output.");
             seedUpDown.Enabled = customSeedCheckbox.Checked;
         }
 
@@ -61,7 +68,7 @@ namespace MGS2_MC
             allWeaponsWillSpawnCheckbox.Enabled = enable;
             randomizeRationsCheckbox.Enabled = enable;
             randomizeStartingItemsCheckbox.Enabled = enable;
-            //randomizeAutomaticRewardsCheckbox.Enabled = enable;
+            randomizeAutomaticRewardsCheckbox.Enabled = enable;
             //randomizeBombLocations.Enabled = enable;
             randomizeEFConnectingBridgeClaymores.Enabled = enable;
             if (enable && customSeedCheckbox.Checked)
@@ -123,6 +130,14 @@ namespace MGS2_MC
             });
             MessageBox.Show("Finished! Spoiler file available in your Documents folder.", "Randomization Complete!");
             ToggleControls(true);
+        }
+
+        private void restrictNikitaCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!restrictNikitaCheckbox.Checked)
+            {
+                MessageBox.Show("This can cause logic-locks if the Nikita spawns on Shell 1 and you do not pick it up before fighting the Harrier.", "WARNING");
+            }
         }
     }
 }

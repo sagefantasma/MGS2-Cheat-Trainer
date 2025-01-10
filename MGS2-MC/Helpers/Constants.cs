@@ -74,27 +74,27 @@
         #endregion
 
         #region Weapon Table
-        public const int M9 = 0; //1
-        public const int USP = 2; //2
-        public const int SOCOM = 4; //3
-        public const int PSG1 = 6; //4
-        public const int RGB6 = 8; //5
-        public const int NIKITA = 10; //6
-        public const int STINGER = 12; //7
-        public const int CLAYMORE = 14; //8
-        public const int C4 = 16; //9
-        public const int CHAFF_GRENADE = 18; //10
-        public const int STUN_GRENADE = 20; //11
-        public const int D_MIC = 22; //12
-        public const int HIGH_FREQUENCY_BLADE = 24; //13
-        public const int COOLANT = 26; //14
-        public const int AKS74U = 28; //15
-        public const int MAGAZINE = 30; //16
-        public const int GRENADE = 32; //17
-        public const int M4 = 34; //18
-        public const int PSG1T = 36; //19
-        public const int D_MIC_ZOOMED = 38; //20
-        public const int BOOK = 40; //21
+        public const int M9 = 0; //1 - C2
+        public const int USP = 2; //2 - C3
+        public const int SOCOM = 4; //3 - C4
+        public const int PSG1 = 6; //4 - C5
+        public const int RGB6 = 8; //5 - C6
+        public const int NIKITA = 10; //6 - C7
+        public const int STINGER = 12; //7 - C8
+        public const int CLAYMORE = 14; //8 - C9
+        public const int C4 = 16; //9 - CA
+        public const int CHAFF_GRENADE = 18; //10 - CB
+        public const int STUN_GRENADE = 20; //11 - CC
+        public const int D_MIC = 22; //12 - CD
+        public const int HIGH_FREQUENCY_BLADE = 24; //13 - CE
+        public const int COOLANT = 26; //14 - CF
+        public const int AKS74U = 28; //15 - D0
+        public const int MAGAZINE = 30; //16 - D1
+        public const int GRENADE = 32; //17 - D2
+        public const int M4 = 34; //18 - D3
+        public const int PSG1T = 36; //19 - D4
+        public const int D_MIC_ZOOMED = 38; //20 - D5
+        public const int BOOK = 40; //21 - D6
         #endregion
     };
 }

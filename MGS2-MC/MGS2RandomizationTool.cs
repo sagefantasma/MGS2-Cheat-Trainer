@@ -97,7 +97,7 @@ namespace MGS2_MC
                 MGS2Randomizer.RandomizationOptions randomizationOptions = new MGS2Randomizer.RandomizationOptions
                 {
                     NoHardLogicLocks = seedAlwaysBeatableCheckbox.Checked,
-                    NoSoftLogicLocks = restrictNikitaCheckbox.Checked,
+                    NikitaShell2 = restrictNikitaCheckbox.Checked,
                     AllWeaponsSpawnable = allWeaponsWillSpawnCheckbox.Checked,
                     IncludeRations = randomizeRationsCheckbox.Checked,
                     RandomizeStartingItems = randomizeStartingItemsCheckbox.Checked,
@@ -106,6 +106,7 @@ namespace MGS2_MC
                     RandomizeClaymores = randomizeEFConnectingBridgeClaymores.Checked
                 };
                 int seed = 0;
+                randomizer.Randomizer = new Random(DateTime.UtcNow.Hour + DateTime.UtcNow.Minute + DateTime.UtcNow.Second + DateTime.UtcNow.Millisecond);
                 while (seed == 0)
                 {
                     try
@@ -119,7 +120,7 @@ namespace MGS2_MC
                     }
                     catch (MGS2Randomizer.RandomizerException ee)
                     {
-                        randomizer.Seed = new Random(DateTime.UtcNow.Hour + DateTime.UtcNow.Minute + DateTime.UtcNow.Second + DateTime.UtcNow.Millisecond).Next();
+                        randomizer.Seed = new Random(randomizer.Randomizer.Next()).Next();
                         randomizer.Randomizer = new Random(randomizer.Seed);
                     }
                     catch (Exception ee)

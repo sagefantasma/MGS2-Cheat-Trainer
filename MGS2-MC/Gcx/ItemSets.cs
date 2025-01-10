@@ -46,30 +46,30 @@ namespace MGS2_MC
     public static class MGS2Items
     {
         public static readonly Item Ration = new Item { Name = "Ration", Id = GcxTableMapping.Ration, ProcId = KnownProc.AwardRation };
-        public static readonly Item Scope1 = new Item { Name = "Scope", Id = GcxTableMapping.Scope1 };
+        public static readonly Item Scope1 = new Item { Name = "Scope", Id = GcxTableMapping.Scope1, ProcId = KnownProc.AwardScope };
         public static readonly Item ColdMeds = new Item { Name = "Cold Medicine", Id = GcxTableMapping.ColdMeds, ProcId = KnownProc.AwardColdMeds2 }; //TODO: VERIFY
         public static readonly Item Bandage = new Item { Name = "Bandage", Id = GcxTableMapping.Bandage, ProcId = KnownProc.AwardBandages };
         public static readonly Item Pentazemin = new Item { Name = "Pentazemin", Id = GcxTableMapping.Pentazemin, ProcId = KnownProc.AwardPentazemin };
-        public static readonly Item BDU = new Item { Name = "B.D.U.", Id = GcxTableMapping.BDU };
+        public static readonly Item BDU = new Item { Name = "B.D.U.", Id = GcxTableMapping.BDU, ProcId = KnownProc.AwardBDU };
         public static readonly Item BodyArmor = new Item { Name = "Body Armor", Id = GcxTableMapping.BodyArmor, ProcId = KnownProc.AwardBodyArmor };
         public static readonly Item Stealth = new Item { Name = "Stealth", Id = GcxTableMapping.Stealth };
         public static readonly Item MineDetector = new Item { Name = "Mine Detector", Id = GcxTableMapping.MineDetector, ProcId = KnownProc.AwardMineDetector };
-        public static readonly Item SensorA = new Item { Name = "Sensor A", Id = GcxTableMapping.SensorA };
+        public static readonly Item SensorA = new Item { Name = "Sensor A", Id = GcxTableMapping.SensorA, ProcId = KnownProc.AwardSensorA };
         public static readonly Item SensorB = new Item { Name = "Sensor B", Id = GcxTableMapping.SensorB, ProcId = KnownProc.AwardSensorB };
         public static readonly Item NVG = new Item { Name = "Night Vision Goggles", Id = GcxTableMapping.NVG, ProcId = KnownProc.AwardNvg };
         public static readonly Item Thermals = new Item { Name = "Thermal Goggles", Id = GcxTableMapping.Thermals, ProcId = KnownProc.AwardThermalG };
         public static readonly Item Scope2 = new Item { Name = "Scope", Id = GcxTableMapping.Scope2 };
         public static readonly Item DigitalCamera = new Item { Name = "Digital Camera", Id = GcxTableMapping.DigitalCamera, ProcId = KnownProc.AwardDigitalCamera };
         public static readonly Item Box1 = new Item { Name = "Box1", Id = GcxTableMapping.Box1, ProcId = KnownProc.AwardBox1 };
-        public static readonly Item Cigs = new Item { Name = "Cigarettes", Id = GcxTableMapping.Cigs };
-        public static readonly Item Card = new Item { Name = "Card", Id = GcxTableMapping.Card };
+        public static readonly Item Cigs = new Item { Name = "Cigarettes", Id = GcxTableMapping.Cigs, ProcId = KnownProc.AwardCigarettes };
+        public static readonly Item Card = new Item { Name = "Card", Id = GcxTableMapping.Card, ProcId = KnownProc.AwardCard1 };
         public static readonly Item Shaver = new Item { Name = "Shaver", Id = GcxTableMapping.Shaver, ProcId = KnownProc.AwardShaver };
-        public static readonly Item Phone = new Item { Name = "Phone", Id = GcxTableMapping.Phone };
-        public static readonly Item Camera1 = new Item { Name = "Camera", Id = GcxTableMapping.Camera1 };
+        public static readonly Item Phone = new Item { Name = "Phone", Id = GcxTableMapping.Phone, ProcId = KnownProc.AwardPhone };
+        public static readonly Item Camera1 = new Item { Name = "Camera", Id = GcxTableMapping.Camera1, ProcId = KnownProc.AwardCamera };
         public static readonly Item Box2 = new Item { Name = "Box 2", Id = GcxTableMapping.Box2, ProcId = KnownProc.AwardBox2 };
         public static readonly Item Box3 = new Item { Name = "Box 3", Id = GcxTableMapping.Box3, ProcId = KnownProc.AwardBox3 };
         public static readonly Item WetBox = new Item { Name = "Wet Box", Id = GcxTableMapping.WetBox, ProcId = KnownProc.AwardWetBox };
-        public static readonly Item APSensor = new Item { Name = "A.P. Sensor", Id = GcxTableMapping.APSensor };
+        public static readonly Item APSensor = new Item { Name = "A.P. Sensor", Id = GcxTableMapping.APSensor, ProcId = KnownProc.AwardAPSensor };
         public static readonly Item Box4 = new Item { Name = "Box 4", Id = GcxTableMapping.Box4, ProcId = KnownProc.AwardBox4 };
         public static readonly Item Box5 = new Item { Name = "Box 5", Id = GcxTableMapping.Box5, ProcId = KnownProc.AwardBox5 };
         public static readonly Item SocomSupp = new Item { Name = "Socom Suppressor", Id = GcxTableMapping.SocomSupp, ProcId = KnownProc.AwardSocomSuppressor };
@@ -77,7 +77,7 @@ namespace MGS2_MC
         public static readonly Item Camera2 = new Item { Name = "Camera", Id = GcxTableMapping.Camera2 };
         public static readonly Item Bandana = new Item { Name = "Bandana", Id = GcxTableMapping.Bandana };
         public static readonly Item DogTags = new Item { Name = "Dog Tags", Id = GcxTableMapping.DogTags };
-        public static readonly Item MoDisc = new Item { Name = "M.O. Disc", Id = GcxTableMapping.MoDisc };
+        public static readonly Item MoDisc = new Item { Name = "M.O. Disc", Id = GcxTableMapping.MoDisc, ProcId = KnownProc.AwardMODisk };
         public static readonly Item UspSupp = new Item { Name = "USP Suppressor", Id = GcxTableMapping.UspSupp, ProcId = KnownProc.AwardUspSuppressor };
         public static readonly Item InfWig = new Item { Name = "Infinity Wig", Id = GcxTableMapping.InfWig };
         public static readonly Item BlueWig = new Item { Name = "Blue Wig", Id = GcxTableMapping.BlueWig };
@@ -88,9 +88,9 @@ namespace MGS2_MC
     {
         public static readonly Item M9 = new Item { Name = "M9", Id = GcxTableMapping.M9, ProcId = KnownProc.AwardM9Gun };
         public static readonly Item M9Ammo = new Item { Name = "M9 Ammo", Id = GcxTableMapping.M9, ProcId = KnownProc.AwardM9Ammo };
-        public static readonly Item Usp = new Item { Name = "USP", Id = GcxTableMapping.Usp };
+        public static readonly Item Usp = new Item { Name = "USP", Id = GcxTableMapping.Usp, ProcId = KnownProc.AwardUsp };
         public static readonly Item UspAmmo = new Item { Name = "USP Ammo", Id = GcxTableMapping.Usp, ProcId = KnownProc.AwardUspAmmo };
-        public static readonly Item Socom = new Item { Name = "SOCOM", Id = GcxTableMapping.Socom };
+        public static readonly Item Socom = new Item { Name = "SOCOM", Id = GcxTableMapping.Socom, ProcId = KnownProc.AwardSocom };
         public static readonly Item SocomAmmo = new Item { Name = "SOCOM Ammo", Id = GcxTableMapping.Socom, ProcId = KnownProc.AwardSocomAmmo };
         public static readonly Item Psg1 = new Item { Name = "PSG1", Id = GcxTableMapping.Psg1, ProcId = KnownProc.AwardPsg1Gun };
         public static readonly Item Psg1Ammo = new Item { Name = "PSG1 Ammo", Id = GcxTableMapping.Psg1, ProcId = KnownProc.AwardPsg1Ammo };
@@ -106,7 +106,7 @@ namespace MGS2_MC
         public static readonly Item Stun = new Item { Name = "Stun Grenade", Id = GcxTableMapping.Stun, ProcId = KnownProc.AwardStunG };
         public static readonly Item Dmic1 = new Item { Name = "Directional Microphone", Id = GcxTableMapping.Dmic1, ProcId = KnownProc.AwardDirectionalMic };
         public static readonly Item HfBlade = new Item { Name = "H.F. Blade", Id = GcxTableMapping.HfBlade };
-        public static readonly Item Coolant = new Item { Name = "Coolant", Id = GcxTableMapping.Coolant };
+        public static readonly Item Coolant = new Item { Name = "Coolant", Id = GcxTableMapping.Coolant, ProcId = KnownProc.AwardCoolantSpray };
         public static readonly Item Aks74u = new Item { Name = "AKS-74u", Id = GcxTableMapping.Aks74u, ProcId = KnownProc.AwardAksGun };
         public static readonly Item Aks74uAmmo = new Item { Name = "AKS-74u Ammo", Id = GcxTableMapping.Aks74u, ProcId = KnownProc.AwardAksAmmo };
         public static readonly Item Magazine = new Item { Name = "Empty Magazine", Id = GcxTableMapping.Magazine };
@@ -247,14 +247,27 @@ namespace MGS2_MC
 
     public static class LogicRequirements
     {
+        public static List<string> TankerProgressionItems = new List<string>
+        {
+            MGS2Items.Camera1.Name,
+            MGS2Weapons.Usp.Name
+        };
+
         public static List<string> ProgressionItems = new List<string>
         {
             MGS2Weapons.Psg1.Name,
-            MGS2Weapons.Coolant.Name,
             MGS2Weapons.Dmic1.Name,
             MGS2Weapons.Aks74u.Name,
             MGS2Weapons.Nikita.Name,
-            MGS2Items.SensorB.Name
+            MGS2Items.SensorB.Name,
+        };
+
+        public static List<string> AutoAwardedProgressionItems = new List<string>
+        {
+            MGS2Items.Card.Name,
+            MGS2Weapons.Socom.Name,
+            MGS2Weapons.Coolant.Name,
+            MGS2Items.BDU.Name
         };
 
         static readonly ItemSet TankerPart1 = new ItemSet();
@@ -275,12 +288,11 @@ namespace MGS2_MC
         {
             TankerPart1.Name = "Before Olga";
             TankerPart1.Entities = new Dictionary<Location, Item>();
-            TankerPart1.ItemsNeededToProgress.Add(MGS2Weapons.M9); //USP or M9
+            TankerPart1.ItemsNeededToProgress.Add(MGS2Weapons.Usp); //USP or M9
 
             TankerPart2.Name = "After Olga, Before Deck 2";
             TankerPart2.Entities = new Dictionary<Location, Item>();
             TankerPart2.ItemsNeededToProgress.AddRange(TankerPart1.ItemsNeededToProgress);
-            TankerPart2.ItemsNeededToProgress.Add(MGS2Weapons.Usp);
 
             TankerPart3.Name = "Deck 2 & Beyond";
             TankerPart3.Entities = new Dictionary<Location, Item>();
@@ -499,7 +511,7 @@ namespace MGS2_MC
             PlantSet2.Name = "Before Stillman";
             PlantSet2.Entities = new Dictionary<Location, Item>();
             PlantSet1.Entities.ToList().ForEach(entity => PlantSet2.Entities.Add(entity.Key, entity.Value));
-            //PlantSet2.ItemsNeededToProgress.AddRange(new Item[] { MGS2Weapons.Coolant, MGS2Items.Card }); //level 1 card;
+            //PlantSet2.ItemsNeededToProgress.AddRange(new Item[] { MGS2Weapons.Coolant}); //level 1 card;
             #region w14a
             //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             PlantSet2.Entities.Add(new Location(gcxFile: "w14a", spawnId: new byte[] { 5, 255, 249, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "Catwalk", mandatorySpawn: true), MGS2Weapons.M9Ammo);
@@ -517,8 +529,8 @@ namespace MGS2_MC
             PlantSet3.Entities = new Dictionary<Location, Item>();
             PlantSet2.Entities.ToList().ForEach(entity => PlantSet3.Entities.Add(entity.Key, entity.Value));
             PlantSet3.ItemsNeededToProgress.AddRange(PlantSet2.ItemsNeededToProgress);
-            PlantSet3.ItemsNeededToProgress.Add(MGS2Items.SensorB);
-            //PlantSet3.ItemsNeededToProgress.AddRange(new Item[] { MGS2Weapons.M9, MGS2Weapons.Socom });
+            //PlantSet3.ItemsNeededToProgress.Add(MGS2Items.SensorB);
+            PlantSet3.ItemsNeededToProgress.AddRange(new Item[] { MGS2Weapons.Socom, MGS2Weapons.Coolant });
             #region w12b
             //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             PlantSet3.Entities.Add(new Location(gcxFile: "w12b", spawnId: new byte[] { 254, 105, 87, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "UnderPipes"), MGS2Items.Ration);
@@ -601,7 +613,7 @@ namespace MGS2_MC
             PlantSet4.Entities = new Dictionary<Location, Item>();
             PlantSet3.Entities.ToList().ForEach(entity => PlantSet4.Entities.Add(entity.Key, entity.Value));
             PlantSet4.ItemsNeededToProgress.AddRange(PlantSet3.ItemsNeededToProgress);
-            PlantSet4.ItemsNeededToProgress.AddRange(new Item[] { /*MGS2Items.Card, MGS2Items.BDU,*/ MGS2Weapons.Aks74u }); //level 2 card;
+            PlantSet4.ItemsNeededToProgress.AddRange(new Item[] { MGS2Items.BDU, MGS2Weapons.Aks74u }); //level 2 card;
             #region w22a
             //ak room
             PlantSet4.Entities.Add(new Location(gcxFile: "w22a", spawnId: new byte[] { 0x30, 0x65, 0xC2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "AKRoom1"), MGS2Items.AkSupp); //ak & m4 room, easy difficulty & other params i dont know
@@ -672,7 +684,7 @@ namespace MGS2_MC
             PlantSet6.Entities = new Dictionary<Location, Item>();
             PlantSet5.Entities.ToList().ForEach(entity => PlantSet6.Entities.Add(entity.Key, entity.Value));
             PlantSet6.ItemsNeededToProgress.AddRange(PlantSet5.ItemsNeededToProgress);
-            PlantSet6.ItemsNeededToProgress.AddRange(new Item[] { MGS2Weapons.Psg1, /*MGS2Items.Card*/ }); //level 3 card
+            PlantSet6.ItemsNeededToProgress.AddRange(new Item[] { MGS2Weapons.Psg1 }); //level 3 card
             #region w22a
             //RGB6 room
             PlantSet6.Entities.Add(new Location(gcxFile: "w22a", spawnId: new byte[] { 0x98, 0x83, 0xA4, 0x1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "RgbRoom1", mandatorySpawn: true), MGS2Weapons.Psg1tAmmo);
@@ -758,8 +770,7 @@ namespace MGS2_MC
             PlantSet8.Name = "Before Emma";
             PlantSet8.Entities = new Dictionary<Location, Item>();
             PlantSet7.Entities.ToList().ForEach(entity => PlantSet8.Entities.Add(entity.Key, entity.Value));
-            PlantSet8.ItemsNeededToProgress.AddRange(PlantSet7.ItemsNeededToProgress);
-            //PlantSet8.ItemsNeededToProgress.Add(MGS2Items.Card); //level 4 card
+            PlantSet8.ItemsNeededToProgress.AddRange(PlantSet7.ItemsNeededToProgress); //level 4 card
             #region w31c
             /*Vamp fight spawns:
              * M9 - 1247E79, C950, E796, FFFC49CE x3
@@ -784,8 +795,7 @@ namespace MGS2_MC
             PlantSet9.Name = "Before Strut L";
             PlantSet9.Entities = new Dictionary<Location, Item>();
             PlantSet8.Entities.ToList().ForEach(entity => PlantSet9.Entities.Add(entity.Key, entity.Value));
-            PlantSet9.ItemsNeededToProgress.AddRange(PlantSet8.ItemsNeededToProgress);
-            //PlantSet9.ItemsNeededToProgress.Add(MGS2Items.Card); //level 5 card
+            PlantSet9.ItemsNeededToProgress.AddRange(PlantSet8.ItemsNeededToProgress); //level 5 card
             #region w25d
             //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             PlantSet9.Entities.Add(new Location(gcxFile: "w25d", spawnId: new byte[] { 203, 34, 102 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "ShellEntrance", mandatorySpawn: true), MGS2Weapons.Chaff);
@@ -798,15 +808,15 @@ namespace MGS2_MC
             //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             //TODO: give spawns names
             PlantSet9.Entities.Add(new Location(gcxFile: "w31d", spawnId: new byte[] { 185, 46, 10, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "RightsideAlcove", mandatorySpawn: true), MGS2Weapons.Aks74uAmmo);
-            PlantSet9.Entities.Add(new Location(gcxFile: "w31d", spawnId: new byte[] { 185, 46, 10, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "ElectricalRoom", mandatorySpawn: true), MGS2Weapons.Aks74uAmmo);
-            PlantSet9.Entities.Add(new Location(gcxFile: "w31d", spawnId: new byte[] { 121, 126, 36, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "ElectricalRoom", mandatorySpawn: true), MGS2Weapons.M9Ammo);
-            PlantSet9.Entities.Add(new Location(gcxFile: "w31d", spawnId: new byte[] { 77, 171, 249, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "ElectricalRoom", mandatorySpawn: true), MGS2Weapons.Psg1Ammo);
+            PlantSet9.Entities.Add(new Location(gcxFile: "w31d", spawnId: new byte[] { 185, 46, 10, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "ElectricalRoom1", mandatorySpawn: true), MGS2Weapons.Aks74uAmmo);
+            PlantSet9.Entities.Add(new Location(gcxFile: "w31d", spawnId: new byte[] { 121, 126, 36, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "ElectricalRoom2", mandatorySpawn: true), MGS2Weapons.M9Ammo);
+            PlantSet9.Entities.Add(new Location(gcxFile: "w31d", spawnId: new byte[] { 77, 171, 249, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "ElectricalRoom3", mandatorySpawn: true), MGS2Weapons.Psg1Ammo);
             PlantSet9.Entities.Add(new Location(gcxFile: "w31d", spawnId: new byte[] { 152, 131, 164, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.Psg1tAmmo);
             PlantSet9.Entities.Add(new Location(gcxFile: "w31d", spawnId: new byte[] { 77, 188, 171, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0), MGS2Weapons.Rgb6Ammo);
             PlantSet9.Entities.Add(new Location(gcxFile: "w31d", spawnId: new byte[] { 187, 113, 139, 3 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "LeftsideAlcove", mandatorySpawn: true), MGS2Weapons.SocomAmmo);
             PlantSet9.Entities.Add(new Location(gcxFile: "w31d", spawnId: new byte[] { 187, 113, 139, 4 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "StrutHDoor", mandatorySpawn: true), MGS2Weapons.SocomAmmo);
             PlantSet9.Entities.Add(new Location(gcxFile: "w31d", spawnId: new byte[] { 107, 43, 115, 1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "LeftsideLanding", mandatorySpawn: true), MGS2Items.Pentazemin);
-            PlantSet9.Entities.Add(new Location(gcxFile: "w31d", spawnId: new byte[] { 254, 105, 87, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "ElectricalRoom"), MGS2Items.Ration);
+            PlantSet9.Entities.Add(new Location(gcxFile: "w31d", spawnId: new byte[] { 254, 105, 87, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "ElectricalRoom4"), MGS2Items.Ration);
             #endregion
 
             PlantSet10.Name = "After Strut L";

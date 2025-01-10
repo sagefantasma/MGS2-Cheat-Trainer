@@ -126,9 +126,9 @@
             this.randomizeAutomaticRewardsCheckbox.AutoSize = true;
             this.randomizeAutomaticRewardsCheckbox.Location = new System.Drawing.Point(12, 128);
             this.randomizeAutomaticRewardsCheckbox.Name = "randomizeAutomaticRewardsCheckbox";
-            this.randomizeAutomaticRewardsCheckbox.Size = new System.Drawing.Size(174, 17);
+            this.randomizeAutomaticRewardsCheckbox.Size = new System.Drawing.Size(290, 17);
             this.randomizeAutomaticRewardsCheckbox.TabIndex = 2;
-            this.randomizeAutomaticRewardsCheckbox.Text = "Randomize Automatic Rewards";
+            this.randomizeAutomaticRewardsCheckbox.Text = "Randomize Automatic Rewards(Does not include Cards)";
             this.randomizeAutomaticRewardsCheckbox.UseVisualStyleBackColor = true;
             // 
             // restrictNikitaCheckbox

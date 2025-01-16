@@ -760,7 +760,7 @@ namespace gcx
             AwardSocomSuppressor, AwardStingerAmmo, AwardStingerGun, AwardStunG, AwardUspAmmo, AwardPentazemin,
             AwardRation, AwardSensorB, AwardShaver, AwardUspSuppressor, AwardThermalG,
             AwardCigarettes, AwardSensorA, AwardAPSensor, AwardUsp, AwardSocom, AwardPhone, AwardScope,
-            AwardMODisk, AwardCamera, AwardBDU, AwardCard1, AwardCard2, AwardCard3, AwardCard4, AwardCard5 //EnableBlade
+            AwardMODisk, AwardCamera, AwardBDU, AwardCard1, AwardCard2, AwardCard3, AwardCard4, AwardCard5, //EnableBlade
         };
     }
 }

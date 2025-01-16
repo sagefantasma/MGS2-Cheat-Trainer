@@ -1,9 +1,15 @@
-﻿using System;
+﻿using MathNet.Numerics.Random;
+using MathNet.Spatial.Euclidean;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net.Mime;
+using System.Reflection;
+using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -221,14 +227,218 @@ namespace MGS2_MC
         {
             //TODO: we should really make this a Polygon instead of just a box, so we can include more area :)
             //and also make sure the claymore positions somewhat make sense(maybe a north polygon and south polygon?)
+            //int leftWall = 0x4CEB;
             int leftWall = 0xBF68;
-            //uint topWall = 0xFFFF0218;
-            int topWall = 0x0218;
+            //uint topWall = 0xFFFEDC3D;
+            uint topWall = 0xFFFF0218;
+            //int rightWall = 0xED4F;
             int rightWall = 0xD6D8;
-            //uint bottomWall = 0xFFFF2928;
-            int bottomWall = 0x2928;
-            
+            //uint bottomWall = 0xFFFF5421;
+            uint bottomWall = 0xFFFF2928;
+            List<Point2D> w21Points = new List<Point2D>
+            {
+                new Point2D(0xED4F, 0xFFFEDC3D),
+                new Point2D(0xCF29,0xFFFEDCFD),
+                new Point2D(0xCE0F, 0xFFFEDE6E),
+                new Point2D(0xCF47, 0xFFFEDFE9),
+                new Point2D(0xD16F, 0xFFFEE0A9),
+                new Point2D(0xD16F, 0xFFFEE48B),
+                new Point2D(0xCEC0, 0xFFFEE53E),
+                new Point2D(0xCD88, 0xFFFEE67B),
+                new Point2D(0xCD88, 0xFFFEFA69),
+                new Point2D(0xCED7, 0xFFFEFBCA),
+                new Point2D(0xD696, 0xFFFEFBCA),
+                new Point2D(0xD74A, 0xFFFEFC7E),
+                new Point2D(0xD74C, 0xFFFF2EC2),
+                new Point2D(0xD696, 0xFFFF2F76),
+                new Point2D(0xCF19, 0xFFFF2F77),
+                new Point2D(0xCD87, 0xFFFF30FB),
+                new Point2D(0xCD86, 0xFFFF44DE),
+                new Point2D(0xCEA2, 0xFFFF4601),
+                new Point2D(0xD0BA, 0xFFFF4601),
+                new Point2D(0xD16E, 0xFFFF46B6),
+                new Point2D(0xD170, 0xFFFF4A98),
+                new Point2D(0xD0BA, 0xFFFF4B57),
+                new Point2D(0xCF63, 0xFFFF4B57),
+                new Point2D(0xCE0F, 0xFFFF4C67),
+                new Point2D(0xCF62, 0xFFFF4E43),
+                new Point2D(0xE4BF, 0xFFFF4E43),
+                new Point2D(0xE57F, 0xFFFF4F03),
+                new Point2D(0xE57F, 0xFFFF5361),
+                new Point2D(0xE4BF, 0xFFFF5421),
+                new Point2D(0xC508, 0xFFFF5421),
+                new Point2D(0xC449, 0xFFFF5362),
+                new Point2D(0xC449, 0xFFFF4F03),
+                new Point2D(0xC509, 0xFFFF4E43),
+                new Point2D(0xC719, 0xFFFF4E43),
+                new Point2D(0xC831, 0xFFFF4D22),
+                new Point2D(0xC705, 0xFFFF4B57),
+                new Point2D(0xC585, 0xFFFF4B57),
+                new Point2D(0xC4D0, 0xFFFF4A98),
+                new Point2D(0xC4D2, 0xFFFF46B6),
+                new Point2D(0xC585, 0xFFFF4601),
+                new Point2D(0xC7AF, 0xFFFF4602),
+                new Point2D(0xC8B8, 0xFFFF448C),
+                new Point2D(0xC8B9, 0xFFFF3102),
+                new Point2D(0xC73A, 0xFFFF2F76),
+                new Point2D(0xBFA9, 0xFFFF2F77),
+                new Point2D(0xBEF4, 0xFFFF2EC3),
+                new Point2D(0xBEF6, 0xFFFF1955),
+                new Point2D(0xBDB1, 0xFFFF1808),
+                new Point2D(0x5D6D, 0xFFFF1808),
+                new Point2D(0x5C40, 0xFFFF1A14),
+                new Point2D(0x5C3E, 0xFFFF1B3B),
+                new Point2D(0x5B8A, 0xFFFF1BF0),
+                new Point2D(0x57A8, 0xFFFF1BF0),
+                new Point2D(0x56E9, 0xFFFF1B3B),
+                new Point2D(0x56E9, 0xFFFF19CD),
+                new Point2D(0x552E, 0xFFFF188F),
+                new Point2D(0x533D, 0xFFFF2D11),
+                new Point2D(0x4CF5, 0xFFFF2D11),
+                new Point2D(0x4CEB, 0xFFFF0EC9),
+                new Point2D(0x533D, 0xFFFF0EC9),
+                new Point2D(0x5537, 0xFFFF12B1),
+                new Point2D(0x56E9, 0xFFFF101D),
+                new Point2D(0x5C40, 0xFFFF1006),
+                new Point2D(0x5EFC, 0xFFFF133A),
+                new Point2D(0xBC39, 0xFFFF133A),
+                new Point2D(0xBEF6, 0xFFFF1078),
+                new Point2D(0xBFA9, 0xFFFEFBC8),
+                new Point2D(0xC676, 0xFFFEFBC9),
+                new Point2D(0xC8B8, 0xFFFEFA4C),
+                new Point2D(0xC8B9, 0xFFFEE7B7),
+                new Point2D(0xC5CE, 0xFFFEE53E),
+                new Point2D(0xC59A, 0xFFFEDFE9),
+                new Point2D(0xC831, 0xFFFEDE34),
+                new Point2D(0xC508, 0xFFFEDCFD),
+                new Point2D(0xC508, 0xFFFED71F),
+                new Point2D(0xED4F, 0xFFFED7A3)
+            };
 
+            List<PointF> w21Pointz = new List<PointF>
+            {
+                
+                new PointF(0xED4F, 0xFFFEDC3D),
+                new PointF(0xCF29, 0xFFFEDCFD),
+                new PointF(0xCE0F, 0xFFFEDE6E),
+                new PointF(0xCF47, 0xFFFEDFE9),
+                new PointF(0xD16F, 0xFFFEE0A9),
+                new PointF(0xD16F, 0xFFFEE48B),
+                new PointF(0xCEC0, 0xFFFEE53E),
+                new PointF(0xCD88, 0xFFFEE67B),
+                new PointF(0xCD88, 0xFFFEFA69),
+                new PointF(0xCED7, 0xFFFEFBCA),
+                new PointF(0xD696, 0xFFFEFBCA),
+                new PointF(0xD74A, 0xFFFEFC7E),
+                new PointF(0xD74C, 0xFFFF2EC2),
+                new PointF(0xD696, 0xFFFF2F76),
+                new PointF(0xCF19, 0xFFFF2F77),
+                new PointF(0xCD87, 0xFFFF30FB),
+                new PointF(0xCD86, 0xFFFF44DE),
+                new PointF(0xCEA2, 0xFFFF4601),
+                new PointF(0xD0BA, 0xFFFF4601),
+                new PointF(0xD16E, 0xFFFF46B6),
+                new PointF(0xD170, 0xFFFF4A98),
+                new PointF(0xD0BA, 0xFFFF4B57),
+                new PointF(0xCF63, 0xFFFF4B57),
+                new PointF(0xCE0F, 0xFFFF4C67),
+                new PointF(0xCF62, 0xFFFF4E43),
+                new PointF(0xE4BF, 0xFFFF4E43),
+                new PointF(0xE57F, 0xFFFF4F03),
+                new PointF(0xE57F, 0xFFFF5361),
+                new PointF(0xE4BF, 0xFFFF5421),
+                new PointF(0xC508, 0xFFFF5421),
+                new PointF(0xC449, 0xFFFF5362),
+                new PointF(0xC449, 0xFFFF4F03),
+                new PointF(0xC509, 0xFFFF4E43),
+                new PointF(0xC719, 0xFFFF4E43),
+                new PointF(0xC831, 0xFFFF4D22),
+                new PointF(0xC705, 0xFFFF4B57),
+                new PointF(0xC585, 0xFFFF4B57),
+                new PointF(0xC4D0, 0xFFFF4A98),
+                new PointF(0xC4D2, 0xFFFF46B6),
+                new PointF(0xC585, 0xFFFF4601),
+                new PointF(0xC7AF, 0xFFFF4602),
+                new PointF(0xC8B8, 0xFFFF448C),
+                new PointF(0xC8B9, 0xFFFF3102),
+                new PointF(0xC73A, 0xFFFF2F76),
+                new PointF(0xBFA9, 0xFFFF2F77),
+                new PointF(0xBEF4, 0xFFFF2EC3),
+                new PointF(0xBEF6, 0xFFFF1955),
+                new PointF(0xBDB1, 0xFFFF1808),
+                new PointF(0x5D6D, 0xFFFF1808),
+                new PointF(0x5C40, 0xFFFF1A14),
+                new PointF(0x5C3E, 0xFFFF1B3B),
+                new PointF(0x5B8A, 0xFFFF1BF0),
+                new PointF(0x57A8, 0xFFFF1BF0),
+                new PointF(0x56E9, 0xFFFF1B3B),
+                new PointF(0x56E9, 0xFFFF19CD),
+                new PointF(0x552E, 0xFFFF188F),
+                new PointF(0x533D, 0xFFFF2D11),
+                new PointF(0x4CF5, 0xFFFF2D11),
+                new PointF(0x4CEB, 0xFFFF0EC9),
+                new PointF(0x533D, 0xFFFF0EC9),
+                new PointF(0x5537, 0xFFFF12B1),
+                new PointF(0x56E9, 0xFFFF101D),
+                new PointF(0x5C40, 0xFFFF1006),
+                new PointF(0x5EFC, 0xFFFF133A),
+                new PointF(0xBC39, 0xFFFF133A),
+                new PointF(0xBEF6, 0xFFFF1078),
+                new PointF(0xBFA9, 0xFFFEFBC8),
+                new PointF(0xC676, 0xFFFEFBC9),
+                new PointF(0xC8B8, 0xFFFEFA4C),
+                new PointF(0xC8B9, 0xFFFEE7B7),
+                new PointF(0xC5CE, 0xFFFEE53E),
+                new PointF(0xC59A, 0xFFFEDFE9),
+                new PointF(0xC831, 0xFFFEDE34),
+                new PointF(0xC508, 0xFFFEDCFD),
+                new PointF(0xC508, 0xFFFED71F),
+                new PointF(0xED4F, 0xFFFED7A3)
+            };
+
+            /* Debugging my drawn shape
+            for(int i =0; i< w21Pointz.Count; i++)
+            {
+                w21Pointz[i] = new PointF(w21Pointz[i].X/10, w21Pointz[i].Y/10);
+            }
+
+            
+            //var polygon1D = polygon2D.ReduceComplexity(1);
+            //var otherPoly = polygon2D.ToPolyLine2D();
+            int height = (int)(bottomWall - topWall) / 10 + 500;
+            int width = (rightWall - leftWall)/ 10 + 500;
+
+            RectangleF bounds = GetPolygonBounds(w21Pointz.ToArray());
+            float offsetX = (width - bounds.Width) / 2 - bounds.Left;
+            float offsetY = (height - bounds.Height) / 2 - bounds.Top;
+            
+            Bitmap bmp = new Bitmap(width, height);
+
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                g.Clear(Color.White);
+                using(Pen pen = new Pen(Color.Green, 50))
+                {
+                    PointF[] translatedPoints = TranslatePoints(w21Pointz.ToArray(), offsetX, offsetY);
+
+                    g.DrawPolygon(pen, translatedPoints);
+                }
+            }
+
+            bmp.Save("testpolygon2.png", ImageFormat.Png);
+            bmp.Dispose();
+
+            //  Graphics graphics = Graphics.FromImage(bmp);
+            //Pen pen = new Pen(Color.FromKnownColor(KnownColor.Green), 1000);
+
+            //graphics.DrawPolygon(pen, w21Pointz.ToArray());
+            //bmp.Save("testpolygon.png");
+            */
+
+            GraphicsPath polygonPath = new GraphicsPath();
+            polygonPath.AddPolygon(w21Pointz.ToArray());
+
+            MathNet.Spatial.Euclidean.Polygon2D polygon2D = new MathNet.Spatial.Euclidean.Polygon2D(w21Points);
             string gcxFile = GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_w21a"));
             byte[] gcxContents = File.ReadAllBytes(gcxFile);
             List<int> claymores = GcxEditor.FindAllSubArray(gcxContents, new byte[] { 0x85, 0xD6, 0x78 });
@@ -236,14 +446,59 @@ namespace MGS2_MC
             foreach(int claymore in claymores)
             {
                 int xPos = Randomizer.Next(leftWall, rightWall);
-                int yPos = Randomizer.Next(topWall, bottomWall);
+                uint yPos = (uint)GetRandomFloat(topWall, bottomWall);
 
-                Array.Copy(BitConverter.GetBytes(xPos), 0, gcxContents, claymore + 10, 2);
-                Array.Copy(BitConverter.GetBytes(yPos), 0, gcxContents, claymore + 16, 2); //the FFFF should be untouched with this and still work
+                while (!polygonPath.IsVisible(new PointF(xPos, yPos)))
+                {
+                    xPos = Randomizer.Next(leftWall, rightWall);
+                    yPos = (uint)GetRandomFloat(topWall, bottomWall);
+                }
+
+                if (polygonPath.IsVisible(new PointF(xPos, yPos)))
+                {
+                    Array.Copy(BitConverter.GetBytes(xPos), 0, gcxContents, claymore + 10, 2);
+                    Array.Copy(BitConverter.GetBytes(yPos), 0, gcxContents, claymore + 14, 4); //the FFFF should be untouched with this and still work
+                }
             }
 
             File.WriteAllBytes(gcxFile, gcxContents);
         }
+
+        float GetRandomFloat(float min, float max)
+        {
+            return (float)Randomizer.NextDouble() * (max - min) + min;
+        }
+
+        #region ChatGPT debug image debugging code
+        static RectangleF GetPolygonBounds(PointF[] points)
+        {
+            float minX = float.MaxValue;
+            float minY = float.MaxValue;
+            float maxX = float.MinValue;
+            float maxY = float.MinValue;
+
+            foreach (var point in points)
+            {
+                if (point.X < minX) minX = point.X;
+                if (point.Y < minY) minY = point.Y;
+                if (point.X > maxX) maxX = point.X;
+                if (point.Y > maxY) maxY = point.Y;
+            }
+
+            return new RectangleF(minX, minY, maxX - minX, maxY - minY);
+        }
+
+        // Function to translate points by a given offset
+        static PointF[] TranslatePoints(PointF[] points, float offsetX, float offsetY)
+        {
+            PointF[] translatedPoints = new PointF[points.Length];
+            for (int i = 0; i < points.Length; i++)
+            {
+                translatedPoints[i] = new PointF(points[i].X + offsetX, points[i].Y + offsetY);
+            }
+            return translatedPoints;
+        }
+        #endregion
 
         private void RandomizeStartingItems()
         {
@@ -805,7 +1060,538 @@ namespace MGS2_MC
 
         private void RandomizeC4Locations()
         {
+            byte[] bulC4InitBytes = { 0x11, 0xBB, 0xDB, 0x06 };
+            string gcxFile;
+            byte[] gcxContents;
+            List<int> c4Locations;
 
+            #region Strut A Roof
+            int roofChoice = Randomizer.Next(2);
+            byte[] roofXLocation = new byte[2];
+            byte[] roofYLocation = new byte[2];
+            byte[] roofZLocation = new byte[2];
+            switch (roofChoice)
+            {
+                case 0:
+                    //change nothing
+                    break;
+                case 1:
+                    roofXLocation = new byte[] { 0xCD, 0x0B };
+                    roofYLocation = new byte[] { 0x6A, 0x14 };
+                    roofZLocation = new byte[] { 0x00, 0x00};
+                    break;
+                case 2:
+                    roofXLocation = new byte[] { 0x52, 0xE4 };
+                    roofYLocation = new byte[] { 0x6A, 0x18 };
+                    roofZLocation = new byte[] { 0x57, 0x09};
+                    break;
+            }
+
+            if (roofChoice != 0)
+            {
+                gcxFile = GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_w12a"));
+                gcxContents = File.ReadAllBytes(gcxFile);
+                c4Locations = GcxEditor.FindAllSubArray(gcxContents, bulC4InitBytes);
+
+                foreach (int c4Location in c4Locations)
+                {
+                    Array.Copy(roofXLocation, 0, gcxContents, c4Location + 0xC, 2);
+                    Array.Copy(roofYLocation, 0, gcxContents, c4Location + 0xF, 2);
+                    Array.Copy(roofZLocation, 0, gcxContents, c4Location + 0x12, 2);
+                }
+
+                File.WriteAllBytes(gcxFile, gcxContents);
+
+                gcxFile = GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_w12c"));
+                gcxContents = File.ReadAllBytes(gcxFile);
+                c4Locations = GcxEditor.FindAllSubArray(gcxContents, bulC4InitBytes);
+
+                foreach (int c4Location in c4Locations)
+                {
+                    Array.Copy(roofXLocation, 0, gcxContents, c4Location + 0xC, 2);
+                    Array.Copy(roofYLocation, 0, gcxContents, c4Location + 0xF, 2);
+                    Array.Copy(roofZLocation, 0, gcxContents, c4Location + 0x12, 2);
+                }
+
+                File.WriteAllBytes(gcxFile, gcxContents);
+            }
+            #endregion
+
+            #region Pump Room
+            int pumpRoom = Randomizer.Next(5);
+            byte[] pumpRoomXLocation = new byte[1];
+            byte[] pumpRoomYLocation = new byte[1];
+            byte[] pumpRoomZLocation = new byte[2];
+            switch (pumpRoom)
+            {
+                case 0:
+                    //change nothing
+                    break;
+                case 1:
+                    pumpRoomXLocation = new byte[] { 0x6F };
+                    pumpRoomYLocation = new byte[] { 0xFF };
+                    pumpRoomZLocation = new byte[] { 0x00, 0x01 };
+                    break;
+                case 2:
+                    pumpRoomXLocation = new byte[] { 0x70 };
+                    pumpRoomYLocation = new byte[] { 0xFF};
+                    pumpRoomZLocation = new byte[] { 0x80, 0x31 };
+                    break;
+                case 3:
+                    pumpRoomXLocation = new byte[] { 0x00 };
+                    pumpRoomYLocation = new byte[] { 0xFF };
+                    pumpRoomZLocation = new byte[] { 0x38, 0x20 };
+                    break;
+                case 4:
+                    pumpRoomXLocation = new byte[] { 0x00 };
+                    pumpRoomYLocation = new byte[] { 0xFF };
+                    pumpRoomZLocation = new byte[] { 0x40, 0x1A };
+                    break;
+                case 5:
+                    pumpRoomXLocation = new byte[] { 0x00 };
+                    pumpRoomYLocation = new byte[] { 0xFF };
+                    pumpRoomZLocation = new byte[] { 0x50, 0x10 };
+                    break;
+            }
+
+            if (pumpRoom != 0)
+            {
+                gcxFile = GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_w12b"));
+                gcxContents = File.ReadAllBytes(gcxFile);
+                c4Locations = GcxEditor.FindAllSubArray(gcxContents, new byte[] { 0x16, 0x99, 0x61, 0x59 });
+
+                foreach (int c4Location in c4Locations)
+                {
+                    Array.Copy(pumpRoomXLocation, 0, gcxContents, c4Location + 0xD, 1);
+                    Array.Copy(pumpRoomYLocation, 0, gcxContents, c4Location + 0xF, 1);
+                    Array.Copy(pumpRoomZLocation, 0, gcxContents, c4Location + 0x11, 2);
+                }
+
+                File.WriteAllBytes(gcxFile, gcxContents);
+            }
+            #endregion
+
+            #region Transformer Room
+            int transformerRoom = Randomizer.Next(5);
+            byte[] transformerRoomXLocation = new byte[4];
+            byte[] transformerRoomYLocation = new byte[2];
+            byte[] transformerRoomZLocation = new byte[4];
+            switch (transformerRoom)
+            {
+                case 0:
+                    //change nothing
+                    break;
+                case 1:
+                    transformerRoomXLocation = new byte[] { 0x56, 0x43, 0xFF, 0xFF };
+                    transformerRoomYLocation = new byte[] { 0x4C, 0x04 };
+                    transformerRoomZLocation = new byte[] { 0x90, 0x75, 0xFF, 0xFF };
+                    break;
+                case 2:
+                    transformerRoomXLocation = new byte[] { 0x56, 0x43, 0xFF, 0xFF };
+                    transformerRoomYLocation = new byte[] { 0x7A, 0x00 };
+                    transformerRoomZLocation = new byte[] { 0x10, 0x89, 0xFF, 0xFF };
+                    break;
+                case 3:
+                    transformerRoomXLocation = new byte[] { 0x00, 0x20, 0xFF, 0xFF };
+                    transformerRoomYLocation = new byte[] { 0xE3, 0x01 };
+                    transformerRoomZLocation = new byte[] { 0x90, 0x93, 0xFF, 0xFF };
+                    break;
+                case 4:
+                    transformerRoomXLocation = new byte[] { 0xC6, 0x2C, 0xFF, 0xFF };
+                    transformerRoomYLocation = new byte[] { 0x40, 0x0D };
+                    transformerRoomZLocation = new byte[] { 0xAC, 0x67, 0xFF, 0xFF };
+                    break;
+                case 5:
+                    transformerRoomXLocation = new byte[] { 0x61, 0x53, 0xFF, 0xFF };
+                    transformerRoomYLocation = new byte[] { 0x7A, 0x00 };
+                    transformerRoomZLocation = new byte[] { 0xA1, 0x67, 0xFF, 0xFF };
+                    break;
+            }
+
+            if (transformerRoom != 0)
+            {
+                gcxFile = GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_w14a"));
+                gcxContents = File.ReadAllBytes(gcxFile);
+                c4Locations = GcxEditor.FindAllSubArray(gcxContents, bulC4InitBytes);
+
+                foreach (int c4Location in c4Locations)
+                {
+                    Array.Copy(transformerRoomXLocation, 0, gcxContents, c4Location + 0xC, 4);
+                    Array.Copy(transformerRoomYLocation, 0, gcxContents, c4Location + 0x11, 2);
+                    Array.Copy(transformerRoomZLocation, 0, gcxContents, c4Location + 0x14, 4);
+                }
+
+                File.WriteAllBytes(gcxFile, gcxContents);
+            }
+            #endregion
+
+            #region Mess Hall
+            int diningHall = Randomizer.Next(5);
+            byte[] diningHallXLocation = new byte[4];
+            byte[] diningHallYLocation = new byte[2];
+            byte[] diningHallZLocation = new byte[4];
+            switch (diningHall)
+            {
+                case 0:
+                    //change nothing
+                    break;
+                case 1:
+                    diningHallXLocation = new byte[] { 0x41, 0x44, 0xFF, 0xFF };
+                    diningHallYLocation = new byte[] { 0xB0, 0x05 };
+                    diningHallZLocation = new byte[] { 0xC3, 0xBD, 0xFE, 0xFF };
+                    break;
+                case 2:
+                    diningHallXLocation = new byte[] { 0x2E, 0x52, 0xFF, 0xFF };
+                    diningHallYLocation = new byte[] { 0x32, 0x0D };
+                    diningHallZLocation = new byte[] { 0xC3, 0xBD, 0xFE, 0xFF };
+                    break;
+                case 3:
+                    diningHallXLocation = new byte[] { 0x34, 0x28, 0xFF, 0xFF };
+                    diningHallYLocation = new byte[] { 0x32, 0x0B };
+                    diningHallZLocation = new byte[] { 0xAB, 0xC1, 0xFE, 0xFF };
+                    break;
+                case 4:
+                    diningHallXLocation = new byte[] { 0x61, 0x0F, 0xFF, 0xFF };
+                    diningHallYLocation = new byte[] { 0xE2, 0x0C };
+                    diningHallZLocation = new byte[] { 0x28, 0xAC, 0xFE, 0xFF };
+                    break;
+                case 5:
+                    diningHallXLocation = new byte[] { 0x11, 0x25, 0xFF, 0xFF };
+                    diningHallYLocation = new byte[] { 0x00, 0x0C };
+                    diningHallZLocation = new byte[] { 0x33, 0xD5, 0xFE, 0xFF };
+                    break;
+                case 6:
+                    diningHallXLocation = new byte[] { 0xA9, 0x4D, 0xFF, 0xFF };
+                    diningHallYLocation = new byte[] { 0x60, 0x09 };
+                    diningHallZLocation = new byte[] { 0xD8, 0x76, 0xFE, 0xFF };
+                    break;
+                case 7:
+                    diningHallXLocation = new byte[] { 0x2E, 0x11, 0xFF, 0xFF };
+                    diningHallYLocation = new byte[] { 0x70, 0x01 };
+                    diningHallZLocation = new byte[] { 0x9D, 0x90, 0xFE, 0xFF };
+                    break;
+            }
+
+            if (diningHall != 0)
+            {
+                gcxFile = GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_w16a"));
+                gcxContents = File.ReadAllBytes(gcxFile);
+                c4Locations = GcxEditor.FindAllSubArray(gcxContents, new byte[] {0x20, 0x99, 0x61, 0x59} );
+
+                foreach (int c4Location in c4Locations)
+                {
+                    Array.Copy(diningHallXLocation, 0, gcxContents, c4Location + 0xD, 4);
+                    Array.Copy(diningHallYLocation, 0, gcxContents, c4Location + 0x12, 2);
+                    Array.Copy(diningHallZLocation, 0, gcxContents, c4Location + 0x15, 4);
+                }
+
+                File.WriteAllBytes(gcxFile, gcxContents);
+
+                gcxFile = GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_w16b"));
+                gcxContents = File.ReadAllBytes(gcxFile);
+                c4Locations = GcxEditor.FindAllSubArray(gcxContents, new byte[] { 0x20, 0x99, 0x61, 0x59 });
+
+                foreach (int c4Location in c4Locations)
+                {
+                    Array.Copy(diningHallXLocation, 0, gcxContents, c4Location + 0xD, 4);
+                    Array.Copy(diningHallYLocation, 0, gcxContents, c4Location + 0x12, 2);
+                    Array.Copy(diningHallZLocation, 0, gcxContents, c4Location + 0x15, 4);
+                }
+
+                File.WriteAllBytes(gcxFile, gcxContents);
+            }
+            #endregion
+
+            #region Sediment Pool
+            int sedimentPool1 = Randomizer.Next(4);
+            byte[] sedimentPool1XLocation = new byte[2];
+            byte[] sedimentPool1YLocation = new byte[2];
+            byte[] sedimentPool1ZLocation = new byte[4];
+            switch (sedimentPool1)
+            {
+                case 0:
+                    //change nothing
+                    break;
+                case 1:
+                    sedimentPool1XLocation = new byte[] { 0x0B, 0xDB };
+                    sedimentPool1YLocation = new byte[] { 0x66, 0xEF };
+                    sedimentPool1ZLocation = new byte[] { 0x41, 0x0C, 0xFE, 0xFF };
+                    break;
+                case 2:
+                    sedimentPool1XLocation = new byte[] { 0x99, 0xEA };
+                    sedimentPool1YLocation = new byte[] { 0x60, 0xF0 };
+                    sedimentPool1ZLocation = new byte[] { 0x62, 0xF7, 0xFD, 0xFF };
+                    break;
+                case 3:
+                    sedimentPool1XLocation = new byte[] { 0x45, 0xE4 };
+                    sedimentPool1YLocation = new byte[] { 0x60, 0xF0 };
+                    sedimentPool1ZLocation = new byte[] { 0x56, 0x5F, 0xFE, 0xFF };
+                    break;
+                case 4:
+                    sedimentPool1XLocation = new byte[] { 0x9F, 0xFC };
+                    sedimentPool1YLocation = new byte[] { 0x75, 0xED };
+                    sedimentPool1ZLocation = new byte[] { 0xA3, 0x06, 0xFE, 0xFF };
+                    break;
+            }
+
+            int sedimentPool2 = Randomizer.Next(3);
+            byte[] sedimentPool2XLocation = new byte[2];
+            byte[] sedimentPool2YLocation = new byte[2];
+            byte[] sedimentPool2ZLocation = new byte[4];
+            switch (sedimentPool2)
+            {
+                case 0:
+                    //change nothing
+                    break;
+                case 1:
+                    sedimentPool2XLocation = new byte[] { 0x1C, 0x03 };
+                    sedimentPool2YLocation = new byte[] { 0x75, 0xED };
+                    sedimentPool2ZLocation = new byte[] { 0xB3, 0x06, 0xFE, 0xFF };
+                    break;
+                case 2:
+                    sedimentPool2XLocation = new byte[] { 0x5C, 0x1C};
+                    sedimentPool2YLocation = new byte[] { 0x60, 0xF0 };
+                    sedimentPool2ZLocation = new byte[] { 0x56, 0x5F, 0xFE, 0xFF };
+                    break;
+                case 3:
+                    sedimentPool2XLocation = new byte[] { 0x77, 0x00 };
+                    sedimentPool2YLocation = new byte[] { 0x30, 0xFC };
+                    sedimentPool2ZLocation = new byte[] { 0x6F, 0x24, 0xFE, 0xFF };
+                    break;
+            }
+
+            int sedimentPool3 = Randomizer.Next(4);
+            byte[] sedimentPool3XLocation = new byte[2];
+            byte[] sedimentPool3YLocation = new byte[2];
+            byte[] sedimentPool3ZLocation = new byte[4];
+            switch (sedimentPool3)
+            {
+                case 0:
+                    //change nothing
+                    break;
+                case 1:
+                    sedimentPool3XLocation = new byte[] { 0xBF, 0x00 };
+                    sedimentPool3YLocation = new byte[] { 0xC2, 0x01 };
+                    sedimentPool3ZLocation = new byte[] { 0x6A, 0xF6, 0xFD, 0xFF };
+                    break;
+                case 2:
+                    sedimentPool3XLocation = new byte[] { 0xB6, 0x26 };
+                    sedimentPool3YLocation = new byte[] { 0xCE, 0xFF };
+                    sedimentPool3ZLocation = new byte[] { 0x54, 0x49, 0xFE, 0xFF };
+                    break;
+                case 3:
+                    sedimentPool3XLocation = new byte[] { 0xB0, 0x01 };
+                    sedimentPool3YLocation = new byte[] { 0xB8, 0xFA };
+                    sedimentPool3ZLocation = new byte[] { 0x66, 0x02, 0xFE, 0xFF };
+                    break;
+                case 4:
+                    sedimentPool3XLocation = new byte[] { 0xBD, 0x1F };
+                    sedimentPool3YLocation = new byte[] { 0xB8, 0xFA };
+                    sedimentPool3ZLocation = new byte[] { 0xF6, 0x3B, 0xFE, 0xFF };
+                    break;
+            }
+
+            if (sedimentPool1 != 0 || sedimentPool2 != 0 || sedimentPool3 != 0)
+            {
+                gcxFile = GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_w18a"));
+                gcxContents = File.ReadAllBytes(gcxFile);
+                List<int> c41Locations = GcxEditor.FindAllSubArray(gcxContents, new byte[] { 0x06, 0x25, 0x6F, 0x3A, 0x06, 0x4D, 0x25, 0xB2 });
+                List<int> c42Locations = GcxEditor.FindAllSubArray(gcxContents, new byte[] { 0x06, 0x25, 0x6F, 0x3A, 0x06, 0x4E, 0x25, 0xB2 });
+                List<int> c43Locations = GcxEditor.FindAllSubArray(gcxContents, new byte[] { 0x06, 0x25, 0x6F, 0x3A, 0x06, 0x4F, 0x25, 0xB2 });
+
+                if (sedimentPool1 != 0)
+                {
+                    foreach (int c4Location in c41Locations)
+                    {
+                        Array.Copy(sedimentPool1XLocation, 0, gcxContents, c4Location + 0xB, 2);
+                        Array.Copy(sedimentPool1YLocation, 0, gcxContents, c4Location + 0xE, 2);
+                        Array.Copy(sedimentPool1ZLocation, 0, gcxContents, c4Location + 0x11, 4);
+                    }
+                }
+                if (sedimentPool2 != 0)
+                {
+                    foreach (int c4Location in c42Locations)
+                    {
+                        Array.Copy(sedimentPool2XLocation, 0, gcxContents, c4Location + 0xB, 2);
+                        Array.Copy(sedimentPool2YLocation, 0, gcxContents, c4Location + 0xE, 2);
+                        Array.Copy(sedimentPool2ZLocation, 0, gcxContents, c4Location + 0x11, 4);
+                    }
+                }
+                if (sedimentPool3 != 0)
+                {
+                    foreach (int c4Location in c43Locations)
+                    {
+                        Array.Copy(sedimentPool3XLocation, 0, gcxContents, c4Location + 0xB, 2);
+                        Array.Copy(sedimentPool3YLocation, 0, gcxContents, c4Location + 0xE, 2);
+                        Array.Copy(sedimentPool3ZLocation, 0, gcxContents, c4Location + 0x11, 4);
+                    }
+                }
+
+                File.WriteAllBytes(gcxFile, gcxContents);
+            }
+            #endregion
+
+            #region Parcel Room
+            int parcelRoom = Randomizer.Next(3);
+            byte[] parcelRoomXLocation = new byte[4];
+            byte[] parcelRoomYLocation = new byte[2];
+            byte[] parcelRoomZLocation = new byte[4];
+            switch (parcelRoom)
+            {
+                case 0:
+                    //change nothing
+                    break;
+                case 1:
+                    parcelRoomXLocation = new byte[] { 0x27, 0xCC, 0x00, 0x00 };
+                    parcelRoomYLocation = new byte[] { 0x2A, 0x09 };
+                    parcelRoomZLocation = new byte[] { 0x41, 0x7A, 0xFE, 0xFF };
+                    break;
+                case 2:
+                    parcelRoomXLocation = new byte[] { 0xDC, 0xDC, 0x00, 0x00 };
+                    parcelRoomYLocation = new byte[] { 0x2A, 0x10 };
+                    parcelRoomZLocation = new byte[] { 0x10, 0x89, 0xFE, 0xFF };
+                    break;
+                case 3:
+                    parcelRoomXLocation = new byte[] { 0x42, 0xE5, 0x00, 0x00 };
+                    parcelRoomYLocation = new byte[] { 0x4B, 0x06 };
+                    parcelRoomZLocation = new byte[] { 0xC1, 0xC2, 0xFE, 0xFF };
+                    break;
+            }
+
+            if (parcelRoom != 0)
+            {
+                gcxFile = GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_w20a"));
+                gcxContents = File.ReadAllBytes(gcxFile);
+                c4Locations = GcxEditor.FindAllSubArray(gcxContents, new byte[] { 0x06, 0x44, 0x31, 0x41, 0x0D, 0xEA, 0x7D, 0x5C, 0x99 });
+
+                foreach (int c4Location in c4Locations)
+                {
+                    Array.Copy(parcelRoomXLocation, 0, gcxContents, c4Location + 0x19, 4);
+                    Array.Copy(parcelRoomYLocation, 0, gcxContents, c4Location + 0x1E, 2);
+                    Array.Copy(parcelRoomZLocation, 0, gcxContents, c4Location + 0x21, 4);
+                }
+
+                File.WriteAllBytes(gcxFile, gcxContents);
+            }
+            #endregion
+
+            #region Helipad
+            int helipad = Randomizer.Next(4);
+            byte[] helipadXLocation = new byte[4];
+            byte[] helipadYLocation = new byte[2];
+            byte[] helipadZLocation = new byte[4];
+            switch (helipad)
+            {
+                case 0:
+                    //change nothing
+                    break;
+                case 1:
+                    helipadXLocation = new byte[] { 0x44, 0xBB, 0x00, 0x00 };
+                    helipadYLocation = new byte[] { 0x00, 0x31 };
+                    helipadZLocation = new byte[] { 0x3B, 0xA8, 0xFE, 0xFF };
+                    break;
+                case 2:
+                    helipadXLocation = new byte[] { 0xBF, 0xB1, 0x00, 0x00 };
+                    helipadYLocation = new byte[] { 0x00, 0x2E };
+                    helipadZLocation = new byte[] { 0x3B, 0xA8, 0xFE, 0xFF };
+                    break;
+                case 3:
+                    helipadXLocation = new byte[] { 0x75, 0xCD, 0x00, 0x00 };
+                    helipadYLocation = new byte[] { 0x0D, 0x27 };
+                    helipadZLocation = new byte[] { 0xDD, 0xC2, 0xFE, 0xFF };
+                    break;
+                case 4:
+                    helipadXLocation = new byte[] { 0x91, 0x9E, 0x00, 0x00 };
+                    helipadYLocation = new byte[] { 0x80, 0x11 };
+                    helipadZLocation = new byte[] { 0x88, 0xA1, 0xFE, 0xFF };
+                    break;
+            }
+
+            if (helipad != 0)
+            {
+                gcxFile = GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_w20b"));
+                gcxContents = File.ReadAllBytes(gcxFile);
+                c4Locations = GcxEditor.FindAllSubArray(gcxContents, bulC4InitBytes);
+
+                foreach (int c4Location in c4Locations)
+                {
+                    Array.Copy(helipadXLocation, 0, gcxContents, c4Location + 0xC, 4);
+                    Array.Copy(helipadYLocation, 0, gcxContents, c4Location + 0x11, 2);
+                    Array.Copy(helipadZLocation, 0, gcxContents, c4Location + 0x14, 4);
+                }
+
+                File.WriteAllBytes(gcxFile, gcxContents);
+            }
+            #endregion
+
+            #region Armory
+            int armory = Randomizer.Next(3);
+            byte[] armoryXLocation = new byte[4];
+            byte[] armoryYLocation = new byte[2];
+            byte[] armoryZLocation = new byte[2];
+            switch (armory)
+            {
+                case 0:
+                    //change nothing
+                    break;
+                case 1:
+                    armoryXLocation = new byte[] { 0x30, 0xC5, 0x00, 0x00 };
+                    armoryYLocation = new byte[] { 0x60, 0xFB };
+                    armoryZLocation = new byte[] { 0xDC, 0xB6};
+                    break;
+                case 2:
+                    armoryXLocation = new byte[] { 0xA9, 0xB3, 0x00, 0x00 };
+                    armoryYLocation = new byte[] { 0x60, 0xF0 };
+                    armoryZLocation = new byte[] { 0x9F, 0x81};
+                    break;
+                case 3:
+                    armoryXLocation = new byte[] { 0x45, 0x9A, 0x00, 0x00 };
+                    armoryYLocation = new byte[] { 0xE3, 0x01 };
+                    armoryZLocation = new byte[] { 0x53, 0x95};
+                    break;
+                case 4:
+                    armoryXLocation = new byte[] { 0x81, 0xAF, 0x00, 0x00 };
+                    armoryYLocation = new byte[] { 0x9B, 0x05 };
+                    armoryZLocation = new byte[] { 0xB5, 0xB8};
+                    break;
+                case 5:
+                    armoryXLocation = new byte[] { 0xFE, 0xF3, 0x00, 0x00 };
+                    armoryYLocation = new byte[] { 0xB2, 0x00 };
+                    armoryZLocation = new byte[] { 0x74, 0xAA};
+                    break;
+                case 6:
+                    armoryXLocation = new byte[] { 0x3D, 0xC5, 0x00, 0x00 };
+                    armoryYLocation = new byte[] { 0xE2, 0x01 };
+                    armoryZLocation = new byte[] { 0x64, 0xA6};
+                    break;
+                case 7:
+                    armoryXLocation = new byte[] { 0x53, 0xC4, 0x00, 0x00 };
+                    armoryYLocation = new byte[] { 0x1B, 0x04 };
+                    armoryZLocation = new byte[] { 0x00, 0x8E};
+                    break;
+                case 8:
+                    armoryXLocation = new byte[] { 0xB9, 0xDA, 0x00, 0x00 };
+                    armoryYLocation = new byte[] { 0x4B, 0x04 };
+                    armoryZLocation = new byte[] { 0xAE, 0x90};
+                    break;
+            }
+
+            if (armory != 0)
+            {
+                gcxFile = GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_w22a"));
+                gcxContents = File.ReadAllBytes(gcxFile);
+                c4Locations = GcxEditor.FindAllSubArray(gcxContents, new byte[] { 0x06, 0x25, 0x6F, 0x3A, 0x06, 0x25, 0x6F, 0x3A });
+
+                foreach (int c4Location in c4Locations)
+                {
+                    Array.Copy(armoryXLocation, 0, gcxContents, c4Location + 0xB, 4);
+                    Array.Copy(armoryYLocation, 0, gcxContents, c4Location + 0x10, 2);
+                    Array.Copy(armoryZLocation, 0, gcxContents, c4Location + 0x13, 2);
+                }
+
+                File.WriteAllBytes(gcxFile, gcxContents);
+            }
+            #endregion
         }
 
         public void Derandomize()
@@ -869,13 +1655,33 @@ namespace MGS2_MC
             {
                 SpoilerContents = RandomizeAutomaticRewards();
             }
+            else
+            {
+                //need to remove the automatic rewards from the logic checker if we aren't randomizing automatic rewards
+                VanillaItems.PlantSet3.ItemsNeededToProgress.Remove(MGS2Weapons.Socom);
+                VanillaItems.PlantSet3.ItemsNeededToProgress.Remove(MGS2Weapons.Coolant);
+                VanillaItems.PlantSet4.ItemsNeededToProgress.Remove(MGS2Weapons.Socom);
+                VanillaItems.PlantSet4.ItemsNeededToProgress.Remove(MGS2Weapons.Coolant);
+                VanillaItems.PlantSet4.ItemsNeededToProgress.Remove(MGS2Items.BDU);
+                VanillaItems.PlantSet5.ItemsNeededToProgress.Remove(MGS2Weapons.Socom);
+                VanillaItems.PlantSet5.ItemsNeededToProgress.Remove(MGS2Weapons.Coolant);
+                VanillaItems.PlantSet5.ItemsNeededToProgress.Remove(MGS2Items.BDU);
+                VanillaItems.PlantSet6.ItemsNeededToProgress.Remove(MGS2Weapons.Socom);
+                VanillaItems.PlantSet6.ItemsNeededToProgress.Remove(MGS2Weapons.Coolant);
+                VanillaItems.PlantSet6.ItemsNeededToProgress.Remove(MGS2Items.BDU);
+                VanillaItems.PlantSet7.ItemsNeededToProgress.Remove(MGS2Weapons.Socom);
+                VanillaItems.PlantSet7.ItemsNeededToProgress.Remove(MGS2Weapons.Coolant);
+                VanillaItems.PlantSet7.ItemsNeededToProgress.Remove(MGS2Items.BDU);
+                VanillaItems.PlantSet8.ItemsNeededToProgress.Remove(MGS2Weapons.Socom);
+                VanillaItems.PlantSet8.ItemsNeededToProgress.Remove(MGS2Weapons.Coolant);
+                VanillaItems.PlantSet8.ItemsNeededToProgress.Remove(MGS2Items.BDU);
+                VanillaItems.PlantSet9.ItemsNeededToProgress.Remove(MGS2Weapons.Socom);
+                VanillaItems.PlantSet9.ItemsNeededToProgress.Remove(MGS2Weapons.Coolant);
+                VanillaItems.PlantSet9.ItemsNeededToProgress.Remove(MGS2Items.BDU);
+            }
             if (options.RandomizeClaymores)
             {
                 RandomizeClaymores();
-            }
-            if (options.RandomizeC4)
-            {
-                RandomizeC4Locations();
             }
 
             try
@@ -1119,7 +1925,12 @@ namespace MGS2_MC
             {
                 throw new RandomizerException("bad randomization seed");
             }
-            
+
+            if (options.RandomizeC4)
+            {
+                RandomizeC4Locations();
+            }
+
             return Seed;
         }
 

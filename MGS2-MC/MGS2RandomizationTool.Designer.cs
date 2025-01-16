@@ -113,7 +113,6 @@
             // randomizeBombLocations
             // 
             this.randomizeBombLocations.AutoSize = true;
-            this.randomizeBombLocations.Enabled = false;
             this.randomizeBombLocations.Location = new System.Drawing.Point(12, 151);
             this.randomizeBombLocations.Name = "randomizeBombLocations";
             this.randomizeBombLocations.Size = new System.Drawing.Size(158, 17);

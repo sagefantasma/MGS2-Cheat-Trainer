@@ -225,97 +225,12 @@ namespace MGS2_MC
 
         private void RandomizeClaymores()
         {
-            //TODO: we should really make this a Polygon instead of just a box, so we can include more area :)
-            //and also make sure the claymore positions somewhat make sense(maybe a north polygon and south polygon?)
-            //int leftWall = 0x4CEB;
             int leftWall = 0xBF68;
-            //uint topWall = 0xFFFEDC3D;
             uint topWall = 0xFFFF0218;
-            //int rightWall = 0xED4F;
             int rightWall = 0xD6D8;
-            //uint bottomWall = 0xFFFF5421;
             uint bottomWall = 0xFFFF2928;
-            List<Point2D> w21Points = new List<Point2D>
-            {
-                new Point2D(0xED4F, 0xFFFEDC3D),
-                new Point2D(0xCF29,0xFFFEDCFD),
-                new Point2D(0xCE0F, 0xFFFEDE6E),
-                new Point2D(0xCF47, 0xFFFEDFE9),
-                new Point2D(0xD16F, 0xFFFEE0A9),
-                new Point2D(0xD16F, 0xFFFEE48B),
-                new Point2D(0xCEC0, 0xFFFEE53E),
-                new Point2D(0xCD88, 0xFFFEE67B),
-                new Point2D(0xCD88, 0xFFFEFA69),
-                new Point2D(0xCED7, 0xFFFEFBCA),
-                new Point2D(0xD696, 0xFFFEFBCA),
-                new Point2D(0xD74A, 0xFFFEFC7E),
-                new Point2D(0xD74C, 0xFFFF2EC2),
-                new Point2D(0xD696, 0xFFFF2F76),
-                new Point2D(0xCF19, 0xFFFF2F77),
-                new Point2D(0xCD87, 0xFFFF30FB),
-                new Point2D(0xCD86, 0xFFFF44DE),
-                new Point2D(0xCEA2, 0xFFFF4601),
-                new Point2D(0xD0BA, 0xFFFF4601),
-                new Point2D(0xD16E, 0xFFFF46B6),
-                new Point2D(0xD170, 0xFFFF4A98),
-                new Point2D(0xD0BA, 0xFFFF4B57),
-                new Point2D(0xCF63, 0xFFFF4B57),
-                new Point2D(0xCE0F, 0xFFFF4C67),
-                new Point2D(0xCF62, 0xFFFF4E43),
-                new Point2D(0xE4BF, 0xFFFF4E43),
-                new Point2D(0xE57F, 0xFFFF4F03),
-                new Point2D(0xE57F, 0xFFFF5361),
-                new Point2D(0xE4BF, 0xFFFF5421),
-                new Point2D(0xC508, 0xFFFF5421),
-                new Point2D(0xC449, 0xFFFF5362),
-                new Point2D(0xC449, 0xFFFF4F03),
-                new Point2D(0xC509, 0xFFFF4E43),
-                new Point2D(0xC719, 0xFFFF4E43),
-                new Point2D(0xC831, 0xFFFF4D22),
-                new Point2D(0xC705, 0xFFFF4B57),
-                new Point2D(0xC585, 0xFFFF4B57),
-                new Point2D(0xC4D0, 0xFFFF4A98),
-                new Point2D(0xC4D2, 0xFFFF46B6),
-                new Point2D(0xC585, 0xFFFF4601),
-                new Point2D(0xC7AF, 0xFFFF4602),
-                new Point2D(0xC8B8, 0xFFFF448C),
-                new Point2D(0xC8B9, 0xFFFF3102),
-                new Point2D(0xC73A, 0xFFFF2F76),
-                new Point2D(0xBFA9, 0xFFFF2F77),
-                new Point2D(0xBEF4, 0xFFFF2EC3),
-                new Point2D(0xBEF6, 0xFFFF1955),
-                new Point2D(0xBDB1, 0xFFFF1808),
-                new Point2D(0x5D6D, 0xFFFF1808),
-                new Point2D(0x5C40, 0xFFFF1A14),
-                new Point2D(0x5C3E, 0xFFFF1B3B),
-                new Point2D(0x5B8A, 0xFFFF1BF0),
-                new Point2D(0x57A8, 0xFFFF1BF0),
-                new Point2D(0x56E9, 0xFFFF1B3B),
-                new Point2D(0x56E9, 0xFFFF19CD),
-                new Point2D(0x552E, 0xFFFF188F),
-                new Point2D(0x533D, 0xFFFF2D11),
-                new Point2D(0x4CF5, 0xFFFF2D11),
-                new Point2D(0x4CEB, 0xFFFF0EC9),
-                new Point2D(0x533D, 0xFFFF0EC9),
-                new Point2D(0x5537, 0xFFFF12B1),
-                new Point2D(0x56E9, 0xFFFF101D),
-                new Point2D(0x5C40, 0xFFFF1006),
-                new Point2D(0x5EFC, 0xFFFF133A),
-                new Point2D(0xBC39, 0xFFFF133A),
-                new Point2D(0xBEF6, 0xFFFF1078),
-                new Point2D(0xBFA9, 0xFFFEFBC8),
-                new Point2D(0xC676, 0xFFFEFBC9),
-                new Point2D(0xC8B8, 0xFFFEFA4C),
-                new Point2D(0xC8B9, 0xFFFEE7B7),
-                new Point2D(0xC5CE, 0xFFFEE53E),
-                new Point2D(0xC59A, 0xFFFEDFE9),
-                new Point2D(0xC831, 0xFFFEDE34),
-                new Point2D(0xC508, 0xFFFEDCFD),
-                new Point2D(0xC508, 0xFFFED71F),
-                new Point2D(0xED4F, 0xFFFED7A3)
-            };
 
-            List<PointF> w21Pointz = new List<PointF>
+            List<PointF> walkableArea = new List<PointF>
             {
                 
                 new PointF(0xED4F, 0xFFFEDC3D),
@@ -396,107 +311,85 @@ namespace MGS2_MC
                 new PointF(0xED4F, 0xFFFED7A3)
             };
 
-            /* Debugging my drawn shape
-            for(int i =0; i< w21Pointz.Count; i++)
-            {
-                w21Pointz[i] = new PointF(w21Pointz[i].X/10, w21Pointz[i].Y/10);
-            }
-
-            
-            //var polygon1D = polygon2D.ReduceComplexity(1);
-            //var otherPoly = polygon2D.ToPolyLine2D();
-            int height = (int)(bottomWall - topWall) / 10 + 500;
-            int width = (rightWall - leftWall)/ 10 + 500;
-
-            RectangleF bounds = GetPolygonBounds(w21Pointz.ToArray());
-            float offsetX = (width - bounds.Width) / 2 - bounds.Left;
-            float offsetY = (height - bounds.Height) / 2 - bounds.Top;
-            
-            Bitmap bmp = new Bitmap(width, height);
-
-            using (Graphics g = Graphics.FromImage(bmp))
-            {
-                g.Clear(Color.White);
-                using(Pen pen = new Pen(Color.Green, 50))
-                {
-                    PointF[] translatedPoints = TranslatePoints(w21Pointz.ToArray(), offsetX, offsetY);
-
-                    g.DrawPolygon(pen, translatedPoints);
-                }
-            }
-
-            bmp.Save("testpolygon2.png", ImageFormat.Png);
-            bmp.Dispose();
-
-            //  Graphics graphics = Graphics.FromImage(bmp);
-            //Pen pen = new Pen(Color.FromKnownColor(KnownColor.Green), 1000);
-
-            //graphics.DrawPolygon(pen, w21Pointz.ToArray());
-            //bmp.Save("testpolygon.png");
-            */
-
-            GraphicsPath polygonPath = new GraphicsPath();
-            polygonPath.AddPolygon(w21Pointz.ToArray());
-
-            MathNet.Spatial.Euclidean.Polygon2D polygon2D = new MathNet.Spatial.Euclidean.Polygon2D(w21Points);
             string gcxFile = GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_w21a"));
             byte[] gcxContents = File.ReadAllBytes(gcxFile);
             List<int> claymores = GcxEditor.FindAllSubArray(gcxContents, new byte[] { 0x85, 0xD6, 0x78 });
 
-            foreach(int claymore in claymores)
+            PointF randomPoint;
+
+            foreach (int claymore in claymores)
             {
-                int xPos = Randomizer.Next(leftWall, rightWall);
-                uint yPos = (uint)GetRandomFloat(topWall, bottomWall);
-
-                while (!polygonPath.IsVisible(new PointF(xPos, yPos)))
+                randomPoint = GetRandomPointInPolygon(walkableArea, Randomizer);
+                // Claymores on the lowered bridge don't work because they're too high. Rerandomize any rolls that are on the bridge for now.
+                while (randomPoint.X < leftWall)
                 {
-                    xPos = Randomizer.Next(leftWall, rightWall);
-                    yPos = (uint)GetRandomFloat(topWall, bottomWall);
+                    randomPoint = GetRandomPointInPolygon(walkableArea, Randomizer);
                 }
+                int xPos = (int) randomPoint.X;
+                uint yPos = (uint)randomPoint.Y;
 
-                if (polygonPath.IsVisible(new PointF(xPos, yPos)))
+                Array.Copy(BitConverter.GetBytes(xPos), 0, gcxContents, claymore + 0xA, 2);
+                
+                /* Claymores on the lowered bridge don't work because they're too high. Shelving this for later when I solve this problem.
+                 * if(xPos < leftWall)
                 {
-                    Array.Copy(BitConverter.GetBytes(xPos), 0, gcxContents, claymore + 10, 2);
-                    Array.Copy(BitConverter.GetBytes(yPos), 0, gcxContents, claymore + 14, 4); //the FFFF should be untouched with this and still work
+                    Array.Copy(BitConverter.GetBytes(0xFF), 0, gcxContents, claymore + 0xE, 1);
                 }
+                */
+                Array.Copy(BitConverter.GetBytes(yPos), 0, gcxContents, claymore + 0x10, 4); //the FFFF should be untouched with this and still work
             }
 
             File.WriteAllBytes(gcxFile, gcxContents);
         }
 
-        float GetRandomFloat(float min, float max)
+        #region ChatGPT polygon interior randomization magic
+        public static bool IsPointInPolygon(PointF p, List<PointF> polygon)
         {
-            return (float)Randomizer.NextDouble() * (max - min) + min;
+            bool inside = false;
+            int n = polygon.Count;
+            for (int i = 0, j = n - 1; i < n; j = i++)
+            {
+                if (((polygon[i].Y > p.Y) != (polygon[j].Y > p.Y)) &&
+                    (p.X < (polygon[j].X - polygon[i].X) * (p.Y - polygon[i].Y) / (polygon[j].Y - polygon[i].Y) + polygon[i].X))
+                {
+                    inside = !inside;
+                }
+            }
+            return inside;
         }
 
-        #region ChatGPT debug image debugging code
-        static RectangleF GetPolygonBounds(PointF[] points)
+        // Get the bounding box of the polygon
+        public static RectangleF GetBoundingBox(List<PointF> polygon)
         {
-            float minX = float.MaxValue;
-            float minY = float.MaxValue;
-            float maxX = float.MinValue;
-            float maxY = float.MinValue;
+            float minX = float.MaxValue, minY = float.MaxValue, maxX = float.MinValue, maxY = float.MinValue;
 
-            foreach (var point in points)
+            foreach (var point in polygon)
             {
                 if (point.X < minX) minX = point.X;
-                if (point.Y < minY) minY = point.Y;
                 if (point.X > maxX) maxX = point.X;
+                if (point.Y < minY) minY = point.Y;
                 if (point.Y > maxY) maxY = point.Y;
             }
 
             return new RectangleF(minX, minY, maxX - minX, maxY - minY);
         }
 
-        // Function to translate points by a given offset
-        static PointF[] TranslatePoints(PointF[] points, float offsetX, float offsetY)
+        // Generate a random point inside the polygon
+        public static PointF GetRandomPointInPolygon(List<PointF> polygon, Random rand)
         {
-            PointF[] translatedPoints = new PointF[points.Length];
-            for (int i = 0; i < points.Length; i++)
+            var boundingBox = GetBoundingBox(polygon);
+
+            PointF randomPoint;
+            do
             {
-                translatedPoints[i] = new PointF(points[i].X + offsetX, points[i].Y + offsetY);
+                // Generate random point within the bounding box
+                float x = (float)(rand.NextDouble() * boundingBox.Width + boundingBox.Left);
+                float y = (float)(rand.NextDouble() * boundingBox.Height + boundingBox.Top);
+                randomPoint = new PointF(x, y);
             }
-            return translatedPoints;
+            while (!IsPointInPolygon(randomPoint, polygon));  // Check if it's inside the polygon
+
+            return randomPoint;
         }
         #endregion
 

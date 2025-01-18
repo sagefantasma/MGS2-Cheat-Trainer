@@ -316,6 +316,10 @@ namespace MGS2_MC
                         GUI.StaticGuiReference.UpdateGameStats(currentGameStats, currentDifficulty);
                     }
                 }
+                else
+                {
+                    _updateStatsTask.Dispose();
+                }
             }
             catch(Exception e)
             {

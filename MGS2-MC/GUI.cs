@@ -36,6 +36,8 @@ namespace MGS2_MC
         private static bool UserHasBeenWarned = false;
         private PeriodicTask _reapplyFilterTask;
         private TreeNode CurrentBossNode = null;
+        List<Task> BossTasks = new List<Task> ();
+        Task CheatsTabTask;
 
         internal static void ShowGui()
         {
@@ -1739,7 +1741,7 @@ namespace MGS2_MC
                             playerCurrentHpTrackBar.Maximum = (int)playerMaxHpUpDown.Value;
                             playerCurrentHpTrackBar.Value = MGS2MemoryManager.GetCurrentHP();
                             gripTrackBar.Value = MGS2MemoryManager.GetCurrentGripGauge();
-                            Task.Factory.StartNew(LiveUpdateHp);
+                            CheatsTabTask = Task.Factory.StartNew(LiveUpdateHp);
                         }
                     }
                     catch(Exception ex)
@@ -1747,6 +1749,19 @@ namespace MGS2_MC
                         _logger.Error($"Something went wrong with the live HP stats: {ex}");
                         //playerHealthGroupBox.Enabled = false;
                     }
+                }
+                else
+                { 
+                    CheatsTabTask?.Dispose();
+                }
+
+                if(CurrentTab != mgs2TabControl.TabPages.IndexOfKey("tabPageBosses"))
+                {
+                    foreach(Task bossTask in BossTasks)
+                    {
+                        bossTask.Dispose();
+                    }
+                    BossTasks.Clear();
                 }
                 /* Turns out we don't have any cheats that require administrator, but I'm leaving this reference here in case we do.
                 if(!Program.IsRunAsAdministrator())
@@ -2163,7 +2178,7 @@ namespace MGS2_MC
                     CurrentBossNode = e.Node;
                     bossGroupBox.Text = e.Node.Text;
 
-                    Task.Factory.StartNew(() => LiveUpdateBossVitals(BossParser.ParseNode(e.Node.Text)));
+                    BossTasks.Add(Task.Factory.StartNew(() => LiveUpdateBossVitals(BossParser.ParseNode(e.Node.Text))));
                 }
                 catch (Exception ex)
                 {

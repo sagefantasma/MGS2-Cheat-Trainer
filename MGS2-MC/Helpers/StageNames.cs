@@ -89,7 +89,7 @@ namespace MGS2_MC
             public static readonly string Cutscene08 = "d12t3";
             public static readonly string Cutscene09 = "d12t4";
             public static readonly string Cutscene10 = "d12t4"; //is this accurate?
-            public static readonly string Cutscene11 = "d13t";
+            public static readonly string Cutscene11 = "d13t"; //has NG+ rewards
             public static readonly string Cutscene12 = "d14t";
 
             public static readonly List<string> CutsceneList = new List<string> { TankerOpening, RussianInvasion, IdentifyingChoppers, OlgaCutscenes, Cutscene05, Cutscene06,

@@ -289,6 +289,46 @@ namespace MGS2_MC
             kms: "assets/kms/us/ak_sp_label_stage_a03b.kms,us/stage/XXXX/cache/00b4cb62.kms,cache/00b4cb62.kms\r\r\n",
             cmdl: "assets/kms/us/ak_sp_label_stage_a03b.cmdl,us/stage/XXXX/cache/00b4cb62.cmdl,eu/stage/XXXX/cache/00b4cb62.cmdl\r\r\n",
             ctxr: "", tri: "");
+        public static Resource CoolantSprayLabel = new Resource("cls_label",
+            kms: "assets/kms/us/cls_label.kms,us/stage/XXXX/cache/00589291.kms,cache/00589291.kms\r\r\n",
+            cmdl: "assets/kms/us/cls_label.cmdl,us/stage/XXXX/cache/00589291.cmdl,eu/stage/XXXX/cache/00589291.cmdl\r\r\n",
+            ctxr: "", tri: "");
+        public static Resource UspLabel = new Resource("usp_label",
+            kms: "assets/kms/us/usp_label_stage_a03b.kms,us/stage/XXXX/cache/006ac9d1.kms,cache/006ac9d1.kms\r\r\n",
+            cmdl: "assets/kms/us/usp_label_stage_a03b.cmdl,us/stage/XXXX/cache/006ac9d1.cmdl,eu/stage/XXXX/cache/006ac9d1.cmdl\r\r\n",
+            ctxr: "", tri: "");
+        public static Resource SocomLabel = new Resource("scm_label",
+            kms: "assets/kms/us/scm_label.kms,us/stage/XXXX/cache/00684911.kms,cache/00684911.kms\r\r\n",
+            cmdl: "assets/kms/us/scm_label.cmdl,us/stage/XXXX/cache/00684911.cmdl,eu/stage/XXXX/cache/00684911.cmdl\r\r\n",
+            ctxr: "", tri: "");
+        public static Resource CigarettesLabel = new Resource("cigarette_label",
+            kms: "assets/kms/us/cigarette_label.kms,us/stage/XXXX/cache/00a2717f.kms,cache/00a2717f.kms\r\r\n",
+            cmdl: "assets/kms/us/cigarette_label.cmdl,us/stage/XXXX/cache/00a2717f.cmdl,eu/stage/XXXX/cache/00a2717f.cmdl\r\r\n",
+            ctxr: "", tri: "");
+        public static Resource CigarettesIbox = new Resource("cigarette_ibox",
+            kms: "assets/kms/us/cigarette_ibox.kms,us/stage/XXXX/cache/009b993b.kms,cache/009b993b.kms\r\r\n",
+            cmdl: "assets/kms/us/cigarette_ibox.cmdl,us/stage/XXXX/cache/009b993b.cmdl,eu/stage/XXXX/cache/009b993b.cmdl\r\r\n",
+            ctxr: "", tri: "");
+        public static Resource CigarettesIboxSh = new Resource("cigarette_sh",
+            kms: "assets/kms/us/cigarette_sh.kms,us/stage/XXXX/cache/00b8e828.kms,cache/00b8e828.kms\r\r\n",
+            cmdl: "assets/kms/us/cigarette_sh.cmdl,us/stage/XXXX/cache/00b8e828.cmdl,eu/stage/XXXX/cache/00b8e828.cmdl\r\r\n",
+            ctxr: "", tri: "");
+        public static Resource SensorALabel = new Resource("bsn_a_label",
+            kms: "assets/kms/us/bsn_a_label.kms,us/stage/XXXX/cache/00c327a7.kms,cache/00c327a7.kms\r\r\n",
+            cmdl: "assets/kms/us/bsn_a_label.cmdl,us/stage/XXXX/cache/00c327a7.cmdl,eu/stage/XXXX/cache/00c327a7.cmdl\r\r\n",
+            ctxr: "", tri: "");
+        public static Resource APSensorIbox = new Resource("a_p_sensor_ibox.",
+            kms: "assets/kms/us/a_p_sensor_ibox.kms,us/stage/XXXX/cache/003cfc74.kms,cache/003cfc74.kms\r\r\n",
+            cmdl: "assets/kms/us/a_p_sensor_ibox.cmdl,us/stage/XXXX/cache/003cfc74.cmdl,eu/stage/XXXX/cache/003cfc74.cmdl\r\r\n",
+            ctxr: "", tri: "");
+        public static Resource APSensorLabel = new Resource("a_p_sensor_ibox_label",
+            kms: "assets/kms/us/a_p_sensor_ibox_label.kms,us/stage/XXXX/cache/003132e0.kms,cache/003132e0.kms\r\r\n",
+            cmdl: "assets/kms/us/a_p_sensor_ibox_label.cmdl,us/stage/XXXX/cache/003132e0.cmdl,eu/stage/XXXX/cache/003132e0.cmdl\r\r\n",
+            ctxr: "", tri: "");
+        public static Resource ScopeCustomBox = new Resource("sougan",
+            kms: "assets/kms/us/sougan.kms,us/stage/XXXX/cache/002c297b.kms,cache/002c297b.kms\r\r\n",
+            cmdl: "assets/kms/us/sougan.cmdl,us/stage/XXXX/cache/002c297b.cmdl,eu/stage/XXXX/cache/002c297b.cmdl\r\r\n",
+            ctxr: "", tri: "");
     }
 
     public class Resource
@@ -308,7 +348,8 @@ namespace MGS2_MC
             MGS2Resource.RationIbox, MGS2Resource.M9AmmoLabel, MGS2Resource.M9WeaponLabel, MGS2Resource.StunLabel, MGS2Resource.BandageLabel,
             MGS2Resource.ShaverLabel, MGS2Resource.MedicineIbox, MGS2Resource.MedicineSh, MGS2Resource.HandgunIbox, MGS2Resource.HandgunSh,
             MGS2Resource.ChaffLabel, MGS2Resource.SocomAmmoLabel, MGS2Resource.GrenadeIbox, MGS2Resource.GrenadeSh, MGS2Resource.HandgunAmmoIbox,
-            MGS2Resource.HandgunAmmoSh, MGS2Resource.RationSh, MGS2Resource.RationLabel
+            MGS2Resource.HandgunAmmoSh, MGS2Resource.RationSh, MGS2Resource.RationLabel, MGS2Resource.CoolantSprayLabel, MGS2Resource.SocomLabel,
+            MGS2Resource.UspLabel, MGS2Resource.ScopeCustomBox
         };
 
         public static List<string> AllPlantWeaponItemResources = new List<string>()
@@ -322,14 +363,15 @@ namespace MGS2_MC
             "minedetectorlabel", "nvglabel", "rifleammoibox", "rifleammosh", "rifleibox", "riflesh",
             "launcherammoibox", "launcherammosh", "launcheribox", "launchersh", "grenadeibox", "grenadesh", "handgunammoibox",
             "handgunammosh", "medicineibox", "medicinesh", "handgunibox", "handgunsh", "box2ibox", "box2sh",
-            "goggleibox", "gogglesh", "cboxlabel", "detectoribox", "detectorsh", "dmicibox", "dmicsh"
+            "goggleibox", "gogglesh", "cboxlabel", "detectoribox", "detectorsh", "dmicibox", "dmicsh", "clslabel", "scmlabel"
         };
 
         public static List<string> AllTankerWeaponItemResources = new List<string>()
         {
             "chafflabel", "grenadelabel", "m9ammolabel", "stunlabel", "uspammolabel", "bandageslabel",
             "rationibox", "rationsh", "rationlabel", "coldmedslabel", "pentazeminlabel", "thermalgoggleslabel", "uspsuppressorlabel", "grenadeibox",
-            "grenadesh", "handgunammoibox", "handgunammosh", "medicineibox", "medicinesh", "box2ibox", "box2sh", "goggleibox", "gogglesh", "cboxlabel"
+            "grenadesh", "handgunammoibox", "handgunammosh", "medicineibox", "medicinesh", "box2ibox", "box2sh", "goggleibox", "gogglesh", "cboxlabel",
+            "usplabel"
         };
 
         public string CommonName { get; set; }

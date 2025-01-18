@@ -436,7 +436,7 @@ namespace MGS2_MC
             LittleEndianRepresentation = new byte[] { 0xAF, 0x7E, 0x8A },
             ProcDependencies = new RawProc[] { InventoryCheck }
         };
-        public static readonly RawProc AwardM9Gun = new RawProc
+        public static readonly RawProc AwardM9Gun = new RawProc //by default only works for Raiden
         {
             CommonName = "M9 Weapon",
             BigEndianRepresentation = "B35211",

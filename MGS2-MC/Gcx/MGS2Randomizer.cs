@@ -86,7 +86,7 @@ namespace MGS2_MC
         };
         private List<RandomizedItem> RaidenWeaponAwardOptions;
 
-        private static List<RandomizedItem> MasterSnakeItemAwardOptions = new List<RandomizedItem> { new RandomizedItem { Index = 1, Count = 2, Name = "Ration" },
+        private static List<RandomizedItem> MasterSnakeItemAwardOptions = new List<RandomizedItem> { new RandomizedItem { Index = 1 + 0xC1, Count = 2, Name = "Ration" },
             new RandomizedItem{Index = 3 + 0xC1, Count = 1 + 0xC1, Name = "Cold Medicine" },new RandomizedItem{Index = 4 + 0xC1, Count = 5 + 0xC1, Name = "Bandage" },
             new RandomizedItem{Index = 5 + 0xC1, Count = 5 + 0xC1, Name = "Pentazemin" }, new RandomizedItem{Index = 8 + 0xC1, Count = 1 + 0xC1, Name = "Stealth" },
             new RandomizedItem{Index = 9 + 0xC1, Count = 1 + 0xC1, Name = "Mine Detector" }, new RandomizedItem{Index = 13 + 0xC1, Count = 1 + 0xC1, Name = "Thermals" },
@@ -393,60 +393,193 @@ namespace MGS2_MC
         }
         #endregion
 
+        private void AddTankerStartingItemsToPool()
+        {
+            //Add M9, Camera, Cigs and AP Sensor to randomization pool
+            KeyValuePair<Location, Item> newSpawn1 = VanillaItems.TankerPart3.Entities.First(spawn => spawn.Key.Name == "RightsideLifeboats" && spawn.Key.GcxFile == "w00a");
+            VanillaItems.TankerPart3.Entities[newSpawn1.Key] = MGS2Weapons.M9; //need to address resourcing problem
+            //"standard" itembox modification did not fix it
+            //changing to m9_label alone did not fix it
+            //it was an issue with the proc - the proc was referencing Raiden's weapon list, not snake's
+            //TODO: modify any calls to the M9 spawn function in "w0" levels to reference Snake's weapon list instead of Raiden's
+
+            KeyValuePair<Location, Item> newSpawn2 = VanillaItems.TankerPart3.Entities.First(spawn => spawn.Key.Name == "UnderLeftsideStairs" && spawn.Key.GcxFile == "w00a");
+            VanillaItems.TankerPart3.Entities[newSpawn2.Key] = MGS2Items.Camera1; //minor resourcing issue with the dmic box not showing up
+
+            KeyValuePair<Location, Item> newSpawn3 = VanillaItems.TankerPart3.Entities.First(spawn => spawn.Key.Name == "UnderRightsideStairs" && spawn.Key.GcxFile == "w01b");
+            VanillaItems.TankerPart3.Entities[newSpawn3.Key] = MGS2Items.Cigs;
+
+            KeyValuePair<Location, Item> newSpawn4 = VanillaItems.TankerPart1.Entities.First(spawn => spawn.Key.Name == "Bar" && spawn.Key.GcxFile == "w01f");
+            VanillaItems.TankerPart3.Entities[newSpawn4.Key] = MGS2Items.APSensor;
+
+            if (!VanillaItems.TankerPart1.ItemsNeededToProgress.Contains(MGS2Weapons.M9))
+                VanillaItems.TankerPart1.ItemsNeededToProgress.Add(MGS2Weapons.M9);
+            if (!VanillaItems.TankerPart3.ItemsNeededToProgress.Contains(MGS2Items.Camera1))
+                VanillaItems.TankerPart3.ItemsNeededToProgress.Add(MGS2Items.Camera1);
+        }
+
+        private void AddPlantStartingItemsToPool()
+        {
+            //Add AP Sensor and Scope to randomization pool
+            KeyValuePair<Location, Item> newSpawn1 = VanillaItems.PlantSet10.Entities.First(spawn => spawn.Key.Name == "BottomFloorMiddleCrates" && spawn.Key.GcxFile == "w22a");
+            VanillaItems.PlantSet10.Entities[newSpawn1.Key] = MGS2Items.APSensor;
+
+            KeyValuePair<Location, Item> newSpawn2 = VanillaItems.PlantSet10.Entities.First(spawn => spawn.Key.Name == "BottomFloorParkourBoxes" && spawn.Key.GcxFile == "w22a");
+            VanillaItems.PlantSet10.Entities[newSpawn2.Key] = MGS2Items.Scope1;
+        }
+
         private void RandomizeStartingItems()
         {
             //TODO: finish implementation logic
             string gcxFile = GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_n_title"));
             byte[] gcxContents = File.ReadAllBytes(gcxFile);
-            
+            byte[] snakeStartingAmmoBytes = new byte[] { 0x11, 0x00, 0x0A, 0x5C };
+            byte[] emptyInitializeWeaponsArray = new byte[] { 0xC2, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0, 0xC0 };
+            byte[] startingItemCountBytes = new byte[] { 0x14, 0x06, 0x02, 0x7D };
+            byte[] emptyInitializeItemsArray = new byte[] { 0xC2, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1, 0xC1 };
+
+            #region Tanker
             //Snake starts with M9, so randomize that
             List<int> snakeWeaponAward = GcxEditor.FindAllSubArray(gcxContents, TankerInitializeWeaponsArray);
-            RandomizedItem randomizedReward = GetRandomStartingItem(true);
-            foreach(int weaponInitializiation in snakeWeaponAward)
+            RandomizedItem randomTankerStartingWeapon = GetRandomItem(true, false);
+            int indexToModify = randomTankerStartingWeapon.Index - 0xC1;
+            byte[] newInitializeWeaponsArray = new byte[emptyInitializeWeaponsArray.Length + 3];
+            Array.Copy(emptyInitializeWeaponsArray, newInitializeWeaponsArray, indexToModify);
+            Array.Copy(snakeStartingAmmoBytes, 0, newInitializeWeaponsArray, indexToModify, snakeStartingAmmoBytes.Length);
+            Array.Copy(emptyInitializeWeaponsArray, indexToModify + 1, newInitializeWeaponsArray, indexToModify + 4, emptyInitializeWeaponsArray.Length - indexToModify - 1);
+            foreach (int location in snakeWeaponAward)
             {
-                gcxContents[weaponInitializiation + randomizedReward.Index - WeaponIndexBase] = randomizedReward.Count;
+                Array.Copy(newInitializeWeaponsArray, 0, gcxContents, location + 6, newInitializeWeaponsArray.Length);
             }
+            //^this works, but oh my lord is this over-engineered. I can just... insert C0s until I get where I need to be, then insert the ammo bytes, then fill out with C0s. christ.
 
-            //Snake starts with AP Sensor, Camera, and cigs
+
+            //Snake starts with Camera, cigs, and (possibly) AP Sensor.
             List<int> snakeItemAward = GcxEditor.FindAllSubArray(gcxContents, TankerInitializeItemsArray);
             while (snakeItemAward.Count > 5)
             {
-                snakeItemAward.RemoveAt(snakeItemAward.Count - 1);
+                snakeItemAward.RemoveAt(5);
+            }
+            List<RandomizedItem> randomTankerStartingItems = new List<RandomizedItem>();
+            
+            for (int i = 0; i< 3; i++)
+            {
+                RandomizedItem randomItem = GetRandomItem(false, false);
+                if(randomTankerStartingItems.Contains(randomItem))
+                {
+                    i--;
+                }
+                else
+                {
+                    randomTankerStartingItems.Add(randomItem);
+                }
             }
 
-            randomizedReward = GetRandomStartingItem(false);
-            foreach (int initializationIndex in snakeItemAward)
+            //if not starting with Camera, modify w00a to not automatically award the Camera
+            //use only result from `39218001ECF1D6C2` and set the ending C2 to C1
+            if (!randomTankerStartingItems.Any(x=>x.Name == "Camera"))
             {
-                gcxContents[initializationIndex + randomizedReward.Index - ItemIndexBase] = randomizedReward.Count;
-            }
-            randomizedReward = GetRandomStartingItem(false);
-            foreach (int initializationIndex in snakeItemAward)
-            {
-                gcxContents[initializationIndex + randomizedReward.Index - ItemIndexBase] = randomizedReward.Count;
-            }
-            randomizedReward = GetRandomStartingItem(false);
-            foreach (int initializationIndex in snakeItemAward)
-            {
-                gcxContents[initializationIndex + randomizedReward.Index - ItemIndexBase] = randomizedReward.Count;
+                string w00a = GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_w00a"));
+                byte[] w00aContents = File.ReadAllBytes(w00a);
+
+                int cameraIndex = GcxEditor.FindSubArray(w00aContents, new byte[] { 0x39, 0x21, 0x80, 0x01, 0xEC, 0xF1, 0xD6, 0xC2 }) + 7;
+
+                w00aContents[cameraIndex] = 0xC1;
+                File.WriteAllBytes(w00a, w00aContents);
             }
 
+            List<int> selectedRandomItemIndices = new List<int>();
+            foreach(RandomizedItem item in randomTankerStartingItems)
+            {
+                selectedRandomItemIndices.Add(item.Index - 0xC1);
+            }
+            selectedRandomItemIndices.Sort();
+
+            byte[] newInitializeTankerItemsArray = new byte[emptyInitializeItemsArray.Length + 3];
+            newInitializeTankerItemsArray[0] = 0xC2;
+            for(int i = 1; i<newInitializeTankerItemsArray.Length; i++)
+            {
+                if (selectedRandomItemIndices.Contains(i))
+                {
+                    if(selectedRandomItemIndices.Count > 1)
+                    {
+                        newInitializeTankerItemsArray[i] = 0xC2;
+                        selectedRandomItemIndices.Remove(i);
+                    }
+                    else
+                    {
+                        Array.Copy(startingItemCountBytes, 0, newInitializeTankerItemsArray, i, startingItemCountBytes.Length);
+                        i += 3;
+                    }
+                }
+                else
+                {
+                    newInitializeTankerItemsArray[i] = 0xC1;
+                }
+            }
+            foreach (int location in snakeItemAward)
+            {
+                Array.Copy(newInitializeTankerItemsArray, 0, gcxContents, location + 6, newInitializeTankerItemsArray.Length);
+            }
+            AddTankerStartingItemsToPool();
+            #endregion
+
+            #region Plant
             //Raiden only starts with the AP sensor and Scope, so randomize those
             List<int> raidenItemAward = GcxEditor.FindAllSubArray(gcxContents, PlantInitializeItemsArray);
             while(raidenItemAward.Count > 6)
             {
-                raidenItemAward.RemoveAt(raidenItemAward.Count - 1);
+                raidenItemAward.RemoveAt(6);
+            }
+            raidenItemAward.RemoveAt(0);
+            List<RandomizedItem> randomPlantStartingItems = new List<RandomizedItem>();
+            for (int i = 0; i < 2; i++)
+            {
+                RandomizedItem randomItem = GetRandomItem(false, true);
+                if (randomPlantStartingItems.Contains(randomItem))
+                {
+                    i--;
+                }
+                else
+                {
+                    randomPlantStartingItems.Add(randomItem);
+                }
             }
 
-            randomizedReward = GetRandomStartingItem(false);
-            foreach (int initializationIndex in raidenItemAward)
+            selectedRandomItemIndices = new List<int>();
+            foreach (RandomizedItem item in randomPlantStartingItems)
             {
-                gcxContents[initializationIndex + randomizedReward.Index - ItemIndexBase] = randomizedReward.Count;
+                selectedRandomItemIndices.Add(item.Index - 0xC1);
             }
-            randomizedReward = GetRandomStartingItem(false);
-            foreach (int initializationIndex in raidenItemAward)
+
+            byte[] newInitializePlantItemsArray = new byte[emptyInitializeItemsArray.Length + 3];
+            newInitializePlantItemsArray[0] = 0xC2;
+            for (int i = 1; i < newInitializePlantItemsArray.Length; i++)
             {
-                gcxContents[initializationIndex + randomizedReward.Index - ItemIndexBase] = randomizedReward.Count;
+                if (selectedRandomItemIndices.Contains(i))
+                {
+                    if (selectedRandomItemIndices.Count > 1)
+                    {
+                        newInitializePlantItemsArray[i] = 0xC2;
+                        selectedRandomItemIndices.Remove(i);
+                    }
+                    else
+                    {
+                        Array.Copy(startingItemCountBytes, 0, newInitializePlantItemsArray, i, startingItemCountBytes.Length);
+                        i += 3;
+                    }
+                }
+                else
+                {
+                    newInitializePlantItemsArray[i] = 0xC1;
+                }
             }
+            foreach (int location in raidenItemAward)
+            {
+                Array.Copy(newInitializePlantItemsArray, 0, gcxContents, location + 6, newInitializePlantItemsArray.Length);
+            }
+            AddPlantStartingItemsToPool();
+            #endregion
 
             File.WriteAllBytes(gcxFile, gcxContents);
         }
@@ -456,96 +589,6 @@ namespace MGS2_MC
             public byte Index;
             public byte Count;
             public string Name;
-        }
-
-        private RandomizedItem GetRandomStartingItem(bool isWeapon = false)
-        {
-            //TODO: finish implementation logic
-            RandomizedItem randomizedItem = new RandomizedItem();
-
-            if (isWeapon)
-            {
-                //just very basic now, start with either M9 or USP
-                if(Randomizer.Next() % 2 == 0)
-                { 
-                    randomizedItem.Index = 0xC2;
-                    randomizedItem.Count = 0x0E;
-                }
-                else
-                {
-                    randomizedItem.Index = 0xC3;
-                    randomizedItem.Count = 0x0C;
-                }
-            }
-            else
-            {
-                //for simplification at the moment, it needs to be things available to both Snake and Raiden(or at least wont crash the game)
-                //Ration, Cold Meds, Bandage, Pentazemin, Thermals, Cigs, Box 1, Digital Camera, AP Sensor
-                //USP Suppressor, SOCOM Suppressor, AK Suppressor, Stealth, Phone
-                //these are also a bit more complicated than I was thinking at first. Going to once again need to account for the var references.
-                switch (Randomizer.Next(0, 13))
-                {
-                    case 0:
-                        //Ration
-                        randomizedItem.Index = 0xC2;
-                        break;
-                    case 1:
-                        //Cold meds
-                        randomizedItem.Index = 0xC4;
-                        break;
-                    case 2:
-                        //Bandage
-                        randomizedItem.Index = 0xC5;
-                        break;
-                    case 3:
-                        //Pentazemin
-                        randomizedItem.Index = 0xC6;
-                        break;
-                    case 4:
-                        //Thermals
-                        randomizedItem.Index = 0xCE;
-                        break;
-                    case 5:
-                        //Cigs
-                        randomizedItem.Index = 0xD2;
-                        break;
-                    case 6:
-                        //Box1
-                        randomizedItem.Index = 0xD1;
-                        break;
-                    case 7:
-                        //Digital Camera
-                        randomizedItem.Index = 0xD0;
-                        break;
-                    case 8:
-                        //AP Sensor
-                        randomizedItem.Index = 0xDA;
-                        break;
-                    case 9:
-                        //USP Suppressor
-                        randomizedItem.Index = 0xE4;
-                        break;
-                    case 10:
-                        //SOCOM suppressor
-                        randomizedItem.Index = 0xDE;
-                        break;
-                    case 11:
-                        //AK Suppressor
-                        randomizedItem.Index = 0xDF;
-                        break;
-                    case 12:
-                        //Stealth
-                        randomizedItem.Index = 0xC9;
-                        break;
-                    case 13:
-                        //Phone
-                        randomizedItem.Index = 0xD5;
-                        break;
-                }
-                randomizedItem.Count = 0x01;
-            }
-
-            return randomizedItem;
         }
 
         private RandomizedItem GetRandomItem(bool isWeapon = false, bool isPlant = true)
@@ -590,6 +633,11 @@ namespace MGS2_MC
 
         private void AddAutomaticRewardsToPools()
         {
+            Location uspLocation = VanillaItems.TankerPart3.Entities.First(spawn => spawn.Key.GcxFile == "w01f" && spawn.Key.Name == "StinkyRationMan").Key;
+            VanillaItems.TankerPart3.Entities[uspLocation] = MGS2Weapons.Usp;
+            if(!VanillaItems.TankerPart2.ItemsNeededToProgress.Contains(MGS2Weapons.Usp))
+                VanillaItems.TankerPart2.ItemsNeededToProgress.Add(MGS2Weapons.Usp);
+
             Location socomLocation = VanillaItems.PlantSet10.Entities.First(spawn => spawn.Key.GcxFile == "w12b" && spawn.Key.Name == "Locker1").Key;
             VanillaItems.PlantSet10.Entities[socomLocation] = MGS2Weapons.Socom;
             
@@ -1202,32 +1250,42 @@ namespace MGS2_MC
             byte[] sedimentPool1ZLocation = new byte[4];
             switch (sedimentPool1)
             {
+                default:
+                    sedimentPool1 = 0;
+                    break;
                 case 0:
                     //change nothing
                     break;
-                case 1:
+                //for some reason, this bomb is just absolutely refusing to be sprayed anywhere but the default spot.
+                /*case 1:
+                    //other liftable & sprayable hatch
                     sedimentPool1XLocation = new byte[] { 0x0B, 0xDB };
                     sedimentPool1YLocation = new byte[] { 0x66, 0xEF };
                     sedimentPool1ZLocation = new byte[] { 0x41, 0x0C, 0xFE, 0xFF };
                     break;
                 case 2:
-                    sedimentPool1XLocation = new byte[] { 0x99, 0xEA };
-                    sedimentPool1YLocation = new byte[] { 0x60, 0xF0 };
-                    sedimentPool1ZLocation = new byte[] { 0x62, 0xF7, 0xFD, 0xFF };
-                    break;
-                case 3:
+                    //behind fence
                     sedimentPool1XLocation = new byte[] { 0x45, 0xE4 };
                     sedimentPool1YLocation = new byte[] { 0x60, 0xF0 };
                     sedimentPool1ZLocation = new byte[] { 0x56, 0x5F, 0xFE, 0xFF };
                     break;
-                case 4:
+                case 3:
+                    //left-side scaffold (doesnt work correctly[at least on Extreme], so disabled)
                     sedimentPool1XLocation = new byte[] { 0x9F, 0xFC };
                     sedimentPool1YLocation = new byte[] { 0x75, 0xED };
                     sedimentPool1ZLocation = new byte[] { 0xA3, 0x06, 0xFE, 0xFF };
                     break;
+                  */  
+                /*case 4: 
+                    //under stairs (doesnt work correctly[at least on Extreme], so disabled)
+                    sedimentPool1XLocation = new byte[] { 0x99, 0xEA };
+                    sedimentPool1YLocation = new byte[] { 0x60, 0xF0 };
+                    sedimentPool1ZLocation = new byte[] { 0x62, 0xF7, 0xFD, 0xFF };
+                    break;*/
+                    
             }
 
-            int sedimentPool2 = Randomizer.Next(3);
+            int sedimentPool2 = Randomizer.Next(2);
             byte[] sedimentPool2XLocation = new byte[2];
             byte[] sedimentPool2YLocation = new byte[2];
             byte[] sedimentPool2ZLocation = new byte[4];
@@ -1237,20 +1295,23 @@ namespace MGS2_MC
                     //change nothing
                     break;
                 case 1:
-                    sedimentPool2XLocation = new byte[] { 0x1C, 0x03 };
-                    sedimentPool2YLocation = new byte[] { 0x75, 0xED };
-                    sedimentPool2ZLocation = new byte[] { 0xB3, 0x06, 0xFE, 0xFF };
-                    break;
-                case 2:
-                    sedimentPool2XLocation = new byte[] { 0x5C, 0x1C};
-                    sedimentPool2YLocation = new byte[] { 0x60, 0xF0 };
-                    sedimentPool2ZLocation = new byte[] { 0x56, 0x5F, 0xFE, 0xFF };
-                    break;
-                case 3:
+                    //center cage
                     sedimentPool2XLocation = new byte[] { 0x77, 0x00 };
                     sedimentPool2YLocation = new byte[] { 0x30, 0xFC };
                     sedimentPool2ZLocation = new byte[] { 0x6F, 0x24, 0xFE, 0xFF };
                     break;
+                case 2:
+                    //behind fence
+                    sedimentPool2XLocation = new byte[] { 0x5C, 0x1C};
+                    sedimentPool2YLocation = new byte[] { 0x60, 0xF0 };
+                    sedimentPool2ZLocation = new byte[] { 0x56, 0x5F, 0xFE, 0xFF };
+                    break;
+                /*case 3:
+                    //right-side scaffold (doesnt work correctly[at least on Extreme], so disabled)
+                    sedimentPool2XLocation = new byte[] { 0x1C, 0x03 };
+                    sedimentPool2YLocation = new byte[] { 0x75, 0xED };
+                    sedimentPool2ZLocation = new byte[] { 0xB3, 0x06, 0xFE, 0xFF };
+                    break;*/
             }
 
             int sedimentPool3 = Randomizer.Next(4);
@@ -1418,7 +1479,7 @@ namespace MGS2_MC
             #endregion
 
             #region Armory
-            int armory = Randomizer.Next(3);
+            int armory = Randomizer.Next(8);
             byte[] armoryXLocation = new byte[4];
             byte[] armoryYLocation = new byte[2];
             byte[] armoryZLocation = new byte[2];
@@ -1480,6 +1541,7 @@ namespace MGS2_MC
                     Array.Copy(armoryXLocation, 0, gcxContents, c4Location + 0xB, 4);
                     Array.Copy(armoryYLocation, 0, gcxContents, c4Location + 0x10, 2);
                     Array.Copy(armoryZLocation, 0, gcxContents, c4Location + 0x13, 2);
+                    Array.Copy(new byte[] { 0x00, 0x04 }, 0, gcxContents, c4Location + 0x19, 2);
                 }
 
                 File.WriteAllBytes(gcxFile, gcxContents);
@@ -1864,7 +1926,6 @@ namespace MGS2_MC
 
         private bool VerifyItemSetLogicValidity(MGS2ItemSet setToCheck)
         {
-            /* For now, the Tanker is always completeable. When we figure out auto-given items, this will be needed
             foreach (Item item in VanillaItems.TankerPart1.ItemsNeededToProgress) 
             {
                 if (!setToCheck.TankerPart1.Entities.ContainsValue(item))
@@ -1880,7 +1941,6 @@ namespace MGS2_MC
                 if (!setToCheck.TankerPart3.Entities.ContainsValue(item))
                     return false;
             }
-            */
 
             foreach (Item item in VanillaItems.PlantSet2.ItemsNeededToProgress)
             {
@@ -2087,6 +2147,14 @@ namespace MGS2_MC
             {
                 OpenedFileData openedFileData = kvp.Value;
                 byte[] newGcxBytes = openedFileData.GcxEditor.BuildGcxFile();
+                if (kvp.Key.Contains("w0"))
+                {
+                    List<int> plantWeaponReferences = GcxEditor.FindAllSubArray(newGcxBytes, new byte[] { 0x39, 0x21, 0x80, 0x02, 0xAC });
+                    foreach(int index in plantWeaponReferences)
+                    {
+                        Array.Copy(new byte[] { 0x39, 0x21, 0x80, 0x01, 0x5C }, 0, newGcxBytes, index, 5);
+                    }
+                }
                 string date = $"{createdDirectory.Name}/scenerio_stage_{kvp.Key}.gcx";
                 if (customDirectory)
                     File.WriteAllBytes(date, newGcxBytes);

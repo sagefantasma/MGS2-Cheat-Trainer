@@ -366,7 +366,6 @@ namespace MGS2_MC
             #region Tanker
             TankerPart1.Name = "Before Olga";
             TankerPart1.Entities = new Dictionary<Location, Item>();
-            TankerPart1.ItemsNeededToProgress.Add(MGS2Weapons.M9);
             #region w00a
             TankerPart1.Entities.Add(new Location(gcxFile: "w00a", spawnId: new byte[] { 0x6E, 0x0E, 0xA8 }, posX: 0xB7BC, posZ: 0, posY: 0xBBA4, rot: 1, name: "NearbyLeftsideBodyDump"), MGS2Items.Ration); //not guaranteed spawn
             TankerPart1.Entities.Add(new Location(gcxFile: "w00a", spawnId: new byte[] { 0x6F, 0x0E, 0xA8 }, posX: 0x1388, posZ: 0, posY: 0x493E, rot: 1, name: "NearSnakeSpawn"), MGS2Items.Ration); //not guaranteed spawn
@@ -413,7 +412,6 @@ namespace MGS2_MC
             TankerPart2.Entities = new Dictionary<Location, Item>();
             TankerPart1.Entities.ToList().ForEach(entity => TankerPart2.Entities.Add(entity.Key, entity.Value));
             TankerPart2.ItemsNeededToProgress.AddRange(TankerPart1.ItemsNeededToProgress);
-            TankerPart2.ItemsNeededToProgress.Add(MGS2Weapons.Usp);
             #region w00c
             TankerPart2.Entities.Add(new Location(gcxFile: "w00c", spawnId: new byte[] { 0x6E, 0x0E, 0xA8 }, posX: 0xD314, posZ: 0x2EE0, posY: 0xB6C2, rot: 1, name: "NearLeftsidePlatform"), MGS2Items.Ration);
             TankerPart2.Entities.Add(new Location(gcxFile: "w00c", spawnId: new byte[] { 0x6A, 0xC1, 0x11 }, posX: 0x4650, posZ: 0x31CE, posY: 0xC568, rot: 3, name: "RightsidePlatform"), MGS2Items.WetBox); //TODO: is this dependent on not having the item?
@@ -437,7 +435,6 @@ namespace MGS2_MC
             TankerPart3.Entities = new Dictionary<Location, Item>();
             TankerPart2.Entities.ToList().ForEach(entity => TankerPart3.Entities.Add(entity.Key, entity.Value));
             TankerPart3.ItemsNeededToProgress.AddRange(TankerPart2.ItemsNeededToProgress);
-            TankerPart3.ItemsNeededToProgress.Add(MGS2Items.Camera1);
             #region w03a
             TankerPart3.Entities.Add(new Location(gcxFile: "w03a", spawnId: new byte[] { 0x6E, 0x0E, 0xA8 }, posX: 0xD026, posZ: 0xEC78, posY: 0xFFFF5BF0, rot: 0, name: "DeadguySideRoom"), MGS2Items.Ration);
             TankerPart3.Entities.Add(new Location(gcxFile: "w03a", spawnId: new byte[] { 0xF3, 0xB9, 0x75 }, posX: 0xC950, posZ: 0xEC78, posY: 0xFFFEF46C, rot: 0, name: "CloseSideRoom", mandatorySpawn: true), MGS2Weapons.UspAmmo);

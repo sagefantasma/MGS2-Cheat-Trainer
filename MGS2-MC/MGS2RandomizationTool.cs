@@ -69,9 +69,9 @@ namespace MGS2_MC
             randomizeRationsCheckbox.Enabled = enable;
             randomizeStartingItemsCheckbox.Enabled = enable;
             randomizeAutomaticRewardsCheckbox.Enabled = enable;
-            //randomizeBombLocations.Enabled = enable;
+            randomizeBombLocations.Enabled = enable;
             randomizeEFConnectingBridgeClaymores.Enabled = enable;
-            if (enable && customSeedCheckbox.Checked)
+            if (!enable && customSeedCheckbox.Checked)
                 seedUpDown.Enabled = enable;
             customSeedCheckbox.Enabled = enable;
         }

@@ -32,7 +32,7 @@
     <ErrorReportUrl>https://github.com/sagefantasma/MGS2-Cheat-Trainer/issues</ErrorReportUrl>
     <ProductName>MGS2 Master Collection Cheat Trainer</ProductName>
     <PublisherName>ANTIBigBoss</PublisherName>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>2</ApplicationRevision>
     <ApplicationVersion>1.9.2.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -474,54 +474,54 @@
     <Content Include="Gcx\MGS2 Known Procs\proc_0xFFDCA5.proc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Gcx\MGS2 Known Procs\proc_0x7F5DC3.proc">
+    <Content Include="Gcx\MGS2 Known Procs\proc_0x7F5DC3.proc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Gcx\MGS2 Known Procs\proc_0xFFDAC6.proc">
+    </Content>
+    <Content Include="Gcx\MGS2 Known Procs\proc_0xFFDAC6.proc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Gcx\MGS2 Known Procs\proc_0xFFDAC7.proc">
+    </Content>
+    <Content Include="Gcx\MGS2 Known Procs\proc_0xFFDAC7.proc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Gcx\MGS2 Known Procs\proc_0xFFDAC8.proc">
+    </Content>
+    <Content Include="Gcx\MGS2 Known Procs\proc_0xFFDAC8.proc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Gcx\MGS2 Known Procs\proc_0xFFDAC9.proc">
+    </Content>
+    <Content Include="Gcx\MGS2 Known Procs\proc_0xFFDAC9.proc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Gcx\MGS2 Known Procs\proc_0xFFDACA.proc">
+    </Content>
+    <Content Include="Gcx\MGS2 Known Procs\proc_0xFFDACA.proc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Gcx\MGS2 Known Procs\proc_0xFFDACB.proc">
+    </Content>
+    <Content Include="Gcx\MGS2 Known Procs\proc_0xFFDACB.proc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Gcx\MGS2 Known Procs\proc_0xFFDACC.proc">
+    </Content>
+    <Content Include="Gcx\MGS2 Known Procs\proc_0xFFDACC.proc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Gcx\MGS2 Known Procs\proc_0xFFDACD.proc">
+    </Content>
+    <Content Include="Gcx\MGS2 Known Procs\proc_0xFFDACD.proc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Gcx\MGS2 Known Procs\proc_0xFFDACE.proc">
+    </Content>
+    <Content Include="Gcx\MGS2 Known Procs\proc_0xFFDACE.proc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Gcx\MGS2 Known Procs\proc_0xFFDACF.proc">
+    </Content>
+    <Content Include="Gcx\MGS2 Known Procs\proc_0xFFDACF.proc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Gcx\MGS2 Known Procs\proc_0xFFDAD0.proc">
+    </Content>
+    <Content Include="Gcx\MGS2 Known Procs\proc_0xFFDAD0.proc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Gcx\MGS2 Known Procs\proc_0xFFDAD1.proc">
+    </Content>
+    <Content Include="Gcx\MGS2 Known Procs\proc_0xFFDAD1.proc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Gcx\MGS2 Known Procs\proc_0xFFDAD2.proc">
+    </Content>
+    <Content Include="Gcx\MGS2 Known Procs\proc_0xFFDAD2.proc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Gcx\MGS2 Known Procs\proc_0xFFDAD3.proc">
+    </Content>
+    <Content Include="Gcx\MGS2 Known Procs\proc_0xFFDAD3.proc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Gcx\MGS2 Known Procs\proc_0xFFDAD4.proc">
+    </Content>
+    <Content Include="Gcx\MGS2 Known Procs\proc_0xFFDAD4.proc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </Content>
     <None Include="Resources\Documentation\mgs2_memory_print.CEM" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />

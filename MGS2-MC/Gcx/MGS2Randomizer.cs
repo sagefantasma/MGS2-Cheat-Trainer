@@ -1291,10 +1291,13 @@ namespace MGS2_MC
             byte[] sedimentPool2ZLocation = new byte[4];
             switch (sedimentPool2)
             {
+                default:
+                    sedimentPool2 = 0;
+                    break;
                 case 0:
                     //change nothing
                     break;
-                case 1:
+                /*case 1:
                     //center cage
                     sedimentPool2XLocation = new byte[] { 0x77, 0x00 };
                     sedimentPool2YLocation = new byte[] { 0x30, 0xFC };
@@ -1305,7 +1308,7 @@ namespace MGS2_MC
                     sedimentPool2XLocation = new byte[] { 0x5C, 0x1C};
                     sedimentPool2YLocation = new byte[] { 0x60, 0xF0 };
                     sedimentPool2ZLocation = new byte[] { 0x56, 0x5F, 0xFE, 0xFF };
-                    break;
+                    break;*/
                 /*case 3:
                     //right-side scaffold (doesnt work correctly[at least on Extreme], so disabled)
                     sedimentPool2XLocation = new byte[] { 0x1C, 0x03 };
@@ -1591,6 +1594,12 @@ namespace MGS2_MC
 
         public int RandomizeItemSpawns(RandomizationOptions options)
         {
+            //TODO: so there's an issue where we are accidentally making each tested seed successively LESS stringent
+            //if we have RandomizeAutomaticRewards enabled, which is very much NOT good. Is this fixable by referencing
+            //the _vanillaItems instead of VanillaItems? then we'd be able to return _vanillaItems to the "master" set
+            //before testing each seed, avoiding this issue. alternatively, we don't remove automatic rewards from the
+            //spawn pool. not really a big fan of this option tbqh.
+            //BuildVanillaItemSet();
             Derandomize(); //return to a "base" state to make our lives easier.
             RaidenItemAwardOptions = new List<RandomizedItem>();
             RaidenItemAwardOptions.AddRange(MasterRaidenItemAwardOptions);
@@ -1653,6 +1662,7 @@ namespace MGS2_MC
 
                 //assign each spawn on the tanker a random item from the list of available spawns
                 int itemsAssigned = 0;
+                int retries = 1000;
                 while (TankerSpawnsLeft.Count > 0)
                 {
                     int randomNum = Randomizer.Next();
@@ -1662,7 +1672,12 @@ namespace MGS2_MC
                     if (options.NoHardLogicLocks &&
                         LogicRequirements.ProgressionItems.Contains(randomChoice.Name) &&
                         !VanillaItems.TankerPart3.Entities.ElementAt(itemsAssigned).Key.MandatorySpawn)
+                    {
+                        retries--;
+                        if (retries == 0)
+                            break; //maybe throw and rethrow instead of break?
                         continue;
+                    }
 
                     //iteratively go through spawns in "sequential" order, setting random items to each
                     if (itemsAssigned < VanillaItems.TankerPart1.Entities.Count)

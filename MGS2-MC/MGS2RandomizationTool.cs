@@ -72,7 +72,11 @@ namespace MGS2_MC
             randomizeBombLocations.Enabled = enable;
             randomizeEFConnectingBridgeClaymores.Enabled = enable;
             if (!enable && customSeedCheckbox.Checked)
+            {
                 seedUpDown.Enabled = enable;
+            }
+            else
+                seedUpDown.Value = 0;
             customSeedCheckbox.Enabled = enable;
         }
 
@@ -93,7 +97,7 @@ namespace MGS2_MC
             Application.DoEvents();
             await Task.Run(() =>
             {
-                MGS2Randomizer randomizer = new MGS2Randomizer(_installLocation, seedUpDown.Enabled ? (int)seedUpDown.Value : 0);
+                MGS2Randomizer randomizer = new MGS2Randomizer(_installLocation, (int) seedUpDown.Value);
                 MGS2Randomizer.RandomizationOptions randomizationOptions = new MGS2Randomizer.RandomizationOptions
                 {
                     NoHardLogicLocks = seedAlwaysBeatableCheckbox.Checked,
@@ -106,7 +110,8 @@ namespace MGS2_MC
                     RandomizeClaymores = randomizeEFConnectingBridgeClaymores.Checked
                 };
                 int seed = 0;
-                randomizer.Randomizer = new Random(DateTime.UtcNow.Hour + DateTime.UtcNow.Minute + DateTime.UtcNow.Second + DateTime.UtcNow.Millisecond);
+                if(randomizer.Seed == 0)
+                    randomizer.Randomizer = new Random(DateTime.UtcNow.Hour + DateTime.UtcNow.Minute + DateTime.UtcNow.Second + DateTime.UtcNow.Millisecond);
                 while (seed == 0)
                 {
                     try

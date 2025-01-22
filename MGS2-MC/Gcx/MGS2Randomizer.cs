@@ -2153,11 +2153,17 @@ namespace MGS2_MC
                 byte[] newGcxBytes = openedFileData.GcxEditor.BuildGcxFile();
                 if (kvp.Key.Contains("w0"))
                 {
-                    //this is here to allow any custom spawns made for Raiden to work for Snake on Tanker levels.
+                    //this is here to allow any custom weapon spawns made for Raiden to work for Snake on Tanker levels.
                     List<int> plantWeaponReferences = GcxEditor.FindAllSubArray(newGcxBytes, new byte[] { 0x39, 0x21, 0x80, 0x02, 0xAC });
                     foreach(int index in plantWeaponReferences)
                     {
                         Array.Copy(new byte[] { 0x39, 0x21, 0x80, 0x01, 0x5C }, 0, newGcxBytes, index, 5);
+                    }
+                    //this is here to allow any custom item spawns made for Raiden to work for Snake on Tanker levels.
+                    List<int> plantItemReferences = GcxEditor.FindAllSubArray(newGcxBytes, new byte[] { 0x39, 0x21, 0x80, 0x03, 0x3C });
+                    foreach (int index in plantWeaponReferences)
+                    {
+                        Array.Copy(new byte[] { 0x39, 0x21, 0x80, 0x01, 0xEC }, 0, newGcxBytes, index, 5);
                     }
                 }
                 string date = $"{createdDirectory.Name}/scenerio_stage_{kvp.Key}.gcx";

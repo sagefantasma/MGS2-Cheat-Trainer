@@ -10,6 +10,8 @@ namespace MGS2_MC
     {
         //TODO: MAY NEED TO ADD TRIs as well, sadge
         //TODO: should all of these have ctxr's associated with them?
+        public static Resource ItemBox = new Resource("itembox",
+            kms: "", cmdl: "", ctxr: "", tri: "assets/tri/us/itembox.tri,us/stage/XXXX/cache/00883186.tri,cache/00883186.tri\r\r\n");
         public static Resource ColdMedsLabel = new Resource("cold_medicine_label", 
             kms: "assets/kms/us/cold_medicine_label_stage_a03b.kms,us/stage/XXXX/cache/00f971fb.kms,cache/00f971fb.kms\r\r\n", 
             cmdl: "assets/kms/us/cold_medicine_label_stage_a03b.cmdl,us/stage/XXXX/cache/00f971fb.cmdl,eu/stage/XXXX/cache/00f971fb.cmdl\r\r\n",
@@ -349,7 +351,7 @@ namespace MGS2_MC
             MGS2Resource.ShaverLabel, MGS2Resource.MedicineIbox, MGS2Resource.MedicineSh, MGS2Resource.HandgunIbox, MGS2Resource.HandgunSh,
             MGS2Resource.ChaffLabel, MGS2Resource.SocomAmmoLabel, MGS2Resource.GrenadeIbox, MGS2Resource.GrenadeSh, MGS2Resource.HandgunAmmoIbox,
             MGS2Resource.HandgunAmmoSh, MGS2Resource.RationSh, MGS2Resource.RationLabel, MGS2Resource.CoolantSprayLabel, MGS2Resource.SocomLabel,
-            MGS2Resource.UspLabel, MGS2Resource.ScopeCustomBox
+            MGS2Resource.UspLabel, MGS2Resource.ScopeCustomBox, MGS2Resource.ItemBox
         };
 
         public static List<string> AllPlantWeaponItemResources = new List<string>()
@@ -363,7 +365,7 @@ namespace MGS2_MC
             "minedetectorlabel", "nvglabel", "rifleammoibox", "rifleammosh", "rifleibox", "riflesh",
             "launcherammoibox", "launcherammosh", "launcheribox", "launchersh", "grenadeibox", "grenadesh", "handgunammoibox",
             "handgunammosh", "medicineibox", "medicinesh", "handgunibox", "handgunsh", "box2ibox", "box2sh",
-            "goggleibox", "gogglesh", "cboxlabel", "detectoribox", "detectorsh", "dmicibox", "dmicsh", "clslabel", "scmlabel"
+            "goggleibox", "gogglesh", "cboxlabel", "detectoribox", "detectorsh", "dmicibox", "dmicsh", "clslabel", "scmlabel", "itembox"
         };
 
         public static List<string> AllTankerWeaponItemResources = new List<string>()

@@ -260,6 +260,7 @@ namespace MGS2_MC
             MGS2Weapons.Aks74u.Name,
             MGS2Weapons.Nikita.Name,
             MGS2Items.SensorB.Name,
+            MGS2Weapons.M9.Name,
             MGS2Weapons.Usp.Name,
             MGS2Items.Camera1.Name
         };
@@ -601,7 +602,7 @@ namespace MGS2_MC
             PlantSet3.Entities.Add(new Location(gcxFile: "w22a", spawnId: new byte[] { 0xBB, 0x71, 0x8B, 0x05 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "RoomAcrossNode3.2"), MGS2Weapons.SocomAmmo); //room across from node(if suppressor has been picked up)
             PlantSet3.Entities.Add(new Location(gcxFile: "w22a", spawnId: new byte[] { 0x6A, 0x6A, 0x9 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "RoomAcrossNode2"), MGS2Weapons.SocomAmmo); //room across from node - dependent on not having?
             PlantSet3.Entities.Add(new Location(gcxFile: "w22a", spawnId: new byte[] { 33, 142, 94 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "RoomWithNode", mandatorySpawn: true), MGS2Items.Box2); //room with node
-            PlantSet3.Entities.Add(new Location(gcxFile: "w22a", spawnId: new byte[] { 107, 43, 115 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "LockerNearNode1", mandatorySpawn: true), MGS2Items.Pentazemin); //locker near node
+            PlantSet3.Entities.Add(new Location(gcxFile: "w22a", spawnId: new byte[] { 107, 43, 115 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "LockerNearNode1"), MGS2Items.Pentazemin); //locker near node
             PlantSet3.Entities.Add(new Location(gcxFile: "w22a", spawnId: new byte[] { 254, 105, 87, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "LockerNearNode2"), MGS2Items.Ration); //locker near node
             PlantSet3.Entities.Add(new Location(gcxFile: "w22a", spawnId: new byte[] { 0x79, 0x7E, 0x24, 0x03 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "RoomAcrossNode4", mandatorySpawn: true), MGS2Weapons.M9Ammo); //room across from node
             PlantSet3.Entities.Add(new Location(gcxFile: "w22a", spawnId: new byte[] { 0x4F, 0x38, 0x60, 0x1 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "LockerNearNode3", mandatorySpawn: true), MGS2Weapons.Book); //locker near node

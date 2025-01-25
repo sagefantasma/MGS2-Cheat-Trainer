@@ -398,7 +398,7 @@ namespace MGS2_MC
             _vanillaItems.TankerPart3.Entities[newSpawn1.Key] = MGS2Weapons.M9; 
 
             KeyValuePair<Location, Item> newSpawn2 = _vanillaItems.TankerPart3.Entities.First(spawn => spawn.Key.Name == "UnderLeftsideStairs" && spawn.Key.GcxFile == "w00a");
-            _vanillaItems.TankerPart3.Entities[newSpawn2.Key] = MGS2Items.Camera1; //minor resourcing issue with the dmic box not showing up
+            _vanillaItems.TankerPart3.Entities[newSpawn2.Key] = MGS2Items.Camera1;
 
             KeyValuePair<Location, Item> newSpawn3 = _vanillaItems.TankerPart3.Entities.First(spawn => spawn.Key.Name == "UnderRightsideStairs" && spawn.Key.GcxFile == "w01b");
             _vanillaItems.TankerPart3.Entities[newSpawn3.Key] = MGS2Items.Cigs;
@@ -572,10 +572,23 @@ namespace MGS2_MC
             {
                 Array.Copy(newInitializePlantItemsArray, 0, gcxContents, location + 6, newInitializePlantItemsArray.Length);
             }
+
+            string d13tGcx = GcxFileDirectory.Find(file => file.Contains("scenerio_stage_d13t"));
+            byte[] d13tContents = File.ReadAllBytes(d13tGcx);
+            List<int> d13tRaidenItemAward = GcxEditor.FindAllSubArray(d13tContents, PlantInitializeItemsArray);
+            while(d13tRaidenItemAward.Count > 5)
+            {
+                d13tRaidenItemAward.RemoveAt(5);
+            }
+            foreach(int location in d13tRaidenItemAward)
+            {
+                Array.Copy(newInitializePlantItemsArray, 0, d13tContents, location + 6, newInitializePlantItemsArray.Length);
+            }
             AddPlantStartingItemsToPool();
             #endregion
 
             File.WriteAllBytes(gcxFile, gcxContents);
+            File.WriteAllBytes(d13tGcx, d13tContents);
         }
 
         class RandomizedItem
@@ -2161,7 +2174,7 @@ namespace MGS2_MC
                     }
                     //this is here to allow any custom item spawns made for Raiden to work for Snake on Tanker levels.
                     List<int> plantItemReferences = GcxEditor.FindAllSubArray(newGcxBytes, new byte[] { 0x39, 0x21, 0x80, 0x03, 0x3C });
-                    foreach (int index in plantWeaponReferences)
+                    foreach (int index in plantItemReferences)
                     {
                         Array.Copy(new byte[] { 0x39, 0x21, 0x80, 0x01, 0xEC }, 0, newGcxBytes, index, 5);
                     }

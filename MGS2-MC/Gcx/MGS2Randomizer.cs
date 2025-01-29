@@ -424,7 +424,6 @@ namespace MGS2_MC
 
         private void RandomizeStartingItems()
         {
-            //TODO: finish implementation logic
             string gcxFile = GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_n_title"));
             byte[] gcxContents = File.ReadAllBytes(gcxFile);
             byte[] snakeStartingAmmoBytes = new byte[] { 0x11, 0x00, 0x0A, 0x5C };
@@ -600,7 +599,6 @@ namespace MGS2_MC
 
         private RandomizedItem GetRandomItem(bool isWeapon = false, bool isPlant = true)
         {
-            //TODO: test and confirm
             RandomizedItem randomizedItem;
 
             if (isPlant)
@@ -1014,7 +1012,7 @@ namespace MGS2_MC
             List<int> c4Locations;
 
             #region Strut A Roof
-            int roofChoice = Randomizer.Next(2);
+            int roofChoice = Randomizer.Next(3);
             byte[] roofXLocation = new byte[2];
             byte[] roofYLocation = new byte[2];
             byte[] roofZLocation = new byte[2];
@@ -1066,7 +1064,7 @@ namespace MGS2_MC
             #endregion
 
             #region Pump Room
-            int pumpRoom = Randomizer.Next(5);
+            int pumpRoom = Randomizer.Next(6);
             byte[] pumpRoomXLocation = new byte[1];
             byte[] pumpRoomYLocation = new byte[1];
             byte[] pumpRoomZLocation = new byte[2];
@@ -1120,7 +1118,7 @@ namespace MGS2_MC
             #endregion
 
             #region Transformer Room
-            int transformerRoom = Randomizer.Next(5);
+            int transformerRoom = Randomizer.Next(6);
             byte[] transformerRoomXLocation = new byte[4];
             byte[] transformerRoomYLocation = new byte[2];
             byte[] transformerRoomZLocation = new byte[4];
@@ -1174,7 +1172,7 @@ namespace MGS2_MC
             #endregion
 
             #region Mess Hall
-            int diningHall = Randomizer.Next(5);
+            int diningHall = Randomizer.Next(8);
             byte[] diningHallXLocation = new byte[4];
             byte[] diningHallYLocation = new byte[2];
             byte[] diningHallZLocation = new byte[4];
@@ -1251,7 +1249,7 @@ namespace MGS2_MC
             #endregion
 
             #region Sediment Pool
-            int sedimentPool1 = Randomizer.Next(4);
+            int sedimentPool1 = Randomizer.Next(5);
             byte[] sedimentPool1XLocation = new byte[2];
             byte[] sedimentPool1YLocation = new byte[2];
             byte[] sedimentPool1ZLocation = new byte[4];
@@ -1263,8 +1261,7 @@ namespace MGS2_MC
                 case 0:
                     //change nothing
                     break;
-                //for some reason, this bomb is just absolutely refusing to be sprayed anywhere but the default spot.
-                /*case 1:
+                case 1:
                     //other liftable & sprayable hatch
                     sedimentPool1XLocation = new byte[] { 0x0B, 0xDB };
                     sedimentPool1YLocation = new byte[] { 0x66, 0xEF };
@@ -1277,22 +1274,22 @@ namespace MGS2_MC
                     sedimentPool1ZLocation = new byte[] { 0x56, 0x5F, 0xFE, 0xFF };
                     break;
                 case 3:
-                    //left-side scaffold (doesnt work correctly[at least on Extreme], so disabled)
+                    //left-side scaffold 
                     sedimentPool1XLocation = new byte[] { 0x9F, 0xFC };
                     sedimentPool1YLocation = new byte[] { 0x75, 0xED };
                     sedimentPool1ZLocation = new byte[] { 0xA3, 0x06, 0xFE, 0xFF };
                     break;
-                  */  
-                /*case 4: 
-                    //under stairs (doesnt work correctly[at least on Extreme], so disabled)
+                    
+                case 4: 
+                    //under stairs 
                     sedimentPool1XLocation = new byte[] { 0x99, 0xEA };
                     sedimentPool1YLocation = new byte[] { 0x60, 0xF0 };
                     sedimentPool1ZLocation = new byte[] { 0x62, 0xF7, 0xFD, 0xFF };
-                    break;*/
+                    break;
                     
             }
 
-            int sedimentPool2 = Randomizer.Next(2);
+            int sedimentPool2 = Randomizer.Next(4);
             byte[] sedimentPool2XLocation = new byte[2];
             byte[] sedimentPool2YLocation = new byte[2];
             byte[] sedimentPool2ZLocation = new byte[4];
@@ -1304,7 +1301,7 @@ namespace MGS2_MC
                 case 0:
                     //change nothing
                     break;
-                /*case 1:
+                case 1:
                     //center cage
                     sedimentPool2XLocation = new byte[] { 0x77, 0x00 };
                     sedimentPool2YLocation = new byte[] { 0x30, 0xFC };
@@ -1315,16 +1312,16 @@ namespace MGS2_MC
                     sedimentPool2XLocation = new byte[] { 0x5C, 0x1C};
                     sedimentPool2YLocation = new byte[] { 0x60, 0xF0 };
                     sedimentPool2ZLocation = new byte[] { 0x56, 0x5F, 0xFE, 0xFF };
-                    break;*/
-                /*case 3:
-                    //right-side scaffold (doesnt work correctly[at least on Extreme], so disabled)
+                    break;
+                case 3:
+                    //right-side scaffold
                     sedimentPool2XLocation = new byte[] { 0x1C, 0x03 };
                     sedimentPool2YLocation = new byte[] { 0x75, 0xED };
                     sedimentPool2ZLocation = new byte[] { 0xB3, 0x06, 0xFE, 0xFF };
-                    break;*/
+                    break;
             }
 
-            int sedimentPool3 = Randomizer.Next(4);
+            int sedimentPool3 = Randomizer.Next(5);
             byte[] sedimentPool3XLocation = new byte[2];
             byte[] sedimentPool3YLocation = new byte[2];
             byte[] sedimentPool3ZLocation = new byte[4];
@@ -1365,6 +1362,21 @@ namespace MGS2_MC
 
                 if (sedimentPool1 != 0)
                 {
+                    //need to grab third hit of 4D25B2 + 7 and change from C1 -> C2
+                    //otherwise, only default spawn will work
+                    List<int> bomb1References = GcxEditor.FindAllSubArray(gcxContents, new byte[] { 0x4D, 0x25, 0xB2 });
+                    byte originalByte = 0;
+                    int i = 0;
+                    while(originalByte != 0xC1)
+                    {
+                        originalByte = gcxContents[bomb1References[i] + 7];
+                        if (originalByte != 0xC1)
+                        {
+                            i++;
+                        }
+                    }
+                    
+                    gcxContents[bomb1References[i] + 7] = 0xC2;
                     foreach (int c4Location in c41Locations)
                     {
                         Array.Copy(sedimentPool1XLocation, 0, gcxContents, c4Location + 0xB, 2);
@@ -1374,6 +1386,21 @@ namespace MGS2_MC
                 }
                 if (sedimentPool2 != 0)
                 {
+                    //need to grab second hit of 4E25B2 + 7 and change from C1 -> C2
+                    //otherwise, only default spawn will work
+                    List<int> bomb2References = GcxEditor.FindAllSubArray(gcxContents, new byte[] { 0x4E, 0x25, 0xB2 });
+                    byte originalByte = 0;
+                    int i = 0;
+                    while (originalByte != 0xC1)
+                    {
+                        originalByte = gcxContents[bomb2References[i] + 7];
+                        if (originalByte != 0xC1)
+                        {
+                            i++;
+                        }
+                    }
+
+                    gcxContents[bomb2References[i] + 7] = 0xC2;
                     foreach (int c4Location in c42Locations)
                     {
                         Array.Copy(sedimentPool2XLocation, 0, gcxContents, c4Location + 0xB, 2);
@@ -1396,7 +1423,7 @@ namespace MGS2_MC
             #endregion
 
             #region Parcel Room
-            int parcelRoom = Randomizer.Next(3);
+            int parcelRoom = Randomizer.Next(4);
             byte[] parcelRoomXLocation = new byte[4];
             byte[] parcelRoomYLocation = new byte[2];
             byte[] parcelRoomZLocation = new byte[4];
@@ -1440,7 +1467,7 @@ namespace MGS2_MC
             #endregion
 
             #region Helipad
-            int helipad = Randomizer.Next(4);
+            int helipad = Randomizer.Next(5);
             byte[] helipadXLocation = new byte[4];
             byte[] helipadYLocation = new byte[2];
             byte[] helipadZLocation = new byte[4];
@@ -1489,7 +1516,7 @@ namespace MGS2_MC
             #endregion
 
             #region Armory
-            int armory = Randomizer.Next(8);
+            int armory = Randomizer.Next(9);
             byte[] armoryXLocation = new byte[4];
             byte[] armoryYLocation = new byte[2];
             byte[] armoryZLocation = new byte[2];
@@ -1644,10 +1671,6 @@ namespace MGS2_MC
                 _vanillaItems.PlantSet9.ItemsNeededToProgress.Remove(MGS2Weapons.Socom);
                 _vanillaItems.PlantSet9.ItemsNeededToProgress.Remove(MGS2Weapons.Coolant);
                 _vanillaItems.PlantSet9.ItemsNeededToProgress.Remove(MGS2Items.BDU);
-            }
-            if (options.RandomizeClaymores)
-            {
-                RandomizeClaymores();
             }
 
             try
@@ -1896,6 +1919,11 @@ namespace MGS2_MC
             if (!VerifyItemSetLogicValidity(_randomizedItems))
             {
                 throw new RandomizerException("bad randomization seed");
+            }
+
+            if (options.RandomizeClaymores)
+            {
+                RandomizeClaymores();
             }
 
             if (options.RandomizeC4)

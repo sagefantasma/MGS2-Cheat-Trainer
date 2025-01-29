@@ -42,6 +42,8 @@ namespace gcx
                 procEditor.WriteOutSpawns(gcxFile);
             }*/
 
+            //ResourceEditor.AddResource()
+
             ShowGui();
             return;
             bool rerun = false;

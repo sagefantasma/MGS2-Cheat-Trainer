@@ -759,8 +759,9 @@ namespace MGS2_MC
             AwardPsg1tAmmo, AwardPsg1tGun, AwardRgbAmmo, AwardRgbGun, AwardSocomAmmo,
             AwardSocomSuppressor, AwardStingerAmmo, AwardStingerGun, AwardStunG, AwardUspAmmo, AwardPentazemin,
             AwardRation, AwardSensorB, AwardShaver, AwardUspSuppressor, AwardThermalG,
-            AwardCigarettes, AwardSensorA, AwardAPSensor, AwardUsp, AwardSocom, AwardPhone, AwardScope,
-            AwardMODisk, AwardCamera, AwardBDU, AwardCard1, AwardCard2, AwardCard3, AwardCard4, AwardCard5 //EnableBlade
+            AwardCigarettes, AwardSensorA, AwardAPSensor, AwardUsp, AwardSocom, 
+            AwardPhone, AwardScope, AwardMODisk, AwardCamera, AwardBDU, 
+            AwardCard1, AwardCard2, AwardCard3, AwardCard4, AwardCard5 //EnableBlade
         };
     }
 }

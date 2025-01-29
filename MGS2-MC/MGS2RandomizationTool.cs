@@ -126,7 +126,8 @@ namespace MGS2_MC
                     catch (MGS2Randomizer.RandomizerException ee)
                     {
                         //randomizer.Seed = new Random(DateTime.UtcNow.Hour + DateTime.UtcNow.Minute + DateTime.UtcNow.Second + DateTime.UtcNow.Millisecond);
-                        randomizer.Randomizer = new Random(DateTime.UtcNow.Hour + DateTime.UtcNow.Minute + DateTime.UtcNow.Second + DateTime.UtcNow.Millisecond);
+                        //randomizer.Randomizer = new Random(DateTime.UtcNow.Hour + DateTime.UtcNow.Minute + DateTime.UtcNow.Second + DateTime.UtcNow.Millisecond);
+                        randomizer.Randomizer = new Random(randomizer.Randomizer.Next());
                     }
                     catch (Exception ee)
                     {

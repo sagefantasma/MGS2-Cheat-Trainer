@@ -32,7 +32,7 @@
     <ErrorReportUrl>https://github.com/sagefantasma/MGS2-Cheat-Trainer/issues</ErrorReportUrl>
     <ProductName>MGS2 Master Collection Cheat Trainer</ProductName>
     <PublisherName>ANTIBigBoss</PublisherName>
-    <ApplicationRevision>4</ApplicationRevision>
+    <ApplicationRevision>6</ApplicationRevision>
     <ApplicationVersion>1.9.4.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -209,7 +209,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Gcx\GcxComparator.cs" />
     <Compile Include="Gcx\GcxEditor.cs" />
     <Compile Include="Gcx\GcxExplorer.cs">
       <SubType>Form</SubType>

@@ -895,12 +895,12 @@ namespace MGS2_MC
                     if (activeCheat.CodeLocation == IntPtr.Zero)
                     {
                         activeCheat.OriginalBytes = ReadMemory(MGS2AoB.PauseVRAoB, MGS2Offset.PAUSE_VR_TIMER);
-                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.PauseVRAoB, MGS2Offset.PAUSE_VR_TIMER, 3);
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.PauseVRAoB, MGS2Offset.PAUSE_VR_TIMER, 6, 2);
                         MGS2Cheat.PauseVRTimer = activeCheat;
                     }
                     else
                     {
-                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.PAUSE_VR_TIMER, 3);
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.PAUSE_VR_TIMER, 6, 2);
                     }
                 }
                 else

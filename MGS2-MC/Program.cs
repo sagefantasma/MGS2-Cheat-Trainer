@@ -30,55 +30,37 @@ namespace MGS2_MC
         [STAThread]
         static void Main()
         {
-            Task.Run(() =>
+            bool requireAdmin = bool.Parse(ConfigurationManager.AppSettings.Get("RequireAdmin"));
+            if (Debugger.IsAttached)
             {
-                if (IsRunAsAdministrator())
-                {
-                    while (GUI.GuiLoaded == false)
-                    {
-                        //wait for the GUI to load
-                    }
-                    _logger.Debug("Cheat Trainer started in admin mode! Starting on cheats tab.");
-                    (GUI.StaticGuiReference.Controls["mgs2TabControl"] as TabControl).SelectTab("tabPageCheats");
-                    GUI.StaticGuiReference.Name += " (ADMIN MODE)";
-                }
-            });
-            InitializeTrainer();
+                requireAdmin = false;
+            }
+            if (IsRunAsAdministrator() || !requireAdmin)
+            {
+                InitializeTrainer();
+            }
+            else
+            {
+                RestartInAdminMode();
+            }
         }
 
         public static void RestartInAdminMode()
         {
-            _logger.Debug("User isn't in admin mode. Asking to restart in admin mode");
-
-            string message = "Not all cheats work without admin mode. Would you like to restart in Admin mode?";
-            string caption = "Limited functionality ahead!";
-            MessageBoxButtons buttons = MessageBoxButtons.YesNo;
-            DialogResult userChoice = MessageBox.Show(message, caption, buttons);
-            switch (userChoice)
+            var processInfo = new ProcessStartInfo(Assembly.GetExecutingAssembly().CodeBase)
             {
-                case DialogResult.Yes:
-                    var processInfo = new ProcessStartInfo(Assembly.GetExecutingAssembly().CodeBase)
-                    {
-                        UseShellExecute = true,
-                        Verb = "runas"
-                    };
+                UseShellExecute = true,
+                Verb = "runas"
+            };
 
-                    try
-                    {
-                        _logger.Debug("Restarting process with UAC prompt");
-                        Process.Start(processInfo);
-                    }
-                    catch
-                    {
-                        _logger.Error("User declined UAC prompt.");
-                    }
-                    Application.Exit();
-                    break;
-                default:
-                case DialogResult.No:
-                    _logger.Debug("User chose to not restart in admin mode.");
-                    break;
+            try
+            {
+                Process.Start(processInfo);
             }
+            catch
+            {
+            }
+            Application.Exit();
         }
 
         private static void InitializeTrainer()
@@ -182,7 +164,13 @@ namespace MGS2_MC
                 logLevel = "Debug";
             }
             Logging.MainLogEventLevel = ParseLogEventLevel(logLevel);
-            Logging.LogLocation = Path.Combine(new FileInfo(Application.ExecutablePath).DirectoryName, "logs");
+            string userDocuments = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            string logDirectory = Path.Combine(userDocuments, "MGS Mod Manager and Trainer", "MGS2", "MGS2 Logs");
+            if (!Directory.Exists(logDirectory))
+            {
+                Directory.CreateDirectory(logDirectory);
+            }
+            Logging.LogLocation = logDirectory;
             _logger = Logging.InitializeNewLogger(loggerName);
             _logger.Information($"MGS2 MC Cheat Trainer v.{AppVersion} initialized...");
             _logger.Verbose($"Instance ID: {InstanceID}");

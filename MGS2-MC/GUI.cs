@@ -2317,5 +2317,18 @@ namespace MGS2_MC
                 _logger.Error($"RANDOMIZER UNHANDLED ERROR: {ex.Message}");
             }
         }
+
+        private void openInstallLocationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Process.Start(new FileInfo(Application.ExecutablePath).Directory.FullName);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Failed to open install location from sender {JsonSerializer.Serialize(sender)} and args {JsonSerializer.Serialize(e)}: {ex}");
+                MessageBox.Show(@"Failed to open install location. If this error persists, please report the bug to our Discord.");
+            }
+        }
     }
 }

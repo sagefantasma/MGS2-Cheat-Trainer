@@ -528,8 +528,7 @@ namespace MGS2_MC
             PlantSet3.Entities = new Dictionary<Location, Item>();
             PlantSet2.Entities.ToList().ForEach(entity => PlantSet3.Entities.Add(entity.Key, entity.Value));
             PlantSet3.ItemsNeededToProgress.AddRange(PlantSet2.ItemsNeededToProgress);
-            //PlantSet3.ItemsNeededToProgress.Add(MGS2Items.SensorB);
-            PlantSet3.ItemsNeededToProgress.AddRange(new Item[] { MGS2Weapons.Socom, MGS2Weapons.Coolant });
+            PlantSet3.ItemsNeededToProgress.AddRange(new Item[] { MGS2Weapons.Socom, MGS2Weapons.Coolant, MGS2Items.SensorB });
             #region w12b
             //verified with new ID acquisiton(still not crazy about decimal instead of hex)
             PlantSet3.Entities.Add(new Location(gcxFile: "w12b", spawnId: new byte[] { 254, 105, 87, 2 }, posX: 0x0, posZ: 0x0, posY: 0x0, rot: 0, name: "UnderPipes"), MGS2Items.Ration);

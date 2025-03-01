@@ -761,7 +761,7 @@ namespace gcx
             AwardRation, AwardSensorB, AwardShaver, AwardUspSuppressor, AwardThermalG,
             AwardCigarettes, AwardSensorA, AwardAPSensor, AwardUsp, AwardSocom, 
             AwardPhone, AwardScope, AwardMODisk, AwardCamera, AwardBDU, 
-            AwardCard1, AwardCard2, AwardCard3, AwardCard4, AwardCard5, //EnableBlade
+            AwardCard1, AwardCard2, AwardCard3, AwardCard4, AwardCard5, EnableBlade
         };
     }
 }

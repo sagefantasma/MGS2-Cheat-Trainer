@@ -21,31 +21,89 @@ namespace gcx
         [STAThread]
         static void Main(string[] args)
         {
-            /*List<string> stages = new List<string> { "w00a", "w00b", "w00c", "w01a", "w01b", "w01c", "w01d", "w01e", "w01f",
-            "w02a", "w03a", "w03b", "w04a", "w04b", "w04c", "w11a", "w11b", "w11c", "w12a", "w12b", "w12c", "w13a", "w13b",
-            "w14a", "w15a", "w15b", "w16a", "w16b", "w17a", "w18a", "w19a", "w20a", "w20b", "w20c", "w20d", "w21a", "w21b",
-            "w22a", "w23a", "w23b", "w24a", "w24b", "w24c", "w24d", "w25a", "w25b", "w25c", "w25d", "w28a", "w31a",
-            "w31b", "w31c", "w31d", "w32a", "w41a", "w42a", "w43a", "w44a", "w45a", "w46a", "w51a", "w61a"};
-            foreach(string gcxFile in stages)
+            ResourceExtractor resourceExtractor = new ResourceExtractor("C:\\Users\\yonan\\Documents\\Pinned Folders\\C Drive Steam Games\\MGS2\\eu\\stage\\r_tnk0");
+            resourceExtractor.ExtractResources();
+            List<string> tankerSnakeBpAssets = resourceExtractor.bpAssetsResources.ToList();
+            List<string> tankerSnakeManifest = resourceExtractor.manifestResources.ToList();
+            List<Resource> tankerSnakeBpAssetsResources = new List<Resource>();
+            List<Resource> tankerSnakeManifestResources = new List<Resource>();
+            foreach(string bpAsset in tankerSnakeBpAssets)
             {
-                string gcxPath = $"main game\\scenerio_stage_{gcxFile}.gcx";
-                GcxEditor gcx_Editor = new GcxEditor();
-                gcx_Editor.CallDecompiler(gcxPath);
-                List<DecodedProc> allFileFunctions = gcx_Editor.BuildContentTree();
-                List<DecodedProc> spawns = new List<DecodedProc>();
-                foreach (DecodedProc entry in allFileFunctions)
-                {
-                    if (MGS2Randomizer.ContainsSpawningFunctions(entry))
-                        spawns.Add(entry);
-                }
-                ProcEditor procEditor = new ProcEditor(spawns, true);
-                procEditor.WriteOutSpawns(gcxFile);
-            }*/
+                tankerSnakeBpAssetsResources.Add(ResourceParser.ParseResource(bpAsset));
+            }
+            foreach (string manifestAsset in tankerSnakeManifest)
+            {
+                tankerSnakeManifestResources.Add(ResourceParser.ParseResource(manifestAsset));
+            }
 
-            //ResourceEditor.AddResource()
+            resourceExtractor = new ResourceExtractor("C:\\Users\\yonan\\Documents\\Pinned Folders\\C Drive Steam Games\\MGS2\\eu\\stage\\r_vr_1");
+            resourceExtractor.ExtractResources();
+            List<string> mgs1SnakeBpAssets = resourceExtractor.bpAssetsResources.ToList();
+            List<string> mgs1SnakeManifest = resourceExtractor.manifestResources.ToList();
+            List<Resource> mgs1SnakeBpAssetsResources = new List<Resource>();
+            List<Resource> mgs1SnakeManifestResources = new List<Resource>();
+            foreach (string bpAsset in mgs1SnakeBpAssets)
+            {
+                mgs1SnakeBpAssetsResources.Add(ResourceParser.ParseResource(bpAsset));
+            }
+            foreach (string manifestAsset in mgs1SnakeManifest)
+            {
+                mgs1SnakeManifestResources.Add(ResourceParser.ParseResource(manifestAsset));
+            }
+
+            foreach (Resource bpAsset in tankerSnakeBpAssetsResources)
+            {
+                Resource duplicatedResource = mgs1SnakeBpAssetsResources.FirstOrDefault(asset => asset.Hash == bpAsset.Hash);
+                
+                if(duplicatedResource != null)
+                {
+                    mgs1SnakeBpAssetsResources.Remove(duplicatedResource);
+                }
+            }
+
+            foreach (Resource manifestAsset in tankerSnakeManifestResources)
+            {
+                Resource duplicatedResource = mgs1SnakeManifestResources.FirstOrDefault(asset => asset.Hash == manifestAsset.Hash);
+
+                if (duplicatedResource != null)
+                {
+                    mgs1SnakeManifestResources.Remove(duplicatedResource);
+                }
+            }
+
+            foreach(Resource bpAsset in mgs1SnakeBpAssetsResources)
+            {
+                //bpAsset.Stage = "r_tnk0";
+                tankerSnakeBpAssetsResources.Add(bpAsset);
+            }
+
+            foreach (Resource bpAsset in mgs1SnakeManifestResources)
+            {
+                //bpAsset.Stage = "r_tnk0";
+                tankerSnakeManifestResources.Add(bpAsset);
+            }
+
+            ResourceBuilder.BuildResources(tankerSnakeBpAssetsResources, tankerSnakeManifestResources);
 
             ShowGui();
             return;
+
+            List<string> strings = new List<string>();
+            foreach (OldResource value in OldResource.HFBladeResourceList)
+            {
+                strings.Add(value.CommonName);
+            }
+            /*List<string> stages = new List<string> { "w00a", "w00b", "w00c", "w01a", "w01b", "w01c", "w01d", "w01e", "w01f",
+            "w02a", "w03a", "w03b", "w04a", "w04b", "w04c", "w11a", "w11b", "w11c", "w12a", "w12b", "w12c", "w13a", "w13b",
+            "w14a", "w15a", "w15b", "w16a", "w16b", "w17a", "w18a", "w19a", "w20a", "w20b", "w20c", "w20d", "w21a", "w21b",
+            "w22a", "w23a", "w23b", "w24a", "w24b", "w24c", "w24d", "w24e", "w25a", "w25b", "w25c", "w25d", "w28a", "w31a",
+            "w31b", "w31c", "w31d", "w31f", "w32a", "w32b", "w41a", "w42a", "w43a", "w44a", "w45a", "w46a", "w51a", "w61a"};*/
+            List<string> stages = new List<string> { "w12a" };
+            string mgs2Directory = @"C:\Users\yonan\Documents\Pinned Folders\C Drive Steam Games\MGS2\";
+            foreach (string stage in stages)
+                ResourceEditor.AddResources(stage, mgs2Directory + "\\eu\\stage", strings);
+
+            
             bool rerun = false;
             do
             {

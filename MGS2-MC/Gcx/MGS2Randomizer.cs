@@ -175,6 +175,20 @@ namespace MGS2_MC
             public bool AllWeaponsSpawnable { get; set; }
             public bool RandomizeCards { get; set; }
             public bool KeepVanillaCardAccess { get; set; }
+
+            public override string ToString()
+            {
+                return $"NoHardLogicLocks = {NoHardLogicLocks};\n" +
+                    $"NikitaShell2 = {NikitaShell2};\n" +
+                    $"AllWeaponsSpawnable = {AllWeaponsSpawnable};\n" +
+                    $"IncludeRations = {IncludeRations};\n" +
+                    $"RandomizeStartingItems = {RandomizeStartingItems};\n" +
+                    $"RandomizeAutomaticRewards = {RandomizeAutomaticRewards};\n" +
+                    $"RandomizeCards = {RandomizeCards};\n" +
+                    $"KeepVanillaCardAccess = {KeepVanillaCardAccess};\n" +
+                    $"RandomizeC4 = {RandomizeC4};\n" +
+                    $"RandomizeClaymores = {RandomizeClaymores};\n\n\n\n\n\n";
+            }
         }
 
         private void FixOneOffItems()
@@ -1698,6 +1712,7 @@ namespace MGS2_MC
             SnakeWeaponAwardOptions = new List<RandomizedItem>();
             SnakeWeaponAwardOptions.AddRange(MasterSnakeWeaponAwardOptions);
             _randomizedItems = new MGS2ItemSet();
+            SpoilerContents = options.ToString();
 
             if (options.RandomizeStartingItems)
             {
@@ -1705,7 +1720,7 @@ namespace MGS2_MC
             }
             if (options.RandomizeAutomaticRewards)
             {
-                SpoilerContents = RandomizeAutomaticRewards(options.RandomizeCards); 
+                SpoilerContents += RandomizeAutomaticRewards(options.RandomizeCards); 
             }
             else
             {
@@ -2219,6 +2234,7 @@ namespace MGS2_MC
 
         private bool VerifyCardSetLogicValidity(MGS2ItemSet setToCheck, bool keepCardAccessLevels = false)
         {
+            #region Tanker Checks
             foreach (Item item in _vanillaItems.TankerPart1.ItemsNeededToProgress)
             {
                 if (!setToCheck.TankerPart1.Entities.ContainsValue(item))
@@ -2234,7 +2250,9 @@ namespace MGS2_MC
                 if (!setToCheck.TankerPart3.Entities.ContainsValue(item))
                     return false;
             }
+            #endregion
 
+            #region Plant Checks
             if (!setToCheck.PlantCard0Set.Entities.ContainsValue(MGS2Items.Card))
             {
                 return false;
@@ -2290,7 +2308,7 @@ namespace MGS2_MC
                         KeyValuePair<Location, Item> socomSpawn = setToCheck.PlantCard5Set.Entities.FirstOrDefault(spawn => spawn.Value.Name == "SOCOM");
                         List<KeyValuePair<Location, Item>> part1SocomAmmoSpawns = firstProgressionSpawns.Where(spawn => spawn.Value.Name == "SOCOM Ammo" 
                         && spawn.Key.MandatorySpawn
-                        && keepCardAccessLevels ? spawn.Key.CardNeededToAccess == VanillaItems.ItemAccessLevels[MGS2Weapons.Socom] : true).ToList();
+                        && (keepCardAccessLevels ? spawn.Key.CardNeededToAccess == VanillaItems.ItemAccessLevels[MGS2Weapons.Socom] : true)).ToList();
                         KeyValuePair<Location, Item> ammoSpawnToSwap = part1SocomAmmoSpawns[Randomizer.Next(0, part1SocomAmmoSpawns.Count -1)];
 
                         setToCheck.PlantCard5Set.Entities[ammoSpawnToSwap.Key] = socomSpawn.Value;
@@ -2301,7 +2319,7 @@ namespace MGS2_MC
                         KeyValuePair<Location, Item> coolantSpawn = setToCheck.PlantCard5Set.Entities.FirstOrDefault(spawn => spawn.Value.Name == "Coolant");
                         List<KeyValuePair<Location, Item>> part1M9AmmoSpawns = firstProgressionSpawns.Where(spawn => spawn.Value.Name == "M9 Ammo" 
                         && spawn.Key.MandatorySpawn
-                        && keepCardAccessLevels ? spawn.Key.CardNeededToAccess == VanillaItems.ItemAccessLevels[MGS2Weapons.Coolant] : true).ToList();
+                        && (keepCardAccessLevels ? spawn.Key.CardNeededToAccess == VanillaItems.ItemAccessLevels[MGS2Weapons.Coolant] : true)).ToList();
                         KeyValuePair<Location, Item> ammoSpawnToSwap = part1M9AmmoSpawns[Randomizer.Next(0, part1M9AmmoSpawns.Count-1)];
 
                         setToCheck.PlantCard5Set.Entities[ammoSpawnToSwap.Key] = coolantSpawn.Value;
@@ -2311,7 +2329,7 @@ namespace MGS2_MC
                     {
                         KeyValuePair<Location, Item> sensorBSpawn = setToCheck.PlantCard5Set.Entities.FirstOrDefault(spawn => spawn.Value.Name == "Sensor B");
                         List<KeyValuePair<Location, Item>> part1M4AmmoSpawns = firstProgressionSpawns.Where(spawn => spawn.Value.Name == "M4 Ammo" && spawn.Key.MandatorySpawn
-                        && keepCardAccessLevels ? spawn.Key.CardNeededToAccess == VanillaItems.ItemAccessLevels[MGS2Items.SensorB] : true).ToList();
+                        && (keepCardAccessLevels ? spawn.Key.CardNeededToAccess == VanillaItems.ItemAccessLevels[MGS2Items.SensorB] : true)).ToList();
                         KeyValuePair<Location, Item> ammoSpawnToSwap = part1M4AmmoSpawns[Randomizer.Next(0, part1M4AmmoSpawns.Count-1)];
 
                         setToCheck.PlantCard5Set.Entities[ammoSpawnToSwap.Key] = sensorBSpawn.Value;
@@ -2330,7 +2348,7 @@ namespace MGS2_MC
                         KeyValuePair<Location, Item> bduSpawn = setToCheck.PlantCard5Set.Entities.FirstOrDefault(spawn => spawn.Value.Name == "B.D.U.");
                         List<KeyValuePair<Location, Item>> part2Rgb6AmmoSpawns = secondProgressionSpawns.Where(spawn => spawn.Value.Name == "RGB6 Ammo" 
                         && spawn.Key.MandatorySpawn
-                        && keepCardAccessLevels ? spawn.Key.CardNeededToAccess == VanillaItems.ItemAccessLevels[MGS2Items.BDU] : true).ToList();
+                        && (keepCardAccessLevels ? spawn.Key.CardNeededToAccess == VanillaItems.ItemAccessLevels[MGS2Items.BDU] : true)).ToList();
                         KeyValuePair<Location, Item> ammoSpawnToSwap = part2Rgb6AmmoSpawns[Randomizer.Next(0, part2Rgb6AmmoSpawns.Count-1)];
 
                         setToCheck.PlantCard5Set.Entities[ammoSpawnToSwap.Key] = bduSpawn.Value;
@@ -2341,7 +2359,7 @@ namespace MGS2_MC
                         KeyValuePair<Location, Item> aks74uSpawn = setToCheck.PlantCard5Set.Entities.FirstOrDefault(spawn => spawn.Value.Name == "AKS-74u");
                         List<KeyValuePair<Location, Item>> part2Aks74uAmmoSpawns = secondProgressionSpawns.Where(spawn => spawn.Value.Name == "AKS-74u Ammo" 
                         && spawn.Key.MandatorySpawn
-                        && keepCardAccessLevels ? spawn.Key.CardNeededToAccess == VanillaItems.ItemAccessLevels[MGS2Weapons.Aks74u] : true).ToList();
+                        && (keepCardAccessLevels ? spawn.Key.CardNeededToAccess == VanillaItems.ItemAccessLevels[MGS2Weapons.Aks74u] : true)).ToList();
                         KeyValuePair<Location, Item> ammoSpawnToSwap = part2Aks74uAmmoSpawns[Randomizer.Next(0, part2Aks74uAmmoSpawns.Count-1)];
 
                         setToCheck.PlantCard5Set.Entities[ammoSpawnToSwap.Key] = aks74uSpawn.Value;
@@ -2349,7 +2367,9 @@ namespace MGS2_MC
                     }
                 }
             }
-            List<KeyValuePair<Location, Item>> thirdProgressionSpawns = setToCheck.PlantCard5Set.Entities.Where(spawns => Location.ThirdProgressionAreas.Contains(spawns.Key.GcxFile)).ToList();
+
+            List<KeyValuePair<Location, Item>> thirdProgressionSpawns = setToCheck.PlantCard5Set.Entities.Where(spawns => Location.ThirdProgressionAreas.Contains(spawns.Key.GcxFile)
+            && new string[] { "FrontDoor1", "FrontDoor2" }.Contains(spawns.Key.Name) == false).ToList();
             foreach (Item item in _vanillaItems.CardRandomizationThirdProgressionItems)
             {
                 if (!thirdProgressionSpawns.Any(spawn => spawn.Value.Name == item.Name))
@@ -2357,10 +2377,10 @@ namespace MGS2_MC
                     if (item.Name == "Directional Microphone")
                     {
                         KeyValuePair<Location, Item> dmicSpawn = setToCheck.PlantCard5Set.Entities.FirstOrDefault(spawn => spawn.Value.Name == "Directional Microphone");
-                        List<KeyValuePair<Location, Item>> part3StingerAmmoSpawns = thirdProgressionSpawns.Where(spawn => spawn.Value.Name == "Stinger Ammo" 
+                        List<KeyValuePair<Location, Item>> part3AnyAmmoSpawns = thirdProgressionSpawns.Where(spawn => spawn.Value.Name.Contains("Ammo") 
                         && spawn.Key.MandatorySpawn
-                        && keepCardAccessLevels ? spawn.Key.CardNeededToAccess == VanillaItems.ItemAccessLevels[MGS2Weapons.Dmic1] : true).ToList();
-                        KeyValuePair<Location, Item> ammoSpawnToSwap = part3StingerAmmoSpawns[Randomizer.Next(0, part3StingerAmmoSpawns.Count-1)];
+                        && (keepCardAccessLevels ? spawn.Key.CardNeededToAccess == VanillaItems.ItemAccessLevels[MGS2Weapons.Dmic1] : true)).ToList();
+                        KeyValuePair<Location, Item> ammoSpawnToSwap = part3AnyAmmoSpawns[Randomizer.Next(0, part3AnyAmmoSpawns.Count-1)];
 
                         setToCheck.PlantCard5Set.Entities[ammoSpawnToSwap.Key] = dmicSpawn.Value;
                         setToCheck.PlantCard5Set.Entities[dmicSpawn.Key] = ammoSpawnToSwap.Value;
@@ -2368,16 +2388,17 @@ namespace MGS2_MC
                     if (item.Name == "PSG1")
                     {
                         KeyValuePair<Location, Item> psg1Spawn = setToCheck.PlantCard5Set.Entities.FirstOrDefault(spawn => spawn.Value.Name == "PSG1");
-                        List<KeyValuePair<Location, Item>> part2Psg1AmmoSpawns = thirdProgressionSpawns.Where(spawn => spawn.Value.Name == "PSG1 Ammo" 
+                        List<KeyValuePair<Location, Item>> part3Psg1AmmoSpawns = thirdProgressionSpawns.Where(spawn => spawn.Value.Name == "PSG1 Ammo" 
                         && spawn.Key.MandatorySpawn
-                        && keepCardAccessLevels ? spawn.Key.CardNeededToAccess == VanillaItems.ItemAccessLevels[MGS2Weapons.Psg1] : true).ToList();
-                        KeyValuePair<Location, Item> ammoSpawnToSwap = part2Psg1AmmoSpawns[Randomizer.Next(0, part2Psg1AmmoSpawns.Count-1)];
+                        && (keepCardAccessLevels ? spawn.Key.CardNeededToAccess == VanillaItems.ItemAccessLevels[MGS2Weapons.Psg1] : true)).ToList();
+                        KeyValuePair<Location, Item> ammoSpawnToSwap = part3Psg1AmmoSpawns[Randomizer.Next(0, part3Psg1AmmoSpawns.Count-1)];
 
                         setToCheck.PlantCard5Set.Entities[ammoSpawnToSwap.Key] = psg1Spawn.Value;
                         setToCheck.PlantCard5Set.Entities[psg1Spawn.Key] = ammoSpawnToSwap.Value;
                     }
                 }
             }
+            #endregion
 
             return true;
         }

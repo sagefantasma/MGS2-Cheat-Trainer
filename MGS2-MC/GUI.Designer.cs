@@ -659,9 +659,9 @@
             this.launchMgs2MenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewLogsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openInstallLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.githubMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.joinOurDiscordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openInstallLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mgs2TabControl.SuspendLayout();
             this.tabPageItem.SuspendLayout();
             this.itemLayoutPanel.SuspendLayout();
@@ -1024,7 +1024,7 @@
             this.mgs2TabControl.Location = new System.Drawing.Point(0, 24);
             this.mgs2TabControl.Name = "mgs2TabControl";
             this.mgs2TabControl.SelectedIndex = 0;
-            this.mgs2TabControl.Size = new System.Drawing.Size(584, 440);
+            this.mgs2TabControl.Size = new System.Drawing.Size(592, 440);
             this.mgs2TabControl.TabIndex = 0;
             this.mgs2TabControl.SelectedIndexChanged += new System.EventHandler(this.Mgs2TabControl_SelectedIndexChanged);
             // 
@@ -1034,7 +1034,7 @@
             this.tabPageItem.Location = new System.Drawing.Point(4, 22);
             this.tabPageItem.Name = "tabPageItem";
             this.tabPageItem.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageItem.Size = new System.Drawing.Size(576, 414);
+            this.tabPageItem.Size = new System.Drawing.Size(584, 414);
             this.tabPageItem.TabIndex = 0;
             this.tabPageItem.Text = "Items";
             this.tabPageItem.UseVisualStyleBackColor = true;
@@ -1051,7 +1051,7 @@
             this.itemLayoutPanel.Name = "itemLayoutPanel";
             this.itemLayoutPanel.RowCount = 1;
             this.itemLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.itemLayoutPanel.Size = new System.Drawing.Size(570, 408);
+            this.itemLayoutPanel.Size = new System.Drawing.Size(578, 408);
             this.itemLayoutPanel.TabIndex = 0;
             // 
             // itemListBox
@@ -1061,7 +1061,7 @@
             this.itemListBox.FormattingEnabled = true;
             this.itemListBox.Location = new System.Drawing.Point(3, 3);
             this.itemListBox.Name = "itemListBox";
-            this.itemListBox.Size = new System.Drawing.Size(108, 402);
+            this.itemListBox.Size = new System.Drawing.Size(109, 402);
             this.itemListBox.TabIndex = 0;
             this.itemListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ItemListBox_MouseDoubleClick);
             // 
@@ -1069,10 +1069,10 @@
             // 
             this.itemGroupBox.Controls.Add(this.itemTabTestGroupBox);
             this.itemGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.itemGroupBox.Location = new System.Drawing.Point(117, 3);
+            this.itemGroupBox.Location = new System.Drawing.Point(118, 3);
             this.itemGroupBox.Name = "itemGroupBox";
             this.itemGroupBox.Padding = new System.Windows.Forms.Padding(10);
-            this.itemGroupBox.Size = new System.Drawing.Size(450, 402);
+            this.itemGroupBox.Size = new System.Drawing.Size(457, 402);
             this.itemGroupBox.TabIndex = 1;
             this.itemGroupBox.TabStop = false;
             this.itemGroupBox.Text = "Select an Item From the List to the Left";
@@ -1083,7 +1083,7 @@
             this.itemTabTestGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.itemTabTestGroupBox.Location = new System.Drawing.Point(10, 23);
             this.itemTabTestGroupBox.Name = "itemTabTestGroupBox";
-            this.itemTabTestGroupBox.Size = new System.Drawing.Size(430, 369);
+            this.itemTabTestGroupBox.Size = new System.Drawing.Size(437, 369);
             this.itemTabTestGroupBox.TabIndex = 54;
             this.itemTabTestGroupBox.TabStop = false;
             this.itemTabTestGroupBox.Text = "TESTING PURPOSES ONLY";
@@ -1104,7 +1104,7 @@
             this.itemTabTestLayoutPanel.RowCount = 2;
             this.itemTabTestLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 42.22222F));
             this.itemTabTestLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 57.77778F));
-            this.itemTabTestLayoutPanel.Size = new System.Drawing.Size(424, 350);
+            this.itemTabTestLayoutPanel.Size = new System.Drawing.Size(431, 350);
             this.itemTabTestLayoutPanel.TabIndex = 41;
             // 
             // itemTabTestMaxLayoutPanel
@@ -1116,12 +1116,12 @@
             this.itemTabTestMaxLayoutPanel.Controls.Add(this.numericUpDown1, 0, 1);
             this.itemTabTestMaxLayoutPanel.Controls.Add(this.button1, 1, 1);
             this.itemTabTestMaxLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.itemTabTestMaxLayoutPanel.Location = new System.Drawing.Point(215, 150);
+            this.itemTabTestMaxLayoutPanel.Location = new System.Drawing.Point(218, 150);
             this.itemTabTestMaxLayoutPanel.Name = "itemTabTestMaxLayoutPanel";
             this.itemTabTestMaxLayoutPanel.RowCount = 2;
             this.itemTabTestMaxLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 38.88889F));
             this.itemTabTestMaxLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 61.11111F));
-            this.itemTabTestMaxLayoutPanel.Size = new System.Drawing.Size(206, 197);
+            this.itemTabTestMaxLayoutPanel.Size = new System.Drawing.Size(210, 197);
             this.itemTabTestMaxLayoutPanel.TabIndex = 3;
             // 
             // label53
@@ -1132,7 +1132,7 @@
             this.label53.Location = new System.Drawing.Point(0, 0);
             this.label53.Margin = new System.Windows.Forms.Padding(0);
             this.label53.Name = "label53";
-            this.label53.Size = new System.Drawing.Size(206, 76);
+            this.label53.Size = new System.Drawing.Size(210, 76);
             this.label53.TabIndex = 0;
             this.label53.Text = "Max Count";
             // 
@@ -1147,13 +1147,13 @@
             0,
             0});
             this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(163, 20);
+            this.numericUpDown1.Size = new System.Drawing.Size(167, 20);
             this.numericUpDown1.TabIndex = 1;
             // 
             // button1
             // 
             this.button1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.button1.Location = new System.Drawing.Point(166, 76);
+            this.button1.Location = new System.Drawing.Point(170, 76);
             this.button1.Margin = new System.Windows.Forms.Padding(0);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(40, 22);
@@ -1167,7 +1167,7 @@
             this.itemTabTestPictureBox.ImageLocation = "Resources/images/niki_alp_ovl.bmp.bmp";
             this.itemTabTestPictureBox.Location = new System.Drawing.Point(3, 3);
             this.itemTabTestPictureBox.Name = "itemTabTestPictureBox";
-            this.itemTabTestPictureBox.Size = new System.Drawing.Size(206, 141);
+            this.itemTabTestPictureBox.Size = new System.Drawing.Size(209, 141);
             this.itemTabTestPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.itemTabTestPictureBox.TabIndex = 0;
             this.itemTabTestPictureBox.TabStop = false;
@@ -1175,7 +1175,7 @@
             // itemTabTestCheckBox
             // 
             this.itemTabTestCheckBox.AutoSize = true;
-            this.itemTabTestCheckBox.Location = new System.Drawing.Point(215, 6);
+            this.itemTabTestCheckBox.Location = new System.Drawing.Point(218, 6);
             this.itemTabTestCheckBox.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
             this.itemTabTestCheckBox.Name = "itemTabTestCheckBox";
             this.itemTabTestCheckBox.Size = new System.Drawing.Size(71, 17);
@@ -1197,7 +1197,7 @@
             this.itemTabTestCurrentLayoutPanel.RowCount = 2;
             this.itemTabTestCurrentLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 38.88889F));
             this.itemTabTestCurrentLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 61.11111F));
-            this.itemTabTestCurrentLayoutPanel.Size = new System.Drawing.Size(206, 197);
+            this.itemTabTestCurrentLayoutPanel.Size = new System.Drawing.Size(209, 197);
             this.itemTabTestCurrentLayoutPanel.TabIndex = 2;
             // 
             // label54
@@ -1208,7 +1208,7 @@
             this.label54.Location = new System.Drawing.Point(0, 0);
             this.label54.Margin = new System.Windows.Forms.Padding(0);
             this.label54.Name = "label54";
-            this.label54.Size = new System.Drawing.Size(206, 76);
+            this.label54.Size = new System.Drawing.Size(209, 76);
             this.label54.TabIndex = 0;
             this.label54.Text = "Current Count";
             // 
@@ -1223,13 +1223,13 @@
             0,
             0});
             this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(163, 20);
+            this.numericUpDown2.Size = new System.Drawing.Size(166, 20);
             this.numericUpDown2.TabIndex = 1;
             // 
             // button2
             // 
             this.button2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.button2.Location = new System.Drawing.Point(166, 76);
+            this.button2.Location = new System.Drawing.Point(169, 76);
             this.button2.Margin = new System.Windows.Forms.Padding(0);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(40, 22);
@@ -1243,7 +1243,7 @@
             this.tabPageWeapon.Location = new System.Drawing.Point(4, 22);
             this.tabPageWeapon.Name = "tabPageWeapon";
             this.tabPageWeapon.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageWeapon.Size = new System.Drawing.Size(576, 414);
+            this.tabPageWeapon.Size = new System.Drawing.Size(584, 414);
             this.tabPageWeapon.TabIndex = 1;
             this.tabPageWeapon.Text = "Weapons";
             this.tabPageWeapon.UseVisualStyleBackColor = true;
@@ -1260,7 +1260,7 @@
             this.weaponTabLayoutPanel.Name = "weaponTabLayoutPanel";
             this.weaponTabLayoutPanel.RowCount = 1;
             this.weaponTabLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.weaponTabLayoutPanel.Size = new System.Drawing.Size(570, 408);
+            this.weaponTabLayoutPanel.Size = new System.Drawing.Size(578, 408);
             this.weaponTabLayoutPanel.TabIndex = 1;
             // 
             // weaponListBox
@@ -1270,7 +1270,7 @@
             this.weaponListBox.FormattingEnabled = true;
             this.weaponListBox.Location = new System.Drawing.Point(3, 3);
             this.weaponListBox.Name = "weaponListBox";
-            this.weaponListBox.Size = new System.Drawing.Size(108, 402);
+            this.weaponListBox.Size = new System.Drawing.Size(109, 402);
             this.weaponListBox.TabIndex = 0;
             this.weaponListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.weaponListBox_MouseDoubleClick);
             // 
@@ -1278,10 +1278,10 @@
             // 
             this.weaponGroupBox.Controls.Add(this.weaponTabTestGroupBox);
             this.weaponGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.weaponGroupBox.Location = new System.Drawing.Point(117, 3);
+            this.weaponGroupBox.Location = new System.Drawing.Point(118, 3);
             this.weaponGroupBox.Name = "weaponGroupBox";
             this.weaponGroupBox.Padding = new System.Windows.Forms.Padding(10);
-            this.weaponGroupBox.Size = new System.Drawing.Size(450, 402);
+            this.weaponGroupBox.Size = new System.Drawing.Size(457, 402);
             this.weaponGroupBox.TabIndex = 1;
             this.weaponGroupBox.TabStop = false;
             this.weaponGroupBox.Text = "Select a Weapon From the List to the Left";
@@ -1292,7 +1292,7 @@
             this.weaponTabTestGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.weaponTabTestGroupBox.Location = new System.Drawing.Point(10, 23);
             this.weaponTabTestGroupBox.Name = "weaponTabTestGroupBox";
-            this.weaponTabTestGroupBox.Size = new System.Drawing.Size(430, 369);
+            this.weaponTabTestGroupBox.Size = new System.Drawing.Size(437, 369);
             this.weaponTabTestGroupBox.TabIndex = 54;
             this.weaponTabTestGroupBox.TabStop = false;
             this.weaponTabTestGroupBox.Text = "TESTING PURPOSES ONLY";
@@ -1313,7 +1313,7 @@
             this.weaponTabTestLayoutPanel.RowCount = 2;
             this.weaponTabTestLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 42.22222F));
             this.weaponTabTestLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 57.77778F));
-            this.weaponTabTestLayoutPanel.Size = new System.Drawing.Size(424, 350);
+            this.weaponTabTestLayoutPanel.Size = new System.Drawing.Size(431, 350);
             this.weaponTabTestLayoutPanel.TabIndex = 41;
             // 
             // weaponTabTestMaxLayoutPanel
@@ -1325,12 +1325,12 @@
             this.weaponTabTestMaxLayoutPanel.Controls.Add(this.numericUpDown3, 0, 1);
             this.weaponTabTestMaxLayoutPanel.Controls.Add(this.button3, 1, 1);
             this.weaponTabTestMaxLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.weaponTabTestMaxLayoutPanel.Location = new System.Drawing.Point(215, 150);
+            this.weaponTabTestMaxLayoutPanel.Location = new System.Drawing.Point(218, 150);
             this.weaponTabTestMaxLayoutPanel.Name = "weaponTabTestMaxLayoutPanel";
             this.weaponTabTestMaxLayoutPanel.RowCount = 2;
             this.weaponTabTestMaxLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 38.88889F));
             this.weaponTabTestMaxLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 61.11111F));
-            this.weaponTabTestMaxLayoutPanel.Size = new System.Drawing.Size(206, 197);
+            this.weaponTabTestMaxLayoutPanel.Size = new System.Drawing.Size(210, 197);
             this.weaponTabTestMaxLayoutPanel.TabIndex = 3;
             // 
             // label55
@@ -1341,7 +1341,7 @@
             this.label55.Location = new System.Drawing.Point(0, 0);
             this.label55.Margin = new System.Windows.Forms.Padding(0);
             this.label55.Name = "label55";
-            this.label55.Size = new System.Drawing.Size(206, 76);
+            this.label55.Size = new System.Drawing.Size(210, 76);
             this.label55.TabIndex = 0;
             this.label55.Text = "Max Count";
             // 
@@ -1356,13 +1356,13 @@
             0,
             0});
             this.numericUpDown3.Name = "numericUpDown3";
-            this.numericUpDown3.Size = new System.Drawing.Size(163, 20);
+            this.numericUpDown3.Size = new System.Drawing.Size(167, 20);
             this.numericUpDown3.TabIndex = 1;
             // 
             // button3
             // 
             this.button3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.button3.Location = new System.Drawing.Point(166, 76);
+            this.button3.Location = new System.Drawing.Point(170, 76);
             this.button3.Margin = new System.Windows.Forms.Padding(0);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(40, 22);
@@ -1376,7 +1376,7 @@
             this.weaponTestTabPictureBox.ImageLocation = "Resources/images/niki_alp_ovl.bmp.bmp";
             this.weaponTestTabPictureBox.Location = new System.Drawing.Point(3, 3);
             this.weaponTestTabPictureBox.Name = "weaponTestTabPictureBox";
-            this.weaponTestTabPictureBox.Size = new System.Drawing.Size(206, 141);
+            this.weaponTestTabPictureBox.Size = new System.Drawing.Size(209, 141);
             this.weaponTestTabPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.weaponTestTabPictureBox.TabIndex = 0;
             this.weaponTestTabPictureBox.TabStop = false;
@@ -1384,7 +1384,7 @@
             // weaponTestTabCheckBox
             // 
             this.weaponTestTabCheckBox.AutoSize = true;
-            this.weaponTestTabCheckBox.Location = new System.Drawing.Point(215, 6);
+            this.weaponTestTabCheckBox.Location = new System.Drawing.Point(218, 6);
             this.weaponTestTabCheckBox.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
             this.weaponTestTabCheckBox.Name = "weaponTestTabCheckBox";
             this.weaponTestTabCheckBox.Size = new System.Drawing.Size(71, 17);
@@ -1406,7 +1406,7 @@
             this.weaponTabTestCurrentLayoutTable.RowCount = 2;
             this.weaponTabTestCurrentLayoutTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 38.88889F));
             this.weaponTabTestCurrentLayoutTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 61.11111F));
-            this.weaponTabTestCurrentLayoutTable.Size = new System.Drawing.Size(206, 197);
+            this.weaponTabTestCurrentLayoutTable.Size = new System.Drawing.Size(209, 197);
             this.weaponTabTestCurrentLayoutTable.TabIndex = 2;
             // 
             // label56
@@ -1417,7 +1417,7 @@
             this.label56.Location = new System.Drawing.Point(0, 0);
             this.label56.Margin = new System.Windows.Forms.Padding(0);
             this.label56.Name = "label56";
-            this.label56.Size = new System.Drawing.Size(206, 76);
+            this.label56.Size = new System.Drawing.Size(209, 76);
             this.label56.TabIndex = 0;
             this.label56.Text = "Current Count";
             // 
@@ -1432,13 +1432,13 @@
             0,
             0});
             this.numericUpDown4.Name = "numericUpDown4";
-            this.numericUpDown4.Size = new System.Drawing.Size(163, 20);
+            this.numericUpDown4.Size = new System.Drawing.Size(166, 20);
             this.numericUpDown4.TabIndex = 1;
             // 
             // button4
             // 
             this.button4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.button4.Location = new System.Drawing.Point(166, 76);
+            this.button4.Location = new System.Drawing.Point(169, 76);
             this.button4.Margin = new System.Windows.Forms.Padding(0);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(40, 22);
@@ -1452,7 +1452,7 @@
             this.tabPageBosses.Location = new System.Drawing.Point(4, 22);
             this.tabPageBosses.Name = "tabPageBosses";
             this.tabPageBosses.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageBosses.Size = new System.Drawing.Size(576, 414);
+            this.tabPageBosses.Size = new System.Drawing.Size(584, 414);
             this.tabPageBosses.TabIndex = 5;
             this.tabPageBosses.Text = "Bosses";
             this.tabPageBosses.UseVisualStyleBackColor = true;
@@ -1472,7 +1472,7 @@
             this.bossLayoutPanel.RowCount = 2;
             this.bossLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 5.392157F));
             this.bossLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 94.60784F));
-            this.bossLayoutPanel.Size = new System.Drawing.Size(570, 408);
+            this.bossLayoutPanel.Size = new System.Drawing.Size(578, 408);
             this.bossLayoutPanel.TabIndex = 1;
             // 
             // detectBossCheckbox
@@ -1569,7 +1569,7 @@
             treeNode6,
             treeNode32,
             treeNode33});
-            this.bossTreeView.Size = new System.Drawing.Size(133, 380);
+            this.bossTreeView.Size = new System.Drawing.Size(134, 380);
             this.bossTreeView.TabIndex = 1;
             this.bossTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.bossTreeView_AfterSelect);
             // 
@@ -1577,9 +1577,9 @@
             // 
             this.bossGroupBox.Controls.Add(this.bossHealthStaminaLayoutPanel);
             this.bossGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bossGroupBox.Location = new System.Drawing.Point(142, 25);
+            this.bossGroupBox.Location = new System.Drawing.Point(143, 25);
             this.bossGroupBox.Name = "bossGroupBox";
-            this.bossGroupBox.Size = new System.Drawing.Size(425, 380);
+            this.bossGroupBox.Size = new System.Drawing.Size(432, 380);
             this.bossGroupBox.TabIndex = 2;
             this.bossGroupBox.TabStop = false;
             this.bossGroupBox.Text = "No Currently Detected/Selected Boss";
@@ -1596,7 +1596,7 @@
             this.bossHealthStaminaLayoutPanel.RowCount = 2;
             this.bossHealthStaminaLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.bossHealthStaminaLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.bossHealthStaminaLayoutPanel.Size = new System.Drawing.Size(419, 361);
+            this.bossHealthStaminaLayoutPanel.Size = new System.Drawing.Size(426, 361);
             this.bossHealthStaminaLayoutPanel.TabIndex = 0;
             this.bossHealthStaminaLayoutPanel.Visible = false;
             // 
@@ -1606,7 +1606,7 @@
             this.bossStaminaGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bossStaminaGroupBox.Location = new System.Drawing.Point(3, 183);
             this.bossStaminaGroupBox.Name = "bossStaminaGroupBox";
-            this.bossStaminaGroupBox.Size = new System.Drawing.Size(413, 175);
+            this.bossStaminaGroupBox.Size = new System.Drawing.Size(420, 175);
             this.bossStaminaGroupBox.TabIndex = 1;
             this.bossStaminaGroupBox.TabStop = false;
             this.bossStaminaGroupBox.Text = "Boss Stamina";
@@ -1623,7 +1623,7 @@
             this.bossStaminaLayoutPanel.Name = "bossStaminaLayoutPanel";
             this.bossStaminaLayoutPanel.RowCount = 1;
             this.bossStaminaLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.bossStaminaLayoutPanel.Size = new System.Drawing.Size(407, 156);
+            this.bossStaminaLayoutPanel.Size = new System.Drawing.Size(414, 156);
             this.bossStaminaLayoutPanel.TabIndex = 1;
             // 
             // bossStaminaTrackbar
@@ -1631,7 +1631,7 @@
             this.bossStaminaTrackbar.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.bossStaminaTrackbar.BackColor = System.Drawing.Color.MediumSlateBlue;
             this.bossStaminaTrackbar.LargeChange = 10;
-            this.bossStaminaTrackbar.Location = new System.Drawing.Point(84, 55);
+            this.bossStaminaTrackbar.Location = new System.Drawing.Point(88, 55);
             this.bossStaminaTrackbar.Maximum = 100;
             this.bossStaminaTrackbar.Name = "bossStaminaTrackbar";
             this.bossStaminaTrackbar.Size = new System.Drawing.Size(320, 45);
@@ -1646,7 +1646,7 @@
             this.bossStaminaLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bossStaminaLabel.Location = new System.Drawing.Point(3, 0);
             this.bossStaminaLabel.Name = "bossStaminaLabel";
-            this.bossStaminaLabel.Size = new System.Drawing.Size(75, 156);
+            this.bossStaminaLabel.Size = new System.Drawing.Size(76, 156);
             this.bossStaminaLabel.TabIndex = 3;
             this.bossStaminaLabel.Text = "Current Stamina";
             this.bossStaminaLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1657,7 +1657,7 @@
             this.bossHpGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bossHpGroupBox.Location = new System.Drawing.Point(3, 3);
             this.bossHpGroupBox.Name = "bossHpGroupBox";
-            this.bossHpGroupBox.Size = new System.Drawing.Size(413, 174);
+            this.bossHpGroupBox.Size = new System.Drawing.Size(420, 174);
             this.bossHpGroupBox.TabIndex = 0;
             this.bossHpGroupBox.TabStop = false;
             this.bossHpGroupBox.Text = "Boss HP";
@@ -1674,7 +1674,7 @@
             this.bossHpLayoutPanel.Name = "bossHpLayoutPanel";
             this.bossHpLayoutPanel.RowCount = 1;
             this.bossHpLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.bossHpLayoutPanel.Size = new System.Drawing.Size(407, 155);
+            this.bossHpLayoutPanel.Size = new System.Drawing.Size(414, 155);
             this.bossHpLayoutPanel.TabIndex = 0;
             // 
             // bossHpTrackbar
@@ -1682,7 +1682,7 @@
             this.bossHpTrackbar.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.bossHpTrackbar.BackColor = System.Drawing.Color.Aquamarine;
             this.bossHpTrackbar.LargeChange = 10;
-            this.bossHpTrackbar.Location = new System.Drawing.Point(84, 55);
+            this.bossHpTrackbar.Location = new System.Drawing.Point(88, 55);
             this.bossHpTrackbar.Maximum = 100;
             this.bossHpTrackbar.Name = "bossHpTrackbar";
             this.bossHpTrackbar.Size = new System.Drawing.Size(320, 45);
@@ -1697,7 +1697,7 @@
             this.bossHpLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bossHpLabel.Location = new System.Drawing.Point(3, 0);
             this.bossHpLabel.Name = "bossHpLabel";
-            this.bossHpLabel.Size = new System.Drawing.Size(75, 155);
+            this.bossHpLabel.Size = new System.Drawing.Size(76, 155);
             this.bossHpLabel.TabIndex = 3;
             this.bossHpLabel.Text = "Current HP";
             this.bossHpLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1707,9 +1707,9 @@
             this.autoDetectBossLabel.AutoSize = true;
             this.autoDetectBossLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.autoDetectBossLabel.Enabled = false;
-            this.autoDetectBossLabel.Location = new System.Drawing.Point(142, 0);
+            this.autoDetectBossLabel.Location = new System.Drawing.Point(143, 0);
             this.autoDetectBossLabel.Name = "autoDetectBossLabel";
-            this.autoDetectBossLabel.Size = new System.Drawing.Size(425, 22);
+            this.autoDetectBossLabel.Size = new System.Drawing.Size(432, 22);
             this.autoDetectBossLabel.TabIndex = 3;
             this.autoDetectBossLabel.Text = "Auto-detect boss functionality not yet implemented, sorry ;(";
             this.autoDetectBossLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1720,7 +1720,7 @@
             this.tabPageStats.Location = new System.Drawing.Point(4, 22);
             this.tabPageStats.Name = "tabPageStats";
             this.tabPageStats.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageStats.Size = new System.Drawing.Size(576, 414);
+            this.tabPageStats.Size = new System.Drawing.Size(584, 414);
             this.tabPageStats.TabIndex = 2;
             this.tabPageStats.Text = "In-Game Stats";
             this.tabPageStats.UseVisualStyleBackColor = true;
@@ -1751,7 +1751,7 @@
             this.tabPageLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tabPageLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tabPageLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.tabPageLayoutPanel.Size = new System.Drawing.Size(570, 408);
+            this.tabPageLayoutPanel.Size = new System.Drawing.Size(578, 408);
             this.tabPageLayoutPanel.TabIndex = 0;
             // 
             // alertsGroupBox
@@ -1760,7 +1760,7 @@
             this.alertsGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.alertsGroupBox.Location = new System.Drawing.Point(3, 3);
             this.alertsGroupBox.Name = "alertsGroupBox";
-            this.alertsGroupBox.Size = new System.Drawing.Size(136, 96);
+            this.alertsGroupBox.Size = new System.Drawing.Size(138, 96);
             this.alertsGroupBox.TabIndex = 0;
             this.alertsGroupBox.TabStop = false;
             this.alertsGroupBox.Text = "Alert Count";
@@ -1777,7 +1777,7 @@
             this.alertsTablePanel.RowCount = 2;
             this.alertsTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
             this.alertsTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
-            this.alertsTablePanel.Size = new System.Drawing.Size(130, 77);
+            this.alertsTablePanel.Size = new System.Drawing.Size(132, 77);
             this.alertsTablePanel.TabIndex = 1;
             // 
             // alertCountButton
@@ -1785,7 +1785,7 @@
             this.alertCountButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.alertCountButton.Location = new System.Drawing.Point(3, 49);
             this.alertCountButton.Name = "alertCountButton";
-            this.alertCountButton.Size = new System.Drawing.Size(124, 25);
+            this.alertCountButton.Size = new System.Drawing.Size(126, 25);
             this.alertCountButton.TabIndex = 2;
             this.alertCountButton.Text = "Adjust Alerts";
             this.alertCountButton.UseVisualStyleBackColor = true;
@@ -1798,7 +1798,7 @@
             this.alertCountLabel.Location = new System.Drawing.Point(3, 0);
             this.alertCountLabel.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.alertCountLabel.Name = "alertCountLabel";
-            this.alertCountLabel.Size = new System.Drawing.Size(124, 31);
+            this.alertCountLabel.Size = new System.Drawing.Size(126, 31);
             this.alertCountLabel.TabIndex = 1;
             this.alertCountLabel.Text = "0";
             this.alertCountLabel.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -1807,9 +1807,9 @@
             // 
             this.killCountGroupBox.Controls.Add(this.killCountTablePanel);
             this.killCountGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.killCountGroupBox.Location = new System.Drawing.Point(145, 3);
+            this.killCountGroupBox.Location = new System.Drawing.Point(147, 3);
             this.killCountGroupBox.Name = "killCountGroupBox";
-            this.killCountGroupBox.Size = new System.Drawing.Size(136, 96);
+            this.killCountGroupBox.Size = new System.Drawing.Size(138, 96);
             this.killCountGroupBox.TabIndex = 4;
             this.killCountGroupBox.TabStop = false;
             this.killCountGroupBox.Text = "Kill Count";
@@ -1826,7 +1826,7 @@
             this.killCountTablePanel.RowCount = 2;
             this.killCountTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
             this.killCountTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
-            this.killCountTablePanel.Size = new System.Drawing.Size(130, 77);
+            this.killCountTablePanel.Size = new System.Drawing.Size(132, 77);
             this.killCountTablePanel.TabIndex = 0;
             // 
             // killCountLabel
@@ -1836,7 +1836,7 @@
             this.killCountLabel.Location = new System.Drawing.Point(3, 0);
             this.killCountLabel.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.killCountLabel.Name = "killCountLabel";
-            this.killCountLabel.Size = new System.Drawing.Size(124, 31);
+            this.killCountLabel.Size = new System.Drawing.Size(126, 31);
             this.killCountLabel.TabIndex = 0;
             this.killCountLabel.Text = "0";
             this.killCountLabel.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -1846,7 +1846,7 @@
             this.adjustKillCountButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.adjustKillCountButton.Location = new System.Drawing.Point(3, 49);
             this.adjustKillCountButton.Name = "adjustKillCountButton";
-            this.adjustKillCountButton.Size = new System.Drawing.Size(124, 25);
+            this.adjustKillCountButton.Size = new System.Drawing.Size(126, 25);
             this.adjustKillCountButton.TabIndex = 1;
             this.adjustKillCountButton.Text = "Adjust Kills";
             this.adjustKillCountButton.UseVisualStyleBackColor = true;
@@ -1856,9 +1856,9 @@
             // 
             this.playTimeGroupBox.Controls.Add(this.playTimeTablePanel);
             this.playTimeGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.playTimeGroupBox.Location = new System.Drawing.Point(287, 3);
+            this.playTimeGroupBox.Location = new System.Drawing.Point(291, 3);
             this.playTimeGroupBox.Name = "playTimeGroupBox";
-            this.playTimeGroupBox.Size = new System.Drawing.Size(280, 96);
+            this.playTimeGroupBox.Size = new System.Drawing.Size(284, 96);
             this.playTimeGroupBox.TabIndex = 5;
             this.playTimeGroupBox.TabStop = false;
             this.playTimeGroupBox.Text = "Play Time";
@@ -1875,7 +1875,7 @@
             this.playTimeTablePanel.RowCount = 1;
             this.playTimeTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.playTimeTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 77F));
-            this.playTimeTablePanel.Size = new System.Drawing.Size(274, 77);
+            this.playTimeTablePanel.Size = new System.Drawing.Size(278, 77);
             this.playTimeTablePanel.TabIndex = 0;
             // 
             // playTimeLabel
@@ -1885,7 +1885,7 @@
             this.playTimeLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.playTimeLabel.Location = new System.Drawing.Point(3, 0);
             this.playTimeLabel.Name = "playTimeLabel";
-            this.playTimeLabel.Size = new System.Drawing.Size(268, 77);
+            this.playTimeLabel.Size = new System.Drawing.Size(272, 77);
             this.playTimeLabel.TabIndex = 1;
             this.playTimeLabel.Text = "00 : 00 : 00";
             this.playTimeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1896,7 +1896,7 @@
             this.rationsUsedGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rationsUsedGroupBox.Location = new System.Drawing.Point(3, 105);
             this.rationsUsedGroupBox.Name = "rationsUsedGroupBox";
-            this.rationsUsedGroupBox.Size = new System.Drawing.Size(136, 96);
+            this.rationsUsedGroupBox.Size = new System.Drawing.Size(138, 96);
             this.rationsUsedGroupBox.TabIndex = 9;
             this.rationsUsedGroupBox.TabStop = false;
             this.rationsUsedGroupBox.Text = "Rations Used";
@@ -1913,7 +1913,7 @@
             this.rationsUsedTablePanel.RowCount = 2;
             this.rationsUsedTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
             this.rationsUsedTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
-            this.rationsUsedTablePanel.Size = new System.Drawing.Size(130, 77);
+            this.rationsUsedTablePanel.Size = new System.Drawing.Size(132, 77);
             this.rationsUsedTablePanel.TabIndex = 1;
             // 
             // rationsUsedButton
@@ -1921,7 +1921,7 @@
             this.rationsUsedButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rationsUsedButton.Location = new System.Drawing.Point(3, 49);
             this.rationsUsedButton.Name = "rationsUsedButton";
-            this.rationsUsedButton.Size = new System.Drawing.Size(124, 25);
+            this.rationsUsedButton.Size = new System.Drawing.Size(126, 25);
             this.rationsUsedButton.TabIndex = 2;
             this.rationsUsedButton.Text = "Adjust Rations Used";
             this.rationsUsedButton.UseVisualStyleBackColor = true;
@@ -1934,7 +1934,7 @@
             this.rationsUsedLabel.Location = new System.Drawing.Point(3, 0);
             this.rationsUsedLabel.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.rationsUsedLabel.Name = "rationsUsedLabel";
-            this.rationsUsedLabel.Size = new System.Drawing.Size(124, 31);
+            this.rationsUsedLabel.Size = new System.Drawing.Size(126, 31);
             this.rationsUsedLabel.TabIndex = 1;
             this.rationsUsedLabel.Text = "0";
             this.rationsUsedLabel.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -1943,9 +1943,9 @@
             // 
             this.continuesGroupBox.Controls.Add(this.continueCountTablePanel);
             this.continuesGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.continuesGroupBox.Location = new System.Drawing.Point(145, 105);
+            this.continuesGroupBox.Location = new System.Drawing.Point(147, 105);
             this.continuesGroupBox.Name = "continuesGroupBox";
-            this.continuesGroupBox.Size = new System.Drawing.Size(136, 96);
+            this.continuesGroupBox.Size = new System.Drawing.Size(138, 96);
             this.continuesGroupBox.TabIndex = 7;
             this.continuesGroupBox.TabStop = false;
             this.continuesGroupBox.Text = "Continue Count";
@@ -1962,7 +1962,7 @@
             this.continueCountTablePanel.RowCount = 2;
             this.continueCountTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
             this.continueCountTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
-            this.continueCountTablePanel.Size = new System.Drawing.Size(130, 77);
+            this.continueCountTablePanel.Size = new System.Drawing.Size(132, 77);
             this.continueCountTablePanel.TabIndex = 1;
             // 
             // continueCountButton
@@ -1970,7 +1970,7 @@
             this.continueCountButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.continueCountButton.Location = new System.Drawing.Point(3, 49);
             this.continueCountButton.Name = "continueCountButton";
-            this.continueCountButton.Size = new System.Drawing.Size(124, 25);
+            this.continueCountButton.Size = new System.Drawing.Size(126, 25);
             this.continueCountButton.TabIndex = 2;
             this.continueCountButton.Text = "Adjust Continues";
             this.continueCountButton.UseVisualStyleBackColor = true;
@@ -1983,7 +1983,7 @@
             this.continueCountLabel.Location = new System.Drawing.Point(3, 0);
             this.continueCountLabel.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.continueCountLabel.Name = "continueCountLabel";
-            this.continueCountLabel.Size = new System.Drawing.Size(124, 31);
+            this.continueCountLabel.Size = new System.Drawing.Size(126, 31);
             this.continueCountLabel.TabIndex = 1;
             this.continueCountLabel.Text = "0";
             this.continueCountLabel.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -1992,9 +1992,9 @@
             // 
             this.specialItemsGroupBox.Controls.Add(this.specialItemsCheckedListBox);
             this.specialItemsGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.specialItemsGroupBox.Location = new System.Drawing.Point(287, 105);
+            this.specialItemsGroupBox.Location = new System.Drawing.Point(291, 105);
             this.specialItemsGroupBox.Name = "specialItemsGroupBox";
-            this.specialItemsGroupBox.Size = new System.Drawing.Size(280, 96);
+            this.specialItemsGroupBox.Size = new System.Drawing.Size(284, 96);
             this.specialItemsGroupBox.TabIndex = 8;
             this.specialItemsGroupBox.TabStop = false;
             this.specialItemsGroupBox.Text = "Special Items Used";
@@ -2013,7 +2013,7 @@
             this.specialItemsCheckedListBox.Location = new System.Drawing.Point(3, 16);
             this.specialItemsCheckedListBox.MultiColumn = true;
             this.specialItemsCheckedListBox.Name = "specialItemsCheckedListBox";
-            this.specialItemsCheckedListBox.Size = new System.Drawing.Size(274, 77);
+            this.specialItemsCheckedListBox.Size = new System.Drawing.Size(278, 77);
             this.specialItemsCheckedListBox.TabIndex = 0;
             // 
             // savesGroupBox
@@ -2022,7 +2022,7 @@
             this.savesGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.savesGroupBox.Location = new System.Drawing.Point(3, 207);
             this.savesGroupBox.Name = "savesGroupBox";
-            this.savesGroupBox.Size = new System.Drawing.Size(136, 96);
+            this.savesGroupBox.Size = new System.Drawing.Size(138, 96);
             this.savesGroupBox.TabIndex = 6;
             this.savesGroupBox.TabStop = false;
             this.savesGroupBox.Text = "Save Count";
@@ -2039,7 +2039,7 @@
             this.saveTablePanel.RowCount = 2;
             this.saveTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
             this.saveTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
-            this.saveTablePanel.Size = new System.Drawing.Size(130, 77);
+            this.saveTablePanel.Size = new System.Drawing.Size(132, 77);
             this.saveTablePanel.TabIndex = 1;
             // 
             // saveCountButton
@@ -2047,7 +2047,7 @@
             this.saveCountButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.saveCountButton.Location = new System.Drawing.Point(3, 49);
             this.saveCountButton.Name = "saveCountButton";
-            this.saveCountButton.Size = new System.Drawing.Size(124, 25);
+            this.saveCountButton.Size = new System.Drawing.Size(126, 25);
             this.saveCountButton.TabIndex = 2;
             this.saveCountButton.Text = "Adjust Saves";
             this.saveCountButton.UseVisualStyleBackColor = true;
@@ -2060,7 +2060,7 @@
             this.saveCountLabel.Location = new System.Drawing.Point(3, 0);
             this.saveCountLabel.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.saveCountLabel.Name = "saveCountLabel";
-            this.saveCountLabel.Size = new System.Drawing.Size(124, 31);
+            this.saveCountLabel.Size = new System.Drawing.Size(126, 31);
             this.saveCountLabel.TabIndex = 1;
             this.saveCountLabel.Text = "0";
             this.saveCountLabel.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -2069,9 +2069,9 @@
             // 
             this.shotsFiredGroupBox.Controls.Add(this.shotsFiredTablePanel);
             this.shotsFiredGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.shotsFiredGroupBox.Location = new System.Drawing.Point(145, 207);
+            this.shotsFiredGroupBox.Location = new System.Drawing.Point(147, 207);
             this.shotsFiredGroupBox.Name = "shotsFiredGroupBox";
-            this.shotsFiredGroupBox.Size = new System.Drawing.Size(136, 96);
+            this.shotsFiredGroupBox.Size = new System.Drawing.Size(138, 96);
             this.shotsFiredGroupBox.TabIndex = 1;
             this.shotsFiredGroupBox.TabStop = false;
             this.shotsFiredGroupBox.Text = "Shots Fired";
@@ -2088,7 +2088,7 @@
             this.shotsFiredTablePanel.RowCount = 2;
             this.shotsFiredTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
             this.shotsFiredTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
-            this.shotsFiredTablePanel.Size = new System.Drawing.Size(130, 77);
+            this.shotsFiredTablePanel.Size = new System.Drawing.Size(132, 77);
             this.shotsFiredTablePanel.TabIndex = 1;
             // 
             // shotsFiredButton
@@ -2096,7 +2096,7 @@
             this.shotsFiredButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.shotsFiredButton.Location = new System.Drawing.Point(3, 49);
             this.shotsFiredButton.Name = "shotsFiredButton";
-            this.shotsFiredButton.Size = new System.Drawing.Size(124, 25);
+            this.shotsFiredButton.Size = new System.Drawing.Size(126, 25);
             this.shotsFiredButton.TabIndex = 2;
             this.shotsFiredButton.Text = "Adjust Shots Fired";
             this.shotsFiredButton.UseVisualStyleBackColor = true;
@@ -2109,7 +2109,7 @@
             this.shotsFiredLabel.Location = new System.Drawing.Point(3, 0);
             this.shotsFiredLabel.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.shotsFiredLabel.Name = "shotsFiredLabel";
-            this.shotsFiredLabel.Size = new System.Drawing.Size(124, 31);
+            this.shotsFiredLabel.Size = new System.Drawing.Size(126, 31);
             this.shotsFiredLabel.TabIndex = 1;
             this.shotsFiredLabel.Text = "0";
             this.shotsFiredLabel.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -2118,9 +2118,9 @@
             // 
             this.projectedRankGroupBox.Controls.Add(this.projectedRankTable);
             this.projectedRankGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.projectedRankGroupBox.Location = new System.Drawing.Point(287, 207);
+            this.projectedRankGroupBox.Location = new System.Drawing.Point(291, 207);
             this.projectedRankGroupBox.Name = "projectedRankGroupBox";
-            this.projectedRankGroupBox.Size = new System.Drawing.Size(280, 96);
+            this.projectedRankGroupBox.Size = new System.Drawing.Size(284, 96);
             this.projectedRankGroupBox.TabIndex = 2;
             this.projectedRankGroupBox.TabStop = false;
             this.projectedRankGroupBox.Text = "Projected Rank";
@@ -2137,7 +2137,7 @@
             this.projectedRankTable.RowCount = 1;
             this.projectedRankTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.projectedRankTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 77F));
-            this.projectedRankTable.Size = new System.Drawing.Size(274, 77);
+            this.projectedRankTable.Size = new System.Drawing.Size(278, 77);
             this.projectedRankTable.TabIndex = 0;
             // 
             // projectedRankLabel
@@ -2148,7 +2148,7 @@
             this.projectedRankLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.projectedRankLabel.Location = new System.Drawing.Point(3, 0);
             this.projectedRankLabel.Name = "projectedRankLabel";
-            this.projectedRankLabel.Size = new System.Drawing.Size(268, 77);
+            this.projectedRankLabel.Size = new System.Drawing.Size(272, 77);
             this.projectedRankLabel.TabIndex = 2;
             this.projectedRankLabel.Text = "-";
             this.projectedRankLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2159,7 +2159,7 @@
             this.damageTakenGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.damageTakenGroupBox.Location = new System.Drawing.Point(3, 309);
             this.damageTakenGroupBox.Name = "damageTakenGroupBox";
-            this.damageTakenGroupBox.Size = new System.Drawing.Size(136, 96);
+            this.damageTakenGroupBox.Size = new System.Drawing.Size(138, 96);
             this.damageTakenGroupBox.TabIndex = 3;
             this.damageTakenGroupBox.TabStop = false;
             this.damageTakenGroupBox.Text = "Damage Taken";
@@ -2176,7 +2176,7 @@
             this.damageTakenTablePanel.RowCount = 2;
             this.damageTakenTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
             this.damageTakenTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
-            this.damageTakenTablePanel.Size = new System.Drawing.Size(130, 77);
+            this.damageTakenTablePanel.Size = new System.Drawing.Size(132, 77);
             this.damageTakenTablePanel.TabIndex = 1;
             // 
             // damageTakenButton
@@ -2184,7 +2184,7 @@
             this.damageTakenButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.damageTakenButton.Location = new System.Drawing.Point(3, 49);
             this.damageTakenButton.Name = "damageTakenButton";
-            this.damageTakenButton.Size = new System.Drawing.Size(124, 25);
+            this.damageTakenButton.Size = new System.Drawing.Size(126, 25);
             this.damageTakenButton.TabIndex = 2;
             this.damageTakenButton.Text = "Adjust Damage Taken";
             this.damageTakenButton.UseVisualStyleBackColor = true;
@@ -2197,7 +2197,7 @@
             this.damageTakenLabel.Location = new System.Drawing.Point(3, 0);
             this.damageTakenLabel.Margin = new System.Windows.Forms.Padding(3, 0, 3, 0);
             this.damageTakenLabel.Name = "damageTakenLabel";
-            this.damageTakenLabel.Size = new System.Drawing.Size(124, 31);
+            this.damageTakenLabel.Size = new System.Drawing.Size(126, 31);
             this.damageTakenLabel.TabIndex = 1;
             this.damageTakenLabel.Text = "0";
             this.damageTakenLabel.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -2205,7 +2205,7 @@
             // mechDamageGroupBox
             // 
             this.mechDamageGroupBox.Controls.Add(this.tableLayoutPanel1);
-            this.mechDamageGroupBox.Location = new System.Drawing.Point(145, 309);
+            this.mechDamageGroupBox.Location = new System.Drawing.Point(147, 309);
             this.mechDamageGroupBox.Name = "mechDamageGroupBox";
             this.mechDamageGroupBox.Size = new System.Drawing.Size(136, 96);
             this.mechDamageGroupBox.TabIndex = 10;
@@ -2254,7 +2254,7 @@
             // 
             this.disableStatsTrackingCheckBox.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.disableStatsTrackingCheckBox.AutoSize = true;
-            this.disableStatsTrackingCheckBox.Location = new System.Drawing.Point(360, 348);
+            this.disableStatsTrackingCheckBox.Location = new System.Drawing.Point(366, 348);
             this.disableStatsTrackingCheckBox.Name = "disableStatsTrackingCheckBox";
             this.disableStatsTrackingCheckBox.Size = new System.Drawing.Size(134, 17);
             this.disableStatsTrackingCheckBox.TabIndex = 11;
@@ -2268,7 +2268,7 @@
             this.tabPageStrings.Location = new System.Drawing.Point(4, 22);
             this.tabPageStrings.Name = "tabPageStrings";
             this.tabPageStrings.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageStrings.Size = new System.Drawing.Size(576, 414);
+            this.tabPageStrings.Size = new System.Drawing.Size(584, 414);
             this.tabPageStrings.TabIndex = 3;
             this.tabPageStrings.Text = "Modify Strings";
             this.tabPageStrings.UseVisualStyleBackColor = true;
@@ -2287,7 +2287,7 @@
             this.stringTabLayoutPanel.RowCount = 2;
             this.stringTabLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.stringTabLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.stringTabLayoutPanel.Size = new System.Drawing.Size(570, 408);
+            this.stringTabLayoutPanel.Size = new System.Drawing.Size(578, 408);
             this.stringTabLayoutPanel.TabIndex = 0;
             // 
             // stringsListBox
@@ -2297,7 +2297,7 @@
             this.stringsListBox.Location = new System.Drawing.Point(3, 3);
             this.stringsListBox.Name = "stringsListBox";
             this.stringTabLayoutPanel.SetRowSpan(this.stringsListBox, 2);
-            this.stringsListBox.Size = new System.Drawing.Size(108, 402);
+            this.stringsListBox.Size = new System.Drawing.Size(109, 402);
             this.stringsListBox.TabIndex = 0;
             this.stringsListBox.SelectedIndexChanged += new System.EventHandler(this.StringsListBox_SelectedIndexChanged);
             // 
@@ -2306,7 +2306,7 @@
             this.basicNameGroupBox.Controls.Add(this.setBasicNameBtn);
             this.basicNameGroupBox.Controls.Add(this.flowLayoutPanel1);
             this.basicNameGroupBox.Controls.Add(this.basicNameTextBox);
-            this.basicNameGroupBox.Location = new System.Drawing.Point(117, 3);
+            this.basicNameGroupBox.Location = new System.Drawing.Point(118, 3);
             this.basicNameGroupBox.Name = "basicNameGroupBox";
             this.basicNameGroupBox.Size = new System.Drawing.Size(234, 198);
             this.basicNameGroupBox.TabIndex = 1;
@@ -2364,7 +2364,7 @@
             // 
             // descriptionGroupBox
             // 
-            this.descriptionGroupBox.Location = new System.Drawing.Point(117, 207);
+            this.descriptionGroupBox.Location = new System.Drawing.Point(118, 207);
             this.descriptionGroupBox.Name = "descriptionGroupBox";
             this.descriptionGroupBox.Size = new System.Drawing.Size(450, 198);
             this.descriptionGroupBox.TabIndex = 2;
@@ -2378,7 +2378,7 @@
             this.tabPageCheats.Location = new System.Drawing.Point(4, 22);
             this.tabPageCheats.Name = "tabPageCheats";
             this.tabPageCheats.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageCheats.Size = new System.Drawing.Size(576, 414);
+            this.tabPageCheats.Size = new System.Drawing.Size(584, 414);
             this.tabPageCheats.TabIndex = 4;
             this.tabPageCheats.Text = "Cheats";
             this.tabPageCheats.UseVisualStyleBackColor = true;
@@ -2397,7 +2397,7 @@
             this.cheatTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.cheatTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.cheatTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.cheatTablePanel.Size = new System.Drawing.Size(570, 408);
+            this.cheatTablePanel.Size = new System.Drawing.Size(578, 408);
             this.cheatTablePanel.TabIndex = 0;
             // 
             // healthAndGripTablePanel
@@ -2408,12 +2408,12 @@
             this.healthAndGripTablePanel.Controls.Add(this.gripGroupBox, 0, 1);
             this.healthAndGripTablePanel.Controls.Add(this.playerHealthGroupBox, 0, 0);
             this.healthAndGripTablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.healthAndGripTablePanel.Location = new System.Drawing.Point(288, 3);
+            this.healthAndGripTablePanel.Location = new System.Drawing.Point(292, 3);
             this.healthAndGripTablePanel.Name = "healthAndGripTablePanel";
             this.healthAndGripTablePanel.RowCount = 2;
             this.healthAndGripTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.healthAndGripTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.healthAndGripTablePanel.Size = new System.Drawing.Size(279, 198);
+            this.healthAndGripTablePanel.Size = new System.Drawing.Size(283, 198);
             this.healthAndGripTablePanel.TabIndex = 13;
             // 
             // gripGroupBox
@@ -2422,7 +2422,7 @@
             this.gripGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gripGroupBox.Location = new System.Drawing.Point(3, 102);
             this.gripGroupBox.Name = "gripGroupBox";
-            this.gripGroupBox.Size = new System.Drawing.Size(273, 93);
+            this.gripGroupBox.Size = new System.Drawing.Size(277, 93);
             this.gripGroupBox.TabIndex = 13;
             this.gripGroupBox.TabStop = false;
             this.gripGroupBox.Text = "Player Grip";
@@ -2441,15 +2441,15 @@
             this.playerGripTablePanel.RowCount = 2;
             this.playerGripTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.playerGripTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.playerGripTablePanel.Size = new System.Drawing.Size(267, 74);
+            this.playerGripTablePanel.Size = new System.Drawing.Size(271, 74);
             this.playerGripTablePanel.TabIndex = 0;
             // 
             // raiseGripButton
             // 
             this.raiseGripButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.raiseGripButton.Location = new System.Drawing.Point(136, 40);
+            this.raiseGripButton.Location = new System.Drawing.Point(138, 40);
             this.raiseGripButton.Name = "raiseGripButton";
-            this.raiseGripButton.Size = new System.Drawing.Size(128, 31);
+            this.raiseGripButton.Size = new System.Drawing.Size(130, 31);
             this.raiseGripButton.TabIndex = 2;
             this.raiseGripButton.Text = "Add 100 Pushups";
             this.raiseGripButton.UseVisualStyleBackColor = true;
@@ -2471,7 +2471,7 @@
             this.playerGripSubTablePanel.RowCount = 1;
             this.playerGripSubTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.playerGripSubTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
-            this.playerGripSubTablePanel.Size = new System.Drawing.Size(267, 37);
+            this.playerGripSubTablePanel.Size = new System.Drawing.Size(271, 37);
             this.playerGripSubTablePanel.TabIndex = 0;
             // 
             // gripTrackBar
@@ -2480,10 +2480,10 @@
             this.playerGripSubTablePanel.SetColumnSpan(this.gripTrackBar, 2);
             this.gripTrackBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gripTrackBar.LargeChange = 250;
-            this.gripTrackBar.Location = new System.Drawing.Point(92, 3);
+            this.gripTrackBar.Location = new System.Drawing.Point(93, 3);
             this.gripTrackBar.Maximum = 1800;
             this.gripTrackBar.Name = "gripTrackBar";
-            this.gripTrackBar.Size = new System.Drawing.Size(172, 31);
+            this.gripTrackBar.Size = new System.Drawing.Size(175, 31);
             this.gripTrackBar.TabIndex = 2;
             this.gripTrackBar.TickStyle = System.Windows.Forms.TickStyle.None;
             this.gripTrackBar.Value = 1800;
@@ -2495,7 +2495,7 @@
             this.label49.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label49.Location = new System.Drawing.Point(3, 0);
             this.label49.Name = "label49";
-            this.label49.Size = new System.Drawing.Size(83, 37);
+            this.label49.Size = new System.Drawing.Size(84, 37);
             this.label49.TabIndex = 0;
             this.label49.Text = "Current Grip";
             this.label49.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2505,7 +2505,7 @@
             this.lowerGripButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lowerGripButton.Location = new System.Drawing.Point(3, 40);
             this.lowerGripButton.Name = "lowerGripButton";
-            this.lowerGripButton.Size = new System.Drawing.Size(127, 31);
+            this.lowerGripButton.Size = new System.Drawing.Size(129, 31);
             this.lowerGripButton.TabIndex = 1;
             this.lowerGripButton.Text = "Remove 100 Pushups";
             this.lowerGripButton.UseVisualStyleBackColor = true;
@@ -2517,7 +2517,7 @@
             this.playerHealthGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.playerHealthGroupBox.Location = new System.Drawing.Point(3, 3);
             this.playerHealthGroupBox.Name = "playerHealthGroupBox";
-            this.playerHealthGroupBox.Size = new System.Drawing.Size(273, 93);
+            this.playerHealthGroupBox.Size = new System.Drawing.Size(277, 93);
             this.playerHealthGroupBox.TabIndex = 12;
             this.playerHealthGroupBox.TabStop = false;
             this.playerHealthGroupBox.Text = "Player Health";
@@ -2537,7 +2537,7 @@
             this.playerHpTablePanel.RowCount = 2;
             this.playerHpTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.playerHpTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.playerHpTablePanel.Size = new System.Drawing.Size(267, 74);
+            this.playerHpTablePanel.Size = new System.Drawing.Size(271, 74);
             this.playerHpTablePanel.TabIndex = 0;
             // 
             // currentHpLabel
@@ -2546,7 +2546,7 @@
             this.currentHpLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.currentHpLabel.Location = new System.Drawing.Point(3, 0);
             this.currentHpLabel.Name = "currentHpLabel";
-            this.currentHpLabel.Size = new System.Drawing.Size(74, 37);
+            this.currentHpLabel.Size = new System.Drawing.Size(75, 37);
             this.currentHpLabel.TabIndex = 0;
             this.currentHpLabel.Text = "Current HP";
             this.currentHpLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2556,10 +2556,10 @@
             this.playerCurrentHpTrackBar.BackColor = System.Drawing.Color.Aquamarine;
             this.playerCurrentHpTrackBar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.playerCurrentHpTrackBar.LargeChange = 10;
-            this.playerCurrentHpTrackBar.Location = new System.Drawing.Point(83, 3);
+            this.playerCurrentHpTrackBar.Location = new System.Drawing.Point(84, 3);
             this.playerCurrentHpTrackBar.Maximum = 100;
             this.playerCurrentHpTrackBar.Name = "playerCurrentHpTrackBar";
-            this.playerCurrentHpTrackBar.Size = new System.Drawing.Size(181, 31);
+            this.playerCurrentHpTrackBar.Size = new System.Drawing.Size(184, 31);
             this.playerCurrentHpTrackBar.TabIndex = 1;
             this.playerCurrentHpTrackBar.TickStyle = System.Windows.Forms.TickStyle.None;
             this.playerCurrentHpTrackBar.Value = 100;
@@ -2571,7 +2571,7 @@
             this.playerMaxHpLabel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.playerMaxHpLabel.Location = new System.Drawing.Point(3, 37);
             this.playerMaxHpLabel.Name = "playerMaxHpLabel";
-            this.playerMaxHpLabel.Size = new System.Drawing.Size(74, 37);
+            this.playerMaxHpLabel.Size = new System.Drawing.Size(75, 37);
             this.playerMaxHpLabel.TabIndex = 2;
             this.playerMaxHpLabel.Text = "Max HP";
             this.playerMaxHpLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -2580,14 +2580,14 @@
             // 
             this.playerMaxHpUpDown.Dock = System.Windows.Forms.DockStyle.Fill;
             this.playerMaxHpUpDown.Enabled = false;
-            this.playerMaxHpUpDown.Location = new System.Drawing.Point(83, 40);
+            this.playerMaxHpUpDown.Location = new System.Drawing.Point(84, 40);
             this.playerMaxHpUpDown.Maximum = new decimal(new int[] {
             65534,
             0,
             0,
             0});
             this.playerMaxHpUpDown.Name = "playerMaxHpUpDown";
-            this.playerMaxHpUpDown.Size = new System.Drawing.Size(181, 20);
+            this.playerMaxHpUpDown.Size = new System.Drawing.Size(184, 20);
             this.playerMaxHpUpDown.TabIndex = 3;
             this.playerMaxHpUpDown.Value = new decimal(new int[] {
             100,
@@ -2607,7 +2607,7 @@
             this.cheatsLeftSideFlowPanel.Location = new System.Drawing.Point(3, 3);
             this.cheatsLeftSideFlowPanel.Name = "cheatsLeftSideFlowPanel";
             this.cheatTablePanel.SetRowSpan(this.cheatsLeftSideFlowPanel, 2);
-            this.cheatsLeftSideFlowPanel.Size = new System.Drawing.Size(279, 402);
+            this.cheatsLeftSideFlowPanel.Size = new System.Drawing.Size(283, 402);
             this.cheatsLeftSideFlowPanel.TabIndex = 16;
             // 
             // cheatsCheckedListBox
@@ -2724,7 +2724,7 @@
             this.toolStripStatusLabel});
             this.statusStrip.Location = new System.Drawing.Point(0, 464);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(584, 22);
+            this.statusStrip.Size = new System.Drawing.Size(592, 22);
             this.statusStrip.SizingGrip = false;
             this.statusStrip.TabIndex = 1;
             this.statusStrip.Text = "statusStrip1";
@@ -6295,6 +6295,7 @@
             this.bduMaskCheckBox.TabIndex = 2;
             this.bduMaskCheckBox.Text = "Balaclava?";
             this.bduMaskCheckBox.UseVisualStyleBackColor = true;
+            this.bduMaskCheckBox.Visible = false;
             this.bduMaskCheckBox.CheckedChanged += new System.EventHandler(this.BduMaskCheckBox_CheckedChanged);
             // 
             // bduPictureBox
@@ -8578,7 +8579,7 @@
             this.mainMenuStrip.Location = new System.Drawing.Point(0, 0);
             this.mainMenuStrip.Name = "mainMenuStrip";
             this.mainMenuStrip.Padding = new System.Windows.Forms.Padding(4, 1, 0, 1);
-            this.mainMenuStrip.Size = new System.Drawing.Size(584, 24);
+            this.mainMenuStrip.Size = new System.Drawing.Size(592, 24);
             this.mainMenuStrip.TabIndex = 1;
             // 
             // optionsMenuItem
@@ -8631,6 +8632,13 @@
             this.viewLogsMenuItem.Text = "View Logs";
             this.viewLogsMenuItem.Click += new System.EventHandler(this.ViewLogsMenuItem_Click);
             // 
+            // openInstallLocationToolStripMenuItem
+            // 
+            this.openInstallLocationToolStripMenuItem.Name = "openInstallLocationToolStripMenuItem";
+            this.openInstallLocationToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.openInstallLocationToolStripMenuItem.Text = "Open Install Location";
+            this.openInstallLocationToolStripMenuItem.Click += new System.EventHandler(this.openInstallLocationToolStripMenuItem_Click);
+            // 
             // githubMenuItem
             // 
             this.githubMenuItem.Name = "githubMenuItem";
@@ -8645,19 +8653,12 @@
             this.joinOurDiscordToolStripMenuItem.Text = "Join Our Discord";
             this.joinOurDiscordToolStripMenuItem.Click += new System.EventHandler(this.JoinOurDiscordToolStripMenuItem_Click);
             // 
-            // openInstallLocationToolStripMenuItem
-            // 
-            this.openInstallLocationToolStripMenuItem.Name = "openInstallLocationToolStripMenuItem";
-            this.openInstallLocationToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
-            this.openInstallLocationToolStripMenuItem.Text = "Open Install Location";
-            this.openInstallLocationToolStripMenuItem.Click += new System.EventHandler(this.openInstallLocationToolStripMenuItem_Click);
-            // 
             // GUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Green;
-            this.ClientSize = new System.Drawing.Size(584, 486);
+            this.ClientSize = new System.Drawing.Size(592, 486);
             this.Controls.Add(this.mgs2TabControl);
             this.Controls.Add(this.mainMenuStrip);
             this.Controls.Add(this.statusStrip);

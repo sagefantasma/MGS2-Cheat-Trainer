@@ -170,6 +170,7 @@ namespace MGS2_MC
             public bool RandomizeStartingItems { get; set; }
             public bool RandomizeAutomaticRewards { get; set; }
             public bool RandomizeClaymores { get; set; }
+            public bool RandomizeTankerControlUnits { get; set; }
             public bool RandomizeC4 { get; set; }
             public bool IncludeRations { get; set; }
             public bool AllWeaponsSpawnable { get; set; }
@@ -187,7 +188,8 @@ namespace MGS2_MC
                     $"RandomizeCards = {RandomizeCards};\n" +
                     $"KeepVanillaCardAccess = {KeepVanillaCardAccess};\n" +
                     $"RandomizeC4 = {RandomizeC4};\n" +
-                    $"RandomizeClaymores = {RandomizeClaymores};\n\n\n\n\n\n";
+                    $"RandomizeClaymores = {RandomizeClaymores};\n" +
+                    $"RandomizeTankerControlUnits = {RandomizeTankerControlUnits};\n\n\n\n\n\n";
             }
         }
 
@@ -251,13 +253,14 @@ namespace MGS2_MC
         private void RandomizeClaymores()
         {
             int leftWall = 0xBF68;
+            int rightSideLowerCatwalk = 0xABB0;
             uint topWall = 0xFFFF0218;
             int rightWall = 0xD6D8;
             uint bottomWall = 0xFFFF2928;
 
             List<PointF> walkableArea = new List<PointF>
             {
-                
+
                 new PointF(0xED4F, 0xFFFEDC3D),
                 new PointF(0xCF29, 0xFFFEDCFD),
                 new PointF(0xCE0F, 0xFFFEDE6E),
@@ -337,6 +340,17 @@ namespace MGS2_MC
             };
 
             string gcxFile = GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_w21a"));
+
+            //make claymore functions bigger
+            GcxEditor w21a = new GcxEditor();
+            w21a.CallDecompiler(gcxFile);
+            List<DecodedProc> contentTree = w21a.BuildContentTree();
+            DecodedProc claymoreSpawningFunction = contentTree.Find(x => x.Name == "proc_0x223D85 ");
+            byte[] customClaymoreFunctionContents = File.ReadAllBytes("gcx\\w21a_custom_claymores.proc");
+            claymoreSpawningFunction.RawContents = customClaymoreFunctionContents;
+            byte[] modifiedGcxContents = w21a.BuildGcxFile();
+            File.WriteAllBytes(gcxFile, modifiedGcxContents);
+
             byte[] gcxContents = File.ReadAllBytes(gcxFile);
             List<int> claymores = GcxEditor.FindAllSubArray(gcxContents, new byte[] { 0x85, 0xD6, 0x78 });
 
@@ -345,23 +359,23 @@ namespace MGS2_MC
             foreach (int claymore in claymores)
             {
                 randomPoint = GetRandomPointInPolygon(walkableArea, Randomizer);
-                // Claymores on the lowered bridge don't work because they're too high. Rerandomize any rolls that are on the bridge for now.
-                while (randomPoint.X < leftWall)
+                // Rerandomize any rolls that are on the stairs leading to lower catwalk
+                while (randomPoint.X < leftWall && randomPoint.X > rightSideLowerCatwalk)
                 {
                     randomPoint = GetRandomPointInPolygon(walkableArea, Randomizer);
                 }
                 int xPos = (int) randomPoint.X;
                 uint yPos = (uint)randomPoint.Y;
 
-                Array.Copy(BitConverter.GetBytes(xPos), 0, gcxContents, claymore + 0xA, 2);
+                Array.Copy(BitConverter.GetBytes(xPos), 0, gcxContents, claymore + 0xB, 2);
                 
-                /* Claymores on the lowered bridge don't work because they're too high. Shelving this for later when I solve this problem.
-                 * if(xPos < leftWall)
+                // Claymores on the lower catwalk need to be, well, lowered.
+                if(xPos < rightSideLowerCatwalk)
                 {
-                    Array.Copy(BitConverter.GetBytes(0xFF), 0, gcxContents, claymore + 0xE, 1);
+                    Array.Copy(BitConverter.GetBytes(0xFFFFFA20), 0, gcxContents, claymore + 0x10, 4);
                 }
-                */
-                Array.Copy(BitConverter.GetBytes(yPos), 0, gcxContents, claymore + 0x10, 4); //the FFFF should be untouched with this and still work
+
+                Array.Copy(BitConverter.GetBytes(yPos), 0, gcxContents, claymore + 0x15, 4); //the FFFF should be untouched with this and still work
             }
 
             File.WriteAllBytes(gcxFile, gcxContents);
@@ -1075,6 +1089,145 @@ namespace MGS2_MC
             //TODO: implement
 
             return spoiler;
+        }
+
+        private void RandomizeTankerSemtexControlUnitLocations()
+        {
+            byte[] controlUnit1Bytes = { 0x6C, 0x55, 0xF5 };
+            byte[] brokenControlUnit1Bytes = { 0xAD, 0x55, 0xD5 };
+            byte[] controlUnit2Bytes = { 0x6B, 0x55, 0xF5 };
+            byte[] brokenControlUnit2Bytes = { 0xAC, 0x55, 0xD5 };
+            byte[] controlUnit3Bytes = { 0x6A, 0x55, 0xF5 };
+            byte[] brokenControlUnit3Bytes = { 0xAB, 0x55, 0xD5 };
+            string gcxFile;
+            byte[] gcxContents;
+
+            int c1Choice = Randomizer.Next(4);
+            int c2Choice = Randomizer.Next(5);
+            int c3Choice = c1Choice;
+            while(c3Choice == c1Choice)
+            {
+                c3Choice = Randomizer.Next(4);
+            }
+
+            ByteLocation c1Location = SouthFacingControlUnit(c1Choice);
+            ByteLocation c2Location = new ByteLocation();
+            ByteLocation c3Location = SouthFacingControlUnit(c3Choice);
+            switch (c2Choice)
+            {
+                case 0:
+                    c2Location = null;
+                    break;
+                case 1:
+                    c2Location.X = new byte[] { 0xE4, 0xC1 };
+                    c2Location.Y = new byte[] { 0x78, 0xEC };
+                    c2Location.Z = new byte[] { 0x30, 0x87 };
+                    break;
+                case 2:
+                    c2Location.X = new byte[] { 0xE4, 0xC1 };
+                    c2Location.Y = new byte[] { 0x78, 0xEC };
+                    c2Location.Z = new byte[] { 0x08, 0x96 };
+                    break;
+                case 3:
+                    c2Location.X = new byte[] { 0xB0, 0xDE };
+                    c2Location.Y = new byte[] { 0x00, 0xFA };
+                    c2Location.Z = new byte[] { 0x37, 0xD7 };
+                    break;
+                case 4:
+                    c2Location.X = new byte[] { 0xB0, 0xDE };
+                    c2Location.Y = new byte[] { 0x00, 0xFA };
+                    c2Location.Z = new byte[] { 0x32, 0xA0 };
+                    break;
+                case 5:
+                    c2Location.X = new byte[] { 0x0F, 0xCF };
+                    c2Location.Y = new byte[] { 0x40, 0xF6 };
+                    c2Location.Z = new byte[] { 0x90, 0xB2 };
+                    break;
+            }
+
+            gcxFile = GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_w02a"));
+            gcxContents = File.ReadAllBytes(gcxFile);
+            if (c1Location != null)
+            {
+                int controlUnit1Offset = GcxEditor.FindAllSubArray(gcxContents, controlUnit1Bytes).FirstOrDefault();
+                int brokenControlUnit1Offset = GcxEditor.FindAllSubArray(gcxContents, brokenControlUnit1Bytes).LastOrDefault();
+
+                Array.Copy(c1Location.X, 0, gcxContents, controlUnit1Offset + 0x7, 2);
+                Array.Copy(c1Location.Y, 0, gcxContents, controlUnit1Offset + 0xA, 2);
+                Array.Copy(c1Location.Z, 0, gcxContents, controlUnit1Offset + 0xD, 2);
+
+                Array.Copy(c1Location.X, 0, gcxContents, brokenControlUnit1Offset + 0x11, 2);
+                Array.Copy(c1Location.Y, 0, gcxContents, brokenControlUnit1Offset + 0x14, 2);
+                Array.Copy(c1Location.Z, 0, gcxContents, brokenControlUnit1Offset + 0x17, 2);
+            }
+            if(c2Location != null)
+            {
+                int controlUnit2Offset = GcxEditor.FindAllSubArray(gcxContents, controlUnit2Bytes).FirstOrDefault();
+                int brokenControlUnit2Offset = GcxEditor.FindAllSubArray(gcxContents, brokenControlUnit2Bytes).LastOrDefault();
+
+                Array.Copy(c2Location.X, 0, gcxContents, controlUnit2Offset + 0x7, 2);
+                Array.Copy(c2Location.Y, 0, gcxContents, controlUnit2Offset + 0xA, 2);
+                Array.Copy(c2Location.Z, 0, gcxContents, controlUnit2Offset + 0xD, 2);
+
+                Array.Copy(c2Location.X, 0, gcxContents, brokenControlUnit2Offset + 0x11, 2);
+                Array.Copy(c2Location.Y, 0, gcxContents, brokenControlUnit2Offset + 0x14, 2);
+                Array.Copy(c2Location.Z, 0, gcxContents, brokenControlUnit2Offset + 0x17, 2);
+            }
+            if(c3Location != null)
+            {
+                int controlUnit3Offset = GcxEditor.FindAllSubArray(gcxContents, controlUnit3Bytes).FirstOrDefault();
+                int brokenControlUnit3Offset = GcxEditor.FindAllSubArray(gcxContents, brokenControlUnit3Bytes).LastOrDefault();
+
+                Array.Copy(c3Location.X, 0, gcxContents, controlUnit3Offset + 0x7, 2);
+                Array.Copy(c3Location.Y, 0, gcxContents, controlUnit3Offset + 0xA, 2);
+                Array.Copy(c3Location.Z, 0, gcxContents, controlUnit3Offset + 0xD, 2);
+
+                Array.Copy(c3Location.X, 0, gcxContents, brokenControlUnit3Offset + 0x11, 2);
+                Array.Copy(c3Location.Y, 0, gcxContents, brokenControlUnit3Offset + 0x14, 2);
+                Array.Copy(c3Location.Z, 0, gcxContents, brokenControlUnit3Offset + 0x17, 2);
+            }
+
+            File.WriteAllBytes(gcxFile, gcxContents);
+        }
+
+        private class ByteLocation
+        {
+            public byte[] X;
+            public byte[] Y;
+            public byte[] Z;
+        }
+
+        private ByteLocation SouthFacingControlUnit(int choice)
+        {
+            ByteLocation byteLocation = new ByteLocation();
+            switch(choice)
+            {
+                case 0:
+                    byteLocation = null;
+                    break;
+                case 1:
+                    byteLocation.X = new byte[] { 0xBB, 0xB7 };
+                    byteLocation.Y = new byte[] { 0x80, 0xF1 };
+                    byteLocation.Z = new byte[] { 0x00, 0xA3 };
+                    break;
+                case 2:
+                    byteLocation.X = new byte[] { 0xBB, 0xB7 };
+                    byteLocation.Y = new byte[] { 0x40, 0xF5 };
+                    byteLocation.Z = new byte[] { 0xB5, 0x9E };
+                    break;
+                case 3:
+                    byteLocation.X = new byte[] { 0xB5, 0xC8 };
+                    byteLocation.Y = new byte[] { 0x40, 0xF6 };
+                    byteLocation.Z = new byte[] { 0xB5, 0x9E };
+                    break;
+                case 4:
+                    byteLocation.X = new byte[] { 0xB7, 0xE4 };
+                    byteLocation.Y = new byte[] { 0x00, 0xF3 };
+                    byteLocation.Z = new byte[] { 0xBE, 0xA6 };
+                    break;
+            }
+
+            return byteLocation;
         }
 
         private void RandomizeC4Locations()
@@ -1836,6 +1989,16 @@ namespace MGS2_MC
                         int modValue = randomNum % PlantSpawns.Count;
                         Item randomChoice = PlantSpawns[modValue];
 
+                        //isolate rations to only non-mandatory spawns
+                        if (randomChoice.Name == "Ration" &&
+                            _vanillaItems.PlantSet10.Entities.ElementAt(itemsAssigned).Key.MandatorySpawn)
+                        {
+                            retries--;
+                            if (retries == 0)
+                                break;
+                            continue;
+                        }
+
                         if (options.NoHardLogicLocks &&
                             LogicRequirements.ProgressionItems.Contains(randomChoice.Name) &&
                             !_vanillaItems.PlantSet10.Entities.ElementAt(itemsAssigned).Key.MandatorySpawn)
@@ -1994,6 +2157,16 @@ namespace MGS2_MC
                         int randomNum = Randomizer.Next();
                         int modValue = randomNum % PlantSpawns.Count;
                         Item randomChoice = PlantSpawns[modValue];
+
+                        //isolate rations to only non-mandatory spawns
+                        if(randomChoice.Name == "Ration" &&
+                            _vanillaItems.PlantCard5Set.Entities.ElementAt(itemsAssigned).Key.MandatorySpawn)
+                        {
+                            retries--;
+                            if (retries == 0)
+                                break;
+                            continue;
+                        }
 
                         if (options.NoHardLogicLocks &&
                             LogicRequirements.ProgressionItems.Contains(randomChoice.Name) &&
@@ -2166,6 +2339,11 @@ namespace MGS2_MC
             if (options.RandomizeC4)
             {
                 RandomizeC4Locations();
+            }
+
+            if (options.RandomizeTankerControlUnits)
+            {
+                RandomizeTankerSemtexControlUnitLocations();
             }
 
             return Seed;

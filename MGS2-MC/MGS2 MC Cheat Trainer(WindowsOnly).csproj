@@ -521,6 +521,9 @@
     <Content Include="Gcx\MGS2 Known Procs\proc_0xFFDAD4.proc">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Gcx\w21a_custom_claymores.proc">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\Documentation\mgs2_memory_print.CEM" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />

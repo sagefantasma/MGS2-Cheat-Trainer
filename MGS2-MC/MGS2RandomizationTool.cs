@@ -46,6 +46,9 @@ namespace MGS2_MC
             this.helpProvider1.SetShowHelp(this.randomizeEFConnectingBridgeClaymores, true);
             this.helpProvider1.SetHelpString(this.randomizeEFConnectingBridgeClaymores, "Randomize where the claymores spawn on the EF Connecting Bridge.");
 
+            this.helpProvider1.SetShowHelp(this.randomizeTankerControlUnitLocations, true);
+            this.helpProvider1.SetHelpString(this.randomizeTankerControlUnitLocations, "Randomize where control units spawn in the engine room on the Tanker.");
+
             this.helpProvider1.SetShowHelp(this.restoreBaseGameButton, true);
             this.helpProvider1.SetHelpString(this.restoreBaseGameButton, "Restores the game's files to their 'vanilla' state. If this does not work properly, use Steam to 'Verify integrity of game files' to accomplish the same result.");
         }
@@ -74,7 +77,8 @@ namespace MGS2_MC
             randomizeAutomaticRewardsCheckbox.Enabled = enable;
             randomizeBombLocations.Enabled = enable;
             randomizeEFConnectingBridgeClaymores.Enabled = enable;
-            if(!enable && randomizeAutomaticRewardsCheckbox.Checked)
+            randomizeTankerControlUnitLocations.Enabled = enable;
+            if (!enable && randomizeAutomaticRewardsCheckbox.Checked)
             {
                 addCardsCheckbox.Enabled = enable;
             }
@@ -120,7 +124,8 @@ namespace MGS2_MC
                     RandomizeC4 = randomizeBombLocations.Checked,
                     RandomizeClaymores = randomizeEFConnectingBridgeClaymores.Checked,
                     RandomizeCards = addCardsCheckbox.Checked,
-                    KeepVanillaCardAccess = keepVanillaCardLevelsCheckbox.Checked
+                    KeepVanillaCardAccess = keepVanillaCardLevelsCheckbox.Checked,
+                    RandomizeTankerControlUnits = randomizeTankerControlUnitLocations.Checked
                 };
                 int seed = 0;
                 if(randomizer.Seed == 0)

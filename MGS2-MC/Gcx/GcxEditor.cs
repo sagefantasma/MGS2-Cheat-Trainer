@@ -93,18 +93,6 @@ namespace MGS2_MC
                 proc.ScriptInitialPosition = position;
                 procBlock.AddRange(proc.RawContents);
                 position += proc.RawContents.Length;
-                /*
-                 * We are capturing all the padding now I believe, so I think this can go.
-                if (proc.RawContents.SequenceEqual(new byte[] { 0x81, 0x00 }) || proc.RawContents[0] == 0x89 || proc.RawContents[0] == 0x8D)
-                {
-                    //no padding
-                }
-                else
-                {
-                    procBlock.AddRange(new byte[] { 0x00, 0x00 }); //all procs must be ended with the double zero byte, unless its an empty proc
-                    position += 2;
-                }
-                */
             }
 
             int procBodySize = procBlock.Count;

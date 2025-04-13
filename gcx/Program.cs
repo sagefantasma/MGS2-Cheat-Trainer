@@ -21,6 +21,7 @@ namespace gcx
         [STAThread]
         static void Main(string[] args)
         {
+            /*
             ResourceExtractor resourceExtractor = new ResourceExtractor("C:\\Users\\yonan\\Documents\\Pinned Folders\\C Drive Steam Games\\MGS2\\eu\\stage\\r_tnk0");
             resourceExtractor.ExtractResources();
             List<string> tankerSnakeBpAssets = resourceExtractor.bpAssetsResources.ToList();
@@ -84,7 +85,7 @@ namespace gcx
             }
 
             ResourceBuilder.BuildResources(tankerSnakeBpAssetsResources, tankerSnakeManifestResources);
-
+            */
             ShowGui();
             return;
 

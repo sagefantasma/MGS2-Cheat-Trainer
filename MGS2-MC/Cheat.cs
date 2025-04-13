@@ -1225,8 +1225,8 @@ namespace MGS2_MC
         public static Cheat VRInfiniteAmmo { get; internal set; } = new Cheat("VR Infinite Ammo", Cheat.CheatActions.VRInfiniteAmmo, MGS2AoB.OriginalVRInfiniteAmmoBytes);
         public static Cheat VRInfiniteItem { get; internal set; } = new Cheat("VR Infinite Items", Cheat.CheatActions.VRInfiniteItem, MGS2AoB.OriginalVRInfiniteItemBytes);
         public static Cheat VRNoReload { get; internal set; } = new Cheat("VR No Reload", Cheat.CheatActions.VRNoReload, MGS2AoB.OriginalVRNoReloadBytes);
-        public static Cheat EmmaInfiniteHealth { get; internal set; } = new Cheat("Emma Infinite Health", Cheat.CheatActions.EmmaInfiniteHp, MGS2AoB.OriginalEmmaHpBytes);
-        public static Cheat EmmaInfiniteO2 { get; internal set; } = new Cheat("Emma Infinite O2", Cheat.CheatActions.EmmaInfiniteO2, MGS2AoB.OriginalEmmaO2Bytes);
+        public static Cheat EmmaInfiniteHealth { get; internal set; } = new Cheat("Emma Infinite Health(CRASHES SNIPING SECTION)", Cheat.CheatActions.EmmaInfiniteHp, MGS2AoB.OriginalEmmaHpBytes);
+        public static Cheat EmmaInfiniteO2 { get; internal set; } = new Cheat("Emma Infinite O2(CRASHES SNIPING SECTION)", Cheat.CheatActions.EmmaInfiniteO2, MGS2AoB.OriginalEmmaO2Bytes);
 
         private static List<Cheat> _cheatList = null;
 

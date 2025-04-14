@@ -37,11 +37,17 @@ namespace MGS2_MC
             this.helpProvider1.SetShowHelp(this.randomizeAutomaticRewardsCheckbox, true);
             this.helpProvider1.SetHelpString(this.randomizeAutomaticRewardsCheckbox, "Automatic rewards will be randomized into the pool. This includes: USP on Tanker; SOCOM, Coolant, Sensor A, Card Keys, BDU, Phone, and MO Disc on Plant.");
 
+            this.helpProvider1.SetShowHelp(this.addCardsCheckbox, true);
+            this.helpProvider1.SetHelpString(this.addCardsCheckbox, "If automatic rewards are enabled, you can enable this option to add cards to the randomization pool.");
+
             this.helpProvider1.SetShowHelp(this.randomizeBombLocations, true);
             this.helpProvider1.SetHelpString(this.randomizeBombLocations, "Randomize where all bombs during the bomb defusal segment spawn.");
 
             this.helpProvider1.SetShowHelp(this.randomizeEFConnectingBridgeClaymores, true);
             this.helpProvider1.SetHelpString(this.randomizeEFConnectingBridgeClaymores, "Randomize where the claymores spawn on the EF Connecting Bridge.");
+
+            this.helpProvider1.SetShowHelp(this.randomizeTankerControlUnitLocations, true);
+            this.helpProvider1.SetHelpString(this.randomizeTankerControlUnitLocations, "Randomize where control units spawn in the engine room on the Tanker.");
 
             this.helpProvider1.SetShowHelp(this.restoreBaseGameButton, true);
             this.helpProvider1.SetHelpString(this.restoreBaseGameButton, "Restores the game's files to their 'vanilla' state. If this does not work properly, use Steam to 'Verify integrity of game files' to accomplish the same result.");
@@ -71,6 +77,15 @@ namespace MGS2_MC
             randomizeAutomaticRewardsCheckbox.Enabled = enable;
             randomizeBombLocations.Enabled = enable;
             randomizeEFConnectingBridgeClaymores.Enabled = enable;
+            randomizeTankerControlUnitLocations.Enabled = enable;
+            if (!enable && randomizeAutomaticRewardsCheckbox.Checked)
+            {
+                addCardsCheckbox.Enabled = enable;
+            }
+            if(!enable && addCardsCheckbox.Checked)
+            {
+                keepVanillaCardLevelsCheckbox.Enabled = enable;
+            }
             if (!enable && customSeedCheckbox.Checked)
             {
                 seedUpDown.Enabled = enable;
@@ -107,7 +122,10 @@ namespace MGS2_MC
                     RandomizeStartingItems = randomizeStartingItemsCheckbox.Checked,
                     RandomizeAutomaticRewards = randomizeAutomaticRewardsCheckbox.Checked,
                     RandomizeC4 = randomizeBombLocations.Checked,
-                    RandomizeClaymores = randomizeEFConnectingBridgeClaymores.Checked
+                    RandomizeClaymores = randomizeEFConnectingBridgeClaymores.Checked,
+                    RandomizeCards = addCardsCheckbox.Checked,
+                    KeepVanillaCardAccess = keepVanillaCardLevelsCheckbox.Checked,
+                    RandomizeTankerControlUnits = randomizeTankerControlUnitLocations.Checked
                 };
                 int seed = 0;
                 if(randomizer.Seed == 0)
@@ -127,7 +145,8 @@ namespace MGS2_MC
                     {
                         //randomizer.Seed = new Random(DateTime.UtcNow.Hour + DateTime.UtcNow.Minute + DateTime.UtcNow.Second + DateTime.UtcNow.Millisecond);
                         //randomizer.Randomizer = new Random(DateTime.UtcNow.Hour + DateTime.UtcNow.Minute + DateTime.UtcNow.Second + DateTime.UtcNow.Millisecond);
-                        randomizer.Randomizer = new Random(randomizer.Randomizer.Next());
+                        randomizer.Seed = randomizer.Randomizer.Next();
+                        randomizer.Randomizer = new Random(randomizer.Seed);
                     }
                     catch (Exception ee)
                     {
@@ -144,6 +163,24 @@ namespace MGS2_MC
             if (!restrictNikitaCheckbox.Checked)
             {
                 MessageBox.Show("This can cause logic-locks if the Nikita spawns on Shell 1 and you do not pick it up before fighting the Harrier.", "WARNING");
+            }
+        }
+
+        private void randomizeAutomaticRewardsCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            addCardsCheckbox.Enabled = randomizeAutomaticRewardsCheckbox.Checked;
+            if (!randomizeAutomaticRewardsCheckbox.Checked)
+            {
+                addCardsCheckbox.Checked = false;
+            }
+        }
+
+        private void addCardsCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            keepVanillaCardLevelsCheckbox.Enabled = addCardsCheckbox.Checked;
+            if (!addCardsCheckbox.Checked)
+            {
+                keepVanillaCardLevelsCheckbox.Checked = false;
             }
         }
     }

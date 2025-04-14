@@ -96,6 +96,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ResourceBuilder.cs" />
+    <Compile Include="ResourceParser.cs" />
+    <Compile Include="ResourceTypes.cs" />
     <Compile Include="GcxLevelResourceMapper.cs" />
     <Compile Include="GcxTableMapping.cs" />
     <Compile Include="GcxComparator.cs" />
@@ -107,6 +110,7 @@
       <DependentUpon>GcxExplorer.cs</DependentUpon>
     </Compile>
     <Compile Include="GcxProcs.cs" />
+    <Compile Include="Resource.cs" />
     <Compile Include="ItemSets.cs" />
     <Compile Include="MGS2Randomizer.cs" />
     <Compile Include="MGS2Resource.cs" />
@@ -125,6 +129,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResourceEditor.cs" />
+    <Compile Include="ResourceExtractor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

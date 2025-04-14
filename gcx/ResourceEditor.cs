@@ -22,7 +22,7 @@ namespace gcx
             public string Name { get; set; }
             public string Text { get; set; }
             public FileType FileType { get; set; }
-            public Resource Resource { get; set; }
+            public OldResource Resource { get; set; }
         }
 
         private class LevelResources
@@ -558,7 +558,7 @@ namespace gcx
         {
             List<MGS2ResourceData> resourceData = new List<MGS2ResourceData>();
 
-            Resource resource = Resource.LookupResource(resourceToAdd);
+            OldResource resource = OldResource.LookupResource(resourceToAdd);
 
             MGS2ResourceData kmsFile = new MGS2ResourceData();
 

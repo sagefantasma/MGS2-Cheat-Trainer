@@ -12,6 +12,8 @@ namespace MGS2_MC
         //TODO: should all of these have ctxr's associated with them?
         public static Resource ItemBox = new Resource("itembox",
             kms: "", cmdl: "", ctxr: "", tri: "assets/tri/us/itembox.tri,us/stage/XXXX/cache/00883186.tri,cache/00883186.tri\r\r\n");
+        public static Resource ItemBox2 = new Resource("itembox2",
+            kms: "", cmdl: "", ctxr: "textures/flatlist/ibox_all2.bmp.ctxr,stage/XXXX/cache/ibox_all2.bmp.ctxr,eu/stage/XXXX/cache/00883186/008e6a68.ctxr\r\r\n", tri: "");
         public static Resource ColdMedsLabel = new Resource("cold_medicine_label", 
             kms: "assets/kms/us/cold_medicine_label_stage_a03b.kms,us/stage/XXXX/cache/00f971fb.kms,cache/00f971fb.kms\r\r\n", 
             cmdl: "assets/kms/us/cold_medicine_label_stage_a03b.cmdl,us/stage/XXXX/cache/00f971fb.cmdl,eu/stage/XXXX/cache/00f971fb.cmdl\r\r\n",
@@ -331,7 +333,7 @@ namespace MGS2_MC
             kms: "assets/kms/us/sougan.kms,us/stage/XXXX/cache/002c297b.kms,cache/002c297b.kms\r\r\n",
             cmdl: "assets/kms/us/sougan.cmdl,us/stage/XXXX/cache/002c297b.cmdl,eu/stage/XXXX/cache/002c297b.cmdl\r\r\n",
             ctxr: "", tri: "");
-        //79 total
+        //80 total
     }
 
     public class Resource
@@ -353,7 +355,7 @@ namespace MGS2_MC
             MGS2Resource.ChaffLabel, MGS2Resource.SocomAmmoLabel, MGS2Resource.GrenadeIbox, MGS2Resource.GrenadeSh, MGS2Resource.HandgunAmmoIbox,
             MGS2Resource.HandgunAmmoSh, MGS2Resource.RationSh, MGS2Resource.RationLabel, MGS2Resource.CoolantSprayLabel, MGS2Resource.SocomLabel,
             MGS2Resource.UspLabel, MGS2Resource.ScopeCustomBox, MGS2Resource.ItemBox, MGS2Resource.CigarettesIbox, MGS2Resource.CigarettesIboxSh,
-            MGS2Resource.CigarettesLabel, MGS2Resource.SensorALabel, MGS2Resource.APSensorIbox, MGS2Resource.APSensorLabel
+            MGS2Resource.CigarettesLabel, MGS2Resource.SensorALabel, MGS2Resource.APSensorIbox, MGS2Resource.APSensorLabel, MGS2Resource.ItemBox2
         };
 
         public static List<string> AllPlantWeaponItemResources = new List<string>()

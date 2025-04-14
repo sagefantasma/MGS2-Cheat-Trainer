@@ -523,7 +523,7 @@ namespace gcx
         private void AddAllResources()
         {
             List<string> strings = new List<string>();
-            foreach (Resource value in Resource.ResourceList)
+            foreach (OldResource value in OldResource.ResourceList)
             {
                 strings.Add(value.CommonName);
             }

@@ -513,13 +513,13 @@ namespace MGS2_MC
             //use only result from `39218001ECF1D6C2` and set the ending C2 to C1
             if (!randomTankerStartingItems.Any(x=>x.Name == "Camera"))
             {
-                string w00a = GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_w00a"));
-                byte[] w00aContents = File.ReadAllBytes(w00a);
+                string w00aFile = GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_w00a"));
+                byte[] w00aByteContents = File.ReadAllBytes(w00aFile);
 
-                int cameraIndex = GcxEditor.FindSubArray(w00aContents, new byte[] { 0x39, 0x21, 0x80, 0x01, 0xEC, 0xF1, 0xD6, 0xC2 }) + 7;
+                int cameraIndex = GcxEditor.FindSubArray(w00aByteContents, new byte[] { 0x39, 0x21, 0x80, 0x01, 0xEC, 0xF1, 0xD6, 0xC2 }) + 7;
 
-                w00aContents[cameraIndex] = 0xC1;
-                File.WriteAllBytes(w00a, w00aContents);
+                w00aByteContents[cameraIndex] = 0xC1;
+                File.WriteAllBytes(w00aFile, w00aByteContents);
             }
 
             List<int> selectedRandomItemIndices = new List<int>();
@@ -556,6 +556,19 @@ namespace MGS2_MC
                 Array.Copy(newInitializeTankerItemsArray, 0, gcxContents, location + 6, newInitializeTankerItemsArray.Length);
             }
             AddTankerStartingItemsToPool();
+
+            //Fixing the inventory bug that occurs if you watch the M9 pad demo on w00a
+            string w00a = GcxFileDirectory.Find(file => file.Contains($"scenerio_stage_w00a"));
+            byte[] w00aContents = File.ReadAllBytes(w00a);
+
+            List<int> autoMenuInitId = GcxEditor.FindAllSubArray(w00aContents, new byte[] { 0x86, 0x3A, 0xA2 });
+
+            w00aContents[autoMenuInitId[0] + 8] = 0xC1;
+            w00aContents[autoMenuInitId[0] + 9] = 0xC1;
+
+            w00aContents[autoMenuInitId[1] + 14] = 0xC1;
+            w00aContents[autoMenuInitId[1] + 18] = 0xC1;
+            File.WriteAllBytes(w00a, w00aContents);
             #endregion
 
             #region Plant

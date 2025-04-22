@@ -2302,6 +2302,13 @@ namespace MGS2_MC
         private void randomizerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _logger.Verbose("Opening randomization tool...");
+
+            DialogResult deprecatedNotice = MessageBox.Show("This version of the MGS2 Randomizer is officially deprecated. If you'd like to enjoy the latest version of the randomizer, please download the standalone mod! Would you like to go to Nexus Mods now to download it?", "Thanks for playing!", MessageBoxButtons.YesNo);
+            if (deprecatedNotice == DialogResult.Yes)
+            {
+                Process.Start("https://www.nexusmods.com/metalgearsolid2mc/mods/92");
+                return;
+            }
             
             MGS2RandomizationTool randomizationTool = new MGS2RandomizationTool();
             try

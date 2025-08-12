@@ -1185,6 +1185,125 @@ namespace MGS2_MC
                     customFilterCancellationTokenSource.Cancel();
                 }
             }
+
+            internal static void InvisibleToGuards(bool activate)
+            {
+                Cheat activeCheat = MGS2Cheat.InvisibleToGuards;
+                byte[] invisibleToGuards = new byte[] { 0xFF, 0xFF, 0x31, 0xC0, 0x48, 0x83, 0xC4, 0x20, 0x5B, 0xC3 };
+                if (activate)
+                {
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithSpecificCode(MGS2AoB.InvisibleToGuardsAoB, invisibleToGuards, MGS2Offset.INVISIBLE_TO_GUARDS);
+                        MGS2Cheat.InvisibleToGuards = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithSpecificCode(activeCheat.CodeLocation, invisibleToGuards, MGS2Offset.INVISIBLE_TO_GUARDS);
+                    }
+                }
+                else
+                {
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.INVISIBLE_TO_GUARDS, activeCheat.OriginalBytes);
+                }
+            }
+
+            internal static void InvisibleToCyphers(bool activate)
+            {
+                Cheat activeCheat = MGS2Cheat.InvisibleToCyphers;
+                byte[] invisibleToCyphers = new byte[] { 0x48, 0x39, 0xE0, 0x0F, 0x1F, 0x40, 0x00, 0x0F, 0x85, 0x4C, 0x04 };
+                if (activate)
+                {
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithSpecificCode(MGS2AoB.InvisibleToCyphersAoB, invisibleToCyphers, MGS2Offset.INVISIBLE_TO_CYPHERS);
+                        MGS2Cheat.InvisibleToGuards = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithSpecificCode(activeCheat.CodeLocation, invisibleToCyphers, MGS2Offset.INVISIBLE_TO_CYPHERS);
+                    }
+                }
+                else
+                {
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.INVISIBLE_TO_CYPHERS, activeCheat.OriginalBytes);
+                }
+            }
+
+            internal static void InvisibleToCameras(bool activate)
+            {
+                Cheat activeCheat = MGS2Cheat.InvisibleToCameras;
+                byte[] invisibleToCameras = new byte[] { 0x0F, 0x1F, 0x40, 0x00, 0xE8, 0x13, 0xF8, 0x1C }; //this was from snakeswiss' original implementation, but doesnt work on 2.0.1. thankfully, disabling the first command(first 4 bytes) works instead :)
+                if (activate)
+                {
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.InvisibleToCamerasAoB, MGS2Offset.INVISIBLE_TO_CAMERAS, 4);
+                        MGS2Cheat.InvisibleToGuards = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithInvalidCode(MGS2AoB.InvisibleToCamerasAoB, MGS2Offset.INVISIBLE_TO_CAMERAS, 4);
+                    }
+                }
+                else
+                {
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.INVISIBLE_TO_CAMERAS, activeCheat.OriginalBytes);
+                }
+            }
+
+            internal static void DeafenGuardsToKnocks(bool activate)
+            {
+                Cheat activeCheat = MGS2Cheat.DeafenGuardsToKnocks;
+                byte[] deafenedToKnocks = new byte[] { 0xA8, 0x01, 0xEB, 0x1D, 0x48, 0x8B, 0xCB };
+                if (activate)
+                {
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithSpecificCode(MGS2AoB.DeafenGuardsToKnocksAoB, deafenedToKnocks, MGS2Offset.DEAFEN_GUARDS_TO_KNOCKS);
+                        MGS2Cheat.DeafenGuardsToKnocks = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithSpecificCode(activeCheat.CodeLocation, deafenedToKnocks, MGS2Offset.DEAFEN_GUARDS_TO_KNOCKS);
+                    }
+                }
+                else
+                {
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.DEAFEN_GUARDS_TO_KNOCKS, activeCheat.OriginalBytes);
+                }
+            }
+
+            internal static void DeafenGuardsToGuns(bool activate)
+            {
+                Cheat activeCheat = MGS2Cheat.DeafenGuardsToGuns;
+                byte[] deafenedToGuns = new byte[] { 0xA9, 0x00, 0x18, 0x00, 0x00, 0xEB, 0x12, 0x48, 0x8B, 0xCB };
+                if (activate)
+                {
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithSpecificCode(MGS2AoB.DeafenGuardsToGunsAoB, deafenedToGuns, MGS2Offset.DEAFEN_GUARDS_TO_GUNS);
+                        MGS2Cheat.DeafenGuardsToGuns = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithSpecificCode(activeCheat.CodeLocation, deafenedToGuns, MGS2Offset.DEAFEN_GUARDS_TO_GUNS);
+                    }
+                }
+                else
+                {
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.DEAFEN_GUARDS_TO_GUNS, activeCheat.OriginalBytes);
+                }
+            }
+
+            internal static void GhostMode(bool activate)
+            {
+                InvisibleToGuards(activate);
+                InvisibleToCyphers(activate);
+                InvisibleToCameras(activate);
+                DeafenGuardsToKnocks(activate);
+                DeafenGuardsToGuns(activate);
+            }
         }
     }    
 
@@ -1227,6 +1346,12 @@ namespace MGS2_MC
         public static Cheat VRNoReload { get; internal set; } = new Cheat("VR No Reload", Cheat.CheatActions.VRNoReload, MGS2AoB.OriginalVRNoReloadBytes);
         public static Cheat EmmaInfiniteHealth { get; internal set; } = new Cheat("Emma Infinite Health(CRASHES SNIPING SECTION)", Cheat.CheatActions.EmmaInfiniteHp, MGS2AoB.OriginalEmmaHpBytes);
         public static Cheat EmmaInfiniteO2 { get; internal set; } = new Cheat("Emma Infinite O2(CRASHES SNIPING SECTION)", Cheat.CheatActions.EmmaInfiniteO2, MGS2AoB.OriginalEmmaO2Bytes);
+        public static Cheat InvisibleToGuards { get; internal set; } = new Cheat("Invisible to Guards", Cheat.CheatActions.InvisibleToGuards, MGS2AoB.OriginalInvisibleToGuardsBytes);
+        public static Cheat InvisibleToCyphers { get; internal set; } = new Cheat("Invisible to Cyphers", Cheat.CheatActions.InvisibleToCyphers, MGS2AoB.OriginalInvisibleToCyphersBytes);
+        public static Cheat InvisibleToCameras { get; internal set; } = new Cheat("Invisible to Cameras", Cheat.CheatActions.InvisibleToCameras, MGS2AoB.OriginalInvisibleToCamerasBytes);
+        public static Cheat DeafenGuardsToKnocks { get; internal set; } = new Cheat("Deafen Guards to Knocks", Cheat.CheatActions.DeafenGuardsToKnocks, MGS2AoB.OriginalDeafenGuardsToKnocksBytes);
+        public static Cheat DeafenGuardsToGuns { get; internal set; } = new Cheat("Deafen Guards to Guns", Cheat.CheatActions.DeafenGuardsToGuns, MGS2AoB.OriginalDeafenGuardsToGunsBytes);
+        public static Cheat GhostMode { get; internal set; } = new Cheat("Ghost Mode", Cheat.CheatActions.GhostMode, null);
 
         private static List<Cheat> _cheatList = null;
 
@@ -1240,7 +1365,7 @@ namespace MGS2_MC
                 DisableItemMenuPause, DisableWeaponMenuPause, InfiniteItems, InfiniteKnockout, RemovePlantFilter,
                 RemovePlantFog, RemoveTankerFilter, NightTime, MaxStackOnPickup, PauseVRTimer, VRObjectiveAutoComplete,
                 VREnemiesAutoComplete, VRNoHitDamage, VRNoFallDamage, VRInfiniteStrength, VRGripDamage, VRAimStability,
-                VRInfiniteAmmo, VRInfiniteItem, VRNoReload, BlackScreen, Letterboxing
+                VRInfiniteAmmo, VRInfiniteItem, VRNoReload, BlackScreen, Letterboxing, GhostMode
             };
         }
 

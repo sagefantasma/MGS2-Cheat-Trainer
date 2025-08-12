@@ -224,6 +224,16 @@ namespace MGS2_MC
         public static byte[] OriginalEmmaHpBytes = { 0x66, 0x29, 0x9F, 0xAE, 0x03, 0x00, 0x00 };
         public static string EmmaInfiniteO2AoB = "66 89 46 18 F3 0F 11 87 38 0F 00 00";
         public static byte[] OriginalEmmaO2Bytes = { 0x66, 0x89, 0x46, 0x18 };
+        public static string InvisibleToGuardsAoB = "FF FF 85 C0 75 28 48 8B 43 20";
+        public static byte[] OriginalInvisibleToGuardsBytes = { 0xFF, 0xFF, 0x85, 0xC0, 0x75, 0x28, 0x48, 0x8B, 0x43, 0x20 };
+        public static string InvisibleToCyphersAoB = "48 85 88 E8 13 00 00 0F 85 4C 04";
+        public static byte[] OriginalInvisibleToCyphersBytes = { 0x48, 0x85, 0x88, 0xE8, 0x13, 0x00, 0x00, 0x0F, 0x85, 0x4C, 0x04 };
+        public static string InvisibleToCamerasAoB = "83 4B 4C 01 E8 03 F7 1C";
+        public static byte[] OriginalInvisibleToCamerasBytes = { 0x83, 0x4B, 0x4C, 0x01, 0xE8, 0x03, 0xF7, 0x1C };
+        public static string DeafenGuardsToKnocksAoB = "A8 01 74 1D 48 8B CB";
+        public static byte[] OriginalDeafenGuardsToKnocksBytes = { 0xA8, 0x01, 0x74, 0x1D, 0x48, 0x8B, 0xCB };
+        public static string DeafenGuardsToGunsAoB = "A9 00 18 00 00 74 12 48 8B CB";
+        public static byte[] OriginalDeafenGuardsToGunsBytes = { 0xA9, 0x00, 0x18, 0x00, 0x00, 0x74, 0x12, 0x48, 0x8B, 0xCB };
 
         internal class GuardAnimation
         {
@@ -425,6 +435,11 @@ namespace MGS2_MC
         public static readonly MemoryOffset VR_NO_RELOAD = new MemoryOffset(0, 10);
         public static readonly MemoryOffset EMMA_INF_HP = new MemoryOffset(0, 3);
         public static readonly MemoryOffset EMMA_INF_O2 = new MemoryOffset(0, 6);
+        public static readonly MemoryOffset INVISIBLE_TO_GUARDS = new MemoryOffset(0, 9);
+        public static readonly MemoryOffset INVISIBLE_TO_CYPHERS = new MemoryOffset(0, 10);
+        public static readonly MemoryOffset INVISIBLE_TO_CAMERAS = new MemoryOffset(0, 7);
+        public static readonly MemoryOffset DEAFEN_GUARDS_TO_KNOCKS = new MemoryOffset(0, 6);
+        public static readonly MemoryOffset DEAFEN_GUARDS_TO_GUNS = new MemoryOffset(0, 9);
         #endregion
 
         #region Calculated From CurrentGripGauge

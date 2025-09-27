@@ -188,6 +188,8 @@ namespace MGS2_MC
         internal static byte[] OriginalVRInfiniteItemBytes = { 0x66, 0x41, 0x89, 0x09, 0x0F, 0xBF, 0xC1 };
         internal static string VRNoReloadAoB = "FF C8 89 05 ?? ?? ?? 01 C3 CC 48";
         internal static byte[] OriginalVRNoReloadBytes = { 0xFF, 0xC8, 0x89, 0x05, 0x00, 0x00, 0x00, 0x01, 0xC3, 0xCC, 0x48 };
+        internal static string TurnOffMusicAoB = "8B 8C 83 20 32 78 01 48 8D 04 C0 48 8D 14 C5 00 00 00 00";
+        internal static byte[] OriginalTurnOffMusicBytes = { 0x8B, 0x8C, 0x83, 0x20, 0x32, 0x78, 0x01, 0x48, 0x8D, 0x04, 0xC0, 0x48, 0x8D, 0x14, 0xC5, 0x00, 0x00, 0x00, 0x00 };
         #endregion
         #region Guard animations
         internal static GuardAnimation WaitAnimation = new GuardAnimation { Name = "Wait", Bytes = new byte[] { 0xBA, 0x00, 0x00, 0x00, 0x00, 0x90, 0x90 } };
@@ -440,6 +442,7 @@ namespace MGS2_MC
         public static readonly MemoryOffset INVISIBLE_TO_CAMERAS = new MemoryOffset(0, 7);
         public static readonly MemoryOffset DEAFEN_GUARDS_TO_KNOCKS = new MemoryOffset(0, 6);
         public static readonly MemoryOffset DEAFEN_GUARDS_TO_GUNS = new MemoryOffset(0, 9);
+        public static readonly MemoryOffset TURN_OFF_MUSIC = new MemoryOffset(0, 6);
         #endregion
 
         #region Calculated From CurrentGripGauge

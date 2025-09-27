@@ -49,7 +49,8 @@ namespace MGS2_MC
 
                                     for (int i = startIndexToReplace; i < startIndexToReplace + bytesToReplace.Length; i++)
                                     {
-                                        memoryContent[i] = bytesToReplace[i];
+                                        if(memoryContent.Length > i)
+                                            memoryContent[i] = bytesToReplace[i];
                                     }
 
                                     spp.ModifyProcessOffset(memoryLocation, memoryContent, true);
@@ -1304,6 +1305,29 @@ namespace MGS2_MC
                 DeafenGuardsToKnocks(activate);
                 DeafenGuardsToGuns(activate);
             }
+
+            internal static void TurnOffMusic(bool activate)
+            {
+                Cheat activeCheat = MGS2Cheat.TurnOffMusic;
+                if (activate)
+                {
+                    customFilterCancellationTokenSource = new CancellationTokenSource();
+                    if (activeCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.TurnOffMusicAoB, MGS2Offset.TURN_OFF_MUSIC, 7);
+                        MGS2Cheat.TurnOffMusic = activeCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithInvalidCode(activeCheat.CodeLocation, MGS2Offset.TURN_OFF_MUSIC, 7);
+                    }
+                }
+                else
+                {
+                    ReplaceWithOriginalCode(activeCheat.CodeLocation, MGS2Offset.TURN_OFF_MUSIC, activeCheat.OriginalBytes);
+                    customFilterCancellationTokenSource.Cancel();
+                }
+            }
         }
     }    
 
@@ -1352,6 +1376,7 @@ namespace MGS2_MC
         public static Cheat DeafenGuardsToKnocks { get; internal set; } = new Cheat("Deafen Guards to Knocks", Cheat.CheatActions.DeafenGuardsToKnocks, MGS2AoB.OriginalDeafenGuardsToKnocksBytes);
         public static Cheat DeafenGuardsToGuns { get; internal set; } = new Cheat("Deafen Guards to Guns", Cheat.CheatActions.DeafenGuardsToGuns, MGS2AoB.OriginalDeafenGuardsToGunsBytes);
         public static Cheat GhostMode { get; internal set; } = new Cheat("Ghost Mode", Cheat.CheatActions.GhostMode, null);
+        public static Cheat TurnOffMusic { get; internal set; } = new Cheat("Turn off Game Music(does not apply to cutscenes)", Cheat.CheatActions.TurnOffMusic, MGS2AoB.OriginalTurnOffMusicBytes);
 
         private static List<Cheat> _cheatList = null;
 
@@ -1365,7 +1390,7 @@ namespace MGS2_MC
                 DisableItemMenuPause, DisableWeaponMenuPause, InfiniteItems, InfiniteKnockout, RemovePlantFilter,
                 RemovePlantFog, RemoveTankerFilter, NightTime, MaxStackOnPickup, PauseVRTimer, VRObjectiveAutoComplete,
                 VREnemiesAutoComplete, VRNoHitDamage, VRNoFallDamage, VRInfiniteStrength, VRGripDamage, VRAimStability,
-                VRInfiniteAmmo, VRInfiniteItem, VRNoReload, BlackScreen, Letterboxing, GhostMode
+                VRInfiniteAmmo, VRInfiniteItem, VRNoReload, BlackScreen, Letterboxing, GhostMode, TurnOffMusic
             };
         }
 

@@ -1,4 +1,5 @@
 ﻿using MGS2_MC.Helpers;
+using Newtonsoft.Json.Linq;
 using Serilog;
 using Serilog.Core;
 using System;
@@ -275,7 +276,10 @@ namespace MGS2_MC
                 if (process != null)
                 {
                     if (MGS2Process != process)
+                    {
                         MGS2Process = process;
+                        _logger.Debug($"MGS2 found and hooked, version:\n{FileVersionInfo.GetVersionInfo(MGS2Process.MainModule.FileName)}");
+                    }
                     Thread.Sleep(60 * Constants.MillisecondsInSecond); //scan every 60 seconds to see if MGS2 is still running
                 }
                 else

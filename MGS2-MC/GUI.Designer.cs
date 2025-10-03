@@ -662,6 +662,7 @@
             this.openInstallLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.githubMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.joinOurDiscordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.restartLevelButton = new System.Windows.Forms.Button();
             this.mgs2TabControl.SuspendLayout();
             this.tabPageItem.SuspendLayout();
             this.itemLayoutPanel.SuspendLayout();
@@ -2254,6 +2255,8 @@
             // 
             this.disableStatsTrackingCheckBox.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.disableStatsTrackingCheckBox.AutoSize = true;
+            this.disableStatsTrackingCheckBox.Checked = true;
+            this.disableStatsTrackingCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.disableStatsTrackingCheckBox.Location = new System.Drawing.Point(366, 348);
             this.disableStatsTrackingCheckBox.Name = "disableStatsTrackingCheckBox";
             this.disableStatsTrackingCheckBox.Size = new System.Drawing.Size(134, 17);
@@ -2601,6 +2604,7 @@
             this.cheatsLeftSideFlowPanel.Controls.Add(this.cheatsCheckedListBox);
             this.cheatsLeftSideFlowPanel.Controls.Add(this.forceSleepButton);
             this.cheatsLeftSideFlowPanel.Controls.Add(this.forceWakeButton);
+            this.cheatsLeftSideFlowPanel.Controls.Add(this.restartLevelButton);
             this.cheatsLeftSideFlowPanel.Controls.Add(this.guardAnimationsGroupBox);
             this.cheatsLeftSideFlowPanel.Controls.Add(this.groupBox1);
             this.cheatsLeftSideFlowPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -8653,6 +8657,16 @@
             this.joinOurDiscordToolStripMenuItem.Text = "Join Our Discord";
             this.joinOurDiscordToolStripMenuItem.Click += new System.EventHandler(this.JoinOurDiscordToolStripMenuItem_Click);
             // 
+            // restartLevelButton
+            // 
+            this.restartLevelButton.Location = new System.Drawing.Point(213, 253);
+            this.restartLevelButton.Name = "restartLevelButton";
+            this.restartLevelButton.Size = new System.Drawing.Size(61, 36);
+            this.restartLevelButton.TabIndex = 22;
+            this.restartLevelButton.Text = "Restart Level";
+            this.restartLevelButton.UseVisualStyleBackColor = true;
+            this.restartLevelButton.Click += new System.EventHandler(this.restartLevelButton_Click);
+            // 
             // GUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -9732,6 +9746,7 @@
         private System.Windows.Forms.Label autoDetectBossLabel;
         private System.Windows.Forms.ToolStripMenuItem randomizerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openInstallLocationToolStripMenuItem;
+        private System.Windows.Forms.Button restartLevelButton;
     }
 }
 

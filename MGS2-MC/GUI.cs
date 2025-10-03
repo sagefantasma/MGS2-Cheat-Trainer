@@ -2337,5 +2337,24 @@ namespace MGS2_MC
                 MessageBox.Show(@"Failed to open install location. If this error persists, please report the bug to our Discord.");
             }
         }
+
+        private void restartLevelButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                _logger.Information("User clicked on 'restart level' button");
+                toolStripStatusLabel.Text = $"Attempting to restart level...";
+                
+                Cheat.CheatActions.RestartLevel();
+
+                toolStripStatusLabel.Text = $"Level restart command issued!";
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Failed to restart level: {ex}");
+                toolStripStatusLabel.Text = $"Failed to restart level!";
+                MessageBox.Show(toolStripStatusLabel.Text);
+            }
+        }
     }
 }

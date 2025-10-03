@@ -347,7 +347,7 @@ namespace MGS2_MC
             _logger.Verbose($"Instance ID: {Program.InstanceID}");
         }
 
-        public static bool EnableGameStats { get; set; } = true;
+        public static bool EnableGameStats { get; set; } = false;
 
         public static Process MGS2Process
         {

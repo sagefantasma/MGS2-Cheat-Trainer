@@ -312,6 +312,30 @@ namespace MGS2_MC
                 }
             }
 
+            public static void RestartLevel()
+            {
+                lock (MGS2Monitor.MGS2Process)
+                {
+                    bool successful = false;
+                    int retries = 5;
+                    do
+                    {
+                        try
+                        {
+                            using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                            {
+                                spp.ModifyProcessOffset(new IntPtr(0x1540058), 1);
+                                successful = true;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            retries--;
+                        }
+                    } while (!successful && retries > 0);
+                }
+            }
+
             public static void TurnScreenBlack(bool activate)
             {
                 Cheat activeCheat = MGS2Cheat.BlackScreen;

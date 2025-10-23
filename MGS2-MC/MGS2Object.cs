@@ -543,7 +543,7 @@ namespace MGS2_MC
         #region Bosses
         public static readonly BossVitals Olga = new BossVitals { HasStamina = true,
             NestedHealthPointers = MGS2Pointer.OlgaNestedPointers,
-            NestedStaminaPointers = MGS2Pointer.OlgaNestedPointers, HealthOffset = 0x14A, StaminaOffset = 0x14C };
+            NestedStaminaPointers = MGS2Pointer.OlgaNestedPointers, HealthOffset = 0x26A, StaminaOffset = 0x26C };
         public static readonly BossVitals Fortune = new BossVitals { HasStamina = true,
             NestedHealthPointers = MGS2Pointer.FortuneNestedPointers,
             NestedStaminaPointers = MGS2Pointer.FortuneNestedPointers,HealthOffset = MGS2Offset.FORTUNE_HP_VALUE.Start, 

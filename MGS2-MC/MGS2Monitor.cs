@@ -104,6 +104,8 @@ namespace MGS2_MC
         #region Members & fields
         private const string loggerName = "MGS2MonitorDebuglog.log";
         private const string MGS2ProcessName = "METAL GEAR SOLID2";
+        private const string DesiredVersion = "2.0.2.0";
+        private static bool _versionWarned = false;
 
         private static Process _mgs2Process;
 
@@ -278,7 +280,14 @@ namespace MGS2_MC
                     if (MGS2Process != process)
                     {
                         MGS2Process = process;
-                        _logger.Debug($"MGS2 found and hooked, version:\n{FileVersionInfo.GetVersionInfo(MGS2Process.MainModule.FileName)}");
+                        FileVersionInfo fileVersion = FileVersionInfo.GetVersionInfo(MGS2Process.MainModule.FileName);
+                        _logger.Debug($"MGS2 found and hooked, version:\n{fileVersion}");
+                        if (string.Compare(fileVersion.ProductVersion, DesiredVersion) != 0 && !_versionWarned) 
+                        {
+                            _versionWarned = true;
+                            MessageBox.Show($"The version of MGS2 we have hooked into({fileVersion.ProductVersion}) does not match what we expect({DesiredVersion})! Expect issues if you continue without updating the game.",
+                                "Incompatible game version detected!", MessageBoxButtons.OK);
+                        }
                     }
                     Thread.Sleep(60 * Constants.MillisecondsInSecond); //scan every 60 seconds to see if MGS2 is still running
                 }

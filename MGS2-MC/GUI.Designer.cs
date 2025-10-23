@@ -208,6 +208,7 @@
             this.cheatsCheckedListBox = new System.Windows.Forms.CheckedListBox();
             this.forceSleepButton = new System.Windows.Forms.Button();
             this.forceWakeButton = new System.Windows.Forms.Button();
+            this.restartLevelButton = new System.Windows.Forms.Button();
             this.guardAnimationsGroupBox = new System.Windows.Forms.GroupBox();
             this.startAnimationButton = new System.Windows.Forms.Button();
             this.guardAnimationComboBox = new System.Windows.Forms.ComboBox();
@@ -662,7 +663,6 @@
             this.openInstallLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.githubMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.joinOurDiscordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.restartLevelButton = new System.Windows.Forms.Button();
             this.mgs2TabControl.SuspendLayout();
             this.tabPageItem.SuspendLayout();
             this.itemLayoutPanel.SuspendLayout();
@@ -2644,6 +2644,16 @@
             this.forceWakeButton.UseVisualStyleBackColor = true;
             this.forceWakeButton.Click += new System.EventHandler(this.forceWakeButton_Click);
             // 
+            // restartLevelButton
+            // 
+            this.restartLevelButton.Location = new System.Drawing.Point(213, 253);
+            this.restartLevelButton.Name = "restartLevelButton";
+            this.restartLevelButton.Size = new System.Drawing.Size(61, 36);
+            this.restartLevelButton.TabIndex = 22;
+            this.restartLevelButton.Text = "Restart Level";
+            this.restartLevelButton.UseVisualStyleBackColor = true;
+            this.restartLevelButton.Click += new System.EventHandler(this.restartLevelButton_Click);
+            // 
             // guardAnimationsGroupBox
             // 
             this.guardAnimationsGroupBox.Controls.Add(this.startAnimationButton);
@@ -2682,6 +2692,7 @@
             this.groupBox1.Controls.Add(this.enableCustomFilterColorCheckBox);
             this.groupBox1.Controls.Add(this.filterColorButton);
             this.groupBox1.Controls.Add(this.filterColorPictureBox);
+            this.groupBox1.Enabled = false;
             this.groupBox1.Location = new System.Drawing.Point(119, 295);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(149, 100);
@@ -8656,16 +8667,6 @@
             this.joinOurDiscordToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
             this.joinOurDiscordToolStripMenuItem.Text = "Join Our Discord";
             this.joinOurDiscordToolStripMenuItem.Click += new System.EventHandler(this.JoinOurDiscordToolStripMenuItem_Click);
-            // 
-            // restartLevelButton
-            // 
-            this.restartLevelButton.Location = new System.Drawing.Point(213, 253);
-            this.restartLevelButton.Name = "restartLevelButton";
-            this.restartLevelButton.Size = new System.Drawing.Size(61, 36);
-            this.restartLevelButton.TabIndex = 22;
-            this.restartLevelButton.Text = "Restart Level";
-            this.restartLevelButton.UseVisualStyleBackColor = true;
-            this.restartLevelButton.Click += new System.EventHandler(this.restartLevelButton_Click);
             // 
             // GUI
             // 

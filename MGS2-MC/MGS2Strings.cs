@@ -29,7 +29,7 @@ namespace MGS2_MC
             new MGS2String { MemoryOffset = MGS2Offset.FATMAN_HP_TEXT, FinderAoB = MGS2AoB.FatmanName, Tag = "Fatman Life Bar", CurrentText = "FATMAN" },
             new MGS2String { MemoryOffset = MGS2Offset.FORTUNE_HP_TEXT, FinderAoB = MGS2AoB.FortuneName, Tag = "Fortune Life Bar", CurrentText = "FORTUNE" },
             new MGS2String { MemoryOffset = MGS2Offset.VAMP_HP_TEXT, FinderAoB = MGS2AoB.FortuneName, Tag = "Vamp Life Bar", CurrentText = "VAMP" },
-            new MGS2String { MemoryOffset = MGS2Offset.VAMP_02_TEXT, FinderAoB = MGS2AoB.Vamp02, Tag = "Vamp O2 Bar", CurrentText = "O2" },
+            new MGS2String { MemoryOffset = MGS2Offset.VAMP_02_TEXT, FinderAoB = MGS2AoB.Vamp02, Tag = "Vamp O2 Bar", CurrentText = "VAMP O2" },
             new MGS2String { MemoryOffset = MGS2Offset.HARRIER_HP_TEXT, FinderAoB = MGS2AoB.HarrierName, Tag = "Harrier Life Bar", CurrentText = "HARRIER" },
             new MGS2String { MemoryOffset = MGS2Offset.EMMA_HP_TEXT, FinderAoB = MGS2AoB.EmmaName, Tag = "Emma Life Bar", CurrentText = "EMMA" },
             new MGS2String { MemoryOffset = MGS2Offset.KASATKA_HP_TEXT, FinderAoB = MGS2AoB.KasatkaName, Tag = "Kasatka Life Bar", CurrentText = "KASATKA" },

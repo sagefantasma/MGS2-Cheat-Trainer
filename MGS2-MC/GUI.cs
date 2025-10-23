@@ -1726,7 +1726,7 @@ namespace MGS2_MC
                     }
                     try
                     {
-                        if (MGS2Monitor.EnableGameStats)
+                        //if (MGS2Monitor.EnableGameStats)
                         {
                             Constants.PlayableCharacter currentCharacter = MGS2MemoryManager.DetermineActiveCharacter();
                             if(currentCharacter == Constants.PlayableCharacter.Snake)

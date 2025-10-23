@@ -312,6 +312,30 @@ namespace MGS2_MC
                 }
             }
 
+            public static void RestartLevel()
+            {
+                lock (MGS2Monitor.MGS2Process)
+                {
+                    bool successful = false;
+                    int retries = 5;
+                    do
+                    {
+                        try
+                        {
+                            using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                            {
+                                spp.ModifyProcessOffset(new IntPtr(0x1540058), 1);
+                                successful = true;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            retries--;
+                        }
+                    } while (!successful && retries > 0);
+                }
+            }
+
             public static void TurnScreenBlack(bool activate)
             {
                 Cheat activeCheat = MGS2Cheat.BlackScreen;
@@ -786,7 +810,7 @@ namespace MGS2_MC
                 {
                     if(activeCheat.CodeLocation == IntPtr.Zero)
                     {
-                        byte[] originalValue = ReadMemory(MGS2AoB.RemovePlantFog, MGS2Offset.REMOVE_PLANT_FOG);
+                        byte[] originalValue = ReadMemory(MGS2AoB.RemovePlantFog, MGS2Offset.REMOVE_PLANT_FOG); //this is incorrect
                         activeCheat.CodeLocation = ReplaceWithInvalidCode(MGS2AoB.RemovePlantFog, MGS2Offset.REMOVE_PLANT_FOG, 5);
                         activeCheat.OriginalBytes = originalValue;
                         MGS2Cheat.RemovePlantFog = activeCheat;
@@ -874,7 +898,7 @@ namespace MGS2_MC
                 ReplaceWithSpecificCode(MGS2AoB.CustomFilteringAoB, customColor, MGS2Offset.CUSTOM_FILTERING);
                 
                 if(!customFilterCancellationTokenSource.IsCancellationRequested)
-                    await PeriodicTask.Run(() => ReapplyColorFilter(customColor), TimeSpan.FromMilliseconds(100), customFilterCancellationTokenSource.Token);
+                    await PeriodicTask.Run(() => ReapplyColorFilter(customColor), TimeSpan.FromMilliseconds(1000), customFilterCancellationTokenSource.Token);
             }
 
             private static void ReapplyColorFilter(byte[] chosenColor)
@@ -1385,11 +1409,11 @@ namespace MGS2_MC
             _cheatList = new List<Cheat>
             {
                 NoBleedDamage, NoBurnDamage, InfiniteAmmo, InfiniteLife, InfiniteOxygen, NoGripDamage, 
-                EmmaInfiniteHealth, EmmaInfiniteO2, NoClipWithGravity, NoClipNoGravity, 
+                /*EmmaInfiniteHealth,*/ EmmaInfiniteO2, NoClipWithGravity, NoClipNoGravity,  //Emma health is crashing the game and i cba to fix it
                 NoReload,/*ZoomIn, ZoomOut,*/ DisablePauseButton, //zoom in and out aren't working as expected, and i cant be bothered to fix them right now.
                 DisableItemMenuPause, DisableWeaponMenuPause, InfiniteItems, InfiniteKnockout, RemovePlantFilter,
                 RemovePlantFog, RemoveTankerFilter, NightTime, MaxStackOnPickup, PauseVRTimer, VRObjectiveAutoComplete,
-                VREnemiesAutoComplete, VRNoHitDamage, VRNoFallDamage, VRInfiniteStrength, VRGripDamage, VRAimStability,
+                /*VREnemiesAutoComplete,*/ VRNoHitDamage, VRNoFallDamage, VRInfiniteStrength, VRGripDamage, VRAimStability, //VR Enemies autocomplete is crashing the game
                 VRInfiniteAmmo, VRInfiniteItem, VRNoReload, BlackScreen, Letterboxing, GhostMode, TurnOffMusic
             };
         }

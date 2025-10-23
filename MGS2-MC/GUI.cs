@@ -1726,7 +1726,7 @@ namespace MGS2_MC
                     }
                     try
                     {
-                        if (MGS2Monitor.EnableGameStats)
+                        //if (MGS2Monitor.EnableGameStats)
                         {
                             Constants.PlayableCharacter currentCharacter = MGS2MemoryManager.DetermineActiveCharacter();
                             if(currentCharacter == Constants.PlayableCharacter.Snake)
@@ -2335,6 +2335,25 @@ namespace MGS2_MC
             {
                 _logger.Error($"Failed to open install location from sender {JsonSerializer.Serialize(sender)} and args {JsonSerializer.Serialize(e)}: {ex}");
                 MessageBox.Show(@"Failed to open install location. If this error persists, please report the bug to our Discord.");
+            }
+        }
+
+        private void restartLevelButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                _logger.Information("User clicked on 'restart level' button");
+                toolStripStatusLabel.Text = $"Attempting to restart level...";
+                
+                Cheat.CheatActions.RestartLevel();
+
+                toolStripStatusLabel.Text = $"Level restart command issued!";
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Failed to restart level: {ex}");
+                toolStripStatusLabel.Text = $"Failed to restart level!";
+                MessageBox.Show(toolStripStatusLabel.Text);
             }
         }
     }

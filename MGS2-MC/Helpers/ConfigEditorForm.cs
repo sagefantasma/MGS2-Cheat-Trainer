@@ -56,6 +56,7 @@ namespace MGS2_MC
                     AutoLaunchGame = launchMgs2CheckBox.Checked,
                     CloseGameWithTrainer = closeMgs2CheckBox.Checked,
                     CloseTrainerWithGame = closeTrainerCheckBox.Checked,
+                    EnableControllerSupport = controllerNavigationCheckBox.Checked,
                     Mgs2ExePath = mgs2ExeTextBox.Text
                 };
                 File.WriteAllText(TrainerConfigFileLocation, JsonSerializer.Serialize(newConfig));

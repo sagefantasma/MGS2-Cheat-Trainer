@@ -208,6 +208,7 @@
             this.cheatsCheckedListBox = new System.Windows.Forms.CheckedListBox();
             this.forceSleepButton = new System.Windows.Forms.Button();
             this.forceWakeButton = new System.Windows.Forms.Button();
+            this.restartLevelButton = new System.Windows.Forms.Button();
             this.guardAnimationsGroupBox = new System.Windows.Forms.GroupBox();
             this.startAnimationButton = new System.Windows.Forms.Button();
             this.guardAnimationComboBox = new System.Windows.Forms.ComboBox();
@@ -2254,6 +2255,8 @@
             // 
             this.disableStatsTrackingCheckBox.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.disableStatsTrackingCheckBox.AutoSize = true;
+            this.disableStatsTrackingCheckBox.Checked = true;
+            this.disableStatsTrackingCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
             this.disableStatsTrackingCheckBox.Location = new System.Drawing.Point(366, 348);
             this.disableStatsTrackingCheckBox.Name = "disableStatsTrackingCheckBox";
             this.disableStatsTrackingCheckBox.Size = new System.Drawing.Size(134, 17);
@@ -2601,6 +2604,7 @@
             this.cheatsLeftSideFlowPanel.Controls.Add(this.cheatsCheckedListBox);
             this.cheatsLeftSideFlowPanel.Controls.Add(this.forceSleepButton);
             this.cheatsLeftSideFlowPanel.Controls.Add(this.forceWakeButton);
+            this.cheatsLeftSideFlowPanel.Controls.Add(this.restartLevelButton);
             this.cheatsLeftSideFlowPanel.Controls.Add(this.guardAnimationsGroupBox);
             this.cheatsLeftSideFlowPanel.Controls.Add(this.groupBox1);
             this.cheatsLeftSideFlowPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -2640,6 +2644,17 @@
             this.forceWakeButton.UseVisualStyleBackColor = true;
             this.forceWakeButton.Click += new System.EventHandler(this.forceWakeButton_Click);
             // 
+            // restartLevelButton
+            // 
+            this.restartLevelButton.Location = new System.Drawing.Point(213, 253);
+            this.restartLevelButton.Name = "restartLevelButton";
+            this.restartLevelButton.Size = new System.Drawing.Size(61, 36);
+            this.restartLevelButton.TabIndex = 22;
+            this.restartLevelButton.Text = "Restart Level";
+            this.restartLevelButton.UseVisualStyleBackColor = true;
+            this.restartLevelButton.Visible = false;
+            this.restartLevelButton.Click += new System.EventHandler(this.restartLevelButton_Click);
+            // 
             // guardAnimationsGroupBox
             // 
             this.guardAnimationsGroupBox.Controls.Add(this.startAnimationButton);
@@ -2678,6 +2693,7 @@
             this.groupBox1.Controls.Add(this.enableCustomFilterColorCheckBox);
             this.groupBox1.Controls.Add(this.filterColorButton);
             this.groupBox1.Controls.Add(this.filterColorPictureBox);
+            this.groupBox1.Enabled = false;
             this.groupBox1.Location = new System.Drawing.Point(119, 295);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(149, 100);
@@ -9732,6 +9748,7 @@
         private System.Windows.Forms.Label autoDetectBossLabel;
         private System.Windows.Forms.ToolStripMenuItem randomizerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openInstallLocationToolStripMenuItem;
+        private System.Windows.Forms.Button restartLevelButton;
     }
 }
 

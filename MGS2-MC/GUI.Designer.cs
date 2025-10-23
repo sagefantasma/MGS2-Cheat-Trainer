@@ -2652,6 +2652,7 @@
             this.restartLevelButton.TabIndex = 22;
             this.restartLevelButton.Text = "Restart Level";
             this.restartLevelButton.UseVisualStyleBackColor = true;
+            this.restartLevelButton.Visible = false;
             this.restartLevelButton.Click += new System.EventHandler(this.restartLevelButton_Click);
             // 
             // guardAnimationsGroupBox

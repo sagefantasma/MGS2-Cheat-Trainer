@@ -324,7 +324,7 @@ namespace MGS2_MC
                         {
                             using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
                             {
-                                spp.ModifyProcessOffset(new IntPtr(0x1540058), 1);
+                                spp.ModifyProcessOffset(new IntPtr(0x153F048), 1);
                                 successful = true;
                             }
                         }

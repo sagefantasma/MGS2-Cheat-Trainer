@@ -104,7 +104,7 @@ namespace MGS2_MC
         #region Members & fields
         private const string loggerName = "MGS2MonitorDebuglog.log";
         private const string MGS2ProcessName = "METAL GEAR SOLID2";
-        private const string DesiredVersion = "2.0.2.0";
+        private const string DesiredVersion = "2.1.0.0";
         private static bool _versionWarned = false;
 
         private static Process _mgs2Process;

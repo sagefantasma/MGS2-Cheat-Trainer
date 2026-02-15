@@ -1496,6 +1496,7 @@
             treeNode1.Name = "olgaNode";
             treeNode1.Text = "Olga";
             treeNode2.Name = "fortuneNode";
+            treeNode2.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Strikeout, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             treeNode2.Text = "Fortune";
             treeNode3.Name = "fatmanNode";
             treeNode3.Text = "Fatman";
@@ -2646,6 +2647,7 @@
             // 
             // restartLevelButton
             // 
+            this.restartLevelButton.Enabled = false;
             this.restartLevelButton.Location = new System.Drawing.Point(213, 253);
             this.restartLevelButton.Name = "restartLevelButton";
             this.restartLevelButton.Size = new System.Drawing.Size(61, 36);

@@ -1215,6 +1215,7 @@ namespace MGS2_MC
             {
                 Cheat activeCheat = MGS2Cheat.InvisibleToGuards;
                 byte[] invisibleToGuards = new byte[] { 0xFF, 0xFF, 0x31, 0xC0, 0x48, 0x83, 0xC4, 0x20, 0x5B, 0xC3 };
+                // FF FF 31 C0 48 83 C4 20 5B C3 
                 if (activate)
                 {
                     if (activeCheat.CodeLocation == IntPtr.Zero)

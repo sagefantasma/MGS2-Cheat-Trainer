@@ -2163,7 +2163,7 @@ namespace MGS2_MC
 
         private void bossTreeView_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            if(e.Node.Text == "Harrier" || e.Node.Text == "Solidus")
+            if(e.Node.Text == "Harrier" || e.Node.Text == "Solidus" || e.Node.Text == "Fortune")
             {
                 MessageBox.Show("Sorry, modifying this boss' vitals with the trainer currently crashes the game. We're trying to find a " +
                     "solution to this issue and hope to enable modification of this boss' vitals in a future update! Thank you " +

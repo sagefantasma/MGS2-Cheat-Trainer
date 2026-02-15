@@ -908,11 +908,27 @@ namespace MGS2_MC
         {
             try
             {
-                IntPtr pointerLocation = MGS2Monitor.MGS2Process.MainModule.BaseAddress;
-                SetDataInNestedPointers(pointerLocation, updatedVitals.NestedHealthPointers, updatedVitals.HealthOffset, BitConverter.GetBytes(updatedVitals.Health));
-                if (updatedVitals.HasStamina)
+                if (updatedVitals.Boss != Constants.Boss.Fortune)
                 {
-                    SetDataInNestedPointers(pointerLocation, updatedVitals.NestedStaminaPointers, updatedVitals.StaminaOffset, BitConverter.GetBytes(updatedVitals.Stamina));
+                    IntPtr pointerLocation = MGS2Monitor.MGS2Process.MainModule.BaseAddress;
+                    SetDataInNestedPointers(pointerLocation, updatedVitals.NestedHealthPointers, updatedVitals.HealthOffset, BitConverter.GetBytes(updatedVitals.Health));
+                    if (updatedVitals.HasStamina)
+                    {
+                        SetDataInNestedPointers(pointerLocation, updatedVitals.NestedStaminaPointers, updatedVitals.StaminaOffset, BitConverter.GetBytes(updatedVitals.Stamina));
+                    }
+                }
+                else
+                {
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    {
+                        if (_fortuneOffset == IntPtr.Zero)
+                        {
+                            _fortuneOffset = proxy.ScanMemoryForUniquePattern(new SimplePattern(MGS2AoB.FortuneName));
+                        }
+
+                        proxy.ModifyProcessOffset(IntPtr.Add(_fortuneOffset, MGS2Offset.FORTUNE_HP_VALUE.Start), updatedVitals.Health, true);
+                        proxy.ModifyProcessOffset(IntPtr.Add(_fortuneOffset, MGS2Offset.FORTUNE_STAMINA_VALUE.Start), updatedVitals.Stamina, true);
+                    }
                 }
             }
             catch(Exception e)
@@ -922,16 +938,33 @@ namespace MGS2_MC
             }
         }
 
+        private static IntPtr _fortuneOffset = IntPtr.Zero;
         public static BossVitals GetBossVitals(Constants.Boss selectedBoss)
         {
             try
             {
                 BossVitals bossVitals = BossVitals.ParseBossVitals(selectedBoss);
 
-                bossVitals.Health = BitConverter.ToInt16(GetDataFromNestedPointers(bossVitals.NestedHealthPointers, bossVitals.HealthOffset, 2), 0);
-                if (bossVitals.HasStamina)
+                if (selectedBoss != Constants.Boss.Fortune)
                 {
-                    bossVitals.Stamina = BitConverter.ToInt16(GetDataFromNestedPointers(bossVitals.NestedStaminaPointers, bossVitals.StaminaOffset, 2), 0);
+                    bossVitals.Health = BitConverter.ToInt16(GetDataFromNestedPointers(bossVitals.NestedHealthPointers, bossVitals.HealthOffset, 2), 0);
+                    if (bossVitals.HasStamina)
+                    {
+                        bossVitals.Stamina = BitConverter.ToInt16(GetDataFromNestedPointers(bossVitals.NestedStaminaPointers, bossVitals.StaminaOffset, 2), 0);
+                    }
+                }
+                else
+                {
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    {
+                        if (_fortuneOffset == IntPtr.Zero) 
+                        {
+                            _fortuneOffset = proxy.ScanMemoryForUniquePattern(new SimplePattern(MGS2AoB.FortuneName));
+                        }
+
+                        bossVitals.Health = BitConverter.ToInt16(proxy.ReadProcessOffset(IntPtr.Add(_fortuneOffset, MGS2Offset.FORTUNE_HP_VALUE.Start), MGS2Offset.FORTUNE_HP_VALUE.Length), 0);
+                        bossVitals.Stamina = BitConverter.ToInt16(proxy.ReadProcessOffset(IntPtr.Add(_fortuneOffset, MGS2Offset.FORTUNE_STAMINA_VALUE.Start), MGS2Offset.FORTUNE_STAMINA_VALUE.Length), 0);
+                    }
                 }
 
                 return bossVitals;

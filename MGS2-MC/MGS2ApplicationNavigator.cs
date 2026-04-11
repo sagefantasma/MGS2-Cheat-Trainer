@@ -35,9 +35,9 @@ namespace MGS2_MC
         internal static int CurrentGrip = 0x016E9B20; //2.0.1 - 0x016E9B20 ... 2.0.2 - 0x016E8B20
         internal static int CurrentAmmo = 0x01540C20; //2.0.1 - 0x01540C20 ... 2.0.2 - 0x0153FC10
         internal static int PullupCount = 0x00949340; //2.0.1 - 0x00949340 ... 2.0.2 - 0x00948340
-        internal static List<int> OlgaNestedPointers = new List<int> { 0x01551F10, 0x300 }; //fixed 2.0.2 (0x01550EE0, 0x2C0) -- fixed 2.1.0 [+1030, 40]
+        internal static List<int> OlgaNestedPointers = new List<int> { 0x017DF660, 0x0, 0x298 }; //fixed 2.0.2 (0x01550EE0, 0x2C0) -- fixed 2.1.0 [+1030, 40]
         internal static List<int> FortuneNestedPointers = null;
-        internal static List<int> FatmanNestedPointers = new List<int> { 0x01551F10, 0x10 }; //fixed 2.0.2 (0x1550F00, 0x10) -- fixed 2.1.0 [+1010, 0]
+        internal static List<int> FatmanNestedPointers = new List<int> { 0x017DF660, 0x0, 0xE0 }; //fixed 2.0.2 (0x1550F00, 0x10) -- fixed 2.1.0 [+1010, 0]
         internal static List<int> HarrierNestedPointers = new List<int> { 0x1551F18, 0x120 }; //fixed 2.0.2 -- fixed 2.1.0 but will still crash
         internal static List<int> VampNestedPointers = new List<int> { 0x1551F18, 0x8 }; //fixed 2.0.2 -- fixed 2.1.0
         internal static List<int> VampSnipingNestedPointers = new List<int> { 0x1551F10, 0x38, 0x10 }; //fixed 2.0.2 -- fixed 2.1.0

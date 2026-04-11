@@ -544,7 +544,7 @@ namespace MGS2_MC
         #region Bosses
         public static readonly BossVitals Olga = new BossVitals { HasStamina = true,
             NestedHealthPointers = MGS2Pointer.OlgaNestedPointers,
-            NestedStaminaPointers = MGS2Pointer.OlgaNestedPointers, HealthOffset = 0x26A, StaminaOffset = 0x26C,
+            NestedStaminaPointers = MGS2Pointer.OlgaNestedPointers, HealthOffset = 0x46A, StaminaOffset = 0x46C,
             Boss = Constants.Boss.Olga
         };
         public static readonly BossVitals Fortune = new BossVitals { HasStamina = true,
@@ -555,8 +555,8 @@ namespace MGS2_MC
         };
         public static readonly BossVitals Fatman = new BossVitals { HasStamina = true, 
             NestedHealthPointers = MGS2Pointer.FatmanNestedPointers, NestedStaminaPointers = MGS2Pointer.FatmanNestedPointers,
-            HealthOffset = 0x23A,
-            StaminaOffset = 0x214C,
+            HealthOffset = 0x41E,
+            StaminaOffset = 0x2330,
             Boss = Constants.Boss.Fatman
         };
         public static readonly BossVitals Harrier = new BossVitals { HasStamina = false,

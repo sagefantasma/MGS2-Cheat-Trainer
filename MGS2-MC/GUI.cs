@@ -1624,7 +1624,7 @@ namespace MGS2_MC
             }
             catch (Exception ex)
             {
-                _logger.Error($"Failed to select string from sender {JsonSerializer.Serialize(sender)} and args {JsonSerializer.Serialize(e)}: {ex}");
+                _logger.Error($"Failed to select string: {ex}");
                 MessageBox.Show(@"Failed to select string. If this error persists, please restart the application.");
             }
         }
@@ -1773,8 +1773,8 @@ namespace MGS2_MC
             }
             catch(Exception ex) 
             {
-                _logger.Error($"Failed to change tabs from sender {JsonSerializer.Serialize(sender)} and args {JsonSerializer.Serialize(e)}: {ex}");
-                MessageBox.Show(@"Failed to change tabs. If this error persists, please restart the application.");
+                _logger.Error($"Failed to change tabs: {ex}");
+                //MessageBox.Show(@"Failed to change tabs. If this error persists, please restart the application.");
             }
         }
 
@@ -1913,15 +1913,17 @@ namespace MGS2_MC
 
         private void JoinOurDiscordToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            string discordLink = "https://discord.gg/XUh58VfqDu";
             try
             {
                 _logger.Verbose("Opening discord link in web-browser");
-                Process.Start("https://discord.gg/XUh58VfqDu");
+                Process.Start(discordLink);
             }
             catch (Exception ex)
             {
-                _logger.Error($"Failed to launch Discord page from sender {JsonSerializer.Serialize(sender)} and args {JsonSerializer.Serialize(e)}: {ex}");
-                MessageBox.Show(@"Failed to launch Discord page. If this error persists, please restart the application.");
+                _logger.Error($"Failed to launch Discord page: {ex}");
+                Clipboard.SetText(discordLink);
+                MessageBox.Show(@"Failed to launch Discord page, so instead the link to join is now on your clipboard");
             }
         }
 
@@ -2333,7 +2335,7 @@ namespace MGS2_MC
             }
             catch (Exception ex)
             {
-                _logger.Error($"Failed to open install location from sender {JsonSerializer.Serialize(sender)} and args {JsonSerializer.Serialize(e)}: {ex}");
+                _logger.Error($"Failed to open install location: {ex}");
                 MessageBox.Show(@"Failed to open install location. If this error persists, please report the bug to our Discord.");
             }
         }

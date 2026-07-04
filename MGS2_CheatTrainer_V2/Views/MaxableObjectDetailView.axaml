@@ -1,0 +1,58 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="MGS2_CheatTrainer_V2.Views.MaxableObjectDetailView">
+
+    <Grid RowDefinitions="0.42*, 0.58*"
+          ColumnDefinitions="0.5*, 0.5*">
+
+        <!-- Image placeholder (top-left) -->
+        <Border Grid.Row="0" Grid.Column="0"
+                Background="DarkSlateGray"
+                Margin="4"
+                CornerRadius="4"/>
+
+        <!-- Enabled checkbox (top-right) -->
+        <CheckBox Grid.Row="0" Grid.Column="1"
+                  x:Name="EnabledCheckBox"
+                  Content="Enabled?"
+                  Margin="6"
+                  VerticalAlignment="Top"
+                  IsCheckedChanged="EnabledCheckBox_IsCheckedChanged"/>
+
+        <!-- Current count (bottom-left) -->
+        <Grid Grid.Row="1" Grid.Column="0"
+              RowDefinitions="Auto, *"
+              Margin="4">
+            <TextBlock Grid.Row="0" Text="Current Count"/>
+            <Grid Grid.Row="1" ColumnDefinitions="*, Auto">
+                <NumericUpDown Grid.Column="0"
+                               x:Name="CurrentUpDown"
+                               Minimum="0" Maximum="65534"
+                               Margin="0,0,4,0"/>
+                <Button Grid.Column="1"
+                        Content="Set!"
+                        Width="40"
+                        Click="CurrentBtn_Click"/>
+            </Grid>
+        </Grid>
+
+        <!-- Max count (bottom-right) -->
+        <Grid Grid.Row="1" Grid.Column="1"
+              RowDefinitions="Auto, *"
+              Margin="4">
+            <TextBlock Grid.Row="0" Text="Max Count"/>
+            <Grid Grid.Row="1" ColumnDefinitions="*, Auto">
+                <NumericUpDown Grid.Column="0"
+                               x:Name="MaxUpDown"
+                               Minimum="0" Maximum="65534"
+                               Margin="0,0,4,0"/>
+                <Button Grid.Column="1"
+                        Content="Set!"
+                        Width="40"
+                        Click="MaxBtn_Click"/>
+            </Grid>
+        </Grid>
+
+    </Grid>
+
+</UserControl>

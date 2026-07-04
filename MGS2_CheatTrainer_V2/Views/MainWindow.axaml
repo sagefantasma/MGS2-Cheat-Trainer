@@ -1,0 +1,93 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="MGS2_CheatTrainer_V2.Views.MainWindow"
+        Title="MGS2 Cheat Trainer"
+        Width="592"
+        Height="490"
+        CanResize="True">
+
+    <DockPanel>
+
+        <!-- Menu bar at the top -->
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Options">
+                <MenuItem Header="Modify Config"  x:Name="ModifyConfigMenuItem"  Click="ModifyConfigMenuItem_Click"/>
+                <MenuItem Header="Launch MGS2"     x:Name="LaunchMgs2MenuItem"    Click="LaunchMgs2MenuItem_Click"/>
+            </MenuItem>
+            <MenuItem Header="Help">
+                <MenuItem Header="View Logs"              x:Name="ViewLogsMenuItem"    Click="ViewLogsMenuItem_Click"/>
+                <MenuItem Header="Open Install Location"  Click="OpenInstallLocationMenuItem_Click"/>
+                <MenuItem Header="GitHub"                 Click="GithubMenuItem_Click"/>
+                <MenuItem Header="Join our Discord"       Click="JoinDiscordMenuItem_Click"/>
+            </MenuItem>
+        </Menu>
+
+        <!-- Status bar at the bottom -->
+        <Border DockPanel.Dock="Bottom"
+                BorderThickness="0,1,0,0"
+                BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+                Padding="6,3">
+            <TextBlock x:Name="StatusLabel" Text="Ready" />
+        </Border>
+
+        <!-- Main tab control fills remaining space -->
+        <TabControl x:Name="Mgs2TabControl"
+                    SelectionChanged="Mgs2TabControl_SelectionChanged">
+
+            <TabItem Header="Items">
+                <Grid ColumnDefinitions="0.2*, 0.8*">
+
+                    <!-- Left: item list -->
+                    <ListBox Grid.Column="0"
+                             x:Name="ItemListBox"
+                             Tapped="ItemListBox_Tapped"/>
+
+                    <!-- Right: detail panel (GroupBox replacement) -->
+                    <Border Grid.Column="1"
+                            BorderThickness="1"
+                            BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+                            CornerRadius="4"
+                            Padding="10"
+                            Margin="4">
+                        <Grid RowDefinitions="Auto, *">
+
+                            <!-- The "header" text that GroupBox normally shows -->
+                            <TextBlock Grid.Row="0"
+                                       x:Name="ItemGroupHeader"
+                                       Text="Select an Item From the List to the Left"
+                                       Margin="0,0,0,8"/>
+
+                            <!-- Content swaps here on selection -->
+                            <ContentControl Grid.Row="1"
+                                            x:Name="ItemDetailContent"/>
+                        </Grid>
+                    </Border>
+
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Weapons">
+                <!-- Weapons tab content goes here -->
+            </TabItem>
+
+            <TabItem Header="Bosses">
+                <!-- Bosses tab content goes here -->
+            </TabItem>
+
+            <TabItem Header="Stats">
+                <!-- Stats tab content goes here -->
+            </TabItem>
+
+            <TabItem Header="Strings">
+                <!-- Strings tab content goes here -->
+            </TabItem>
+
+            <TabItem Header="Cheats">
+                <!-- Cheats tab content goes here -->
+            </TabItem>
+
+        </TabControl>
+
+    </DockPanel>
+
+</Window>

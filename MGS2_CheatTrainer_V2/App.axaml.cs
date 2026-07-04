@@ -22,9 +22,9 @@ public partial class App : Application
         AvaloniaXamlLoader.Load(this);
 
         ServiceCollection collection = new();
-        collection.AddSingleton<MGS2MemoryManager>();
+        collection.AddSingleton<Mgs2MemoryManager>();
 
-        _services = collection.BuildServiceProvider(); //TODO: Why is throwing an error that PW Trainer isn't?
+        _services = collection.BuildServiceProvider();
     }
 
     public override void OnFrameworkInitializationCompleted()
@@ -34,6 +34,12 @@ public partial class App : Application
             desktop.MainWindow = new MainWindow
             {
                 DataContext = new MainWindowViewModel(),
+            };
+
+            desktop.Exit += (_, _) =>
+            {
+                Mgs2MemoryManager memoryManager = _services.GetService<Mgs2MemoryManager>();
+                memoryManager?.Dispose();
             };
         }
 

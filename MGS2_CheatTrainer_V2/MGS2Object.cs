@@ -24,69 +24,69 @@ namespace MGS2_CheatTrainer_V2
             switch(boss)
             {
                 case Constants.Boss.Olga:
-                    return MGS2UsableObjects.Olga;
+                    return Mgs2UsableObjects.Olga;
                 case Constants.Boss.Fortune:
-                    return MGS2UsableObjects.Fortune;
+                    return Mgs2UsableObjects.Fortune;
                 case Constants.Boss.Fatman:
-                    return MGS2UsableObjects.Fatman;
+                    return Mgs2UsableObjects.Fatman;
                 case Constants.Boss.Harrier:
-                    return MGS2UsableObjects.Harrier;
+                    return Mgs2UsableObjects.Harrier;
                 case Constants.Boss.Vamp:
-                    return MGS2UsableObjects.Vamp;
+                    return Mgs2UsableObjects.Vamp;
                 case Constants.Boss.VampSnipe:
-                    return MGS2UsableObjects.VampSniping;
+                    return Mgs2UsableObjects.VampSniping;
                 case Constants.Boss.Solidus:
-                    return MGS2UsableObjects.Solidus;
+                    return Mgs2UsableObjects.Solidus;
                 case Constants.Boss.Ray1:
-                    return MGS2UsableObjects.Ray1;
+                    return Mgs2UsableObjects.Ray1;
                 case Constants.Boss.Ray2:
-                    return MGS2UsableObjects.Ray2;
+                    return Mgs2UsableObjects.Ray2;
                 case Constants.Boss.Ray3:
-                    return MGS2UsableObjects.Ray3;
+                    return Mgs2UsableObjects.Ray3;
                 case Constants.Boss.Ray4:
-                    return MGS2UsableObjects.Ray4;
+                    return Mgs2UsableObjects.Ray4;
                 case Constants.Boss.Ray5:
-                    return MGS2UsableObjects.Ray5;
+                    return Mgs2UsableObjects.Ray5;
                 case Constants.Boss.Ray6:
-                    return MGS2UsableObjects.Ray6;
+                    return Mgs2UsableObjects.Ray6;
                 case Constants.Boss.Ray7:
-                    return MGS2UsableObjects.Ray7;
+                    return Mgs2UsableObjects.Ray7;
                 case Constants.Boss.Ray8:
-                    return MGS2UsableObjects.Ray8;
+                    return Mgs2UsableObjects.Ray8;
                 case Constants.Boss.Ray9:
-                    return MGS2UsableObjects.Ray9;
+                    return Mgs2UsableObjects.Ray9;
                 case Constants.Boss.Ray10:
-                    return MGS2UsableObjects.Ray10;
+                    return Mgs2UsableObjects.Ray10;
                 case Constants.Boss.Ray11:
-                    return MGS2UsableObjects.Ray11;
+                    return Mgs2UsableObjects.Ray11;
                 case Constants.Boss.Ray12:
-                    return MGS2UsableObjects.Ray12;
+                    return Mgs2UsableObjects.Ray12;
                 case Constants.Boss.Ray13:
-                    return MGS2UsableObjects.Ray13;
+                    return Mgs2UsableObjects.Ray13;
                 case Constants.Boss.Ray14:
-                    return MGS2UsableObjects.Ray14;
+                    return Mgs2UsableObjects.Ray14;
                 case Constants.Boss.Ray15:
-                    return MGS2UsableObjects.Ray15;
+                    return Mgs2UsableObjects.Ray15;
                 case Constants.Boss.Ray16:
-                    return MGS2UsableObjects.Ray16;
+                    return Mgs2UsableObjects.Ray16;
                 case Constants.Boss.Ray17:
-                    return MGS2UsableObjects.Ray17;
+                    return Mgs2UsableObjects.Ray17;
                 case Constants.Boss.Ray18:
-                    return MGS2UsableObjects.Ray18;
+                    return Mgs2UsableObjects.Ray18;
                 case Constants.Boss.Ray19:
-                    return MGS2UsableObjects.Ray19;
+                    return Mgs2UsableObjects.Ray19;
                 case Constants.Boss.Ray20:
-                    return MGS2UsableObjects.Ray20;
+                    return Mgs2UsableObjects.Ray20;
                 case Constants.Boss.Ray21:
-                    return MGS2UsableObjects.Ray21;
+                    return Mgs2UsableObjects.Ray21;
                 case Constants.Boss.Ray22:
-                    return MGS2UsableObjects.Ray22;
+                    return Mgs2UsableObjects.Ray22;
                 case Constants.Boss.Ray23:
-                    return MGS2UsableObjects.Ray23;
+                    return Mgs2UsableObjects.Ray23;
                 case Constants.Boss.Ray24:
-                    return MGS2UsableObjects.Ray24;
+                    return Mgs2UsableObjects.Ray24;
                 case Constants.Boss.Ray25:
-                    return MGS2UsableObjects.Ray25;
+                    return Mgs2UsableObjects.Ray25;
                 default:
                     throw new InvalidEnumArgumentException("Boss not recognized.");
             }
@@ -95,41 +95,41 @@ namespace MGS2_CheatTrainer_V2
 
     internal class GameObject
     {
-        internal string _name = "";
-        internal IntPtr _nameOffset; //TODO: make this a MemoryOffset
+        internal string Name = "";
+        internal IntPtr NameOffset; //TODO: make this a MemoryOffset
     }
 
-    interface IOldMGS2Object
+    interface IOldMgs2Object
     {
         void OldToggleObject(bool shouldBeEnabled, ILogger logger, TextBlock statusLabel);
     }
 
-    public abstract class OldMgs2Object : IOldMGS2Object
+    public abstract class OldMgs2Object : IOldMgs2Object
     {
         internal GameObject GameObject { get; set; } //replace with MGS2 string?
-        public string Name { get { return GameObject._name; } }
-        public IntPtr NameMemoryOffset { get { return GameObject._nameOffset; } } //TODO: make this a MemoryOffset
+        public string Name { get { return GameObject.Name; } }
+        public IntPtr NameMemoryOffset { get { return GameObject.NameOffset; } } //TODO: make this a MemoryOffset
         public int InventoryOffset { get; set; } //TODO: make this a MemoryOffset
 
         public OldMgs2Object(string name, IntPtr nameMemoryOffset, int inventoryOffset)
         {
-            GameObject = new GameObject { _name = name, _nameOffset = nameMemoryOffset };
+            GameObject = new GameObject { Name = name, NameOffset = nameMemoryOffset };
             InventoryOffset = inventoryOffset;
         }
 
         public void ChangeName(string name)
         {
             //TODO: this should be leveraged in the string modifiers
-            GameObject newGameObject = new GameObject { _name = name, _nameOffset = NameMemoryOffset };
+            GameObject newGameObject = new GameObject { Name = name, NameOffset = NameMemoryOffset };
             GameObject = newGameObject;
         }
 
         public void OldToggleObject(bool shouldBeEnabled, ILogger logger, TextBlock statusLabel)
         {
             logger.Verbose($"Toggling {Name}...");
-            Constants.PlayableCharacter currentPC = MGS2MemoryManager.CheckIfUsable(this);
+            Constants.PlayableCharacter currentPc = Mgs2MemoryManager.CheckIfUsable(this);
             statusLabel.Text = $"Finding {Name} in memory...";
-            ushort currentObjectValue = BitConverter.ToUInt16(MGS2MemoryManager.GetPlayerInfoBasedValue(InventoryOffset, sizeof(short), currentPC), 0);
+            ushort currentObjectValue = BitConverter.ToUInt16(Mgs2MemoryManager.GetPlayerInfoBasedValue(InventoryOffset, sizeof(short), currentPc), 0);
             bool isCurrentlyEnabled;
             if (this is OldBasicItem)
                 isCurrentlyEnabled = currentObjectValue == 0 ? false : true;
@@ -138,7 +138,7 @@ namespace MGS2_CheatTrainer_V2
             //Toggle the object if it is currently disabled and needs enabling, or if it is currently enabled and needs disabling.
             if (isCurrentlyEnabled != shouldBeEnabled)
             {
-                MGS2MemoryManager.ToggleObject(this, currentPC, shouldBeEnabled);
+                Mgs2MemoryManager.ToggleObject(this, currentPc, shouldBeEnabled);
             }
             statusLabel.Text = $"Toggled {Name}!";
             logger.Verbose($"Toggle was successful");
@@ -183,9 +183,9 @@ namespace MGS2_CheatTrainer_V2
             try
             {
                 logger.Verbose($"Setting {Name} to {level}...");
-                Constants.PlayableCharacter currentPC = MGS2MemoryManager.CheckIfUsable(this);
+                Constants.PlayableCharacter currentPc = Mgs2MemoryManager.CheckIfUsable(this);
                 statusLabel.Text = $"Finding {Name} in memory...";
-                MGS2MemoryManager.UpdateObjectBaseValue(this, level, currentPC);
+                Mgs2MemoryManager.UpdateObjectBaseValue(this, level, currentPc);
                 statusLabel.Text = $"{Name} level updated to {level}";
                 logger.Verbose($"Level set");
             }
@@ -213,9 +213,9 @@ namespace MGS2_CheatTrainer_V2
             try
             {
                 logger.Verbose($"Setting durability {value} for {Name}...");
-                Constants.PlayableCharacter currentPC = MGS2MemoryManager.CheckIfUsable(this);
+                Constants.PlayableCharacter currentPc = Mgs2MemoryManager.CheckIfUsable(this);
                 statusLabel.Text = $"Finding {Name} in memory...";
-                MGS2MemoryManager.UpdateObjectBaseValue(this, value, currentPC);
+                Mgs2MemoryManager.UpdateObjectBaseValue(this, value, currentPc);
                 statusLabel.Text = $"{Name} durability updated to {value}";
                 logger.Verbose($"Durability set successfully");
             }
@@ -228,8 +228,8 @@ namespace MGS2_CheatTrainer_V2
 
         internal new void ToggleObject(bool shouldBeEnabled, ILogger logger, TextBlock statusLabel)
         {
-            Constants.PlayableCharacter currentPC = MGS2MemoryManager.CheckIfUsable(this);
-            short currentDurability = BitConverter.ToInt16(MGS2MemoryManager.GetPlayerInfoBasedValue(DurabilityOffset, sizeof(short), currentPC), 0);
+            Constants.PlayableCharacter currentPc = Mgs2MemoryManager.CheckIfUsable(this);
+            short currentDurability = BitConverter.ToInt16(Mgs2MemoryManager.GetPlayerInfoBasedValue(DurabilityOffset, sizeof(short), currentPc), 0);
             
             if (currentDurability == 0 && shouldBeEnabled)
             {
@@ -250,29 +250,29 @@ namespace MGS2_CheatTrainer_V2
         internal int CurrentCountOffset { get { return InventoryOffset; } set { InventoryOffset = value; } } //TODO: make this a MemoryOffset
         internal int MaxCountOffset { get; set; } //TODO: make this a MemoryOffset
 
-        const int MIN_MAX_COUNT_DIFF = 96;
-        private ushort LastKnownCurrentCount = 1;
+        const int MinMaxCountDiff = 96;
+        private ushort _lastKnownCurrentCount = 1;
 
         public OldStackableItem(string name, IntPtr nameMemoryOffset, int inventoryOffset) : base(name, nameMemoryOffset, inventoryOffset)
         {
-            MaxCountOffset = inventoryOffset + MIN_MAX_COUNT_DIFF;
+            MaxCountOffset = inventoryOffset + MinMaxCountDiff;
         }
         #endregion
 
         internal new void ToggleObject(bool shouldBeEnabled, ILogger logger, TextBlock statusLabel)
         {
-            Constants.PlayableCharacter currentPC = MGS2MemoryManager.CheckIfUsable(this);
-            ushort currentCount = BitConverter.ToUInt16(MGS2MemoryManager.GetPlayerInfoBasedValue(CurrentCountOffset, sizeof(short), currentPC), 0);
+            Constants.PlayableCharacter currentPc = Mgs2MemoryManager.CheckIfUsable(this);
+            ushort currentCount = BitConverter.ToUInt16(Mgs2MemoryManager.GetPlayerInfoBasedValue(CurrentCountOffset, sizeof(short), currentPc), 0);
             if (currentCount == 0 && shouldBeEnabled)
             {
-                if (LastKnownCurrentCount != 0)
-                    UpdateCurrentCount(LastKnownCurrentCount, logger, statusLabel);
+                if (_lastKnownCurrentCount != 0)
+                    UpdateCurrentCount(_lastKnownCurrentCount, logger, statusLabel);
                 else
                     UpdateCurrentCount(1, logger, statusLabel);
             }
             else if(!shouldBeEnabled)
             {
-                LastKnownCurrentCount = currentCount;
+                _lastKnownCurrentCount = currentCount;
                 UpdateCurrentCount(0, logger, statusLabel); 
             }
         }
@@ -282,9 +282,9 @@ namespace MGS2_CheatTrainer_V2
             try
             {
                 logger.Verbose($"Setting current count to {count} for {Name}...");
-                Constants.PlayableCharacter currentPC = MGS2MemoryManager.CheckIfUsable(this);
+                Constants.PlayableCharacter currentPc = Mgs2MemoryManager.CheckIfUsable(this);
                 statusLabel.Text = $"Finding {Name} in memory...";
-                MGS2MemoryManager.UpdateObjectBaseValue(this, count, currentPC);
+                Mgs2MemoryManager.UpdateObjectBaseValue(this, count, currentPc);
                 statusLabel.Text = $"Current count for {Name} updated to {count}";
                 logger.Verbose($"Current count set successfully");
             }
@@ -300,9 +300,9 @@ namespace MGS2_CheatTrainer_V2
             try
             {
                 logger.Verbose($"Setting max count to {count} for {Name}...");
-                Constants.PlayableCharacter currentPC = MGS2MemoryManager.CheckIfUsable(this);
+                Constants.PlayableCharacter currentPc = Mgs2MemoryManager.CheckIfUsable(this);
                 statusLabel.Text = $"Finding {Name} in memory...";
-                MGS2MemoryManager.UpdateObjectMaxValue(this, count, currentPC);
+                Mgs2MemoryManager.UpdateObjectMaxValue(this, count, currentPc);
                 statusLabel.Text = $"Max count for {Name} updated to {count}";
                 logger.Verbose($"Max count set successfully");
             }
@@ -344,30 +344,30 @@ namespace MGS2_CheatTrainer_V2
         public int CurrentAmmoOffset { get { return InventoryOffset; } set { InventoryOffset = value; } } //TODO: make this a MemoryOffset
         public int MaxAmmoOffset { get; set; } //TODO: make this a MemoryOffset
 
-        const int MIN_MAX_COUNT_DIFF = 72;
-        private short LastKnownCurrentAmmo = 1;
+        const int MinMaxCountDiff = 72;
+        private short _lastKnownCurrentAmmo = 1;
         public OldAmmoWeapon(string name, IntPtr nameMemoryOffset, int inventoryOffset) : base(name, nameMemoryOffset, inventoryOffset)
         {
-            MaxAmmoOffset = inventoryOffset + MIN_MAX_COUNT_DIFF;
+            MaxAmmoOffset = inventoryOffset + MinMaxCountDiff;
         }
         #endregion
 
         internal new void ToggleObject(bool shouldBeEnabled, ILogger logger, TextBlock statusLabel)
         {
-            Constants.PlayableCharacter currentPC = MGS2MemoryManager.CheckIfUsable(this);
-            short currentAmmo = BitConverter.ToInt16(MGS2MemoryManager.GetPlayerInfoBasedValue(CurrentAmmoOffset, sizeof(short), currentPC), 0);
+            Constants.PlayableCharacter currentPc = Mgs2MemoryManager.CheckIfUsable(this);
+            short currentAmmo = BitConverter.ToInt16(Mgs2MemoryManager.GetPlayerInfoBasedValue(CurrentAmmoOffset, sizeof(short), currentPc), 0);
             //TODO: it would be cool to duplicate the "NO USE" functionality the Stinger gets when prone when disabled!
             //can't seem to easily find the bytes that control that though :(
             if (currentAmmo <= 0 && shouldBeEnabled)
             {
-                if (LastKnownCurrentAmmo != 0)
-                    UpdateCurrentAmmoCount(LastKnownCurrentAmmo, logger, statusLabel);
+                if (_lastKnownCurrentAmmo != 0)
+                    UpdateCurrentAmmoCount(_lastKnownCurrentAmmo, logger, statusLabel);
                 else
                     UpdateCurrentAmmoCount(1, logger, statusLabel);
             }
             else if(!shouldBeEnabled)
             {
-                LastKnownCurrentAmmo = currentAmmo;
+                _lastKnownCurrentAmmo = currentAmmo;
                 UpdateCurrentAmmoCount(-1, logger, statusLabel);
             }
         }
@@ -378,9 +378,9 @@ namespace MGS2_CheatTrainer_V2
             try
             {
                 logger?.Verbose($"Setting current ammo to {count} for {Name}...");
-                Constants.PlayableCharacter currentPC = MGS2MemoryManager.CheckIfUsable(this);
+                Constants.PlayableCharacter currentPc = Mgs2MemoryManager.CheckIfUsable(this);
                 statusLabel.Text = $"Finding {Name} in memory...";
-                MGS2MemoryManager.UpdateObjectBaseValue(this, shortCount, currentPC);
+                Mgs2MemoryManager.UpdateObjectBaseValue(this, shortCount, currentPc);
                 statusLabel.Text = $"Current ammo count for {Name} updated to {count}";
                 logger.Verbose($"Current ammo set successfully");
             }
@@ -397,9 +397,9 @@ namespace MGS2_CheatTrainer_V2
             try
             {
                 logger.Verbose($"Setting max ammo to {count} for {Name}...");
-                Constants.PlayableCharacter currentPC = MGS2MemoryManager.CheckIfUsable(this);
+                Constants.PlayableCharacter currentPc = Mgs2MemoryManager.CheckIfUsable(this);
                 statusLabel.Text = $"Finding {Name} in memory...";
-                MGS2MemoryManager.UpdateObjectMaxValue(this, shortCount, currentPC);
+                Mgs2MemoryManager.UpdateObjectMaxValue(this, shortCount, currentPc);
                 statusLabel.Text = $"Max ammo count for {Name} updated to {count}";
                 logger.Verbose($"Max ammo set successfully");
             }
@@ -415,7 +415,7 @@ namespace MGS2_CheatTrainer_V2
     {
         #region Internals & Constructor
         public int SpecialOffset { get { return InventoryOffset; } set { InventoryOffset = value; } } //TODO: make this a MemoryOffset
-        ushort count = 0;
+        ushort _count = 0;
         public OldSpecialWeapon(string name, IntPtr nameMemoryOffset, int inventoryOffset) : base(name, nameMemoryOffset, inventoryOffset)
         {
         }
@@ -426,8 +426,8 @@ namespace MGS2_CheatTrainer_V2
             try
             {
                 logger.Verbose($"Setting HF blade to lethal");
-                Constants.PlayableCharacter currentPC = MGS2MemoryManager.CheckIfUsable(this);
-                MGS2MemoryManager.UpdateObjectBaseValue(this, count += 1, currentPC); //TODO: determine real values
+                Constants.PlayableCharacter currentPc = Mgs2MemoryManager.CheckIfUsable(this);
+                Mgs2MemoryManager.UpdateObjectBaseValue(this, _count += 1, currentPc); //TODO: determine real values
                 logger.Verbose($"HF blade set to lethal successfully!");
             }
             catch(Exception e)
@@ -442,8 +442,8 @@ namespace MGS2_CheatTrainer_V2
             try
             {
                 logger.Verbose($"Setting HF blade to stun");
-                Constants.PlayableCharacter currentPC = MGS2MemoryManager.CheckIfUsable(this);
-                MGS2MemoryManager.UpdateObjectBaseValue(this, count -= 1, currentPC); //TODO: determine real values
+                Constants.PlayableCharacter currentPc = Mgs2MemoryManager.CheckIfUsable(this);
+                Mgs2MemoryManager.UpdateObjectBaseValue(this, _count -= 1, currentPc); //TODO: determine real values
                 logger.Verbose($"HF blade set to lethal successfully!");
             }
             catch(Exception e)
@@ -455,92 +455,8 @@ namespace MGS2_CheatTrainer_V2
     }
     #endregion
 
-    public class MGS2UsableObjects
+    public class Mgs2UsableObjects
     {
-        //TODO: update name pointers to, you know, real values :)
-        #region Weapons
-        #region Basic Weapons
-        public static readonly OldBasicWeapon DMic1 = new OldBasicWeapon("Directional Microphone", IntPtr.Zero, Mgs2Offset.BASE_WEAPON.Start + Constants.D_MIC);
-        public static readonly OldBasicWeapon DMic2 = new OldBasicWeapon("Directional Microphone", IntPtr.Zero, Mgs2Offset.BASE_WEAPON.Start + Constants.D_MIC_ZOOMED);
-        public static readonly OldBasicWeapon Coolant = new OldBasicWeapon("Coolant Spray", IntPtr.Zero, Mgs2Offset.BASE_WEAPON.Start + Constants.COOLANT);
-        #endregion
-        #region Ammo Weapons
-        public static readonly OldAmmoWeapon M9 = new OldAmmoWeapon("M9", IntPtr.Zero, Mgs2Offset.BASE_WEAPON.Start + Constants.M9);
-        public static readonly OldAmmoWeapon USP = new OldAmmoWeapon("USP", IntPtr.Zero, Mgs2Offset.BASE_WEAPON.Start + Constants.USP);
-        public static readonly OldAmmoWeapon SOCOM = new OldAmmoWeapon("SOCOM", IntPtr.Zero, Mgs2Offset.BASE_WEAPON.Start + Constants.SOCOM);
-        public static readonly OldAmmoWeapon PSG1 = new OldAmmoWeapon("PSG1", IntPtr.Zero, Mgs2Offset.BASE_WEAPON.Start + Constants.PSG1);
-        public static readonly OldAmmoWeapon RGB6 = new OldAmmoWeapon("RGB6", IntPtr.Zero, Mgs2Offset.BASE_WEAPON.Start + Constants.RGB6);
-        public static readonly OldAmmoWeapon Nikita = new OldAmmoWeapon("Nikita", IntPtr.Zero, Mgs2Offset.BASE_WEAPON.Start + Constants.NIKITA);
-        public static readonly OldAmmoWeapon Stinger = new OldAmmoWeapon("Stinger", IntPtr.Zero, Mgs2Offset.BASE_WEAPON.Start + Constants.STINGER);
-        public static readonly OldAmmoWeapon Claymore = new OldAmmoWeapon("Claymore", IntPtr.Zero, Mgs2Offset.BASE_WEAPON.Start + Constants.CLAYMORE);
-        public static readonly OldAmmoWeapon C4 = new OldAmmoWeapon("C4", IntPtr.Zero, Mgs2Offset.BASE_WEAPON.Start + Constants.C4);
-        public static readonly OldAmmoWeapon ChaffGrenade = new OldAmmoWeapon("Chaff Grenade", IntPtr.Zero, Mgs2Offset.BASE_WEAPON.Start + Constants.CHAFF_GRENADE);
-        public static readonly OldAmmoWeapon StunGrenade = new OldAmmoWeapon("Stun Grenade", IntPtr.Zero, Mgs2Offset.BASE_WEAPON.Start + Constants.STUN_GRENADE);
-        public static readonly OldAmmoWeapon AKS74u = new OldAmmoWeapon("AKS74u", IntPtr.Zero, Mgs2Offset.BASE_WEAPON.Start + Constants.AKS74U);
-        public static readonly OldAmmoWeapon Magazine = new OldAmmoWeapon("Magazine", IntPtr.Zero, Mgs2Offset.BASE_WEAPON.Start + Constants.MAGAZINE);
-        public static readonly OldAmmoWeapon Grenade = new OldAmmoWeapon("Grenade", IntPtr.Zero, Mgs2Offset.BASE_WEAPON.Start + Constants.GRENADE);
-        public static readonly OldAmmoWeapon M4 = new OldAmmoWeapon("M4", IntPtr.Zero, Mgs2Offset.BASE_WEAPON.Start + Constants.M4);
-        public static readonly OldAmmoWeapon PSG1T = new OldAmmoWeapon("PGS1-T", IntPtr.Zero, Mgs2Offset.BASE_WEAPON.Start + Constants.PSG1T);
-        public static readonly OldAmmoWeapon Book = new OldAmmoWeapon("Book", IntPtr.Zero, Mgs2Offset.BASE_WEAPON.Start + Constants.BOOK);
-        #endregion
-        #region Special Weapons
-        public static readonly OldSpecialWeapon HighFrequencyBlade = new OldSpecialWeapon("HF Blade", IntPtr.Zero, Mgs2Offset.BASE_WEAPON.Start + Constants.HIGH_FREQUENCY_BLADE);
-        #endregion
-        #endregion
-
-        #region Items
-        #region Basic Items
-        public static readonly OldBasicItem SnakeScope = new OldBasicItem("Binoculars", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.BROKEN_SCOPE);
-        public static readonly OldBasicItem BodyArmor = new OldBasicItem("Body Armor", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.BODY_ARMOR);
-        public static readonly OldBasicItem Stealth = new OldBasicItem("Stealth", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.STEALTH);
-        public static readonly OldBasicItem MineDetector = new OldBasicItem("Mine Detector", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.MINE_DETECTOR);
-        public static readonly OldBasicItem SensorA = new OldBasicItem("Sensor A", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.SENSOR_A);
-        public static readonly OldBasicItem SensorB = new OldBasicItem("Sensor B", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.SENSOR_B);
-        public static readonly OldBasicItem NightVisionGoggles = new OldBasicItem("NVG", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.NVG);
-        public static readonly OldBasicItem ThermalGoggles = new OldBasicItem("ThermalG", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.THERMAL_GOGGLES);
-        public static readonly OldBasicItem RaidenScope = new OldBasicItem("Binoculars", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start   + Constants.SCOPE);
-        public static readonly OldBasicItem DigitalCamera = new OldBasicItem("Digital Camera", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.DIGITAL_CAMERA);
-        public static readonly OldBasicItem Cigarettes = new OldBasicItem("Cigs", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.CIGARETTES);
-        public static readonly OldBasicItem Shaver = new OldBasicItem("Shaver", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.SHAVER);
-        public static readonly OldBasicItem Phone = new OldBasicItem("Phone", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.PHONE);
-        public static readonly OldBasicItem Camera1 = new OldBasicItem("Camera", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.CAMERA);
-        public static readonly OldBasicItem APSensor = new OldBasicItem("AP Sensor", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.AP_SENSOR);
-        public static readonly OldBasicItem UnknownItem = new OldBasicItem("Unknown Item", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.UNKNOWN_ITEM); //TODO: unused? need to confirm
-        public static readonly OldBasicItem SocomSuppressor = new OldBasicItem("SOCOM Suppressor", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.SOCOM_SUPPRESSOR);
-        public static readonly OldBasicItem AKSuppressor = new OldBasicItem("AK Suppressor", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.AK_SUPPRESSOR);
-        public static readonly OldBasicItem Camera2 = new OldBasicItem("Camera", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.BROKEN_CAMERA);
-        public static readonly OldBasicItem Bandana = new OldBasicItem("Bandana", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.BANDANA);
-        public static readonly OldBasicItem MODisc = new OldBasicItem("MODisc", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.MO_DISC);
-        public static readonly OldBasicItem USPSuppressor = new OldBasicItem("USP Suppressor", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.USP_SUPPRESSOR);
-        public static readonly OldBasicItem InfinityWig = new OldBasicItem("Infinity Wig", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.INFINITY_WIG);
-        public static readonly OldBasicItem BlueWig = new OldBasicItem("Blue Wig", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.BLUE_WIG);
-        public static readonly OldBasicItem OrangeWig = new OldBasicItem("Orange Wig", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.ORANGE_WIG);
-        public static readonly OldBasicItem ColorWig = new OldBasicItem("Color Wig", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.COLOR_WIG_1); //unused
-        public static readonly OldBasicItem ColorWig2 = new OldBasicItem("Color Wig 2", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.COLOR_WIG_2); //unused
-        public static readonly OldBasicItem ColdMedicine = new OldBasicItem("Cold Medicine", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.COLD_MEDICINE);
-        #endregion
-        #region Durability Items
-        public static readonly OldDurabilityItem Box1 = new OldDurabilityItem("Box1", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.BOX_1);
-        public static readonly OldDurabilityItem Box2 = new OldDurabilityItem("Box2", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.BOX_2);
-        public static readonly OldDurabilityItem Box3 = new OldDurabilityItem("Box3", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.BOX_3);
-        public static readonly OldDurabilityItem WetBox = new OldDurabilityItem("WetBox", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.WET_BOX);
-        public static readonly OldDurabilityItem Box4 = new OldDurabilityItem("Box4", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.BOX_4);
-        public static readonly OldDurabilityItem Box5 = new OldDurabilityItem("Box5", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.BOX_5);
-        #endregion
-        #region Enumerable Items
-        public static readonly OldStackableItem Ration = new OldStackableItem("Ration", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.RATION);
-        public static readonly OldStackableItem Bandage = new OldStackableItem("Bandage", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.BANDAGE);
-        public static readonly OldStackableItem Pentazemin = new OldStackableItem("Pentazemin", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.PENTAZEMIN);
-        public static readonly OldStackableItem DogTags = new OldStackableItem("DogTags", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.DOG_TAGS);
-        #endregion
-        #region Levelable Items
-        public static readonly OldLevelableItem Card = new OldLevelableItem("Card", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.CARD);
-        #endregion
-        #region Unknown Items
-        public static readonly OldBasicItem BDU = new OldDurabilityItem("BDU", IntPtr.Zero, Mgs2Offset.BASE_ITEM.Start + Constants.BDU);
-        #endregion
-        #endregion
-
         #region Bosses
         public static readonly BossVitals Olga = new BossVitals { HasStamina = true,
             NestedHealthPointers = Mgs2Pointer.OlgaNestedPointers,
@@ -549,8 +465,8 @@ namespace MGS2_CheatTrainer_V2
         };
         public static readonly BossVitals Fortune = new BossVitals { HasStamina = true,
             NestedHealthPointers = Mgs2Pointer.FortuneNestedPointers,
-            NestedStaminaPointers = Mgs2Pointer.FortuneNestedPointers,HealthOffset = Mgs2Offset.FORTUNE_HP_VALUE.Start, 
-            StaminaOffset = Mgs2Offset.FORTUNE_STAMINA_VALUE.Start,
+            NestedStaminaPointers = Mgs2Pointer.FortuneNestedPointers,HealthOffset = Mgs2Offset.FortuneHpValue.Start, 
+            StaminaOffset = Mgs2Offset.FortuneStaminaValue.Start,
             Boss = Constants.Boss.Fortune
         };
         public static readonly BossVitals Fatman = new BossVitals { HasStamina = true, 

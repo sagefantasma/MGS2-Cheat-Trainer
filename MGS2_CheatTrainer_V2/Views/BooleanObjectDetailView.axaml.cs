@@ -10,8 +10,8 @@ namespace MGS2_CheatTrainer_V2.Views;
 
 public partial class BooleanObjectDetailView : UserControl
 {
-    private Constants.Weapon? _weapon;
-    private readonly MemoryManager _memoryManager;
+    private Constants.IMgs2Object? _object;
+    private readonly Mgs2MemoryManager _memoryManager;
     
     public IImage? EntityImage
     {
@@ -22,39 +22,13 @@ public partial class BooleanObjectDetailView : UserControl
     public BooleanObjectDetailView()
     {
         InitializeComponent();
-        _memoryManager = App.Services.GetRequiredService<MemoryManager>();
-    }
-
-    private static Constants.Weapon DetermineWeapon(string input)
-    {
-        try
-        {
-            return Constants.WeaponsList.Find(x => input.ToLower().Contains($"{x.Shorthand}detailview", StringComparison.InvariantCultureIgnoreCase))!;
-        }
-        catch (Exception ex)
-        {
-            throw new NullReferenceException($"{input} is an unknown weapon");
-        }
+        _memoryManager = App.Services.GetRequiredService<Mgs2MemoryManager>();
     }
 
     public void Enabled_OnClick(object sender, RoutedEventArgs e)
     {
         //TODO: implement
-        _weapon ??= DetermineWeapon(Name!);
-        _memoryManager.ToggleObject(_weapon);
-    }
-
-    public void LevelUp_OnClick(object? sender, RoutedEventArgs e)
-    {
-        //TODO: implement
-        _weapon ??= DetermineWeapon(Name!);
-        _memoryManager.LevelUpObject(_weapon);
-    }
-
-    public void MaxAmmo_OnClick(object? sender, RoutedEventArgs e)
-    {
-        //TODO: implement
-        _weapon ??= DetermineWeapon(Name!);
-        _memoryManager.MaxAmmo(_weapon);
+        _object ??= Constants.DetermineObject(Name!);
+        _memoryManager.ToggleObject(_object!);
     }
 }

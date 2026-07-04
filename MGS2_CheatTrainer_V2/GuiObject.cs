@@ -7,6 +7,7 @@ using Avalonia.Controls;
 
 namespace MGS2_CheatTrainer_V2
 {
+    //REWRITE STATUS: Not needed to update?
     internal class GuiObject
     {
         public string Name { get; protected set; }

@@ -8,18 +8,19 @@ using SimplifiedMemoryManager;
 
 namespace MGS2_CheatTrainer_V2
 {
-    internal class MGS2MemoryManager
+    //REWRITE STATUS: Surely needs more than what I've done already?
+    internal class Mgs2MemoryManager : IDisposable
     {
         #region Internals
-        private const string loggerName = "MemoryManagerDebuglog.log";
-        private static List<IntPtr> _lastKnownStageOffsets { get; set; } = default;
-        private static ILogger _logger { get; set; }
+        private const string LoggerName = "MemoryManagerDebuglog.log";
+        private static List<IntPtr> LastKnownStageOffsets { get; set; } = default;
+        private static ILogger Logger { get; set; }
 
         internal static void StartLogger()
         {
-            _logger = Logging.InitializeNewLogger(loggerName);
-            _logger.Information($"Memory Manager for version {Program.AppVersion} initialized...");
-            _logger.Verbose($"Instance ID: {Program.InstanceID}");
+            Logger = Logging.InitializeNewLogger(LoggerName);
+            Logger.Information($"Memory Manager for version {Program.AppVersion} initialized...");
+            Logger.Verbose($"Instance ID: {Program.InstanceId}");
         }
 
         public class GameStats
@@ -61,20 +62,20 @@ namespace MGS2_CheatTrainer_V2
         {
             try
             {
-                Constants.PlayableCharacter currentPC = DetermineActiveCharacter();
-                switch (currentPC)
+                Constants.PlayableCharacter currentPc = DetermineActiveCharacter();
+                switch (currentPc)
                 {
                     case Constants.PlayableCharacter.Snake:
                         if (!Snake.UsableObjects.Contains(oldMgs2Object))
                         {
-                            _logger.Warning($"Snake cannot use {oldMgs2Object.Name}");
+                            Logger.Warning($"Snake cannot use {oldMgs2Object.Name}");
                             throw new InvalidOperationException($"Snake cannot use {oldMgs2Object.Name}");
                         }
                         break;
                     case Constants.PlayableCharacter.Raiden:
                         if (!Raiden.UsableObjects.Contains(oldMgs2Object))
                         {
-                            _logger.Warning($"Raiden cannot use {oldMgs2Object.Name}");
+                            Logger.Warning($"Raiden cannot use {oldMgs2Object.Name}");
                             throw new InvalidOperationException($"Raiden cannot use {oldMgs2Object.Name}");
                         }
                         break;
@@ -82,11 +83,11 @@ namespace MGS2_CheatTrainer_V2
                         break;
                 }
 
-                return currentPC;
+                return currentPc;
             }
             catch (Exception e)
             {
-                _logger.Error($"Could not check if {oldMgs2Object.Name} is usable: {e}");
+                Logger.Error($"Could not check if {oldMgs2Object.Name} is usable: {e}");
                 throw new AggregateException("Failed to check if item is usable", e);
             }
         }
@@ -95,35 +96,35 @@ namespace MGS2_CheatTrainer_V2
         {
             try
             {
-                lock (MGS2Monitor.MGS2Process)
+                lock (Mgs2Monitor.Mgs2Process)
                 {
-                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                     {
-                        if (_lastKnownStageOffsets != default)
+                        if (LastKnownStageOffsets != default)
                         {
-                            if (ValidateLastKnownOffsets(proxy, _lastKnownStageOffsets, Mgs2AoB.StageInfo))
+                            if (ValidateLastKnownOffsets(proxy, LastKnownStageOffsets, Mgs2AoB.StageInfo))
                             {
-                                _logger.Verbose($"Last known stageOffsets are still valid, reusing...");
-                                return _lastKnownStageOffsets;
+                                Logger.Verbose($"Last known stageOffsets are still valid, reusing...");
+                                return LastKnownStageOffsets;
                             }
                         }
                         SimplePattern stageOffsetPattern = new SimplePattern(Mgs2AoB.StageInfoString);
                         List<IntPtr> stageOffsets = proxy.ScanMemoryForPattern(stageOffsetPattern);
 
-                        _logger.Verbose($"We found {stageOffsets.Count} stage offsets in memory");
+                        Logger.Verbose($"We found {stageOffsets.Count} stage offsets in memory");
 
                         //ignore all results except for the final two if more than 2 are found.
                         if (stageOffsets.Count > 1)
                             stageOffsets = stageOffsets.GetRange(stageOffsets.Count - 2, 2);
 
-                        _lastKnownStageOffsets = new List<IntPtr>(stageOffsets);
-                        return _lastKnownStageOffsets;
+                        LastKnownStageOffsets = new List<IntPtr>(stageOffsets);
+                        return LastKnownStageOffsets;
                     }
                 }
             }
             catch(Exception e)
             {
-                _logger.Error($"Could not get stage offsets: {e}");
+                Logger.Error($"Could not get stage offsets: {e}");
                 throw new AggregateException("Failed to get stage offsets", e);
             }
         }
@@ -138,17 +139,17 @@ namespace MGS2_CheatTrainer_V2
                     byte[] currentBytesAtLastKnown = proxy.ReadProcessOffset(stageOffset, finderAoB.Length);
                     if (!currentBytesAtLastKnown.SequenceEqual(finderAoB))
                     {
-                        _logger.Verbose($"Last known offset at {stageOffset} has changed since we last looked!");
+                        Logger.Verbose($"Last known offset at {stageOffset} has changed since we last looked!");
                         lastKnownAreValid = false;
                     }
                 }
 
-                _logger.Verbose($"Last known offset(s) are still valid.");
+                Logger.Verbose($"Last known offset(s) are still valid.");
                 return lastKnownAreValid;
             }
             catch (Exception e)
             {
-                _logger.Warning($"Something unexpected went wrong when looking at the last known offsets: {e}");
+                Logger.Warning($"Something unexpected went wrong when looking at the last known offsets: {e}");
                 //we failed to look at the last known offsets, which isn't fatal.
                 return false;
             }
@@ -161,16 +162,16 @@ namespace MGS2_CheatTrainer_V2
                 bytesToRead = 2;
             }
 
-            lock (MGS2Monitor.MGS2Process)
+            lock (Mgs2Monitor.Mgs2Process)
             {
-                using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                using (SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                 {
                     try
                     {
                         byte[] bytesRead = proxy.ReadProcessOffset(memoryLocation, bytesToRead);
                         if (bytesRead.Length != bytesToRead)
                         {
-                            _logger.Warning($"Expected to read {bytesToRead}, but we actually read {bytesRead.Length}");
+                            Logger.Warning($"Expected to read {bytesToRead}, but we actually read {bytesRead.Length}");
                             throw new FileLoadException($"Failed to read value at memoryLocation {memoryLocation}.");
                         }
 
@@ -178,7 +179,7 @@ namespace MGS2_CheatTrainer_V2
                     }
                     catch (SimpleProcessProxyException e)
                     {
-                        _logger.Error($"Failed to read memory: {e}");
+                        Logger.Error($"Failed to read memory: {e}");
                         throw e;
                     }
                 }
@@ -190,18 +191,18 @@ namespace MGS2_CheatTrainer_V2
             int combinedOffset = playerOffset + objectOffset;
             try
             {
-                lock (MGS2Monitor.MGS2Process)
+                lock (Mgs2Monitor.Mgs2Process)
                 {
-                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                     {
-                        _logger.Information($"Inverting boolean value at {combinedOffset}...");
+                        Logger.Information($"Inverting boolean value at {combinedOffset}...");
                         proxy.InvertBooleanValue(new IntPtr(combinedOffset), sizeof(short));
                     }
                 }
             }
             catch (Exception e)
             {
-                _logger.Error($"Failed to invert boolean at offset {playerOffset}+{objectOffset}: {e}");
+                Logger.Error($"Failed to invert boolean at offset {playerOffset}+{objectOffset}: {e}");
                 throw new AggregateException("Could not invert boolean", e);
             }
         }
@@ -211,13 +212,13 @@ namespace MGS2_CheatTrainer_V2
             try
             {
                 List<IntPtr> stageMemoryOffsets = GetStageOffsets();
-                string stringInMemory = Encoding.UTF8.GetString(ReadValueFromMemory(stageMemoryOffsets.First() + Mgs2Offset.CURRENT_CHARACTER.Start, Mgs2Offset.CURRENT_CHARACTER.Length));
+                string stringInMemory = Encoding.UTF8.GetString(ReadValueFromMemory(stageMemoryOffsets.First() + Mgs2Offset.CurrentCharacter.Start, Mgs2Offset.CurrentCharacter.Length));
 
                 return stringInMemory;
             }
             catch(Exception e)
             {
-                _logger.Error($"Could not get character code: {e}");
+                Logger.Error($"Could not get character code: {e}");
                 throw new AggregateException("Failed to get character code", e);
             }
         }
@@ -227,15 +228,15 @@ namespace MGS2_CheatTrainer_V2
             try
             {
                 List<IntPtr> stageMemoryOffsets = GetStageOffsets();
-                string stringInMemory = Encoding.UTF8.GetString(ReadValueFromMemory(stageMemoryOffsets.First() + Mgs2Offset.CURRENT_STAGE.Start, Mgs2Offset.CURRENT_STAGE.Length));
+                string stringInMemory = Encoding.UTF8.GetString(ReadValueFromMemory(stageMemoryOffsets.First() + Mgs2Offset.CurrentStage.Start, Mgs2Offset.CurrentStage.Length));
 
                 Stage currentStage = Stage.Parse(stringInMemory);
-                _logger.Verbose($"User is currently in stage: {stringInMemory}. Parsed as {currentStage}");
+                Logger.Verbose($"User is currently in stage: {stringInMemory}. Parsed as {currentStage}");
                 return currentStage;
             }
             catch (Exception e)
             {
-                _logger.Error($"Failed to get stage: {e}");
+                Logger.Error($"Failed to get stage: {e}");
                 throw new AggregateException($"Could not get stage", e);
             }
         }
@@ -244,18 +245,18 @@ namespace MGS2_CheatTrainer_V2
         {
             try
             {
-                lock (MGS2Monitor.MGS2Process)
+                lock (Mgs2Monitor.Mgs2Process)
                 {
-                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                     {
-                        _logger.Information($"setting memory at offset {stringOffset} to {valueToSet}...");
+                        Logger.Information($"setting memory at offset {stringOffset} to {valueToSet}...");
                         proxy.ModifyProcessOffset(stringOffset, valueToSet, true);
                     }
                 }
             }
             catch(Exception e)
             {
-                _logger.Error($"Failed to set string at offset {stringOffset}: {e}");
+                Logger.Error($"Failed to set string at offset {stringOffset}: {e}");
                 throw new AggregateException($"Could not set string at offset {stringOffset}", e);
             }
         }
@@ -265,19 +266,19 @@ namespace MGS2_CheatTrainer_V2
             //TODO: this is kind of gross that this is hardcoded to be playeroffset only... i would like to fix that.
             try
             {
-                lock (MGS2Monitor.MGS2Process)
+                lock (Mgs2Monitor.Mgs2Process)
                 {
-                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                     {
                         IntPtr ammoOffset = proxy.FollowPointer(new IntPtr(Mgs2Pointer.CurrentAmmo), false);
-                        _logger.Information($"setting playerOffsetBased value at offset: {ammoOffset}+{objectOffset} to {BitConverter.ToString(valueToSet)}...");
+                        Logger.Information($"setting playerOffsetBased value at offset: {ammoOffset}+{objectOffset} to {BitConverter.ToString(valueToSet)}...");
                         proxy.SetMemoryAtPointer(IntPtr.Add(ammoOffset, objectOffset), valueToSet);
                     }
                 }
             }
             catch (Exception e)
             {
-                _logger.Error($"Failed to set memory at offset {objectOffset}: {e}");
+                Logger.Error($"Failed to set memory at offset {objectOffset}: {e}");
                 throw new AggregateException($"Could not set memory at offset {objectOffset}", e);
             }
         }
@@ -286,18 +287,18 @@ namespace MGS2_CheatTrainer_V2
         {
             try
             {
-                lock (MGS2Monitor.MGS2Process)
+                lock (Mgs2Monitor.Mgs2Process)
                 {
-                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                     {
-                        _logger.Information($"Setting known offset value at offset: {offset} to {BitConverter.ToString(valueToSet)}...");
+                        Logger.Information($"Setting known offset value at offset: {offset} to {BitConverter.ToString(valueToSet)}...");
                         proxy.ModifyProcessOffset(offset, valueToSet, true);
                     }
                 }
             }
             catch(Exception e)
             {
-                _logger.Error($"Failed to set memory at offset {offset}: {e}");
+                Logger.Error($"Failed to set memory at offset {offset}: {e}");
                 throw new AggregateException($"Could not set memory at offset {offset}", e);
             }
         }
@@ -306,18 +307,18 @@ namespace MGS2_CheatTrainer_V2
         {
             try
             {
-                lock (MGS2Monitor.MGS2Process)
+                lock (Mgs2Monitor.Mgs2Process)
                 {
-                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                     {
-                        _logger.Information($"Setting known offset value at offset: {offset} to {valueToSet}...");
+                        Logger.Information($"Setting known offset value at offset: {offset} to {valueToSet}...");
                         proxy.ModifyProcessOffset(offset, valueToSet, true);
                     }
                 }
             }
             catch (Exception e)
             {
-                _logger.Error($"Failed to set memory at offset {offset}: {e}");
+                Logger.Error($"Failed to set memory at offset {offset}: {e}");
                 throw new AggregateException($"Could not set memory at offset {offset}", e);
             }
         }
@@ -326,9 +327,9 @@ namespace MGS2_CheatTrainer_V2
         {
             try
             {
-                lock (MGS2Monitor.MGS2Process)
+                lock (Mgs2Monitor.Mgs2Process)
                 {
-                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                     {
                         IntPtr memoryLocation = proxy.ScanMemoryForUniquePattern(new SimplePattern(byteString));
                         return proxy.ReadProcessOffset(IntPtr.Add(memoryLocation, memoryOffset.Start), memoryOffset.Length);
@@ -337,7 +338,7 @@ namespace MGS2_CheatTrainer_V2
             }
             catch(Exception e)
             {
-                _logger.Error($"Failed to read memory AoB offset");
+                Logger.Error($"Failed to read memory AoB offset");
                 throw new AggregateException($"Could not read memory AoB offset", e);
             }
         }
@@ -346,9 +347,9 @@ namespace MGS2_CheatTrainer_V2
         {
             try
             {
-                lock (MGS2Monitor.MGS2Process)
+                lock (Mgs2Monitor.Mgs2Process)
                 {
-                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                     {
                         IntPtr memoryLocation = proxy.ScanMemoryForUniquePattern(new SimplePattern(byteString));
                         proxy.ModifyProcessOffset(IntPtr.Add(memoryLocation, memoryOffset.Start), valueToSet, true);
@@ -357,20 +358,20 @@ namespace MGS2_CheatTrainer_V2
             }
             catch(Exception e)
             {
-                _logger.Error($"Failed to set memory AoB offset");
+                Logger.Error($"Failed to set memory AoB offset");
                 throw new AggregateException($"Could not set memory AoB offset", e);
             }
         }
         #endregion
 
-        public static void UpdateGameString(MGS2Strings.MGS2String gameString, string newValue)
+        public static void UpdateGameString(Mgs2Strings.Mgs2String gameString, string newValue)
         {
             try
             {
-                _logger.Debug($"Attempting to set string {gameString.Tag} to {newValue}...");
-                lock (MGS2Monitor.MGS2Process)
+                Logger.Debug($"Attempting to set string {gameString.Tag} to {newValue}...");
+                lock (Mgs2Monitor.Mgs2Process)
                 {
-                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                     {
                         IntPtr offset = proxy.ScanMemoryForUniquePattern(new SimplePattern(gameString.FinderAoB));
 
@@ -380,18 +381,18 @@ namespace MGS2_CheatTrainer_V2
             }
             catch (Exception e)
             {
-                _logger.Error($"Failed to update game string for {gameString.Tag}: {e}");
+                Logger.Error($"Failed to update game string for {gameString.Tag}: {e}");
                 throw new AggregateException($"Could not update game string for {gameString.Tag}", e);
             }
         }
 
-        public static string ReadGameString(MGS2Strings.MGS2String gameString)
+        public static string ReadGameString(Mgs2Strings.Mgs2String gameString)
         {
             try
             {
-                lock (MGS2Monitor.MGS2Process)
+                lock (Mgs2Monitor.Mgs2Process)
                 {
-                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                     {
                         IntPtr offset = proxy.ScanMemoryForUniquePattern(new SimplePattern(gameString.FinderAoB));
 
@@ -403,7 +404,7 @@ namespace MGS2_CheatTrainer_V2
             }
             catch (Exception e)
             {
-                _logger.Error($"Failed to read the game string for {gameString.Tag}: {e}");
+                Logger.Error($"Failed to read the game string for {gameString.Tag}: {e}");
                 throw new AggregateException($"Could not read game string for {gameString.Tag}", e);
             }
         }
@@ -412,9 +413,9 @@ namespace MGS2_CheatTrainer_V2
         {
             try
             {
-                lock (MGS2Monitor.MGS2Process)
+                lock (Mgs2Monitor.Mgs2Process)
                 {
-                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                     {
                         IntPtr ammoOffset = proxy.FollowPointer(new IntPtr(Mgs2Pointer.CurrentAmmo), false);
                         return proxy.GetMemoryFromPointer(IntPtr.Add(ammoOffset, valueOffset), sizeToRead);
@@ -423,7 +424,7 @@ namespace MGS2_CheatTrainer_V2
             }
             catch (Exception e)
             {
-                _logger.Error($"Failed to get player info based value: {e}");
+                Logger.Error($"Failed to get player info based value: {e}");
                 throw new AggregateException($"Could not get player info based value", e);
             }
         }
@@ -438,30 +439,30 @@ namespace MGS2_CheatTrainer_V2
                 switch (mgs2Object)
                 {
                     case Constants.MaxableItem maxableItem:
-                        _logger.Debug($"mgs2Object parsed as MaxableItem, setting base value to: {value}");
+                        Logger.Debug($"mgs2Object parsed as MaxableItem, setting base value to: {value}");
                         SetPlayerOffsetBasedByteValueObject(maxableItem.Index, BitConverter.GetBytes(value), character);
                         break;
                     case Constants.SpecialItem specialItem:
-                        _logger.Debug($"mgs2Object parsed as SpecialItem, setting base value to: {value}");
+                        Logger.Debug($"mgs2Object parsed as SpecialItem, setting base value to: {value}");
                         SetPlayerOffsetBasedByteValueObject(specialItem.Index, BitConverter.GetBytes(value), character);
                         break;
                     case Constants.MaxableWeapon maxableWeapon:
-                        _logger.Debug($"mgs2Object parsed as MaxableWeapon, setting base value to: {value}");
+                        Logger.Debug($"mgs2Object parsed as MaxableWeapon, setting base value to: {value}");
                         SetPlayerOffsetBasedByteValueObject(maxableWeapon.Index, BitConverter.GetBytes(value), character);
                         break;
                     case Constants.BooleanWeapon booleanWeapon:
-                        _logger.Debug($"mgs2Object parsed as BooleanWeapon, setting base value to: {value}");
+                        Logger.Debug($"mgs2Object parsed as BooleanWeapon, setting base value to: {value}");
                         SetPlayerOffsetBasedByteValueObject(booleanWeapon.Index, BitConverter.GetBytes(value), character);
                         break;
                     case Constants.BooleanItem booleanItem:
-                        _logger.Debug($"mgs2Object parsed as BooleanItem, setting base value to: {value}");
+                        Logger.Debug($"mgs2Object parsed as BooleanItem, setting base value to: {value}");
                         SetPlayerOffsetBasedByteValueObject(booleanItem.Index, BitConverter.GetBytes(value), character);
                         break;
                 }
             }
             catch (Exception e)
             {
-                _logger.Error($"Failed to update the base value for {mgs2Object.Name}: {e}");
+                Logger.Error($"Failed to update the base value for {mgs2Object.Name}: {e}");
                 throw new AggregateException($"Could not update base value for {mgs2Object.Name}", e);
             }
         }
@@ -473,18 +474,18 @@ namespace MGS2_CheatTrainer_V2
                 switch (oldMgs2Object)
                 {
                     case OldStackableItem stackableItem:
-                        _logger.Debug($"mgs2Object parsed as StackableItem, setting max count to: {count}");
+                        Logger.Debug($"mgs2Object parsed as StackableItem, setting max count to: {count}");
                         SetPlayerOffsetBasedByteValueObject(stackableItem.MaxCountOffset, BitConverter.GetBytes(count), character);
                         break;
                     case OldAmmoWeapon ammoWeapon:
-                        _logger.Debug($"mgs2Object parsed as AmmoWeapon, setting max count to: {count}");
+                        Logger.Debug($"mgs2Object parsed as AmmoWeapon, setting max count to: {count}");
                         SetPlayerOffsetBasedByteValueObject(ammoWeapon.MaxAmmoOffset, BitConverter.GetBytes(count), character);
                         break;
                 }
             }
             catch (Exception e)
             {
-                _logger.Error($"Failed to update the max value for {oldMgs2Object.Name}: {e}");
+                Logger.Error($"Failed to update the max value for {oldMgs2Object.Name}: {e}");
                 throw new AggregateException($"Could not update max value for {oldMgs2Object.Name}", e);
             }
         }
@@ -510,7 +511,7 @@ namespace MGS2_CheatTrainer_V2
             }
             catch (Exception e)
             {
-                _logger.Error($"Failed to toggle {mgs2Object.Name}: {e}");
+                Logger.Error($"Failed to toggle {mgs2Object.Name}: {e}");
                 throw new AggregateException($"Could not toggle {mgs2Object.Name}", e);
             }
         }
@@ -519,9 +520,9 @@ namespace MGS2_CheatTrainer_V2
         {
             try
             {
-                _logger.Verbose("Reading game stats...");
+                Logger.Verbose("Reading game stats...");
                 IntPtr stageOffset = GetStageOffsets().First();
-                byte[] gameStatsBytes = ReadValueFromMemory(stageOffset + Mgs2Offset.GAME_STATS_BLOCK.Start, Mgs2Offset.GAME_STATS_BLOCK.Length);
+                byte[] gameStatsBytes = ReadValueFromMemory(stageOffset + Mgs2Offset.GameStatsBlock.Start, Mgs2Offset.GameStatsBlock.Length);
                 short continues = BitConverter.ToInt16(gameStatsBytes, 4);
                 short saves = BitConverter.ToInt16(gameStatsBytes, 8);
                 int playTime = BitConverter.ToInt32(gameStatsBytes, 10);
@@ -530,9 +531,9 @@ namespace MGS2_CheatTrainer_V2
                 short alerts = BitConverter.ToInt16(gameStatsBytes, 20);
                 short kills = BitConverter.ToInt16(gameStatsBytes, 22);
                 short damageTaken = BitConverter.ToInt16(gameStatsBytes, 24);
-                byte[] rationsUsedBytes = ReadValueFromMemory(stageOffset + Mgs2Offset.RATIONS_USED.Start, Mgs2Offset.RATIONS_USED.Length);
+                byte[] rationsUsedBytes = ReadValueFromMemory(stageOffset + Mgs2Offset.RationsUsed.Start, Mgs2Offset.RationsUsed.Length);
                 short rationsUsed = BitConverter.ToInt16(rationsUsedBytes, 0);
-                byte[] specialItemsBytes = ReadValueFromMemory(stageOffset + Mgs2Offset.SPECIAL_ITEMS_USED.Start, Mgs2Offset.SPECIAL_ITEMS_USED.Length);
+                byte[] specialItemsBytes = ReadValueFromMemory(stageOffset + Mgs2Offset.SpecialItemsUsed.Start, Mgs2Offset.SpecialItemsUsed.Length);
                 short specialItems = BitConverter.ToInt16(specialItemsBytes, 0);
 
                 GameStats gameStats = new GameStats
@@ -549,13 +550,13 @@ namespace MGS2_CheatTrainer_V2
                     MechsDestroyed = mechsDestroyed
                 };
 
-                _logger.Verbose($"Current game stats: {gameStats}");
+                Logger.Verbose($"Current game stats: {gameStats}");
 
                 return gameStats;
             }
             catch (Exception e)
             {
-                _logger.Error($"Failed to get current game stats: {e}");
+                Logger.Error($"Failed to get current game stats: {e}");
                 throw new AggregateException("Could not get current game stats", e);
             }
         }
@@ -569,28 +570,28 @@ namespace MGS2_CheatTrainer_V2
                 switch (gameStat)
                 {
                     case GameStats.ModifiableStats.Alerts:
-                        gameStatOffset = Mgs2Offset.ALERT_COUNT;
+                        gameStatOffset = Mgs2Offset.AlertCount;
                         break;
                     case GameStats.ModifiableStats.Continues:
-                        gameStatOffset = Mgs2Offset.CONTINUE_COUNT;
+                        gameStatOffset = Mgs2Offset.ContinueCount;
                         break;
                     case GameStats.ModifiableStats.DamageTaken:
-                        gameStatOffset = Mgs2Offset.DAMAGE_TAKEN;
+                        gameStatOffset = Mgs2Offset.DamageTaken;
                         break;
                     case GameStats.ModifiableStats.Kills:
-                        gameStatOffset = Mgs2Offset.KILL_COUNT;
+                        gameStatOffset = Mgs2Offset.KillCount;
                         break;
                     case GameStats.ModifiableStats.MechsDestroyed:
-                        gameStatOffset = Mgs2Offset.MECHS_DESTROYED;
+                        gameStatOffset = Mgs2Offset.MechsDestroyed;
                         break;
                     case GameStats.ModifiableStats.Rations:
-                        gameStatOffset = Mgs2Offset.RATIONS_USED;
+                        gameStatOffset = Mgs2Offset.RationsUsed;
                         break;
                     case GameStats.ModifiableStats.Saves:
-                        gameStatOffset = Mgs2Offset.SAVE_COUNT;
+                        gameStatOffset = Mgs2Offset.SaveCount;
                         break;
                     case GameStats.ModifiableStats.Shots:
-                        gameStatOffset = Mgs2Offset.SHOT_COUNT;
+                        gameStatOffset = Mgs2Offset.ShotCount;
                         break;
                     default:
                         throw new Exception("You must provide a valid game stat to modify");
@@ -600,7 +601,7 @@ namespace MGS2_CheatTrainer_V2
             }
             catch (Exception e)
             {
-                _logger.Error($"Failed to modify {gameStat}: {e}");
+                Logger.Error($"Failed to modify {gameStat}: {e}");
                 throw new AggregateException($"Could not modify {gameStat}", e);
             }
         }
@@ -610,7 +611,7 @@ namespace MGS2_CheatTrainer_V2
             try
             {
                 IntPtr stageOffset = GetStageOffsets().First();
-                byte[] difficultyByte = ReadValueFromMemory(stageOffset + Mgs2Offset.CURRENT_DIFFICULTY.Start, Mgs2Offset.CURRENT_DIFFICULTY.Length);
+                byte[] difficultyByte = ReadValueFromMemory(stageOffset + Mgs2Offset.CurrentDifficulty.Start, Mgs2Offset.CurrentDifficulty.Length);
 
                 int convertedDifficulty = difficultyByte[0];
 
@@ -618,7 +619,7 @@ namespace MGS2_CheatTrainer_V2
             }
             catch (Exception e)
             {
-                _logger.Error($"Failed to get current difficulty: {e}");
+                Logger.Error($"Failed to get current difficulty: {e}");
                 throw new AggregateException("Could not get current difficulty", e);
             }
         }
@@ -628,7 +629,7 @@ namespace MGS2_CheatTrainer_V2
             try
             {
                 IntPtr stageOffset = GetStageOffsets().First();
-                byte[] gameTypeByte = ReadValueFromMemory(stageOffset + Mgs2Offset.CURRENT_GAMETYPE.Start, Mgs2Offset.CURRENT_GAMETYPE.Length);
+                byte[] gameTypeByte = ReadValueFromMemory(stageOffset + Mgs2Offset.CurrentGametype.Start, Mgs2Offset.CurrentGametype.Length);
 
                 int convertedGameType = gameTypeByte[0];
 
@@ -636,54 +637,54 @@ namespace MGS2_CheatTrainer_V2
             }
             catch (Exception e)
             {
-                _logger.Error($"Failed to get current game type: {e}");
+                Logger.Error($"Failed to get current game type: {e}");
                 throw new AggregateException("Could not get current game type", e);
             }
         }
 
-        public static ushort GetCurrentHP()
+        public static ushort GetCurrentHp()
         {
             try
             {
                 IntPtr stageOffset = GetStageOffsets().First();
-                byte[] currentHpBytes = ReadValueFromMemory(stageOffset + Mgs2Offset.CURRENT_HP.Start, Mgs2Offset.CURRENT_HP.Length);
+                byte[] currentHpBytes = ReadValueFromMemory(stageOffset + Mgs2Offset.CurrentHp.Start, Mgs2Offset.CurrentHp.Length);
 
                 return BitConverter.ToUInt16(currentHpBytes, 0);
             }
             catch (Exception e)
             {
-                _logger.Error($"Failed to get current HP: {e}");
+                Logger.Error($"Failed to get current HP: {e}");
                 throw new AggregateException("Could not get current HP", e);
             }
         }
 
-        public static ushort GetCurrentMaxHP()
+        public static ushort GetCurrentMaxHp()
         {
             try
             {
                 IntPtr stageOffset = GetStageOffsets().First();
-                byte[] currentMaxHpBytes = ReadValueFromMemory(stageOffset + Mgs2Offset.CURRENT_MAX_HP.Start, Mgs2Offset.CURRENT_MAX_HP.Length);
+                byte[] currentMaxHpBytes = ReadValueFromMemory(stageOffset + Mgs2Offset.CurrentMaxHp.Start, Mgs2Offset.CurrentMaxHp.Length);
 
                 return BitConverter.ToUInt16(currentMaxHpBytes, 0);
             }
             catch(Exception e)
             {
-                _logger.Error($"Failed to get current max HP: {e}");
+                Logger.Error($"Failed to get current max HP: {e}");
                 throw new AggregateException("Could not get current max HP", e);
             }
         }
 
         public static ushort GetCurrentGripGauge()
         {
-            lock (MGS2Monitor.MGS2Process)
+            lock (Mgs2Monitor.Mgs2Process)
             {
                 try
                 {
-                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                     {
                         IntPtr memoryPointedTo = proxy.FollowPointer(new IntPtr(Mgs2Pointer.CurrentGrip), false);
-                        memoryPointedTo = IntPtr.Add(memoryPointedTo, Mgs2Offset.CURRENT_GRIP_GAUGE.Start);
-                        byte[] gripGauge = proxy.GetMemoryFromPointer(memoryPointedTo, Mgs2Offset.CURRENT_GRIP_GAUGE.Length);
+                        memoryPointedTo = IntPtr.Add(memoryPointedTo, Mgs2Offset.CurrentGripGauge.Start);
+                        byte[] gripGauge = proxy.GetMemoryFromPointer(memoryPointedTo, Mgs2Offset.CurrentGripGauge.Length);
 
                         return BitConverter.ToUInt16(gripGauge, 0);
                     }
@@ -699,19 +700,19 @@ namespace MGS2_CheatTrainer_V2
         {
             try
             {
-                lock (MGS2Monitor.MGS2Process)
+                lock (Mgs2Monitor.Mgs2Process)
                 {
-                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                     {
                         IntPtr memoryPointedTo = proxy.FollowPointer(new IntPtr(Mgs2Pointer.CurrentGrip), false);
-                        memoryPointedTo = IntPtr.Add(memoryPointedTo, Mgs2Offset.CURRENT_GRIP_GAUGE.Start);
+                        memoryPointedTo = IntPtr.Add(memoryPointedTo, Mgs2Offset.CurrentGripGauge.Start);
                         proxy.SetMemoryAtPointer(memoryPointedTo, BitConverter.GetBytes(desiredGripGauge));
                     }
                 }
             }
             catch (Exception e)
             {
-                _logger.Error($"Failed to modify current grip: {e}");
+                Logger.Error($"Failed to modify current grip: {e}");
                 throw new AggregateException("Could not modify current grip", e);
             }
         }
@@ -720,19 +721,19 @@ namespace MGS2_CheatTrainer_V2
         {
             try
             {
-                lock (MGS2Monitor.MGS2Process)
+                lock (Mgs2Monitor.Mgs2Process)
                 {
-                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                     {
-                        IntPtr memoryPointedTo = proxy.FollowPointer(new IntPtr(Mgs2Pointer.ModifiableHP), false);
-                        memoryPointedTo = IntPtr.Add(memoryPointedTo, Mgs2Offset.MODIFIABLE_HP.Start);
+                        IntPtr memoryPointedTo = proxy.FollowPointer(new IntPtr(Mgs2Pointer.ModifiableHp), false);
+                        memoryPointedTo = IntPtr.Add(memoryPointedTo, Mgs2Offset.ModifiableHp.Start);
                         proxy.SetMemoryAtPointer(memoryPointedTo, BitConverter.GetBytes(desiredHp));
                     }
                 }
             }
             catch (Exception e)
             {
-                _logger.Error($"Failed to modify current hp: {e}");
+                Logger.Error($"Failed to modify current hp: {e}");
                 throw new AggregateException("Could not modify current hp", e);
             }
         }
@@ -741,18 +742,18 @@ namespace MGS2_CheatTrainer_V2
         {
             try
             {
-                lock (MGS2Monitor.MGS2Process)
+                lock (Mgs2Monitor.Mgs2Process)
                 {
                     Constants.PlayableCharacter currentCharacter = DetermineActiveCharacter();
                 
-                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                     {
                         IntPtr memoryLocation = proxy.FollowPointer(new IntPtr(Mgs2Pointer.PullupCount), false);
 
                         if (currentCharacter == Constants.PlayableCharacter.Snake)
-                            memoryLocation = IntPtr.Add(memoryLocation, Mgs2Offset.SNAKE_PULLUPS.Start);
+                            memoryLocation = IntPtr.Add(memoryLocation, Mgs2Offset.SnakePullups.Start);
                         else
-                            memoryLocation = IntPtr.Add(memoryLocation, Mgs2Offset.RAIDEN_PULLUPS.Start);
+                            memoryLocation = IntPtr.Add(memoryLocation, Mgs2Offset.RaidenPullups.Start);
 
                         byte[] gripLevelBytes = proxy.GetMemoryFromPointer(memoryLocation, 2);
                         ushort gripLevel = BitConverter.ToUInt16(gripLevelBytes, 0);
@@ -783,7 +784,7 @@ namespace MGS2_CheatTrainer_V2
             }
             catch(Exception e)
             {
-                _logger.Error($"Failed to modify grip level: {e}");
+                Logger.Error($"Failed to modify grip level: {e}");
                 throw new AggregateException("Could not modify current grip level", e);
             }
         }
@@ -805,9 +806,9 @@ namespace MGS2_CheatTrainer_V2
             {
                 IntPtr nestedPointerEndpoint = FollowNestedPointers(initialPointer, pointerOffsets);
 
-                lock (MGS2Monitor.MGS2Process)
+                lock (Mgs2Monitor.Mgs2Process)
                 {
-                    using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    using (SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                     {
                         spp.SetMemoryAtPointer(IntPtr.Add(nestedPointerEndpoint, destinationOffset), dataToSet);   
                     }
@@ -815,7 +816,7 @@ namespace MGS2_CheatTrainer_V2
             }
             catch(Exception e)
             {
-                _logger.Error($"Failed to set data within nested pointers: {e}");
+                Logger.Error($"Failed to set data within nested pointers: {e}");
                 throw new AggregateException("Could not set nested pointer data", e);
             }
         }
@@ -828,9 +829,9 @@ namespace MGS2_CheatTrainer_V2
             {
                 for (int i = 0; i < pointerOffsets.Count; i++)
                 {
-                    lock (MGS2Monitor.MGS2Process)
+                    lock (Mgs2Monitor.Mgs2Process)
                     {
-                        using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                        using (SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                         {
                             IntPtr nestedPointer = new IntPtr(pointerLocation.ToInt64() + pointerOffsets[i]);
                             pointerLocation = new IntPtr(BitConverter.ToInt64(spp.GetMemoryFromPointer(nestedPointer, 8), 0));
@@ -842,7 +843,7 @@ namespace MGS2_CheatTrainer_V2
             }
             catch (Exception e)
             {
-                _logger.Error($"Failed to follow nested pointers: {e}");
+                Logger.Error($"Failed to follow nested pointers: {e}");
                 throw new AggregateException("Could not follow nested pointers provided", e);
             }
         }
@@ -854,9 +855,9 @@ namespace MGS2_CheatTrainer_V2
             //pointerLocation = initialPointer;
             for (int i = 0; i < pointerOffsets.Count; i++)
             {
-                lock (MGS2Monitor.MGS2Process)
+                lock (Mgs2Monitor.Mgs2Process)
                 {
-                    using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    using (SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                     {
                         if (pointerLocation == IntPtr.Zero)
                         {
@@ -870,9 +871,9 @@ namespace MGS2_CheatTrainer_V2
                     }
                 }
             }
-            lock (MGS2Monitor.MGS2Process)
+            lock (Mgs2Monitor.Mgs2Process)
             {
-                using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                using (SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                 {
                     return spp.GetMemoryFromPointer(IntPtr.Add(pointerLocation, destinationOffset), bytesToReadAtDestination);
                 }
@@ -883,12 +884,12 @@ namespace MGS2_CheatTrainer_V2
         {
             try
             {
-                IntPtr pointerLocation = MGS2Monitor.MGS2Process.MainModule.BaseAddress;
+                IntPtr pointerLocation = Mgs2Monitor.Mgs2Process.MainModule.BaseAddress;
                 pointerLocation = FollowNestedPointers(pointerLocation, pointerOffsets);
 
-                lock (MGS2Monitor.MGS2Process)
+                lock (Mgs2Monitor.Mgs2Process)
                 {
-                    using (SimpleProcessProxy spp = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    using (SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                     {
                         return spp.GetMemoryFromPointer(IntPtr.Add(pointerLocation, destinationOffset), bytesToReadAtDestination);
                     }
@@ -896,7 +897,7 @@ namespace MGS2_CheatTrainer_V2
             }
             catch(Exception e)
             {
-                _logger.Error($"Failed to get data from nested pointers: {e}");
+                Logger.Error($"Failed to get data from nested pointers: {e}");
                 throw new AggregateException("Could not get value from nested pointers provided", e);
             }
         }
@@ -907,7 +908,7 @@ namespace MGS2_CheatTrainer_V2
             {
                 if (updatedVitals.Boss != Constants.Boss.Fortune)
                 {
-                    IntPtr pointerLocation = MGS2Monitor.MGS2Process.MainModule.BaseAddress;
+                    IntPtr pointerLocation = Mgs2Monitor.Mgs2Process.MainModule.BaseAddress;
                     SetDataInNestedPointers(pointerLocation, updatedVitals.NestedHealthPointers, updatedVitals.HealthOffset, BitConverter.GetBytes(updatedVitals.Health));
                     if (updatedVitals.HasStamina)
                     {
@@ -916,21 +917,21 @@ namespace MGS2_CheatTrainer_V2
                 }
                 else
                 {
-                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                     {
                         if (_fortuneOffset == IntPtr.Zero)
                         {
                             _fortuneOffset = proxy.ScanMemoryForUniquePattern(new SimplePattern(Mgs2AoB.FortuneName));
                         }
 
-                        proxy.ModifyProcessOffset(IntPtr.Add(_fortuneOffset, Mgs2Offset.FORTUNE_HP_VALUE.Start), updatedVitals.Health, true);
-                        proxy.ModifyProcessOffset(IntPtr.Add(_fortuneOffset, Mgs2Offset.FORTUNE_STAMINA_VALUE.Start), updatedVitals.Stamina, true);
+                        proxy.ModifyProcessOffset(IntPtr.Add(_fortuneOffset, Mgs2Offset.FortuneHpValue.Start), updatedVitals.Health, true);
+                        proxy.ModifyProcessOffset(IntPtr.Add(_fortuneOffset, Mgs2Offset.FortuneStaminaValue.Start), updatedVitals.Stamina, true);
                     }
                 }
             }
             catch(Exception e)
             {
-                _logger.Error($"Failed to set boss vitals: {e}");
+                Logger.Error($"Failed to set boss vitals: {e}");
                 throw new AggregateException($"Could not set boss vitals", e);
             }
         }
@@ -952,15 +953,15 @@ namespace MGS2_CheatTrainer_V2
                 }
                 else
                 {
-                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(MGS2Monitor.MGS2Process))
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                     {
                         if (_fortuneOffset == IntPtr.Zero) 
                         {
                             _fortuneOffset = proxy.ScanMemoryForUniquePattern(new SimplePattern(Mgs2AoB.FortuneName));
                         }
 
-                        bossVitals.Health = BitConverter.ToInt16(proxy.ReadProcessOffset(IntPtr.Add(_fortuneOffset, Mgs2Offset.FORTUNE_HP_VALUE.Start), Mgs2Offset.FORTUNE_HP_VALUE.Length), 0);
-                        bossVitals.Stamina = BitConverter.ToInt16(proxy.ReadProcessOffset(IntPtr.Add(_fortuneOffset, Mgs2Offset.FORTUNE_STAMINA_VALUE.Start), Mgs2Offset.FORTUNE_STAMINA_VALUE.Length), 0);
+                        bossVitals.Health = BitConverter.ToInt16(proxy.ReadProcessOffset(IntPtr.Add(_fortuneOffset, Mgs2Offset.FortuneHpValue.Start), Mgs2Offset.FortuneHpValue.Length), 0);
+                        bossVitals.Stamina = BitConverter.ToInt16(proxy.ReadProcessOffset(IntPtr.Add(_fortuneOffset, Mgs2Offset.FortuneStaminaValue.Start), Mgs2Offset.FortuneStaminaValue.Length), 0);
                     }
                 }
 
@@ -968,7 +969,7 @@ namespace MGS2_CheatTrainer_V2
             }
             catch(Exception e)
             {
-                _logger.Error($"Failed to get boss vitals: {e}");
+                Logger.Error($"Failed to get boss vitals: {e}");
                 throw new AggregateException($"Could not get boss vitals", e);
             }
         }
@@ -979,11 +980,11 @@ namespace MGS2_CheatTrainer_V2
             try
             {
                 string characterCode = GetCharacterCode();
-                _logger.Debug($"Found character: {characterCode}");
+                Logger.Debug($"Found character: {characterCode}");
 
                 if (characterCode.Contains("tnk") || characterCode.Contains("r_vr_s"))
                 {
-                    _logger.Verbose("Currently playing as Snake");
+                    Logger.Verbose("Currently playing as Snake");
                     if (characterCode.Contains("tnk"))
                         return Constants.PlayableCharacter.Snake;
                     else
@@ -991,45 +992,50 @@ namespace MGS2_CheatTrainer_V2
                 }
                 else if (characterCode.Contains("plt"))
                 {
-                    _logger.Verbose("Currently playing as Raiden");
+                    Logger.Verbose("Currently playing as Raiden");
                     return Constants.PlayableCharacter.Raiden;
                 }
                 else if (characterCode.Contains("vr_1"))
                 {
-                    _logger.Verbose("Currently playing as MGS1 Snake");
-                    return Constants.PlayableCharacter.MGS1Snake;
+                    Logger.Verbose("Currently playing as MGS1 Snake");
+                    return Constants.PlayableCharacter.Mgs1Snake;
                 }
                 else if (characterCode.Contains("r_vr_t"))
                 {
-                    _logger.Verbose("Currently playing as Tuxedo Snake");
+                    Logger.Verbose("Currently playing as Tuxedo Snake");
                     return Constants.PlayableCharacter.TuxedoSnake;
                 }
                 else if (characterCode.Contains("r_vr_p"))
                 {
-                    _logger.Verbose("Currently playing as Pliskin");
+                    Logger.Verbose("Currently playing as Pliskin");
                     return Constants.PlayableCharacter.Pliskin;
                 }
                 else if (characterCode.Contains("r_vr_b"))
                 {
-                    _logger.Verbose("Currently playing as Ninja Raiden");
+                    Logger.Verbose("Currently playing as Ninja Raiden");
                     return Constants.PlayableCharacter.NinjaRaiden;
                 }
                 else if (characterCode.Contains("r_vr_x"))
                 {
-                    _logger.Verbose("Currently playing as Naked Raiden");
+                    Logger.Verbose("Currently playing as Naked Raiden");
                     return Constants.PlayableCharacter.NakedRaiden;
                 }
                 else
                 {
-                    _logger.Warning("Unable to determine what the active character is!");
+                    Logger.Warning("Unable to determine what the active character is!");
                     throw new NotImplementedException("Unknown stage! Can't safely determine what the active character is");
                 }
             }
             catch(Exception e)
             {
-                _logger.Error($"Failed to determine active character: {e}");
+                Logger.Error($"Failed to determine active character: {e}");
                 throw new AggregateException("Could not determine active character", e);
             }
+        }
+
+        public void Dispose()
+        {
+            //Nothing really needs to be done I think
         }
     }
 }

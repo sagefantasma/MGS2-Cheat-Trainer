@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 namespace MGS2_CheatTrainer_V2
 {
+    //REWRITE STATUS: Technically not needed to update for rewrite, but should get some TLC
+    
     /// <summary>
     /// Details memory information related to an object.
     /// Start determines the byte where the object starts being defined.
@@ -30,7 +32,7 @@ namespace MGS2_CheatTrainer_V2
     internal struct Mgs2Pointer
     {
         internal static int WalkThroughWalls = 0x01552088; 
-        internal static int ModifiableHP = 0x017DF780; //2.0.2 - 0x17DE780
+        internal static int ModifiableHp = 0x017DF780; //2.0.2 - 0x17DE780
         internal static int CurrentGrip = 0x016E9B20; //2.0.1 - 0x016E9B20 ... 2.0.2 - 0x016E8B20
         internal static int CurrentAmmo = 0x01540C20; //2.0.1 - 0x01540C20 ... 2.0.2 - 0x0153FC10
         internal static int PullupCount = 0x00949340; //2.0.1 - 0x00949340 ... 2.0.2 - 0x00948340
@@ -122,10 +124,10 @@ namespace MGS2_CheatTrainer_V2
         internal static string NinjaClipping = "01 ?? F4 01 24 00 00 00 00 00 00 00 00 27 15 9B";
         internal static string NakedRaidenClipping = "01 ?? 01 24 00 00 00 00 00 00 00 00 00 27 15 9B";
         internal static string SnakeClipping = "01 ?? 00 00 00 00 00 00 00 00 00 00 00 E6 DC 28";
-        internal static string VRClipping = "DA 01 F4 01 ?? 00 00 00 00 00 00 00 00 00 00 00 27 15 9B";
+        internal static string VrClipping = "DA 01 F4 01 ?? 00 00 00 00 00 00 00 00 00 00 00 27 15 9B";
         internal static string PliskinClipping = "DA 01 F4 01 ?? 00 00 00 00 00 00 00 00 00 00 00 27 15 9B";
         internal static string TuxedoSnakeClipping = "DA 01 F4 01 ?? 00 00 00 00 00 00 00 00 00 00 00 27 15 9B";
-        internal static string MGS1SnakeClipping = "DA 01 F4 01 ?? 00 00 00 00 00 00 00 00 00 00 00 27 15 9B";
+        internal static string Mgs1SnakeClipping = "DA 01 F4 01 ?? 00 00 00 00 00 00 00 00 00 00 00 27 15 9B";
         internal static byte[] OriginalCameraBytes = { 0x45, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x06, 0x17, 0x42, 0x53, 0x17, 0x06, 0x53, 0x42, 0x44 };
         internal static string Camera = "45 00 00 00 00 00 00 00 06 17 42 53 17 06 53 42 44";
         internal static string DecrementGripGauge = "66 89 BB 18 04 00 00";
@@ -165,28 +167,28 @@ namespace MGS2_CheatTrainer_V2
         internal static string EnableCustomFiltering = "89 05 05 BF 4C 01";
         internal static byte[] OriginalCustomFilteringBytes = { 0x89, 0x05, 0x05, 0xBF, 0x4C, 0x01 };
         internal static string CustomFilteringAoB = "00 00 80 3F 00 00 00 00 E0 0B 00 00 00 00 00 00";
-        internal static string PauseVRAoB = "7E 51 FF 0D ?? ?? ?? 01";
-        internal static byte[] OriginalPauseVRBytes = { 0x7E, 0x51, 0xFF, 0x0D, 0x00, 0x00, 0x00, 0x01 };
-        internal static string VRObjectiveAoB = "0F 8C 9F 00 00 00 48 8B CB";
-        internal static byte[] OriginalVRObjectiveBytes = { 0x0F, 0x8C, 0x9F, 0x00, 0x00, 0x00, 0x48, 0x8B, 0xCB };
-        internal static string VREnemiesAoB = "7C 36 8B 83 98 00 00 00";
-        internal static byte[] OriginalVREnemiesBytes = { 0x7C, 0x36, 0x8B, 0x83, 0x98, 0x00, 0x00, 0x00 };
-        internal static string VRNoHitDamageAoB = "66 29 43 12 E9 67 FF FF FF";
-        internal static byte[] OriginalVRNoHitDamageBytes = { 0x66, 0x29, 0x43, 0x12, 0xE9, 0x67, 0xFF, 0xFF, 0xFF };
-        internal static string VRNoFallDamageAoB = "66 01 97 D2 08 00 00";
-        internal static byte[] OriginalVRNoFallDamageBytes = { 0x66, 0x01, 0x97, 0xD2, 0x08, 0x00, 0x00 };
-        internal static string VRInfiniteStrAoB = "66 89 BB 18 04 00 00";
-        internal static byte[] OriginalVRInfiniteStrBytes = { 0x66, 0x89, 0xBB, 0x18, 0x04, 0x00, 0x00 };
-        internal static string VRGripDamageAoB = "66 01 87 18 04 00 00 41";
-        internal static byte[] OriginalVRGripDamageBytes = { 0x66, 0x01, 0x87, 0x18, 0x04, 0x00, 0x00, 0x41 };
-        internal static string VRAimStabilityAoB = "0F 8F 90 01 00 00 48 8B";
-        internal static byte[] OriginalVRAimStabilityBytes = { 0x0F, 0x8F, 0x90, 0x01, 0x00, 0x00, 0x48, 0x8B };
-        internal static string VRInfiniteAmmoAoB = "66 2B CF 79 02";
-        internal static byte[] OriginalVRInfiniteAmmoBytes = { 0x66, 0x2B, 0xCF, 0x79, 0x02 };
-        internal static string VRInfiniteItemAoB = "66 41 89 09 0F BF C1";
-        internal static byte[] OriginalVRInfiniteItemBytes = { 0x66, 0x41, 0x89, 0x09, 0x0F, 0xBF, 0xC1 };
-        internal static string VRNoReloadAoB = "FF C8 89 05 ?? ?? ?? 01 C3 CC 48";
-        internal static byte[] OriginalVRNoReloadBytes = { 0xFF, 0xC8, 0x89, 0x05, 0x00, 0x00, 0x00, 0x01, 0xC3, 0xCC, 0x48 };
+        internal static string PauseVrAoB = "7E 51 FF 0D ?? ?? ?? 01";
+        internal static byte[] OriginalPauseVrBytes = { 0x7E, 0x51, 0xFF, 0x0D, 0x00, 0x00, 0x00, 0x01 };
+        internal static string VrObjectiveAoB = "0F 8C 9F 00 00 00 48 8B CB";
+        internal static byte[] OriginalVrObjectiveBytes = { 0x0F, 0x8C, 0x9F, 0x00, 0x00, 0x00, 0x48, 0x8B, 0xCB };
+        internal static string VrEnemiesAoB = "7C 36 8B 83 98 00 00 00";
+        internal static byte[] OriginalVrEnemiesBytes = { 0x7C, 0x36, 0x8B, 0x83, 0x98, 0x00, 0x00, 0x00 };
+        internal static string VrNoHitDamageAoB = "66 29 43 12 E9 67 FF FF FF";
+        internal static byte[] OriginalVrNoHitDamageBytes = { 0x66, 0x29, 0x43, 0x12, 0xE9, 0x67, 0xFF, 0xFF, 0xFF };
+        internal static string VrNoFallDamageAoB = "66 01 97 D2 08 00 00";
+        internal static byte[] OriginalVrNoFallDamageBytes = { 0x66, 0x01, 0x97, 0xD2, 0x08, 0x00, 0x00 };
+        internal static string VrInfiniteStrAoB = "66 89 BB 18 04 00 00";
+        internal static byte[] OriginalVrInfiniteStrBytes = { 0x66, 0x89, 0xBB, 0x18, 0x04, 0x00, 0x00 };
+        internal static string VrGripDamageAoB = "66 01 87 18 04 00 00 41";
+        internal static byte[] OriginalVrGripDamageBytes = { 0x66, 0x01, 0x87, 0x18, 0x04, 0x00, 0x00, 0x41 };
+        internal static string VrAimStabilityAoB = "0F 8F 90 01 00 00 48 8B";
+        internal static byte[] OriginalVrAimStabilityBytes = { 0x0F, 0x8F, 0x90, 0x01, 0x00, 0x00, 0x48, 0x8B };
+        internal static string VrInfiniteAmmoAoB = "66 2B CF 79 02";
+        internal static byte[] OriginalVrInfiniteAmmoBytes = { 0x66, 0x2B, 0xCF, 0x79, 0x02 };
+        internal static string VrInfiniteItemAoB = "66 41 89 09 0F BF C1";
+        internal static byte[] OriginalVrInfiniteItemBytes = { 0x66, 0x41, 0x89, 0x09, 0x0F, 0xBF, 0xC1 };
+        internal static string VrNoReloadAoB = "FF C8 89 05 ?? ?? ?? 01 C3 CC 48";
+        internal static byte[] OriginalVrNoReloadBytes = { 0xFF, 0xC8, 0x89, 0x05, 0x00, 0x00, 0x00, 0x01, 0xC3, 0xCC, 0x48 };
         internal static string TurnOffMusicAoB = "8B 8C 83 20 32 78 01 48 8D 04 C0 48 8D 14 C5 00 00 00 00";
         internal static byte[] OriginalTurnOffMusicBytes = { 0x8B, 0x8C, 0x83, 0x20, 0x32, 0x78, 0x01, 0x48, 0x8D, 0x04, 0xC0, 0x48, 0x8D, 0x14, 0xC5, 0x00, 0x00, 0x00, 0x00 };
         #endregion
@@ -199,13 +201,13 @@ namespace MGS2_CheatTrainer_V2
         internal static GuardAnimation DozeAnimation = new GuardAnimation { Name = "Doze", Bytes = new byte[] { 0xBA, 0x06, 0x00, 0x00, 0x00, 0x90, 0x90 } };
         internal static GuardAnimation AttentionAnimation = new GuardAnimation { Name = "Attention", Bytes = new byte[] { 0xBA, 0x07, 0x00, 0x00, 0x00, 0x90, 0x90 } };
         internal static GuardAnimation BoogieAnimation = new GuardAnimation { Name = "Boogie", Bytes = new byte[] { 0xBA, 0x09, 0x00, 0x00, 0x00, 0x90, 0x90 } };
-        internal static GuardAnimation LDOverwatchAnimation = new GuardAnimation { Name = "Long Distance Overwatch", Bytes = new byte[] { 0xBA, 0x0A, 0x00, 0x00, 0x00, 0x90, 0x90 } };
+        internal static GuardAnimation LdOverwatchAnimation = new GuardAnimation { Name = "Long Distance Overwatch", Bytes = new byte[] { 0xBA, 0x0A, 0x00, 0x00, 0x00, 0x90, 0x90 } };
         internal static GuardAnimation RemoveGogglesAnimation = new GuardAnimation { Name = "Remove Goggles", Bytes = new byte[] { 0xBA, 0x0B, 0x00, 0x00, 0x00, 0x90, 0x90 } };
         internal static GuardAnimation DazedAnimation = new GuardAnimation { Name = "Dazed", Bytes = new byte[] { 0xBA, 0x0C, 0x00, 0x00, 0x00, 0x90, 0x90 } };
-        internal static GuardAnimation SDOverwatchAnimation = new GuardAnimation { Name = "Short Distance Overwatch", Bytes = new byte[] { 0xBA, 0x0D, 0x00, 0x00, 0x00, 0x90, 0x90 } };
+        internal static GuardAnimation SdOverwatchAnimation = new GuardAnimation { Name = "Short Distance Overwatch", Bytes = new byte[] { 0xBA, 0x0D, 0x00, 0x00, 0x00, 0x90, 0x90 } };
         internal static GuardAnimation MoveBackwardAnimation = new GuardAnimation { Name = "Move Backward", Bytes = new byte[] { 0xBA, 0x0F, 0x00, 0x00, 0x00, 0x90, 0x90 } };
         internal static GuardAnimation LookMagazineAnimation = new GuardAnimation { Name = "Look at Magazine", Bytes = new byte[] { 0xBA, 0x15, 0x00, 0x00, 0x00, 0x90, 0x90 } };
-        internal static GuardAnimation DeactivateAIAnimation = new GuardAnimation { Name = "Deactivate AI", Bytes = new byte[] { 0xBA, 0x16, 0x00, 0x00, 0x00, 0x90, 0x90 } };
+        internal static GuardAnimation DeactivateAiAnimation = new GuardAnimation { Name = "Deactivate AI", Bytes = new byte[] { 0xBA, 0x16, 0x00, 0x00, 0x00, 0x90, 0x90 } };
         internal static GuardAnimation CommandSoldiersAnimation = new GuardAnimation { Name = "Command Soldiers", Bytes = new byte[] { 0xBA, 0x18, 0x00, 0x00, 0x00, 0x90, 0x90 } };
         internal static GuardAnimation RadioCheckinAnimation = new GuardAnimation { Name = "Radio Check-in", Bytes = new byte[] { 0xBA, 0x19, 0x00, 0x00, 0x00, 0x90, 0x90 }};
         internal static GuardAnimation PeeAnimation = new GuardAnimation { Name = "Pee", Bytes = new byte[] { 0xBA, 0x1A, 0x00, 0x00, 0x00, 0x90, 0x90 } };
@@ -217,8 +219,8 @@ namespace MGS2_CheatTrainer_V2
         internal static List<GuardAnimation> GuardAnimationList = new List<GuardAnimation>
         { 
             WaitAnimation, PatrolAnimation, MoveForwardAnimation, YawnAnimation, StretchAnimation, DozeAnimation, AttentionAnimation, BoogieAnimation,
-            LDOverwatchAnimation, RemoveGogglesAnimation, DazedAnimation, SDOverwatchAnimation, MoveBackwardAnimation, LookMagazineAnimation,
-            DeactivateAIAnimation, CommandSoldiersAnimation, RadioCheckinAnimation, PeeAnimation, PeeWiggleAnimation, LeanRightAnimation,
+            LdOverwatchAnimation, RemoveGogglesAnimation, DazedAnimation, SdOverwatchAnimation, MoveBackwardAnimation, LookMagazineAnimation,
+            DeactivateAiAnimation, CommandSoldiersAnimation, RadioCheckinAnimation, PeeAnimation, PeeWiggleAnimation, LeanRightAnimation,
             LeanLeftAnimation, RollRightAnimation, RollLeftAnimation
         };
         public static string EmmaInfiniteHpAoB = "66 29 9F AE 03 00 00";
@@ -274,16 +276,16 @@ namespace MGS2_CheatTrainer_V2
     {
         #region Offsets
         #region Pointer offsets
-        public static readonly MemoryOffset SNAKE_PULLUPS = new MemoryOffset(0x12E);
-        public static readonly MemoryOffset RAIDEN_PULLUPS = new MemoryOffset(0x130);
+        public static readonly MemoryOffset SnakePullups = new MemoryOffset(0x12E);
+        public static readonly MemoryOffset RaidenPullups = new MemoryOffset(0x130);
         #endregion
 
         #region String offsets
         #region Calculated From LifeAndGripNames
-        public static readonly MemoryOffset LIFE_TEXT = new MemoryOffset(9, 12); //2.1.0 ready
-        public static readonly MemoryOffset GRIP_Lv1_TEXT = new MemoryOffset(21, 28); //2.1.0 ready
-        public static readonly MemoryOffset GRIP_Lv2_TEXT = new MemoryOffset(-155, -148); //2.1.0 ready
-        public static readonly MemoryOffset GRIP_Lv3_TEXT = new MemoryOffset(-171, -164); //2.1.0 ready
+        public static readonly MemoryOffset LifeText = new MemoryOffset(9, 12); //2.1.0 ready
+        public static readonly MemoryOffset GripLv1Text = new MemoryOffset(21, 28); //2.1.0 ready
+        public static readonly MemoryOffset GripLv2Text = new MemoryOffset(-155, -148); //2.1.0 ready
+        public static readonly MemoryOffset GripLv3Text = new MemoryOffset(-171, -164); //2.1.0 ready
         #endregion
 
         #region Calculated From RationMedsBandagePentazeminDescriptions
@@ -291,173 +293,173 @@ namespace MGS2_CheatTrainer_V2
         #endregion
 
         #region Calculated From RayNames
-        public static readonly MemoryOffset RAY_01 = new MemoryOffset(86, 93); //2.1.0 ready
-        public static readonly MemoryOffset RAY_02 = new MemoryOffset(RAY_01.Start + 16, RAY_01.End + 16);
-        public static readonly MemoryOffset RAY_03 = new MemoryOffset(RAY_02.Start + 16, RAY_02.End + 16);
-        public static readonly MemoryOffset RAY_04 = new MemoryOffset(RAY_03.Start + 16, RAY_03.End + 16);
-        public static readonly MemoryOffset RAY_05 = new MemoryOffset(RAY_04.Start + 16, RAY_04.End + 16);
-        public static readonly MemoryOffset RAY_06 = new MemoryOffset(RAY_05.Start + 16, RAY_05.End + 16);
-        public static readonly MemoryOffset RAY_07 = new MemoryOffset(RAY_06.Start + 16, RAY_06.End + 16);
-        public static readonly MemoryOffset RAY_08 = new MemoryOffset(RAY_07.Start + 16, RAY_07.End + 16);
-        public static readonly MemoryOffset RAY_09 = new MemoryOffset(RAY_08.Start + 16, RAY_08.End + 16);
-        public static readonly MemoryOffset RAY_10 = new MemoryOffset(RAY_09.Start + 16, RAY_09.End + 16);
-        public static readonly MemoryOffset RAY_11 = new MemoryOffset(RAY_10.Start + 16, RAY_10.End + 16);
-        public static readonly MemoryOffset RAY_12 = new MemoryOffset(RAY_11.Start + 16, RAY_11.End + 16);
-        public static readonly MemoryOffset RAY_13 = new MemoryOffset(RAY_12.Start + 16, RAY_12.End + 16);
-        public static readonly MemoryOffset RAY_14 = new MemoryOffset(RAY_13.Start + 16, RAY_13.End + 16);
-        public static readonly MemoryOffset RAY_15 = new MemoryOffset(RAY_14.Start + 16, RAY_14.End + 16);
-        public static readonly MemoryOffset RAY_16 = new MemoryOffset(RAY_15.Start + 16, RAY_15.End + 16);
-        public static readonly MemoryOffset RAY_17 = new MemoryOffset(RAY_16.Start + 16, RAY_16.End + 16);
-        public static readonly MemoryOffset RAY_18 = new MemoryOffset(RAY_17.Start + 16, RAY_17.End + 16);
-        public static readonly MemoryOffset RAY_19 = new MemoryOffset(RAY_18.Start + 16, RAY_18.End + 16);
-        public static readonly MemoryOffset RAY_20 = new MemoryOffset(RAY_19.Start + 16, RAY_19.End + 16);
-        public static readonly MemoryOffset RAY_21 = new MemoryOffset(RAY_20.Start + 16, RAY_20.End + 16);
-        public static readonly MemoryOffset RAY_22 = new MemoryOffset(RAY_21.Start + 16, RAY_21.End + 16);
-        public static readonly MemoryOffset RAY_23 = new MemoryOffset(RAY_22.Start + 16, RAY_22.End + 16);
-        public static readonly MemoryOffset RAY_24 = new MemoryOffset(RAY_23.Start + 16, RAY_23.End + 16);
-        public static readonly MemoryOffset RAY_25 = new MemoryOffset(RAY_24.Start + 16, RAY_24.End + 16);
+        public static readonly MemoryOffset Ray01 = new MemoryOffset(86, 93); //2.1.0 ready
+        public static readonly MemoryOffset Ray02 = new MemoryOffset(Ray01.Start + 16, Ray01.End + 16);
+        public static readonly MemoryOffset Ray03 = new MemoryOffset(Ray02.Start + 16, Ray02.End + 16);
+        public static readonly MemoryOffset Ray04 = new MemoryOffset(Ray03.Start + 16, Ray03.End + 16);
+        public static readonly MemoryOffset Ray05 = new MemoryOffset(Ray04.Start + 16, Ray04.End + 16);
+        public static readonly MemoryOffset Ray06 = new MemoryOffset(Ray05.Start + 16, Ray05.End + 16);
+        public static readonly MemoryOffset Ray07 = new MemoryOffset(Ray06.Start + 16, Ray06.End + 16);
+        public static readonly MemoryOffset Ray08 = new MemoryOffset(Ray07.Start + 16, Ray07.End + 16);
+        public static readonly MemoryOffset Ray09 = new MemoryOffset(Ray08.Start + 16, Ray08.End + 16);
+        public static readonly MemoryOffset Ray10 = new MemoryOffset(Ray09.Start + 16, Ray09.End + 16);
+        public static readonly MemoryOffset Ray11 = new MemoryOffset(Ray10.Start + 16, Ray10.End + 16);
+        public static readonly MemoryOffset Ray12 = new MemoryOffset(Ray11.Start + 16, Ray11.End + 16);
+        public static readonly MemoryOffset Ray13 = new MemoryOffset(Ray12.Start + 16, Ray12.End + 16);
+        public static readonly MemoryOffset Ray14 = new MemoryOffset(Ray13.Start + 16, Ray13.End + 16);
+        public static readonly MemoryOffset Ray15 = new MemoryOffset(Ray14.Start + 16, Ray14.End + 16);
+        public static readonly MemoryOffset Ray16 = new MemoryOffset(Ray15.Start + 16, Ray15.End + 16);
+        public static readonly MemoryOffset Ray17 = new MemoryOffset(Ray16.Start + 16, Ray16.End + 16);
+        public static readonly MemoryOffset Ray18 = new MemoryOffset(Ray17.Start + 16, Ray17.End + 16);
+        public static readonly MemoryOffset Ray19 = new MemoryOffset(Ray18.Start + 16, Ray18.End + 16);
+        public static readonly MemoryOffset Ray20 = new MemoryOffset(Ray19.Start + 16, Ray19.End + 16);
+        public static readonly MemoryOffset Ray21 = new MemoryOffset(Ray20.Start + 16, Ray20.End + 16);
+        public static readonly MemoryOffset Ray22 = new MemoryOffset(Ray21.Start + 16, Ray21.End + 16);
+        public static readonly MemoryOffset Ray23 = new MemoryOffset(Ray22.Start + 16, Ray22.End + 16);
+        public static readonly MemoryOffset Ray24 = new MemoryOffset(Ray23.Start + 16, Ray23.End + 16);
+        public static readonly MemoryOffset Ray25 = new MemoryOffset(Ray24.Start + 16, Ray24.End + 16);
         #endregion
 
         #region Calculated From SolidusName
-        public static readonly MemoryOffset SOLIDUS_HP_TEXT = new MemoryOffset(60, 66); //2.1.0 ready
+        public static readonly MemoryOffset SolidusHpText = new MemoryOffset(60, 66); //2.1.0 ready
         #endregion
 
         #region Calculated From EmmaO2
-        public static readonly MemoryOffset EMMA_O2_TEXT = new MemoryOffset(24, 30); //2.1.0 ready
-        public static readonly MemoryOffset RAIDEN_O2_TEXT = new MemoryOffset(136, 137); //2.1.0 ready
+        public static readonly MemoryOffset EmmaO2Text = new MemoryOffset(24, 30); //2.1.0 ready
+        public static readonly MemoryOffset RaidenO2Text = new MemoryOffset(136, 137); //2.1.0 ready
         #endregion
 
         #region Calculated From EmmaName
-        public static readonly MemoryOffset EMMA_HP_TEXT = new MemoryOffset(390, 393); //2.1.0 ready
+        public static readonly MemoryOffset EmmaHpText = new MemoryOffset(390, 393); //2.1.0 ready
         #endregion
 
         #region Calculated From FatmanName
-        public static readonly MemoryOffset FATMAN_HP_TEXT = new MemoryOffset(88, 93); //2.1.0 ready
+        public static readonly MemoryOffset FatmanHpText = new MemoryOffset(88, 93); //2.1.0 ready
         #endregion
 
         #region Calculated From OlgaName
-        public static readonly MemoryOffset OLGA_HP_TEXT = new MemoryOffset(292, 295); //2.1.0 ready
+        public static readonly MemoryOffset OlgaHpText = new MemoryOffset(292, 295); //2.1.0 ready
                                                                                        //there is also a meryl string right next to OLGA... but idk what it is used for so i'm not bothering to add it atm
                                                                                        //guessing the meryl^^ string is related to the OLGA boss fight! OLGAMERYL
         #endregion
 
         #region Calculated From HarrierName
-        public static readonly MemoryOffset HARRIER_HP_TEXT = new MemoryOffset(-109, -103); //2.1.0 ready
+        public static readonly MemoryOffset HarrierHpText = new MemoryOffset(-109, -103); //2.1.0 ready
         #endregion
 
         #region Calculated From KasatkaName
-        public static readonly MemoryOffset KASATKA_HP_TEXT = new MemoryOffset(-8, -2); //2.1.0 ready
+        public static readonly MemoryOffset KasatkaHpText = new MemoryOffset(-8, -2); //2.1.0 ready
         #endregion
 
         #region Calculated From FortuneName
-        public static readonly MemoryOffset FORTUNE_HP_TEXT = new MemoryOffset(1188, 1194); //2.1.0 ready
-        public static readonly MemoryOffset FORTUNE_HP_VALUE = new MemoryOffset(1212, 1213);
-        public static readonly MemoryOffset FORTUNE_STAMINA_VALUE = new MemoryOffset(1228, 1229);
-        public static readonly MemoryOffset VAMP_HP_TEXT = new MemoryOffset(1908, 1911); //2.1.0 ready
+        public static readonly MemoryOffset FortuneHpText = new MemoryOffset(1188, 1194); //2.1.0 ready
+        public static readonly MemoryOffset FortuneHpValue = new MemoryOffset(1212, 1213);
+        public static readonly MemoryOffset FortuneStaminaValue = new MemoryOffset(1228, 1229);
+        public static readonly MemoryOffset VampHpText = new MemoryOffset(1908, 1911); //2.1.0 ready
         #endregion
 
         #region Calculated From Vamp02
-        public static readonly MemoryOffset VAMP_02_TEXT = new MemoryOffset(8, 14); //2.1.0 ready
+        public static readonly MemoryOffset Vamp02Text = new MemoryOffset(8, 14); //2.1.0 ready
         #endregion
         #endregion
 
         #region Value offsets
         #region Calculated From PlayerInfo
-        public static readonly MemoryOffset BASE_WEAPON = new MemoryOffset(2, 116); //if a "new" playerOffsetBytes is chosen, only need to update this value and the item offset will update.
-        public static readonly MemoryOffset BASE_ITEM = new MemoryOffset(BASE_WEAPON.Start + 144, BASE_WEAPON.Start + 144 + 80);
-        public static readonly MemoryOffset GRIP_LEVEL_SNAKE = new MemoryOffset(-46, -45); //will break
-        public static readonly MemoryOffset GRIP_LEVEL_RAIDEN = new MemoryOffset(-44, -43); //will break
+        public static readonly MemoryOffset BaseWeapon = new MemoryOffset(2, 116); //if a "new" playerOffsetBytes is chosen, only need to update this value and the item offset will update.
+        public static readonly MemoryOffset BaseItem = new MemoryOffset(BaseWeapon.Start + 144, BaseWeapon.Start + 144 + 80);
+        public static readonly MemoryOffset GripLevelSnake = new MemoryOffset(-46, -45); //will break
+        public static readonly MemoryOffset GripLevelRaiden = new MemoryOffset(-44, -43); //will break
         #endregion
 
         #region Calculated From HealthMod
-        public static readonly MemoryOffset MODIFY_PLAYER_HP = new MemoryOffset(-110, -107); //TODO: prove this is valid
-        public static readonly MemoryOffset MODIFY_CLIP_SIZE = new MemoryOffset(-114, -111); //TODO: prove this is valid
+        public static readonly MemoryOffset ModifyPlayerHp = new MemoryOffset(-110, -107); //TODO: prove this is valid
+        public static readonly MemoryOffset ModifyClipSize = new MemoryOffset(-114, -111); //TODO: prove this is valid
         #endregion
 
         #region Calculated From StageInfo
-        public static readonly MemoryOffset CURRENT_CHARACTER = new MemoryOffset(-260, -255);
-        public static readonly MemoryOffset CURRENT_MAX_HP = new MemoryOffset(-36, -35);
-        public static readonly MemoryOffset CURRENT_HP = new MemoryOffset(-38, -37);
-        public static readonly MemoryOffset CURRENT_STAGE = new MemoryOffset(-244, -238);
-        public static readonly MemoryOffset CURRENT_DIFFICULTY = new MemoryOffset(-272);
-        public static readonly MemoryOffset NGPLUS_COUNT = new MemoryOffset(-271, -272); //TODO: prove this is valid
-        public static readonly MemoryOffset CURRENT_GAMETYPE = new MemoryOffset(-281); //TODO: prove this is valid
-        public static readonly MemoryOffset CURRENT_EQUIPPED_ITEM = new MemoryOffset(-26); //TODO: prove this is valid
-        public static readonly MemoryOffset CURRENT_EQUIPPED_WEAPON = new MemoryOffset(-28); //TODO: prove this is valid
-        public static readonly MemoryOffset GAME_STATS_BLOCK = new MemoryOffset(14, 57);
-        public static readonly MemoryOffset DAMAGE_TAKEN = new MemoryOffset(38);
-        public static readonly MemoryOffset KILL_COUNT = new MemoryOffset(36);
-        public static readonly MemoryOffset ALERT_COUNT = new MemoryOffset(34);
-        public static readonly MemoryOffset SHOT_COUNT = new MemoryOffset(32);
-        public static readonly MemoryOffset PLAY_TIME = new MemoryOffset(26, 29);
-        public static readonly MemoryOffset SAVE_COUNT = new MemoryOffset(22);
-        public static readonly MemoryOffset CONTINUE_COUNT = new MemoryOffset(18);
-        public static readonly MemoryOffset MECHS_DESTROYED = new MemoryOffset(56);
-        public static readonly MemoryOffset PULL_UP_COUNT = new MemoryOffset(14);
-        public static readonly MemoryOffset SPECIAL_ITEMS_USED = new MemoryOffset(5238, 5239);
-        public static readonly MemoryOffset RATIONS_USED = new MemoryOffset(5232, 5233);
+        public static readonly MemoryOffset CurrentCharacter = new MemoryOffset(-260, -255);
+        public static readonly MemoryOffset CurrentMaxHp = new MemoryOffset(-36, -35);
+        public static readonly MemoryOffset CurrentHp = new MemoryOffset(-38, -37);
+        public static readonly MemoryOffset CurrentStage = new MemoryOffset(-244, -238);
+        public static readonly MemoryOffset CurrentDifficulty = new MemoryOffset(-272);
+        public static readonly MemoryOffset NgplusCount = new MemoryOffset(-271, -272); //TODO: prove this is valid
+        public static readonly MemoryOffset CurrentGametype = new MemoryOffset(-281); //TODO: prove this is valid
+        public static readonly MemoryOffset CurrentEquippedItem = new MemoryOffset(-26); //TODO: prove this is valid
+        public static readonly MemoryOffset CurrentEquippedWeapon = new MemoryOffset(-28); //TODO: prove this is valid
+        public static readonly MemoryOffset GameStatsBlock = new MemoryOffset(14, 57);
+        public static readonly MemoryOffset DamageTaken = new MemoryOffset(38);
+        public static readonly MemoryOffset KillCount = new MemoryOffset(36);
+        public static readonly MemoryOffset AlertCount = new MemoryOffset(34);
+        public static readonly MemoryOffset ShotCount = new MemoryOffset(32);
+        public static readonly MemoryOffset PlayTime = new MemoryOffset(26, 29);
+        public static readonly MemoryOffset SaveCount = new MemoryOffset(22);
+        public static readonly MemoryOffset ContinueCount = new MemoryOffset(18);
+        public static readonly MemoryOffset MechsDestroyed = new MemoryOffset(56);
+        public static readonly MemoryOffset PullUpCount = new MemoryOffset(14);
+        public static readonly MemoryOffset SpecialItemsUsed = new MemoryOffset(5238, 5239);
+        public static readonly MemoryOffset RationsUsed = new MemoryOffset(5232, 5233);
         #endregion
 
         #region Cheats offsets
-        public static readonly MemoryOffset INFINITE_AMMO = new MemoryOffset(0, 16);
-        public static readonly MemoryOffset NEVER_RELOAD = new MemoryOffset(0, 16);
-        public static readonly MemoryOffset INFINITE_LIFE = new MemoryOffset(0, 16);
-        public static readonly MemoryOffset INFINITE_O2 = new MemoryOffset(0, 16);
-        public static readonly MemoryOffset NO_BLEED_DMG = new MemoryOffset(0, 16);
-        public static readonly MemoryOffset NO_BURN_DMG = new MemoryOffset(0, 16);
-        public static readonly MemoryOffset NO_CLIP = new MemoryOffset(0x40, 0x53);
-        public static readonly MemoryOffset LETTERBOX = new MemoryOffset(-187);
-        public static readonly MemoryOffset ZOOM = new MemoryOffset(-189); //todo: verify
-        public static readonly MemoryOffset BLACK_SCREEN = new MemoryOffset(-228);
-        public static readonly MemoryOffset NO_GRIP_DMG = new MemoryOffset(0, 6);
-        public static readonly MemoryOffset NO_PAUSE_BTN = new MemoryOffset(0, 5);
-        public static readonly MemoryOffset NO_ITEM_PAUSE = new MemoryOffset(0, 6);
-        public static readonly MemoryOffset NO_WEAPON_PAUSE = new MemoryOffset(0, 6);
-        public static readonly MemoryOffset FORCE_SLEEP = new MemoryOffset(0, 7);
-        public static readonly MemoryOffset FORCE_WAKE = new MemoryOffset(0, 9);
-        public static readonly MemoryOffset INFINITE_ITEMS = new MemoryOffset(0, 6);
-        public static readonly MemoryOffset MAX_ON_PICKUP = new MemoryOffset(0, 6);
-        public static readonly MemoryOffset KNOCKOUT_DURATION = new MemoryOffset(0, 7);
-        public static readonly MemoryOffset REMOVE_PLANT_FILTER = new MemoryOffset(0, 6);
-        public static readonly MemoryOffset GUARD_ANIMATIONS = new MemoryOffset(0, 6);
-        public static readonly MemoryOffset REMOVE_PLANT_FOG = new MemoryOffset(0, 4);
-        public static readonly MemoryOffset REMOVE_TANKER_FILTER = new MemoryOffset(9);
-        public static readonly MemoryOffset NIGHT_TIME = new MemoryOffset(0);
-        public static readonly MemoryOffset ENABLE_CUSTOM_FILTER = new MemoryOffset(0, 18);
-        public static readonly MemoryOffset CUSTOM_FILTERING = new MemoryOffset(-204, -202);
-        public static readonly MemoryOffset PAUSE_VR_TIMER = new MemoryOffset(0, 7);
-        public static readonly MemoryOffset VR_AUTO_COMPLETE_OBJECTIVES = new MemoryOffset(0, 7);
-        public static readonly MemoryOffset VR_AUTO_COMPLETE_ENEMIES = new MemoryOffset(0, 7);
-        public static readonly MemoryOffset VR_NO_HIT_DMG = new MemoryOffset(0, 8);
-        public static readonly MemoryOffset VR_NO_FALL_DMG = new MemoryOffset(0, 6);
-        public static readonly MemoryOffset VR_INF_STR = new MemoryOffset(0, 6);
-        public static readonly MemoryOffset VR_TAKE_GRIP_DMG = new MemoryOffset(0, 7);
-        public static readonly MemoryOffset VR_AIM_STAB = new MemoryOffset(0, 7);
-        public static readonly MemoryOffset VR_INF_AMMO = new MemoryOffset(0, 4);
-        public static readonly MemoryOffset VR_INF_ITEM = new MemoryOffset(0, 6);
-        public static readonly MemoryOffset VR_NO_RELOAD = new MemoryOffset(0, 10);
-        public static readonly MemoryOffset EMMA_INF_HP = new MemoryOffset(0, 3);
-        public static readonly MemoryOffset EMMA_INF_O2 = new MemoryOffset(0, 6);
-        public static readonly MemoryOffset INVISIBLE_TO_GUARDS = new MemoryOffset(0, 9);
-        public static readonly MemoryOffset INVISIBLE_TO_CYPHERS = new MemoryOffset(0, 10);
-        public static readonly MemoryOffset INVISIBLE_TO_CAMERAS = new MemoryOffset(0, 7);
-        public static readonly MemoryOffset DEAFEN_GUARDS_TO_KNOCKS = new MemoryOffset(0, 6);
-        public static readonly MemoryOffset DEAFEN_GUARDS_TO_GUNS = new MemoryOffset(0, 9);
-        public static readonly MemoryOffset TURN_OFF_MUSIC = new MemoryOffset(0, 6);
+        public static readonly MemoryOffset InfiniteAmmo = new MemoryOffset(0, 16);
+        public static readonly MemoryOffset NeverReload = new MemoryOffset(0, 16);
+        public static readonly MemoryOffset InfiniteLife = new MemoryOffset(0, 16);
+        public static readonly MemoryOffset InfiniteO2 = new MemoryOffset(0, 16);
+        public static readonly MemoryOffset NoBleedDmg = new MemoryOffset(0, 16);
+        public static readonly MemoryOffset NoBurnDmg = new MemoryOffset(0, 16);
+        public static readonly MemoryOffset NoClip = new MemoryOffset(0x40, 0x53);
+        public static readonly MemoryOffset Letterbox = new MemoryOffset(-187);
+        public static readonly MemoryOffset Zoom = new MemoryOffset(-189); //todo: verify
+        public static readonly MemoryOffset BlackScreen = new MemoryOffset(-228);
+        public static readonly MemoryOffset NoGripDmg = new MemoryOffset(0, 6);
+        public static readonly MemoryOffset NoPauseBtn = new MemoryOffset(0, 5);
+        public static readonly MemoryOffset NoItemPause = new MemoryOffset(0, 6);
+        public static readonly MemoryOffset NoWeaponPause = new MemoryOffset(0, 6);
+        public static readonly MemoryOffset ForceSleep = new MemoryOffset(0, 7);
+        public static readonly MemoryOffset ForceWake = new MemoryOffset(0, 9);
+        public static readonly MemoryOffset InfiniteItems = new MemoryOffset(0, 6);
+        public static readonly MemoryOffset MaxOnPickup = new MemoryOffset(0, 6);
+        public static readonly MemoryOffset KnockoutDuration = new MemoryOffset(0, 7);
+        public static readonly MemoryOffset RemovePlantFilter = new MemoryOffset(0, 6);
+        public static readonly MemoryOffset GuardAnimations = new MemoryOffset(0, 6);
+        public static readonly MemoryOffset RemovePlantFog = new MemoryOffset(0, 4);
+        public static readonly MemoryOffset RemoveTankerFilter = new MemoryOffset(9);
+        public static readonly MemoryOffset NightTime = new MemoryOffset(0);
+        public static readonly MemoryOffset EnableCustomFilter = new MemoryOffset(0, 18);
+        public static readonly MemoryOffset CustomFiltering = new MemoryOffset(-204, -202);
+        public static readonly MemoryOffset PauseVrTimer = new MemoryOffset(0, 7);
+        public static readonly MemoryOffset VrAutoCompleteObjectives = new MemoryOffset(0, 7);
+        public static readonly MemoryOffset VrAutoCompleteEnemies = new MemoryOffset(0, 7);
+        public static readonly MemoryOffset VrNoHitDmg = new MemoryOffset(0, 8);
+        public static readonly MemoryOffset VrNoFallDmg = new MemoryOffset(0, 6);
+        public static readonly MemoryOffset VrInfStr = new MemoryOffset(0, 6);
+        public static readonly MemoryOffset VrTakeGripDmg = new MemoryOffset(0, 7);
+        public static readonly MemoryOffset VrAimStab = new MemoryOffset(0, 7);
+        public static readonly MemoryOffset VrInfAmmo = new MemoryOffset(0, 4);
+        public static readonly MemoryOffset VrInfItem = new MemoryOffset(0, 6);
+        public static readonly MemoryOffset VrNoReload = new MemoryOffset(0, 10);
+        public static readonly MemoryOffset EmmaInfHp = new MemoryOffset(0, 3);
+        public static readonly MemoryOffset EmmaInfO2 = new MemoryOffset(0, 6);
+        public static readonly MemoryOffset InvisibleToGuards = new MemoryOffset(0, 9);
+        public static readonly MemoryOffset InvisibleToCyphers = new MemoryOffset(0, 10);
+        public static readonly MemoryOffset InvisibleToCameras = new MemoryOffset(0, 7);
+        public static readonly MemoryOffset DeafenGuardsToKnocks = new MemoryOffset(0, 6);
+        public static readonly MemoryOffset DeafenGuardsToGuns = new MemoryOffset(0, 9);
+        public static readonly MemoryOffset TurnOffMusic = new MemoryOffset(0, 6);
         #endregion
 
         #region Calculated From CurrentGripGauge
-        public static readonly MemoryOffset CURRENT_GRIP_GAUGE = new MemoryOffset(136, 137);
+        public static readonly MemoryOffset CurrentGripGauge = new MemoryOffset(136, 137);
         #endregion
 
         #region Calculated From ModifiableHP
-        public static readonly MemoryOffset MODIFIABLE_HP = new MemoryOffset(2258, 2259);
+        public static readonly MemoryOffset ModifiableHp = new MemoryOffset(2258, 2259);
         #endregion
 
         #region Calculated from Unknown Finder AoBs    
-        public static readonly MemoryOffset PLAYER_COLD = new MemoryOffset(-128); //TODO: prove this is valid, if even useful        
-        public static readonly MemoryOffset PLAYER_STANCE = new MemoryOffset(-134); //TODO: prove this is valid, if even useful
-        public static readonly MemoryOffset PLAYER_SNEEZING = new MemoryOffset(-108, -107); //TODO: prove this is valid, if even useful
+        public static readonly MemoryOffset PlayerCold = new MemoryOffset(-128); //TODO: prove this is valid, if even useful        
+        public static readonly MemoryOffset PlayerStance = new MemoryOffset(-134); //TODO: prove this is valid, if even useful
+        public static readonly MemoryOffset PlayerSneezing = new MemoryOffset(-108, -107); //TODO: prove this is valid, if even useful
 
         //TODO: add more of the game stats here
         //These values are PRESENTLY unknown

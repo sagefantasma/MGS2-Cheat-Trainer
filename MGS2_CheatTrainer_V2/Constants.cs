@@ -7,15 +7,15 @@ namespace MGS2_CheatTrainer_V2
     {
         //REWRITE STATUS: Done?
         public const string MGS2_PROCESS_NAME = "METAL GEAR SOLID2";
-        internal const string SteamAppId = "2131640";
-        internal const string SteamAppIdFileName = "steam_appid.txt";
-        public const int MillisecondsInSecond = 1000;
+        internal const string STEAM_APP_ID = "2131640";
+        internal const string STEAM_APP_ID_FILE_NAME = "steam_appid.txt";
+        public const int MILLISECONDS_IN_SECOND = 1000;
 
         public enum PlayableCharacter
         {
             Snake,
             Raiden,
-            MGS1Snake,
+            Mgs1Snake,
             TuxedoSnake,
             Pliskin,
             NinjaRaiden,
@@ -82,12 +82,18 @@ namespace MGS2_CheatTrainer_V2
             public bool Enabled { get; set; }
         }
 
-        public static class Extensions
+        public static IMgs2Object? DetermineObject(string input)
         {
-            public static T? FindInEither<T>(List<T> first, List<T> second, Predicate<T> match)
-                where T : class
+            try
             {
-                return first.Find(match) ?? second.Find(match);
+                string viewName = input.ToLower();
+            
+                return ItemList.Find(x=> viewName.Contains($"{x.Shorthand}detailview", StringComparison.InvariantCultureIgnoreCase)) ??
+                       WeaponList.Find(x => viewName.Contains($"{x.Shorthand}detailview", StringComparison.InvariantCultureIgnoreCase)) ?? throw new Exception();
+            }
+            catch (Exception ex)
+            {
+                throw new NullReferenceException($"{input} is an unknown object");
             }
         }
 

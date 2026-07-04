@@ -4,6 +4,7 @@ using System.IO;
 
 namespace MGS2_CheatTrainer_V2
 {
+    //REWRITE STATUS: Not needed to update?
     internal abstract class Logging
     {
         private const int KilobyteInBytes = 1000;

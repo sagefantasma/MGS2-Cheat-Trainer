@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace MGS2_CheatTrainer_V2
 {
+    //REWRITE STATUS: Not needed to update?
     public static class BossParser
     {
         public static Constants.Boss ParseNode(string nodeName)

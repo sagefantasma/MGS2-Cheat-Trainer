@@ -159,7 +159,7 @@ namespace MGS2_CheatTrainer_V2
         new MaxableWeapon("Stun Grenade", "stun", 20), //11 - CC
         new BooleanWeapon("Directional Microphone", "dmic", 22), //12 - CD
         new BooleanWeapon("High Frequency Blade", "hfblade", 24), //13 - CE
-        new BooleanWeapon("Coolant", "coolant", 26), //14 - CF
+        new BooleanWeapon("Coolant Spray", "coolant", 26), //14 - CF
         new MaxableWeapon("AKS-74u", "aks74u", 28), //15 - D0
         new MaxableWeapon("Magazine", "magazine", 30), //16 - D1
         new MaxableWeapon("Grenade", "grenade", 32), //17 - D2

@@ -126,6 +126,7 @@ namespace MGS2_CheatTrainer_V2
 
         public void OldToggleObject(bool shouldBeEnabled, ILogger logger, TextBlock statusLabel)
         {
+            /*
             logger.Verbose($"Toggling {Name}...");
             Constants.PlayableCharacter currentPc = Mgs2MemoryManager.CheckIfUsable(this);
             statusLabel.Text = $"Finding {Name} in memory...";
@@ -138,15 +139,17 @@ namespace MGS2_CheatTrainer_V2
             //Toggle the object if it is currently disabled and needs enabling, or if it is currently enabled and needs disabling.
             if (isCurrentlyEnabled != shouldBeEnabled)
             {
-                Mgs2MemoryManager.ToggleObject(this, currentPc, shouldBeEnabled);
+                //Mgs2MemoryManager.ToggleObject(this, currentPc, shouldBeEnabled);
             }
             statusLabel.Text = $"Toggled {Name}!";
             logger.Verbose($"Toggle was successful");
+            */
         }
     }
     #endregion
 
     #region Item Classes
+    /*
     public class OldBasicItem : OldMgs2Object
     {
         #region Internals & Constructor
@@ -164,7 +167,7 @@ namespace MGS2_CheatTrainer_V2
             catch(Exception e)
             {
                 logger.Error($"Failed to toggle {Name}: {e}");
-                MessageBox.Show($"Failed to toggle {Name}: {e}");
+                //MessageBox.Show($"Failed to toggle {Name}: {e}");
             }
         }
     }
@@ -185,14 +188,14 @@ namespace MGS2_CheatTrainer_V2
                 logger.Verbose($"Setting {Name} to {level}...");
                 Constants.PlayableCharacter currentPc = Mgs2MemoryManager.CheckIfUsable(this);
                 statusLabel.Text = $"Finding {Name} in memory...";
-                Mgs2MemoryManager.UpdateObjectBaseValue(this, level, currentPc);
+                //Mgs2MemoryManager.UpdateObjectBaseValue(this, level, currentPc);
                 statusLabel.Text = $"{Name} level updated to {level}";
                 logger.Verbose($"Level set");
             }
             catch(Exception e)
             {
                 logger.Error($"Failed to set card level: {e}");
-                MessageBox.Show($"Failed to set card level: {e}");
+                //MessageBox.Show($"Failed to set card level: {e}");
             }
         }
     }
@@ -215,14 +218,14 @@ namespace MGS2_CheatTrainer_V2
                 logger.Verbose($"Setting durability {value} for {Name}...");
                 Constants.PlayableCharacter currentPc = Mgs2MemoryManager.CheckIfUsable(this);
                 statusLabel.Text = $"Finding {Name} in memory...";
-                Mgs2MemoryManager.UpdateObjectBaseValue(this, value, currentPc);
+                //Mgs2MemoryManager.UpdateObjectBaseValue(this, value, currentPc);
                 statusLabel.Text = $"{Name} durability updated to {value}";
                 logger.Verbose($"Durability set successfully");
             }
             catch(Exception e)
             {
                 logger.Error($"Failed to modify durability for {Name}: {e}");
-                MessageBox.Show($"Failed to modify durability for {Name}: {e}");
+                //MessageBox.Show($"Failed to modify durability for {Name}: {e}");
             }
         }
 
@@ -261,8 +264,8 @@ namespace MGS2_CheatTrainer_V2
 
         internal new void ToggleObject(bool shouldBeEnabled, ILogger logger, TextBlock statusLabel)
         {
-            Constants.PlayableCharacter currentPc = Mgs2MemoryManager.CheckIfUsable(this);
-            ushort currentCount = BitConverter.ToUInt16(Mgs2MemoryManager.GetPlayerInfoBasedValue(CurrentCountOffset, sizeof(short), currentPc), 0);
+            //Constants.PlayableCharacter currentPc = Mgs2MemoryManager.CheckIfUsable(this);
+            //ushort currentCount = BitConverter.ToUInt16(Mgs2MemoryManager.GetPlayerInfoBasedValue(CurrentCountOffset, sizeof(short), currentPc), 0);
             if (currentCount == 0 && shouldBeEnabled)
             {
                 if (_lastKnownCurrentCount != 0)
@@ -282,16 +285,16 @@ namespace MGS2_CheatTrainer_V2
             try
             {
                 logger.Verbose($"Setting current count to {count} for {Name}...");
-                Constants.PlayableCharacter currentPc = Mgs2MemoryManager.CheckIfUsable(this);
+                //Constants.PlayableCharacter currentPc = Mgs2MemoryManager.CheckIfUsable(this);
                 statusLabel.Text = $"Finding {Name} in memory...";
-                Mgs2MemoryManager.UpdateObjectBaseValue(this, count, currentPc);
+                //Mgs2MemoryManager.UpdateObjectBaseValue(this, count, currentPc);
                 statusLabel.Text = $"Current count for {Name} updated to {count}";
                 logger.Verbose($"Current count set successfully");
             }
             catch(Exception e)
             {
                 logger.Error($"Failed to update current count of {Name}: {e}");
-                MessageBox.Show($"Failed to update current count of {Name}: {e}");
+                //MessageBox.Show($"Failed to update current count of {Name}: {e}");
             }
         }
 
@@ -300,22 +303,23 @@ namespace MGS2_CheatTrainer_V2
             try
             {
                 logger.Verbose($"Setting max count to {count} for {Name}...");
-                Constants.PlayableCharacter currentPc = Mgs2MemoryManager.CheckIfUsable(this);
+                //Constants.PlayableCharacter currentPc = Mgs2MemoryManager.CheckIfUsable(this);
                 statusLabel.Text = $"Finding {Name} in memory...";
-                Mgs2MemoryManager.UpdateObjectMaxValue(this, count, currentPc);
+                //Mgs2MemoryManager.UpdateObjectMaxValue(this, count, currentPc);
                 statusLabel.Text = $"Max count for {Name} updated to {count}";
                 logger.Verbose($"Max count set successfully");
             }
             catch(Exception e)
             {
                 logger.Error($"Failed to update max count of {Name}: {e}");
-                MessageBox.Show($"Failed to update max count of {Name}: {e}");
+                //MessageBox.Show($"Failed to update max count of {Name}: {e}");
             }
         }
-    }
+    }*/
     #endregion
 
     #region Weapon Classes
+    /*
     public class OldBasicWeapon : OldMgs2Object
     {
         #region Internals & Constructor
@@ -333,7 +337,7 @@ namespace MGS2_CheatTrainer_V2
             catch(Exception e)
             {
                 logger.Error($"Failed to toggle {Name}: {e}");
-                MessageBox.Show($"Failed to toggle {Name}: {e}");
+                //MessageBox.Show($"Failed to toggle {Name}: {e}");
             }
         }
     }
@@ -354,7 +358,7 @@ namespace MGS2_CheatTrainer_V2
 
         internal new void ToggleObject(bool shouldBeEnabled, ILogger logger, TextBlock statusLabel)
         {
-            Constants.PlayableCharacter currentPc = Mgs2MemoryManager.CheckIfUsable(this);
+            //Constants.PlayableCharacter currentPc = Mgs2MemoryManager.CheckIfUsable(this);
             short currentAmmo = BitConverter.ToInt16(Mgs2MemoryManager.GetPlayerInfoBasedValue(CurrentAmmoOffset, sizeof(short), currentPc), 0);
             //TODO: it would be cool to duplicate the "NO USE" functionality the Stinger gets when prone when disabled!
             //can't seem to easily find the bytes that control that though :(
@@ -378,16 +382,16 @@ namespace MGS2_CheatTrainer_V2
             try
             {
                 logger?.Verbose($"Setting current ammo to {count} for {Name}...");
-                Constants.PlayableCharacter currentPc = Mgs2MemoryManager.CheckIfUsable(this);
+                //Constants.PlayableCharacter currentPc = Mgs2MemoryManager.CheckIfUsable(this);
                 statusLabel.Text = $"Finding {Name} in memory...";
-                Mgs2MemoryManager.UpdateObjectBaseValue(this, shortCount, currentPc);
+                //Mgs2MemoryManager.UpdateObjectBaseValue(this, shortCount, currentPc);
                 statusLabel.Text = $"Current ammo count for {Name} updated to {count}";
                 logger.Verbose($"Current ammo set successfully");
             }
             catch(Exception e)
             {
                 logger.Error($"Failed to update current ammo count for {Name}: {e}");
-                MessageBox.Show($"Failed to update current ammo count for {Name}: {e}");
+                //MessageBox.Show($"Failed to update current ammo count for {Name}: {e}");
             }
         }
 
@@ -397,7 +401,7 @@ namespace MGS2_CheatTrainer_V2
             try
             {
                 logger.Verbose($"Setting max ammo to {count} for {Name}...");
-                Constants.PlayableCharacter currentPc = Mgs2MemoryManager.CheckIfUsable(this);
+                //Constants.PlayableCharacter currentPc = Mgs2MemoryManager.CheckIfUsable(this);
                 statusLabel.Text = $"Finding {Name} in memory...";
                 Mgs2MemoryManager.UpdateObjectMaxValue(this, shortCount, currentPc);
                 statusLabel.Text = $"Max ammo count for {Name} updated to {count}";
@@ -406,7 +410,7 @@ namespace MGS2_CheatTrainer_V2
             catch(Exception e)
             {
                 logger.Error($"Failed to update max ammo count for {Name}: {e}");
-                MessageBox.Show($"Failed to update max ammo count for {Name}: {e}");
+                //MessageBox.Show($"Failed to update max ammo count for {Name}: {e}");
             }
         }
     }
@@ -426,14 +430,14 @@ namespace MGS2_CheatTrainer_V2
             try
             {
                 logger.Verbose($"Setting HF blade to lethal");
-                Constants.PlayableCharacter currentPc = Mgs2MemoryManager.CheckIfUsable(this);
-                Mgs2MemoryManager.UpdateObjectBaseValue(this, _count += 1, currentPc); //TODO: determine real values
+                //Constants.PlayableCharacter currentPc = Mgs2MemoryManager.CheckIfUsable(this);
+                //Mgs2MemoryManager.UpdateObjectBaseValue(this, _count += 1, currentPc); //TODO: determine real values
                 logger.Verbose($"HF blade set to lethal successfully!");
             }
             catch(Exception e)
             {
                 logger.Error($"Failed to set HF blade to lethal: {e}");
-                MessageBox.Show($"Failed to set HF blade to lethal: {e}");
+                //MessageBox.Show($"Failed to set HF blade to lethal: {e}");
             }
         }
 
@@ -442,17 +446,18 @@ namespace MGS2_CheatTrainer_V2
             try
             {
                 logger.Verbose($"Setting HF blade to stun");
-                Constants.PlayableCharacter currentPc = Mgs2MemoryManager.CheckIfUsable(this);
-                Mgs2MemoryManager.UpdateObjectBaseValue(this, _count -= 1, currentPc); //TODO: determine real values
+                //Constants.PlayableCharacter currentPc = Mgs2MemoryManager.CheckIfUsable(this);
+                //Mgs2MemoryManager.UpdateObjectBaseValue(this, _count -= 1, currentPc); //TODO: determine real values
                 logger.Verbose($"HF blade set to lethal successfully!");
             }
             catch(Exception e)
             {
                 logger.Error($"Failed to set HF blade to stun: {e}");
-                MessageBox.Show($"Failed to set HF blade to stun: {e}");
+                //MessageBox.Show($"Failed to set HF blade to stun: {e}");
             }
         }
     }
+    */
     #endregion
 
     public class Mgs2UsableObjects

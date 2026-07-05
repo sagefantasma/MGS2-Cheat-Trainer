@@ -10,10 +10,6 @@
 
         <!-- Menu bar at the top -->
         <Menu DockPanel.Dock="Top">
-            <MenuItem Header="Options">
-                <MenuItem Header="Modify Config"  x:Name="ModifyConfigMenuItem"  Click="ModifyConfigMenuItem_Click"/>
-                <MenuItem Header="Launch MGS2"     x:Name="LaunchMgs2MenuItem"    Click="LaunchMgs2MenuItem_Click"/>
-            </MenuItem>
             <MenuItem Header="Help">
                 <MenuItem Header="View Logs"              x:Name="ViewLogsMenuItem"    Click="ViewLogsMenuItem_Click"/>
                 <MenuItem Header="Open Install Location"  Click="OpenInstallLocationMenuItem_Click"/>
@@ -36,33 +32,7 @@
 
             <TabItem Header="Items">
                 <Grid ColumnDefinitions="0.2*, 0.8*">
-
-                    <!-- Left: item list -->
-                    <ListBox Grid.Column="0"
-                             x:Name="ItemListBox"
-                             Tapped="ItemListBox_Tapped"/>
-
-                    <!-- Right: detail panel (GroupBox replacement) -->
-                    <Border Grid.Column="1"
-                            BorderThickness="1"
-                            BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
-                            CornerRadius="4"
-                            Padding="10"
-                            Margin="4">
-                        <Grid RowDefinitions="Auto, *">
-
-                            <!-- The "header" text that GroupBox normally shows -->
-                            <TextBlock Grid.Row="0"
-                                       x:Name="ItemGroupHeader"
-                                       Text="Select an Item From the List to the Left"
-                                       Margin="0,0,0,8"/>
-
-                            <!-- Content swaps here on selection -->
-                            <ContentControl Grid.Row="1"
-                                            x:Name="ItemDetailContent"/>
-                        </Grid>
-                    </Border>
-
+                    
                 </Grid>
             </TabItem>
 

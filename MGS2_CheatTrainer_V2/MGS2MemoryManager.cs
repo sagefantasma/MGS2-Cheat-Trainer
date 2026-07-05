@@ -58,7 +58,7 @@ namespace MGS2_CheatTrainer_V2
         #endregion
 
         #region Private methods
-        internal static Constants.PlayableCharacter CheckIfUsable(OldMgs2Object oldMgs2Object)
+        internal static Constants.PlayableCharacter CheckIfUsable(Constants.IMgs2Object mgs2Object)
         {
             try
             {
@@ -66,17 +66,17 @@ namespace MGS2_CheatTrainer_V2
                 switch (currentPc)
                 {
                     case Constants.PlayableCharacter.Snake:
-                        if (!Snake.UsableObjects.Contains(oldMgs2Object))
+                        if (!Snake.UsableObjects.Contains(mgs2Object))
                         {
-                            Logger.Warning($"Snake cannot use {oldMgs2Object.Name}");
-                            throw new InvalidOperationException($"Snake cannot use {oldMgs2Object.Name}");
+                            Logger.Warning($"Snake cannot use {mgs2Object.Name}");
+                            throw new InvalidOperationException($"Snake cannot use {mgs2Object.Name}");
                         }
                         break;
                     case Constants.PlayableCharacter.Raiden:
-                        if (!Raiden.UsableObjects.Contains(oldMgs2Object))
+                        if (!Raiden.UsableObjects.Contains(mgs2Object))
                         {
-                            Logger.Warning($"Raiden cannot use {oldMgs2Object.Name}");
-                            throw new InvalidOperationException($"Raiden cannot use {oldMgs2Object.Name}");
+                            Logger.Warning($"Raiden cannot use {mgs2Object.Name}");
+                            throw new InvalidOperationException($"Raiden cannot use {mgs2Object.Name}");
                         }
                         break;
                     default:
@@ -87,7 +87,7 @@ namespace MGS2_CheatTrainer_V2
             }
             catch (Exception e)
             {
-                Logger.Error($"Could not check if {oldMgs2Object.Name} is usable: {e}");
+                Logger.Error($"Could not check if {mgs2Object.Name} is usable: {e}");
                 throw new AggregateException("Failed to check if item is usable", e);
             }
         }
@@ -467,26 +467,26 @@ namespace MGS2_CheatTrainer_V2
             }
         }
 
-        public static void UpdateObjectMaxValue(OldMgs2Object oldMgs2Object, ushort count, Constants.PlayableCharacter character)
+        public static void UpdateObjectMaxValue(Constants.IMgs2Object mgs2Object, ushort count, Constants.PlayableCharacter character)
         {
             try
             {
-                switch (oldMgs2Object)
+                switch (mgs2Object)
                 {
-                    case OldStackableItem stackableItem:
-                        Logger.Debug($"mgs2Object parsed as StackableItem, setting max count to: {count}");
-                        SetPlayerOffsetBasedByteValueObject(stackableItem.MaxCountOffset, BitConverter.GetBytes(count), character);
+                    case Constants.MaxableItem maxableItem:
+                        Logger.Debug($"mgs2Object parsed as MaxableItem, setting max count to: {count}");
+                        SetPlayerOffsetBasedByteValueObject(maxableItem.MaxCount, BitConverter.GetBytes(count), character);
                         break;
-                    case OldAmmoWeapon ammoWeapon:
-                        Logger.Debug($"mgs2Object parsed as AmmoWeapon, setting max count to: {count}");
-                        SetPlayerOffsetBasedByteValueObject(ammoWeapon.MaxAmmoOffset, BitConverter.GetBytes(count), character);
+                    case Constants.MaxableWeapon maxableWeapon:
+                        Logger.Debug($"mgs2Object parsed as maxableWeapon, setting max count to: {count}");
+                        SetPlayerOffsetBasedByteValueObject(maxableWeapon.MaxCount, BitConverter.GetBytes(count), character);
                         break;
                 }
             }
             catch (Exception e)
             {
-                Logger.Error($"Failed to update the max value for {oldMgs2Object.Name}: {e}");
-                throw new AggregateException($"Could not update max value for {oldMgs2Object.Name}", e);
+                Logger.Error($"Failed to update the max value for {mgs2Object.Name}: {e}");
+                throw new AggregateException($"Could not update max value for {mgs2Object.Name}", e);
             }
         }
 

@@ -10,6 +10,8 @@ namespace MGS2_CheatTrainer_V2
         internal const string STEAM_APP_ID = "2131640";
         internal const string STEAM_APP_ID_FILE_NAME = "steam_appid.txt";
         public const int MILLISECONDS_IN_SECOND = 1000;
+        internal const int ITEM_MIN_MAX_COUNT_DIFF = 96;
+        internal const int WEAPON_MIN_MAX_COUNT_DIFF = 72;
 
         public enum PlayableCharacter
         {
@@ -50,18 +52,15 @@ namespace MGS2_CheatTrainer_V2
 
         public class SpecialItem(string name, string shorthand, int index) : Item(name, shorthand, index)
         {
-            public int Value { get; set; }
         }
 
         public class MaxableItem(string name, string shorthand, int index) : Item(name, shorthand, index)
         {
-            public int CurrentCount { get; set; }
-            public int MaxCount { get; set; }
+            public int MaxIndex { get; set; } = index + ITEM_MIN_MAX_COUNT_DIFF;
         }
 
         public class BooleanItem(string name, string shorthand, int index) : Item(name, shorthand, index)
         {
-            public bool Enabled { get; set; }
         }
     
         public class Weapon(string name, string shorthand, int index) : IMgs2Object
@@ -73,13 +72,11 @@ namespace MGS2_CheatTrainer_V2
         
         public class MaxableWeapon(string name, string shorthand, int index) : Weapon(name, shorthand, index)
         {
-            public int CurrentCount { get; set; }
-            public int MaxCount { get; set; }
+            public int MaxIndex { get; set; } = index + WEAPON_MIN_MAX_COUNT_DIFF;
         }
 
         public class BooleanWeapon(string name, string shorthand, int index) : Weapon(name, shorthand, index)
         {
-            public bool Enabled { get; set; }
         }
 
         public static IMgs2Object? DetermineObject(string input)

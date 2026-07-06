@@ -1,6 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using System;
+using Avalonia.Media;
 
 namespace MGS2_CheatTrainer_V2.Views
 {
@@ -8,9 +9,9 @@ namespace MGS2_CheatTrainer_V2.Views
     {
         // These actions get set by MainWindow when it loads an item,
         // so the detail view doesn't need to know about MGS2 objects directly
-        public Action<bool> OnToggle { get; set; }
-        public Action<ushort> OnSetCurrent { get; set; }
-        public Action<ushort> OnSetMax { get; set; }
+        public required Action<bool> OnToggle { get; set; }
+        public required Action<ushort> OnSetCurrent { get; set; }
+        public required Action<ushort> OnSetMax { get; set; }
 
         // Set to false for items that don't have a quantity (e.g. Body Armor)
         public bool HasCount
@@ -19,6 +20,22 @@ namespace MGS2_CheatTrainer_V2.Views
             {
                 CurrentUpDown.IsVisible = value;
                 MaxUpDown.IsVisible = value;
+            }
+        }
+
+        public IImage? EntityImage
+        {
+            get => ObjectImage?.Source;
+            set => ObjectImage?.Source = value;
+        }
+
+        public string? Mgs2Object
+        {
+            get;
+            set
+            {
+                field = value;
+                EnabledCheckBox.Content = $"{Mgs2Object} Enabled?";
             }
         }
 

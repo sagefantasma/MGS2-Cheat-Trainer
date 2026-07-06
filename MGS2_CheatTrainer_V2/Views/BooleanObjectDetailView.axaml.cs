@@ -18,11 +18,21 @@ public partial class BooleanObjectDetailView : UserControl
         get => ObjectImage?.Source;
         set => ObjectImage?.Source = value;
     }
+    
+    public string? Mgs2Object
+    {
+        get;
+        set
+        {
+            field = value;
+            EnabledCheckBox.Content = $"{Mgs2Object} Enabled?";
+        }
+    }
 
     public BooleanObjectDetailView()
     {
         InitializeComponent();
-        _memoryManager = App.Services.GetRequiredService<Mgs2MemoryManager>();
+        //_memoryManager = App.Services.GetRequiredService<Mgs2MemoryManager>();
     }
 
     public void Enabled_OnClick(object sender, RoutedEventArgs e)

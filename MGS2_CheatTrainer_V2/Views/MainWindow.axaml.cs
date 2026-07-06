@@ -34,6 +34,6 @@ public partial class MainWindow : Window
 
     private void Mgs2TabControl_SelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        throw new System.NotImplementedException();
+        //throw new System.NotImplementedException();
     }
 }

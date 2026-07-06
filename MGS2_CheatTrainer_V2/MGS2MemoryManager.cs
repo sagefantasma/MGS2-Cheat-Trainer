@@ -475,11 +475,11 @@ namespace MGS2_CheatTrainer_V2
                 {
                     case Constants.MaxableItem maxableItem:
                         Logger.Debug($"mgs2Object parsed as MaxableItem, setting max count to: {count}");
-                        SetPlayerOffsetBasedByteValueObject(maxableItem.MaxCount, BitConverter.GetBytes(count), character);
+                        SetPlayerOffsetBasedByteValueObject(maxableItem.MaxIndex, BitConverter.GetBytes(count), character);
                         break;
                     case Constants.MaxableWeapon maxableWeapon:
                         Logger.Debug($"mgs2Object parsed as maxableWeapon, setting max count to: {count}");
-                        SetPlayerOffsetBasedByteValueObject(maxableWeapon.MaxCount, BitConverter.GetBytes(count), character);
+                        SetPlayerOffsetBasedByteValueObject(maxableWeapon.MaxIndex, BitConverter.GetBytes(count), character);
                         break;
                 }
             }

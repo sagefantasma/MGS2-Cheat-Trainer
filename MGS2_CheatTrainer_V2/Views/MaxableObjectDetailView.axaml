@@ -1,22 +1,23 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="200"
              x:Class="MGS2_CheatTrainer_V2.Views.MaxableObjectDetailView">
 
-    <Grid RowDefinitions="0.42*, 0.58*"
+    <Border BorderThickness="2" BorderBrush="GhostWhite" Margin="3">
+    <Grid RowDefinitions="0.5*, 0.5*"
           ColumnDefinitions="0.5*, 0.5*">
-
         <!-- Image placeholder (top-left) -->
-        <Border Grid.Row="0" Grid.Column="0"
-                Background="DarkSlateGray"
-                Margin="4"
-                CornerRadius="4"/>
+        <Image x:Name="ObjectImage" Source="/Assets/ration_alp_ovl.bmp.bmp" Stretch="Uniform" Grid.Row="0" Grid.Column="0"
+                Margin="4"/>
 
         <!-- Enabled checkbox (top-right) -->
         <CheckBox Grid.Row="0" Grid.Column="1"
                   x:Name="EnabledCheckBox"
                   Content="Enabled?"
                   Margin="6"
-                  VerticalAlignment="Top"
+                  VerticalAlignment="Center"
                   IsCheckedChanged="EnabledCheckBox_IsCheckedChanged"/>
 
         <!-- Current count (bottom-left) -->
@@ -27,8 +28,9 @@
             <Grid Grid.Row="1" ColumnDefinitions="*, Auto">
                 <NumericUpDown Grid.Column="0"
                                x:Name="CurrentUpDown"
-                               Minimum="0" Maximum="65534"
-                               Margin="0,0,4,0"/>
+                               ShowButtonSpinner="False"
+                               Minimum="0" Maximum="65534" 
+                               Margin="4,4,4,4"/>
                 <Button Grid.Column="1"
                         Content="Set!"
                         Width="40"
@@ -44,8 +46,9 @@
             <Grid Grid.Row="1" ColumnDefinitions="*, Auto">
                 <NumericUpDown Grid.Column="0"
                                x:Name="MaxUpDown"
+                               ShowButtonSpinner="False"
                                Minimum="0" Maximum="65534"
-                               Margin="0,0,4,0"/>
+                               Margin="4,4,4,4"/>
                 <Button Grid.Column="1"
                         Content="Set!"
                         Width="40"
@@ -53,6 +56,5 @@
             </Grid>
         </Grid>
 
-    </Grid>
-
+    </Grid></Border>
 </UserControl>

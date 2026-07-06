@@ -1,9 +1,10 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:views="clr-namespace:MGS2_CheatTrainer_V2.Views"
         x:Class="MGS2_CheatTrainer_V2.Views.MainWindow"
         Title="MGS2 Cheat Trainer"
-        Width="592"
-        Height="490"
+        Width="1330"
+        Height="1040"
         CanResize="True">
 
     <DockPanel>
@@ -31,9 +32,48 @@
                     SelectionChanged="Mgs2TabControl_SelectionChanged">
 
             <TabItem Header="Items">
-                <Grid ColumnDefinitions="0.2*, 0.8*">
-                    
-                </Grid>
+                <Panel>
+                    <Image Source="/Assets/mini.png" Stretch="UniformToFill"/>
+                    <Rectangle Fill="Black" Opacity="0.9" IsHitTestVisible="False"/>
+                    <Grid x:Name="ItemGrid" ColumnDefinitions=".2*,.2*,.2*,.2*,.2*" RowDefinitions=".125*,.125*,.125*,.125*,.125*,.125*,.125*,.125*">
+                        <views:MaxableObjectDetailView x:Name="RationDetailView" Grid.Row="0" Grid.Column="0" EntityImage="/Assets/ration_alp_ovl.bmp.bmp" Mgs2Object="Ration"/>
+                        <views:BooleanObjectDetailView x:Name="Scope1DetailView" Grid.Row="0" Grid.Column="1" EntityImage="/Assets/scope_alp_ovl.bmp.bmp" Mgs2Object="Scope"/>
+                        <views:MaxableObjectDetailView x:Name="ColdMedsDetailView" Grid.Row="0" Grid.Column="2" EntityImage="/Assets/medi_alp_ovl.bmp.bmp" Mgs2Object="Medicine"/>
+                        <views:MaxableObjectDetailView x:Name="BandageDetailView" Grid.Row="0" Grid.Column="3" EntityImage="/Assets/styp_alp_ovl.bmp.bmp" Mgs2Object="Bandage"/>
+                        <views:MaxableObjectDetailView x:Name="PentazeminDetailView" Grid.Row="0" Grid.Column="4" EntityImage="/Assets/medi_alp_ovl.bmp.bmp" Mgs2Object="Pentazemin"/>
+                        <views:BooleanObjectDetailView x:Name="BduDetailView" Grid.Row="1" Grid.Column="0" EntityImage="/Assets/bam_alp_ovl.bmp.bmp" Mgs2Object="Body Armor"/>
+                        <views:BooleanObjectDetailView x:Name="StealthDetailView" Grid.Row="1" Grid.Column="1" EntityImage="/Assets/sam_alp_ovl.bmp.bmp" Mgs2Object="Stealth"/>
+                        <views:BooleanObjectDetailView x:Name="MineDetectorDetailView" Grid.Row="1" Grid.Column="2" EntityImage="/Assets/mnd_alp_ovl.bmp.bmp" Mgs2Object="Mine Detector"/>
+                        <views:BooleanObjectDetailView x:Name="SensorADetailView" Grid.Row="1" Grid.Column="3" EntityImage="/Assets/bsn1_alp_ovl.bmp.bmp" Mgs2Object="Sensor A"/>
+                        <views:BooleanObjectDetailView x:Name="SensorBDetailView" Grid.Row="1" Grid.Column="4" EntityImage="/Assets/bsn2_alp_ovl.bmp.bmp" Mgs2Object="Sensor B"/>
+                        <views:BooleanObjectDetailView x:Name="NvgDetailView" Grid.Row="2" Grid.Column="0" EntityImage="/Assets/ngl_alp_ovl.bmp.bmp" Mgs2Object="N.V.G."/>
+                        <views:BooleanObjectDetailView x:Name="ThermalsDetailView" Grid.Row="2" Grid.Column="1" EntityImage="/Assets/tgl_alp_ovl.bmp.bmp" Mgs2Object="Thermal Goggles"/>
+                        <views:BooleanObjectDetailView x:Name="Scope2DetailView" Grid.Row="2" Grid.Column="2" EntityImage="/Assets/scope_alp_ovl.bmp.bmp" Mgs2Object="Cutscene Scope"/>
+                        <views:BooleanObjectDetailView x:Name="DigitalCameraDetailView" Grid.Row="2" Grid.Column="3" EntityImage="/Assets/camera_alp_ovl.bmp.bmp" Mgs2Object="Digital Camera"/>
+                        <views:SpecialObjectDetailView x:Name="Box1DetailView" Grid.Row="2" Grid.Column="4" EntityImage="/Assets/cbx_a_alp_ovl.bmp.bmp" Mgs2Object="Box 1" ValueName="Durability"/>
+                        <views:BooleanObjectDetailView x:Name="CigsDetailView" Grid.Row="3" Grid.Column="0" EntityImage="/Assets/smoke_alp_ovl.bmp.bmp" Mgs2Object="Cigarettes"/>
+                        <views:SpecialObjectDetailView x:Name="CardDetailView" Grid.Row="3" Grid.Column="1" EntityImage="/Assets/acd_alp_ovl.bmp.bmp" Mgs2Object="Card" ValueName="Level"/>
+                        <views:BooleanObjectDetailView x:Name="ShaverDetailView" Grid.Row="3" Grid.Column="2" EntityImage="/Assets/shv_alp_ovl.bmp.bmp" Mgs2Object="Shaver"/>
+                        <views:BooleanObjectDetailView x:Name="PhoneDetailView" Grid.Row="3" Grid.Column="3" EntityImage="/Assets/htl_alp_ovl.bmp.bmp" Mgs2Object="Phone"/>
+                        <views:BooleanObjectDetailView x:Name="CameraDetailView" Grid.Row="3" Grid.Column="4" EntityImage="/Assets/camera_alp_ovl.bmp.bmp" Mgs2Object="Camera"/>
+                        <views:SpecialObjectDetailView x:Name="Box2DetailView" Grid.Row="4" Grid.Column="0" EntityImage="/Assets/cbx_b_alp_ovl.bmp.bmp" Mgs2Object="Box 2" ValueName="Durability"/>
+                        <views:SpecialObjectDetailView x:Name="Box3DetailView" Grid.Row="4" Grid.Column="1" EntityImage="/Assets/cbx_c_alp_ovl.bmp.bmp" Mgs2Object="Box 3" ValueName="Durability"/>
+                        <views:SpecialObjectDetailView x:Name="WetBoxDetailView" Grid.Row="4" Grid.Column="2" EntityImage="/Assets/cbox_wet_alp_ovl.bmp.bmp" Mgs2Object="Wet Box" ValueName="Durability"/>
+                        <views:BooleanObjectDetailView x:Name="ApSensorDetailView" Grid.Row="4" Grid.Column="3" EntityImage="/Assets/aps_alp_ovl.bmp.bmp" Mgs2Object="A.P. Sensor"/>
+                        <views:SpecialObjectDetailView x:Name="Box4DetailView" Grid.Row="4" Grid.Column="4" EntityImage="/Assets/cbx_d_alp_ovl.bmp.bmp" Mgs2Object="Box 4" ValueName="Durability"/>
+                        <views:SpecialObjectDetailView x:Name="Box5DetailView" Grid.Row="5" Grid.Column="0" EntityImage="/Assets/cbx_e_alp_ovl.bmp.bmp" Mgs2Object="Box 5" ValueName="Durability"/>
+                        <views:BooleanObjectDetailView x:Name="SocomSuppDetailView" Grid.Row="5" Grid.Column="1" EntityImage="/Assets/scm_sp2_alp_ovl.bmp.bmp" Mgs2Object="SOCOM Suppressor"/>
+                        <views:BooleanObjectDetailView x:Name="AkSuppDetailView" Grid.Row="5" Grid.Column="2" EntityImage="/Assets/aks_sp2_alp_ovl.bmp.bmp" Mgs2Object="AK Suppressor"/>
+                        <views:BooleanObjectDetailView x:Name="CutsceneCameraDetailView" Grid.Row="5" Grid.Column="3" EntityImage="/Assets/camera_alp_ovl.bmp.bmp" Mgs2Object="Cutscene Camera"/>
+                        <views:BooleanObjectDetailView x:Name="BandanaDetailView" Grid.Row="5" Grid.Column="4" EntityImage="/Assets/bnd_alp_ovl.bmp.bmp" Mgs2Object="Bandana"/>
+                        <views:MaxableObjectDetailView x:Name="DogTagsDetailView" Grid.Row="6" Grid.Column="0" EntityImage="/Assets/dog_alp_ovl.bmp.bmp" Mgs2Object="Dog Tags"/>
+                        <views:BooleanObjectDetailView x:Name="MODiscDetailView" Grid.Row="6" Grid.Column="1" EntityImage="/Assets/mod_alp_ovl.bmp.bmp" Mgs2Object="M.O. Disc"/>
+                        <views:BooleanObjectDetailView x:Name="UspSuppDetailView" Grid.Row="6" Grid.Column="2" EntityImage="/Assets/usp_sp2_alp_ovl.bmp.bmp" Mgs2Object="USP Suppressor"/>
+                        <views:BooleanObjectDetailView x:Name="InfinityWigDetailView" Grid.Row="6" Grid.Column="3" EntityImage="/Assets/wig2_alp_ovl.bmp.bmp" Mgs2Object="Infinity Wig"/>
+                        <views:BooleanObjectDetailView x:Name="BlueWigDetailView" Grid.Row="6" Grid.Column="4" EntityImage="/Assets/wig1_alp_ovl.bmp.bmp" Mgs2Object="Blue Wig"/>
+                        <views:BooleanObjectDetailView x:Name="OrangeWigDetailView" Grid.Row="7" Grid.Column="0" EntityImage="/Assets/wig1_alp_ovl.bmp.bmp" Mgs2Object="Orange Wig"/>
+                    </Grid>
+                </Panel>
             </TabItem>
 
             <TabItem Header="Weapons">

@@ -22,7 +22,8 @@ public partial class App : Application
         AvaloniaXamlLoader.Load(this);
 
         ServiceCollection collection = new();
-        collection.AddSingleton<Mgs2MemoryManager>();
+        //collection.AddSingleton<Mgs2MemoryManager>();
+        //collection.AddSingleton<Logging>();
 
         _services = collection.BuildServiceProvider();
     }

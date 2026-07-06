@@ -72,8 +72,10 @@ namespace MGS2_CheatTrainer_V2
                 Process process = null;
                 if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) 
                     process = Process.GetProcessesByName(Mgs2ProcessName).FirstOrDefault();
-                else
+                else //Technically, I'm only supporting Linux and not OSX, but idk if OSX would work or not with this pattern
                 {
+                    //The process name isn't always an exact match like it is on Windows, unfortunately, so we need to
+                    //do some fancy tricks to get the actual MGS2 process.
                     Process[] processes = Process.GetProcessesByName("METAL");
                     if (processes.Length == 1)
                         process = processes[0];
@@ -83,6 +85,7 @@ namespace MGS2_CheatTrainer_V2
                         {
                             using (SimpleProcessProxy spp = new SimpleProcessProxy(p))
                             {
+                                //TODO: do something real instead of this placeholder junk
                                 nint signifyingMemory = 1234;
                                 long bytesToRead = 4;
                                 string determinantString = "ASDF";
@@ -106,7 +109,7 @@ namespace MGS2_CheatTrainer_V2
                     if (Mgs2Process != process)
                     {
                         Mgs2Process = process;
-                        FileVersionInfo fileVersion = FileVersionInfo.GetVersionInfo(Mgs2Process.MainModule.FileName);
+                        FileVersionInfo fileVersion = FileVersionInfo.GetVersionInfo(Mgs2Process.MainModule.FileName); //TODO: does this work for Linux?
                         Logger.Debug($"MGS2 found and hooked, version:\n{fileVersion}");
                         if (string.Compare(fileVersion.ProductVersion, DesiredVersion) != 0 && !_versionWarned) 
                         {

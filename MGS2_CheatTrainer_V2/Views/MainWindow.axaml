@@ -77,7 +77,31 @@
             </TabItem>
 
             <TabItem Header="Weapons">
-                <!-- Weapons tab content goes here -->
+                <Panel>
+                    <Grid x:Name="WeaponGrid" ColumnDefinitions=".33*,.33*,.33*" RowDefinitions=".125*,.125*,.125*,.125*,.125*,.125*,.125*,.125*">
+                        <views:MaxableObjectDetailView x:Name="M9DetailView" Grid.Row="0" Grid.Column="0" EntityImage="/Assets/m9_alp_ovl.bmp.bmp" Mgs2Object="M9"/>
+                        <views:MaxableObjectDetailView x:Name="UspDetailView" Grid.Row="0" Grid.Column="1" EntityImage="/Assets/usp_alp_ovl.bmp.bmp" Mgs2Object="USP"/>
+                        <views:MaxableObjectDetailView x:Name="SocomDetailView" Grid.Row="0" Grid.Column="2" EntityImage="/Assets/scm_alp_ovl.bmp.bmp" Mgs2Object="SOCOM"/>
+                        <views:MaxableObjectDetailView x:Name="Psg1DetailView" Grid.Row="1" Grid.Column="0" EntityImage="/Assets/psg_alp_ovl.bmp.bmp" Mgs2Object="PSG1"/>
+                        <views:MaxableObjectDetailView x:Name="Rgb6DetailView" Grid.Row="1" Grid.Column="1" EntityImage="/Assets/rgb_alp_ovl.bmp.bmp" Mgs2Object="RGB-6"/>
+                        <views:MaxableObjectDetailView x:Name="NikitaDetailView" Grid.Row="1" Grid.Column="2" EntityImage="/Assets/niki_alp_ovl.bmp.bmp" Mgs2Object="Nikita"/>
+                        <views:MaxableObjectDetailView x:Name="StingerDetailView" Grid.Row="2" Grid.Column="0" EntityImage="/Assets/stin_alp_ovl.bmp.bmp" Mgs2Object="Stinger"/>
+                        <views:MaxableObjectDetailView x:Name="ClaymoreDetailView" Grid.Row="2" Grid.Column="1" EntityImage="/Assets/cray_alp_ovl.bmp.bmp" Mgs2Object="Claymore"/>
+                        <views:MaxableObjectDetailView x:Name="C4DetailView" Grid.Row="2" Grid.Column="2" EntityImage="/Assets/cfr_alp_ovl.bmp.bmp" Mgs2Object="C4"/>
+                        <views:MaxableObjectDetailView x:Name="ChaffDetailView" Grid.Row="3" Grid.Column="0" EntityImage="/Assets/chaff_alp_ovl.bmp.bmp" Mgs2Object="Chaff Grenade"/>
+                        <views:MaxableObjectDetailView x:Name="StunDetailView" Grid.Row="3" Grid.Column="1" EntityImage="/Assets/stun_alp_ovl.bmp.bmp" Mgs2Object="Stun Grenade"/>
+                        <views:BooleanObjectDetailView x:Name="DMicDetailView" Grid.Row="3" Grid.Column="2" EntityImage="/Assets/dmp_alp_ovl.bmp.bmp" Mgs2Object="Directional Microphone"/>
+                        <views:BooleanObjectDetailView x:Name="HfBladeDetailView" Grid.Row="4" Grid.Column="0" EntityImage="/Assets/hfb_alp_ovl.bmp.bmp" Mgs2Object="High Frequency Blade"/>
+                        <views:BooleanObjectDetailView x:Name="CoolantDetailView" Grid.Row="4" Grid.Column="1" EntityImage="/Assets/cls_alp_ovl.bmp.bmp" Mgs2Object="Coolant Spray"/>
+                        <views:MaxableObjectDetailView x:Name="Aks74UDetailView" Grid.Row="4" Grid.Column="2" EntityImage="/Assets/aks_alp_ovl.bmp.bmp" Mgs2Object="AKS-74u"/>
+                        <views:MaxableObjectDetailView x:Name="MagazineDetailView" Grid.Row="5" Grid.Column="0" EntityImage="/Assets/mag_alp_ovl.bmp.bmp" Mgs2Object="Magazine"/>
+                        <views:MaxableObjectDetailView x:Name="GrenadeDetailView" Grid.Row="5" Grid.Column="1" EntityImage="/Assets/gre_alp_ovl.bmp.bmp" Mgs2Object="Grenade"/>
+                        <views:MaxableObjectDetailView x:Name="M4DetailView" Grid.Row="5" Grid.Column="2" EntityImage="/Assets/m4a_nm_alp_ovl.bmp.bmp" Mgs2Object="M4"/>
+                        <views:MaxableObjectDetailView x:Name="Psg1TDetailView" Grid.Row="6" Grid.Column="0" EntityImage="/Assets/psg2_alp_ovl.bmp.bmp" Mgs2Object="PSG1-T"/>
+                        <views:BooleanObjectDetailView x:Name="DMicZoomedDetailView" Grid.Row="6" Grid.Column="1" EntityImage="/Assets/dmp_alp_ovl.bmp.bmp" Mgs2Object="Directional Microphone(Movie)"/>
+                        <views:MaxableObjectDetailView x:Name="BookDetailView" Grid.Row="6" Grid.Column="2" EntityImage="/Assets/wpb_alp_ovl.bmp.bmp" Mgs2Object="Book"/>
+                    </Grid>
+                </Panel>
             </TabItem>
 
             <TabItem Header="Bosses">

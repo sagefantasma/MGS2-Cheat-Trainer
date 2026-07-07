@@ -9,7 +9,7 @@
     <Grid RowDefinitions="0.5*, 0.5*"
           ColumnDefinitions="0.5*, 0.5*">
         <!-- Image placeholder (top-left) -->
-        <Image x:Name="ObjectImage" Source="/Assets/ration_alp_ovl.bmp.bmp" Stretch="Uniform" Grid.Row="0" Grid.Column="0"
+        <Image x:Name="ObjectImage" Source="/Assets/ration_alp_ovl.bmp.bmp" Stretch="Uniform" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2"
                 Margin="4"/>
 
         <!-- Enabled checkbox (top-right) -->
@@ -21,7 +21,7 @@
                   IsCheckedChanged="Enabled_OnClick"/>
 
         <!-- Current count (bottom-left) -->
-        <Grid Grid.Row="1" Grid.Column="0"
+        <Grid Grid.Row="1" Grid.Column="1"
               RowDefinitions="Auto, *"
               Margin="4">
             <TextBlock x:Name="ValueDescriptor" Grid.Row="0" Text="Current Count"/>

@@ -146,7 +146,7 @@ namespace MGS2_CheatTrainer_V2
         new MaxableWeapon("M9", "m9", 0), //1 - C2
         new MaxableWeapon("U.S.P.", "usp", 2), //2 - C3
         new MaxableWeapon("SOCOM", "socom", 4), //3 - C4
-        new MaxableWeapon("PSG-1", "psg1", 6), //4 - C5
+        new MaxableWeapon("PSG1", "psg1", 6), //4 - C5
         new MaxableWeapon("RGB-6", "rgb6", 8), //5 - C6
         new MaxableWeapon("Nikita", "nikita", 10), //6 - C7
         new MaxableWeapon("Stinger", "stinger", 12), //7 - C8

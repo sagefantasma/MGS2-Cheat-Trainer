@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace MGS2_CheatTrainer_V2
 {
-    //REWRITE STATUS: Seems error free, but this class does desperately need attention outside a rewrite.
+    //REWRITE STATUS: Seems error free, but this class does desperately need attention outside making multiplatform.
     public struct Cheat
     {
         public string Name { get; private set; }

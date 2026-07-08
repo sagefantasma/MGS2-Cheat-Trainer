@@ -12,6 +12,8 @@ namespace MGS2_CheatTrainer_V2.Views
         public required Action<bool> OnToggle { get; set; }
         public required Action<ushort> OnSetCurrent { get; set; }
         public required Action<ushort> OnSetMax { get; set; }
+        private Constants.IMgs2Object? _object;
+        private readonly Mgs2MemoryManager _memoryManager;
 
         // Set to false for items that don't have a quantity (e.g. Body Armor)
         public bool HasCount

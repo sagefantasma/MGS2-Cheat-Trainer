@@ -105,7 +105,16 @@
             </TabItem>
 
             <TabItem Header="Bosses">
-                <!-- Bosses tab content goes here -->
+                <Grid x:Name="BossGrid" ColumnDefinitions=".33*,.33*,.33*" RowDefinitions=".33*,.33*,.33*">
+                    <views:BossDetailView x:Name="OlgaDetailView" Grid.Row="0" Grid.Column="0" EntityImage=""/>
+                    <views:BossDetailView x:Name="FatmanDetailView" Grid.Row="0" Grid.Column="1" EntityImage=""/>
+                    <views:BossDetailView x:Name="FortuneDetailView" Grid.Row="0" Grid.Column="2" EntityImage=""/>
+                    <views:BossDetailView x:Name="HarrierDetailView" Grid.Row="1" Grid.Column="0" EntityImage=""/>
+                    <views:BossDetailView x:Name="Vamp1DetailView" Grid.Row="1" Grid.Column="1" EntityImage=""/>
+                    <views:BossDetailView x:Name="Vamp2DetailView" Grid.Row="1" Grid.Column="2" EntityImage=""/>
+                    <views:BossDetailView x:Name="RaysDetailView" Grid.Row="2" Grid.Column="0" EntityImage=""/>
+                    <views:BossDetailView x:Name="SolidusDetailView" Grid.Row="2" Grid.Column="1" EntityImage=""/>
+                </Grid>
             </TabItem>
 
             <TabItem Header="Stats">

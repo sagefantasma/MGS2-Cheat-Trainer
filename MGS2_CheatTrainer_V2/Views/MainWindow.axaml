@@ -118,7 +118,7 @@
             </TabItem>
 
             <TabItem Header="Stats">
-                <!-- Stats tab content goes here -->
+                <views:StatsDetailView/>
             </TabItem>
 
             <TabItem Header="Strings">

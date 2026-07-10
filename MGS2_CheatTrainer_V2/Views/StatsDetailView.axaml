@@ -1,0 +1,22 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:views="clr-namespace:MGS2_CheatTrainer_V2.Views"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="MGS2_CheatTrainer_V2.Views.StatsDetailView">
+    
+    <Grid ColumnDefinitions="0.20*, 0.20*, 0.20*, 0.20*, 0.20*" RowDefinitions="0.5*, 0.5*">
+        <views:SingleStatBox Grid.Row="0" Grid.Column="0" GroupBoxName="Alerts" Margin="5"/>
+        <views:SingleStatBox Grid.Row="0" Grid.Column="1" GroupBoxName="Kills" Margin="5"/>
+        <views:SingleStatBox Grid.Row="0" Grid.Column="2" GroupBoxName="Rations Used" Margin="5"/>
+        <views:SingleStatBox Grid.Row="0" Grid.Column="3" GroupBoxName="Continues" Margin="5"/>
+        <views:SingleStatBox Grid.Row="0" Grid.Column="4" GroupBoxName="Saves" Margin="5"/>
+        <views:SingleStatBox Grid.Row="1" Grid.Column="0" GroupBoxName="Shots Fired" Margin="5"/>
+        <views:SingleStatBox Grid.Row="1" Grid.Column="1" GroupBoxName="Damage Taken" Margin="5"/>
+        <views:SingleStatBox Grid.Row="1" Grid.Column="2" GroupBoxName="Mechs Destroyed" Margin="5"/>
+        <views:SingleStatBox Grid.Row="1" Grid.Column="3" GroupBoxName="Play Time" Margin="5"/>
+        <views:SingleStatBox Grid.Row="1" Grid.Column="4" GroupBoxName="Special Items Used" Margin="5"/>
+    </Grid>
+    
+</UserControl>

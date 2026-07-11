@@ -122,7 +122,7 @@
             </TabItem>
 
             <TabItem Header="Strings">
-                <!-- Strings tab content goes here -->
+                <views:StringDetailView/>
             </TabItem>
 
             <TabItem Header="Cheats">

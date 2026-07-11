@@ -1,0 +1,56 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="MGS2_CheatTrainer_V2.Views.StringDetailView">
+    <Grid ColumnDefinitions=".5*,.5*" RowDefinitions=".5*,.5*">
+        <ListBox Grid.Row="0" Grid.Column="0" Grid.RowSpan="2">
+            <ListBoxItem x:Name="LifeBarString" Content="Life Bar"/>
+            <ListBoxItem x:Name="Level1GripString" Content="Grip Lv1"/>
+            <ListBoxItem x:Name="Level2GripString" Content="Grip Lv2"/>
+            <ListBoxItem x:Name="Level3GripString" Content="Grip Lv3"/>
+            <ListBoxItem x:Name="OlgaLifeBarString" Content="Olga HP Bar"/>
+            <ListBoxItem x:Name="RaidenO2BarString" Content="Raiden O2 Bar"/>
+            <ListBoxItem x:Name="FatmanLifeBarString" Content="Fatman HP Bar"/>
+            <ListBoxItem x:Name="FortuneLifeBarString" Content="Fortune HP Bar"/>
+            <ListBoxItem x:Name="VampLifeBarString" Content="Vamp HP Bar"/>
+            <ListBoxItem x:Name="VampO2BarString" Content="Vamp 02 Bar"/>
+            <ListBoxItem x:Name="HarrierLifeBarString" Content="Harrier HP Bar"/>
+            <ListBoxItem x:Name="EmmaLifeBarString" Content="Emma HP Bar"/>
+            <ListBoxItem x:Name="KasatkaLifeBarString" Content="Kasatka HP Bar"/>
+            <ListBoxItem x:Name="EmmaO2BarString" Content="Emma O2 Bar"/>
+            <ListBoxItem x:Name="Ray01LifeBarString" Content="RAY-A01E HP Bar"/>
+            <ListBoxItem x:Name="Ray02LifeBarString" Content="RAY-A02E HP Bar"/>
+            <ListBoxItem x:Name="Ray03LifeBarString" Content="RAY-A03E HP Bar"/>
+            <ListBoxItem x:Name="Ray04LifeBarString" Content="RAY-A04E HP Bar"/>
+            <ListBoxItem x:Name="Ray05LifeBarString" Content="RAY-A05E HP Bar"/>
+            <ListBoxItem x:Name="Ray06LifeBarString" Content="RAY-B01F HP Bar"/>
+            <ListBoxItem x:Name="Ray07LifeBarString" Content="RAY-B02F HP Bar"/>
+            <ListBoxItem x:Name="Ray08LifeBarString" Content="RAY-B03F HP Bar"/>
+            <ListBoxItem x:Name="Ray09LifeBarString" Content="RAY-B04F HP Bar"/>
+            <ListBoxItem x:Name="Ray10LifeBarString" Content="RAY-B05F HP Bar"/>
+            <ListBoxItem x:Name="Ray11LifeBarString" Content="RAY-C01H HP Bar"/>
+            <ListBoxItem x:Name="Ray12LifeBarString" Content="RAY-C02H HP Bar"/>
+            <ListBoxItem x:Name="Ray13LifeBarString" Content="RAY-C03H HP Bar"/>
+            <ListBoxItem x:Name="Ray14LifeBarString" Content="RAY-C04H HP Bar"/>
+            <ListBoxItem x:Name="Ray15LifeBarString" Content="RAY-C05H HP Bar"/>
+            <ListBoxItem x:Name="Ray16LifeBarString" Content="RAY-D01G HP Bar"/>
+            <ListBoxItem x:Name="Ray17LifeBarString" Content="RAY-D02G HP Bar"/>
+            <ListBoxItem x:Name="Ray18LifeBarString" Content="RAY-D03G HP Bar"/>
+            <ListBoxItem x:Name="Ray19LifeBarString" Content="RAY-D04G HP Bar"/>
+            <ListBoxItem x:Name="Ray20LifeBarString" Content="RAY-D05G HP Bar"/>
+            <ListBoxItem x:Name="Ray21LifeBarString" Content="RAY-E01L HP Bar"/>
+            <ListBoxItem x:Name="Ray22LifeBarString" Content="RAY-E02L HP Bar"/>
+            <ListBoxItem x:Name="Ray23LifeBarString" Content="RAY-E03L HP Bar"/>
+            <ListBoxItem x:Name="Ray24LifeBarString" Content="RAY-E04L HP Bar"/>
+            <ListBoxItem x:Name="Ray25LifeBarString" Content="RAY-E05L HP Bar"/>
+            <ListBoxItem x:Name="SolidusLifeBarString" Content="Solidus HP Bar"/>
+        </ListBox>
+        <TextBox Grid.Column="1" Grid.Row="0" x:Name="InputTextBox" IsEnabled="False"
+                 HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <Button Grid.Column="1" Grid.Row="1" x:Name="UpdateStringButton" IsEnabled="False" Content="Update Game String" 
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+    </Grid>
+</UserControl>

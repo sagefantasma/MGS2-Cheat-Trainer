@@ -3,8 +3,8 @@
         xmlns:views="clr-namespace:MGS2_CheatTrainer_V2.Views"
         x:Class="MGS2_CheatTrainer_V2.Views.MainWindow"
         Title="MGS2 Cheat Trainer"
-        Width="1330"
-        Height="1040"
+        Width="1250"
+        Height="925"
         CanResize="True">
 
     <DockPanel>
@@ -50,18 +50,18 @@
                         <views:BooleanObjectDetailView x:Name="ThermalsDetailView" Grid.Row="2" Grid.Column="1" EntityImage="/Assets/tgl_alp_ovl.bmp.bmp" Mgs2Object="Thermal Goggles"/>
                         <views:BooleanObjectDetailView x:Name="Scope2DetailView" Grid.Row="2" Grid.Column="2" EntityImage="/Assets/scope_alp_ovl.bmp.bmp" Mgs2Object="Cutscene Scope"/>
                         <views:BooleanObjectDetailView x:Name="DigitalCameraDetailView" Grid.Row="2" Grid.Column="3" EntityImage="/Assets/camera_alp_ovl.bmp.bmp" Mgs2Object="Digital Camera"/>
-                        <views:SpecialObjectDetailView x:Name="Box1DetailView" Grid.Row="2" Grid.Column="4" EntityImage="/Assets/cbx_a_alp_ovl.bmp.bmp" Mgs2Object="Box 1" ValueName="Durability"/>
+                        <views:SpecialObjectDetailView x:Name="Box1DetailView" Grid.Row="2" Grid.Column="4" EntityImage="/Assets/cbx_a_alp_ovl.bmp.bmp" Mgs2Object="Box 1" ValueName="Durability" MaxValue="23"/>
                         <views:BooleanObjectDetailView x:Name="CigsDetailView" Grid.Row="3" Grid.Column="0" EntityImage="/Assets/smoke_alp_ovl.bmp.bmp" Mgs2Object="Cigarettes"/>
-                        <views:SpecialObjectDetailView x:Name="CardDetailView" Grid.Row="3" Grid.Column="1" EntityImage="/Assets/acd_alp_ovl.bmp.bmp" Mgs2Object="Card" ValueName="Level"/>
+                        <views:SpecialObjectDetailView x:Name="CardDetailView" Grid.Row="3" Grid.Column="1" EntityImage="/Assets/acd_alp_ovl.bmp.bmp" Mgs2Object="Card" ValueName="Level" MaxValue="5"/>
                         <views:BooleanObjectDetailView x:Name="ShaverDetailView" Grid.Row="3" Grid.Column="2" EntityImage="/Assets/shv_alp_ovl.bmp.bmp" Mgs2Object="Shaver"/>
                         <views:BooleanObjectDetailView x:Name="PhoneDetailView" Grid.Row="3" Grid.Column="3" EntityImage="/Assets/htl_alp_ovl.bmp.bmp" Mgs2Object="Phone"/>
                         <views:BooleanObjectDetailView x:Name="CameraDetailView" Grid.Row="3" Grid.Column="4" EntityImage="/Assets/camera_alp_ovl.bmp.bmp" Mgs2Object="Camera"/>
-                        <views:SpecialObjectDetailView x:Name="Box2DetailView" Grid.Row="4" Grid.Column="0" EntityImage="/Assets/cbx_b_alp_ovl.bmp.bmp" Mgs2Object="Box 2" ValueName="Durability"/>
-                        <views:SpecialObjectDetailView x:Name="Box3DetailView" Grid.Row="4" Grid.Column="1" EntityImage="/Assets/cbx_c_alp_ovl.bmp.bmp" Mgs2Object="Box 3" ValueName="Durability"/>
-                        <views:SpecialObjectDetailView x:Name="WetBoxDetailView" Grid.Row="4" Grid.Column="2" EntityImage="/Assets/cbox_wet_alp_ovl.bmp.bmp" Mgs2Object="Wet Box" ValueName="Durability"/>
+                        <views:SpecialObjectDetailView x:Name="Box2DetailView" Grid.Row="4" Grid.Column="0" EntityImage="/Assets/cbx_b_alp_ovl.bmp.bmp" Mgs2Object="Box 2" ValueName="Durability" MaxValue="23"/>
+                        <views:SpecialObjectDetailView x:Name="Box3DetailView" Grid.Row="4" Grid.Column="1" EntityImage="/Assets/cbx_c_alp_ovl.bmp.bmp" Mgs2Object="Box 3" ValueName="Durability" MaxValue="23"/>
+                        <views:SpecialObjectDetailView x:Name="WetBoxDetailView" Grid.Row="4" Grid.Column="2" EntityImage="/Assets/cbox_wet_alp_ovl.bmp.bmp" Mgs2Object="Wet Box" ValueName="Durability" MaxValue="23"/>
                         <views:BooleanObjectDetailView x:Name="ApSensorDetailView" Grid.Row="4" Grid.Column="3" EntityImage="/Assets/aps_alp_ovl.bmp.bmp" Mgs2Object="A.P. Sensor"/>
-                        <views:SpecialObjectDetailView x:Name="Box4DetailView" Grid.Row="4" Grid.Column="4" EntityImage="/Assets/cbx_d_alp_ovl.bmp.bmp" Mgs2Object="Box 4" ValueName="Durability"/>
-                        <views:SpecialObjectDetailView x:Name="Box5DetailView" Grid.Row="5" Grid.Column="0" EntityImage="/Assets/cbx_e_alp_ovl.bmp.bmp" Mgs2Object="Box 5" ValueName="Durability"/>
+                        <views:SpecialObjectDetailView x:Name="Box4DetailView" Grid.Row="4" Grid.Column="4" EntityImage="/Assets/cbx_d_alp_ovl.bmp.bmp" Mgs2Object="Box 4" ValueName="Durability" MaxValue="23"/>
+                        <views:SpecialObjectDetailView x:Name="Box5DetailView" Grid.Row="5" Grid.Column="0" EntityImage="/Assets/cbx_e_alp_ovl.bmp.bmp" Mgs2Object="Box 5" ValueName="Durability" MaxValue="23"/>
                         <views:BooleanObjectDetailView x:Name="SocomSuppDetailView" Grid.Row="5" Grid.Column="1" EntityImage="/Assets/scm_sp2_alp_ovl.bmp.bmp" Mgs2Object="SOCOM Suppressor"/>
                         <views:BooleanObjectDetailView x:Name="AkSuppDetailView" Grid.Row="5" Grid.Column="2" EntityImage="/Assets/aks_sp2_alp_ovl.bmp.bmp" Mgs2Object="AK Suppressor"/>
                         <views:BooleanObjectDetailView x:Name="CutsceneCameraDetailView" Grid.Row="5" Grid.Column="3" EntityImage="/Assets/camera_alp_ovl.bmp.bmp" Mgs2Object="Cutscene Camera"/>
@@ -78,55 +78,91 @@
 
             <TabItem Header="Weapons">
                 <Panel>
-                    <Grid x:Name="WeaponGrid" ColumnDefinitions=".33*,.33*,.33*" RowDefinitions=".125*,.125*,.125*,.125*,.125*,.125*,.125*,.125*">
+                    <Image Source="/Assets/mini.png" Stretch="UniformToFill"/>
+                    <Rectangle Fill="Black" Opacity="0.9" IsHitTestVisible="False"/>
+                    <Grid x:Name="WeaponGrid" ColumnDefinitions=".2*,.2*,.2*,.2*,.2*" RowDefinitions=".2*,.2*,.2*,.2*,.2*">
                         <views:MaxableObjectDetailView x:Name="M9DetailView" Grid.Row="0" Grid.Column="0" EntityImage="/Assets/m9_alp_ovl.bmp.bmp" Mgs2Object="M9"/>
                         <views:MaxableObjectDetailView x:Name="UspDetailView" Grid.Row="0" Grid.Column="1" EntityImage="/Assets/usp_alp_ovl.bmp.bmp" Mgs2Object="USP"/>
                         <views:MaxableObjectDetailView x:Name="SocomDetailView" Grid.Row="0" Grid.Column="2" EntityImage="/Assets/scm_alp_ovl.bmp.bmp" Mgs2Object="SOCOM"/>
-                        <views:MaxableObjectDetailView x:Name="Psg1DetailView" Grid.Row="1" Grid.Column="0" EntityImage="/Assets/psg_alp_ovl.bmp.bmp" Mgs2Object="PSG1"/>
-                        <views:MaxableObjectDetailView x:Name="Rgb6DetailView" Grid.Row="1" Grid.Column="1" EntityImage="/Assets/rgb_alp_ovl.bmp.bmp" Mgs2Object="RGB-6"/>
-                        <views:MaxableObjectDetailView x:Name="NikitaDetailView" Grid.Row="1" Grid.Column="2" EntityImage="/Assets/niki_alp_ovl.bmp.bmp" Mgs2Object="Nikita"/>
-                        <views:MaxableObjectDetailView x:Name="StingerDetailView" Grid.Row="2" Grid.Column="0" EntityImage="/Assets/stin_alp_ovl.bmp.bmp" Mgs2Object="Stinger"/>
-                        <views:MaxableObjectDetailView x:Name="ClaymoreDetailView" Grid.Row="2" Grid.Column="1" EntityImage="/Assets/cray_alp_ovl.bmp.bmp" Mgs2Object="Claymore"/>
-                        <views:MaxableObjectDetailView x:Name="C4DetailView" Grid.Row="2" Grid.Column="2" EntityImage="/Assets/cfr_alp_ovl.bmp.bmp" Mgs2Object="C4"/>
-                        <views:MaxableObjectDetailView x:Name="ChaffDetailView" Grid.Row="3" Grid.Column="0" EntityImage="/Assets/chaff_alp_ovl.bmp.bmp" Mgs2Object="Chaff Grenade"/>
-                        <views:MaxableObjectDetailView x:Name="StunDetailView" Grid.Row="3" Grid.Column="1" EntityImage="/Assets/stun_alp_ovl.bmp.bmp" Mgs2Object="Stun Grenade"/>
-                        <views:BooleanObjectDetailView x:Name="DMicDetailView" Grid.Row="3" Grid.Column="2" EntityImage="/Assets/dmp_alp_ovl.bmp.bmp" Mgs2Object="Directional Microphone"/>
-                        <views:BooleanObjectDetailView x:Name="HfBladeDetailView" Grid.Row="4" Grid.Column="0" EntityImage="/Assets/hfb_alp_ovl.bmp.bmp" Mgs2Object="High Frequency Blade"/>
-                        <views:BooleanObjectDetailView x:Name="CoolantDetailView" Grid.Row="4" Grid.Column="1" EntityImage="/Assets/cls_alp_ovl.bmp.bmp" Mgs2Object="Coolant Spray"/>
-                        <views:MaxableObjectDetailView x:Name="Aks74UDetailView" Grid.Row="4" Grid.Column="2" EntityImage="/Assets/aks_alp_ovl.bmp.bmp" Mgs2Object="AKS-74u"/>
-                        <views:MaxableObjectDetailView x:Name="MagazineDetailView" Grid.Row="5" Grid.Column="0" EntityImage="/Assets/mag_alp_ovl.bmp.bmp" Mgs2Object="Magazine"/>
-                        <views:MaxableObjectDetailView x:Name="GrenadeDetailView" Grid.Row="5" Grid.Column="1" EntityImage="/Assets/gre_alp_ovl.bmp.bmp" Mgs2Object="Grenade"/>
-                        <views:MaxableObjectDetailView x:Name="M4DetailView" Grid.Row="5" Grid.Column="2" EntityImage="/Assets/m4a_nm_alp_ovl.bmp.bmp" Mgs2Object="M4"/>
-                        <views:MaxableObjectDetailView x:Name="Psg1TDetailView" Grid.Row="6" Grid.Column="0" EntityImage="/Assets/psg2_alp_ovl.bmp.bmp" Mgs2Object="PSG1-T"/>
-                        <views:BooleanObjectDetailView x:Name="DMicZoomedDetailView" Grid.Row="6" Grid.Column="1" EntityImage="/Assets/dmp_alp_ovl.bmp.bmp" Mgs2Object="Directional Microphone(Movie)"/>
-                        <views:MaxableObjectDetailView x:Name="BookDetailView" Grid.Row="6" Grid.Column="2" EntityImage="/Assets/wpb_alp_ovl.bmp.bmp" Mgs2Object="Book"/>
+                        <views:MaxableObjectDetailView x:Name="Psg1DetailView" Grid.Row="0" Grid.Column="3" EntityImage="/Assets/psg_alp_ovl.bmp.bmp" Mgs2Object="PSG1"/>
+                        <views:MaxableObjectDetailView x:Name="Rgb6DetailView" Grid.Row="0" Grid.Column="4" EntityImage="/Assets/rgb_alp_ovl.bmp.bmp" Mgs2Object="RGB-6"/>
+                        <views:MaxableObjectDetailView x:Name="NikitaDetailView" Grid.Row="1" Grid.Column="0" EntityImage="/Assets/niki_alp_ovl.bmp.bmp" Mgs2Object="Nikita"/>
+                        <views:MaxableObjectDetailView x:Name="StingerDetailView" Grid.Row="1" Grid.Column="1" EntityImage="/Assets/stin_alp_ovl.bmp.bmp" Mgs2Object="Stinger"/>
+                        <views:MaxableObjectDetailView x:Name="ClaymoreDetailView" Grid.Row="1" Grid.Column="2" EntityImage="/Assets/cray_alp_ovl.bmp.bmp" Mgs2Object="Claymore"/>
+                        <views:MaxableObjectDetailView x:Name="C4DetailView" Grid.Row="1" Grid.Column="3" EntityImage="/Assets/cfr_alp_ovl.bmp.bmp" Mgs2Object="C4"/>
+                        <views:MaxableObjectDetailView x:Name="ChaffDetailView" Grid.Row="1" Grid.Column="4" EntityImage="/Assets/chaff_alp_ovl.bmp.bmp" Mgs2Object="Chaff Grenade"/>
+                        <views:MaxableObjectDetailView x:Name="StunDetailView" Grid.Row="2" Grid.Column="0" EntityImage="/Assets/stun_alp_ovl.bmp.bmp" Mgs2Object="Stun Grenade"/>
+                        <views:BooleanObjectDetailView x:Name="DMicDetailView" Grid.Row="2" Grid.Column="1"  EntityImage="/Assets/dmp_alp_ovl.bmp.bmp" Mgs2Object="Directional Microphone"/>
+                        <views:BooleanObjectDetailView x:Name="HfBladeDetailView" Grid.Row="2" Grid.Column="2" EntityImage="/Assets/hfb_alp_ovl.bmp.bmp" Mgs2Object="High Frequency Blade"/>
+                        <views:BooleanObjectDetailView x:Name="CoolantDetailView" Grid.Row="2" Grid.Column="3" EntityImage="/Assets/cls_alp_ovl.bmp.bmp" Mgs2Object="Coolant Spray"/>
+                        <views:MaxableObjectDetailView x:Name="Aks74UDetailView" Grid.Row="2" Grid.Column="4" EntityImage="/Assets/aks_alp_ovl.bmp.bmp" Mgs2Object="AKS-74u"/>
+                        <views:MaxableObjectDetailView x:Name="MagazineDetailView" Grid.Row="3" Grid.Column="0" EntityImage="/Assets/mag_alp_ovl.bmp.bmp" Mgs2Object="Magazine"/>
+                        <views:MaxableObjectDetailView x:Name="GrenadeDetailView" Grid.Row="3" Grid.Column="1" EntityImage="/Assets/gre_alp_ovl.bmp.bmp" Mgs2Object="Grenade"/>
+                        <views:MaxableObjectDetailView x:Name="M4DetailView" Grid.Row="3" Grid.Column="2" EntityImage="/Assets/m4a_nm_alp_ovl.bmp.bmp" Mgs2Object="M4"/>
+                        <views:MaxableObjectDetailView x:Name="Psg1TDetailView" Grid.Row="3" Grid.Column="3" EntityImage="/Assets/psg2_alp_ovl.bmp.bmp" Mgs2Object="PSG1-T"/>
+                        <views:BooleanObjectDetailView x:Name="DMicZoomedDetailView" Grid.Row="3" Grid.Column="4" EntityImage="/Assets/dmp_alp_ovl.bmp.bmp" Mgs2Object="Directional Microphone(Movie)"/>
+                        <views:MaxableObjectDetailView x:Name="BookDetailView" Grid.Row="4" Grid.Column="0" EntityImage="/Assets/wpb_alp_ovl.bmp.bmp" Mgs2Object="Book"/>
+                        <CheckBox x:Name="AllWeaponsModCheckBox" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="4"
+                                  HorizontalAlignment="Center" Content="All Weapons Mod Installed?"/>
                     </Grid>
                 </Panel>
             </TabItem>
 
             <TabItem Header="Bosses">
-                <Grid x:Name="BossGrid" ColumnDefinitions=".33*,.33*,.33*" RowDefinitions=".33*,.33*,.33*">
-                    <views:BossDetailView x:Name="OlgaDetailView" Grid.Row="0" Grid.Column="0" EntityImage=""/>
-                    <views:BossDetailView x:Name="FatmanDetailView" Grid.Row="0" Grid.Column="1" EntityImage=""/>
-                    <views:BossDetailView x:Name="FortuneDetailView" Grid.Row="0" Grid.Column="2" EntityImage=""/>
-                    <views:BossDetailView x:Name="HarrierDetailView" Grid.Row="1" Grid.Column="0" EntityImage=""/>
-                    <views:BossDetailView x:Name="Vamp1DetailView" Grid.Row="1" Grid.Column="1" EntityImage=""/>
-                    <views:BossDetailView x:Name="Vamp2DetailView" Grid.Row="1" Grid.Column="2" EntityImage=""/>
-                    <views:BossDetailView x:Name="RaysDetailView" Grid.Row="2" Grid.Column="0" EntityImage=""/>
-                    <views:BossDetailView x:Name="SolidusDetailView" Grid.Row="2" Grid.Column="1" EntityImage=""/>
-                </Grid>
+                <Panel>
+                    <Image Source="/Assets/mini.png" Stretch="UniformToFill"/>
+                    <Rectangle Fill="Black" Opacity="0.9" IsHitTestVisible="False"/>
+                    <Grid x:Name="BossGrid" ColumnDefinitions=".33*,.33*,.33*" RowDefinitions=".33*,.33*,.33*">
+                        <GroupBox Grid.Row="0" Grid.Column="0" Header="Olga" Margin="5">
+                            <views:BossDetailView x:Name="OlgaDetailView"  EntityImage="/Assets/Olga.webp"/>
+                        </GroupBox>
+                        <GroupBox Grid.Row="0" Grid.Column="1" Header="Fatman" Margin="5">
+                            <views:BossDetailView x:Name="FatmanDetailView" EntityImage="/Assets/Fatman.webp"/>
+                        </GroupBox>
+                        <GroupBox Grid.Row="0" Grid.Column="2" Header="Fortune" Margin="5" IsEnabled="False">
+                            <views:BossDetailView x:Name="FortuneDetailView" EntityImage="/Assets/Fortune.webp"/>
+                        </GroupBox>
+                        <GroupBox Grid.Row="1" Grid.Column="0" Header="Harrier" Margin="5" IsEnabled="False">
+                            <views:BossDetailView x:Name="HarrierDetailView" EntityImage="/Assets/Harrier.webp" HasStamina="False"/> <!--Need different-->
+                        </GroupBox>
+                        <GroupBox Grid.Row="1" Grid.Column="1" Header="Vamp 1" Margin="5">
+                            <views:BossDetailView x:Name="Vamp1DetailView" EntityImage="/Assets/Vamp.jpg"/>
+                        </GroupBox>
+                        <GroupBox Grid.Row="1" Grid.Column="2" Header="Vamp 2" Margin="5">
+                            <views:BossDetailView x:Name="Vamp2DetailView" EntityImage="/Assets/TwilightSniping.jpg"/>
+                        </GroupBox>
+                        <GroupBox Grid.Row="2" Grid.Column="0" Header="RAYs" Margin="5">
+                            <views:BossDetailView x:Name="RaysDetailView" EntityImage="/Assets/Rays.jpg" HasStamina="False"/> <!--Need different-->
+                        </GroupBox>
+                        <GroupBox Grid.Row="2" Grid.Column="1" Header="Solidus" Margin="5" IsEnabled="False">
+                            <views:BossDetailView x:Name="SolidusDetailView" EntityImage="/Assets/Solidus.webp"/>
+                        </GroupBox>
+                    </Grid>
+                </Panel>
             </TabItem>
 
             <TabItem Header="Stats">
-                <views:StatsDetailView/>
+                <Panel>
+                    <Image Source="/Assets/mini.png" Stretch="UniformToFill"/>
+                    <Rectangle Fill="Black" Opacity="0.9" IsHitTestVisible="False"/>
+                    <views:StatsDetailView/>
+                </Panel>
             </TabItem>
 
             <TabItem Header="Strings">
-                <views:StringDetailView/>
+                <Panel>
+                    <Image Source="/Assets/mini.png" Stretch="UniformToFill"/>
+                    <Rectangle Fill="Black" Opacity="0.9" IsHitTestVisible="False"/>
+                    <views:StringDetailView/>
+                </Panel>
             </TabItem>
 
             <TabItem Header="Cheats">
-                <!-- Cheats tab content goes here -->
+                <Panel>
+                    <Image Source="/Assets/mini.png" Stretch="UniformToFill"/>
+                    <Rectangle Fill="Black" Opacity="0.9" IsHitTestVisible="False"/>
+                    <views:CheatsDetailView/>
+                </Panel>
             </TabItem>
 
         </TabControl>

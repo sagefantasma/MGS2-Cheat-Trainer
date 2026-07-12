@@ -12,6 +12,31 @@ public partial class BossDetailView : UserControl
         get => ObjectImage?.Source;
         set => ObjectImage?.Source = value;
     }
+
+    public bool HasStamina
+    {
+        get;
+        set
+        {
+            field = value;
+            StaminaSlider.IsVisible = value;
+            StaminaLabel.IsVisible = value;
+            StaminaSlider.IsEnabled = value;
+        }
+    }
+
+    public bool IsActive
+    {
+        get;
+        set
+        {
+            field = value;
+            if (value)
+                ImageDarkener.Opacity = 1;
+            else
+                ImageDarkener.Opacity = .8;
+        }
+    }
     
     public BossDetailView()
     {

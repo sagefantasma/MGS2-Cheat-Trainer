@@ -1,0 +1,88 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="MGS2_CheatTrainer_V2.Views.CheatsDetailView">
+    <Grid ColumnDefinitions=".2*,.2*,.2*,.2*,.2*" RowDefinitions=".2*,.2*,.2*,.2*,.2*">
+        <GroupBox Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Header="Story/Snake Tales">
+            <ScrollViewer>
+                <StackPanel Spacing="5" HorizontalAlignment="Center">
+                    <CheckBox x:Name="NoBleedDamageCheckbox" Content="No Bleed Damage" Background="DarkSlateGray" HorizontalAlignment="Stretch"/>
+                    <CheckBox x:Name="NoBurnDamageCheckbox" Content="No Burn Damage"/>
+                    <CheckBox x:Name="InfiniteAmmoCheckbox" Content="Infinite Ammo" Background="DarkSlateGray" HorizontalAlignment="Stretch"/>
+                    <CheckBox x:Name="InfiniteLifeCheckbox" Content="Enemies Deal No Damage"/>
+                    <CheckBox x:Name="InfiniteOxygenCheckbox" Content="Infinite Oxygen" Background="DarkSlateGray" HorizontalAlignment="Stretch"/>
+                    <CheckBox x:Name="NoGripDamageCheckbox" Content="Infinite Grip Stamina"/>
+                    <CheckBox x:Name="InfiniteEmmaHealthCheckbox" Content="Emma Infinite Life" Background="DarkSlateGray" HorizontalAlignment="Stretch"/>
+                    <CheckBox x:Name="InfiniteEmmaO2Checkbox" Content="Emma Infinite Oxygen"/>
+                    <CheckBox x:Name="NoReloadCheckbox" Content="No Weapon Reload Required" Background="DarkSlateGray" HorizontalAlignment="Stretch"/>
+                    <CheckBox x:Name="InfiniteItemsCheckbox" Content="Infinite Item Uses"/>
+                    <CheckBox x:Name="InfiniteKnockoutCheckbox" Content="Infinite Knockout/Tranq Duration" Background="DarkSlateGray" HorizontalAlignment="Stretch"/>
+                    <CheckBox x:Name="MaxStackOnPickupCheckbox" Content="Max Stack On Pickup"/>
+                    <CheckBox x:Name="NoClipWithGravityCheckbox" Content="No Clip (With Gravity)" Background="DarkSlateGray" HorizontalAlignment="Stretch"/>
+                    <CheckBox x:Name="NoClipWithoutGravityCheckbox" Content="No Clip (No Gravity)"/>
+                    <CheckBox x:Name="DisablePauseButtonCheckbox" Content="Disable Pause Button" Background="DarkSlateGray" HorizontalAlignment="Stretch"/>
+                    <CheckBox x:Name="DisableItemMenuPauseCheckbox" Content="Disable Item Menu Pause"/>
+                    <CheckBox x:Name="DisableWeaponMenuPauseCheckbox" Content="Disable Weapon Menu Pause" Background="DarkSlateGray" HorizontalAlignment="Stretch"/>
+                    <CheckBox x:Name="GhostModeCheckbox" Content="Enable 'Ghost' Mode"/>
+                </StackPanel>
+            </ScrollViewer>
+        </GroupBox>
+        <GroupBox Grid.Row="0" Grid.Column="1" Grid.RowSpan="3" Header="VR">
+            <ScrollViewer>
+                <StackPanel Spacing="5">
+                    <CheckBox x:Name="PauseVrTimerCheckbox" Content="Pause Timer"/>
+                    <CheckBox x:Name="VrObjectiveAutoCompleteCheckbox" Content="Auto-Complete Objectives" Background="DarkSlateGray" HorizontalAlignment="Stretch"/>
+                    <CheckBox x:Name="VrEnemiesAutoCompleteCheckbox" Content="Auto-'Kill' Enemies"/>
+                    <CheckBox x:Name="VrNoHitDamageCheckbox" Content="Enemies Deal No Damage" Background="DarkSlateGray" HorizontalAlignment="Stretch"/>
+                    <CheckBox x:Name="VrNoFallDamageCheckbox" Content="No Fall Damage"/>
+                    <CheckBox x:Name="VrInfiniteStrengthCheckbox" Content="Infinite Strength" Background="DarkSlateGray" HorizontalAlignment="Stretch"/>
+                    <CheckBox x:Name="VrGripDamageCheckbox" Content="Infinite Grip Stamina"/>
+                    <CheckBox x:Name="VrAimStabilityCheckbox" Content="Perfect Aim Stability" Background="DarkSlateGray" HorizontalAlignment="Stretch"/>
+                    <CheckBox x:Name="VrInfiniteAmmoCheckbox" Content="Infinite Ammo"/>
+                    <CheckBox x:Name="VrInfiniteItemsCheckbox" Content="Infinite Item Use" Background="DarkSlateGray" HorizontalAlignment="Stretch"/>
+                    <CheckBox x:Name="VrNoReloadCheckbox" Content="No Weapon Reload Required"/>
+                </StackPanel>
+            </ScrollViewer>
+        </GroupBox>
+        <GroupBox Grid.Row="0" Grid.Column="2" Grid.RowSpan="3" Header="Audio/Visual">
+            <ScrollViewer>
+                <StackPanel Spacing="5">
+                    <CheckBox x:Name="RemovePlantFilterCheckbox" Content="Remove Plant Washout Filter" Background="DarkSlateGray" HorizontalAlignment="Stretch"/>
+                    <CheckBox x:Name="RemovePlantFogCheckbox" Content="Remove Plant Fog"/>
+                    <CheckBox x:Name="RemoveTankerFilterCheckbox" Content="Remove Tanker Filter" Background="DarkSlateGray" HorizontalAlignment="Stretch"/>
+                    <CheckBox x:Name="NightTimeCheckbox" Content="Set to Night-time"/>
+                    <CheckBox x:Name="BlackScreenCheckbox" Content="&quot;BLACKOUT&quot;" Background="DarkSlateGray" HorizontalAlignment="Stretch"/>
+                    <CheckBox x:Name="LetterboxingCheckbox" Content="Activate Letterboxing"/>
+                    <CheckBox x:Name="TurnOffMusicCheckbox" Content="Turn Off Music" Background="DarkSlateGray" HorizontalAlignment="Stretch"/>
+                    <CheckBox x:Name="ZoomInCheckbox" Content="Zoom In"/>
+                    <CheckBox x:Name="ZoomOutCheckbox" Content="ZoomOut" Background="DarkSlateGray" HorizontalAlignment="Stretch"/>
+                </StackPanel>
+            </ScrollViewer>
+        </GroupBox>
+        <GroupBox Grid.Row="0" Grid.Column="3" Grid.RowSpan="3" Grid.ColumnSpan="2" Header="Guards">
+            <StackPanel>
+                <GroupBox Header="Idle Animations" Margin="10">
+                    <WrapPanel>
+                        <ComboBox x:Name="GuardAnimationsListBox" Margin="10"> <!--TODO: Fill on initialization?-->
+                        </ComboBox>
+                        <Button x:Name="SetAnimationButton" Content="Set Animation" Margin="10"/>
+                    </WrapPanel>
+                </GroupBox>
+                <Button x:Name="ForceGuardSleepButton" Content="Force All Guards to Sleep" HorizontalAlignment="Center" Margin="10"/>
+                <Button x:Name="ForceGuardWakeButton" Content="Force All Guards to Wake" HorizontalAlignment="Center" Margin="10"/>
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Grid.Row="3" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="5" Header="Health and Grip">
+            <Grid ColumnDefinitions=".2*,.2*,.2*,.2*,.2*" RowDefinitions=".2*,.2*,.2*,.2*,.2*">
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="HP" Margin="20,0"/>
+                <Slider Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Grid.RowSpan="2"/>
+                <TextBlock Grid.Row="3" Grid.Column="1" Text="Grip" Margin="20,0"/>
+                <Slider Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" Grid.RowSpan="2"/>
+                <Button Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" Content="-100 Push-ups"/>
+                <Button Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Content="+100 Push-ups"/>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</UserControl>

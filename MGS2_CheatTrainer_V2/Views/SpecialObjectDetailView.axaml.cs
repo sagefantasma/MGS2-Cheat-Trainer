@@ -25,7 +25,7 @@ public partial class SpecialObjectDetailView : UserControl
         set
         {
             field = value;
-            EnabledCheckBox.Content = $"{Mgs2Object} Enabled?";
+            GroupBox.Header = $"{Mgs2Object}";
         }
     }
 
@@ -36,6 +36,17 @@ public partial class SpecialObjectDetailView : UserControl
         {
             field = value;
             ValueDescriptor.Text = $"Current {ValueName}";
+        }
+    }
+
+    public int? MaxValue
+    {
+        get;
+        set
+        {
+            field = value;
+            if(value != null)
+                CurrentUpDown.Maximum = (decimal)value;
         }
     }
 

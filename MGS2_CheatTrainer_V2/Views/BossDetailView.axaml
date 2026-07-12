@@ -5,16 +5,29 @@
              mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="300"
              x:Class="MGS2_CheatTrainer_V2.Views.BossDetailView">
     
-    <Border BorderThickness="2" BorderBrush="GhostWhite" Margin="3">
-        <Grid RowDefinitions="0.25*, 0.25*, 0.25*, 0.25*"
-              ColumnDefinitions="0.5*, 0.5*">
-            <!-- Image placeholder (top-left) -->
-            <Image x:Name="ObjectImage" Source="/Assets/ration_alp_ovl.bmp.bmp" Stretch="Uniform" Grid.Row="0" Grid.Column="0" 
-                   Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="4"/>
-            <TextBlock Margin="35,0,0,0" Text="HP" Grid.Row="2" Grid.Column="0"/>
-            <Slider x:Name="HpSlider" Margin="10,0" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"/>
-            <TextBlock Margin="35,0,0,0" Text="Stamina" Grid.Row="3" Grid.Column="0"/>
-            <Slider x:Name="StaminaSlider" Margin="10,0" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"/>
-        </Grid>
-    </Border>
+    <Grid RowDefinitions="0.25*, 0.25*, 0.25*, 0.25*"
+          ColumnDefinitions="0.5*, 0.5*">
+        <!-- Image placeholder (top-left) -->
+        <Border ClipToBounds="True" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="4">
+            <Viewbox Stretch="UniformToFill" VerticalAlignment="Top" HorizontalAlignment="Center">
+                <Image x:Name="ObjectImage" Source="/Assets/Olga.webp"  
+                       Margin="4"/>
+            </Viewbox>
+        </Border>
+        <Rectangle x:Name="ImageDarkener" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="4" 
+                   Fill="Black" Opacity="0.8" IsHitTestVisible="False"/>
+        <TextBlock Margin="35,0,0,0" Text="HP" Foreground="Green" Grid.Row="2" Grid.Column="0">
+            <TextBlock.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="2" OffsetX="1" OffsetY="1" Opacity="1"/>
+            </TextBlock.Effect>
+        </TextBlock>
+        <Slider x:Name="HpSlider" Margin="10,0" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Foreground="Green"/>
+        <TextBlock x:Name="StaminaLabel" Margin="35,0,0,0" Text="Stamina" Foreground="Blue" Grid.Row="3" Grid.Column="0">
+            <TextBlock.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="2" OffsetX="1" OffsetY="1" Opacity="1"/>
+            </TextBlock.Effect>
+        </TextBlock>
+        <Slider x:Name="StaminaSlider" Margin="10,0" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Foreground="Blue"/>
+    </Grid>
+    
 </UserControl>

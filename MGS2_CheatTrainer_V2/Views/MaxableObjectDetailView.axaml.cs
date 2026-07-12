@@ -37,7 +37,7 @@ namespace MGS2_CheatTrainer_V2.Views
             set
             {
                 field = value;
-                EnabledCheckBox.Content = $"{Mgs2Object} Enabled?";
+                GroupBox.Header = $"{Mgs2Object}";
             }
         }
 

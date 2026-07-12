@@ -5,21 +5,23 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="MGS2_CheatTrainer_V2.Views.BooleanObjectDetailView">
     
-    <Border BorderThickness="2" BorderBrush="GhostWhite" Margin="3">
-    <Grid RowDefinitions="1*"
-          ColumnDefinitions="0.5*, 0.5*">
-        <!-- Image placeholder (top-left) -->
-        <Image x:Name="ObjectImage" Source="/Assets/ration_alp_ovl.bmp.bmp" Stretch="Uniform" Grid.Row="0" Grid.Column="0"
-                Margin="4"/>
+    <GroupBox x:Name="GroupBox">
+        <Grid RowDefinitions="1*"
+              ColumnDefinitions="1*">
+            <!-- Image placeholder (top-left) -->
+            <Image x:Name="ObjectImage" Source="/Assets/ration_alp_ovl.bmp.bmp" Stretch="Uniform" Grid.Row="0" Grid.Column="0"
+                   Margin="2" />
+            <Rectangle Fill="Black" Opacity="0.7" IsHitTestVisible="False"
+                       Grid.Row="0" Grid.Column="0"/>
 
-        <!-- Enabled checkbox (top-right) -->
-        <CheckBox Grid.Row="0" Grid.Column="1"
-                  x:Name="EnabledCheckBox"
-                  Content="Enabled?"
-                  Margin="6"
-                  VerticalAlignment="Center"
-                  IsCheckedChanged="Enabled_OnClick"/>
-
-    </Grid></Border>
+            <!-- Enabled checkbox (top-right) -->
+            <CheckBox Grid.Row="0" Grid.Column="0"
+                      x:Name="EnabledCheckBox"
+                      Content="Enabled?"
+                      VerticalAlignment="Center"
+                      HorizontalAlignment="Center"
+                      IsCheckedChanged="Enabled_OnClick"/>
+        </Grid>
+    </GroupBox>
     
 </UserControl>

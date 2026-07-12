@@ -25,7 +25,7 @@ public partial class BooleanObjectDetailView : UserControl
         set
         {
             field = value;
-            EnabledCheckBox.Content = $"{Mgs2Object} Enabled?";
+            GroupBox.Header = $"{Mgs2Object}";
         }
     }
 

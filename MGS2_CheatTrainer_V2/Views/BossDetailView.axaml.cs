@@ -2,11 +2,14 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MGS2_CheatTrainer_V2.Views;
 
 public partial class BossDetailView : UserControl
 {
+    private readonly Mgs2MemoryManager _memoryManager;
+    
     public IImage? EntityImage
     {
         get => ObjectImage?.Source;
@@ -41,5 +44,6 @@ public partial class BossDetailView : UserControl
     public BossDetailView()
     {
         InitializeComponent();
+        _memoryManager = App.Services.GetRequiredService<Mgs2MemoryManager>();
     }
 }

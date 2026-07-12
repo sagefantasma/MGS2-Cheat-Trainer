@@ -4,6 +4,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using System.Linq;
+using System.Threading;
 using Avalonia.Markup.Xaml;
 using MGS2_CheatTrainer_V2.ViewModels;
 using MGS2_CheatTrainer_V2.Views;
@@ -22,8 +23,7 @@ public partial class App : Application
         AvaloniaXamlLoader.Load(this);
 
         ServiceCollection collection = new();
-        //collection.AddSingleton<Mgs2MemoryManager>();
-        //collection.AddSingleton<Logging>();
+        collection.AddSingleton<Mgs2MemoryManager>();
 
         _services = collection.BuildServiceProvider();
     }

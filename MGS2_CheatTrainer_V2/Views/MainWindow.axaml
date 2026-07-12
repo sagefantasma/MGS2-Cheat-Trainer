@@ -3,13 +3,14 @@
         xmlns:views="clr-namespace:MGS2_CheatTrainer_V2.Views"
         x:Class="MGS2_CheatTrainer_V2.Views.MainWindow"
         Title="MGS2 Cheat Trainer"
+        MinWidth="1250"
+        MinHeight="925"
         Width="1250"
         Height="925"
         CanResize="True">
 
     <DockPanel>
-
-        <!-- Menu bar at the top -->
+        
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Help">
                 <MenuItem Header="View Logs"              x:Name="ViewLogsMenuItem"    Click="ViewLogsMenuItem_Click"/>
@@ -18,16 +19,14 @@
                 <MenuItem Header="Join our Discord"       Click="JoinDiscordMenuItem_Click"/>
             </MenuItem>
         </Menu>
-
-        <!-- Status bar at the bottom -->
+        
         <Border DockPanel.Dock="Bottom"
                 BorderThickness="0,1,0,0"
                 BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
                 Padding="6,3">
             <TextBlock x:Name="StatusLabel" Text="Ready" />
         </Border>
-
-        <!-- Main tab control fills remaining space -->
+        
         <TabControl x:Name="Mgs2TabControl"
                     SelectionChanged="Mgs2TabControl_SelectionChanged">
 

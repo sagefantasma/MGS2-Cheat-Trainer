@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using System;
 using Avalonia.Media;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MGS2_CheatTrainer_V2.Views
 {
@@ -44,6 +45,7 @@ namespace MGS2_CheatTrainer_V2.Views
         public MaxableObjectDetailView()
         {
             InitializeComponent();
+            _memoryManager = App.Services.GetRequiredService<Mgs2MemoryManager>();
         }
 
         private void EnabledCheckBox_IsCheckedChanged(object sender, RoutedEventArgs e)

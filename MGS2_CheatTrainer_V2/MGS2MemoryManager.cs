@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Microsoft.Extensions.DependencyInjection;
 using SimplifiedMemoryManager;
 
 namespace MGS2_CheatTrainer_V2
@@ -12,16 +13,8 @@ namespace MGS2_CheatTrainer_V2
     internal class Mgs2MemoryManager : IDisposable
     {
         #region Internals
-        private const string LoggerName = "MemoryManagerDebuglog.log";
         private static List<IntPtr> LastKnownStageOffsets { get; set; } = default;
-        private static ILogger Logger { get; set; }
-
-        internal static void StartLogger()
-        {
-            Logger = Logging.InitializeNewLogger(LoggerName);
-            Logger.Information($"Memory Manager for version {Program.AppVersion} initialized...");
-            Logger.Verbose($"Instance ID: {Program.InstanceId}");
-        }
+        private static ILogger Logger => Logging.Logger;
 
         public class GameStats
         {
@@ -168,7 +161,8 @@ namespace MGS2_CheatTrainer_V2
                 {
                     try
                     {
-                        byte[] bytesRead = proxy.ReadProcessOffset(memoryLocation, bytesToRead);
+                        //byte[] bytesRead = proxy.ReadProcessOffset(memoryLocation, bytesToRead);
+                        byte[] bytesRead = proxy.GetMemoryFromPointer(memoryLocation, (int)bytesToRead);
                         if (bytesRead.Length != bytesToRead)
                         {
                             Logger.Warning($"Expected to read {bytesToRead}, but we actually read {bytesRead.Length}");
@@ -440,23 +434,23 @@ namespace MGS2_CheatTrainer_V2
                 {
                     case Constants.MaxableItem maxableItem:
                         Logger.Debug($"mgs2Object parsed as MaxableItem, setting base value to: {value}");
-                        SetPlayerOffsetBasedByteValueObject(maxableItem.Index, BitConverter.GetBytes(value), character);
+                        SetPlayerOffsetBasedByteValueObject(maxableItem.Index + Mgs2Offset.BaseItem.Start, BitConverter.GetBytes(value), character);
                         break;
                     case Constants.SpecialItem specialItem:
                         Logger.Debug($"mgs2Object parsed as SpecialItem, setting base value to: {value}");
-                        SetPlayerOffsetBasedByteValueObject(specialItem.Index, BitConverter.GetBytes(value), character);
+                        SetPlayerOffsetBasedByteValueObject(specialItem.Index + Mgs2Offset.BaseItem.Start, BitConverter.GetBytes(value), character);
                         break;
                     case Constants.MaxableWeapon maxableWeapon:
                         Logger.Debug($"mgs2Object parsed as MaxableWeapon, setting base value to: {value}");
-                        SetPlayerOffsetBasedByteValueObject(maxableWeapon.Index, BitConverter.GetBytes(value), character);
+                        SetPlayerOffsetBasedByteValueObject(maxableWeapon.Index + Mgs2Offset.BaseWeapon.Start, BitConverter.GetBytes(value), character);
                         break;
                     case Constants.BooleanWeapon booleanWeapon:
                         Logger.Debug($"mgs2Object parsed as BooleanWeapon, setting base value to: {value}");
-                        SetPlayerOffsetBasedByteValueObject(booleanWeapon.Index, BitConverter.GetBytes(value), character);
+                        SetPlayerOffsetBasedByteValueObject(booleanWeapon.Index + Mgs2Offset.BaseWeapon.Start, BitConverter.GetBytes(value), character);
                         break;
                     case Constants.BooleanItem booleanItem:
                         Logger.Debug($"mgs2Object parsed as BooleanItem, setting base value to: {value}");
-                        SetPlayerOffsetBasedByteValueObject(booleanItem.Index, BitConverter.GetBytes(value), character);
+                        SetPlayerOffsetBasedByteValueObject(booleanItem.Index + Mgs2Offset.BaseItem.Start, BitConverter.GetBytes(value), character);
                         break;
                 }
             }

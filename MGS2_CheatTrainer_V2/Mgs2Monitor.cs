@@ -11,6 +11,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Base;
 using MsBox.Avalonia.Enums;
@@ -32,31 +33,14 @@ namespace MGS2_CheatTrainer_V2
         private static bool InitialLaunch { get; set; } = true;
         private static CancellationToken MonitorCancellationToken { get; set; }
         private static CancellationTokenSource Mgs2CancellationTokenSource { get; set; } = new CancellationTokenSource();
-        private static ILogger Logger { get; set; }
+        private static ILogger? Logger => Logging.Logger;
         private static Thread ScanningThread { get; set; }
         private static Task UpdateStatsTask { get; set; }
         private static Stage LastKnownStage { get; set; }
         #endregion
-
+        
         #region Functions
         #region Event Handlers & Delegates
-        /// <summary>
-        /// !!!NOTE!!! This WILL NOT WORK if you are running this program in a debugger and use the "Stop Debugging" feature.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private static void CloseMgs2EventHandler(object sender, EventArgs e)
-        {
-            try
-            {
-                Mgs2Process?.CloseMainWindow();
-                Mgs2Process?.Dispose();
-            }
-            catch (Exception ex)
-            {
-                Logger.Error($"Failed to close MGS2: {ex}");
-            }
-        }
 
         private static void TearDownMonitor()
         { 
@@ -67,64 +51,79 @@ namespace MGS2_CheatTrainer_V2
         #region Threads
         private static void ScanForMgs2()
         {
-            while (!MonitorCancellationToken.IsCancellationRequested) //this loop should only end when the program ends.
+            while (!MonitorCancellationToken.IsCancellationRequested)
             {
-                Process process = null;
-                if(RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) 
-                    process = Process.GetProcessesByName(Mgs2ProcessName).FirstOrDefault();
-                else //Technically, I'm only supporting Linux and not OSX, but idk if OSX would work or not with this pattern
+                if (Mgs2Process == null)
                 {
-                    //The process name isn't always an exact match like it is on Windows, unfortunately, so we need to
-                    //do some fancy tricks to get the actual MGS2 process.
-                    Process[] processes = Process.GetProcessesByName("METAL");
-                    if (processes.Length == 1)
-                        process = processes[0];
+                    Process process = null;
+                    
+                    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                        process = Process.GetProcessesByName(Mgs2ProcessName).FirstOrDefault();
                     else
                     {
-                        foreach (Process p in processes)
+                        Process[] processes = Process.GetProcessesByName("METAL");
+                        if (processes.Length == 1)
+                            process = processes[0];
+                        else if (processes.Length == 0)
+                            processes = Process.GetProcesses();
+
+                        if (process is null)
                         {
-                            using (SimpleProcessProxy spp = new SimpleProcessProxy(p))
+                            foreach (Process p in processes)
                             {
-                                //TODO: do something real instead of this placeholder junk
-                                nint signifyingMemory = 1234;
-                                long bytesToRead = 4;
-                                string determinantString = "ASDF";
-                                try
+                                if (!p.ProcessName.Contains("METAL")) continue;
+                                using (SimpleProcessProxy spp = new SimpleProcessProxy(p))
                                 {
-                                    if (determinantString.Equals(
-                                            Encoding.UTF8.GetString(
-                                                spp.ReadProcessOffset(signifyingMemory, bytesToRead))))
-                                        process = p;
-                                }
-                                catch
-                                {
-                                    continue;
+                                    nint signifyingMemory = 0x72F2E0;
+                                    long bytesToRead = 18;
+                                    string determinantString = "METAL GEAR SOLID 2";
+                                    try
+                                    {
+                                        byte[] memory = spp.ReadProcessOffset(signifyingMemory, bytesToRead);
+                                        string decodedString = Encoding.UTF8.GetString(memory);
+                                        if (determinantString.Equals(decodedString))
+                                            process = p;
+                                    }
+                                    catch
+                                    {
+                                        continue;
+                                    }
                                 }
                             }
                         }
                     }
-                }
-                if (process != null)
-                {
-                    if (Mgs2Process != process)
+
+                    if (process != null)
                     {
-                        Mgs2Process = process;
-                        FileVersionInfo fileVersion = FileVersionInfo.GetVersionInfo(Mgs2Process.MainModule.FileName); //TODO: does this work for Linux?
-                        Logger.Debug($"MGS2 found and hooked, version:\n{fileVersion}");
-                        if (string.Compare(fileVersion.ProductVersion, DesiredVersion) != 0 && !_versionWarned) 
+                        // Bug fix: only update if process actually changed
+                        if (Mgs2Process?.Id != process.Id)
                         {
-                            _versionWarned = true;
-                            IMsBox<ButtonResult> msgBox = MessageBoxManager.GetMessageBoxStandard("Incompatible game version detected!",
-                                $"The version of MGS2 we have hooked into({fileVersion.ProductVersion}) does not match what we expect({DesiredVersion})! Expect issues if you continue without updating the game.",
-                                ButtonEnum.Ok);
+                            Mgs2Process = process;
+                            FileVersionInfo fileVersion = FileVersionInfo.GetVersionInfo(
+                                Mgs2Process.MainModule.FileName);
+                            Logger.Debug($"MGS2 found and hooked, version:\n{fileVersion}");
+
+                            if (string.Compare(fileVersion.ProductVersion, DesiredVersion) != 0
+                                && !_versionWarned)
+                            {
+                                _versionWarned = true;
+                                /*IMsBox<ButtonResult> msgBox = MessageBoxManager.GetMessageBoxStandard(
+                                    "Incompatible game version detected!",
+                                    $"The version of MGS2 we have hooked({fileVersion.ProductVersion}) " +
+                                    $"does not match expected({DesiredVersion})!",
+                                    ButtonEnum.Ok);*/
+                            }
                         }
+
+                        Thread.Sleep(60 * Constants.MILLISECONDS_IN_SECOND);
                     }
-                    Thread.Sleep(60 * Constants.MILLISECONDS_IN_SECOND); //scan every 60 seconds to see if MGS2 is still running
-                }
-                else
-                {
-                    Mgs2Process = null;
-                    Thread.Sleep(10 * Constants.MILLISECONDS_IN_SECOND); //scan every 10 seconds if we know MGS2 IS NOT running
+                    else
+                    {
+                        // Bug fix: only clear if we previously had a process
+                        if (Mgs2Process != null)
+                            Mgs2Process = null;
+                        Thread.Sleep(10 * Constants.MILLISECONDS_IN_SECOND);
+                    }
                 }
             }
         }
@@ -147,7 +146,7 @@ namespace MGS2_CheatTrainer_V2
                     Stage currentStage = Mgs2MemoryManager.GetStage(); //Always found, or error is thrown.
                     if(currentStage?.Name != LastKnownStage?.Name)
                     {
-                        Logger.Debug($"User is now in stage: {currentStage}");
+                        //Logger.Debug($"User is now in stage: {currentStage}");
                         LastKnownStage = currentStage!;
                     }
                     //if we're in a main menu, we shouldn't try to find stats right now.
@@ -169,7 +168,7 @@ namespace MGS2_CheatTrainer_V2
                 if (_mgs2Process != null)
                 {
                     //only write to log when we are actually in a game, and should have some stats to grab
-                    Logger.Error($"Failed to update scoring stats! Error encountered: {e}");
+                    //Logger.Error($"Failed to update scoring stats! Error encountered: {e}");
                 }
             }
         }
@@ -181,7 +180,6 @@ namespace MGS2_CheatTrainer_V2
         #region Constructor & Process Encapsulator
         static Mgs2Monitor()
         {
-            Logger = Logging.InitializeNewLogger(LoggerName);
             Logger.Information($"MGS2 Monitor for version {Program.AppVersion} initialized...");
             Logger.Verbose($"Instance ID: {Program.InstanceId}");
         }
@@ -190,29 +188,34 @@ namespace MGS2_CheatTrainer_V2
 
         public static Process Mgs2Process
         {
-            get 
+            get
             {
                 if (_mgs2Process != null && _mgs2Process.HasExited == false)
-                {
                     return _mgs2Process;
-                }
 
-                try
-                {
-                    Mgs2CancellationTokenSource.Cancel();
-                }
-                catch 
-                {
-                    //if this fails, its not a big deal
-                }
+                try { Mgs2CancellationTokenSource.Cancel(); }
+                catch { }
                 _mgs2Process = null;
                 return null;
             }
             set
             {
-                //start tasks to monitor in-game values
-                UpdateStatsTask = Task.Factory.StartNew(MonitorScoringStats);
-                _mgs2Process = value;
+                // Bug fix: only start monitoring task when setting a real process,
+                // and only if it's actually a different process than what we have
+                if (value != null && value != _mgs2Process)
+                {
+                    // Cancel any existing monitoring task before starting a new one
+                    try { Mgs2CancellationTokenSource.Cancel(); }
+                    catch { }
+
+                    _mgs2Process = value;
+                    //UpdateStatsTask = Task.Factory.StartNew(MonitorScoringStats);
+                }
+                else if (value == null)
+                {
+                    // Just clear the process, don't start a new task
+                    _mgs2Process = null;
+                }
             }
         }
         #endregion

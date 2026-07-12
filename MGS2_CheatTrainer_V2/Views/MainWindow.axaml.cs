@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -10,6 +11,8 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        Logging.StartLogger();
+        Mgs2Monitor.EnableMonitor(new CancellationToken());
     }
 
     private void ViewLogsMenuItem_Click(object? sender, RoutedEventArgs e)

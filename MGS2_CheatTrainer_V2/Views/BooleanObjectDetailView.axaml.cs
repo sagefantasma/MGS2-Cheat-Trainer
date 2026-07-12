@@ -32,7 +32,7 @@ public partial class BooleanObjectDetailView : UserControl
     public BooleanObjectDetailView()
     {
         InitializeComponent();
-        //_memoryManager = App.Services.GetRequiredService<Mgs2MemoryManager>();
+        _memoryManager = App.Services.GetRequiredService<Mgs2MemoryManager>();
     }
 
     public void Enabled_OnClick(object sender, RoutedEventArgs e)

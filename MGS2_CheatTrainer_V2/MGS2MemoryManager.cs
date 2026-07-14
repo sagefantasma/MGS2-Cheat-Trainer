@@ -87,6 +87,8 @@ namespace MGS2_CheatTrainer_V2
 
         private static List<IntPtr> GetStageOffsets()
         {
+            //TODO: replace this with hardcode stage pointer instead of AoB-based since this game is no longer getting updated
+            //Famous last words, that^.
             try
             {
                 lock (Mgs2Monitor.Mgs2Process)
@@ -463,17 +465,18 @@ namespace MGS2_CheatTrainer_V2
 
         public static void UpdateObjectMaxValue(Constants.IMgs2Object mgs2Object, ushort count, Constants.PlayableCharacter character)
         {
+            //TODO: validate
             try
             {
                 switch (mgs2Object)
                 {
                     case Constants.MaxableItem maxableItem:
                         Logger.Debug($"mgs2Object parsed as MaxableItem, setting max count to: {count}");
-                        SetPlayerOffsetBasedByteValueObject(maxableItem.MaxIndex, BitConverter.GetBytes(count), character);
+                        SetPlayerOffsetBasedByteValueObject(maxableItem.MaxIndex + Mgs2Offset.BaseItem.Start, BitConverter.GetBytes(count), character);
                         break;
                     case Constants.MaxableWeapon maxableWeapon:
                         Logger.Debug($"mgs2Object parsed as maxableWeapon, setting max count to: {count}");
-                        SetPlayerOffsetBasedByteValueObject(maxableWeapon.MaxIndex, BitConverter.GetBytes(count), character);
+                        SetPlayerOffsetBasedByteValueObject(maxableWeapon.MaxIndex + Mgs2Offset.BaseWeapon.Start, BitConverter.GetBytes(count), character);
                         break;
                 }
             }

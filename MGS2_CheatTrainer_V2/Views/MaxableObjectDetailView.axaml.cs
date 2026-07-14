@@ -56,11 +56,15 @@ namespace MGS2_CheatTrainer_V2.Views
         private void CurrentBtn_Click(object sender, RoutedEventArgs e)
         {
             OnSetCurrent?.Invoke((ushort)CurrentUpDown.Value);
+            _object ??= Constants.DetermineObject(Name!);
+            _memoryManager.UpdateObjectBaseValue(_object, (ushort)CurrentUpDown.Value);
         }
 
         private void MaxBtn_Click(object sender, RoutedEventArgs e)
         {
             OnSetMax?.Invoke((ushort)MaxUpDown.Value);
+            _object ??= Constants.DetermineObject(Name!);
+            _memoryManager.UpdateObjectMaxValue(_object, (ushort)MaxUpDown.Value);
         }
     }
 }

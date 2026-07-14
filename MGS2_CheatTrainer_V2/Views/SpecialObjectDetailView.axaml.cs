@@ -53,7 +53,7 @@ public partial class SpecialObjectDetailView : UserControl
     public SpecialObjectDetailView()
     {
         InitializeComponent();
-        //_memoryManager = App.Services.GetRequiredService<Mgs2MemoryManager>();
+        _memoryManager = App.Services.GetRequiredService<Mgs2MemoryManager>();
     }
 
     public void Enabled_OnClick(object sender, RoutedEventArgs e)
@@ -67,7 +67,6 @@ public partial class SpecialObjectDetailView : UserControl
     {
         //TODO: implement
         _object ??= Constants.DetermineObject(Name!);
-        ushort value = 0; //TODO: make real value
-        _memoryManager.UpdateObjectBaseValue(_object!, value);
+        _memoryManager.UpdateObjectBaseValue(_object!, (ushort)CurrentUpDown.Value);
     }
 }

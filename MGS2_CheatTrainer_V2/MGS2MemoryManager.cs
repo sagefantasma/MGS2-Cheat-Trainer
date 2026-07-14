@@ -85,10 +85,30 @@ namespace MGS2_CheatTrainer_V2
             }
         }
 
+        private static IntPtr GetCurrentStageOffset()
+        {
+            try
+            {
+                lock (Mgs2Monitor.Mgs2Process)
+                {
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
+                    {
+                        IntPtr memoryLocation = proxy.FollowPointer(new IntPtr(Mgs2Pointer.PlayerPointer), false);
+
+                        return IntPtr.Add(memoryLocation, Mgs2Offset.CurrentStage.Start);
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                Logger.Error($"Could not get current stage offset: {e}");
+                throw new AggregateException("Failed to get current stage offset", e);
+            }
+        }
+        
+        [Obsolete("This is inefficient and slow, use GetCurrentStageOffset instead.")]
         private static List<IntPtr> GetStageOffsets()
         {
-            //TODO: replace this with hardcode stage pointer instead of AoB-based since this game is no longer getting updated
-            //Famous last words, that^.
             try
             {
                 lock (Mgs2Monitor.Mgs2Process)
@@ -205,10 +225,12 @@ namespace MGS2_CheatTrainer_V2
 
         private static string GetCharacterCode()
         {
+            //TODO: validate with new offset
             try
             {
-                List<IntPtr> stageMemoryOffsets = GetStageOffsets();
-                string stringInMemory = Encoding.UTF8.GetString(ReadValueFromMemory(stageMemoryOffsets.First() + Mgs2Offset.CurrentCharacter.Start, Mgs2Offset.CurrentCharacter.Length));
+                //List<IntPtr> stageMemoryOffsets = GetStageOffsets();
+                IntPtr stageMemoryOffset = GetCurrentStageOffset();
+                string stringInMemory = Encoding.UTF8.GetString(ReadValueFromMemory(stageMemoryOffset + Mgs2Offset.CurrentCharacter.Start, Mgs2Offset.CurrentCharacter.Length));
 
                 return stringInMemory;
             }
@@ -221,10 +243,12 @@ namespace MGS2_CheatTrainer_V2
 
         internal static Stage GetStage()
         {
+            //TODO: validate with new offset
             try
             {
-                List<IntPtr> stageMemoryOffsets = GetStageOffsets();
-                string stringInMemory = Encoding.UTF8.GetString(ReadValueFromMemory(stageMemoryOffsets.First() + Mgs2Offset.CurrentStage.Start, Mgs2Offset.CurrentStage.Length));
+                //List<IntPtr> stageMemoryOffsets = GetStageOffsets();
+                IntPtr stageMemoryOffset = GetCurrentStageOffset();
+                string stringInMemory = Encoding.UTF8.GetString(ReadValueFromMemory(stageMemoryOffset));
 
                 Stage currentStage = Stage.Parse(stringInMemory);
                 Logger.Verbose($"User is currently in stage: {stringInMemory}. Parsed as {currentStage}");
@@ -427,7 +451,7 @@ namespace MGS2_CheatTrainer_V2
 
         public void UpdateObjectBaseValue(Constants.IMgs2Object mgs2Object, ushort value)
         { 
-            //TODO: validate
+            //NOTE: Currently working as expected on rewrite/multiplatforming
             try
             {
                 Constants.PlayableCharacter character = DetermineActiveCharacter();
@@ -463,11 +487,13 @@ namespace MGS2_CheatTrainer_V2
             }
         }
 
-        public static void UpdateObjectMaxValue(Constants.IMgs2Object mgs2Object, ushort count, Constants.PlayableCharacter character)
+        public void UpdateObjectMaxValue(Constants.IMgs2Object mgs2Object, ushort count)
         {
-            //TODO: validate
+            //NOTE: Currently working as expected on rewrite/multiplatforming
             try
             {
+                Constants.PlayableCharacter character = DetermineActiveCharacter();
+                
                 switch (mgs2Object)
                 {
                     case Constants.MaxableItem maxableItem:
@@ -515,10 +541,12 @@ namespace MGS2_CheatTrainer_V2
 
         public static GameStats ReadGameStats()
         {
+            //TODO: validate with new offset
             try
             {
                 Logger.Verbose("Reading game stats...");
-                IntPtr stageOffset = GetStageOffsets().First();
+                //IntPtr stageOffset = GetStageOffsets().First();
+                IntPtr stageOffset = GetCurrentStageOffset();
                 byte[] gameStatsBytes = ReadValueFromMemory(stageOffset + Mgs2Offset.GameStatsBlock.Start, Mgs2Offset.GameStatsBlock.Length);
                 short continues = BitConverter.ToInt16(gameStatsBytes, 4);
                 short saves = BitConverter.ToInt16(gameStatsBytes, 8);
@@ -560,9 +588,11 @@ namespace MGS2_CheatTrainer_V2
 
         public static void ChangeGameStat(GameStats.ModifiableStats gameStat, short value)
         {
+            //TODO: validate with new offset
             try
             {
-                IntPtr stageOffset = GetStageOffsets().First();
+                //IntPtr stageOffset = GetStageOffsets().First();
+                IntPtr stageOffset = GetCurrentStageOffset();
                 MemoryOffset gameStatOffset;
                 switch (gameStat)
                 {
@@ -605,9 +635,11 @@ namespace MGS2_CheatTrainer_V2
 
         public static Difficulty ReadCurrentDifficulty()
         {
+            //TODO: validate with new offset
             try
             {
-                IntPtr stageOffset = GetStageOffsets().First();
+                //IntPtr stageOffset = GetStageOffsets().First();
+                IntPtr stageOffset = GetCurrentStageOffset();
                 byte[] difficultyByte = ReadValueFromMemory(stageOffset + Mgs2Offset.CurrentDifficulty.Start, Mgs2Offset.CurrentDifficulty.Length);
 
                 int convertedDifficulty = difficultyByte[0];
@@ -623,9 +655,11 @@ namespace MGS2_CheatTrainer_V2
 
         public static GameType ReadGameType()
         {
+            //TODO: validate with new offset
             try
             {
-                IntPtr stageOffset = GetStageOffsets().First();
+                //IntPtr stageOffset = GetStageOffsets().First();
+                IntPtr stageOffset = GetCurrentStageOffset();
                 byte[] gameTypeByte = ReadValueFromMemory(stageOffset + Mgs2Offset.CurrentGametype.Start, Mgs2Offset.CurrentGametype.Length);
 
                 int convertedGameType = gameTypeByte[0];
@@ -641,9 +675,11 @@ namespace MGS2_CheatTrainer_V2
 
         public static ushort GetCurrentHp()
         {
+            //TODO: validate with new offset
             try
             {
-                IntPtr stageOffset = GetStageOffsets().First();
+                //IntPtr stageOffset = GetStageOffsets().First();
+                IntPtr stageOffset = GetCurrentStageOffset();
                 byte[] currentHpBytes = ReadValueFromMemory(stageOffset + Mgs2Offset.CurrentHp.Start, Mgs2Offset.CurrentHp.Length);
 
                 return BitConverter.ToUInt16(currentHpBytes, 0);
@@ -657,9 +693,11 @@ namespace MGS2_CheatTrainer_V2
 
         public static ushort GetCurrentMaxHp()
         {
+            //TODO: validate with new offset
             try
             {
-                IntPtr stageOffset = GetStageOffsets().First();
+                //IntPtr stageOffset = GetStageOffsets().First();
+                IntPtr stageOffset = GetCurrentStageOffset();
                 byte[] currentMaxHpBytes = ReadValueFromMemory(stageOffset + Mgs2Offset.CurrentMaxHp.Start, Mgs2Offset.CurrentMaxHp.Length);
 
                 return BitConverter.ToUInt16(currentMaxHpBytes, 0);
@@ -745,7 +783,7 @@ namespace MGS2_CheatTrainer_V2
                 
                     using (SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                     {
-                        IntPtr memoryLocation = proxy.FollowPointer(new IntPtr(Mgs2Pointer.PullupCount), false);
+                        IntPtr memoryLocation = proxy.FollowPointer(new IntPtr(Mgs2Pointer.PlayerPointer), false);
 
                         if (currentCharacter == Constants.PlayableCharacter.Snake)
                             memoryLocation = IntPtr.Add(memoryLocation, Mgs2Offset.SnakePullups.Start);

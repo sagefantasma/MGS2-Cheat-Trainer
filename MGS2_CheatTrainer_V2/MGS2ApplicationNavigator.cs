@@ -35,7 +35,7 @@ namespace MGS2_CheatTrainer_V2
         internal static int ModifiableHp = 0x017DF780; //2.0.2 - 0x17DE780
         internal static int CurrentGrip = 0x016E9B20; //2.0.1 - 0x016E9B20 ... 2.0.2 - 0x016E8B20
         internal static int CurrentAmmo = 0x01540C20; //2.0.1 - 0x01540C20 ... 2.0.2 - 0x0153FC10
-        internal static int PullupCount = 0x00949340; //2.0.1 - 0x00949340 ... 2.0.2 - 0x00948340
+        internal static int PlayerPointer = 0x00949340; //2.0.1 - 0x00949340 ... 2.0.2 - 0x00948340
         internal static List<int> OlgaNestedPointers = new List<int> { 0x017DF660, 0x0, 0x298 }; //fixed 2.0.2 (0x01550EE0, 0x2C0) -- fixed 2.1.0 [+1030, 40]
         internal static List<int> FortuneNestedPointers = null;
         internal static List<int> FatmanNestedPointers = new List<int> { 0x017DF660, 0x0, 0xE0 }; //fixed 2.0.2 (0x1550F00, 0x10) -- fixed 2.1.0 [+1010, 0]
@@ -276,6 +276,8 @@ namespace MGS2_CheatTrainer_V2
     {
         #region Offsets
         #region Pointer offsets
+
+        public static readonly MemoryOffset CurrentStage = new MemoryOffset(0x2C);
         public static readonly MemoryOffset SnakePullups = new MemoryOffset(0x12E);
         public static readonly MemoryOffset RaidenPullups = new MemoryOffset(0x130);
         #endregion
@@ -377,10 +379,10 @@ namespace MGS2_CheatTrainer_V2
         #endregion
 
         #region Calculated From StageInfo
-        public static readonly MemoryOffset CurrentCharacter = new MemoryOffset(-260, -255);
+        public static readonly MemoryOffset CurrentCharacter = new MemoryOffset(-16, -10);
         public static readonly MemoryOffset CurrentMaxHp = new MemoryOffset(-36, -35);
         public static readonly MemoryOffset CurrentHp = new MemoryOffset(-38, -37);
-        public static readonly MemoryOffset CurrentStage = new MemoryOffset(-244, -238);
+        public static readonly MemoryOffset OldCurrentStage = new MemoryOffset(-244, -238);
         public static readonly MemoryOffset CurrentDifficulty = new MemoryOffset(-272);
         public static readonly MemoryOffset NgplusCount = new MemoryOffset(-271, -272); //TODO: prove this is valid
         public static readonly MemoryOffset CurrentGametype = new MemoryOffset(-281); //TODO: prove this is valid

@@ -92,7 +92,7 @@
                         <views:MaxableObjectDetailView x:Name="ChaffDetailView" Grid.Row="1" Grid.Column="4" EntityImage="/Assets/chaff_alp_ovl.bmp.bmp" Mgs2Object="Chaff Grenade"/>
                         <views:MaxableObjectDetailView x:Name="StunDetailView" Grid.Row="2" Grid.Column="0" EntityImage="/Assets/stun_alp_ovl.bmp.bmp" Mgs2Object="Stun Grenade"/>
                         <views:BooleanObjectDetailView x:Name="DMicDetailView" Grid.Row="2" Grid.Column="1"  EntityImage="/Assets/dmp_alp_ovl.bmp.bmp" Mgs2Object="Directional Microphone"/>
-                        <views:BooleanObjectDetailView x:Name="HfBladeDetailView" Grid.Row="2" Grid.Column="2" EntityImage="/Assets/hfb_alp_ovl.bmp.bmp" Mgs2Object="High Frequency Blade"/>
+                        <views:BooleanObjectDetailView x:Name="HfBladeDetailView" Grid.Row="2" Grid.Column="2" EntityImage="/Assets/hfb_alp_ovl.bmp.bmp" Mgs2Object="High Frequency Blade" IsEnabled="False"/>
                         <views:BooleanObjectDetailView x:Name="CoolantDetailView" Grid.Row="2" Grid.Column="3" EntityImage="/Assets/cls_alp_ovl.bmp.bmp" Mgs2Object="Coolant Spray"/>
                         <views:MaxableObjectDetailView x:Name="Aks74UDetailView" Grid.Row="2" Grid.Column="4" EntityImage="/Assets/aks_alp_ovl.bmp.bmp" Mgs2Object="AKS-74u"/>
                         <views:MaxableObjectDetailView x:Name="MagazineDetailView" Grid.Row="3" Grid.Column="0" EntityImage="/Assets/mag_alp_ovl.bmp.bmp" Mgs2Object="Magazine"/>
@@ -140,7 +140,7 @@
                 </Panel>
             </TabItem>
 
-            <TabItem Header="Stats">
+            <TabItem x:Name="StatsTab" Header="Stats" Tapped="StatsTab_Tapped">
                 <Panel>
                     <Image Source="/Assets/mini.png" Stretch="UniformToFill"/>
                     <Rectangle Fill="Black" Opacity="0.9" IsHitTestVisible="False"/>

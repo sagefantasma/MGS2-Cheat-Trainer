@@ -11,6 +11,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using MGS2_CheatTrainer_V2.Views;
 using Microsoft.Extensions.DependencyInjection;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Base;
@@ -37,11 +38,17 @@ namespace MGS2_CheatTrainer_V2
         private static Thread ScanningThread { get; set; }
         private static Task UpdateStatsTask { get; set; }
         private static Stage LastKnownStage { get; set; }
+        public static event EventHandler<bool> GameHooked;
         #endregion
         
         #region Functions
         #region Event Handlers & Delegates
 
+        private static void OnGameHooked(bool hooked)
+        {
+            GameHooked?.Invoke(null, hooked);
+        }
+        
         private static void TearDownMonitor()
         { 
             ScanningThread.Abort();
@@ -99,6 +106,7 @@ namespace MGS2_CheatTrainer_V2
                         if (Mgs2Process?.Id != process.Id)
                         {
                             Mgs2Process = process;
+                            OnGameHooked(true);
                             FileVersionInfo fileVersion = FileVersionInfo.GetVersionInfo(
                                 Mgs2Process.MainModule.FileName);
                             Logger.Debug($"MGS2 found and hooked, version:\n{fileVersion}");
@@ -106,6 +114,8 @@ namespace MGS2_CheatTrainer_V2
                             if (string.Compare(fileVersion.ProductVersion, DesiredVersion) != 0
                                 && !_versionWarned)
                             {
+                                //TODO: Is there a way to make this work when using Proton? Because the FileVersionInfo
+                                //when using Proton is the FileVersionInfo FOR Proton... hmmj
                                 _versionWarned = true;
                                 /*IMsBox<ButtonResult> msgBox = MessageBoxManager.GetMessageBoxStandard(
                                     "Incompatible game version detected!",
@@ -127,52 +137,6 @@ namespace MGS2_CheatTrainer_V2
                 }
             }
         }
-
-        #region In-game Stats
-        
-        private static async Task MonitorScoringStats()
-        {
-            Mgs2CancellationTokenSource = new CancellationTokenSource();
-            CancellationToken mgs2CancellationToken = Mgs2CancellationTokenSource.Token;
-            await PeriodicTask.Run(UpdateScoringStats, TimeSpan.FromSeconds(1), mgs2CancellationToken);   
-        }
-
-        private static void UpdateScoringStats()
-        {
-            try
-            {
-                if (EnableGameStats)
-                {
-                    Stage currentStage = Mgs2MemoryManager.GetStage(); //Always found, or error is thrown.
-                    if(currentStage?.Name != LastKnownStage?.Name)
-                    {
-                        //Logger.Debug($"User is now in stage: {currentStage}");
-                        LastKnownStage = currentStage!;
-                    }
-                    //if we're in a main menu, we shouldn't try to find stats right now.
-                    if (!StageNames.MenuStages.StageList.Contains(currentStage!))
-                    {
-                        Mgs2MemoryManager.GameStats currentGameStats = Mgs2MemoryManager.ReadGameStats();
-                        Difficulty currentDifficulty = Mgs2MemoryManager.ReadCurrentDifficulty();
-                        //GameType currentGameType = MGS2MemoryManager.ReadGameType(); //TODO: finish determining how to determine what gametype we're in
-                        //GUI.StaticGuiReference.UpdateGameStats(currentGameStats, currentDifficulty); //TODO: reimplement
-                    }
-                }
-                else
-                {
-                    UpdateStatsTask.Dispose();
-                }
-            }
-            catch(Exception e)
-            {
-                if (_mgs2Process != null)
-                {
-                    //only write to log when we are actually in a game, and should have some stats to grab
-                    //Logger.Error($"Failed to update scoring stats! Error encountered: {e}");
-                }
-            }
-        }
-        #endregion
         #endregion
         #endregion
         #endregion

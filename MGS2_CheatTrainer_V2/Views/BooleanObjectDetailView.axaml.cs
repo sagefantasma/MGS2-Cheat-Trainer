@@ -12,6 +12,7 @@ public partial class BooleanObjectDetailView : UserControl
 {
     private Constants.IMgs2Object? _object;
     private readonly Mgs2MemoryManager _memoryManager;
+    private bool _active = false;
     
     public IImage? EntityImage
     {
@@ -29,6 +30,17 @@ public partial class BooleanObjectDetailView : UserControl
         }
     }
 
+    public void UpdateObjectEnabledState()
+    {
+        _object ??= Constants.DetermineObject(Name!);
+        ushort value = _memoryManager.GetObjectValue(_object!);
+        if (_object is not Constants.BooleanWeapon)
+            EnabledCheckBox.IsChecked = value > 0;
+        else
+            EnabledCheckBox.IsChecked = value != 0xFFFF;
+        _active = true;
+    }
+
     public BooleanObjectDetailView()
     {
         InitializeComponent();
@@ -37,8 +49,8 @@ public partial class BooleanObjectDetailView : UserControl
 
     public void Enabled_OnClick(object sender, RoutedEventArgs e)
     {
-        //TODO: implement
+        if (!_active) return;
         _object ??= Constants.DetermineObject(Name!);
-        _memoryManager.ToggleObject(_object!);
+        _memoryManager.ToggleObject(_object!, (bool)EnabledCheckBox.IsChecked!);
     }
 }

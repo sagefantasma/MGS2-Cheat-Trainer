@@ -276,7 +276,7 @@ namespace MGS2_CheatTrainer_V2
     {
         #region Offsets
         #region Pointer offsets
-
+        public static readonly MemoryOffset CurrentCharacter = new MemoryOffset(0x1C, 0x22);
         public static readonly MemoryOffset CurrentStage = new MemoryOffset(0x2C);
         public static readonly MemoryOffset SnakePullups = new MemoryOffset(0x12E);
         public static readonly MemoryOffset RaidenPullups = new MemoryOffset(0x130);
@@ -377,18 +377,18 @@ namespace MGS2_CheatTrainer_V2
         public static readonly MemoryOffset ModifyPlayerHp = new MemoryOffset(-110, -107); //TODO: prove this is valid
         public static readonly MemoryOffset ModifyClipSize = new MemoryOffset(-114, -111); //TODO: prove this is valid
         #endregion
-
+        
         #region Calculated From StageInfo
-        public static readonly MemoryOffset CurrentCharacter = new MemoryOffset(-16, -10);
+        //public static readonly MemoryOffset CurrentCharacter = new MemoryOffset(-16, -10);
         public static readonly MemoryOffset CurrentMaxHp = new MemoryOffset(-36, -35);
         public static readonly MemoryOffset CurrentHp = new MemoryOffset(-38, -37);
         public static readonly MemoryOffset OldCurrentStage = new MemoryOffset(-244, -238);
-        public static readonly MemoryOffset CurrentDifficulty = new MemoryOffset(-272);
+        public static readonly MemoryOffset CurrentDifficulty = new MemoryOffset(); //TODO: get value
         public static readonly MemoryOffset NgplusCount = new MemoryOffset(-271, -272); //TODO: prove this is valid
         public static readonly MemoryOffset CurrentGametype = new MemoryOffset(-281); //TODO: prove this is valid
         public static readonly MemoryOffset CurrentEquippedItem = new MemoryOffset(-26); //TODO: prove this is valid
         public static readonly MemoryOffset CurrentEquippedWeapon = new MemoryOffset(-28); //TODO: prove this is valid
-        public static readonly MemoryOffset GameStatsBlock = new MemoryOffset(14, 57);
+        public static readonly MemoryOffset GameStatsBlock = new MemoryOffset(0x12E, 0x159); //14->57 TODO: update
         public static readonly MemoryOffset DamageTaken = new MemoryOffset(38);
         public static readonly MemoryOffset KillCount = new MemoryOffset(36);
         public static readonly MemoryOffset AlertCount = new MemoryOffset(34);
@@ -398,8 +398,8 @@ namespace MGS2_CheatTrainer_V2
         public static readonly MemoryOffset ContinueCount = new MemoryOffset(18);
         public static readonly MemoryOffset MechsDestroyed = new MemoryOffset(56);
         public static readonly MemoryOffset PullUpCount = new MemoryOffset(14);
-        public static readonly MemoryOffset SpecialItemsUsed = new MemoryOffset(5238, 5239);
-        public static readonly MemoryOffset RationsUsed = new MemoryOffset(5232, 5233);
+        public static readonly MemoryOffset SpecialItemsUsed = new MemoryOffset(5238, 5239); //TODO: update
+        public static readonly MemoryOffset RationsUsed = new MemoryOffset(5232, 5233); //TODO: update
         #endregion
 
         #region Cheats offsets

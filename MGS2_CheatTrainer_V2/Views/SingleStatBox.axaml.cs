@@ -18,6 +18,14 @@ public partial class SingleStatBox : UserControl
         }
     }
 
+    public bool Editable
+    {
+        set
+        {
+            this.SetButton.IsEnabled = value;
+        }
+    }
+
     public SingleStatBox()
     {
         InitializeComponent();

@@ -225,14 +225,20 @@ namespace MGS2_CheatTrainer_V2
 
         private static string GetCharacterCode()
         {
-            //TODO: validate with new offset
             try
             {
-                //List<IntPtr> stageMemoryOffsets = GetStageOffsets();
-                IntPtr stageMemoryOffset = GetCurrentStageOffset();
-                string stringInMemory = Encoding.UTF8.GetString(ReadValueFromMemory(stageMemoryOffset + Mgs2Offset.CurrentCharacter.Start, Mgs2Offset.CurrentCharacter.Length));
+                lock (Mgs2Monitor.Mgs2Process)
+                {
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
+                    {
+                        IntPtr pointerLocation = proxy.FollowPointer(new IntPtr(Mgs2Pointer.PlayerPointer), false);
+                        string stringInMemory = Encoding.UTF8.GetString(ReadValueFromMemory(
+                            pointerLocation + Mgs2Offset.CurrentCharacter.Start,
+                            Mgs2Offset.CurrentCharacter.Length));
 
-                return stringInMemory;
+                        return stringInMemory;
+                    }
+                }
             }
             catch(Exception e)
             {
@@ -278,6 +284,27 @@ namespace MGS2_CheatTrainer_V2
             {
                 Logger.Error($"Failed to set string at offset {stringOffset}: {e}");
                 throw new AggregateException($"Could not set string at offset {stringOffset}", e);
+            }
+        }
+
+        private static ushort GetPlayerOffsetBasedByteValueObject(int objectOffset)
+        {
+            try
+            {
+                lock (Mgs2Monitor.Mgs2Process)
+                {
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
+                    {
+                        IntPtr ammoOffset = proxy.FollowPointer(new IntPtr(Mgs2Pointer.CurrentAmmo), false);
+                        Logger.Information($"getting playerOffsetBased value at offset: {ammoOffset}+{objectOffset}...");
+                        return BitConverter.ToUInt16(proxy.GetMemoryFromPointer(IntPtr.Add(ammoOffset, objectOffset), 2));
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.Error($"Failed to get memory at offset {objectOffset}: {e}");
+                throw new AggregateException($"Could not get memory at offset {objectOffset}", e);
             }
         }
 
@@ -513,6 +540,39 @@ namespace MGS2_CheatTrainer_V2
             }
         }
 
+        public ushort GetObjectValue(Constants.IMgs2Object mgs2Object)
+        {
+            try
+            {
+                switch (mgs2Object)
+                {
+                    case Constants.MaxableItem maxableItem:
+                        Logger.Debug($"mgs2Object parsed as MaxableItem, getting base value...");
+                        return GetPlayerOffsetBasedByteValueObject(maxableItem.Index + Mgs2Offset.BaseItem.Start);
+                    case Constants.SpecialItem specialItem:
+                        Logger.Debug($"mgs2Object parsed as SpecialItem, getting base value...");
+                        return GetPlayerOffsetBasedByteValueObject(specialItem.Index + Mgs2Offset.BaseItem.Start);
+                    case Constants.MaxableWeapon maxableWeapon:
+                        Logger.Debug($"mgs2Object parsed as MaxableWeapon, getting base value...");
+                        return GetPlayerOffsetBasedByteValueObject(maxableWeapon.Index + Mgs2Offset.BaseWeapon.Start);
+                    case Constants.BooleanWeapon booleanWeapon:
+                        Logger.Debug($"mgs2Object parsed as BooleanWeapon, getting base value...");
+                        return GetPlayerOffsetBasedByteValueObject(booleanWeapon.Index + Mgs2Offset.BaseWeapon.Start);
+                    case Constants.BooleanItem booleanItem:
+                        Logger.Debug($"mgs2Object parsed as BooleanItem, getting base value...");
+                        return GetPlayerOffsetBasedByteValueObject(booleanItem.Index + Mgs2Offset.BaseItem.Start);
+                    default:
+                        Logger.Error("Unknown mgs2Object type, cannot continue");
+                        throw new InvalidDataException("Unknown mgs2Object type");
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.Error($"Failed to update the base value for {mgs2Object.Name}: {e}");
+                throw new AggregateException($"Could not update base value for {mgs2Object.Name}", e);
+            };
+        }
+
         public void ToggleObject(Constants.IMgs2Object mgs2Object,
             bool enable = true)
         {
@@ -539,15 +599,28 @@ namespace MGS2_CheatTrainer_V2
             }
         }
 
-        public static GameStats ReadGameStats()
+        public GameStats ReadGameStats()
         {
             //TODO: validate with new offset
             try
             {
                 Logger.Verbose("Reading game stats...");
                 //IntPtr stageOffset = GetStageOffsets().First();
-                IntPtr stageOffset = GetCurrentStageOffset();
-                byte[] gameStatsBytes = ReadValueFromMemory(stageOffset + Mgs2Offset.GameStatsBlock.Start, Mgs2Offset.GameStatsBlock.Length);
+                byte[] gameStatsBytes;
+                byte[] rationsUsedBytes;
+                byte[] specialItemsBytes;
+                lock (Mgs2Monitor.Mgs2Process)
+                {
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
+                    {
+                        IntPtr pointerLocation = proxy.FollowPointer(new IntPtr(Mgs2Pointer.PlayerPointer), false);
+                        gameStatsBytes = ReadValueFromMemory(
+                            pointerLocation + Mgs2Offset.GameStatsBlock.Start,
+                            Mgs2Offset.GameStatsBlock.Length);
+                        rationsUsedBytes = ReadValueFromMemory(pointerLocation + Mgs2Offset.RationsUsed.Start, Mgs2Offset.RationsUsed.Length);
+                        specialItemsBytes = ReadValueFromMemory(pointerLocation + Mgs2Offset.SpecialItemsUsed.Start, Mgs2Offset.SpecialItemsUsed.Length);
+                    }
+                }
                 short continues = BitConverter.ToInt16(gameStatsBytes, 4);
                 short saves = BitConverter.ToInt16(gameStatsBytes, 8);
                 int playTime = BitConverter.ToInt32(gameStatsBytes, 10);
@@ -556,9 +629,7 @@ namespace MGS2_CheatTrainer_V2
                 short alerts = BitConverter.ToInt16(gameStatsBytes, 20);
                 short kills = BitConverter.ToInt16(gameStatsBytes, 22);
                 short damageTaken = BitConverter.ToInt16(gameStatsBytes, 24);
-                byte[] rationsUsedBytes = ReadValueFromMemory(stageOffset + Mgs2Offset.RationsUsed.Start, Mgs2Offset.RationsUsed.Length);
                 short rationsUsed = BitConverter.ToInt16(rationsUsedBytes, 0);
-                byte[] specialItemsBytes = ReadValueFromMemory(stageOffset + Mgs2Offset.SpecialItemsUsed.Start, Mgs2Offset.SpecialItemsUsed.Length);
                 short specialItems = BitConverter.ToInt16(specialItemsBytes, 0);
 
                 GameStats gameStats = new GameStats
@@ -636,6 +707,28 @@ namespace MGS2_CheatTrainer_V2
         public static Difficulty ReadCurrentDifficulty()
         {
             //TODO: validate with new offset
+            try
+            {
+                lock (Mgs2Monitor.Mgs2Process)
+                {
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
+                    {
+                        IntPtr pointerLocation = proxy.FollowPointer(new IntPtr(Mgs2Pointer.PlayerPointer), false);
+                        byte[] difficultyByte = ReadValueFromMemory(
+                            pointerLocation + Mgs2Offset.CurrentDifficulty.Start,
+                            Mgs2Offset.CurrentDifficulty.Length);
+                        
+                        int convertedDifficulty = difficultyByte[0];
+
+                        return (Difficulty)convertedDifficulty;
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                Logger.Error($"Could not get current difficulty: {e}");
+                throw new AggregateException("Failed to get current difficulty", e);
+            }
             try
             {
                 //IntPtr stageOffset = GetStageOffsets().First();

@@ -7,15 +7,15 @@
              x:Class="MGS2_CheatTrainer_V2.Views.StatsDetailView">
     
     <Grid ColumnDefinitions="0.20*, 0.20*, 0.20*, 0.20*, 0.20*" RowDefinitions="0.5*, 0.5*">
-        <views:SingleStatBox x:Name="AlertsStatBox" Grid.Row="0" Grid.Column="0" GroupBoxName="Alerts" Margin="5" Editable="True"/>
-        <views:SingleStatBox x:Name="KillsStatBox" Grid.Row="0" Grid.Column="1" GroupBoxName="Kills" Margin="5" Editable="True"/>
-        <views:SingleStatBox x:Name="RationsStatBox" Grid.Row="0" Grid.Column="2" GroupBoxName="Rations Used" Margin="5" Editable="True"/>
-        <views:SingleStatBox x:Name="ContinuesStatBox" Grid.Row="0" Grid.Column="3" GroupBoxName="Continues" Margin="5" Editable="True"/>
-        <views:SingleStatBox x:Name="SavesStatBox" Grid.Row="0" Grid.Column="4" GroupBoxName="Saves" Margin="5" Editable="True"/>
-        <views:SingleStatBox x:Name="ShotsFiredStatBox" Grid.Row="1" Grid.Column="0" GroupBoxName="Shots Fired" Margin="5" Editable="True"/>
-        <views:SingleStatBox x:Name="DamageTakenStatBox" Grid.Row="1" Grid.Column="1" GroupBoxName="Damage Taken" Margin="5" Editable="True"/>
-        <views:SingleStatBox x:Name="MechsDestroyedStatBox" Grid.Row="1" Grid.Column="2" GroupBoxName="Mechs Destroyed" Margin="5" Editable="True"/>
-        <views:SingleStatBox x:Name="PlayTimeStatBox" Grid.Row="1" Grid.Column="3" GroupBoxName="Play Time" Margin="5" Editable="True"/>
+        <views:SingleStatBox x:Name="AlertsStatBox" Grid.Row="0" Grid.Column="0" GroupBoxName="Alerts" Margin="5" Editable="True" Stat="Alerts"/>
+        <views:SingleStatBox x:Name="KillsStatBox" Grid.Row="0" Grid.Column="1" GroupBoxName="Kills" Margin="5" Editable="True" Stat="Kills"/>
+        <views:SingleStatBox x:Name="RationsStatBox" Grid.Row="0" Grid.Column="2" GroupBoxName="Rations Used" Margin="5" Editable="True" Stat="Rations"/>
+        <views:SingleStatBox x:Name="ContinuesStatBox" Grid.Row="0" Grid.Column="3" GroupBoxName="Continues" Margin="5" Editable="True" Stat="Continues"/>
+        <views:SingleStatBox x:Name="SavesStatBox" Grid.Row="0" Grid.Column="4" GroupBoxName="Saves" Margin="5" Editable="True" Stat="Saves"/>
+        <views:SingleStatBox x:Name="ShotsFiredStatBox" Grid.Row="1" Grid.Column="0" GroupBoxName="Shots Fired" Margin="5" Editable="True" Stat="Shots"/>
+        <views:SingleStatBox x:Name="DamageTakenStatBox" Grid.Row="1" Grid.Column="1" GroupBoxName="Damage Taken" Margin="5" Editable="True" Stat="DamageTaken"/>
+        <views:SingleStatBox x:Name="MechsDestroyedStatBox" Grid.Row="1" Grid.Column="2" GroupBoxName="Mechs Destroyed" Margin="5" Editable="True" Stat="MechsDestroyed"/>
+        <views:SingleStatBox x:Name="PlayTimeStatBox" Grid.Row="1" Grid.Column="3" GroupBoxName="Play Time" Margin="5" Editable="False"/>
         <views:SingleStatBox x:Name="SpecialItemsStatBox" Grid.Row="1" Grid.Column="4" GroupBoxName="Special Items Used" Margin="5" Editable="False"/>
     </Grid>
     

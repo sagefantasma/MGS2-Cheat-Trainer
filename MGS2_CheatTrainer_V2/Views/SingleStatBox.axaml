@@ -8,7 +8,7 @@
         <Grid ColumnDefinitions="1*" RowDefinitions=".50*, .50*">
             <TextBox x:Name="ValueTextBox" Grid.Row="0" Text="N/A" Margin="0,0,0,5"
                      HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
-            <Button x:Name="SetButton" Grid.Row="1" Content="Button" HorizontalAlignment="Stretch"  
+            <Button x:Name="SetButton" Grid.Row="1" Content="Button" HorizontalAlignment="Stretch" Click="SetButton_OnClick"
                     VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
         </Grid>
     </GroupBox>

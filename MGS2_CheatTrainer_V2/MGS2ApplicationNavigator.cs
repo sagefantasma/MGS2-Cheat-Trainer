@@ -388,7 +388,7 @@ namespace MGS2_CheatTrainer_V2
         public static readonly MemoryOffset CurrentGametype = new MemoryOffset(-281); //TODO: prove this is valid
         public static readonly MemoryOffset CurrentEquippedItem = new MemoryOffset(-26); //TODO: prove this is valid
         public static readonly MemoryOffset CurrentEquippedWeapon = new MemoryOffset(-28); //TODO: prove this is valid
-        public static readonly MemoryOffset GameStatsBlock = new MemoryOffset(0x12E, 0x159); //14->57 TODO: update
+        public static readonly MemoryOffset GameStatsBlock = new MemoryOffset(0x12E, 0x159);
         public static readonly MemoryOffset DamageTaken = new MemoryOffset(38);
         public static readonly MemoryOffset KillCount = new MemoryOffset(36);
         public static readonly MemoryOffset AlertCount = new MemoryOffset(34);
@@ -398,8 +398,8 @@ namespace MGS2_CheatTrainer_V2
         public static readonly MemoryOffset ContinueCount = new MemoryOffset(18);
         public static readonly MemoryOffset MechsDestroyed = new MemoryOffset(56);
         public static readonly MemoryOffset PullUpCount = new MemoryOffset(14);
-        public static readonly MemoryOffset SpecialItemsUsed = new MemoryOffset(5238, 5239); //TODO: update
-        public static readonly MemoryOffset RationsUsed = new MemoryOffset(5232, 5233); //TODO: update
+        public static readonly MemoryOffset SpecialItemsUsed = new MemoryOffset(0x1596, 0x1597);
+        public static readonly MemoryOffset RationsUsed = new MemoryOffset(0x1590, 0x1591);
         #endregion
 
         #region Cheats offsets

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -12,13 +14,25 @@ public partial class MainWindow : Window
 {
     public static event EventHandler<bool>? StatsTabActivated;
     
+    
     public MainWindow()
     {
         InitializeComponent();
         Logging.StartLogger();
         Mgs2Monitor.EnableMonitor(new CancellationToken());
         Mgs2Monitor.GameHooked += OnGameHooked;
+        StatsDetailView.UpdateStatusBar += OnUpdateStatusBar;
         this.Closed+=(_,_)=>Mgs2Monitor.GameHooked -= OnGameHooked; //TODO: Necessary?
+    }
+
+    private void OnUpdateStatusBar(object? sender, string msg)
+    {
+        Dispatcher.UIThread.Post(async() =>
+        {
+            StatusLabel.Text = msg;
+            await Task.Delay(2000);
+            StatusLabel.Text = "Ready";
+        });
     }
 
     private void OnGameHooked(object? sender, bool hooked)

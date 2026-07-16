@@ -601,11 +601,9 @@ namespace MGS2_CheatTrainer_V2
 
         public GameStats ReadGameStats()
         {
-            //TODO: validate with new offset
             try
             {
                 Logger.Verbose("Reading game stats...");
-                //IntPtr stageOffset = GetStageOffsets().First();
                 byte[] gameStatsBytes;
                 byte[] rationsUsedBytes;
                 byte[] specialItemsBytes;
@@ -657,9 +655,9 @@ namespace MGS2_CheatTrainer_V2
             }
         }
 
-        public static void ChangeGameStat(GameStats.ModifiableStats gameStat, short value)
+        public void ChangeGameStat(GameStats.ModifiableStats gameStat, short value)
         {
-            //TODO: validate with new offset
+            //TODO: validate with new offset -- does not work, need to fix :)
             try
             {
                 //IntPtr stageOffset = GetStageOffsets().First();

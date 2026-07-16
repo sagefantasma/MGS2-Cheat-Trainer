@@ -14,12 +14,28 @@ public partial class StatsDetailView : UserControl
     private readonly Mgs2MemoryManager _memoryManager;
     private Stage? _lastKnownStage;
     private CancellationTokenSource? _cts;
+    public static event EventHandler<string> UpdateStatusBar;
     
     public StatsDetailView()
     {
         InitializeComponent();
         _memoryManager = App.Services.GetRequiredService<Mgs2MemoryManager>();
         MainWindow.StatsTabActivated += OnStatsTab;
+        AlertsStatBox.StatChanged += RequestStatusBarUpdate;
+        KillsStatBox.StatChanged += RequestStatusBarUpdate;
+        RationsStatBox.StatChanged += RequestStatusBarUpdate;
+        ContinuesStatBox.StatChanged += RequestStatusBarUpdate;
+        SavesStatBox.StatChanged += RequestStatusBarUpdate;
+        ShotsFiredStatBox.StatChanged += RequestStatusBarUpdate;
+        DamageTakenStatBox.StatChanged += RequestStatusBarUpdate;
+        MechsDestroyedStatBox.StatChanged += RequestStatusBarUpdate;
+        PlayTimeStatBox.StatChanged += RequestStatusBarUpdate;
+        SpecialItemsStatBox.StatChanged += RequestStatusBarUpdate;
+    }
+    
+    private static void RequestStatusBarUpdate(object? obj, string message)
+    {
+        UpdateStatusBar?.Invoke(null, message);
     }
 
     private void OnStatsTab(object? sender, bool activated)
@@ -48,7 +64,8 @@ public partial class StatsDetailView : UserControl
             ShotsFiredStatBox.ValueTextBox.Text = gameStats.Shots.ToString();
             DamageTakenStatBox.ValueTextBox.Text = gameStats.DamageTaken.ToString();
             MechsDestroyedStatBox.ValueTextBox.Text = gameStats.MechsDestroyed.ToString();
-            PlayTimeStatBox.ValueTextBox.Text = gameStats.PlayTime.ToString(); //TODO: update to real time format
+            //PlayTimeStatBox.ValueTextBox.Text = gameStats.PlayTime.ToString(); //TODO: update to real time format
+            PlayTimeStatBox.ValueTextBox.Text = TimeSpan.FromSeconds(gameStats.PlayTime / 60).ToString(@"hh\:mm\:ss");
             SpecialItemsStatBox.ValueTextBox.Text = gameStats.SpecialItems == 0 ? "NONE" : "YES";
         });
     }

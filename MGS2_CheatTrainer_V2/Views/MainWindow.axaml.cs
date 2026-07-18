@@ -35,6 +35,7 @@ public partial class MainWindow : Window
         WeaponsTabView.UpdateStatusBar += OnUpdateStatusBar;
         StatsTabView.UpdateStatusBar += OnUpdateStatusBar;
         StringTabView.UpdateStatusBar += OnUpdateStatusBar;
+        BossesTabView.UpdateStatusBar += OnUpdateStatusBar;
         this.Closed+=(_,_)=>Mgs2Monitor.GameHooked -= OnGameHooked; //TODO: Necessary?
     }
 

@@ -105,7 +105,7 @@ public partial class StatsTabView : UserControl
     {
         try
         {
-            Stage currentStage = Mgs2MemoryManager.GetStage(); //Always found, or error is thrown.
+            Stage currentStage = _memoryManager.GetStage(); //Always found, or error is thrown.
             if (currentStage?.Name != _lastKnownStage?.Name)
             {
                 //Logger.Debug($"User is now in stage: {currentStage}");
@@ -118,7 +118,7 @@ public partial class StatsTabView : UserControl
                 Mgs2MemoryManager.GameStats currentGameStats = _memoryManager.ReadGameStats();
                 Difficulty currentDifficulty = Mgs2MemoryManager.ReadCurrentDifficulty();
                 //GameType currentGameType = MGS2MemoryManager.ReadGameType(); //TODO: finish determining how to determine what gametype we're in
-                UpdateGameStats(currentGameStats, currentDifficulty); //TODO: reimplement
+                UpdateGameStats(currentGameStats, currentDifficulty);
             }
         }
         catch (Exception e)

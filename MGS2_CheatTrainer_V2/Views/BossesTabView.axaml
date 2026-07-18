@@ -7,28 +7,28 @@
              x:Class="MGS2_CheatTrainer_V2.Views.BossesTabView">
     <Grid x:Name="BossGrid" ColumnDefinitions=".33*,.33*,.33*" RowDefinitions=".33*,.33*,.33*">
         <GroupBox Grid.Row="0" Grid.Column="0" Header="Olga" Margin="5">
-            <views:BossDetailView x:Name="OlgaDetailView"  EntityImage="/Assets/Olga.webp"/>
+            <views:BossDetailView x:Name="OlgaDetailView"  EntityImage="/Assets/Olga.webp" Boss="Olga"/>
         </GroupBox>
-        <GroupBox Grid.Row="0" Grid.Column="1" Header="Fatman" Margin="5">
-            <views:BossDetailView x:Name="FatmanDetailView" EntityImage="/Assets/Fatman.webp"/>
+        <GroupBox Grid.Row="0" Grid.Column="1" Header="Fortune" Margin="5" IsEnabled="False">
+            <views:BossDetailView x:Name="FortuneDetailView" EntityImage="/Assets/Fortune.webp" Boss="Fortune"/>
         </GroupBox>
-        <GroupBox Grid.Row="0" Grid.Column="2" Header="Fortune" Margin="5" IsEnabled="False">
-            <views:BossDetailView x:Name="FortuneDetailView" EntityImage="/Assets/Fortune.webp"/>
+        <GroupBox Grid.Row="0" Grid.Column="2" Header="Fatman" Margin="5">
+            <views:BossDetailView x:Name="FatmanDetailView" EntityImage="/Assets/Fatman.webp" Boss="Fatman"/>
         </GroupBox>
         <GroupBox Grid.Row="1" Grid.Column="0" Header="Harrier" Margin="5" IsEnabled="False">
-            <views:BossDetailView x:Name="HarrierDetailView" EntityImage="/Assets/Harrier.webp" HasStamina="False"/> <!--Need different-->
+            <views:BossDetailView x:Name="HarrierDetailView" EntityImage="/Assets/Harrier.webp" HasStamina="False" Boss="Harrier"/> <!--Need different-->
         </GroupBox>
         <GroupBox Grid.Row="1" Grid.Column="1" Header="Vamp 1" Margin="5">
-            <views:BossDetailView x:Name="Vamp1DetailView" EntityImage="/Assets/Vamp.jpg"/>
+            <views:BossDetailView x:Name="Vamp1DetailView" EntityImage="/Assets/Vamp.jpg" Boss="Vamp"/>
         </GroupBox>
         <GroupBox Grid.Row="1" Grid.Column="2" Header="Vamp 2" Margin="5">
-            <views:BossDetailView x:Name="Vamp2DetailView" EntityImage="/Assets/TwilightSniping.jpg"/>
+            <views:BossDetailView x:Name="Vamp2DetailView" EntityImage="/Assets/TwilightSniping.jpg" Boss="VampSnipe"/>
         </GroupBox>
         <GroupBox Grid.Row="2" Grid.Column="0" Header="RAYs" Margin="5">
-            <views:BossDetailView x:Name="RaysDetailView" EntityImage="/Assets/Rays.jpg" HasStamina="False"/> <!--Need different-->
+            <views:BossDetailView x:Name="RaysDetailView" EntityImage="/Assets/Rays.jpg" HasStamina="False" Boss="Ray1"/> <!--Need different-->
         </GroupBox>
         <GroupBox Grid.Row="2" Grid.Column="1" Header="Solidus" Margin="5" IsEnabled="False">
-            <views:BossDetailView x:Name="SolidusDetailView" EntityImage="/Assets/Solidus.webp"/>
+            <views:BossDetailView x:Name="SolidusDetailView" EntityImage="/Assets/Solidus.webp" Boss="Solidus"/>
         </GroupBox>
     </Grid>
 </UserControl>

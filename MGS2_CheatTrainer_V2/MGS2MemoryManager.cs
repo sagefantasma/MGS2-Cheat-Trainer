@@ -249,14 +249,14 @@ namespace MGS2_CheatTrainer_V2
             }
         }
 
-        internal static Stage GetStage()
+        internal Stage GetStage()
         {
             //TODO: validate with new offset
             try
             {
                 //List<IntPtr> stageMemoryOffsets = GetStageOffsets();
                 IntPtr stageMemoryOffset = GetCurrentStageOffset();
-                string stringInMemory = Encoding.UTF8.GetString(ReadValueFromMemory(stageMemoryOffset));
+                string stringInMemory = Encoding.UTF8.GetString(ReadValueFromMemory(stageMemoryOffset, 4));
 
                 Stage currentStage = Stage.Parse(stringInMemory);
                 Logger.Verbose($"User is currently in stage: {stringInMemory}. Parsed as {currentStage}");
@@ -1082,7 +1082,7 @@ namespace MGS2_CheatTrainer_V2
         }
 
         private static IntPtr _fortuneOffset = IntPtr.Zero;
-        public static BossVitals GetBossVitals(Constants.Boss selectedBoss)
+        public BossVitals GetBossVitals(Constants.Boss selectedBoss)
         {
             try
             {
@@ -1090,6 +1090,7 @@ namespace MGS2_CheatTrainer_V2
 
                 if (selectedBoss != Constants.Boss.Fortune)
                 {
+                    //TODO: boss vitals are broken here, but my brain is dead at this point today. Need to fix
                     bossVitals.Health = BitConverter.ToInt16(GetDataFromNestedPointers(bossVitals.NestedHealthPointers, bossVitals.HealthOffset, 2), 0);
                     if (bossVitals.HasStamina)
                     {

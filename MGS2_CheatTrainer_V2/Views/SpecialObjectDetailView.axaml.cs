@@ -13,6 +13,7 @@ public partial class SpecialObjectDetailView : UserControl
     private Constants.IMgs2Object? _object;
     private readonly Mgs2MemoryManager _memoryManager;
     private bool _active = false;
+    public event EventHandler<string>? ValueChanged;
     
     public IImage? EntityImage
     {
@@ -57,6 +58,11 @@ public partial class SpecialObjectDetailView : UserControl
         _memoryManager = App.Services.GetRequiredService<Mgs2MemoryManager>();
     }
     
+    private void ChangeStat(string message)
+    {
+        ValueChanged?.Invoke(null, message);
+    }
+    
     public void UpdateObjectEnabledState()
     {
         _object ??= Constants.DetermineObject(Name!);
@@ -70,11 +76,18 @@ public partial class SpecialObjectDetailView : UserControl
         if (!_active) return;
         _object ??= Constants.DetermineObject(Name!);
         _memoryManager.ToggleObject(_object!, (bool)EnabledCheckBox.IsChecked!);
+        string enableState = EnabledCheckBox.IsChecked == true ? "enabled" : "disabled";
+        ChangeStat($"{_object?.Name} is {enableState}");
     }
 
     public void ModifyValue_OnClick(object? sender, RoutedEventArgs e)
     {
+        if (EnabledCheckBox.IsChecked == false)
+        {
+            EnabledCheckBox.IsChecked = true;
+        }
         _object ??= Constants.DetermineObject(Name!);
         _memoryManager.UpdateObjectBaseValue(_object!, (ushort)CurrentUpDown.Value);
+        ChangeStat($"Updated {_object.Name} {ValueName} to: {CurrentUpDown.Value}");
     }
 }

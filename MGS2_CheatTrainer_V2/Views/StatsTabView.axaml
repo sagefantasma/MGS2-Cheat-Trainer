@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:views="clr-namespace:MGS2_CheatTrainer_V2.Views"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="MGS2_CheatTrainer_V2.Views.StatsDetailView">
+             x:Class="MGS2_CheatTrainer_V2.Views.StatsTabView">
     
     <Grid ColumnDefinitions="0.20*, 0.20*, 0.20*, 0.20*, 0.20*" RowDefinitions="0.5*, 0.5*">
         <views:SingleStatBox x:Name="AlertsStatBox" Grid.Row="0" Grid.Column="0" GroupBoxName="Alerts" Margin="5" Editable="True" Stat="Alerts"/>

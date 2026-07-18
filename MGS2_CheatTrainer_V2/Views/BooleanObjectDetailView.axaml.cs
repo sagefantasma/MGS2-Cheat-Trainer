@@ -13,6 +13,7 @@ public partial class BooleanObjectDetailView : UserControl
     private Constants.IMgs2Object? _object;
     private readonly Mgs2MemoryManager _memoryManager;
     private bool _active = false;
+    public event EventHandler<string>? ValueChanged;
     
     public IImage? EntityImage
     {
@@ -52,5 +53,12 @@ public partial class BooleanObjectDetailView : UserControl
         if (!_active) return;
         _object ??= Constants.DetermineObject(Name!);
         _memoryManager.ToggleObject(_object!, (bool)EnabledCheckBox.IsChecked!);
+        string enableState = EnabledCheckBox.IsChecked == true ? "enabled" : "disabled";
+        ChangeStat($"{_object?.Name} is {enableState}");
+    }
+    
+    private void ChangeStat(string message)
+    {
+        ValueChanged?.Invoke(null, message);
     }
 }

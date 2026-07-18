@@ -453,7 +453,7 @@ namespace MGS2_CheatTrainer_V2
             }
         }
 
-        public static string ReadGameString(Mgs2Strings.Mgs2String gameString)
+        public string ReadGameString(Mgs2Strings.Mgs2String gameString)
         {
             try
             {

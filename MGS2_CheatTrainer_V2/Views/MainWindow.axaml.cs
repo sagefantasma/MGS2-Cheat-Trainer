@@ -10,9 +10,19 @@ using Avalonia.Threading;
 
 namespace MGS2_CheatTrainer_V2.Views;
 
+public enum Tab
+{
+    Items,
+    Weapons,
+    Bosses,
+    Stats,
+    Strings,
+    Cheats
+}
+
 public partial class MainWindow : Window
 {
-    public static event EventHandler<bool>? StatsTabActivated;
+    public static event EventHandler<Tab>? TabActivated;
     
     
     public MainWindow()
@@ -21,7 +31,9 @@ public partial class MainWindow : Window
         Logging.StartLogger();
         Mgs2Monitor.EnableMonitor(new CancellationToken());
         Mgs2Monitor.GameHooked += OnGameHooked;
-        StatsDetailView.UpdateStatusBar += OnUpdateStatusBar;
+        ItemsTabView.UpdateStatusBar += OnUpdateStatusBar;
+        WeaponsTabView.UpdateStatusBar += OnUpdateStatusBar;
+        StatsTabView.UpdateStatusBar += OnUpdateStatusBar;
         StringTabView.UpdateStatusBar += OnUpdateStatusBar;
         this.Closed+=(_,_)=>Mgs2Monitor.GameHooked -= OnGameHooked; //TODO: Necessary?
     }
@@ -40,7 +52,7 @@ public partial class MainWindow : Window
     {
         Dispatcher.UIThread.Post(() =>
         {
-            foreach (var item in ItemGrid.Children)
+            foreach (var item in ItemsTabView.ItemGrid.Children)
             {
                 switch (item)
                 {
@@ -56,7 +68,7 @@ public partial class MainWindow : Window
                 }
             }
             
-            foreach (var weapon in WeaponGrid.Children)
+            foreach (var weapon in WeaponsTabView.WeaponGrid.Children)
             {
                 switch (weapon)
                 {
@@ -96,15 +108,29 @@ public partial class MainWindow : Window
 
     private void Mgs2TabControl_SelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        //throw new System.NotImplementedException();
-        if (Mgs2TabControl?.SelectedItem?.Equals(StatsTab) != false)
+        if (Mgs2TabControl?.SelectedItem?.Equals(ItemsTab) == true)
         {
-            StatsTabActivated?.Invoke(this, false);
+            TabActivated?.Invoke(this, Tab.Items);
         }
-    }
-
-    private void StatsTab_Tapped(object? sender, TappedEventArgs e)
-    {
-        StatsTabActivated?.Invoke(this, true);
+        else if (Mgs2TabControl?.SelectedItem?.Equals(WeaponsTab) == true)
+        {
+            TabActivated?.Invoke(this, Tab.Weapons);
+        }
+        else if (Mgs2TabControl?.SelectedItem?.Equals(StatsTab) == true)
+        {
+            TabActivated?.Invoke(this, Tab.Stats);
+        }
+        else if (Mgs2TabControl?.SelectedItem?.Equals(BossesTab) == true)
+        {
+            TabActivated?.Invoke(this, Tab.Bosses);
+        }
+        else if (Mgs2TabControl?.SelectedItem?.Equals(StringsTab) == true)
+        {
+            TabActivated?.Invoke(this, Tab.Strings);
+        }
+        else if (Mgs2TabControl?.SelectedItem?.Equals(CheatsTab) == true)
+        {
+            TabActivated?.Invoke(this, Tab.Cheats);
+        }
     }
 }

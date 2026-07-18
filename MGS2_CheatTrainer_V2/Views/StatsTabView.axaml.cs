@@ -10,7 +10,7 @@ using Avalonia.Threading;
 
 namespace MGS2_CheatTrainer_V2.Views;
 
-public partial class StatsDetailView : UserControl
+public partial class StatsTabView : UserControl
 {
     private readonly Mgs2MemoryManager _memoryManager;
     private Stage? _lastKnownStage;
@@ -18,7 +18,7 @@ public partial class StatsDetailView : UserControl
     public static event EventHandler<string>? UpdateStatusBar;
     private static readonly Dictionary<Mgs2MemoryManager.GameStats.ModifiableStats, bool> FrozenStats = new();
     
-    public StatsDetailView()
+    public StatsTabView()
     {
         InitializeComponent();
         foreach (var modifiableStat in Enum.GetValues<Mgs2MemoryManager.GameStats.ModifiableStats>())
@@ -26,7 +26,7 @@ public partial class StatsDetailView : UserControl
             FrozenStats[modifiableStat] = false;
         }
         _memoryManager = App.Services.GetRequiredService<Mgs2MemoryManager>();
-        MainWindow.StatsTabActivated += OnStatsTab;
+        MainWindow.TabActivated += OnTabEntered;
         AlertsStatBox.StatChanged += RequestStatusBarUpdate;
         AlertsStatBox.StatFrozen += FreezeStatBox;
         KillsStatBox.StatChanged += RequestStatusBarUpdate;
@@ -60,9 +60,9 @@ public partial class StatsDetailView : UserControl
         FrozenStats[statBox!.Stat] = freeze;
     }
 
-    private void OnStatsTab(object? sender, bool activated)
+    private void OnTabEntered(object? sender, Tab activated)
     {
-        if (activated)
+        if (activated == Tab.Stats)
         {
             _cts = new CancellationTokenSource();
             CancellationToken cancellationToken = _cts.Token;

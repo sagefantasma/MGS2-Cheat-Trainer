@@ -8,24 +8,11 @@ namespace MGS2_CheatTrainer_V2.Views
 {
     public partial class MaxableObjectDetailView : UserControl
     {
-        // These actions get set by MainWindow when it loads an item,
-        // so the detail view doesn't need to know about MGS2 objects directly
-        public required Action<bool> OnToggle { get; set; }
-        public required Action<ushort> OnSetCurrent { get; set; }
-        public required Action<ushort> OnSetMax { get; set; }
+        //TODO: is it better to have two separate textboxes for current/max, or just one textbox and two buttons like the MGS3 trainer?
         private Constants.IMgs2Object? _object;
         private readonly Mgs2MemoryManager _memoryManager;
         private bool _active = false;
-
-        // Set to false for items that don't have a quantity (e.g. Body Armor)
-        public bool HasCount
-        {
-            set
-            {
-                CurrentUpDown.IsVisible = value;
-                MaxUpDown.IsVisible = value;
-            }
-        }
+        public event EventHandler<string>? ValueChanged;
 
         public IImage? EntityImage
         {
@@ -62,24 +49,34 @@ namespace MGS2_CheatTrainer_V2.Views
 
         private void EnabledCheckBox_IsCheckedChanged(object sender, RoutedEventArgs e)
         {
-            OnToggle?.Invoke(EnabledCheckBox.IsChecked == true);
             if (!_active) return;
             _object ??= Constants.DetermineObject(Name!);
             _memoryManager.ToggleObject(_object!, (bool)EnabledCheckBox.IsChecked!);
+            string enableState = EnabledCheckBox.IsChecked == true ? "enabled" : "disabled";
+            ChangeStat($"{_object?.Name} is {enableState}");
         }
 
         private void CurrentBtn_Click(object sender, RoutedEventArgs e)
         {
-            OnSetCurrent?.Invoke((ushort)CurrentUpDown.Value);
+            if (EnabledCheckBox.IsChecked == false)
+            {
+                EnabledCheckBox.IsChecked = true;
+            }
             _object ??= Constants.DetermineObject(Name!);
             _memoryManager.UpdateObjectBaseValue(_object, (ushort)CurrentUpDown.Value);
+            ChangeStat($"Updated {_object.Name} Current Count to: {CurrentUpDown.Value}");
         }
 
         private void MaxBtn_Click(object sender, RoutedEventArgs e)
         {
-            OnSetMax?.Invoke((ushort)MaxUpDown.Value);
             _object ??= Constants.DetermineObject(Name!);
             _memoryManager.UpdateObjectMaxValue(_object, (ushort)MaxUpDown.Value);
+            ChangeStat($"Updated {_object.Name} Max Count to: {CurrentUpDown.Value}");
+        }
+        
+        private void ChangeStat(string message)
+        {
+            ValueChanged?.Invoke(null, message);
         }
     }
 }

@@ -22,6 +22,7 @@ public partial class MainWindow : Window
         Mgs2Monitor.EnableMonitor(new CancellationToken());
         Mgs2Monitor.GameHooked += OnGameHooked;
         StatsDetailView.UpdateStatusBar += OnUpdateStatusBar;
+        StringTabView.UpdateStatusBar += OnUpdateStatusBar;
         this.Closed+=(_,_)=>Mgs2Monitor.GameHooked -= OnGameHooked; //TODO: Necessary?
     }
 
@@ -30,8 +31,8 @@ public partial class MainWindow : Window
         Dispatcher.UIThread.Post(async() =>
         {
             StatusLabel.Text = msg;
-            await Task.Delay(2000);
-            StatusLabel.Text = "Ready";
+            //await Task.Delay(2000);
+            //StatusLabel.Text = "Ready";
         });
     }
 

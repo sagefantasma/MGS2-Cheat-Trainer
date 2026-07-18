@@ -3,7 +3,7 @@
 namespace MGS2_CheatTrainer_V2
 {
     //REWRITE STATUS: Done?
-    internal class Mgs2Strings
+    public class Mgs2Strings
     {
         /// <summary>
         /// An object representing a string value in MGS2.
@@ -13,7 +13,7 @@ namespace MGS2_CheatTrainer_V2
         public class Mgs2String
         {
             public required MemoryOffset MemoryOffset { get; init; }
-            internal required string FinderAoB { get; init; }
+            public required string FinderAoB { get; init; }
             public required string Tag { get; init; }
             public required string CurrentText { get; set; }
         }
@@ -60,7 +60,7 @@ namespace MGS2_CheatTrainer_V2
             new Mgs2String { MemoryOffset = Mgs2Offset.Ray23, FinderAoB = Mgs2AoB.RayNames, Tag = "Ray #23 Life Bar", CurrentText = "RAY-E03L" },
             new Mgs2String { MemoryOffset = Mgs2Offset.Ray24, FinderAoB = Mgs2AoB.RayNames, Tag = "Ray #24 Life Bar", CurrentText = "RAY-E04L" },
             new Mgs2String { MemoryOffset = Mgs2Offset.Ray25, FinderAoB = Mgs2AoB.RayNames, Tag = "Ray #25 Life Bar", CurrentText = "RAY-E05L" },
-            new Mgs2String { MemoryOffset = Mgs2Offset.SolidusHpText, FinderAoB = Mgs2AoB.SolidusName, Tag = "Solidus' Life Bar", CurrentText = "SOLIDUS" }
+            new Mgs2String { MemoryOffset = Mgs2Offset.SolidusHpText, FinderAoB = Mgs2AoB.SolidusName, Tag = "Solidus Life Bar", CurrentText = "SOLIDUS" }
         };
         #endregion
     }

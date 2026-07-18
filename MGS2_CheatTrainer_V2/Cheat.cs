@@ -79,7 +79,7 @@ namespace MGS2_CheatTrainer_V2
                             using (SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                             {
                                 SimplePattern pattern = new SimplePattern(aob);
-                                int memoryLocation = spp.ScanMemoryForUniquePattern(pattern).ToInt32();
+                                int memoryLocation = spp.ScanMemoryForUniquePattern(pattern).OffsetAddress.ToInt32();
 
                                 if (memoryLocation != -1)
                                 {
@@ -158,7 +158,7 @@ namespace MGS2_CheatTrainer_V2
                             using (SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                             {
                                 SimplePattern pattern = new SimplePattern(patternToScan);
-                                int memoryLocation = spp.ScanMemoryForUniquePattern(pattern).ToInt32();
+                                int memoryLocation = spp.ScanMemoryForUniquePattern(pattern).OffsetAddress.ToInt32();
 
                                 if (memoryLocation != -1)
                                 {
@@ -235,7 +235,7 @@ namespace MGS2_CheatTrainer_V2
                             using (SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                             {
                                 SimplePattern pattern = new SimplePattern(aob);
-                                int memoryLocation = spp.ScanMemoryForUniquePattern(pattern).ToInt32();
+                                int memoryLocation = spp.ScanMemoryForUniquePattern(pattern).OffsetAddress.ToInt32();
 
                                 if (memoryLocation != -1)
                                 {
@@ -296,7 +296,7 @@ namespace MGS2_CheatTrainer_V2
                             using (SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                             {
                                 SimplePattern pattern = new SimplePattern(aob);
-                                int memoryLocation = spp.ScanMemoryForUniquePattern(pattern).ToInt32();
+                                int memoryLocation = spp.ScanMemoryForUniquePattern(pattern).OffsetAddress.ToInt32();
 
                                 if(memoryLocation != -1)
                                     return spp.ReadProcessOffset(new IntPtr(memoryLocation + offset.Start), offset.Length);

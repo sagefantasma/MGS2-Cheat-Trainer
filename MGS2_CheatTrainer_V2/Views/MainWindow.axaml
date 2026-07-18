@@ -152,7 +152,7 @@
                 <Panel>
                     <Image Source="/Assets/mini.png" Stretch="UniformToFill"/>
                     <Rectangle Fill="Black" Opacity="0.9" IsHitTestVisible="False"/>
-                    <views:StringDetailView/>
+                    <views:StringTabView/>
                 </Panel>
             </TabItem>
 

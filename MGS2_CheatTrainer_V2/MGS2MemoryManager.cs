@@ -267,7 +267,7 @@ namespace MGS2_CheatTrainer_V2
             }
         }
 
-        private static void SetStringValue(IntPtr stringOffset, string valueToSet)
+        private void SetStringValue(IntPtr stringOffset, string valueToSet)
         {
             try
             {
@@ -276,7 +276,7 @@ namespace MGS2_CheatTrainer_V2
                     using (SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                     {
                         Logger.Information($"setting memory at offset {stringOffset} to {valueToSet}...");
-                        proxy.ModifyProcessOffset(stringOffset, valueToSet, true);
+                        proxy.ModifyProcessOffset(stringOffset, valueToSet, false);
                     }
                 }
             }
@@ -310,7 +310,6 @@ namespace MGS2_CheatTrainer_V2
 
         private static void SetPlayerOffsetBasedByteValueObject(int objectOffset, byte[] valueToSet, Constants.PlayableCharacter character)
         {
-            //TODO: this is kind of gross that this is hardcoded to be playeroffset only... i would like to fix that.
             try
             {
                 lock (Mgs2Monitor.Mgs2Process)
@@ -399,7 +398,7 @@ namespace MGS2_CheatTrainer_V2
                 {
                     using (SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                     {
-                        IntPtr memoryLocation = proxy.ScanMemoryForUniquePattern(new SimplePattern(byteString));
+                        IntPtr memoryLocation = proxy.ScanMemoryForUniquePattern(new SimplePattern(byteString)).OffsetAddress;
                         return proxy.ReadProcessOffset(IntPtr.Add(memoryLocation, memoryOffset.Start), memoryOffset.Length);
                     }
                 }
@@ -419,7 +418,7 @@ namespace MGS2_CheatTrainer_V2
                 {
                     using (SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                     {
-                        IntPtr memoryLocation = proxy.ScanMemoryForUniquePattern(new SimplePattern(byteString));
+                        IntPtr memoryLocation = proxy.ScanMemoryForUniquePattern(new SimplePattern(byteString)).OffsetAddress;
                         proxy.ModifyProcessOffset(IntPtr.Add(memoryLocation, memoryOffset.Start), valueToSet, true);
                     }
                 }
@@ -432,7 +431,7 @@ namespace MGS2_CheatTrainer_V2
         }
         #endregion
 
-        public static void UpdateGameString(Mgs2Strings.Mgs2String gameString, string newValue)
+        public void UpdateGameString(Mgs2Strings.Mgs2String gameString, string newValue)
         {
             try
             {
@@ -441,7 +440,7 @@ namespace MGS2_CheatTrainer_V2
                 {
                     using (SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                     {
-                        IntPtr offset = proxy.ScanMemoryForUniquePattern(new SimplePattern(gameString.FinderAoB));
+                        IntPtr offset = proxy.ScanMemoryForUniquePattern(new SimplePattern(gameString.FinderAoB)).OffsetAddress;
 
                         SetStringValue(IntPtr.Add(offset, gameString.MemoryOffset.Start), newValue);
                     }
@@ -462,7 +461,7 @@ namespace MGS2_CheatTrainer_V2
                 {
                     using (SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                     {
-                        IntPtr offset = proxy.ScanMemoryForUniquePattern(new SimplePattern(gameString.FinderAoB));
+                        IntPtr offset = proxy.ScanMemoryForUniquePattern(new SimplePattern(gameString.FinderAoB)).OffsetAddress;
 
                         byte[] memoryValue = ReadValueFromMemory(IntPtr.Add(offset, gameString.MemoryOffset.Start), gameString.MemoryOffset.Length);
 
@@ -1065,7 +1064,7 @@ namespace MGS2_CheatTrainer_V2
                     {
                         if (_fortuneOffset == IntPtr.Zero)
                         {
-                            _fortuneOffset = proxy.ScanMemoryForUniquePattern(new SimplePattern(Mgs2AoB.FortuneName));
+                            _fortuneOffset = proxy.ScanMemoryForUniquePattern(new SimplePattern(Mgs2AoB.FortuneName)).OffsetAddress;
                         }
 
                         proxy.ModifyProcessOffset(IntPtr.Add(_fortuneOffset, Mgs2Offset.FortuneHpValue.Start), updatedVitals.Health, true);
@@ -1101,7 +1100,7 @@ namespace MGS2_CheatTrainer_V2
                     {
                         if (_fortuneOffset == IntPtr.Zero) 
                         {
-                            _fortuneOffset = proxy.ScanMemoryForUniquePattern(new SimplePattern(Mgs2AoB.FortuneName));
+                            _fortuneOffset = proxy.ScanMemoryForUniquePattern(new SimplePattern(Mgs2AoB.FortuneName)).OffsetAddress;
                         }
 
                         bossVitals.Health = BitConverter.ToInt16(proxy.ReadProcessOffset(IntPtr.Add(_fortuneOffset, Mgs2Offset.FortuneHpValue.Start), Mgs2Offset.FortuneHpValue.Length), 0);

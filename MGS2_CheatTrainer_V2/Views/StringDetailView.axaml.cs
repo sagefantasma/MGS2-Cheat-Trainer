@@ -1,17 +1,25 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace MGS2_CheatTrainer_V2.Views;
 
 public partial class StringDetailView : UserControl
 {
-    private readonly Mgs2MemoryManager _memoryManager;
+    public Mgs2Strings.Mgs2String GameString
+    {
+        get;
+        set
+        {
+            field = value;
+            Content = value.Tag;
+            Name = value.Tag;
+        }
+    }
     
-    public StringDetailView()
+    public StringDetailView(Mgs2Strings.Mgs2String gameString)
     {
         InitializeComponent();
-        _memoryManager = App.Services.GetRequiredService<Mgs2MemoryManager>();
+        GameString = gameString;
     }
 }

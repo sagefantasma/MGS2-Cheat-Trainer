@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+using MGS2_CheatTrainer_V2.Models;
 
 namespace MGS2_CheatTrainer_V2
 {

@@ -7,6 +7,7 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 using Avalonia.Threading;
+using MGS2_CheatTrainer_V2.Models;
 
 namespace MGS2_CheatTrainer_V2.Views;
 

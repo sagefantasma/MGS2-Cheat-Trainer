@@ -11,12 +11,14 @@ using System.Text;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using MGS2_CheatTrainer_V2.Models;
 using MGS2_CheatTrainer_V2.Views;
 using Microsoft.Extensions.DependencyInjection;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Base;
 using MsBox.Avalonia.Enums;
 using SimplifiedMemoryManager;
+using Constants = MGS2_CheatTrainer_V2.Models.Constants;
 
 namespace MGS2_CheatTrainer_V2
 {

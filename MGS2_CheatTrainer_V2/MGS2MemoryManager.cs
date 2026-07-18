@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using MGS2_CheatTrainer_V2.Models;
+using MGS2_CheatTrainer_V2.Models.PlayableCharacters;
 using Microsoft.Extensions.DependencyInjection;
 using SimplifiedMemoryManager;
 

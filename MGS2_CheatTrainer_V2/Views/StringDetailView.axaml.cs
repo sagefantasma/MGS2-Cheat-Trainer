@@ -1,6 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using MGS2_CheatTrainer_V2.Models;
 
 namespace MGS2_CheatTrainer_V2.Views;
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
@@ -14,28 +15,49 @@ public partial class StatsDetailView : UserControl
     private readonly Mgs2MemoryManager _memoryManager;
     private Stage? _lastKnownStage;
     private CancellationTokenSource? _cts;
-    public static event EventHandler<string> UpdateStatusBar;
+    public static event EventHandler<string>? UpdateStatusBar;
+    private static readonly Dictionary<Mgs2MemoryManager.GameStats.ModifiableStats, bool> FrozenStats = new();
     
     public StatsDetailView()
     {
         InitializeComponent();
+        foreach (var modifiableStat in Enum.GetValues<Mgs2MemoryManager.GameStats.ModifiableStats>())
+        {
+            FrozenStats[modifiableStat] = false;
+        }
         _memoryManager = App.Services.GetRequiredService<Mgs2MemoryManager>();
         MainWindow.StatsTabActivated += OnStatsTab;
         AlertsStatBox.StatChanged += RequestStatusBarUpdate;
+        AlertsStatBox.StatFrozen += FreezeStatBox;
         KillsStatBox.StatChanged += RequestStatusBarUpdate;
+        KillsStatBox.StatFrozen += FreezeStatBox;
         RationsStatBox.StatChanged += RequestStatusBarUpdate;
+        RationsStatBox.StatFrozen += FreezeStatBox;
         ContinuesStatBox.StatChanged += RequestStatusBarUpdate;
+        ContinuesStatBox.StatFrozen += FreezeStatBox;
         SavesStatBox.StatChanged += RequestStatusBarUpdate;
+        SavesStatBox.StatFrozen += FreezeStatBox;
         ShotsFiredStatBox.StatChanged += RequestStatusBarUpdate;
+        ShotsFiredStatBox.StatFrozen += FreezeStatBox;
         DamageTakenStatBox.StatChanged += RequestStatusBarUpdate;
+        DamageTakenStatBox.StatFrozen += FreezeStatBox;
         MechsDestroyedStatBox.StatChanged += RequestStatusBarUpdate;
+        MechsDestroyedStatBox.StatFrozen += FreezeStatBox;
         PlayTimeStatBox.StatChanged += RequestStatusBarUpdate;
+        PlayTimeStatBox.StatFrozen += FreezeStatBox;
         SpecialItemsStatBox.StatChanged += RequestStatusBarUpdate;
+        SpecialItemsStatBox.StatFrozen += FreezeStatBox;
     }
     
     private static void RequestStatusBarUpdate(object? obj, string message)
     {
         UpdateStatusBar?.Invoke(null, message);
+    }
+
+    private static void FreezeStatBox(object? obj, bool freeze)
+    {
+        SingleStatBox? statBox = obj as SingleStatBox;
+        FrozenStats[statBox!.Stat] = freeze;
     }
 
     private void OnStatsTab(object? sender, bool activated)
@@ -44,7 +66,7 @@ public partial class StatsDetailView : UserControl
         {
             _cts = new CancellationTokenSource();
             CancellationToken cancellationToken = _cts.Token;
-            Task.Run(() => PeriodicTask.Run(UpdateScoringStats, TimeSpan.FromSeconds(1), cancellationToken));
+            Task.Run(() => PeriodicTask.Run(UpdateScoringStats, TimeSpan.FromSeconds(1), cancellationToken), cancellationToken);
         }
         else
         {
@@ -56,15 +78,23 @@ public partial class StatsDetailView : UserControl
     {
         Dispatcher.UIThread.Post(() =>
         {
-            AlertsStatBox.ValueTextBox.Text = gameStats.Alerts.ToString();
-            KillsStatBox.ValueTextBox.Text = gameStats.Kills.ToString();
-            RationsStatBox.ValueTextBox.Text = gameStats.Rations.ToString();
-            ContinuesStatBox.ValueTextBox.Text = gameStats.Continues.ToString();
-            SavesStatBox.ValueTextBox.Text = gameStats.Saves.ToString();
-            ShotsFiredStatBox.ValueTextBox.Text = gameStats.Shots.ToString();
-            DamageTakenStatBox.ValueTextBox.Text = gameStats.DamageTaken.ToString();
-            MechsDestroyedStatBox.ValueTextBox.Text = gameStats.MechsDestroyed.ToString();
-            //PlayTimeStatBox.ValueTextBox.Text = gameStats.PlayTime.ToString(); //TODO: update to real time format
+            if(!FrozenStats[Mgs2MemoryManager.GameStats.ModifiableStats.Alerts])
+                AlertsStatBox.ValueTextBox.Text = gameStats.Alerts.ToString();
+            if(!FrozenStats[Mgs2MemoryManager.GameStats.ModifiableStats.Kills])
+                KillsStatBox.ValueTextBox.Text = gameStats.Kills.ToString();
+            if(!FrozenStats[Mgs2MemoryManager.GameStats.ModifiableStats.Rations])
+                RationsStatBox.ValueTextBox.Text = gameStats.Rations.ToString();
+            if(!FrozenStats[Mgs2MemoryManager.GameStats.ModifiableStats.Continues])
+                ContinuesStatBox.ValueTextBox.Text = gameStats.Continues.ToString();
+            if(!FrozenStats[Mgs2MemoryManager.GameStats.ModifiableStats.Saves])
+                SavesStatBox.ValueTextBox.Text = gameStats.Saves.ToString();
+            if(!FrozenStats[Mgs2MemoryManager.GameStats.ModifiableStats.Shots])
+                ShotsFiredStatBox.ValueTextBox.Text = gameStats.Shots.ToString();
+            if(!FrozenStats[Mgs2MemoryManager.GameStats.ModifiableStats.DamageTaken])
+                DamageTakenStatBox.ValueTextBox.Text = gameStats.DamageTaken.ToString();
+            if(!FrozenStats[Mgs2MemoryManager.GameStats.ModifiableStats.MechsDestroyed])
+                MechsDestroyedStatBox.ValueTextBox.Text = gameStats.MechsDestroyed.ToString();
+            
             PlayTimeStatBox.ValueTextBox.Text = TimeSpan.FromSeconds(gameStats.PlayTime / 60).ToString(@"hh\:mm\:ss");
             SpecialItemsStatBox.ValueTextBox.Text = gameStats.SpecialItems == 0 ? "NONE" : "YES";
         });

@@ -330,7 +330,28 @@ namespace MGS2_CheatTrainer_V2
             }
         }
 
-        private static void SetKnownOffsetValue(IntPtr offset, byte[] valueToSet)
+        private static void SetPointerOffsetValue(IntPtr pointer, int offset, byte[] valueToSet)
+        {
+            try
+            {
+                lock (Mgs2Monitor.Mgs2Process)
+                {
+                    using (SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
+                    {
+                        IntPtr pointerLocation = proxy.FollowPointer(pointer, false);
+                        Logger.Information($"setting pointerOffset value at offset: {pointerLocation}+{offset} to {BitConverter.ToString(valueToSet)}...");
+                        proxy.SetMemoryAtPointer(IntPtr.Add(pointerLocation, offset), valueToSet);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.Error($"Failed to set memory at pointer offset [{pointer}]+{offset}: {e}");
+                throw new AggregateException($"Could not set memory at pointer offset [{pointer}]+{offset}", e);
+            }
+        }
+
+        private static void SetKnownStaticOffsetValue(IntPtr offset, byte[] valueToSet)
         {
             try
             {
@@ -350,7 +371,7 @@ namespace MGS2_CheatTrainer_V2
             }
         }
 
-        private static void SetKnownOffsetValue(IntPtr offset, byte valueToSet)
+        private static void SetKnownStaticOffsetValue(IntPtr offset, byte valueToSet)
         {
             try
             {
@@ -657,43 +678,40 @@ namespace MGS2_CheatTrainer_V2
 
         public void ChangeGameStat(GameStats.ModifiableStats gameStat, short value)
         {
-            //TODO: validate with new offset -- does not work, need to fix :)
             try
             {
-                //IntPtr stageOffset = GetStageOffsets().First();
-                IntPtr stageOffset = GetCurrentStageOffset();
-                MemoryOffset gameStatOffset;
+                int gameStatOffset;
                 switch (gameStat)
                 {
                     case GameStats.ModifiableStats.Alerts:
-                        gameStatOffset = Mgs2Offset.AlertCount;
+                        gameStatOffset = Mgs2Offset.AlertCount.Start + Mgs2Offset.GameStatsBlock.Start;
                         break;
                     case GameStats.ModifiableStats.Continues:
-                        gameStatOffset = Mgs2Offset.ContinueCount;
+                        gameStatOffset = Mgs2Offset.ContinueCount.Start + Mgs2Offset.GameStatsBlock.Start;
                         break;
                     case GameStats.ModifiableStats.DamageTaken:
-                        gameStatOffset = Mgs2Offset.DamageTaken;
+                        gameStatOffset = Mgs2Offset.DamageTaken.Start + Mgs2Offset.GameStatsBlock.Start;
                         break;
                     case GameStats.ModifiableStats.Kills:
-                        gameStatOffset = Mgs2Offset.KillCount;
+                        gameStatOffset = Mgs2Offset.KillCount.Start + Mgs2Offset.GameStatsBlock.Start;
                         break;
                     case GameStats.ModifiableStats.MechsDestroyed:
-                        gameStatOffset = Mgs2Offset.MechsDestroyed;
+                        gameStatOffset = Mgs2Offset.MechsDestroyed.Start + Mgs2Offset.GameStatsBlock.Start;
                         break;
                     case GameStats.ModifiableStats.Rations:
-                        gameStatOffset = Mgs2Offset.RationsUsed;
+                        gameStatOffset = Mgs2Offset.RationsUsed.Start;
                         break;
                     case GameStats.ModifiableStats.Saves:
-                        gameStatOffset = Mgs2Offset.SaveCount;
+                        gameStatOffset = Mgs2Offset.SaveCount.Start + Mgs2Offset.GameStatsBlock.Start;
                         break;
                     case GameStats.ModifiableStats.Shots:
-                        gameStatOffset = Mgs2Offset.ShotCount;
+                        gameStatOffset = Mgs2Offset.ShotCount.Start + Mgs2Offset.GameStatsBlock.Start;
                         break;
                     default:
                         throw new Exception("You must provide a valid game stat to modify");
                 }
-
-                SetKnownOffsetValue(stageOffset + gameStatOffset.Start, (byte)value);
+                
+                SetPointerOffsetValue(Mgs2Pointer.PlayerPointer, gameStatOffset, BitConverter.GetBytes(value));
             }
             catch (Exception e)
             {

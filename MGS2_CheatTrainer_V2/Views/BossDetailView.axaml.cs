@@ -5,6 +5,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
+using Avalonia.Threading;
 using MGS2_CheatTrainer_V2.Models;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -91,15 +92,18 @@ public partial class BossDetailView : UserControl
     {
         BossVitals vitals = _memoryManager.GetBossVitals(Boss);
 
-        if (HpSlider.Maximum < vitals.Health)
-            HpSlider.Maximum = vitals.Health;
-        HpSlider.Value = vitals.Health;
-
-        if (vitals.HasStamina)
+        Dispatcher.UIThread.Post(() =>
         {
-            if (StaminaSlider.Maximum < vitals.Stamina)
-                StaminaSlider.Maximum = vitals.Stamina;
-            StaminaSlider.Value = vitals.Stamina;
-        }
+            if (HpSlider.Maximum < vitals.Health)
+                HpSlider.Maximum = vitals.Health;
+            HpSlider.Value = vitals.Health;
+
+            if (vitals.HasStamina)
+            {
+                if (StaminaSlider.Maximum < vitals.Stamina)
+                    StaminaSlider.Maximum = vitals.Stamina;
+                StaminaSlider.Value = vitals.Stamina;
+            }
+        });
     }
 }

@@ -1029,8 +1029,16 @@ namespace MGS2_CheatTrainer_V2
         {
             try
             {
-                IntPtr pointerLocation = Mgs2Monitor.Mgs2Process.MainModule.BaseAddress;
-                pointerLocation = FollowNestedPointers(pointerLocation, pointerOffsets);
+                IntPtr pointerLocation;
+                lock(Mgs2Monitor.Mgs2Process)
+                {
+                    using (SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
+                    {
+                        pointerLocation = spp.FollowPointer(new IntPtr(pointerOffsets[0]), false);
+                    }
+                }
+                
+                pointerLocation = FollowNestedPointers(pointerLocation, pointerOffsets.Slice(1,pointerOffsets.Count - 1));
 
                 lock (Mgs2Monitor.Mgs2Process)
                 {

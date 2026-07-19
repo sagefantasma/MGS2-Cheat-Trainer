@@ -3,6 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Threading;
@@ -90,20 +92,67 @@ public partial class BossDetailView : UserControl
 
     private void GetVitals()
     {
-        BossVitals vitals = _memoryManager.GetBossVitals(Boss);
-
-        Dispatcher.UIThread.Post(() =>
+        try
         {
-            if (HpSlider.Maximum < vitals.Health)
-                HpSlider.Maximum = vitals.Health;
-            HpSlider.Value = vitals.Health;
+            BossVitals vitals = _memoryManager.GetBossVitals(Boss);
 
-            if (vitals.HasStamina)
+            Dispatcher.UIThread.Post(() =>
             {
-                if (StaminaSlider.Maximum < vitals.Stamina)
-                    StaminaSlider.Maximum = vitals.Stamina;
-                StaminaSlider.Value = vitals.Stamina;
+                if (HpSlider.Maximum < vitals.Health)
+                    HpSlider.Maximum = vitals.Health;
+                HpSlider.Value = vitals.Health;
+
+                if (vitals.HasStamina)
+                {
+                    if (StaminaSlider.Maximum < vitals.Stamina)
+                        StaminaSlider.Maximum = vitals.Stamina;
+                    StaminaSlider.Value = vitals.Stamina;
+                }
+            });
+        }
+        catch
+        {
+            //TODO: add logging
+        }
+    }
+
+    private void HpSlider_OnValueChanged(object? sender, RangeBaseValueChangedEventArgs e)
+    {
+        if (sender is Slider)
+        {
+            try
+            {
+                lock (HpSlider)
+                {
+                    BossVitals bossVitals = BossVitals.ParseBossVitals(Boss);
+                    bossVitals.Health = (int)HpSlider.Value;
+                    _memoryManager.SetBossVitals(bossVitals);
+                }
             }
-        });
+            catch (Exception ex)
+            {
+                //TODO: log and update status bar
+            }
+        }
+    }
+
+    private void StaminaSlider_OnValueChanged(object? sender, RangeBaseValueChangedEventArgs e)
+    {
+        if (sender is Slider)
+        {
+            try
+            {
+                lock (StaminaSlider)
+                {
+                    BossVitals bossVitals = BossVitals.ParseBossVitals(Boss);
+                    bossVitals.Stamina = (int)StaminaSlider.Value;
+                    _memoryManager.SetBossVitals(bossVitals);
+                }
+            }
+            catch (Exception ex)
+            {
+                //TODO: log and update status bar
+            }
+        }
     }
 }

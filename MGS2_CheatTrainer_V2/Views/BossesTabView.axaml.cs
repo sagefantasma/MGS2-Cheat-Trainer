@@ -144,7 +144,7 @@ public partial class BossesTabView : UserControl
                     HarrierDetailView.IsActive = false;
                     Vamp1DetailView.IsActive = false;
                     Vamp2DetailView.IsActive = false;
-                    RaysDetailView.IsActive = true;
+                    RaysDetailView.IsActive = false; //TODO: need to get proper HP memory value for RAYs fight
                     SolidusDetailView.IsActive = false;
                 }
                 else if (currentStage.AreaCode == StageNames.PlantStages.FederalHall.AreaCode)

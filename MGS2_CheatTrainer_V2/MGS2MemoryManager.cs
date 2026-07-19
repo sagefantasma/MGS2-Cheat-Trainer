@@ -945,17 +945,26 @@ namespace MGS2_CheatTrainer_V2
             return new IntPtr(BitConverter.ToInt64(aobReferencedPointer, 0));
         }
 
-        private static void SetDataInNestedPointers(IntPtr initialPointer, List<int> pointerOffsets, int destinationOffset, byte[] dataToSet)
+        private static void SetDataInNestedPointers(List<int> pointerOffsets, int destinationOffset, byte[] dataToSet)
         {
             try
             {
-                IntPtr nestedPointerEndpoint = FollowNestedPointers(initialPointer, pointerOffsets);
+                IntPtr pointerLocation;
+                lock(Mgs2Monitor.Mgs2Process)
+                {
+                    using (SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
+                    {
+                        pointerLocation = spp.FollowPointer(new IntPtr(pointerOffsets[0]), false);
+                    }
+                }
+                
+                pointerLocation = FollowNestedPointers(pointerLocation, pointerOffsets.Slice(1,pointerOffsets.Count - 1));
 
                 lock (Mgs2Monitor.Mgs2Process)
                 {
                     using (SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
                     {
-                        spp.SetMemoryAtPointer(IntPtr.Add(nestedPointerEndpoint, destinationOffset), dataToSet);   
+                        spp.SetMemoryAtPointer(IntPtr.Add(pointerLocation, destinationOffset), dataToSet);   
                     }
                 }
             }
@@ -1055,17 +1064,16 @@ namespace MGS2_CheatTrainer_V2
             }
         }
 
-        public static void SetBossVitals(BossVitals updatedVitals)
+        public void SetBossVitals(BossVitals updatedVitals)
         {
             try
             {
                 if (updatedVitals.Boss != Constants.Boss.Fortune)
                 {
-                    IntPtr pointerLocation = Mgs2Monitor.Mgs2Process.MainModule.BaseAddress;
-                    SetDataInNestedPointers(pointerLocation, updatedVitals.NestedHealthPointers, updatedVitals.HealthOffset, BitConverter.GetBytes(updatedVitals.Health));
+                    SetDataInNestedPointers(updatedVitals.NestedHealthPointers, updatedVitals.HealthOffset, BitConverter.GetBytes(updatedVitals.Health));
                     if (updatedVitals.HasStamina)
                     {
-                        SetDataInNestedPointers(pointerLocation, updatedVitals.NestedStaminaPointers, updatedVitals.StaminaOffset, BitConverter.GetBytes(updatedVitals.Stamina));
+                        SetDataInNestedPointers(updatedVitals.NestedStaminaPointers, updatedVitals.StaminaOffset, BitConverter.GetBytes(updatedVitals.Stamina));
                     }
                 }
                 else
@@ -1098,7 +1106,6 @@ namespace MGS2_CheatTrainer_V2
 
                 if (selectedBoss != Constants.Boss.Fortune)
                 {
-                    //TODO: boss vitals are broken here, but my brain is dead at this point today. Need to fix
                     bossVitals.Health = BitConverter.ToInt16(GetDataFromNestedPointers(bossVitals.NestedHealthPointers, bossVitals.HealthOffset, 2), 0);
                     if (bossVitals.HasStamina)
                     {

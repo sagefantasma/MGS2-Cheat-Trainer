@@ -21,13 +21,13 @@
                 <DropShadowEffect Color="Black" BlurRadius="2" OffsetX="1" OffsetY="1" Opacity="1"/>
             </TextBlock.Effect>
         </TextBlock>
-        <Slider x:Name="HpSlider" Margin="10,0" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Foreground="Green"/>
+        <Slider x:Name="HpSlider" Margin="10,0" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" ValueChanged="HpSlider_OnValueChanged" Foreground="Green"/>
         <TextBlock x:Name="StaminaLabel" Margin="35,0,0,0" Text="Stamina" Foreground="Blue" Grid.Row="3" Grid.Column="0">
             <TextBlock.Effect>
                 <DropShadowEffect Color="Black" BlurRadius="2" OffsetX="1" OffsetY="1" Opacity="1"/>
             </TextBlock.Effect>
         </TextBlock>
-        <Slider x:Name="StaminaSlider" Margin="10,0" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Foreground="Blue"/>
+        <Slider x:Name="StaminaSlider" Margin="10,0" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" ValueChanged="StaminaSlider_OnValueChanged" Foreground="Blue"/>
     </Grid>
     
 </UserControl>

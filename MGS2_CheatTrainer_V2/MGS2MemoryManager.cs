@@ -126,15 +126,16 @@ namespace MGS2_CheatTrainer_V2
                             }
                         }
                         SimplePattern stageOffsetPattern = new SimplePattern(Mgs2AoB.StageInfoString);
-                        List<IntPtr> stageOffsets = proxy.ScanMemoryForPattern(stageOffsetPattern);
+                        List<SimpleProcessProxy.SimpleMemory> stageOffsets = proxy.ScanMemoryForPattern(stageOffsetPattern);
+                        List<IntPtr> stageOffsetPtrs = stageOffsets.Select(sm => sm.OffsetAddress).ToList();
 
                         Logger.Verbose($"We found {stageOffsets.Count} stage offsets in memory");
 
                         //ignore all results except for the final two if more than 2 are found.
-                        if (stageOffsets.Count > 1)
-                            stageOffsets = stageOffsets.GetRange(stageOffsets.Count - 2, 2);
+                        if (stageOffsetPtrs.Count > 1)
+                            stageOffsetPtrs = stageOffsetPtrs.GetRange(stageOffsetPtrs.Count - 2, 2);
 
-                        LastKnownStageOffsets = new List<IntPtr>(stageOffsets);
+                        LastKnownStageOffsets = new List<IntPtr>(stageOffsetPtrs);
                         return LastKnownStageOffsets;
                     }
                 }

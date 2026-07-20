@@ -35,6 +35,17 @@ namespace MGS2_CheatTrainer_V2.Models
             Ray1, Ray2, Ray3, Ray4, Ray5, Ray6, Ray7, Ray8, Ray9, Ray10, Ray11, Ray12, Ray13, Ray14, Ray15, Ray16, Ray17, Ray18, Ray19, Ray20, Ray21, Ray22, Ray23, Ray24, Ray25,
             Solidus
         }
+
+        public enum Cheat
+        {
+            NoBleedDamage, NoBurnDamage, InfiniteAmmo, InfiniteLife, InfiniteOxygen, NoGripDamage, 
+            EmmaInfiniteHealth, EmmaInfiniteO2, NoClipWithGravity, NoClipNoGravity,  //Emma health is crashing the game and i cba to fix it
+            NoReload, ZoomIn, ZoomOut, DisablePauseButton, //zoom in and out aren't working as expected, and i cant be bothered to fix them right now.
+            DisableItemMenuPause, DisableWeaponMenuPause, InfiniteItems, InfiniteKnockout, RemovePlantFilter,
+            RemovePlantFog, RemoveTankerFilter, NightTime, MaxStackOnPickup, PauseVrTimer, VrObjectiveAutoComplete,
+            VrEnemiesAutoComplete, VrNoHitDamage, VrNoFallDamage, VrInfiniteStrength, VrGripDamage, VrAimStability, //VR Enemies autocomplete is crashing the game
+            VrInfiniteAmmo, VrInfiniteItem, VrNoReload, BlackScreen, Letterboxing, GhostMode, TurnOffMusic
+        }
         
         public interface IMgs2Object
         {

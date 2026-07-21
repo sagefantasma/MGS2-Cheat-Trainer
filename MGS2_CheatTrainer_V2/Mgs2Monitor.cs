@@ -1,22 +1,10 @@
-﻿using Newtonsoft.Json.Linq;
-using Serilog;
-using Serilog.Core;
+﻿using Serilog;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Text.Json;
 using System.Threading;
-using System.Threading.Tasks;
-using MGS2_CheatTrainer_V2.Models;
-using MGS2_CheatTrainer_V2.Views;
-using Microsoft.Extensions.DependencyInjection;
-using MsBox.Avalonia;
-using MsBox.Avalonia.Base;
-using MsBox.Avalonia.Enums;
 using SimplifiedMemoryManager;
 using Constants = MGS2_CheatTrainer_V2.Models.Constants;
 
@@ -26,34 +14,37 @@ namespace MGS2_CheatTrainer_V2
     {
         #region Private members, fields, and functions
         #region Members & fields
-        private const string LoggerName = "MGS2MonitorDebuglog.log";
         private const string Mgs2ProcessName = "METAL GEAR SOLID2";
         private const string DesiredVersion = "2.1.0.0";
-        private static bool _versionWarned = false;
+        private static bool _versionWarned;
 
-        private static Process _mgs2Process;
+        private static Process? _mgs2Process;
 
-        private static bool InitialLaunch { get; set; } = true;
         private static CancellationToken MonitorCancellationToken { get; set; }
-        private static CancellationTokenSource Mgs2CancellationTokenSource { get; set; } = new CancellationTokenSource();
+        private static CancellationTokenSource Mgs2CancellationTokenSource { get; } = new ();
         private static ILogger? Logger => Logging.Logger;
-        private static Thread ScanningThread { get; set; }
-        private static Task UpdateStatsTask { get; set; }
-        private static Stage LastKnownStage { get; set; }
-        public static event EventHandler<bool> GameHooked;
+        private static Thread? ScanningThread { get; set; }
+        
+        public static event EventHandler<bool>? OnGameHooked;
+        public static event EventHandler<string>? OnInvalidVersionDetected;
         #endregion
         
         #region Functions
         #region Event Handlers & Delegates
 
-        private static void OnGameHooked(bool hooked)
+        private static void GameHooked(bool hooked)
         {
-            GameHooked?.Invoke(null, hooked);
+            OnGameHooked?.Invoke(null, hooked);
         }
         
         private static void TearDownMonitor()
-        { 
-            ScanningThread.Abort();
+        {
+            OnGameHooked?.Invoke(null, false);
+        }
+
+        private static void InvalidVersionDetected(string message)
+        {
+            OnInvalidVersionDetected?.Invoke(null, message);
         }
         #endregion
 
@@ -62,27 +53,28 @@ namespace MGS2_CheatTrainer_V2
         {
             while (!MonitorCancellationToken.IsCancellationRequested)
             {
-                if (Mgs2Process == null)
+                try
                 {
-                    Process process = null;
-                    
-                    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                        process = Process.GetProcessesByName(Mgs2ProcessName).FirstOrDefault();
-                    else
+                    if (Mgs2Process == null)
                     {
-                        Process[] processes = Process.GetProcessesByName("METAL");
-                        if (processes.Length == 1)
-                            process = processes[0];
-                        else if (processes.Length == 0)
-                            processes = Process.GetProcesses();
+                        Process? process = null;
 
-                        if (process is null)
+                        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                            process = Process.GetProcessesByName(Mgs2ProcessName).FirstOrDefault();
+                        else
                         {
-                            foreach (Process p in processes)
+                            Process[] processes = Process.GetProcessesByName("METAL");
+                            if (processes.Length == 1)
+                                process = processes[0];
+                            else if (processes.Length == 0)
+                                processes = Process.GetProcesses();
+
+                            if (process is null)
                             {
-                                if (!p.ProcessName.Contains("METAL")) continue;
-                                using (SimpleProcessProxy spp = new SimpleProcessProxy(p))
+                                foreach (Process p in processes)
                                 {
+                                    if (!p.ProcessName.Contains("METAL")) continue;
+                                    using SimpleProcessProxy spp = new SimpleProcessProxy(p);
                                     nint signifyingMemory = 0x72F2E0;
                                     long bytesToRead = 18;
                                     string determinantString = "METAL GEAR SOLID 2";
@@ -95,47 +87,58 @@ namespace MGS2_CheatTrainer_V2
                                     }
                                     catch
                                     {
-                                        continue;
+                                        // ignored
                                     }
                                 }
                             }
                         }
-                    }
 
-                    if (process != null)
-                    {
-                        // Bug fix: only update if process actually changed
-                        if (Mgs2Process?.Id != process.Id)
+                        if (process != null)
                         {
-                            Mgs2Process = process;
-                            OnGameHooked(true);
-                            FileVersionInfo fileVersion = FileVersionInfo.GetVersionInfo(
-                                Mgs2Process.MainModule.FileName);
-                            Logger.Debug($"MGS2 found and hooked, version:\n{fileVersion}");
-
-                            if (string.Compare(fileVersion.ProductVersion, DesiredVersion) != 0
-                                && !_versionWarned)
+                            // Bug fix: only update if process actually changed
+                            if (Mgs2Process?.Id != process.Id)
                             {
-                                //TODO: Is there a way to make this work when using Proton? Because the FileVersionInfo
-                                //when using Proton is the FileVersionInfo FOR Proton... hmmj
-                                _versionWarned = true;
-                                /*IMsBox<ButtonResult> msgBox = MessageBoxManager.GetMessageBoxStandard(
-                                    "Incompatible game version detected!",
-                                    $"The version of MGS2 we have hooked({fileVersion.ProductVersion}) " +
-                                    $"does not match expected({DesiredVersion})!",
-                                    ButtonEnum.Ok);*/
-                            }
-                        }
+                                Mgs2Process = process;
+                                GameHooked(true);
+                                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                                {
+                                    FileVersionInfo fileVersion = FileVersionInfo.GetVersionInfo(
+                                        Mgs2Process.MainModule?.FileName!);
+                                    Logger?.Information($"MGS2 found and hooked, version:\n{fileVersion}");
 
-                        Thread.Sleep(60 * Constants.MILLISECONDS_IN_SECOND);
+                                    if (string.Compare(fileVersion.ProductVersion, DesiredVersion,
+                                            StringComparison.InvariantCultureIgnoreCase) != 0
+                                        && !_versionWarned)
+                                    {
+                                        //TODO: Is there a way to make this work when using Proton? Because the FileVersionInfo
+                                        //when using Proton is the FileVersionInfo FOR Proton... hmmj
+                                        _versionWarned = true;
+                                        InvalidVersionDetected(
+                                            $"The version of MGS2 we have hooked({fileVersion.ProductVersion}) " +
+                                            $"does not match expected({DesiredVersion})!");
+                                    }
+                                }
+                                else
+                                {
+                                    //Linux path
+                                    Logger?.Information("MGS2 found and hooked");
+                                }
+                            }
+
+                            Thread.Sleep(60 * Constants.MILLISECONDS_IN_SECOND);
+                        }
+                        else
+                        {
+                            // Bug fix: only clear if we previously had a process
+                            if (Mgs2Process != null)
+                                Mgs2Process = null;
+                            Thread.Sleep(10 * Constants.MILLISECONDS_IN_SECOND);
+                        }
                     }
-                    else
-                    {
-                        // Bug fix: only clear if we previously had a process
-                        if (Mgs2Process != null)
-                            Mgs2Process = null;
-                        Thread.Sleep(10 * Constants.MILLISECONDS_IN_SECOND);
-                    }
+                }
+                catch (Exception e)
+                {
+                    Logger?.Error($"Something went wrong in ScanningThread: {e}");
                 }
             }
         }
@@ -146,25 +149,24 @@ namespace MGS2_CheatTrainer_V2
         #region Constructor & Process Encapsulator
         static Mgs2Monitor()
         {
-            Logger.Information($"MGS2 Monitor for version {Program.AppVersion} initialized...");
-            Logger.Verbose($"Instance ID: {Program.InstanceId}");
+            Logger?.Information($"MGS2 Monitor for version {Program.AppVersion} initialized...");
         }
 
-        public static bool EnableGameStats { get; set; } = false;
-
-        public static Process Mgs2Process
+        public static Process? Mgs2Process
         {
             get
             {
-                if (_mgs2Process != null && _mgs2Process.HasExited == false)
+                if (_mgs2Process != null && !_mgs2Process.HasExited)
                     return _mgs2Process;
 
                 try { Mgs2CancellationTokenSource.Cancel(); }
-                catch { }
+                catch { 
+                    //ignored
+                }
                 _mgs2Process = null;
                 return null;
             }
-            set
+            private set
             {
                 // Bug fix: only start monitoring task when setting a real process,
                 // and only if it's actually a different process than what we have
@@ -172,10 +174,12 @@ namespace MGS2_CheatTrainer_V2
                 {
                     // Cancel any existing monitoring task before starting a new one
                     try { Mgs2CancellationTokenSource.Cancel(); }
-                    catch { }
+                    catch
+                    {
+                        // ignored
+                    }
 
                     _mgs2Process = value;
-                    //UpdateStatsTask = Task.Factory.StartNew(MonitorScoringStats);
                 }
                 else if (value == null)
                 {
@@ -194,13 +198,12 @@ namespace MGS2_CheatTrainer_V2
         {
             MonitorCancellationToken = cancellationToken;
             MonitorCancellationToken.Register(TearDownMonitor);
-            Logger.Information("Starting MGS2 scanning thread...");
-            ScanningThread = new Thread(() => ScanForMgs2())
+            Logger?.Information("Starting MGS2 scanning thread...");
+            ScanningThread = new Thread(ScanForMgs2)
             {
                 Name = "MGS2 Scanning Thread"
             };
             ScanningThread.Start();
-            InitialLaunch = false;            
         }
     }
 }

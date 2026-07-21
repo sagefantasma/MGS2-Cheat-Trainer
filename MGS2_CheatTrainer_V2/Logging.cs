@@ -18,18 +18,22 @@ namespace MGS2_CheatTrainer_V2
         {
             LogLocation = Environment.CurrentDirectory;
             Logger = InitializeNewLogger("MGS2CheatTrainerDebuglog.log", LogEventLevel.Debug);
-            Logger.Information("Logging started");
+            Logger?.Information("Logging started");
         }
 
-        internal static ILogger InitializeNewLogger(string logFileName)
+        private static ILogger? InitializeNewLogger(string logFileName)
         {
             return InitializeNewLogger(logFileName, MainLogEventLevel);
         }
 
-        internal static ILogger InitializeNewLogger(string logFileName, LogEventLevel loggingLevel)
+        private static ILogger? InitializeNewLogger(string logFileName, LogEventLevel loggingLevel)
         {
-            return new LoggerConfiguration().WriteTo.File(Path.Combine(LogLocation, logFileName), rollOnFileSizeLimit: false, fileSizeLimitBytes: 50 * MegabyteInKilobytes)
-                                              .MinimumLevel.Is(loggingLevel).CreateLogger();
+            if (LogLocation != null)
+                return new LoggerConfiguration().WriteTo.File(Path.Combine(LogLocation, logFileName),
+                        rollOnFileSizeLimit: false, fileSizeLimitBytes: 50 * MegabyteInKilobytes)
+                    .MinimumLevel.Is(loggingLevel).CreateLogger();
+            else
+                return null;
         }
     }
 }

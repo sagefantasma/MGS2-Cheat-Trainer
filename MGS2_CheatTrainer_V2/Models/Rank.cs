@@ -24,7 +24,7 @@ namespace MGS2_CheatTrainer_V2.Models
 
     internal class Rank
     {
-        public static Rank CurrentlyProjectedRank(Mgs2MemoryManager.GameStats currentStats, Difficulty currentDifficulty, GameType gameType)
+        public static Rank CurrentlyProjectedRank(GameStats currentStats, Difficulty currentDifficulty, GameType gameType)
         {
             Rank projectedRank = null;
             if (gameType != GameType.TankerPlant) //for now i'm only worrying about TankerPlant shared ranks on different difficulties
@@ -52,9 +52,9 @@ namespace MGS2_CheatTrainer_V2.Models
             return projectedRank;
         }
 
-        private bool AreStatsWithinRankRequirements(Mgs2MemoryManager.GameStats stats)
+        private bool AreStatsWithinRankRequirements(GameStats stats)
         {
-            foreach(FieldInfo member in typeof(Mgs2MemoryManager.GameStats).GetFields())
+            foreach(FieldInfo member in typeof(GameStats).GetFields())
             {
                 var test = member.FieldType;
                 if(member.FieldType == typeof(short))
@@ -78,8 +78,8 @@ namespace MGS2_CheatTrainer_V2.Models
         }
 
         public string Name { get; set; }
-        public Mgs2MemoryManager.GameStats MinimumStats { get; set; }
-        public Mgs2MemoryManager.GameStats MaximumStats { get; set; }
+        public GameStats MinimumStats { get; set; }
+        public GameStats MaximumStats { get; set; }
 
         //taken from: https://metalgear.fandom.com/wiki/Codename_(gameplay)#Requirements -- not the best source, but it'll do.
         public static List<Rank> Mgs2ExtremeRanks = new List<Rank> { RankRequirements.BigBoss, RankRequirements.FoxExtreme, RankRequirements.DobermanExtreme, RankRequirements.HoundExtreme };
@@ -97,7 +97,7 @@ namespace MGS2_CheatTrainer_V2.Models
         public static Rank BigBoss = new Rank
         {
             Name = "Big Boss",
-            MinimumStats = new Mgs2MemoryManager.GameStats
+            MinimumStats = new GameStats
             {
                 Alerts = 0,
                 Continues = 0,
@@ -110,7 +110,7 @@ namespace MGS2_CheatTrainer_V2.Models
                 Shots = 0,
                 SpecialItems = 0
             },
-            MaximumStats = new Mgs2MemoryManager.GameStats
+            MaximumStats = new GameStats
             {
                 Alerts = 3,
                 Continues = 0,
@@ -128,7 +128,7 @@ namespace MGS2_CheatTrainer_V2.Models
         public static readonly Rank FoxExtreme = new Rank
         {
             Name = "Fox",
-            MinimumStats = new Mgs2MemoryManager.GameStats
+            MinimumStats = new GameStats
             {
                 Alerts = 0,
                 Continues = 0,
@@ -141,7 +141,7 @@ namespace MGS2_CheatTrainer_V2.Models
                 Shots = 700,
                 SpecialItems = 0
             },
-            MaximumStats = new Mgs2MemoryManager.GameStats
+            MaximumStats = new GameStats
             {
                 Alerts = 3,
                 Continues = 0,
@@ -159,7 +159,7 @@ namespace MGS2_CheatTrainer_V2.Models
         public static readonly Rank DobermanExtreme = new Rank
         {
             Name = "Doberman",
-            MinimumStats = new Mgs2MemoryManager.GameStats
+            MinimumStats = new GameStats
             {
                 Alerts = 0,
                 Continues = 0,
@@ -172,7 +172,7 @@ namespace MGS2_CheatTrainer_V2.Models
                 Shots = 0,
                 SpecialItems = 0
             },
-            MaximumStats = new Mgs2MemoryManager.GameStats
+            MaximumStats = new GameStats
             {
                 Alerts = 4,
                 Continues = 0,
@@ -190,7 +190,7 @@ namespace MGS2_CheatTrainer_V2.Models
         public static readonly Rank HoundExtreme = new Rank
         {
             Name = "Hound",
-            MinimumStats = new Mgs2MemoryManager.GameStats
+            MinimumStats = new GameStats
             {
                 Alerts = 0,
                 Continues = 0,
@@ -203,7 +203,7 @@ namespace MGS2_CheatTrainer_V2.Models
                 Shots = 0,
                 SpecialItems = 0
             },
-            MaximumStats = new Mgs2MemoryManager.GameStats
+            MaximumStats = new GameStats
             {
                 Alerts = 5,
                 Continues = short.MaxValue,
@@ -223,7 +223,7 @@ namespace MGS2_CheatTrainer_V2.Models
         public static readonly Rank FoxHard = new Rank
         {
             Name = "Fox",
-            MinimumStats = new Mgs2MemoryManager.GameStats
+            MinimumStats = new GameStats
             {
                 Alerts = 0,
                 Continues = 0,
@@ -236,7 +236,7 @@ namespace MGS2_CheatTrainer_V2.Models
                 Shots = 0,
                 SpecialItems = 0
             },
-            MaximumStats = new Mgs2MemoryManager.GameStats
+            MaximumStats = new GameStats
             {
                 Alerts = 3,
                 Continues = 0,
@@ -254,7 +254,7 @@ namespace MGS2_CheatTrainer_V2.Models
         public static readonly Rank DobermanHard = new Rank
         {
             Name = "Doberman",
-            MinimumStats = new Mgs2MemoryManager.GameStats
+            MinimumStats = new GameStats
             {
                 Alerts = 0,
                 Continues = 0,
@@ -267,7 +267,7 @@ namespace MGS2_CheatTrainer_V2.Models
                 Shots = 0,
                 SpecialItems = 0
             },
-            MaximumStats = new Mgs2MemoryManager.GameStats
+            MaximumStats = new GameStats
             {
                 Alerts = 3,
                 Continues = 0,
@@ -285,7 +285,7 @@ namespace MGS2_CheatTrainer_V2.Models
         public static readonly Rank HoundHard = new Rank
         {
             Name = "Hound",
-            MinimumStats = new Mgs2MemoryManager.GameStats
+            MinimumStats = new GameStats
             {
                 Alerts = 0,
                 Continues = 0,
@@ -298,7 +298,7 @@ namespace MGS2_CheatTrainer_V2.Models
                 Shots = 0,
                 SpecialItems = 0
             },
-            MaximumStats = new Mgs2MemoryManager.GameStats
+            MaximumStats = new GameStats
             {
                 Alerts = 4,
                 Continues = 0,
@@ -318,7 +318,7 @@ namespace MGS2_CheatTrainer_V2.Models
         public static readonly Rank DobermanNormal = new Rank
         {
             Name = "Doberman",
-            MinimumStats = new Mgs2MemoryManager.GameStats
+            MinimumStats = new GameStats
             {
                 Alerts = 0,
                 Continues = 0,
@@ -331,7 +331,7 @@ namespace MGS2_CheatTrainer_V2.Models
                 Shots = 0,
                 SpecialItems = 0
             },
-            MaximumStats = new Mgs2MemoryManager.GameStats
+            MaximumStats = new GameStats
             {
                 Alerts = 3,
                 Continues = 0,
@@ -349,7 +349,7 @@ namespace MGS2_CheatTrainer_V2.Models
         public static readonly Rank HoundNormal = new Rank
         {
             Name = "Hound",
-            MinimumStats = new Mgs2MemoryManager.GameStats
+            MinimumStats = new GameStats
             {
                 Alerts = 0,
                 Continues = 0,
@@ -362,7 +362,7 @@ namespace MGS2_CheatTrainer_V2.Models
                 Shots = 0,
                 SpecialItems = 0
             },
-            MaximumStats = new Mgs2MemoryManager.GameStats
+            MaximumStats = new GameStats
             {
                 Alerts = 3,
                 Continues = 0,
@@ -384,7 +384,7 @@ namespace MGS2_CheatTrainer_V2.Models
         public static readonly Rank HoundEasy = new Rank
         {
             Name = "Hound",
-            MinimumStats = new Mgs2MemoryManager.GameStats
+            MinimumStats = new GameStats
             {
                 Alerts = 0,
                 Continues = 0,
@@ -397,7 +397,7 @@ namespace MGS2_CheatTrainer_V2.Models
                 Shots = 0,
                 SpecialItems = 0
             },
-            MaximumStats = new Mgs2MemoryManager.GameStats
+            MaximumStats = new GameStats
             {
                 Alerts = 3,
                 Continues = 0,

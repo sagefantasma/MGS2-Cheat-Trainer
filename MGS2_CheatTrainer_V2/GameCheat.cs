@@ -42,21 +42,19 @@ namespace MGS2_CheatTrainer_V2
                     {
                         try
                         {
-                            using (SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
+                            using SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
+                            if (memoryLocation != IntPtr.Zero)
                             {
-                                if (memoryLocation != IntPtr.Zero)
+                                byte[] memoryContent = spp.ReadProcessOffset(IntPtr.Add(memoryLocation, offset.Start), offset.Length);
+
+                                for (int i = startIndexToReplace; i < startIndexToReplace + bytesToReplace.Length; i++)
                                 {
-                                    byte[] memoryContent = spp.ReadProcessOffset(IntPtr.Add(memoryLocation, offset.Start), offset.Length);
-
-                                    for (int i = startIndexToReplace; i < startIndexToReplace + bytesToReplace.Length; i++)
-                                    {
-                                        if(memoryContent.Length > i)
-                                            memoryContent[i] = bytesToReplace[i];
-                                    }
-
-                                    spp.ModifyProcessOffset(memoryLocation, memoryContent, true);
-                                    successful = true;
+                                    if(memoryContent.Length > i)
+                                        memoryContent[i] = bytesToReplace[i];
                                 }
+
+                                spp.ModifyProcessOffset(memoryLocation, memoryContent, true);
+                                successful = true;
                             }
                         }
                         catch (Exception e)
@@ -77,25 +75,23 @@ namespace MGS2_CheatTrainer_V2
                     {
                         try
                         {
-                            using (SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
+                            using SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
+                            SimplePattern pattern = new SimplePattern(aob);
+                            int memoryLocation = spp.ScanMemoryForUniquePattern(pattern).OffsetAddress.ToInt32();
+
+                            if (memoryLocation != -1)
                             {
-                                SimplePattern pattern = new SimplePattern(aob);
-                                int memoryLocation = spp.ScanMemoryForUniquePattern(pattern).OffsetAddress.ToInt32();
+                                byte[] memoryContent = spp.ReadProcessOffset(new IntPtr(memoryLocation + offset.Start), offset.Length);
 
-                                if (memoryLocation != -1)
+                                for (int i = startIndexToReplace; i < startIndexToReplace + bytesToReplace; i++)
                                 {
-                                    byte[] memoryContent = spp.ReadProcessOffset(new IntPtr(memoryLocation + offset.Start), offset.Length);
-
-                                    for (int i = startIndexToReplace; i < startIndexToReplace + bytesToReplace; i++)
-                                    {
-                                        memoryContent[i] = 0x90;
-                                    }
-
-                                    spp.ModifyProcessOffset(new IntPtr(memoryLocation), memoryContent, true);
-                                    successful = true;
-
-                                    return new IntPtr(memoryLocation);
+                                    memoryContent[i] = 0x90;
                                 }
+
+                                spp.ModifyProcessOffset(new IntPtr(memoryLocation), memoryContent, true);
+                                successful = true;
+
+                                return new IntPtr(memoryLocation);
                             }
                         }
                         catch (Exception e)
@@ -118,22 +114,20 @@ namespace MGS2_CheatTrainer_V2
                     {
                         try
                         {
-                            using (SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
+                            using SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
+                            if (memoryLocation != IntPtr.Zero)
                             {
-                                if (memoryLocation != IntPtr.Zero)
+                                byte[] memoryContent = spp.ReadProcessOffset(IntPtr.Add(memoryLocation, offset.Start), offset.Length);
+
+                                for (int i = startIndexToReplace; i < startIndexToReplace + bytesToReplace; i++)
                                 {
-                                    byte[] memoryContent = spp.ReadProcessOffset(IntPtr.Add(memoryLocation, offset.Start), offset.Length);
-
-                                    for (int i = startIndexToReplace; i < startIndexToReplace + bytesToReplace; i++)
-                                    {
-                                        memoryContent[i] = 0x90;
-                                    }
-
-                                    spp.ModifyProcessOffset(memoryLocation, memoryContent, true);
-                                    successful = true;
-
-                                    return memoryLocation;
+                                    memoryContent[i] = 0x90;
                                 }
+
+                                spp.ModifyProcessOffset(memoryLocation, memoryContent, true);
+                                successful = true;
+
+                                return memoryLocation;
                             }
                         }
                         catch (Exception e)
@@ -156,25 +150,23 @@ namespace MGS2_CheatTrainer_V2
                     {
                         try
                         {
-                            using (SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
+                            using SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
+                            SimplePattern pattern = new SimplePattern(patternToScan);
+                            int memoryLocation = spp.ScanMemoryForUniquePattern(pattern).OffsetAddress.ToInt32();
+
+                            if (memoryLocation != -1)
                             {
-                                SimplePattern pattern = new SimplePattern(patternToScan);
-                                int memoryLocation = spp.ScanMemoryForUniquePattern(pattern).OffsetAddress.ToInt32();
+                                byte[] memoryContent = spp.ReadProcessOffset(new IntPtr(memoryLocation + offset.Start), offset.Length);
 
-                                if (memoryLocation != -1)
+                                for (int i = 0; i < replacementBytes.Length; i++)
                                 {
-                                    byte[] memoryContent = spp.ReadProcessOffset(new IntPtr(memoryLocation + offset.Start), offset.Length);
-
-                                    for (int i = 0; i < replacementBytes.Length; i++)
-                                    {
-                                        memoryContent[i] = replacementBytes[i];
-                                    }
-
-                                    spp.ModifyProcessOffset(new IntPtr(memoryLocation + offset.Start), memoryContent, true);
-                                    successful = true;
-
-                                    return new IntPtr(memoryLocation);
+                                    memoryContent[i] = replacementBytes[i];
                                 }
+
+                                spp.ModifyProcessOffset(new IntPtr(memoryLocation + offset.Start), memoryContent, true);
+                                successful = true;
+
+                                return new IntPtr(memoryLocation);
                             }
                         }
                         catch (Exception e)
@@ -196,22 +188,20 @@ namespace MGS2_CheatTrainer_V2
                     {
                         try
                         {
-                            using (SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
+                            using SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
+                            if (memoryLocation != IntPtr.Zero)
                             {
-                                if (memoryLocation != IntPtr.Zero)
+                                byte[] memoryContent = spp.ReadProcessOffset(IntPtr.Add(memoryLocation, offset.Start), offset.Length);
+
+                                for (int i = 0; i < replacementBytes.Length; i++)
                                 {
-                                    byte[] memoryContent = spp.ReadProcessOffset(IntPtr.Add(memoryLocation, offset.Start), offset.Length);
-
-                                    for (int i = 0; i < replacementBytes.Length; i++)
-                                    {
-                                        memoryContent[i] = replacementBytes[i];
-                                    }
-
-                                    spp.ModifyProcessOffset(memoryLocation, memoryContent, true);
-                                    successful = true;
-
-                                    return memoryLocation;
+                                    memoryContent[i] = replacementBytes[i];
                                 }
+
+                                spp.ModifyProcessOffset(memoryLocation, memoryContent, true);
+                                successful = true;
+
+                                return memoryLocation;
                             }
                         }
                         catch (Exception e)
@@ -233,18 +223,16 @@ namespace MGS2_CheatTrainer_V2
                     {
                         try
                         {
-                            using (SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
+                            using SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
+                            SimplePattern pattern = new SimplePattern(aob);
+                            int memoryLocation = spp.ScanMemoryForUniquePattern(pattern).OffsetAddress.ToInt32();
+
+                            if (memoryLocation != -1)
                             {
-                                SimplePattern pattern = new SimplePattern(aob);
-                                int memoryLocation = spp.ScanMemoryForUniquePattern(pattern).OffsetAddress.ToInt32();
+                                spp.ModifyProcessOffset(new IntPtr(memoryLocation + offset.Start), replacementValue, true);
+                                successful = true;
 
-                                if (memoryLocation != -1)
-                                {
-                                    spp.ModifyProcessOffset(new IntPtr(memoryLocation + offset.Start), replacementValue, true);
-                                    successful = true;
-
-                                    return new IntPtr(memoryLocation);
-                                }
+                                return new IntPtr(memoryLocation);
                             }
                         }
                         catch (Exception e)
@@ -267,13 +255,11 @@ namespace MGS2_CheatTrainer_V2
                     {
                         try
                         {
-                            using (SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
+                            using SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
+                            if (memoryLocation != IntPtr.Zero)
                             {
-                                if (memoryLocation != IntPtr.Zero)
-                                {
-                                    spp.ModifyProcessOffset(IntPtr.Add(memoryLocation, offset.Start), replacementValue, true);
-                                    successful = true;
-                                }
+                                spp.ModifyProcessOffset(IntPtr.Add(memoryLocation, offset.Start), replacementValue, true);
+                                successful = true;
                             }
                         }
                         catch (Exception e)
@@ -294,14 +280,12 @@ namespace MGS2_CheatTrainer_V2
                     {
                         try
                         {
-                            using (SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
-                            {
-                                SimplePattern pattern = new SimplePattern(aob);
-                                int memoryLocation = spp.ScanMemoryForUniquePattern(pattern).OffsetAddress.ToInt32();
+                            using SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
+                            SimplePattern pattern = new SimplePattern(aob);
+                            int memoryLocation = spp.ScanMemoryForUniquePattern(pattern).OffsetAddress.ToInt32();
 
-                                if(memoryLocation != -1)
-                                    return spp.ReadProcessOffset(new IntPtr(memoryLocation + offset.Start), offset.Length);
-                            }
+                            if(memoryLocation != -1)
+                                return spp.ReadProcessOffset(new IntPtr(memoryLocation + offset.Start), offset.Length);
                         }
                         catch (Exception e)
                         {
@@ -323,11 +307,9 @@ namespace MGS2_CheatTrainer_V2
                     {
                         try
                         {
-                            using (SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
-                            {
-                                spp.ModifyProcessOffset(new IntPtr(0x153F048), 1);
-                                successful = true;
-                            }
+                            using SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
+                            spp.ModifyProcessOffset(new IntPtr(0x153F048), 1);
+                            successful = true;
                         }
                         catch (Exception e)
                         {
@@ -598,81 +580,79 @@ namespace MGS2_CheatTrainer_V2
 
                     lock (Mgs2Monitor.Mgs2Process)
                     {
-                        using (SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process))
+                        using SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
+                        string activeCharacterAoB;
+                        switch (currentPc)
                         {
-                            string activeCharacterAoB;
-                            switch (currentPc)
+                            case Constants.PlayableCharacter.Raiden:
+                                activeCharacterAoB = Mgs2AoB.RaidenClipping;
+                                break;
+                            case Constants.PlayableCharacter.NinjaRaiden:
+                                activeCharacterAoB = Mgs2AoB.NinjaClipping;
+                                break;
+                            case Constants.PlayableCharacter.NakedRaiden:
+                                activeCharacterAoB = Mgs2AoB.NakedRaidenClipping;
+                                break;
+                            case Constants.PlayableCharacter.Snake:
+                                activeCharacterAoB = Mgs2AoB.SnakeClipping;
+                                break;
+                            case Constants.PlayableCharacter.Pliskin:
+                                activeCharacterAoB = Mgs2AoB.PliskinClipping;
+                                break;
+                            case Constants.PlayableCharacter.Mgs1Snake:
+                                activeCharacterAoB = Mgs2AoB.Mgs1SnakeClipping;
+                                break;
+                            case Constants.PlayableCharacter.TuxedoSnake:
+                                activeCharacterAoB = Mgs2AoB.TuxedoSnakeClipping;
+                                break;
+                            default:
+                                activeCharacterAoB = Mgs2AoB.VrClipping;
+                                break;
+                        }
+
+                        IntPtr pointerLocation = spp.FollowPointer(new IntPtr(Mgs2Pointer.WalkThroughWalls), false);
+                        byte[] memoryContent = spp.GetMemoryFromPointer(new IntPtr(pointerLocation.ToInt64() + Mgs2Offset.NoClip.Start), Mgs2Offset.NoClip.Length);
+
+                        if (!activate)
+                        {
+                            if (memoryContent[4] == 0x15 || memoryContent[4] == 0x13)
                             {
-                                case Constants.PlayableCharacter.Raiden:
-                                    activeCharacterAoB = Mgs2AoB.RaidenClipping;
-                                    break;
-                                case Constants.PlayableCharacter.NinjaRaiden:
-                                    activeCharacterAoB = Mgs2AoB.NinjaClipping;
-                                    break;
-                                case Constants.PlayableCharacter.NakedRaiden:
-                                    activeCharacterAoB = Mgs2AoB.NakedRaidenClipping;
-                                    break;
-                                case Constants.PlayableCharacter.Snake:
-                                    activeCharacterAoB = Mgs2AoB.SnakeClipping;
-                                    break;
-                                case Constants.PlayableCharacter.Pliskin:
-                                    activeCharacterAoB = Mgs2AoB.PliskinClipping;
-                                    break;
-                                case Constants.PlayableCharacter.Mgs1Snake:
-                                    activeCharacterAoB = Mgs2AoB.Mgs1SnakeClipping;
-                                    break;
-                                case Constants.PlayableCharacter.TuxedoSnake:
-                                    activeCharacterAoB = Mgs2AoB.TuxedoSnakeClipping;
-                                    break;
-                                default:
-                                    activeCharacterAoB = Mgs2AoB.VrClipping;
-                                    break;
+                                memoryContent[4] = 0x14;
                             }
-
-                            IntPtr pointerLocation = spp.FollowPointer(new IntPtr(Mgs2Pointer.WalkThroughWalls), false);
-                            byte[] memoryContent = spp.GetMemoryFromPointer(new IntPtr(pointerLocation.ToInt64() + Mgs2Offset.NoClip.Start), Mgs2Offset.NoClip.Length);
-
-                            if (!activate)
+                            else if (memoryContent[4] == 0x25 || memoryContent[4] == 0x23)
                             {
-                                if (memoryContent[4] == 0x15 || memoryContent[4] == 0x13)
+                                memoryContent[4] = 0x24;
+                            }
+                        }
+                        else
+                        {
+                            if (gravity)
+                            {
+                                //set byte to either 15 or 25
+                                if (memoryContent[4] == 0x24)
                                 {
-                                    memoryContent[4] = 0x14;
+                                    memoryContent[4] = 0x25;
                                 }
-                                else if (memoryContent[4] == 0x25 || memoryContent[4] == 0x23)
+                                else
                                 {
-                                    memoryContent[4] = 0x24;
+                                    memoryContent[4] = 0x15;
                                 }
                             }
                             else
                             {
-                                if (gravity)
+                                //set byte to either 13 or 23
+                                if (memoryContent[4] == 0x24)
                                 {
-                                    //set byte to either 15 or 25
-                                    if (memoryContent[4] == 0x24)
-                                    {
-                                        memoryContent[4] = 0x25;
-                                    }
-                                    else
-                                    {
-                                        memoryContent[4] = 0x15;
-                                    }
+                                    memoryContent[4] = 0x23;
                                 }
                                 else
                                 {
-                                    //set byte to either 13 or 23
-                                    if (memoryContent[4] == 0x24)
-                                    {
-                                        memoryContent[4] = 0x23;
-                                    }
-                                    else
-                                    {
-                                        memoryContent[4] = 0x13;
-                                    }
+                                    memoryContent[4] = 0x13;
                                 }
                             }
-
-                            spp.SetMemoryAtPointer(new IntPtr(pointerLocation.ToInt64() + Mgs2Offset.NoClip.Start), memoryContent);
                         }
+
+                        spp.SetMemoryAtPointer(new IntPtr(pointerLocation.ToInt64() + Mgs2Offset.NoClip.Start), memoryContent);
                     }
                 }
                 catch(Exception e)

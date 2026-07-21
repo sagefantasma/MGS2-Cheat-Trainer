@@ -41,24 +41,34 @@ public partial class CheckboxCheatViewModel : UserControl
     
     private async void CheckboxCheat_OnIsCheckChanged(object? sender, RoutedEventArgs e)
     {
-        GameCheat cheat = Mgs2Cheat.CheatList.Find(x => x.CheatType == Cheat);
-        ToggleCheat($"Attempting to toggle {CheatName}...");
-        IsEnabled = false;
-        //TODO: clean up this spoofed Radio button behavior to be cleaner and work correctly
-        if (Cheat == Constants.Cheat.ZoomIn)
-            ((Parent as StackPanel).Children.First(x =>
-                    (x as CheckboxCheatViewModel).Cheat == Constants.Cheat.ZoomOut) as CheckboxCheatViewModel)
-                .CheatCheckBox
-                .IsChecked = false;
-        if (Cheat == Constants.Cheat.ZoomOut)
-            ((Parent as StackPanel).Children.First(x =>
-                    (x as CheckboxCheatViewModel).Cheat == Constants.Cheat.ZoomIn) as CheckboxCheatViewModel)
-                .CheatCheckBox
-                .IsChecked = false;
-        
-        bool toggleState = (bool)CheatCheckBox.IsChecked;
-        await Task.Run(()=>cheat.CheatAction(toggleState));
-        IsEnabled = true;
-        ToggleCheat($"Finished attempting to toggle {CheatName}. Results not guaranteed.");
+        try
+        {
+            GameCheat cheat = Mgs2Cheat.CheatList.Find(x => x.CheatType == Cheat);
+            ToggleCheat($"Attempting to toggle {CheatName}...");
+            IsEnabled = false;
+
+            //These ifs handle "Radio-button"-like behavior for Zoom In & Zoom Out cheats.
+            if (Cheat == Constants.Cheat.ZoomIn && CheatCheckBox.IsChecked == true)
+                ((Parent as StackPanel)?.Children.First(x =>
+                        (x as CheckboxCheatViewModel)?.Cheat == Constants.Cheat.ZoomOut) as CheckboxCheatViewModel)?
+                    .CheatCheckBox
+                    .IsChecked = false;
+            if (Cheat == Constants.Cheat.ZoomOut && CheatCheckBox.IsChecked == true)
+                ((Parent as StackPanel)?.Children.First(x =>
+                        (x as CheckboxCheatViewModel)?.Cheat == Constants.Cheat.ZoomIn) as CheckboxCheatViewModel)?
+                    .CheatCheckBox
+                    .IsChecked = false;
+
+            bool toggleState = (bool)CheatCheckBox.IsChecked!;
+            await Task.Run(() => cheat.CheatAction(toggleState));
+            IsEnabled = true;
+            ToggleCheat($"Finished attempting to toggle {CheatName}. Results not guaranteed.");
+        }
+        catch (Exception ex)
+        {
+            string errorBrief = $"Failed to toggle {CheatName!}";
+            Logging.Logger?.Error($"{errorBrief}: {ex.Message}");
+            ToggleCheat(errorBrief);
+        }
     }
 }

@@ -51,11 +51,20 @@ public partial class BooleanObjectDetailView : UserControl
 
     public void Enabled_OnClick(object sender, RoutedEventArgs e)
     {
-        if (!_active) return;
-        _object ??= Constants.DetermineObject(Name!);
-        _memoryManager.ToggleObject(_object!, (bool)EnabledCheckBox.IsChecked!);
-        string enableState = EnabledCheckBox.IsChecked == true ? "enabled" : "disabled";
-        ChangeStat($"{_object?.Name} is {enableState}");
+        try
+        {
+            if (!_active) return;
+            _object ??= Constants.DetermineObject(Name!);
+            _memoryManager.ToggleObject(_object!, (bool)EnabledCheckBox.IsChecked!);
+            string enableState = EnabledCheckBox.IsChecked == true ? "enabled" : "disabled";
+            ChangeStat($"{_object?.Name} is {enableState}");
+        }
+        catch (Exception ex)
+        {
+            string errorBrief = $"Failed to enable {Name!}";
+            Logging.Logger?.Error($"{errorBrief}: {ex.Message}");
+            ChangeStat(errorBrief);
+        }
     }
     
     private void ChangeStat(string message)

@@ -72,9 +72,11 @@ public partial class StringTabView : UserControl
             await Task.Run(() => _memoryManager.UpdateGameString(_activeString!, textToSet));
             RequestStatusBarUpdate(null, $"{_activeString!.Tag} updated! You will need to reload the area to see the change");
         }
-        catch
+        catch(Exception ex)
         {
-            RequestStatusBarUpdate(null, "Failed to update string. See debuglog for more info");
+            string errorBrief = $"Failed to update string for {_activeString?.Tag}";
+            Logging.Logger?.Error($"{errorBrief}: {ex.Message}");
+            RequestStatusBarUpdate(null, errorBrief);
         }
     }
 }

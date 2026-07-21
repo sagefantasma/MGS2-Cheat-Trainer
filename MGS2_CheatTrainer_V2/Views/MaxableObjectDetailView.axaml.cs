@@ -50,29 +50,57 @@ namespace MGS2_CheatTrainer_V2.Views
 
         private void EnabledCheckBox_IsCheckedChanged(object sender, RoutedEventArgs e)
         {
-            if (!_active) return;
-            _object ??= Constants.DetermineObject(Name!);
-            _memoryManager.ToggleObject(_object!, (bool)EnabledCheckBox.IsChecked!);
-            string enableState = EnabledCheckBox.IsChecked == true ? "enabled" : "disabled";
-            ChangeStat($"{_object?.Name} is {enableState}");
+            try
+            {
+                if (!_active) return;
+                _object ??= Constants.DetermineObject(Name!);
+                _memoryManager.ToggleObject(_object!, (bool)EnabledCheckBox.IsChecked!);
+                string enableState = EnabledCheckBox.IsChecked == true ? "enabled" : "disabled";
+                ChangeStat($"{_object?.Name} is {enableState}");
+            }
+            catch (Exception ex)
+            {
+                string errorBrief = $"Failed to enable {Name!}";
+                Logging.Logger?.Error($"{errorBrief}: {ex.Message}");
+                ChangeStat(errorBrief);
+            }
         }
 
         private void CurrentBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (EnabledCheckBox.IsChecked == false)
+            try
             {
-                EnabledCheckBox.IsChecked = true;
+                if (EnabledCheckBox.IsChecked == false)
+                {
+                    EnabledCheckBox.IsChecked = true;
+                }
+
+                _object ??= Constants.DetermineObject(Name!);
+                _memoryManager.UpdateObjectBaseValue(_object, (ushort)CurrentUpDown.Value);
+                ChangeStat($"Updated {_object.Name} Current Count to: {CurrentUpDown.Value}");
             }
-            _object ??= Constants.DetermineObject(Name!);
-            _memoryManager.UpdateObjectBaseValue(_object, (ushort)CurrentUpDown.Value);
-            ChangeStat($"Updated {_object.Name} Current Count to: {CurrentUpDown.Value}");
+            catch (Exception ex)
+            {
+                string errorBrief = $"Failed to set current count for {Name!}";
+                Logging.Logger?.Error($"{errorBrief}: {ex.Message}");
+                ChangeStat(errorBrief);
+            }
         }
 
         private void MaxBtn_Click(object sender, RoutedEventArgs e)
         {
-            _object ??= Constants.DetermineObject(Name!);
-            _memoryManager.UpdateObjectMaxValue(_object, (ushort)MaxUpDown.Value);
-            ChangeStat($"Updated {_object.Name} Max Count to: {CurrentUpDown.Value}");
+            try
+            {
+                _object ??= Constants.DetermineObject(Name!);
+                _memoryManager.UpdateObjectMaxValue(_object, (ushort)MaxUpDown.Value);
+                ChangeStat($"Updated {_object.Name} Max Count to: {CurrentUpDown.Value}");
+            }
+            catch (Exception ex)
+            {
+                string errorBrief = $"Failed to set max count for {Name!}";
+                Logging.Logger?.Error($"{errorBrief}: {ex.Message}");
+                ChangeStat(errorBrief);
+            }
         }
         
         private void ChangeStat(string message)

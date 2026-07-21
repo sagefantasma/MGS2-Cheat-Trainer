@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using MGS2_CheatTrainer_V2.Models;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace MGS2_CheatTrainer_V2.Views;
@@ -12,7 +13,7 @@ public partial class SingleStatBox : UserControl
 {
     private readonly Mgs2MemoryManager _memoryManager;
 
-    internal Mgs2MemoryManager.GameStats.ModifiableStats Stat { get; set; }
+    internal GameStats.ModifiableStats Stat { get; set; }
     public event EventHandler<bool>? StatFrozen;
     public event EventHandler<string>? StatChanged;
     
@@ -51,8 +52,17 @@ public partial class SingleStatBox : UserControl
 
     private void SetButton_OnClick(object? sender, RoutedEventArgs e)
     {
-        _memoryManager.ChangeGameStat(Stat, short.Parse(ValueTextBox.Text!));
-        ChangeStat($"{Stat} updated to: {ValueTextBox.Text}");
+        try
+        {
+            _memoryManager.ChangeGameStat(Stat, short.Parse(ValueTextBox.Text!));
+            ChangeStat($"{Stat} updated to: {ValueTextBox.Text}");
+        }
+        catch (Exception ex)
+        {
+            string errorBrief = $"Failed to modify {Stat}";
+            Logging.Logger?.Error($"{errorBrief}: {ex.Message}");
+            ChangeStat(errorBrief);
+        }
     }
 
     private void ValueTextBox_OnGetFocus(object? sender, FocusChangedEventArgs e)

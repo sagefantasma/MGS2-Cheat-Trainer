@@ -7,6 +7,9 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Base;
+using MsBox.Avalonia.Enums;
 
 namespace MGS2_CheatTrainer_V2.Views;
 
@@ -30,14 +33,15 @@ public partial class MainWindow : Window
         InitializeComponent();
         Logging.StartLogger();
         Mgs2Monitor.EnableMonitor(new CancellationToken());
-        Mgs2Monitor.GameHooked += OnGameHooked;
+        Mgs2Monitor.OnGameHooked += OnGameHooked;
+        Mgs2Monitor.OnInvalidVersionDetected += OnInvalidVersionDetected;
         ItemsTabView.UpdateStatusBar += OnUpdateStatusBar;
         WeaponsTabView.UpdateStatusBar += OnUpdateStatusBar;
         StatsTabView.UpdateStatusBar += OnUpdateStatusBar;
         StringTabView.UpdateStatusBar += OnUpdateStatusBar;
         BossesTabView.UpdateStatusBar += OnUpdateStatusBar;
         CheatsTabView.UpdateStatusBar += OnUpdateStatusBar;
-        this.Closed+=(_,_)=>Mgs2Monitor.GameHooked -= OnGameHooked; //TODO: Necessary?
+        this.Closed+=(_,_)=>Mgs2Monitor.OnGameHooked -= OnGameHooked; //TODO: Necessary?
     }
 
     private void OnUpdateStatusBar(object? sender, string msg)
@@ -47,6 +51,18 @@ public partial class MainWindow : Window
             StatusLabel.Text = msg;
             //await Task.Delay(2000);
             //StatusLabel.Text = "Ready";
+        });
+    }
+
+    private void OnInvalidVersionDetected(object? sender, string msg)
+    {
+        Dispatcher.UIThread.Post(() =>
+        {
+            IMsBox<ButtonResult> msgBox = MessageBoxManager.GetMessageBoxStandard(
+                "Incompatible game version detected!",
+                msg,
+                ButtonEnum.Ok);
+            msgBox.ShowAsync();
         });
     }
 

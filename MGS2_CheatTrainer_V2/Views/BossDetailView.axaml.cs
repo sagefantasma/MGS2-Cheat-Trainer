@@ -110,9 +110,10 @@ public partial class BossDetailView : UserControl
                 }
             });
         }
-        catch
+        catch(Exception e)
         {
-            //TODO: add logging
+            string errorBrief = $"Failed to get vitals for {Boss}";
+            Logging.Logger?.Error($"{errorBrief}: {e.Message}");
         }
     }
 
@@ -131,7 +132,8 @@ public partial class BossDetailView : UserControl
             }
             catch (Exception ex)
             {
-                //TODO: log and update status bar
+                string errorBrief = $"Failed to change HP for {Boss}";
+                Logging.Logger?.Error($"{errorBrief}: {ex.Message}");
             }
         }
     }
@@ -151,7 +153,8 @@ public partial class BossDetailView : UserControl
             }
             catch (Exception ex)
             {
-                //TODO: log and update status bar
+                string errorBrief = $"Failed to change Stamina for {Boss}";
+                Logging.Logger?.Error($"{errorBrief}: {ex.Message}");
             }
         }
     }

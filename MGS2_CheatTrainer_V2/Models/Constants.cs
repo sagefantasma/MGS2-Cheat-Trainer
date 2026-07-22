@@ -6,12 +6,12 @@ namespace MGS2_CheatTrainer_V2.Models
     public static class Constants
     {
         //REWRITE STATUS: Done?
-        public const string MGS2_PROCESS_NAME = "METAL GEAR SOLID2";
-        internal const string STEAM_APP_ID = "2131640";
-        internal const string STEAM_APP_ID_FILE_NAME = "steam_appid.txt";
-        public const int MILLISECONDS_IN_SECOND = 1000;
-        internal const int ITEM_MIN_MAX_COUNT_DIFF = 96;
-        internal const int WEAPON_MIN_MAX_COUNT_DIFF = 72;
+        public const string Mgs2ProcessName = "METAL GEAR SOLID2";
+        internal const string SteamAppId = "2131640";
+        internal const string SteamAppIdFileName = "steam_appid.txt";
+        public const int MillisecondsInSecond = 1000;
+        private const int ItemMinMaxCountDiff = 96;
+        private const int WeaponMinMaxCountDiff = 72;
 
         public enum PlayableCharacter
         {
@@ -67,7 +67,7 @@ namespace MGS2_CheatTrainer_V2.Models
 
         public class MaxableItem(string name, string shorthand, int index) : Item(name, shorthand, index)
         {
-            public int MaxIndex { get; set; } = index + ITEM_MIN_MAX_COUNT_DIFF;
+            public int MaxIndex { get; set; } = index + ItemMinMaxCountDiff;
         }
 
         public class BooleanItem(string name, string shorthand, int index) : Item(name, shorthand, index)
@@ -83,14 +83,14 @@ namespace MGS2_CheatTrainer_V2.Models
         
         public class MaxableWeapon(string name, string shorthand, int index) : Weapon(name, shorthand, index)
         {
-            public int MaxIndex { get; set; } = index + WEAPON_MIN_MAX_COUNT_DIFF;
+            public int MaxIndex { get; set; } = index + WeaponMinMaxCountDiff;
         }
 
         public class BooleanWeapon(string name, string shorthand, int index) : Weapon(name, shorthand, index)
         {
         }
 
-        public static IMgs2Object? DetermineObject(string input)
+        public static IMgs2Object DetermineObject(string input)
         {
             try
             {
@@ -101,7 +101,7 @@ namespace MGS2_CheatTrainer_V2.Models
             }
             catch (Exception ex)
             {
-                throw new NullReferenceException($"{input} is an unknown object");
+                throw new AggregateException($"{input} is an unknown object", ex);
             }
         }
 

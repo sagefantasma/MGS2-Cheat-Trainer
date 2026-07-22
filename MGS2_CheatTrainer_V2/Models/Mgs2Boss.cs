@@ -5,8 +5,8 @@ namespace MGS2_CheatTrainer_V2.Models
 {
     public class BossVitals
     {
-        public List<int> NestedHealthPointers;
-        public List<int> NestedStaminaPointers;
+        public List<int>? NestedHealthPointers;
+        public List<int>? NestedStaminaPointers;
         public int HealthOffset;
         public int Health;
         public bool HasStamina;

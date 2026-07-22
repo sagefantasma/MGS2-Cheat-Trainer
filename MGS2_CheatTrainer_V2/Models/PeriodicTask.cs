@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace MGS2_CheatTrainer_V2.Models
 {
-    public class PeriodicTask
+    public static class PeriodicTask
     { 
         public static async Task Run(Action action, TimeSpan period, CancellationToken cancellationToken)
         {

@@ -24,28 +24,27 @@ namespace MGS2_CheatTrainer_V2.Models
 
     internal class Rank
     {
-        public static Rank CurrentlyProjectedRank(GameStats currentStats, Difficulty currentDifficulty, GameType gameType)
+        public static Rank? CurrentlyProjectedRank(GameStats currentStats, Difficulty currentDifficulty, GameType gameType)
         {
-            Rank projectedRank = null;
+            Rank? projectedRank = null;
             if (gameType != GameType.TankerPlant) //for now i'm only worrying about TankerPlant shared ranks on different difficulties
                 return projectedRank;
-
-            projectedRank = new Rank();
+            
             switch(currentDifficulty)
             {
                 case Difficulty.EuropeanExtreme:
                 case Difficulty.Extreme:
-                    projectedRank = Mgs2ExtremeRanks.FirstOrDefault(rank => rank.AreStatsWithinRankRequirements(currentStats) == true);
+                    projectedRank = Mgs2ExtremeRanks.FirstOrDefault(rank => rank.AreStatsWithinRankRequirements(currentStats));
                     break;
                 case Difficulty.Hard:
-                    projectedRank = Mgs2HardRanks.FirstOrDefault(rank => rank.AreStatsWithinRankRequirements(currentStats) == true);
+                    projectedRank = Mgs2HardRanks.FirstOrDefault(rank => rank.AreStatsWithinRankRequirements(currentStats));
                     break;
                 case Difficulty.Normal:
-                    projectedRank = Mgs2NormalRanks.FirstOrDefault(rank => rank.AreStatsWithinRankRequirements(currentStats) == true);
+                    projectedRank = Mgs2NormalRanks.FirstOrDefault(rank => rank.AreStatsWithinRankRequirements(currentStats));
                     break;
                 case Difficulty.Easy:
                 case Difficulty.VeryEasy:
-                    projectedRank = Mgs2EasyRanks.FirstOrDefault(rank => rank.AreStatsWithinRankRequirements(currentStats) == true);
+                    projectedRank = Mgs2EasyRanks.FirstOrDefault(rank => rank.AreStatsWithinRankRequirements(currentStats));
                     break;
             }
 
@@ -56,19 +55,18 @@ namespace MGS2_CheatTrainer_V2.Models
         {
             foreach(FieldInfo member in typeof(GameStats).GetFields())
             {
-                var test = member.FieldType;
                 if(member.FieldType == typeof(short))
                 {
-                    if ((short)member.GetValue(stats) < (short)member.GetValue(MinimumStats))
+                    if ((short)member.GetValue(stats)! < (short)member.GetValue(MinimumStats)!)
                         return false;
-                    if ((short)member.GetValue(stats) > (short)member.GetValue(MaximumStats))
+                    if ((short)member.GetValue(stats)! > (short)member.GetValue(MaximumStats)!)
                         return false;
                 }
                 else if(member.FieldType == typeof(int))
                 {
-                    if ((int)member.GetValue(stats) < (int)member.GetValue(MinimumStats))
+                    if ((int)member.GetValue(stats)! < (int)member.GetValue(MinimumStats)!)
                         return false;
-                    if ((int)member.GetValue(stats) > (int)member.GetValue(MaximumStats))
+                    if ((int)member.GetValue(stats)! > (int)member.GetValue(MaximumStats)!)
                         return false;
                 }
                 
@@ -77,16 +75,23 @@ namespace MGS2_CheatTrainer_V2.Models
             return true;
         }
 
-        public string Name { get; set; }
-        public GameStats MinimumStats { get; set; }
-        public GameStats MaximumStats { get; set; }
+        public string? Name { get; set; }
+        public required GameStats MinimumStats { get; set; }
+        public required GameStats MaximumStats { get; set; }
 
         //taken from: https://metalgear.fandom.com/wiki/Codename_(gameplay)#Requirements -- not the best source, but it'll do.
-        public static List<Rank> Mgs2ExtremeRanks = new List<Rank> { RankRequirements.BigBoss, RankRequirements.FoxExtreme, RankRequirements.DobermanExtreme, RankRequirements.HoundExtreme };
-        public static List<Rank> Mgs2HardRanks = new List<Rank> { RankRequirements.FoxHard, RankRequirements.DobermanHard, RankRequirements.HoundHard };
-        public static List<Rank> Mgs2NormalRanks = new List<Rank> { RankRequirements.DobermanNormal, RankRequirements.HoundNormal };
-        public static List<Rank> Mgs2EasyRanks = new List<Rank> { RankRequirements.HoundEasy };
-        public static List<Rank> Mgs2DifficultyAgnosticRanks = new List<Rank>(); //in case we ever decide to implement more
+        private static readonly List<Rank> Mgs2ExtremeRanks =
+        [
+            RankRequirements.BigBoss, RankRequirements.FoxExtreme, RankRequirements.DobermanExtreme,
+            RankRequirements.HoundExtreme
+        ];
+        private static readonly List<Rank> Mgs2HardRanks =
+            [RankRequirements.FoxHard, RankRequirements.DobermanHard, RankRequirements.HoundHard];
+
+        private static readonly List<Rank> Mgs2NormalRanks =
+            [RankRequirements.DobermanNormal, RankRequirements.HoundNormal];
+        private static readonly List<Rank> Mgs2EasyRanks = [RankRequirements.HoundEasy];
+        private static readonly List<Rank> Mgs2DifficultyAgnosticRanks = []; //in case we ever decide to implement more
     }
 
     struct RankRequirements

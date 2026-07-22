@@ -125,14 +125,14 @@ namespace MGS2_CheatTrainer_V2
                                 }
                             }
 
-                            Thread.Sleep(60 * Constants.MILLISECONDS_IN_SECOND);
+                            Thread.Sleep(60 * Constants.MillisecondsInSecond);
                         }
                         else
                         {
                             // Bug fix: only clear if we previously had a process
                             if (Mgs2Process != null)
                                 Mgs2Process = null;
-                            Thread.Sleep(10 * Constants.MILLISECONDS_IN_SECOND);
+                            Thread.Sleep(10 * Constants.MillisecondsInSecond);
                         }
                     }
                 }

@@ -1,9 +1,7 @@
 using System;
 using System.Threading.Tasks;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using MGS2_CheatTrainer_V2.Models;
 using Microsoft.Extensions.DependencyInjection;
 

@@ -12,7 +12,7 @@ namespace MGS2_CheatTrainer_V2.Views
         //TODO: is it better to have two separate textboxes for current/max, or just one textbox and two buttons like the MGS3 trainer?
         private Constants.IMgs2Object? _object;
         private readonly Mgs2MemoryManager _memoryManager;
-        private bool _active = false;
+        private bool _active;
         public event EventHandler<string>? ValueChanged;
 
         public IImage? EntityImage
@@ -76,7 +76,7 @@ namespace MGS2_CheatTrainer_V2.Views
                 }
 
                 _object ??= Constants.DetermineObject(Name!);
-                _memoryManager.UpdateObjectBaseValue(_object, (ushort)CurrentUpDown.Value);
+                _memoryManager.UpdateObjectBaseValue(_object, (ushort)CurrentUpDown.Value!);
                 ChangeStat($"Updated {_object.Name} Current Count to: {CurrentUpDown.Value}");
             }
             catch (Exception ex)
@@ -92,7 +92,7 @@ namespace MGS2_CheatTrainer_V2.Views
             try
             {
                 _object ??= Constants.DetermineObject(Name!);
-                _memoryManager.UpdateObjectMaxValue(_object, (ushort)MaxUpDown.Value);
+                _memoryManager.UpdateObjectMaxValue(_object, (ushort)MaxUpDown.Value!);
                 ChangeStat($"Updated {_object.Name} Max Count to: {CurrentUpDown.Value}");
             }
             catch (Exception ex)

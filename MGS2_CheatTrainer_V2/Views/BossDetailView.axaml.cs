@@ -1,11 +1,8 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Input;
-using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Threading;
 using MGS2_CheatTrainer_V2.Models;
@@ -17,6 +14,7 @@ public partial class BossDetailView : UserControl
 {
     private readonly Mgs2MemoryManager _memoryManager;
     private CancellationTokenSource? _cts;
+    private bool _inFight;
 
     public required Constants.Boss Boss
     {
@@ -60,8 +58,6 @@ public partial class BossDetailView : UserControl
             IsEnabled = value;
         }
     }
-
-    private bool _inFight = false;
     
     public BossDetailView()
     {

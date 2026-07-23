@@ -1,10 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using MsBox.Avalonia;
@@ -41,7 +37,7 @@ public partial class MainWindow : Window
         StringTabView.UpdateStatusBar += OnUpdateStatusBar;
         BossesTabView.UpdateStatusBar += OnUpdateStatusBar;
         CheatsTabView.UpdateStatusBar += OnUpdateStatusBar;
-        this.Closed+=(_,_)=>Mgs2Monitor.OnGameHooked -= OnGameHooked; //TODO: Necessary?
+        Closed+=(_,_)=>Mgs2Monitor.OnGameHooked -= OnGameHooked; //TODO: Necessary?
     }
 
     private void OnUpdateStatusBar(object? sender, string msg)
@@ -60,8 +56,7 @@ public partial class MainWindow : Window
         {
             IMsBox<ButtonResult> msgBox = MessageBoxManager.GetMessageBoxStandard(
                 "Incompatible game version detected!",
-                msg,
-                ButtonEnum.Ok);
+                msg);
             msgBox.ShowAsync();
         });
     }
@@ -106,22 +101,22 @@ public partial class MainWindow : Window
 
     private void ViewLogsMenuItem_Click(object? sender, RoutedEventArgs e)
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
     private void OpenInstallLocationMenuItem_Click(object? sender, RoutedEventArgs e)
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
     private void GithubMenuItem_Click(object? sender, RoutedEventArgs e)
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
     private void JoinDiscordMenuItem_Click(object? sender, RoutedEventArgs e)
     {
-        throw new System.NotImplementedException();
+        throw new NotImplementedException();
     }
 
     private void Mgs2TabControl_SelectionChanged(object? sender, SelectionChangedEventArgs e)

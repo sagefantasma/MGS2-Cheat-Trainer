@@ -1,10 +1,8 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using MGS2_CheatTrainer_V2.Models;
 
 namespace MGS2_CheatTrainer_V2.Views;
@@ -66,7 +64,7 @@ public partial class CheckboxCheatViewModel : UserControl
         }
         catch (Exception ex)
         {
-            string errorBrief = $"Failed to toggle {CheatName!}";
+            string errorBrief = $"Failed to toggle {CheatName}";
             Logging.Logger?.Error($"{errorBrief}: {ex.Message}");
             ToggleCheat(errorBrief);
         }

@@ -1,11 +1,9 @@
 ﻿using System;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using MGS2_CheatTrainer_V2.Models;
 using Microsoft.Extensions.DependencyInjection;
-using Serilog.Events;
 
 namespace MGS2_CheatTrainer_V2.Views;
 
@@ -13,7 +11,7 @@ public partial class BooleanObjectDetailView : UserControl
 {
     private Constants.IMgs2Object? _object;
     private readonly Mgs2MemoryManager _memoryManager;
-    private bool _active = false;
+    private bool _active;
     public event EventHandler<string>? ValueChanged;
     
     public IImage? EntityImage

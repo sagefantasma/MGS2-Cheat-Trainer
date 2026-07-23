@@ -1,11 +1,9 @@
 ﻿using System;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using MGS2_CheatTrainer_V2.Models;
 using Microsoft.Extensions.DependencyInjection;
-using Serilog.Events;
 
 namespace MGS2_CheatTrainer_V2.Views;
 
@@ -13,7 +11,7 @@ public partial class SpecialObjectDetailView : UserControl
 {
     private Constants.IMgs2Object? _object;
     private readonly Mgs2MemoryManager _memoryManager;
-    private bool _active = false;
+    private bool _active;
     public event EventHandler<string>? ValueChanged;
     
     public IImage? EntityImage
@@ -88,7 +86,7 @@ public partial class SpecialObjectDetailView : UserControl
             EnabledCheckBox.IsChecked = true;
         }
         _object ??= Constants.DetermineObject(Name!);
-        _memoryManager.UpdateObjectBaseValue(_object!, (ushort)CurrentUpDown.Value);
+        _memoryManager.UpdateObjectBaseValue(_object!, (ushort)CurrentUpDown.Value!);
         ChangeStat($"Updated {_object.Name} {ValueName} to: {CurrentUpDown.Value}");
     }
 }

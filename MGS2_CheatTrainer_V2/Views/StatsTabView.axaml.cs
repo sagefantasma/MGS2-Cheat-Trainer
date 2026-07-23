@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.DependencyInjection;
 using Avalonia.Threading;
 using MGS2_CheatTrainer_V2.Models;
@@ -106,14 +104,14 @@ public partial class StatsTabView : UserControl
         try
         {
             Stage currentStage = _memoryManager.GetStage(); //Always found, or error is thrown.
-            if (currentStage?.Name != _lastKnownStage?.Name)
+            if (currentStage.Name != _lastKnownStage?.Name)
             {
                 //Logger.Debug($"User is now in stage: {currentStage}");
-                _lastKnownStage = currentStage!;
+                _lastKnownStage = currentStage;
             }
 
             //if we're in a main menu, we shouldn't try to find stats right now.
-            if (!StageNames.MenuStages.StageList.Contains(currentStage!))
+            if (!StageNames.MenuStages.StageList.Contains(currentStage))
             {
                 GameStats currentGameStats = _memoryManager.ReadGameStats();
                 Difficulty currentDifficulty = Mgs2MemoryManager.ReadCurrentDifficulty(); //TODO: update this

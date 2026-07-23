@@ -1,9 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 using MGS2_CheatTrainer_V2.Models;
 using Avalonia.Threading;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,7 +29,7 @@ public partial class BossesTabView : UserControl
     
     private static void RequestStatusBarUpdate(object? obj, string message)
     {
-        UpdateStatusBar?.Invoke(null, message);
+        UpdateStatusBar?.Invoke(obj, message);
     }
     
     private void OnTabEntered(object? sender, Tab activated)

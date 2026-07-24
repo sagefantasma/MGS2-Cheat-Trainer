@@ -15,5 +15,14 @@ public partial class ItemTabView : UserControl
     public ItemTabView()
     {
         InitializeComponent();
+        MainWindow.TabActivated += OnTabActivated;
+    }
+
+    private void OnTabActivated(object? sender, Tab e)
+    {
+        if (e == Tab.Items)
+        {
+            Logging.Logger?.Information("Items tab activated...");
+        }
     }
 }

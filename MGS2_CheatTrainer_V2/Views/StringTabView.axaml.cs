@@ -11,7 +11,6 @@ public partial class StringTabView : UserControl
 {
     private readonly Mgs2MemoryManager _memoryManager;
     private Mgs2Strings.Mgs2String? _activeString;
-    private bool stringsLoaded = false;
     public static event EventHandler<string>? UpdateStatusBar;
     
     public StringTabView()
@@ -34,6 +33,7 @@ public partial class StringTabView : UserControl
     {
         if (activated == Tab.Strings)
         {
+            Logging.Logger?.Information("User entered Strings tab");
             //This *works*, but it is terribly slow(on Linux) because we're doing AoB scans for each.
             //Little gain from doing this, so scrapping it instead. Neat idea though.
             /*if (!stringsLoaded)
@@ -65,6 +65,7 @@ public partial class StringTabView : UserControl
     {
         try
         {
+            Logging.Logger?.Information($"Attempting to change {_activeString?.Tag}...");
             string textToSet = InputTextBox.Text!;
             RequestStatusBarUpdate(null, $"Attempting to set {_activeString!.Tag} string to {textToSet}...");
             await Task.Run(() => _memoryManager.UpdateGameString(_activeString!, textToSet));

@@ -5,7 +5,7 @@ namespace MGS2_CheatTrainer_V2.Models.PlayableCharacters
 {
     internal abstract class Snake : PlayableCharacter
     {
-        public new static readonly List<Constants.IMgs2Object> UsableObjects =
+        public static readonly List<Constants.IMgs2Object> UsableObjects =
         [
             Constants.ItemList.First(x => "aksupp".Equals(x.Shorthand)),
             Constants.ItemList.First(x => "apsensor".Equals(x.Shorthand)),

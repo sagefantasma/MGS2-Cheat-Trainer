@@ -70,6 +70,7 @@ public partial class BossDetailView : UserControl
     {
         if (activeBoss == Boss)
         {
+            Logging.Logger?.Information($"{Boss} fight detected!");
             if (!_inFight)
             {
                 _inFight = true;
@@ -81,8 +82,11 @@ public partial class BossDetailView : UserControl
         }
         else
         {
-            _cts?.Cancel();
             _inFight = false;
+            if (_cts == null) return;
+            Logging.Logger?.Information($"{Boss} fight no longer detected, ending their GetVitals thread.");
+            _cts.Cancel();
+            
         }
     }
 

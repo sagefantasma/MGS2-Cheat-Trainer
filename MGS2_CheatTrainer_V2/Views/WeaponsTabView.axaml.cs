@@ -15,6 +15,14 @@ public partial class WeaponsTabView : UserControl
     public WeaponsTabView()
     {
         InitializeComponent();
+        MainWindow.TabActivated += OnTabActivated;
     }
     
+    private void OnTabActivated(object? sender, Tab e)
+    {
+        if (e == Tab.Weapons)
+        {
+            Logging.Logger?.Information("Weapons tab activated...");
+        }
+    }
 }

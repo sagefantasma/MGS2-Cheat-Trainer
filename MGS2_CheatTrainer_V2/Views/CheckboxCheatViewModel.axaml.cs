@@ -42,6 +42,7 @@ public partial class CheckboxCheatViewModel : UserControl
         try
         {
             GameCheat cheat = Mgs2Cheat.CheatList.Find(x => x.CheatType == Cheat);
+            Logging.Logger?.Information($"Attempting to toggle {CheatName}");
             ToggleCheat($"Attempting to toggle {CheatName}...");
             IsEnabled = false;
 
@@ -60,6 +61,7 @@ public partial class CheckboxCheatViewModel : UserControl
             bool toggleState = (bool)CheatCheckBox.IsChecked!;
             await Task.Run(() => cheat.CheatAction(toggleState));
             IsEnabled = true;
+            Logging.Logger?.Information($"{CheatName} 'successfully' toggled.");
             ToggleCheat($"Finished attempting to toggle {CheatName}. Results not guaranteed.");
         }
         catch (Exception ex)

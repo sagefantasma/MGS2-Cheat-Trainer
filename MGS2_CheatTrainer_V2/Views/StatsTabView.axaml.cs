@@ -63,13 +63,16 @@ public partial class StatsTabView : UserControl
     {
         if (activated == Tab.Stats)
         {
+            Logging.Logger?.Information("Stats tab opened, beginning stats monitoring...");
             _cts = new CancellationTokenSource();
             CancellationToken cancellationToken = _cts.Token;
             Task.Run(() => PeriodicTask.Run(UpdateScoringStats, TimeSpan.FromSeconds(1), cancellationToken), cancellationToken);
         }
         else
         {
-            _cts?.Cancel();
+            if (_cts == null) return;
+            Logging.Logger?.Information("Leaving stats tab, ending stats monitoring...");
+            _cts.Cancel();
         }
     }
 
@@ -119,14 +122,9 @@ public partial class StatsTabView : UserControl
                 UpdateGameStats(currentGameStats, currentDifficulty);
             }
         }
-        catch (Exception e)
+        catch
         {
-            if (Mgs2Monitor.Mgs2Process != null)
-            {
-                //TODO: log dog
-                //only write to log when we are actually in a game, and should have some stats to grab
-                //Logger.Error($"Failed to update scoring stats! Error encountered: {e}");
-            }
+            UpdateStatusBar?.Invoke(null, "Unable to update game stats!");
         }
     }
 }

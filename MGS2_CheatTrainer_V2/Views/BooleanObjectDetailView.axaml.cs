@@ -53,8 +53,9 @@ public partial class BooleanObjectDetailView : UserControl
         {
             if (!_active) return;
             _object ??= Constants.DetermineObject(Name!);
-            _memoryManager.ToggleObject(_object!, (bool)EnabledCheckBox.IsChecked!);
             string enableState = EnabledCheckBox.IsChecked == true ? "enabled" : "disabled";
+            Logging.Logger?.Information($"Attempting to set {_object.Name} {enableState}...");
+            _memoryManager.ToggleObject(_object!, (bool)EnabledCheckBox.IsChecked!);
             ChangeStat($"{_object?.Name} is {enableState}");
         }
         catch (Exception ex)

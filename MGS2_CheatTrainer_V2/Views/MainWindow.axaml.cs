@@ -1,4 +1,6 @@
 using System;
+using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -23,11 +25,21 @@ public partial class MainWindow : Window
 {
     public static event EventHandler<Tab>? TabActivated;
     
-    
     public MainWindow()
     {
         InitializeComponent();
-        Logging.StartLogger();
+        Title = $"{Title} - v{Program.AppVersion}";
+        try
+        {
+            Logging.StartLogger();
+        }
+        catch
+        {
+            IMsBox<ButtonResult> msgBox = MessageBoxManager.GetMessageBoxStandard(
+                "Logging initialization failed!",
+                $"We tried to start a debuglog, but something went wrong. Is {Logging.LogLocation} a valid directory on your PC?");
+            msgBox.ShowAsync();
+        }
         Mgs2Monitor.EnableMonitor(new CancellationToken());
         Mgs2Monitor.OnGameHooked += OnGameHooked;
         Mgs2Monitor.OnInvalidVersionDetected += OnInvalidVersionDetected;
@@ -52,6 +64,7 @@ public partial class MainWindow : Window
 
     private void OnInvalidVersionDetected(object? sender, string msg)
     {
+        Logging.Logger?.Error($"Incompatible game version detected: {msg}");
         Dispatcher.UIThread.Post(() =>
         {
             IMsBox<ButtonResult> msgBox = MessageBoxManager.GetMessageBoxStandard(
@@ -101,22 +114,38 @@ public partial class MainWindow : Window
 
     private void ViewLogsMenuItem_Click(object? sender, RoutedEventArgs e)
     {
-        throw new NotImplementedException();
+        OpenUrl(Logging.LogLocation!);
     }
 
     private void OpenInstallLocationMenuItem_Click(object? sender, RoutedEventArgs e)
     {
-        throw new NotImplementedException();
+        OpenUrl(AppDomain.CurrentDomain.BaseDirectory);
     }
 
     private void GithubMenuItem_Click(object? sender, RoutedEventArgs e)
     {
-        throw new NotImplementedException();
+        OpenUrl("https://github.com/sagefantasma/MGS2-Cheat-Trainer/");
     }
 
     private void JoinDiscordMenuItem_Click(object? sender, RoutedEventArgs e)
     {
-        throw new NotImplementedException();
+        OpenUrl("https://discord.gg/XUh58VfqDu");
+    }
+
+    private void OpenUrl(string url)
+    {
+        try
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = url,
+                UseShellExecute = true
+            });
+        }
+        catch
+        {
+            OnUpdateStatusBar(null, $"Unable to open link, you can use this link instead: {url}");
+        }
     }
 
     private void Mgs2TabControl_SelectionChanged(object? sender, SelectionChangedEventArgs e)

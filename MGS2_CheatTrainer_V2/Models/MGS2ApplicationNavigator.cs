@@ -37,7 +37,7 @@ namespace MGS2_CheatTrainer_V2.Models
         internal static int CurrentAmmo = 0x01540C20; //2.0.1 - 0x01540C20 ... 2.0.2 - 0x0153FC10
         internal static int PlayerPointer = 0x00949340; //2.0.1 - 0x00949340 ... 2.0.2 - 0x00948340
         internal static List<int> OlgaNestedPointers = new List<int> { 0x017DF660, 0x0, 0x298 }; //fixed 2.0.2 (0x01550EE0, 0x2C0) -- fixed 2.1.0 [+1030, 40]
-        internal static List<int> FortuneNestedPointers = null;
+        internal static List<int>? FortuneNestedPointers = null;
         internal static List<int> FatmanNestedPointers = new List<int> { 0x017DF660, 0x0, 0xE0 }; //fixed 2.0.2 (0x1550F00, 0x10) -- fixed 2.1.0 [+1010, 0]
         internal static List<int> HarrierNestedPointers = new List<int> { 0x1551F18, 0x120 }; //fixed 2.0.2 -- fixed 2.1.0 but will still crash
         internal static List<int> VampNestedPointers = new List<int> { 0x1551F18, 0x8 }; //fixed 2.0.2 -- fixed 2.1.0
@@ -242,10 +242,8 @@ namespace MGS2_CheatTrainer_V2.Models
 
         internal class GuardAnimation
         {
-            public string Name { get; set; }
-            public byte[] Bytes { get; set; }
-
-            public GuardAnimation() { }
+            public required string Name { get; set; }
+            public required byte[] Bytes { get; set; }
         }
         #endregion
 

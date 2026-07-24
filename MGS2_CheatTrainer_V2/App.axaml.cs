@@ -39,8 +39,10 @@ public partial class App : Application
 
             desktop.Exit += (_, _) =>
             {
-                Mgs2MemoryManager memoryManager = _services.GetService<Mgs2MemoryManager>();
-                memoryManager?.Dispose();
+                if (_services != null)
+                {
+                    _services.GetService<Mgs2MemoryManager>()?.Dispose();
+                }
             };
         }
 

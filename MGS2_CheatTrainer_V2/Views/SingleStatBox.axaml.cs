@@ -52,6 +52,7 @@ public partial class SingleStatBox : UserControl
     {
         try
         {
+            Logging.Logger?.Information($"Attempting to set {Stat} to {ValueTextBox.Text}");
             _memoryManager.ChangeGameStat(Stat, short.Parse(ValueTextBox.Text!));
             ChangeStat($"{Stat} updated to: {ValueTextBox.Text}");
         }

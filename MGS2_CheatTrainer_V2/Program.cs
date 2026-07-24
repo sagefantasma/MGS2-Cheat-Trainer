@@ -6,8 +6,7 @@ namespace MGS2_CheatTrainer_V2;
 
 sealed class Program
 {
-    public static string AppVersion { get; set; }
-    public static string InstanceId { get; set; }
+    public static string AppVersion { get; } = "3.0.0";
 
     // Initialization code. Don't use any Avalonia, third-party APIs or any
     // SynchronizationContext-reliant code before AppMain is called: things aren't initialized

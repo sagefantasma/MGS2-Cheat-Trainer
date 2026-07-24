@@ -36,13 +36,16 @@ public partial class BossesTabView : UserControl
     {
         if (activated == Tab.Bosses)
         {
+            Logging.Logger?.Information("Bosses tab activated, beginning to monitor for boss fights...");
             _cts = new CancellationTokenSource();
             CancellationToken cancellationToken = _cts.Token;
             Task.Run(() => PeriodicTask.Run(CheckForBosses, TimeSpan.FromSeconds(1), cancellationToken), cancellationToken);
         }
         else
         {
-            _cts?.Cancel();
+            if (_cts == null) return;
+            Logging.Logger?.Information("Left bosses tab, deactivating boss fights monitor...");
+            _cts.Cancel();
         }
     }
 
@@ -172,7 +175,7 @@ public partial class BossesTabView : UserControl
                     SolidusDetailView.IsActive = false;
                 }
             }
-            catch (Exception e)
+            catch
             {
                 RequestStatusBarUpdate(null, "Not currently in-game, not looking for bosses...");
                 OlgaDetailView.IsActive = false;
@@ -183,7 +186,6 @@ public partial class BossesTabView : UserControl
                 Vamp2DetailView.IsActive = false;
                 RaysDetailView.IsActive = false;
                 SolidusDetailView.IsActive = false;
-                //TODO: do smart things here.
             }
         });
     }

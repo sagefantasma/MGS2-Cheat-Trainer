@@ -54,8 +54,9 @@ namespace MGS2_CheatTrainer_V2.Views
             {
                 if (!_active) return;
                 _object ??= Constants.DetermineObject(Name!);
-                _memoryManager.ToggleObject(_object!, (bool)EnabledCheckBox.IsChecked!);
                 string enableState = EnabledCheckBox.IsChecked == true ? "enabled" : "disabled";
+                Logging.Logger?.Information($"Attempting to set {_object.Name} {enableState}...");
+                _memoryManager.ToggleObject(_object!, (bool)EnabledCheckBox.IsChecked!);
                 ChangeStat($"{_object?.Name} is {enableState}");
             }
             catch (Exception ex)
@@ -76,6 +77,7 @@ namespace MGS2_CheatTrainer_V2.Views
                 }
 
                 _object ??= Constants.DetermineObject(Name!);
+                Logging.Logger?.Information($"Attempting to set {_object.Name} current value to {CurrentUpDown.Value}...");
                 _memoryManager.UpdateObjectBaseValue(_object, (ushort)CurrentUpDown.Value!);
                 ChangeStat($"Updated {_object.Name} Current Count to: {CurrentUpDown.Value}");
             }
@@ -92,6 +94,7 @@ namespace MGS2_CheatTrainer_V2.Views
             try
             {
                 _object ??= Constants.DetermineObject(Name!);
+                Logging.Logger?.Information($"Attempting to set {_object.Name} max value to {CurrentUpDown.Value}...");
                 _memoryManager.UpdateObjectMaxValue(_object, (ushort)MaxUpDown.Value!);
                 ChangeStat($"Updated {_object.Name} Max Count to: {CurrentUpDown.Value}");
             }

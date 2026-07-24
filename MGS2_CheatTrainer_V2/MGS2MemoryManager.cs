@@ -999,10 +999,13 @@ namespace MGS2_CheatTrainer_V2
             {
                 if (updatedVitals.Boss != Constants.Boss.Fortune)
                 {
-                    SetDataInNestedPointers(updatedVitals.NestedHealthPointers, updatedVitals.HealthOffset, BitConverter.GetBytes(updatedVitals.Health));
-                    if (updatedVitals.HasStamina)
+                    if (updatedVitals.NestedHealthPointers != null)
+                        SetDataInNestedPointers(updatedVitals.NestedHealthPointers, updatedVitals.HealthOffset,
+                            BitConverter.GetBytes(updatedVitals.Health));
+                    if (updatedVitals.HasStamina && updatedVitals.NestedStaminaPointers != null)
                     {
-                        SetDataInNestedPointers(updatedVitals.NestedStaminaPointers, updatedVitals.StaminaOffset, BitConverter.GetBytes(updatedVitals.Stamina));
+                        SetDataInNestedPointers(updatedVitals.NestedStaminaPointers, updatedVitals.StaminaOffset,
+                            BitConverter.GetBytes(updatedVitals.Stamina));
                     }
                 }
                 else
@@ -1033,8 +1036,12 @@ namespace MGS2_CheatTrainer_V2
 
                 if (selectedBoss != Constants.Boss.Fortune)
                 {
-                    bossVitals.Health = BitConverter.ToInt16(GetDataFromNestedPointers(bossVitals.NestedHealthPointers, bossVitals.HealthOffset, 2), 0);
-                    if (bossVitals.HasStamina)
+                    if (bossVitals.NestedHealthPointers != null)
+                        bossVitals.Health =
+                            BitConverter.ToInt16(
+                                GetDataFromNestedPointers(bossVitals.NestedHealthPointers, bossVitals.HealthOffset, 2),
+                                0);
+                    if (bossVitals.HasStamina && bossVitals.NestedStaminaPointers != null)
                     {
                         bossVitals.Stamina = BitConverter.ToInt16(GetDataFromNestedPointers(bossVitals.NestedStaminaPointers, bossVitals.StaminaOffset, 2), 0);
                     }

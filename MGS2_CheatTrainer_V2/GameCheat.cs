@@ -817,7 +817,7 @@ namespace MGS2_CheatTrainer_V2
 
             internal static void RemovePlantFog(bool activate)
             {
-                byte[] disableFog = new byte[] { 0x46 };
+                byte[] disableFog = [0x46];
 
                 GameCheat activeGameCheat = Mgs2Cheat.RemovePlantFog;
                 if (activate)
@@ -840,8 +840,8 @@ namespace MGS2_CheatTrainer_V2
 
             internal static void RemoveTankerEffects(bool activate)
             {
-                byte[] disableFilter = new byte[] { 0x04 };
-                byte[] enableFilter = new byte[] { 0x03 };
+                byte[] disableFilter = [0x04];
+                byte[] enableFilter = [0x03];
 
                 GameCheat activeGameCheat = Mgs2Cheat.RemoveTankerFilter;
                 if (activate)
@@ -862,8 +862,8 @@ namespace MGS2_CheatTrainer_V2
 
             internal static void NightTime(bool activate)
             {
-                byte[] nightTime = new byte[] { 0x00 };
-                byte[] dayTime = new byte[] { 0xFF };
+                byte[] nightTime = [0x00];
+                byte[] dayTime = [0xFF];
 
                 GameCheat activeGameCheat = Mgs2Cheat.NightTime;
                 if (activate)
@@ -907,7 +907,7 @@ namespace MGS2_CheatTrainer_V2
 
             internal static async Task ApplyColorFilter(Color chosenColor)
             {
-                byte[] customColor = new byte[] { chosenColor.R, chosenColor.G, chosenColor.B };
+                byte[] customColor = [chosenColor.R, chosenColor.G, chosenColor.B];
 
                 ReplaceWithSpecificCode(Mgs2AoB.CustomFilteringAoB, customColor, Mgs2Offset.CustomFiltering);
                 
@@ -1095,12 +1095,13 @@ namespace MGS2_CheatTrainer_V2
                     CustomFilterCancellationTokenSource = new CancellationTokenSource();
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithSpecificCode(Mgs2AoB.VrAimStabilityAoB, new byte[] { 0xE9, 0x91, 0x01, 0x00, 0x00, 0x90 }, Mgs2Offset.VrAimStab);
+                        activeGameCheat.CodeLocation = ReplaceWithSpecificCode(Mgs2AoB.VrAimStabilityAoB, [0xE9, 0x91, 0x01, 0x00, 0x00, 0x90
+                        ], Mgs2Offset.VrAimStab);
                         Mgs2Cheat.VrAimStability = activeGameCheat;
                     }
                     else
                     {
-                        ReplaceWithSpecificCode(activeGameCheat.CodeLocation, new byte[] { 0xE9, 0x91, 0x01, 0x00, 0x00, 0x90 }, Mgs2Offset.VrAimStab);
+                        ReplaceWithSpecificCode(activeGameCheat.CodeLocation, [0xE9, 0x91, 0x01, 0x00, 0x00, 0x90], Mgs2Offset.VrAimStab);
                     }
                 }
                 else
@@ -1228,7 +1229,7 @@ namespace MGS2_CheatTrainer_V2
             internal static void InvisibleToGuards(bool activate)
             {
                 GameCheat activeGameCheat = Mgs2Cheat.InvisibleToGuards;
-                byte[] invisibleToGuards = new byte[] { 0xFF, 0xFF, 0x31, 0xC0, 0x48, 0x83, 0xC4, 0x20, 0x5B, 0xC3 };
+                byte[] invisibleToGuards = [0xFF, 0xFF, 0x31, 0xC0, 0x48, 0x83, 0xC4, 0x20, 0x5B, 0xC3];
                 // FF FF 31 C0 48 83 C4 20 5B C3 
                 if (activate)
                 {
@@ -1251,7 +1252,7 @@ namespace MGS2_CheatTrainer_V2
             internal static void InvisibleToCyphers(bool activate)
             {
                 GameCheat activeGameCheat = Mgs2Cheat.InvisibleToCyphers;
-                byte[] invisibleToCyphers = new byte[] { 0x48, 0x39, 0xE0, 0x0F, 0x1F, 0x40, 0x00, 0x0F, 0x85, 0x4C, 0x04 };
+                byte[] invisibleToCyphers = [0x48, 0x39, 0xE0, 0x0F, 0x1F, 0x40, 0x00, 0x0F, 0x85, 0x4C, 0x04];
                 if (activate)
                 {
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
@@ -1273,7 +1274,7 @@ namespace MGS2_CheatTrainer_V2
             internal static void InvisibleToCameras(bool activate)
             {
                 GameCheat activeGameCheat = Mgs2Cheat.InvisibleToCameras;
-                byte[] invisibleToCameras = new byte[] { 0x0F, 0x1F, 0x40, 0x00, 0xE8, 0x13, 0xF8, 0x1C }; //this was from snakeswiss' original implementation, but doesnt work on 2.0.1. thankfully, disabling the first command(first 4 bytes) works instead :)
+                //byte[] invisibleToCameras = [0x0F, 0x1F, 0x40, 0x00, 0xE8, 0x13, 0xF8, 0x1C]; //this was from snakeswiss' original implementation, but doesnt work on 2.0.1. thankfully, disabling the first command(first 4 bytes) works instead :)
                 if (activate)
                 {
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
@@ -1295,7 +1296,7 @@ namespace MGS2_CheatTrainer_V2
             internal static void DeafenGuardsToKnocks(bool activate)
             {
                 GameCheat activeGameCheat = Mgs2Cheat.DeafenGuardsToKnocks;
-                byte[] deafenedToKnocks = new byte[] { 0xA8, 0x01, 0xEB, 0x1D, 0x48, 0x8B, 0xCB };
+                byte[] deafenedToKnocks = [0xA8, 0x01, 0xEB, 0x1D, 0x48, 0x8B, 0xCB];
                 if (activate)
                 {
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
@@ -1317,7 +1318,7 @@ namespace MGS2_CheatTrainer_V2
             internal static void DeafenGuardsToGuns(bool activate)
             {
                 GameCheat activeGameCheat = Mgs2Cheat.DeafenGuardsToGuns;
-                byte[] deafenedToGuns = new byte[] { 0xA9, 0x00, 0x18, 0x00, 0x00, 0xEB, 0x12, 0x48, 0x8B, 0xCB };
+                byte[] deafenedToGuns = [0xA9, 0x00, 0x18, 0x00, 0x00, 0xEB, 0x12, 0x48, 0x8B, 0xCB];
                 if (activate)
                 {
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
@@ -1372,61 +1373,64 @@ namespace MGS2_CheatTrainer_V2
 
     public static class Mgs2Cheat
     {
-        public static GameCheat BlackScreen { get; internal set; } = new GameCheat(GameCheat.CheatActions.TurnScreenBlack, Mgs2AoB.OriginalCameraBytes, Constants.Cheat.BlackScreen);
-        public static GameCheat NoBleedDamage { get; internal set; } = new GameCheat(GameCheat.CheatActions.TurnOffBleedDamage, Mgs2AoB.OriginalBleedDamageBytes, Constants.Cheat.NoBleedDamage);
-        public static GameCheat NoBurnDamage { get; internal set; } = new GameCheat(GameCheat.CheatActions.TurnOffBurnDamage, Mgs2AoB.OriginalBurnDamageBytes, Constants.Cheat.NoBurnDamage);
-        public static GameCheat InfiniteAmmo { get; internal set; } = new GameCheat(GameCheat.CheatActions.InfiniteAmmo, Mgs2AoB.OriginalAmmoBytes, Constants.Cheat.InfiniteAmmo);
-        public static GameCheat InfiniteLife { get; internal set; } = new GameCheat(GameCheat.CheatActions.InfiniteLife, Mgs2AoB.OriginalLifeBytes, Constants.Cheat.InfiniteLife);
-        public static GameCheat InfiniteOxygen { get; internal set; } = new GameCheat(GameCheat.CheatActions.InfiniteOxygen, Mgs2AoB.OriginalO2Bytes, Constants.Cheat.InfiniteOxygen);
-        public static GameCheat Letterboxing { get; internal set; } = new GameCheat(GameCheat.CheatActions.Letterboxing, Mgs2AoB.OriginalCameraBytes, Constants.Cheat.Letterboxing);
-        public static GameCheat NoReload { get; internal set; } = new GameCheat(GameCheat.CheatActions.AmmoNeverDepletes, Mgs2AoB.OriginalReloadBytes, Constants.Cheat.NoReload);
-        public static GameCheat NoClipWithGravity { get; internal set; } = new GameCheat(GameCheat.CheatActions.NoClipWithGravity, Mgs2AoB.OriginalClippingBytes, Constants.Cheat.NoClipWithGravity);
-        public static GameCheat NoClipNoGravity { get; internal set; } = new GameCheat(GameCheat.CheatActions.NoClipNoGravity, Mgs2AoB.OriginalClippingBytes, Constants.Cheat.NoClipNoGravity);
-        public static GameCheat ZoomIn { get; internal set; } = new GameCheat(GameCheat.CheatActions.ZoomIn, Mgs2AoB.OriginalCameraBytes, Constants.Cheat.ZoomIn);
-        public static GameCheat ZoomOut { get; internal set; } = new GameCheat(GameCheat.CheatActions.ZoomOut, Mgs2AoB.OriginalCameraBytes, Constants.Cheat.ZoomOut);
-        public static GameCheat NoGripDamage { get; internal set; } = new GameCheat(GameCheat.CheatActions.GripNeverDepletes, Mgs2AoB.OriginalGripDamageBytes, Constants.Cheat.NoGripDamage);
-        public static GameCheat DisablePauseButton { get; internal set; } = new GameCheat(GameCheat.CheatActions.TurnOffPauseButton, Mgs2AoB.OriginalPauseButtonBytes, Constants.Cheat.DisablePauseButton);
-        public static GameCheat DisableItemMenuPause { get; internal set; } = new GameCheat(GameCheat.CheatActions.TurnOffItemMenuPause, Mgs2AoB.OriginalItemMenuPauseBytes, Constants.Cheat.DisableItemMenuPause);
-        public static GameCheat DisableWeaponMenuPause { get; internal set; } = new GameCheat(GameCheat.CheatActions.TurnOffWeaponMenuPause, Mgs2AoB.OriginalWeaponMenuPauseBytes, Constants.Cheat.DisableWeaponMenuPause);
-        public static GameCheat InfiniteItems { get; internal set; } = new GameCheat(GameCheat.CheatActions.InfiniteItems, Mgs2AoB.OriginalItemUseBytes, Constants.Cheat.InfiniteItems);
-        public static GameCheat MaxStackOnPickup { get; internal set; } = new GameCheat(GameCheat.CheatActions.MaxStackOnPickup, Mgs2AoB.OriginalCountOnPickup, Constants.Cheat.MaxStackOnPickup);
-        public static GameCheat InfiniteKnockout { get; internal set; } = new GameCheat(GameCheat.CheatActions.InfiniteKnockout, Mgs2AoB.OriginalKnockoutDuration, Constants.Cheat.InfiniteKnockout);
-        public static GameCheat RemovePlantFilter { get; internal set; } = new GameCheat(GameCheat.CheatActions.RemovePlantFilter, Mgs2AoB.OriginalRemovePlantFilterBytes, Constants.Cheat.RemovePlantFilter);
-        public static GameCheat RemovePlantFog { get; internal set; } = new GameCheat(GameCheat.CheatActions.RemovePlantFog, Mgs2AoB.OriginalPlantFogBytes, Constants.Cheat.RemovePlantFog);
-        public static GameCheat RemoveTankerFilter { get; internal set; } = new GameCheat(GameCheat.CheatActions.RemoveTankerEffects, Mgs2AoB.OriginalRemoveTankerFilterBytes, Constants.Cheat.RemoveTankerFilter);
-        public static GameCheat NightTime { get; internal set; } = new GameCheat(GameCheat.CheatActions.NightTime, Mgs2AoB.OriginalNightTimeBytes, Constants.Cheat.NightTime);
-        public static GameCheat EnableCustomFilter { get; internal set; } = new GameCheat(GameCheat.CheatActions.EnableCustomFilter, Mgs2AoB.OriginalCustomFilteringBytes, null);
-        public static GameCheat PauseVrTimer { get; internal set; } = new GameCheat(GameCheat.CheatActions.PauseVrTimer, Mgs2AoB.OriginalPauseVrBytes, Constants.Cheat.PauseVrTimer);
-        public static GameCheat VrObjectiveAutoComplete { get; internal set; } = new GameCheat(GameCheat.CheatActions.AutoCompleteVrObjectives, Mgs2AoB.OriginalVrObjectiveBytes, Constants.Cheat.VrObjectiveAutoComplete);
-        public static GameCheat VrEnemiesAutoComplete { get; internal set; } = new GameCheat(GameCheat.CheatActions.AutoCompleteVrEnemies, Mgs2AoB.OriginalVrEnemiesBytes, Constants.Cheat.VrEnemiesAutoComplete);
-        public static GameCheat VrNoHitDamage { get; internal set; } = new GameCheat(GameCheat.CheatActions.VrNoHitDamage, Mgs2AoB.OriginalVrNoHitDamageBytes, Constants.Cheat.VrNoHitDamage);
-        public static GameCheat VrNoFallDamage { get; internal set; } = new GameCheat(GameCheat.CheatActions.VrNoFallDamage, Mgs2AoB.OriginalVrNoFallDamageBytes, Constants.Cheat.VrNoFallDamage);
-        public static GameCheat VrInfiniteStrength { get; internal set; } = new GameCheat(GameCheat.CheatActions.VrInfiniteStrength, Mgs2AoB.OriginalVrInfiniteStrBytes, Constants.Cheat.VrInfiniteStrength);
-        public static GameCheat VrGripDamage { get; internal set; } = new GameCheat(GameCheat.CheatActions.VrGripDamage, Mgs2AoB.OriginalVrGripDamageBytes, Constants.Cheat.VrGripDamage);
-        public static GameCheat VrAimStability { get; internal set; } = new GameCheat(GameCheat.CheatActions.VrAimStab, Mgs2AoB.OriginalVrAimStabilityBytes, Constants.Cheat.VrAimStability);
-        public static GameCheat VrInfiniteAmmo { get; internal set; } = new GameCheat(GameCheat.CheatActions.VrInfiniteAmmo, Mgs2AoB.OriginalVrInfiniteAmmoBytes, Constants.Cheat.VrInfiniteAmmo);
-        public static GameCheat VrInfiniteItem { get; internal set; } = new GameCheat(GameCheat.CheatActions.VrInfiniteItem, Mgs2AoB.OriginalVrInfiniteItemBytes, Constants.Cheat.VrInfiniteItem);
-        public static GameCheat VrNoReload { get; internal set; } = new GameCheat(GameCheat.CheatActions.VrNoReload, Mgs2AoB.OriginalVrNoReloadBytes, Constants.Cheat.VrNoReload);
-        public static GameCheat EmmaInfiniteHealth { get; internal set; } = new GameCheat(GameCheat.CheatActions.EmmaInfiniteHp, Mgs2AoB.OriginalEmmaHpBytes, Constants.Cheat.EmmaInfiniteHealth);
-        public static GameCheat EmmaInfiniteO2 { get; internal set; } = new GameCheat(GameCheat.CheatActions.EmmaInfiniteO2, Mgs2AoB.OriginalEmmaO2Bytes, Constants.Cheat.EmmaInfiniteO2);
-        public static GameCheat InvisibleToGuards { get; internal set; } = new GameCheat(GameCheat.CheatActions.InvisibleToGuards, Mgs2AoB.OriginalInvisibleToGuardsBytes, null);
-        public static GameCheat InvisibleToCyphers { get; internal set; } = new GameCheat(GameCheat.CheatActions.InvisibleToCyphers, Mgs2AoB.OriginalInvisibleToCyphersBytes, null);
-        public static GameCheat InvisibleToCameras { get; internal set; } = new GameCheat(GameCheat.CheatActions.InvisibleToCameras, Mgs2AoB.OriginalInvisibleToCamerasBytes, null);
-        public static GameCheat DeafenGuardsToKnocks { get; internal set; } = new GameCheat(GameCheat.CheatActions.DeafenGuardsToKnocks, Mgs2AoB.OriginalDeafenGuardsToKnocksBytes, null);
-        public static GameCheat DeafenGuardsToGuns { get; internal set; } = new GameCheat(GameCheat.CheatActions.DeafenGuardsToGuns, Mgs2AoB.OriginalDeafenGuardsToGunsBytes, null);
-        public static GameCheat GhostMode { get; internal set; } = new GameCheat(GameCheat.CheatActions.GhostMode, null, Constants.Cheat.GhostMode);
-        public static GameCheat TurnOffMusic { get; internal set; } = new GameCheat(GameCheat.CheatActions.TurnOffMusic, Mgs2AoB.OriginalTurnOffMusicBytes, Constants.Cheat.TurnOffMusic);
+        public static GameCheat BlackScreen { get; internal set; } = new(GameCheat.CheatActions.TurnScreenBlack, Mgs2AoB.OriginalCameraBytes, Constants.Cheat.BlackScreen);
+        public static GameCheat NoBleedDamage { get; internal set; } = new(GameCheat.CheatActions.TurnOffBleedDamage, Mgs2AoB.OriginalBleedDamageBytes, Constants.Cheat.NoBleedDamage);
+        public static GameCheat NoBurnDamage { get; internal set; } = new(GameCheat.CheatActions.TurnOffBurnDamage, Mgs2AoB.OriginalBurnDamageBytes, Constants.Cheat.NoBurnDamage);
+        public static GameCheat InfiniteAmmo { get; internal set; } = new(GameCheat.CheatActions.InfiniteAmmo, Mgs2AoB.OriginalAmmoBytes, Constants.Cheat.InfiniteAmmo);
+        public static GameCheat InfiniteLife { get; internal set; } = new(GameCheat.CheatActions.InfiniteLife, Mgs2AoB.OriginalLifeBytes, Constants.Cheat.InfiniteLife);
+        public static GameCheat InfiniteOxygen { get; internal set; } = new(GameCheat.CheatActions.InfiniteOxygen, Mgs2AoB.OriginalO2Bytes, Constants.Cheat.InfiniteOxygen);
+        public static GameCheat Letterboxing { get; internal set; } = new(GameCheat.CheatActions.Letterboxing, Mgs2AoB.OriginalCameraBytes, Constants.Cheat.Letterboxing);
+        public static GameCheat NoReload { get; internal set; } = new(GameCheat.CheatActions.AmmoNeverDepletes, Mgs2AoB.OriginalReloadBytes, Constants.Cheat.NoReload);
+        private static GameCheat NoClipWithGravity { get; } = new(GameCheat.CheatActions.NoClipWithGravity, Mgs2AoB.OriginalClippingBytes, Constants.Cheat.NoClipWithGravity);
+        private static GameCheat NoClipNoGravity { get; } = new(GameCheat.CheatActions.NoClipNoGravity, Mgs2AoB.OriginalClippingBytes, Constants.Cheat.NoClipNoGravity);
+        public static GameCheat ZoomIn { get; internal set; } = new(GameCheat.CheatActions.ZoomIn, Mgs2AoB.OriginalCameraBytes, Constants.Cheat.ZoomIn);
+        public static GameCheat ZoomOut { get; internal set; } = new(GameCheat.CheatActions.ZoomOut, Mgs2AoB.OriginalCameraBytes, Constants.Cheat.ZoomOut);
+        public static GameCheat NoGripDamage { get; internal set; } = new(GameCheat.CheatActions.GripNeverDepletes, Mgs2AoB.OriginalGripDamageBytes, Constants.Cheat.NoGripDamage);
+        public static GameCheat DisablePauseButton { get; internal set; } = new(GameCheat.CheatActions.TurnOffPauseButton, Mgs2AoB.OriginalPauseButtonBytes, Constants.Cheat.DisablePauseButton);
+        public static GameCheat DisableItemMenuPause { get; internal set; } = new(GameCheat.CheatActions.TurnOffItemMenuPause, Mgs2AoB.OriginalItemMenuPauseBytes, Constants.Cheat.DisableItemMenuPause);
+        public static GameCheat DisableWeaponMenuPause { get; internal set; } = new(GameCheat.CheatActions.TurnOffWeaponMenuPause, Mgs2AoB.OriginalWeaponMenuPauseBytes, Constants.Cheat.DisableWeaponMenuPause);
+        public static GameCheat InfiniteItems { get; internal set; } = new(GameCheat.CheatActions.InfiniteItems, Mgs2AoB.OriginalItemUseBytes, Constants.Cheat.InfiniteItems);
+        public static GameCheat MaxStackOnPickup { get; internal set; } = new(GameCheat.CheatActions.MaxStackOnPickup, Mgs2AoB.OriginalCountOnPickup, Constants.Cheat.MaxStackOnPickup);
+        public static GameCheat InfiniteKnockout { get; internal set; } = new(GameCheat.CheatActions.InfiniteKnockout, Mgs2AoB.OriginalKnockoutDuration, Constants.Cheat.InfiniteKnockout);
+        public static GameCheat RemovePlantFilter { get; internal set; } = new(GameCheat.CheatActions.RemovePlantFilter, Mgs2AoB.OriginalRemovePlantFilterBytes, Constants.Cheat.RemovePlantFilter);
+        public static GameCheat RemovePlantFog { get; internal set; } = new(GameCheat.CheatActions.RemovePlantFog, Mgs2AoB.OriginalPlantFogBytes, Constants.Cheat.RemovePlantFog);
+        public static GameCheat RemoveTankerFilter { get; internal set; } = new(GameCheat.CheatActions.RemoveTankerEffects, Mgs2AoB.OriginalRemoveTankerFilterBytes, Constants.Cheat.RemoveTankerFilter);
+        public static GameCheat NightTime { get; internal set; } = new(GameCheat.CheatActions.NightTime, Mgs2AoB.OriginalNightTimeBytes, Constants.Cheat.NightTime);
+        public static GameCheat EnableCustomFilter { get; internal set; } = new(GameCheat.CheatActions.EnableCustomFilter, Mgs2AoB.OriginalCustomFilteringBytes, null);
+        public static GameCheat PauseVrTimer { get; internal set; } = new(GameCheat.CheatActions.PauseVrTimer, Mgs2AoB.OriginalPauseVrBytes, Constants.Cheat.PauseVrTimer);
+        public static GameCheat VrObjectiveAutoComplete { get; internal set; } = new(GameCheat.CheatActions.AutoCompleteVrObjectives, Mgs2AoB.OriginalVrObjectiveBytes, Constants.Cheat.VrObjectiveAutoComplete);
+        public static GameCheat VrEnemiesAutoComplete { get; internal set; } = new(GameCheat.CheatActions.AutoCompleteVrEnemies, Mgs2AoB.OriginalVrEnemiesBytes, Constants.Cheat.VrEnemiesAutoComplete);
+        public static GameCheat VrNoHitDamage { get; internal set; } = new(GameCheat.CheatActions.VrNoHitDamage, Mgs2AoB.OriginalVrNoHitDamageBytes, Constants.Cheat.VrNoHitDamage);
+        public static GameCheat VrNoFallDamage { get; internal set; } = new(GameCheat.CheatActions.VrNoFallDamage, Mgs2AoB.OriginalVrNoFallDamageBytes, Constants.Cheat.VrNoFallDamage);
+        public static GameCheat VrInfiniteStrength { get; internal set; } = new(GameCheat.CheatActions.VrInfiniteStrength, Mgs2AoB.OriginalVrInfiniteStrBytes, Constants.Cheat.VrInfiniteStrength);
+        public static GameCheat VrGripDamage { get; internal set; } = new(GameCheat.CheatActions.VrGripDamage, Mgs2AoB.OriginalVrGripDamageBytes, Constants.Cheat.VrGripDamage);
+        public static GameCheat VrAimStability { get; internal set; } = new(GameCheat.CheatActions.VrAimStab, Mgs2AoB.OriginalVrAimStabilityBytes, Constants.Cheat.VrAimStability);
+        public static GameCheat VrInfiniteAmmo { get; internal set; } = new(GameCheat.CheatActions.VrInfiniteAmmo, Mgs2AoB.OriginalVrInfiniteAmmoBytes, Constants.Cheat.VrInfiniteAmmo);
+        public static GameCheat VrInfiniteItem { get; internal set; } = new(GameCheat.CheatActions.VrInfiniteItem, Mgs2AoB.OriginalVrInfiniteItemBytes, Constants.Cheat.VrInfiniteItem);
+        public static GameCheat VrNoReload { get; internal set; } = new(GameCheat.CheatActions.VrNoReload, Mgs2AoB.OriginalVrNoReloadBytes, Constants.Cheat.VrNoReload);
+        public static GameCheat EmmaInfiniteHealth { get; internal set; } = new(GameCheat.CheatActions.EmmaInfiniteHp, Mgs2AoB.OriginalEmmaHpBytes, Constants.Cheat.EmmaInfiniteHealth);
+        public static GameCheat EmmaInfiniteO2 { get; internal set; } = new(GameCheat.CheatActions.EmmaInfiniteO2, Mgs2AoB.OriginalEmmaO2Bytes, Constants.Cheat.EmmaInfiniteO2);
+        public static GameCheat InvisibleToGuards { get; internal set; } = new(GameCheat.CheatActions.InvisibleToGuards, Mgs2AoB.OriginalInvisibleToGuardsBytes, null);
+        public static GameCheat InvisibleToCyphers { get; internal set; } = new(GameCheat.CheatActions.InvisibleToCyphers, Mgs2AoB.OriginalInvisibleToCyphersBytes, null);
+        public static GameCheat InvisibleToCameras { get; internal set; } = new(GameCheat.CheatActions.InvisibleToCameras, Mgs2AoB.OriginalInvisibleToCamerasBytes, null);
+        public static GameCheat DeafenGuardsToKnocks { get; internal set; } = new(GameCheat.CheatActions.DeafenGuardsToKnocks, Mgs2AoB.OriginalDeafenGuardsToKnocksBytes, null);
+        public static GameCheat DeafenGuardsToGuns { get; internal set; } = new(GameCheat.CheatActions.DeafenGuardsToGuns, Mgs2AoB.OriginalDeafenGuardsToGunsBytes, null);
+        private static GameCheat GhostMode { get; } = new(GameCheat.CheatActions.GhostMode, null, Constants.Cheat.GhostMode);
+        public static GameCheat TurnOffMusic { get; internal set; } = new(GameCheat.CheatActions.TurnOffMusic, Mgs2AoB.OriginalTurnOffMusicBytes, Constants.Cheat.TurnOffMusic);
 
-        public static List<GameCheat> CheatList = new List<GameCheat>
-        {
-            NoBleedDamage, NoBurnDamage, InfiniteAmmo, InfiniteLife, InfiniteOxygen, NoGripDamage, 
-            EmmaInfiniteHealth, EmmaInfiniteO2, NoClipWithGravity, NoClipNoGravity,  //Emma health is crashing the game and i cba to fix it
-            NoReload, ZoomIn, ZoomOut, DisablePauseButton, //zoom in and out aren't working as expected, and i cant be bothered to fix them right now.
+        public static readonly List<GameCheat> CheatList =
+        [
+            NoBleedDamage, NoBurnDamage, InfiniteAmmo, InfiniteLife, InfiniteOxygen, NoGripDamage,
+            EmmaInfiniteHealth, EmmaInfiniteO2, NoClipWithGravity,
+            NoClipNoGravity, //Emma health is crashing the game and i cba to fix it
+            NoReload, ZoomIn, ZoomOut,
+            DisablePauseButton, //zoom in and out aren't working as expected, and i cant be bothered to fix them right now.
             DisableItemMenuPause, DisableWeaponMenuPause, InfiniteItems, InfiniteKnockout, RemovePlantFilter,
             RemovePlantFog, RemoveTankerFilter, NightTime, MaxStackOnPickup, PauseVrTimer, VrObjectiveAutoComplete,
-            VrEnemiesAutoComplete, VrNoHitDamage, VrNoFallDamage, VrInfiniteStrength, VrGripDamage, VrAimStability, //VR Enemies autocomplete is crashing the game
+            VrEnemiesAutoComplete, VrNoHitDamage, VrNoFallDamage, VrInfiniteStrength, VrGripDamage,
+            VrAimStability, //VR Enemies autocomplete is crashing the game
             VrInfiniteAmmo, VrInfiniteItem, VrNoReload, BlackScreen, Letterboxing, GhostMode, TurnOffMusic
-        };
+        ];
     }
     
 }

@@ -95,7 +95,6 @@ namespace MGS2_CheatTrainer_V2.Models
         internal static string FortuneName = "66 6F 72 74 5F 6F 62 6A 5F 69 6E 69 2E 63";
         internal static string Vamp02 = "76 61 6D 70 2E 63";
         //00 00 00 78 00 08 00 <-- possibly an AoB for HP/Magazine modificaitons? might have to key off of LIFE?(or at least whatever it is called at that moment, within the games memory block)
-        internal static byte[] HealthMod = new byte[] { 0x00, 0x00, 0x00, 0x78, 0x00, 0x08, 0x00 }; //TODO: prove this is valid
         //clipcurrentCount == -114 from the above AoB, 4bytes long. HP mod is DIRECTLY after, it seems?
         internal static byte[] StageInfo = new byte[] { 0x10, 0x0E, 0x18, 0x15, 0x00, 0x00 };
         internal static string StageInfoString = "10 0E 18 15 00 00";
@@ -371,11 +370,6 @@ namespace MGS2_CheatTrainer_V2.Models
         public static readonly MemoryOffset GripLevelSnake = new MemoryOffset(-46, -45); //will break
         public static readonly MemoryOffset GripLevelRaiden = new MemoryOffset(-44, -43); //will break
         #endregion
-
-        #region Calculated From HealthMod
-        public static readonly MemoryOffset ModifyPlayerHp = new MemoryOffset(-110, -107); //TODO: prove this is valid
-        public static readonly MemoryOffset ModifyClipSize = new MemoryOffset(-114, -111); //TODO: prove this is valid
-        #endregion
         
         #region Calculated From StageInfo
         //public static readonly MemoryOffset CurrentCharacter = new MemoryOffset(-16, -10);
@@ -384,7 +378,7 @@ namespace MGS2_CheatTrainer_V2.Models
         public static readonly MemoryOffset OldCurrentStage = new MemoryOffset(-244, -238); //to ->0x2C
         public static readonly MemoryOffset CurrentDifficulty = new MemoryOffset(0x10); //-272 before 
         public static readonly MemoryOffset NgplusCount = new MemoryOffset(-271, -272); //TODO: prove this is valid
-        public static readonly MemoryOffset CurrentGametype = new MemoryOffset(0x07); //TODO: prove this is valid
+        public static readonly MemoryOffset CurrentGametype = new MemoryOffset(0x07);
         public static readonly MemoryOffset CurrentEquippedItem = new MemoryOffset(-26); //TODO: prove this is valid
         public static readonly MemoryOffset CurrentEquippedWeapon = new MemoryOffset(-28); //TODO: prove this is valid
         public static readonly MemoryOffset GameStatsBlock = new MemoryOffset(0x12E, 0x159);
@@ -410,7 +404,7 @@ namespace MGS2_CheatTrainer_V2.Models
         public static readonly MemoryOffset NoBurnDmg = new MemoryOffset(0, 16);
         public static readonly MemoryOffset NoClip = new MemoryOffset(0x40, 0x53);
         public static readonly MemoryOffset Letterbox = new MemoryOffset(-187);
-        public static readonly MemoryOffset Zoom = new MemoryOffset(-189); //todo: verify
+        public static readonly MemoryOffset Zoom = new MemoryOffset(-189);
         public static readonly MemoryOffset BlackScreen = new MemoryOffset(-228);
         public static readonly MemoryOffset NoGripDmg = new MemoryOffset(0, 6);
         public static readonly MemoryOffset NoPauseBtn = new MemoryOffset(0, 5);

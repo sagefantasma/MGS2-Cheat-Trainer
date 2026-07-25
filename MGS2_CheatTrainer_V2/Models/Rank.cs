@@ -406,7 +406,7 @@ namespace MGS2_CheatTrainer_V2.Models
             {
                 Alerts = 3,
                 Continues = 0,
-                DamageTaken = 1500, //TODO: confirm
+                DamageTaken = 1500,
                 Kills = 0,
                 Rations = 0,
                 MechsDestroyed = 60,

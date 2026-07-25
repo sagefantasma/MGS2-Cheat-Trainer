@@ -15,7 +15,7 @@
                     <views:CheckboxCheatViewModel x:Name="InfiniteLifeCheckbox" CheatName="Enemies Deal No Damage" Cheat="InfiniteLife" />
                     <views:CheckboxCheatViewModel x:Name="InfiniteOxygenCheckbox" CheatName="Infinite Oxygen" Cheat="InfiniteOxygen" Background="DarkSlateGray" HorizontalAlignment="Stretch" />
                     <views:CheckboxCheatViewModel x:Name="NoGripDamageCheckbox" CheatName="Infinite Grip Stamina" Cheat="NoGripDamage" />
-                    <views:CheckboxCheatViewModel x:Name="InfiniteEmmaHealthCheckbox" CheatName="Emma Infinite Life" Cheat="EmmaInfiniteHealth" Background="DarkSlateGray" HorizontalAlignment="Stretch"/>
+                    <views:CheckboxCheatViewModel x:Name="InfiniteEmmaHealthCheckbox" CheatName="Emma Infinite Life" Cheat="EmmaInfiniteHealth" Background="DarkSlateGray" HorizontalAlignment="Stretch" IsEnabled="False"/> <!--Crashes the game, disabling.-->
                     <views:CheckboxCheatViewModel x:Name="InfiniteEmmaO2Checkbox" CheatName="Emma Infinite Oxygen" Cheat="EmmaInfiniteO2" />
                     <views:CheckboxCheatViewModel x:Name="NoReloadCheckbox" CheatName="No Weapon Reload Required" Cheat="NoReload" Background="DarkSlateGray" HorizontalAlignment="Stretch"/>
                     <views:CheckboxCheatViewModel x:Name="InfiniteItemsCheckbox" CheatName="Infinite Item Uses" Cheat="InfiniteItems"/>
@@ -35,7 +35,7 @@
                 <StackPanel x:Name="VrCheats" Spacing="5">
                     <views:CheckboxCheatViewModel x:Name="PauseVrTimerCheckbox" CheatName="Pause Timer" Cheat="PauseVrTimer"/>
                     <views:CheckboxCheatViewModel x:Name="VrObjectiveAutoCompleteCheckbox" CheatName="Auto-Complete Objectives" Cheat="VrObjectiveAutoComplete" Background="DarkSlateGray" HorizontalAlignment="Stretch"/>
-                    <views:CheckboxCheatViewModel x:Name="VrEnemiesAutoCompleteCheckbox" CheatName="Auto-'Kill' Enemies" Cheat="VrEnemiesAutoComplete"/>
+                    <views:CheckboxCheatViewModel x:Name="VrEnemiesAutoCompleteCheckbox" CheatName="Auto-'Kill' Enemies" Cheat="VrEnemiesAutoComplete" IsEnabled="False"/> <!--Crashes the game, disabling.-->
                     <views:CheckboxCheatViewModel x:Name="VrNoHitDamageCheckbox" CheatName="Enemies Deal No Damage" Cheat="VrNoHitDamage" Background="DarkSlateGray" HorizontalAlignment="Stretch"/>
                     <views:CheckboxCheatViewModel x:Name="VrNoFallDamageCheckbox" CheatName="No Fall Damage" Cheat="VrNoFallDamage"/>
                     <views:CheckboxCheatViewModel x:Name="VrInfiniteStrengthCheckbox" CheatName="Infinite Strength" Cheat="VrInfiniteStrength" Background="DarkSlateGray" HorizontalAlignment="Stretch"/>
@@ -66,7 +66,7 @@
             <StackPanel>
                 <GroupBox Header="Idle Animations" Margin="10">
                     <WrapPanel>
-                        <ComboBox x:Name="GuardAnimationsListBox" Margin="10"> <!--TODO: Fill on initialization?-->
+                        <ComboBox x:Name="GuardAnimationsListBox" Margin="10">
                         </ComboBox>
                         <Button x:Name="SetAnimationButton" Content="Set Animation" Margin="10" Click="SetAnimationButton_OnClick"/>
                     </WrapPanel>

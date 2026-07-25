@@ -208,10 +208,8 @@ namespace MGS2_CheatTrainer_V2
 
         internal Stage GetStage()
         {
-            //TODO: validate with new offset
             try
             {
-                //List<IntPtr> stageMemoryOffsets = GetStageOffsets();
                 IntPtr stageMemoryOffset = GetCurrentStageOffset();
                 string stringInMemory = Encoding.UTF8.GetString(ReadValueFromMemory(stageMemoryOffset, 4));
 
@@ -683,7 +681,6 @@ namespace MGS2_CheatTrainer_V2
 
         public Difficulty ReadCurrentDifficulty()
         {
-            //TODO: validate with new offset
             try
             {
                 if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
@@ -705,26 +702,10 @@ namespace MGS2_CheatTrainer_V2
                 Logger?.Error($"Could not get current difficulty: {e}");
                 throw new AggregateException("Failed to get current difficulty", e);
             }
-            try
-            {
-                //IntPtr stageOffset = GetStageOffsets().First();
-                IntPtr stageOffset = GetCurrentStageOffset();
-                byte[] difficultyByte = ReadValueFromMemory(stageOffset + Mgs2Offset.CurrentDifficulty.Start, Mgs2Offset.CurrentDifficulty.Length);
-
-                int convertedDifficulty = difficultyByte[0];
-
-                return (Difficulty)convertedDifficulty;
-            }
-            catch (Exception e)
-            {
-                Logger?.Error($"Failed to get current difficulty: {e}");
-                throw new AggregateException("Could not get current difficulty", e);
-            }
         }
 
         public GameType ReadGameType()
         {
-            //TODO: validate with new offset
             try
             {
                 if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
@@ -749,7 +730,6 @@ namespace MGS2_CheatTrainer_V2
 
         public ushort GetCurrentHp()
         {
-            //TODO: validate with new offset
             try
             {
                 if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
@@ -772,7 +752,6 @@ namespace MGS2_CheatTrainer_V2
 
         public ushort GetCurrentMaxHp()
         {
-            //TODO: validate with new offset
             try
             {
                 if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
@@ -1150,7 +1129,7 @@ namespace MGS2_CheatTrainer_V2
                 }
 
                 Logger?.Warning("Unable to determine what the active character is!");
-                throw new NotImplementedException("Unknown stage! Can't safely determine what the active character is");
+                throw new Exception("Unknown stage! Can't safely determine what the active character is");
             }
             catch(Exception e)
             {

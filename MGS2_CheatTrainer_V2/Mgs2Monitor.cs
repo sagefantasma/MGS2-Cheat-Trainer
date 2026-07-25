@@ -191,10 +191,6 @@ namespace MGS2_CheatTrainer_V2
         }
         #endregion
 
-        #region Config
-        //TODO: replace with non-custom config system.
-        #endregion
-
         internal static void EnableMonitor(CancellationToken cancellationToken)
         {
             MonitorCancellationToken = cancellationToken;

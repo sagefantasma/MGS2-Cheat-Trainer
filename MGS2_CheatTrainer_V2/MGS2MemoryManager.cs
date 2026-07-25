@@ -19,7 +19,7 @@ namespace MGS2_CheatTrainer_V2
         #endregion
 
         #region Private methods
-        internal static Constants.PlayableCharacter CheckIfUsable(Constants.IMgs2Object mgs2Object)
+        internal Constants.PlayableCharacter CheckIfUsable(Constants.IMgs2Object mgs2Object)
         {
             try
             {
@@ -265,7 +265,7 @@ namespace MGS2_CheatTrainer_V2
             }
         }
 
-        private static void SetPlayerOffsetBasedByteValueObject(int objectOffset, byte[] valueToSet, Constants.PlayableCharacter character)
+        private static void SetPlayerOffsetBasedByteValueObject(int objectOffset, byte[] valueToSet)
         {
             try
             {
@@ -444,9 +444,8 @@ namespace MGS2_CheatTrainer_V2
             }
         }
 
-        public void UpdateObjectBaseValue(Constants.IMgs2Object mgs2Object, ushort value)
-        { 
-            //NOTE: Currently working as expected on rewrite/multiplatforming
+        public void UpdateObjectBaseValue(Constants.IMgs2Object mgs2Object, ushort value, bool force = false)
+        {
             try
             {
                 Constants.PlayableCharacter character = DetermineActiveCharacter();
@@ -455,23 +454,41 @@ namespace MGS2_CheatTrainer_V2
                 {
                     case Constants.MaxableItem maxableItem:
                         Logger?.Debug($"mgs2Object parsed as MaxableItem, setting base value to: {value}");
-                        SetPlayerOffsetBasedByteValueObject(maxableItem.Index + Mgs2Offset.BaseItem.Start, BitConverter.GetBytes(value), character);
+                        SetPlayerOffsetBasedByteValueObject(maxableItem.Index + Mgs2Offset.BaseItem.Start, BitConverter.GetBytes(value));
                         break;
                     case Constants.SpecialItem specialItem:
                         Logger?.Debug($"mgs2Object parsed as SpecialItem, setting base value to: {value}");
-                        SetPlayerOffsetBasedByteValueObject(specialItem.Index + Mgs2Offset.BaseItem.Start, BitConverter.GetBytes(value), character);
+                        SetPlayerOffsetBasedByteValueObject(specialItem.Index + Mgs2Offset.BaseItem.Start, BitConverter.GetBytes(value));
                         break;
                     case Constants.MaxableWeapon maxableWeapon:
+                        if (!force)
+                        {
+                            if(character == Constants.PlayableCharacter.Snake)
+                                if (!Snake.UsableObjects.Contains(maxableWeapon))
+                                    throw new Exception(
+                                        "Sorry, Snake cannot use this weapon without crashing the game. Install the " +
+                                        "'All Weapons' mod from Nexus and check off the 'All Weapons Mod Installed?' " +
+                                        "checkbox to force this through");
+                        }
                         Logger?.Debug($"mgs2Object parsed as MaxableWeapon, setting base value to: {value}");
-                        SetPlayerOffsetBasedByteValueObject(maxableWeapon.Index + Mgs2Offset.BaseWeapon.Start, BitConverter.GetBytes(value), character);
+                        SetPlayerOffsetBasedByteValueObject(maxableWeapon.Index + Mgs2Offset.BaseWeapon.Start, BitConverter.GetBytes(value));
                         break;
                     case Constants.BooleanWeapon booleanWeapon:
+                        if (!force)
+                        {
+                            if(character == Constants.PlayableCharacter.Snake)
+                                if (!Snake.UsableObjects.Contains(booleanWeapon))
+                                    throw new Exception(
+                                        "Snake cannot use this weapon without crashing the game, sorry. Install the " +
+                                        "'All Weapons' mod and check off the 'All Weapons Mod Installed?' checkbox to " +
+                                        "force this through");
+                        }
                         Logger?.Debug($"mgs2Object parsed as BooleanWeapon, setting base value to: {value}");
-                        SetPlayerOffsetBasedByteValueObject(booleanWeapon.Index + Mgs2Offset.BaseWeapon.Start, BitConverter.GetBytes(value), character);
+                        SetPlayerOffsetBasedByteValueObject(booleanWeapon.Index + Mgs2Offset.BaseWeapon.Start, BitConverter.GetBytes(value));
                         break;
                     case Constants.BooleanItem booleanItem:
                         Logger?.Debug($"mgs2Object parsed as BooleanItem, setting base value to: {value}");
-                        SetPlayerOffsetBasedByteValueObject(booleanItem.Index + Mgs2Offset.BaseItem.Start, BitConverter.GetBytes(value), character);
+                        SetPlayerOffsetBasedByteValueObject(booleanItem.Index + Mgs2Offset.BaseItem.Start, BitConverter.GetBytes(value));
                         break;
                 }
             }
@@ -487,17 +504,15 @@ namespace MGS2_CheatTrainer_V2
             //NOTE: Currently working as expected on rewrite/multiplatforming
             try
             {
-                Constants.PlayableCharacter character = DetermineActiveCharacter();
-                
                 switch (mgs2Object)
                 {
                     case Constants.MaxableItem maxableItem:
                         Logger?.Debug($"mgs2Object parsed as MaxableItem, setting max count to: {count}");
-                        SetPlayerOffsetBasedByteValueObject(maxableItem.MaxIndex + Mgs2Offset.BaseItem.Start, BitConverter.GetBytes(count), character);
+                        SetPlayerOffsetBasedByteValueObject(maxableItem.MaxIndex + Mgs2Offset.BaseItem.Start, BitConverter.GetBytes(count));
                         break;
                     case Constants.MaxableWeapon maxableWeapon:
                         Logger?.Debug($"mgs2Object parsed as maxableWeapon, setting max count to: {count}");
-                        SetPlayerOffsetBasedByteValueObject(maxableWeapon.MaxIndex + Mgs2Offset.BaseWeapon.Start, BitConverter.GetBytes(count), character);
+                        SetPlayerOffsetBasedByteValueObject(maxableWeapon.MaxIndex + Mgs2Offset.BaseWeapon.Start, BitConverter.GetBytes(count));
                         break;
                 }
             }
@@ -542,21 +557,21 @@ namespace MGS2_CheatTrainer_V2
         }
 
         public void ToggleObject(Constants.IMgs2Object mgs2Object,
-            bool enable = true)
+            bool enable = true, bool force = false)
         {
             try
             {
                 if (enable)
-                    UpdateObjectBaseValue(mgs2Object, 1);
+                    UpdateObjectBaseValue(mgs2Object, 1, force);
                 else
                 {
                     if (mgs2Object is Constants.Item)
                     {
-                        UpdateObjectBaseValue(mgs2Object, 0);
+                        UpdateObjectBaseValue(mgs2Object, 0, force);
                     }
                     else
                     {
-                        UpdateObjectBaseValue(mgs2Object, ushort.MaxValue);
+                        UpdateObjectBaseValue(mgs2Object, ushort.MaxValue, force);
                     }
                 }
             }
@@ -666,7 +681,7 @@ namespace MGS2_CheatTrainer_V2
             }
         }
 
-        public static Difficulty ReadCurrentDifficulty()
+        public Difficulty ReadCurrentDifficulty()
         {
             //TODO: validate with new offset
             try
@@ -707,18 +722,23 @@ namespace MGS2_CheatTrainer_V2
             }
         }
 
-        public static GameType ReadGameType()
+        public GameType ReadGameType()
         {
             //TODO: validate with new offset
             try
             {
-                //IntPtr stageOffset = GetStageOffsets().First();
-                IntPtr stageOffset = GetCurrentStageOffset();
-                byte[] gameTypeByte = ReadValueFromMemory(stageOffset + Mgs2Offset.CurrentGametype.Start, Mgs2Offset.CurrentGametype.Length);
+                if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
+                lock (Mgs2Monitor.Mgs2Process)
+                {
+                    using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
+                    IntPtr pointerLocation = proxy.FollowPointer(new IntPtr(Mgs2Pointer.PlayerPointer), false);
+                    byte[] gameTypeByte = ReadValueFromMemory(
+                        pointerLocation + Mgs2Offset.CurrentGametype.Start, Mgs2Offset.CurrentGametype.Length);
 
-                int convertedGameType = gameTypeByte[0];
+                    int convertedGameType = gameTypeByte[0];
 
-                return (GameType)convertedGameType;
+                    return (GameType)convertedGameType;
+                }
             }
             catch (Exception e)
             {
@@ -727,16 +747,21 @@ namespace MGS2_CheatTrainer_V2
             }
         }
 
-        public static ushort GetCurrentHp()
+        public ushort GetCurrentHp()
         {
             //TODO: validate with new offset
             try
             {
-                //IntPtr stageOffset = GetStageOffsets().First();
-                IntPtr stageOffset = GetCurrentStageOffset();
-                byte[] currentHpBytes = ReadValueFromMemory(stageOffset + Mgs2Offset.CurrentHp.Start, Mgs2Offset.CurrentHp.Length);
+                if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
+                lock (Mgs2Monitor.Mgs2Process)
+                {
+                    using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
+                    IntPtr pointerLocation = proxy.FollowPointer(new IntPtr(Mgs2Pointer.PlayerPointer), false);
+                    byte[] currentHpBytes = ReadValueFromMemory(
+                        pointerLocation + Mgs2Offset.CurrentHp.Start, Mgs2Offset.CurrentHp.Length);
 
-                return BitConverter.ToUInt16(currentHpBytes, 0);
+                    return BitConverter.ToUInt16(currentHpBytes, 0);
+                }
             }
             catch (Exception e)
             {
@@ -745,16 +770,21 @@ namespace MGS2_CheatTrainer_V2
             }
         }
 
-        public static ushort GetCurrentMaxHp()
+        public ushort GetCurrentMaxHp()
         {
             //TODO: validate with new offset
             try
             {
-                //IntPtr stageOffset = GetStageOffsets().First();
-                IntPtr stageOffset = GetCurrentStageOffset();
-                byte[] currentMaxHpBytes = ReadValueFromMemory(stageOffset + Mgs2Offset.CurrentMaxHp.Start, Mgs2Offset.CurrentMaxHp.Length);
+                if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
+                lock (Mgs2Monitor.Mgs2Process)
+                {
+                    using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
+                    IntPtr pointerLocation = proxy.FollowPointer(new IntPtr(Mgs2Pointer.PlayerPointer), false);
+                    byte[] currentMaxHpBytes = ReadValueFromMemory(
+                        pointerLocation + Mgs2Offset.CurrentMaxHp.Start, Mgs2Offset.CurrentMaxHp.Length);
 
-                return BitConverter.ToUInt16(currentMaxHpBytes, 0);
+                    return BitConverter.ToUInt16(currentMaxHpBytes, 0);
+                }
             }
             catch(Exception e)
             {
@@ -763,7 +793,7 @@ namespace MGS2_CheatTrainer_V2
             }
         }
 
-        public static ushort GetCurrentGripGauge()
+        public ushort GetCurrentGripGauge()
         {
             try
             {
@@ -784,7 +814,7 @@ namespace MGS2_CheatTrainer_V2
             }
         }
 
-        public static void ModifyCurrentGripGauge(ushort desiredGripGauge)
+        public void ModifyCurrentGripGauge(ushort desiredGripGauge)
         {
             try
             {
@@ -804,7 +834,7 @@ namespace MGS2_CheatTrainer_V2
             }
         }
 
-        public static void ModifyCurrentHp(ushort desiredHp)
+        public void ModifyCurrentHp(ushort desiredHp)
         {
             try
             {
@@ -824,7 +854,7 @@ namespace MGS2_CheatTrainer_V2
             }
         }
 
-        public static ushort ModifyGripLevel(bool increase)
+        public ushort ModifyGripLevel(bool increase)
         {
             try
             {
@@ -1067,7 +1097,7 @@ namespace MGS2_CheatTrainer_V2
             }
         }
 
-        public static Constants.PlayableCharacter DetermineActiveCharacter()
+        public Constants.PlayableCharacter DetermineActiveCharacter()
         {
             //return Constants.PlayableCharacter.Pliskin;
             try

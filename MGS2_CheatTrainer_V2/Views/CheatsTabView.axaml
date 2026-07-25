@@ -68,21 +68,21 @@
                     <WrapPanel>
                         <ComboBox x:Name="GuardAnimationsListBox" Margin="10"> <!--TODO: Fill on initialization?-->
                         </ComboBox>
-                        <Button x:Name="SetAnimationButton" Content="Set Animation" Margin="10"/>
+                        <Button x:Name="SetAnimationButton" Content="Set Animation" Margin="10" Click="SetAnimationButton_OnClick"/>
                     </WrapPanel>
                 </GroupBox>
-                <Button x:Name="ForceGuardSleepButton" Content="Force All Guards to Sleep" HorizontalAlignment="Center" Margin="10"/>
-                <Button x:Name="ForceGuardWakeButton" Content="Force All Guards to Wake" HorizontalAlignment="Center" Margin="10"/>
+                <Button x:Name="ForceGuardSleepButton" Content="Force All Guards to Sleep" HorizontalAlignment="Center" Margin="10" Click="ForceGuardSleepButton_OnClick"/>
+                <Button x:Name="ForceGuardWakeButton" Content="Force All Guards to Wake" HorizontalAlignment="Center" Margin="10" Click="ForceGuardWakeButton_OnClick"/>
             </StackPanel>
         </GroupBox>
         <GroupBox Grid.Row="3" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="5" Header="Health and Grip">
             <Grid ColumnDefinitions=".2*,.2*,.2*,.2*,.2*" RowDefinitions=".2*,.2*,.2*,.2*,.2*">
                 <TextBlock Grid.Row="1" Grid.Column="1" Text="HP" Margin="20,0"/>
-                <Slider Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Grid.RowSpan="2"/>
+                <Slider x:Name="HpBar" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Grid.RowSpan="2" ValueChanged="HpBar_OnValueChanged"/>
                 <TextBlock Grid.Row="3" Grid.Column="1" Text="Grip" Margin="20,0"/>
-                <Slider Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" Grid.RowSpan="2"/>
-                <Button Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" Content="-100 Push-ups"/>
-                <Button Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Content="+100 Push-ups"/>
+                <Slider x:Name="GripBar" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" Grid.RowSpan="2" ValueChanged="GripBar_OnValueChanged"/>
+                <Button Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" HorizontalAlignment="Center" Content="-100 Push-ups" Click="DecreasePullupsButton_OnClick"/>
+                <Button Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" Content="+100 Push-ups" Click="IncreasePullupsButton_OnClick"/>
             </Grid>
         </GroupBox>
     </Grid>

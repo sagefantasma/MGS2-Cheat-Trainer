@@ -7,9 +7,9 @@ namespace MGS2_CheatTrainer_V2.Models
     //REWRITE STATUS: Not needed to update?
     public enum GameType
     {
-        Tanker,
-        Plant,
-        TankerPlant
+        Tanker = 16,
+        Plant = 0,
+        TankerPlant = 32
     }
 
     public enum Difficulty

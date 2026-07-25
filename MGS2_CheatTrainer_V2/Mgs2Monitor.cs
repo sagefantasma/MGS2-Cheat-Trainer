@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using SimplifiedMemoryManager;
 using Constants = MGS2_CheatTrainer_V2.Models.Constants;
 
@@ -199,11 +200,7 @@ namespace MGS2_CheatTrainer_V2
             MonitorCancellationToken = cancellationToken;
             MonitorCancellationToken.Register(TearDownMonitor);
             Logger?.Information("Starting MGS2 scanning thread...");
-            ScanningThread = new Thread(ScanForMgs2)
-            {
-                Name = "MGS2 Scanning Thread"
-            };
-            ScanningThread.Start();
+            Task.Run(ScanForMgs2,  cancellationToken);
         }
     }
 }

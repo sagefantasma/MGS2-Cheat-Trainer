@@ -4,6 +4,9 @@ using Avalonia.Interactivity;
 using Avalonia.Media;
 using MGS2_CheatTrainer_V2.Models;
 using Microsoft.Extensions.DependencyInjection;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Base;
+using MsBox.Avalonia.Enums;
 
 namespace MGS2_CheatTrainer_V2.Views;
 
@@ -57,7 +60,7 @@ public partial class SpecialObjectDetailView : UserControl
         _memoryManager = App.Services.GetRequiredService<Mgs2MemoryManager>();
     }
     
-    private void ChangeStat(string message)
+    private void SendStatusUpdate(string message)
     {
         ValueChanged?.Invoke(null, message);
     }
@@ -72,23 +75,52 @@ public partial class SpecialObjectDetailView : UserControl
 
     public void Enabled_OnClick(object sender, RoutedEventArgs e)
     {
-        if (!_active) return;
-        string enableState = EnabledCheckBox.IsChecked == true ? "enabled" : "disabled";
-        _object ??= Constants.DetermineObject(Name!);
-        Logging.Logger?.Information($"Attempting to set {_object.Name} {enableState}...");
-        _memoryManager.ToggleObject(_object!, (bool)EnabledCheckBox.IsChecked!);
-        ChangeStat($"{_object?.Name} is {enableState}");
+        try
+        {
+            if (!_active) return;
+            string enableState = EnabledCheckBox.IsChecked == true ? "enabled" : "disabled";
+            _object ??= Constants.DetermineObject(Name!);
+            Logging.Logger?.Information($"Attempting to set {_object.Name} {enableState}...");
+            _memoryManager.ToggleObject(_object!, (bool)EnabledCheckBox.IsChecked!);
+            SendStatusUpdate($"{_object?.Name} is {enableState}");
+        }
+        catch (Exception ex)
+        {
+            _active = false;
+            EnabledCheckBox.IsChecked = !EnabledCheckBox.IsChecked;
+            string errorBrief = $"Failed to toggle {Name!}";
+            Logging.Logger?.Error($"{errorBrief}: {ex.Message}");
+            SendStatusUpdate(errorBrief);
+            IMsBox<ButtonResult> msgBox = MessageBoxManager.GetMessageBoxStandard(
+                errorBrief,
+                ex.Message);
+            msgBox.ShowAsync();
+            _active = true;
+        }
     }
 
     public void ModifyValue_OnClick(object? sender, RoutedEventArgs e)
     {
-        if (EnabledCheckBox.IsChecked == false)
+        try
         {
-            EnabledCheckBox.IsChecked = true;
+            _object ??= Constants.DetermineObject(Name!);
+            Logging.Logger?.Information($"Attempting to set {_object.Name} {ValueName} to {CurrentUpDown.Value}...");
+            _memoryManager.UpdateObjectBaseValue(_object!, (ushort)CurrentUpDown.Value!);
+            SendStatusUpdate($"Updated {_object.Name} {ValueName} to: {CurrentUpDown.Value}");
+            if (EnabledCheckBox.IsChecked == false)
+            {
+                EnabledCheckBox.IsChecked = true;
+            }
         }
-        _object ??= Constants.DetermineObject(Name!);
-        Logging.Logger?.Information($"Attempting to set {_object.Name} value to {CurrentUpDown.Value}...");
-        _memoryManager.UpdateObjectBaseValue(_object!, (ushort)CurrentUpDown.Value!);
-        ChangeStat($"Updated {_object.Name} {ValueName} to: {CurrentUpDown.Value}");
+        catch (Exception ex)
+        {
+            string errorBrief = $"Failed to set {ValueName} for {Name!}";
+            Logging.Logger?.Error($"{errorBrief}: {ex.Message}");
+            SendStatusUpdate(errorBrief);
+            IMsBox<ButtonResult> msgBox = MessageBoxManager.GetMessageBoxStandard(
+                errorBrief,
+                ex.Message);
+            msgBox.ShowAsync();
+        }
     }
 }

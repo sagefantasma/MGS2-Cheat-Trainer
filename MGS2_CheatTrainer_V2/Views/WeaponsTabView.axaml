@@ -28,6 +28,6 @@
         <views:BooleanObjectDetailView x:Name="DMicZoomedDetailView" Grid.Row="3" Grid.Column="4" EntityImage="/Assets/dmp_alp_ovl.bmp.bmp" Mgs2Object="Directional Microphone(Movie)" ValueChanged="RequestStatusBarUpdate"/>
         <views:MaxableObjectDetailView x:Name="BookDetailView" Grid.Row="4" Grid.Column="0" EntityImage="/Assets/wpb_alp_ovl.bmp.bmp" Mgs2Object="Book" ValueChanged="RequestStatusBarUpdate"/>
         <CheckBox x:Name="AllWeaponsModCheckBox" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="4"
-                  HorizontalAlignment="Center" Content="All Weapons Mod Installed?"/>
+                  HorizontalAlignment="Center" Content="All Weapons Mod Installed?" IsCheckedChanged="AllWeaponsModCheckBox_OnIsCheckedChanged"/>
     </Grid>
 </UserControl>

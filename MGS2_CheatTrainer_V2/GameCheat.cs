@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Threading;
 using System.Threading.Tasks;
 using MGS2_CheatTrainer_V2.Models;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MGS2_CheatTrainer_V2
 {
@@ -147,7 +148,7 @@ namespace MGS2_CheatTrainer_V2
                 }
             }
 
-            private static IntPtr ReplaceWithSpecificCode(string patternToScan, byte[] replacementBytes, MemoryOffset offset)
+            public static IntPtr ReplaceWithSpecificCode(string patternToScan, byte[] replacementBytes, MemoryOffset offset)
             {
                 if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
                 lock (Mgs2Monitor.Mgs2Process)
@@ -294,7 +295,7 @@ namespace MGS2_CheatTrainer_V2
                 }
             }
 
-            private static byte[] ReadMemory(string aob, MemoryOffset offset)
+            public static byte[] ReadMemory(string aob, MemoryOffset offset)
             {
                 if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
                 lock (Mgs2Monitor.Mgs2Process)
@@ -610,7 +611,8 @@ namespace MGS2_CheatTrainer_V2
             {
                 try
                 {
-                    Constants.PlayableCharacter currentPc = Mgs2MemoryManager.DetermineActiveCharacter();
+                    Mgs2MemoryManager memoryManager = App.Services.GetRequiredService<Mgs2MemoryManager>();
+                    Constants.PlayableCharacter currentPc = memoryManager.DetermineActiveCharacter();
                     if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
                     lock (Mgs2Monitor.Mgs2Process)
                     {

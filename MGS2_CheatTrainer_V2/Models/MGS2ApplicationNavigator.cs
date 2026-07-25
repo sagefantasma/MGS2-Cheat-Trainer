@@ -244,6 +244,7 @@ namespace MGS2_CheatTrainer_V2.Models
         {
             public required string Name { get; set; }
             public required byte[] Bytes { get; set; }
+            public override string ToString() => Name;
         }
         #endregion
 
@@ -378,12 +379,12 @@ namespace MGS2_CheatTrainer_V2.Models
         
         #region Calculated From StageInfo
         //public static readonly MemoryOffset CurrentCharacter = new MemoryOffset(-16, -10);
-        public static readonly MemoryOffset CurrentMaxHp = new MemoryOffset(-36, -35);
-        public static readonly MemoryOffset CurrentHp = new MemoryOffset(-38, -37);
-        public static readonly MemoryOffset OldCurrentStage = new MemoryOffset(-244, -238);
-        public static readonly MemoryOffset CurrentDifficulty = new MemoryOffset(); //TODO: get value
+        public static readonly MemoryOffset CurrentMaxHp = new MemoryOffset(252, 253);
+        public static readonly MemoryOffset CurrentHp = new MemoryOffset(250, 251);
+        public static readonly MemoryOffset OldCurrentStage = new MemoryOffset(-244, -238); //to ->0x2C
+        public static readonly MemoryOffset CurrentDifficulty = new MemoryOffset(0x10); //-272 before 
         public static readonly MemoryOffset NgplusCount = new MemoryOffset(-271, -272); //TODO: prove this is valid
-        public static readonly MemoryOffset CurrentGametype = new MemoryOffset(-281); //TODO: prove this is valid
+        public static readonly MemoryOffset CurrentGametype = new MemoryOffset(0x07); //TODO: prove this is valid
         public static readonly MemoryOffset CurrentEquippedItem = new MemoryOffset(-26); //TODO: prove this is valid
         public static readonly MemoryOffset CurrentEquippedWeapon = new MemoryOffset(-28); //TODO: prove this is valid
         public static readonly MemoryOffset GameStatsBlock = new MemoryOffset(0x12E, 0x159);

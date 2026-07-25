@@ -155,7 +155,7 @@ namespace MGS2_CheatTrainer_V2.Models
         #region Weapon Table
         public static List<IMgs2Object> WeaponList = [
         new MaxableWeapon("M9", "m9", 0), //1 - C2
-        new MaxableWeapon("U.S.P.", "usp", 2), //2 - C3
+        new MaxableWeapon("USP", "usp", 2), //2 - C3
         new MaxableWeapon("SOCOM", "socom", 4), //3 - C4
         new MaxableWeapon("PSG1", "psg1", 6), //4 - C5
         new MaxableWeapon("RGB-6", "rgb6", 8), //5 - C6

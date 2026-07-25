@@ -16,7 +16,7 @@
         <views:SingleStatBox x:Name="DamageTakenStatBox" Grid.Row="1" Grid.Column="1" GroupBoxName="Damage Taken" Margin="5" Editable="True" Stat="DamageTaken"/>
         <views:SingleStatBox x:Name="MechsDestroyedStatBox" Grid.Row="1" Grid.Column="2" GroupBoxName="Mechs Destroyed" Margin="5" Editable="True" Stat="MechsDestroyed"/>
         <views:SingleStatBox x:Name="PlayTimeStatBox" Grid.Row="1" Grid.Column="3" GroupBoxName="Play Time" Margin="5" Editable="False"/>
-        <views:SingleStatBox x:Name="SpecialItemsStatBox" Grid.Row="1" Grid.Column="4" GroupBoxName="Special Items Used" Margin="5" Editable="False"/>
+        <views:SingleStatBox x:Name="SpecialItemsStatBox" Grid.Row="1" Grid.Column="4" GroupBoxName="Special Items/Radar Used" Margin="5" Editable="False"/>
     </Grid>
     
 </UserControl>

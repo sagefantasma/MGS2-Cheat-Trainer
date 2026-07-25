@@ -76,7 +76,7 @@ public partial class StatsTabView : UserControl
         }
     }
 
-    private void UpdateGameStats(GameStats gameStats, Difficulty difficulty)
+    private void UpdateGameStats(GameStats gameStats, Difficulty difficulty, GameType gameType)
     {
         Dispatcher.UIThread.Post(() =>
         {
@@ -100,6 +100,15 @@ public partial class StatsTabView : UserControl
             PlayTimeStatBox.ValueTextBox.Text = TimeSpan.FromSeconds(gameStats.PlayTime / 60).ToString(@"hh\:mm\:ss");
             SpecialItemsStatBox.ValueTextBox.Text = gameStats.SpecialItems == 0 ? "NONE" : "YES";
         });
+        if (gameType == GameType.TankerPlant)
+        {
+            Rank? projectedRank = Rank.CurrentlyProjectedRank(gameStats, difficulty, gameType);
+            UpdateStatusBar?.Invoke(null, $"Projected Rank: {projectedRank}");
+        }
+        else
+        {
+            UpdateStatusBar?.Invoke(null, $"Rank projection only supported for Tanker-Plant");
+        }
     }
 
     private void UpdateScoringStats()
@@ -117,9 +126,10 @@ public partial class StatsTabView : UserControl
             if (!StageNames.MenuStages.StageList.Contains(currentStage))
             {
                 GameStats currentGameStats = _memoryManager.ReadGameStats();
-                Difficulty currentDifficulty = Mgs2MemoryManager.ReadCurrentDifficulty(); //TODO: update this
-                //GameType currentGameType = MGS2MemoryManager.ReadGameType(); //TODO: finish determining how to determine what gametype we're in
-                UpdateGameStats(currentGameStats, currentDifficulty);
+                Difficulty currentDifficulty = _memoryManager.ReadCurrentDifficulty(); 
+                
+                GameType currentGameType = _memoryManager.ReadGameType(); 
+                UpdateGameStats(currentGameStats, currentDifficulty, currentGameType);
             }
         }
         catch

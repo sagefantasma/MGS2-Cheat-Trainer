@@ -4,6 +4,9 @@ using Avalonia.Interactivity;
 using Avalonia.Media;
 using MGS2_CheatTrainer_V2.Models;
 using Microsoft.Extensions.DependencyInjection;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Base;
+using MsBox.Avalonia.Enums;
 
 namespace MGS2_CheatTrainer_V2.Views;
 
@@ -55,18 +58,25 @@ public partial class BooleanObjectDetailView : UserControl
             _object ??= Constants.DetermineObject(Name!);
             string enableState = EnabledCheckBox.IsChecked == true ? "enabled" : "disabled";
             Logging.Logger?.Information($"Attempting to set {_object.Name} {enableState}...");
-            _memoryManager.ToggleObject(_object!, (bool)EnabledCheckBox.IsChecked!);
-            ChangeStat($"{_object?.Name} is {enableState}");
+            _memoryManager.ToggleObject(_object!, (bool)EnabledCheckBox.IsChecked!, WeaponsTabView.AllWeaponsModEnabled);
+            SendStatusUpdate($"{_object?.Name} is {enableState}");
         }
         catch (Exception ex)
         {
+            _active = false;
+            EnabledCheckBox.IsChecked = !EnabledCheckBox.IsChecked;
             string errorBrief = $"Failed to enable {Name!}";
             Logging.Logger?.Error($"{errorBrief}: {ex.Message}");
-            ChangeStat(errorBrief);
+            SendStatusUpdate(errorBrief);
+            IMsBox<ButtonResult> msgBox = MessageBoxManager.GetMessageBoxStandard(
+                errorBrief,
+                ex.Message);
+            msgBox.ShowAsync();
+            _active = true;
         }
     }
     
-    private void ChangeStat(string message)
+    private void SendStatusUpdate(string message)
     {
         ValueChanged?.Invoke(null, message);
     }

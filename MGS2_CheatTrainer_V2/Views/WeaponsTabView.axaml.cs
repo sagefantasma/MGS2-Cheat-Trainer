@@ -1,12 +1,14 @@
 using System;
 using Avalonia.Controls;
+using Avalonia.Interactivity;
 
 namespace MGS2_CheatTrainer_V2.Views;
 
 public partial class WeaponsTabView : UserControl
 {
     public event EventHandler<string>? UpdateStatusBar;
-    //TODO: need to add support for the "All Weapons Mod" checkbox
+    public static bool AllWeaponsModEnabled;
+    
     private void RequestStatusBarUpdate(object? obj, string message)
     {
         UpdateStatusBar?.Invoke(null, message);
@@ -24,5 +26,10 @@ public partial class WeaponsTabView : UserControl
         {
             Logging.Logger?.Information("Weapons tab activated...");
         }
+    }
+
+    private void AllWeaponsModCheckBox_OnIsCheckedChanged(object? sender, RoutedEventArgs e)
+    {
+        AllWeaponsModEnabled = (bool)AllWeaponsModCheckBox.IsChecked!;
     }
 }

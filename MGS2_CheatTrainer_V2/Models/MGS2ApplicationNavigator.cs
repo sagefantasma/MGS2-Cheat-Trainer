@@ -67,6 +67,7 @@ namespace MGS2_CheatTrainer_V2.Models
         internal static List<int> Ray23NestedPointers = new List<int> { 0x016EA0F8, 0x430 };
         internal static List<int> Ray24NestedPointers = new List<int> { 0x016EA0F8, 0x450 };
         internal static List<int> Ray25NestedPointers = new List<int> { 0x016EA0F8, 0x470 }; //all fixed 2.0.2 -- fixed 2.1.0
+        internal static List<int> RayTotalHpPointers = new List<int> { 0x016EA0F8, 0x6C0 };
         internal static List<int> SolidusNestedPointers = new List<int> { 0x1551F18, 0x20 }; //"fixed", probably still causes crashes
     }
 

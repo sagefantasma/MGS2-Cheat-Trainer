@@ -25,7 +25,7 @@
             <views:BossDetailView x:Name="Vamp2DetailView" EntityImage="/Assets/TwilightSniping.jpg" Boss="VampSnipe"/>
         </GroupBox>
         <GroupBox Grid.Row="2" Grid.Column="0" Header="RAYs" Margin="5">
-            <views:BossDetailView x:Name="RaysDetailView" EntityImage="/Assets/Rays.jpg" HasStamina="False" Boss="Ray1"/> <!--Need different-->
+            <views:BossDetailView x:Name="RaysDetailView" EntityImage="/Assets/Rays.jpg" HasStamina="False" Boss="TotalRay"/>
         </GroupBox>
         <GroupBox Grid.Row="2" Grid.Column="1" Header="Solidus" Margin="5" IsEnabled="False">
             <views:BossDetailView x:Name="SolidusDetailView" EntityImage="/Assets/Solidus.webp" Boss="Solidus"/>

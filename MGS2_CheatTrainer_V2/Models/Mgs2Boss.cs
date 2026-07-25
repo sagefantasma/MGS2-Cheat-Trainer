@@ -32,6 +32,8 @@ namespace MGS2_CheatTrainer_V2.Models
                     return Mgs2Boss.VampSniping;
                 case Constants.Boss.Solidus:
                     return Mgs2Boss.Solidus;
+                case Constants.Boss.TotalRay:
+                    return Mgs2Boss.RayAll;
                 case Constants.Boss.Ray1:
                     return Mgs2Boss.Ray1;
                 case Constants.Boss.Ray2:
@@ -127,6 +129,14 @@ namespace MGS2_CheatTrainer_V2.Models
             Boss = Constants.Boss.VampSnipe
         };
         #region Rays
+
+        public static readonly BossVitals RayAll = new BossVitals()
+        {
+            HasStamina = false,
+            NestedHealthPointers = Mgs2Pointer.RayTotalHpPointers,
+            HealthOffset = 0x6C4,
+            Boss = Constants.Boss.TotalRay
+        };
         public static readonly BossVitals Ray1 = new BossVitals
         {
             HasStamina = false,

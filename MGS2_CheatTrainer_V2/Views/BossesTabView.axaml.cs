@@ -137,7 +137,7 @@ public partial class BossesTabView : UserControl
                 }
                 else if (currentStage.AreaCode == StageNames.PlantStages.Rectum.AreaCode)
                 {
-                    BossIsActive(Constants.Boss.Ray1);
+                    BossIsActive(Constants.Boss.TotalRay);
                     RequestStatusBarUpdate(null, "RAYs fight detected!");
                     OlgaDetailView.IsActive = false;
                     FortuneDetailView.IsActive = false;
@@ -145,7 +145,7 @@ public partial class BossesTabView : UserControl
                     HarrierDetailView.IsActive = false;
                     Vamp1DetailView.IsActive = false;
                     Vamp2DetailView.IsActive = false;
-                    RaysDetailView.IsActive = false; //TODO: need to get proper HP memory value for RAYs fight
+                    RaysDetailView.IsActive = true;
                     SolidusDetailView.IsActive = false;
                 }
                 else if (currentStage.AreaCode == StageNames.PlantStages.FederalHall.AreaCode)

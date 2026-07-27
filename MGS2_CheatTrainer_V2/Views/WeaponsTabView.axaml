@@ -6,27 +6,29 @@
              mc:Ignorable="d" d:DesignWidth="1250" d:DesignHeight="850"
              x:Class="MGS2_CheatTrainer_V2.Views.WeaponsTabView">
     <Grid x:Name="WeaponGrid" ColumnDefinitions=".2*,.2*,.2*,.2*,.2*" RowDefinitions=".2*,.2*,.2*,.2*,.2*">
-        <views:MaxableObjectDetailView x:Name="M9DetailView" Grid.Row="0" Grid.Column="0" EntityImage="/Assets/m9_alp_ovl.bmp.bmp" Mgs2Object="M9" ValueChanged="RequestStatusBarUpdate"/>
-        <views:MaxableObjectDetailView x:Name="UspDetailView" Grid.Row="0" Grid.Column="1" EntityImage="/Assets/usp_alp_ovl.bmp.bmp" Mgs2Object="USP" ValueChanged="RequestStatusBarUpdate"/>
-        <views:MaxableObjectDetailView x:Name="SocomDetailView" Grid.Row="0" Grid.Column="2" EntityImage="/Assets/scm_alp_ovl.bmp.bmp" Mgs2Object="SOCOM" ValueChanged="RequestStatusBarUpdate"/>
-        <views:MaxableObjectDetailView x:Name="Psg1DetailView" Grid.Row="0" Grid.Column="3" EntityImage="/Assets/psg_alp_ovl.bmp.bmp" Mgs2Object="PSG1" ValueChanged="RequestStatusBarUpdate"/>
-        <views:MaxableObjectDetailView x:Name="Rgb6DetailView" Grid.Row="0" Grid.Column="4" EntityImage="/Assets/rgb_alp_ovl.bmp.bmp" Mgs2Object="RGB-6" ValueChanged="RequestStatusBarUpdate"/>
-        <views:MaxableObjectDetailView x:Name="NikitaDetailView" Grid.Row="1" Grid.Column="0" EntityImage="/Assets/niki_alp_ovl.bmp.bmp" Mgs2Object="Nikita" ValueChanged="RequestStatusBarUpdate"/>
-        <views:MaxableObjectDetailView x:Name="StingerDetailView" Grid.Row="1" Grid.Column="1" EntityImage="/Assets/stin_alp_ovl.bmp.bmp" Mgs2Object="Stinger" ValueChanged="RequestStatusBarUpdate"/>
-        <views:MaxableObjectDetailView x:Name="ClaymoreDetailView" Grid.Row="1" Grid.Column="2" EntityImage="/Assets/cray_alp_ovl.bmp.bmp" Mgs2Object="Claymore" ValueChanged="RequestStatusBarUpdate"/>
-        <views:MaxableObjectDetailView x:Name="C4DetailView" Grid.Row="1" Grid.Column="3" EntityImage="/Assets/cfr_alp_ovl.bmp.bmp" Mgs2Object="C4" ValueChanged="RequestStatusBarUpdate"/>
-        <views:MaxableObjectDetailView x:Name="ChaffDetailView" Grid.Row="1" Grid.Column="4" EntityImage="/Assets/chaff_alp_ovl.bmp.bmp" Mgs2Object="Chaff Grenade" ValueChanged="RequestStatusBarUpdate"/>
-        <views:MaxableObjectDetailView x:Name="StunDetailView" Grid.Row="2" Grid.Column="0" EntityImage="/Assets/stun_alp_ovl.bmp.bmp" Mgs2Object="Stun Grenade" ValueChanged="RequestStatusBarUpdate"/>
-        <views:BooleanObjectDetailView x:Name="DMicDetailView" Grid.Row="2" Grid.Column="1"  EntityImage="/Assets/dmp_alp_ovl.bmp.bmp" Mgs2Object="Directional Microphone" ValueChanged="RequestStatusBarUpdate"/>
-        <views:BooleanObjectDetailView x:Name="HfBladeDetailView" Grid.Row="2" Grid.Column="2" EntityImage="/Assets/hfb_alp_ovl.bmp.bmp" Mgs2Object="High Frequency Blade" IsEnabled="False" ValueChanged="RequestStatusBarUpdate"/>
-        <views:BooleanObjectDetailView x:Name="CoolantDetailView" Grid.Row="2" Grid.Column="3" EntityImage="/Assets/cls_alp_ovl.bmp.bmp" Mgs2Object="Coolant Spray" ValueChanged="RequestStatusBarUpdate"/>
-        <views:MaxableObjectDetailView x:Name="Aks74UDetailView" Grid.Row="2" Grid.Column="4" EntityImage="/Assets/aks_alp_ovl.bmp.bmp" Mgs2Object="AKS-74u" ValueChanged="RequestStatusBarUpdate"/>
-        <views:MaxableObjectDetailView x:Name="MagazineDetailView" Grid.Row="3" Grid.Column="0" EntityImage="/Assets/mag_alp_ovl.bmp.bmp" Mgs2Object="Magazine" ValueChanged="RequestStatusBarUpdate"/>
-        <views:MaxableObjectDetailView x:Name="GrenadeDetailView" Grid.Row="3" Grid.Column="1" EntityImage="/Assets/gre_alp_ovl.bmp.bmp" Mgs2Object="Grenade" ValueChanged="RequestStatusBarUpdate"/>
-        <views:MaxableObjectDetailView x:Name="M4DetailView" Grid.Row="3" Grid.Column="2" EntityImage="/Assets/m4a_nm_alp_ovl.bmp.bmp" Mgs2Object="M4" ValueChanged="RequestStatusBarUpdate"/>
-        <views:MaxableObjectDetailView x:Name="Psg1TDetailView" Grid.Row="3" Grid.Column="3" EntityImage="/Assets/psg2_alp_ovl.bmp.bmp" Mgs2Object="PSG1-T" ValueChanged="RequestStatusBarUpdate"/>
-        <views:BooleanObjectDetailView x:Name="DMicZoomedDetailView" Grid.Row="3" Grid.Column="4" EntityImage="/Assets/dmp_alp_ovl.bmp.bmp" Mgs2Object="Directional Microphone(Movie)" ValueChanged="RequestStatusBarUpdate"/>
-        <views:MaxableObjectDetailView x:Name="BookDetailView" Grid.Row="4" Grid.Column="0" EntityImage="/Assets/wpb_alp_ovl.bmp.bmp" Mgs2Object="Book" ValueChanged="RequestStatusBarUpdate"/>
+        <views:MaxableObjectDetailView x:Name="Aks74UDetailView" Grid.Row="0" Grid.Column="0" EntityImage="/Assets/aks_alp_ovl.bmp.bmp" Mgs2Object="AKS-74u" ValueChanged="RequestStatusBarUpdate"/>
+        <views:MaxableObjectDetailView x:Name="BookDetailView" Grid.Row="0" Grid.Column="1" EntityImage="/Assets/wpb_alp_ovl.bmp.bmp" Mgs2Object="Book" ValueChanged="RequestStatusBarUpdate"/>
+        <views:MaxableObjectDetailView x:Name="ChaffDetailView" Grid.Row="0" Grid.Column="2" EntityImage="/Assets/chaff_alp_ovl.bmp.bmp" Mgs2Object="Chaff Grenade" ValueChanged="RequestStatusBarUpdate"/>
+        <views:MaxableObjectDetailView x:Name="ClaymoreDetailView" Grid.Row="0" Grid.Column="3" EntityImage="/Assets/cray_alp_ovl.bmp.bmp" Mgs2Object="Claymore" ValueChanged="RequestStatusBarUpdate"/>
+        <views:BooleanObjectDetailView x:Name="CoolantDetailView" Grid.Row="0" Grid.Column="4" EntityImage="/Assets/cls_alp_ovl.bmp.bmp" Mgs2Object="Coolant Spray" ValueChanged="RequestStatusBarUpdate"/>
+        <views:MaxableObjectDetailView x:Name="C4DetailView" Grid.Row="1" Grid.Column="0" EntityImage="/Assets/cfr_alp_ovl.bmp.bmp" Mgs2Object="C4" ValueChanged="RequestStatusBarUpdate"/>
+        <views:BooleanObjectDetailView x:Name="DMicDetailView" Grid.Row="1" Grid.Column="1"  EntityImage="/Assets/dmp_alp_ovl.bmp.bmp" Mgs2Object="Directional Microphone" ValueChanged="RequestStatusBarUpdate"/>
+        <views:BooleanObjectDetailView x:Name="DMicZoomedDetailView" Grid.Row="1" Grid.Column="2" EntityImage="/Assets/dmp_alp_ovl.bmp.bmp" Mgs2Object="Directional Microphone(Movie)" ValueChanged="RequestStatusBarUpdate"/>
+        <views:MaxableObjectDetailView x:Name="GrenadeDetailView" Grid.Row="1" Grid.Column="3" EntityImage="/Assets/gre_alp_ovl.bmp.bmp" Mgs2Object="Grenade" ValueChanged="RequestStatusBarUpdate"/>
+        <views:BooleanObjectDetailView x:Name="HfBladeDetailView" Grid.Row="1" Grid.Column="4" EntityImage="/Assets/hfb_alp_ovl.bmp.bmp" Mgs2Object="High Frequency Blade" IsEnabled="False" ValueChanged="RequestStatusBarUpdate"/>
+        <views:MaxableObjectDetailView x:Name="MagazineDetailView" Grid.Row="2" Grid.Column="0" EntityImage="/Assets/mag_alp_ovl.bmp.bmp" Mgs2Object="Magazine" ValueChanged="RequestStatusBarUpdate"/>
+        <views:MaxableObjectDetailView x:Name="M4DetailView" Grid.Row="2" Grid.Column="1" EntityImage="/Assets/m4a_nm_alp_ovl.bmp.bmp" Mgs2Object="M4" ValueChanged="RequestStatusBarUpdate"/>
+        <views:MaxableObjectDetailView x:Name="M9DetailView" Grid.Row="2" Grid.Column="2" EntityImage="/Assets/m9_alp_ovl.bmp.bmp" Mgs2Object="M9" ValueChanged="RequestStatusBarUpdate"/>
+        <views:MaxableObjectDetailView x:Name="NikitaDetailView" Grid.Row="2" Grid.Column="3" EntityImage="/Assets/niki_alp_ovl.bmp.bmp" Mgs2Object="Nikita" ValueChanged="RequestStatusBarUpdate"/>
+        <views:MaxableObjectDetailView x:Name="Psg1DetailView" Grid.Row="2" Grid.Column="4" EntityImage="/Assets/psg_alp_ovl.bmp.bmp" Mgs2Object="PSG1" ValueChanged="RequestStatusBarUpdate"/>
+        <views:MaxableObjectDetailView x:Name="Psg1TDetailView" Grid.Row="3" Grid.Column="0" EntityImage="/Assets/psg2_alp_ovl.bmp.bmp" Mgs2Object="PSG1-T" ValueChanged="RequestStatusBarUpdate"/>
+        <views:MaxableObjectDetailView x:Name="Rgb6DetailView" Grid.Row="3" Grid.Column="1" EntityImage="/Assets/rgb_alp_ovl.bmp.bmp" Mgs2Object="RGB-6" ValueChanged="RequestStatusBarUpdate"/>
+        <views:MaxableObjectDetailView x:Name="SocomDetailView" Grid.Row="3" Grid.Column="2" EntityImage="/Assets/scm_alp_ovl.bmp.bmp" Mgs2Object="SOCOM" ValueChanged="RequestStatusBarUpdate"/>
+        <views:MaxableObjectDetailView x:Name="StingerDetailView" Grid.Row="3" Grid.Column="3" EntityImage="/Assets/stin_alp_ovl.bmp.bmp" Mgs2Object="Stinger" ValueChanged="RequestStatusBarUpdate"/>
+        <views:MaxableObjectDetailView x:Name="StunDetailView" Grid.Row="3" Grid.Column="4" EntityImage="/Assets/stun_alp_ovl.bmp.bmp" Mgs2Object="Stun Grenade" ValueChanged="RequestStatusBarUpdate"/>
+        <views:MaxableObjectDetailView x:Name="UspDetailView" Grid.Row="4" Grid.Column="0" EntityImage="/Assets/usp_alp_ovl.bmp.bmp" Mgs2Object="USP" ValueChanged="RequestStatusBarUpdate"/>
+        
+        
         <CheckBox x:Name="AllWeaponsModCheckBox" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="4"
                   HorizontalAlignment="Center" Content="All Weapons Mod Installed?" IsCheckedChanged="AllWeaponsModCheckBox_OnIsCheckedChanged"/>
     </Grid>

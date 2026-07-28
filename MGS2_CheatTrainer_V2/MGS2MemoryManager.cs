@@ -92,7 +92,7 @@ namespace MGS2_CheatTrainer_V2
                     SimplePattern stageOffsetPattern = new SimplePattern(Mgs2AoB.StageInfoString);
                     List<SimpleProcessProxy.SimpleMemory> stageOffsets =
                         proxy.ScanMemoryForPattern(stageOffsetPattern);
-                    List<IntPtr> stageOffsetPtrs = stageOffsets.Select(sm => sm.OffsetAddress).ToList();
+                    List<IntPtr> stageOffsetPtrs = stageOffsets.Select(sm => sm.Offset).ToList();
 
                     Logger?.Verbose($"We found {stageOffsets.Count} stage offsets in memory");
 
@@ -349,7 +349,7 @@ namespace MGS2_CheatTrainer_V2
                 lock (Mgs2Monitor.Mgs2Process)
                 {
                     using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
-                    IntPtr memoryLocation = proxy.ScanMemoryForUniquePattern(new SimplePattern(byteString)).OffsetAddress;
+                    IntPtr memoryLocation = proxy.ScanMemoryForUniquePattern(new SimplePattern(byteString)).Offset;
                     return proxy.ReadProcessOffset(IntPtr.Add(memoryLocation, memoryOffset.Start), memoryOffset.Length);
                 }
             }
@@ -368,7 +368,7 @@ namespace MGS2_CheatTrainer_V2
                 lock (Mgs2Monitor.Mgs2Process)
                 {
                     using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
-                    IntPtr memoryLocation = proxy.ScanMemoryForUniquePattern(new SimplePattern(byteString)).OffsetAddress;
+                    IntPtr memoryLocation = proxy.ScanMemoryForUniquePattern(new SimplePattern(byteString)).Offset;
                     proxy.ModifyProcessOffset(IntPtr.Add(memoryLocation, memoryOffset.Start), valueToSet, true);
                 }
             }
@@ -389,7 +389,7 @@ namespace MGS2_CheatTrainer_V2
                 lock (Mgs2Monitor.Mgs2Process)
                 {
                     using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
-                    IntPtr offset = proxy.ScanMemoryForUniquePattern(new SimplePattern(gameString.FinderAoB)).OffsetAddress;
+                    IntPtr offset = proxy.ScanMemoryForUniquePattern(new SimplePattern(gameString.FinderAoB)).Offset;
 
                     SetStringValue(IntPtr.Add(offset, gameString.MemoryOffset.Start), newValue);
                 }
@@ -409,7 +409,7 @@ namespace MGS2_CheatTrainer_V2
                 lock (Mgs2Monitor.Mgs2Process)
                 {
                     using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
-                    IntPtr offset = proxy.ScanMemoryForUniquePattern(new SimplePattern(gameString.FinderAoB)).OffsetAddress;
+                    IntPtr offset = proxy.ScanMemoryForUniquePattern(new SimplePattern(gameString.FinderAoB)).Offset;
 
                     byte[] memoryValue = ReadValueFromMemory(IntPtr.Add(offset, gameString.MemoryOffset.Start), gameString.MemoryOffset.Length);
 
@@ -1022,7 +1022,7 @@ namespace MGS2_CheatTrainer_V2
                     using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
                     if (_fortuneOffset == IntPtr.Zero)
                     {
-                        _fortuneOffset = proxy.ScanMemoryForUniquePattern(new SimplePattern(Mgs2AoB.FortuneName)).OffsetAddress;
+                        _fortuneOffset = proxy.ScanMemoryForUniquePattern(new SimplePattern(Mgs2AoB.FortuneName)).Offset;
                     }
 
                     proxy.ModifyProcessOffset(IntPtr.Add(_fortuneOffset, Mgs2Offset.FortuneHpValue.Start), updatedVitals.Health, true);
@@ -1060,7 +1060,7 @@ namespace MGS2_CheatTrainer_V2
                     using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
                     if (_fortuneOffset == IntPtr.Zero) 
                     {
-                        _fortuneOffset = proxy.ScanMemoryForUniquePattern(new SimplePattern(Mgs2AoB.FortuneName)).OffsetAddress;
+                        _fortuneOffset = proxy.ScanMemoryForUniquePattern(new SimplePattern(Mgs2AoB.FortuneName)).Offset;
                     }
 
                     bossVitals.Health = BitConverter.ToInt16(proxy.ReadProcessOffset(IntPtr.Add(_fortuneOffset, Mgs2Offset.FortuneHpValue.Start), Mgs2Offset.FortuneHpValue.Length), 0);

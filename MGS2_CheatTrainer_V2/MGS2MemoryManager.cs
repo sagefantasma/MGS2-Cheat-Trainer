@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using MGS2_CheatTrainer_V2.Models;
 using MGS2_CheatTrainer_V2.Models.PlayableCharacters;
 using SimplifiedMemoryManager;
@@ -72,13 +73,11 @@ namespace MGS2_CheatTrainer_V2
         }
         
         [Obsolete("This is inefficient and slow, use GetCurrentStageOffset instead.")]
-        private static List<IntPtr> GetStageOffsets()
+        private static async Task<List<IntPtr>> GetStageOffsets()
         {
             try
             {
                 if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
-                lock (Mgs2Monitor.Mgs2Process)
-                {
                     using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
                     if (LastKnownStageOffsets != null)
                     {
@@ -91,7 +90,7 @@ namespace MGS2_CheatTrainer_V2
 
                     SimplePattern stageOffsetPattern = new SimplePattern(Mgs2AoB.StageInfoString);
                     List<SimpleProcessProxy.SimpleMemory> stageOffsets =
-                        proxy.ScanMemoryForPattern(stageOffsetPattern);
+                        await proxy.ScanMemoryForPatternAsync(stageOffsetPattern);
                     List<IntPtr> stageOffsetPtrs = stageOffsets.Select(sm => sm.Offset).ToList();
 
                     Logger?.Verbose($"We found {stageOffsets.Count} stage offsets in memory");
@@ -102,7 +101,6 @@ namespace MGS2_CheatTrainer_V2
 
                     LastKnownStageOffsets = new List<IntPtr>(stageOffsetPtrs);
                     return LastKnownStageOffsets;
-                }
             }
             catch(Exception e)
             {
@@ -233,7 +231,7 @@ namespace MGS2_CheatTrainer_V2
                 {
                     using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
                     Logger?.Information($"setting memory at offset {stringOffset} to {valueToSet}...");
-                    proxy.ModifyProcessOffset(stringOffset, valueToSet);
+                    proxy.SetMemoryAtPointer(stringOffset, Encoding.UTF8.GetBytes(valueToSet));
                 }
             }
             catch(Exception e)
@@ -341,17 +339,15 @@ namespace MGS2_CheatTrainer_V2
             }
         }
 
-        private static byte[] ReadAoBOffsetValue(string byteString, MemoryOffset memoryOffset)
+        private static async Task<byte[]> ReadAoBOffsetValue(string byteString, MemoryOffset memoryOffset)
         {
             try
             {
                 if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
-                lock (Mgs2Monitor.Mgs2Process)
-                {
-                    using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
-                    IntPtr memoryLocation = proxy.ScanMemoryForUniquePattern(new SimplePattern(byteString)).Offset;
-                    return proxy.ReadProcessOffset(IntPtr.Add(memoryLocation, memoryOffset.Start), memoryOffset.Length);
-                }
+                using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
+                IntPtr memoryLocation =
+                    (await proxy.ScanMemoryForUniquePatternAsync(new SimplePattern(byteString))).Offset;
+                return proxy.ReadProcessOffset(IntPtr.Add(memoryLocation, memoryOffset.Start), memoryOffset.Length);
             }
             catch(Exception e)
             {
@@ -360,17 +356,15 @@ namespace MGS2_CheatTrainer_V2
             }
         }
 
-        private static void SetAoBOffsetValue(string byteString, MemoryOffset memoryOffset, dynamic valueToSet)
+        private static async Task SetAoBOffsetValue(string byteString, MemoryOffset memoryOffset, dynamic valueToSet)
         {
             try
             {
                 if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
-                lock (Mgs2Monitor.Mgs2Process)
-                {
                     using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
-                    IntPtr memoryLocation = proxy.ScanMemoryForUniquePattern(new SimplePattern(byteString)).Offset;
+                    IntPtr memoryLocation = (await proxy.ScanMemoryForUniquePatternAsync(new SimplePattern(byteString)))
+                        .Offset;
                     proxy.ModifyProcessOffset(IntPtr.Add(memoryLocation, memoryOffset.Start), valueToSet, true);
-                }
             }
             catch(Exception e)
             {
@@ -380,19 +374,17 @@ namespace MGS2_CheatTrainer_V2
         }
         #endregion
 
-        public void UpdateGameString(Mgs2Strings.Mgs2String gameString, string newValue)
+        public async Task UpdateGameString(Mgs2Strings.Mgs2String gameString, string newValue)
         {
             try
             {
                 Logger?.Debug($"Attempting to set string {gameString.Tag} to {newValue}...");
                 if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
-                lock (Mgs2Monitor.Mgs2Process)
-                {
-                    using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
-                    IntPtr offset = proxy.ScanMemoryForUniquePattern(new SimplePattern(gameString.FinderAoB)).Offset;
+                using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
+                IntPtr offset = (await proxy.ScanMemoryForUniquePatternAsync(new SimplePattern(gameString.FinderAoB)))
+                    .Offset;
 
-                    SetStringValue(IntPtr.Add(offset, gameString.MemoryOffset.Start), newValue);
-                }
+                SetStringValue(IntPtr.Add(offset, gameString.MemoryOffset.Start), newValue);
             }
             catch (Exception e)
             {
@@ -401,20 +393,19 @@ namespace MGS2_CheatTrainer_V2
             }
         }
 
-        public string ReadGameString(Mgs2Strings.Mgs2String gameString)
+        public async Task<string> ReadGameString(Mgs2Strings.Mgs2String gameString)
         {
             try
             {
                 if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
-                lock (Mgs2Monitor.Mgs2Process)
-                {
                     using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
-                    IntPtr offset = proxy.ScanMemoryForUniquePattern(new SimplePattern(gameString.FinderAoB)).Offset;
+                    IntPtr offset =
+                        (await proxy.ScanMemoryForUniquePatternAsync(new SimplePattern(gameString.FinderAoB))).Offset;
 
-                    byte[] memoryValue = ReadValueFromMemory(IntPtr.Add(offset, gameString.MemoryOffset.Start), gameString.MemoryOffset.Length);
+                    byte[] memoryValue = ReadValueFromMemory(IntPtr.Add(offset, gameString.MemoryOffset.Start),
+                        gameString.MemoryOffset.Length);
 
                     return Encoding.UTF8.GetString(memoryValue);
-                }
             }
             catch (Exception e)
             {
@@ -882,13 +873,13 @@ namespace MGS2_CheatTrainer_V2
             }
         }
 
-        private static IntPtr FindAoBReferencedPointer(string aobToFind, MemoryOffset memoryOffset)
+        private static async Task<IntPtr> FindAoBReferencedPointer(string aobToFind, MemoryOffset memoryOffset)
         {
             //TODO: remove the auto-return
             return IntPtr.Zero;
             //TODO: confirm this is working as expected
             //find the pointer referenced in memory
-            byte[] aobReferencedPointer = ReadAoBOffsetValue(aobToFind, memoryOffset);
+            byte[] aobReferencedPointer = await ReadAoBOffsetValue(aobToFind, memoryOffset);
             //return it as a pointer
             return new IntPtr(BitConverter.ToInt64(aobReferencedPointer, 0));
         }
@@ -1002,7 +993,7 @@ namespace MGS2_CheatTrainer_V2
             }
         }
 
-        public void SetBossVitals(BossVitals updatedVitals)
+        public async Task SetBossVitals(BossVitals updatedVitals)
         {
             try
             {
@@ -1022,11 +1013,15 @@ namespace MGS2_CheatTrainer_V2
                     using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
                     if (_fortuneOffset == IntPtr.Zero)
                     {
-                        _fortuneOffset = proxy.ScanMemoryForUniquePattern(new SimplePattern(Mgs2AoB.FortuneName)).Offset;
+                        _fortuneOffset =
+                            (await proxy.ScanMemoryForUniquePatternAsync(new SimplePattern(Mgs2AoB.FortuneName)))
+                            .Offset;
                     }
 
-                    proxy.ModifyProcessOffset(IntPtr.Add(_fortuneOffset, Mgs2Offset.FortuneHpValue.Start), updatedVitals.Health, true);
-                    proxy.ModifyProcessOffset(IntPtr.Add(_fortuneOffset, Mgs2Offset.FortuneStaminaValue.Start), updatedVitals.Stamina, true);
+                    proxy.SetMemoryAtPointer(IntPtr.Add(_fortuneOffset, Mgs2Offset.FortuneHpValue.Start),
+                        BitConverter.GetBytes(updatedVitals.Health));
+                    proxy.SetMemoryAtPointer(IntPtr.Add(_fortuneOffset, Mgs2Offset.FortuneStaminaValue.Start),
+                        BitConverter.GetBytes(updatedVitals.Stamina));
                 }
             }
             catch(Exception e)
@@ -1037,7 +1032,7 @@ namespace MGS2_CheatTrainer_V2
         }
 
         private static IntPtr _fortuneOffset = IntPtr.Zero;
-        public BossVitals GetBossVitals(Constants.Boss selectedBoss)
+        public async Task<BossVitals> GetBossVitals(Constants.Boss selectedBoss)
         {
             try
             {
@@ -1052,19 +1047,30 @@ namespace MGS2_CheatTrainer_V2
                                 0);
                     if (bossVitals.HasStamina && bossVitals.NestedStaminaPointers != null)
                     {
-                        bossVitals.Stamina = BitConverter.ToInt16(GetDataFromNestedPointers(bossVitals.NestedStaminaPointers, bossVitals.StaminaOffset, 2), 0);
+                        bossVitals.Stamina =
+                            BitConverter.ToInt16(
+                                GetDataFromNestedPointers(bossVitals.NestedStaminaPointers, bossVitals.StaminaOffset,
+                                    2), 0);
                     }
                 }
                 else
                 {
                     using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
-                    if (_fortuneOffset == IntPtr.Zero) 
+                    if (_fortuneOffset == IntPtr.Zero)
                     {
-                        _fortuneOffset = proxy.ScanMemoryForUniquePattern(new SimplePattern(Mgs2AoB.FortuneName)).Offset;
+                        _fortuneOffset =
+                            (await proxy.ScanMemoryForUniquePatternAsync(new SimplePattern(Mgs2AoB.FortuneName)))
+                            .Offset;
                     }
-
-                    bossVitals.Health = BitConverter.ToInt16(proxy.ReadProcessOffset(IntPtr.Add(_fortuneOffset, Mgs2Offset.FortuneHpValue.Start), Mgs2Offset.FortuneHpValue.Length), 0);
-                    bossVitals.Stamina = BitConverter.ToInt16(proxy.ReadProcessOffset(IntPtr.Add(_fortuneOffset, Mgs2Offset.FortuneStaminaValue.Start), Mgs2Offset.FortuneStaminaValue.Length), 0);
+                    
+                    bossVitals.Health =
+                        BitConverter.ToInt16(
+                            proxy.GetMemoryFromPointer(IntPtr.Add(_fortuneOffset, Mgs2Offset.FortuneHpValue.Start),
+                                Mgs2Offset.FortuneHpValue.Length), 0);
+                    bossVitals.Stamina =
+                        BitConverter.ToInt16(
+                            proxy.GetMemoryFromPointer(IntPtr.Add(_fortuneOffset, Mgs2Offset.FortuneStaminaValue.Start),
+                                Mgs2Offset.FortuneStaminaValue.Length), 0);
                 }
 
                 return bossVitals;
@@ -1082,7 +1088,7 @@ namespace MGS2_CheatTrainer_V2
             try
             {
                 string characterCode = GetCharacterCode();
-                Logger?.Debug($"Found character: {characterCode}");
+                Logger?.Verbose($"Found character: {characterCode}");
 
                 if (characterCode.Contains("tnk") || characterCode.Contains("r_vr_s"))
                 {

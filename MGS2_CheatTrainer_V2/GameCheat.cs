@@ -43,7 +43,8 @@ namespace MGS2_CheatTrainer_V2
                             using SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
                             if (memoryLocation != IntPtr.Zero)
                             {
-                                byte[] memoryContent = spp.ReadProcessOffset(IntPtr.Add(memoryLocation, offset.Start), offset.Length);
+                                byte[] memoryContent = spp.GetMemoryFromPointer(IntPtr.Add(memoryLocation, offset.Start),
+                                    offset.Length);
 
                                 for (int i = startIndexToReplace; i < startIndexToReplace + bytesToReplace.Length; i++)
                                 {
@@ -51,7 +52,7 @@ namespace MGS2_CheatTrainer_V2
                                         memoryContent[i] = bytesToReplace[i];
                                 }
 
-                                spp.ModifyProcessOffset(memoryLocation, memoryContent, true);
+                                spp.SetMemoryAtPointer(memoryLocation, memoryContent);
                                 successful = true;
                             }
                         }
@@ -67,46 +68,44 @@ namespace MGS2_CheatTrainer_V2
                 }
             }
 
-            private static IntPtr ReplaceWithInvalidCode(string aob, MemoryOffset offset, int bytesToReplace, int startIndexToReplace = 0)
+            private static async Task<IntPtr> ReplaceWithInvalidCode(string aob, MemoryOffset offset, int bytesToReplace, int startIndexToReplace = 0)
             {
                 if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
-                lock (Mgs2Monitor.Mgs2Process)
+                bool successful = false;
+                int retries = 5;
+                do
                 {
-                    bool successful = false;
-                    int retries = 5;
-                    do
+                    try
                     {
-                        try
+                        using SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
+                        SimplePattern pattern = new SimplePattern(aob);
+                        IntPtr memoryLocation = spp.ScanMemoryForUniquePatternAsync(pattern).Result.Offset;
+
+                        if (memoryLocation != -1)
                         {
-                            using SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
-                            SimplePattern pattern = new SimplePattern(aob);
-                            int memoryLocation = spp.ScanMemoryForUniquePattern(pattern).Offset.ToInt32();
+                            byte[] memoryContent = spp.GetMemoryFromPointer(IntPtr.Add(memoryLocation, offset.Start),
+                                offset.Length);
 
-                            if (memoryLocation != -1)
+                            for (int i = startIndexToReplace; i < startIndexToReplace + bytesToReplace; i++)
                             {
-                                byte[] memoryContent = spp.ReadProcessOffset(new IntPtr(memoryLocation + offset.Start), offset.Length);
-
-                                for (int i = startIndexToReplace; i < startIndexToReplace + bytesToReplace; i++)
-                                {
-                                    memoryContent[i] = 0x90;
-                                }
-
-                                spp.ModifyProcessOffset(new IntPtr(memoryLocation), memoryContent, true);
-                                successful = true;
-
-                                return new IntPtr(memoryLocation);
+                                memoryContent[i] = 0x90;
                             }
+
+                            spp.SetMemoryAtPointer(IntPtr.Add(memoryLocation, offset.Start), memoryContent);
+                            successful = true;
+
+                            return memoryLocation;
                         }
-                        catch (Exception e)
+                    }
+                    catch (Exception e)
+                    {
+                        retries--;
+                        if (retries == 0)
                         {
-                            retries--;
-                            if (retries == 0)
-                            {
-                                throw new AggregateException("Failed to activate cheat, abandoning process", e);
-                            }
+                            throw new AggregateException("Failed to activate cheat, abandoning process", e);
                         }
-                    } while (!successful && retries > 0);
-                }
+                    }
+                } while (!successful && retries > 0);
 
                 return IntPtr.Zero;
             }
@@ -125,14 +124,15 @@ namespace MGS2_CheatTrainer_V2
                             using SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
                             if (memoryLocation != IntPtr.Zero)
                             {
-                                byte[] memoryContent = spp.ReadProcessOffset(IntPtr.Add(memoryLocation, offset.Start), offset.Length);
+                                byte[] memoryContent = spp.GetMemoryFromPointer(IntPtr.Add(memoryLocation, offset.Start),
+                                    offset.Length);
 
                                 for (int i = startIndexToReplace; i < startIndexToReplace + bytesToReplace; i++)
                                 {
                                     memoryContent[i] = 0x90;
                                 }
 
-                                spp.ModifyProcessOffset(memoryLocation, memoryContent, true);
+                                spp.SetMemoryAtPointer(IntPtr.Add(memoryLocation, offset.Start), memoryContent);
                                 successful = true;
                             }
                         }
@@ -148,46 +148,44 @@ namespace MGS2_CheatTrainer_V2
                 }
             }
 
-            public static IntPtr ReplaceWithSpecificCode(string patternToScan, byte[] replacementBytes, MemoryOffset offset)
+            public static async Task<IntPtr> ReplaceWithSpecificCode(string patternToScan, byte[] replacementBytes, MemoryOffset offset)
             {
                 if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
-                lock (Mgs2Monitor.Mgs2Process)
+                bool successful = false;
+                int retries = 5;
+                do
                 {
-                    bool successful = false;
-                    int retries = 5;
-                    do
+                    try
                     {
-                        try
+                        using SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
+                        SimplePattern pattern = new SimplePattern(patternToScan);
+                        IntPtr memoryLocation = (await spp.ScanMemoryForUniquePatternAsync(pattern)).Offset;
+
+                        if (memoryLocation != -1)
                         {
-                            using SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
-                            SimplePattern pattern = new SimplePattern(patternToScan);
-                            int memoryLocation = spp.ScanMemoryForUniquePattern(pattern).Offset.ToInt32();
+                            byte[] memoryContent = spp.GetMemoryFromPointer(IntPtr.Add(memoryLocation, offset.Start),
+                                offset.Length);
 
-                            if (memoryLocation != -1)
+                            for (int i = 0; i < replacementBytes.Length; i++)
                             {
-                                byte[] memoryContent = spp.ReadProcessOffset(new IntPtr(memoryLocation + offset.Start), offset.Length);
-
-                                for (int i = 0; i < replacementBytes.Length; i++)
-                                {
-                                    memoryContent[i] = replacementBytes[i];
-                                }
-
-                                spp.ModifyProcessOffset(new IntPtr(memoryLocation + offset.Start), memoryContent, true);
-                                successful = true;
-
-                                return new IntPtr(memoryLocation);
+                                memoryContent[i] = replacementBytes[i];
                             }
+
+                            spp.SetMemoryAtPointer(IntPtr.Add(memoryLocation, offset.Start), memoryContent);
+                            successful = true;
+
+                            return memoryLocation;
                         }
-                        catch (Exception e)
+                    }
+                    catch (Exception e)
+                    {
+                        retries--;
+                        if (retries == 0)
                         {
-                            retries--;
-                            if (retries == 0)
-                            {
-                                throw new AggregateException("Failed to activate cheat, abandoning process", e);
-                            }
+                            throw new AggregateException("Failed to activate cheat, abandoning process", e);
                         }
-                    } while (!successful && retries > 0);
-                }
+                    }
+                } while (!successful && retries > 0);
                 throw new Exception("Failed to replace code, aborting the process");
             }
 
@@ -205,14 +203,15 @@ namespace MGS2_CheatTrainer_V2
                             using SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
                             if (memoryLocation != IntPtr.Zero)
                             {
-                                byte[] memoryContent = spp.ReadProcessOffset(IntPtr.Add(memoryLocation, offset.Start), offset.Length);
+                                byte[] memoryContent = spp.GetMemoryFromPointer(IntPtr.Add(memoryLocation, offset.Start),
+                                    offset.Length);
 
                                 for (int i = 0; i < replacementBytes.Length; i++)
                                 {
                                     memoryContent[i] = replacementBytes[i];
                                 }
 
-                                spp.ModifyProcessOffset(memoryLocation, memoryContent, true);
+                                spp.SetMemoryAtPointer(new IntPtr(memoryLocation + offset.Start), memoryContent);
                                 successful = true;
                             }
                         }
@@ -228,39 +227,36 @@ namespace MGS2_CheatTrainer_V2
                 }
             }
 
-            private static IntPtr ModifySingleByte(string aob, MemoryOffset offset, byte replacementValue)
+            private static async Task<IntPtr> ModifySingleByte(string aob, MemoryOffset offset, byte replacementValue)
             {
                 if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
-                lock (Mgs2Monitor.Mgs2Process)
+                bool successful = false;
+                int retries = 5;
+                do
                 {
-                    bool successful = false;
-                    int retries = 5;
-                    do
+                    try
                     {
-                        try
-                        {
-                            using SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
-                            SimplePattern pattern = new SimplePattern(aob);
-                            int memoryLocation = spp.ScanMemoryForUniquePattern(pattern).Offset.ToInt32();
+                        using SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
+                        SimplePattern pattern = new SimplePattern(aob);
+                        IntPtr memoryLocation = (await spp.ScanMemoryForUniquePatternAsync(pattern)).Offset;
 
-                            if (memoryLocation != -1)
-                            {
-                                spp.ModifyProcessOffset(new IntPtr(memoryLocation + offset.Start), replacementValue, true);
-                                successful = true;
-
-                                return new IntPtr(memoryLocation);
-                            }
-                        }
-                        catch (Exception e)
+                        if (memoryLocation != -1)
                         {
-                            retries--;
-                            if (retries == 0)
-                            {
-                                throw new AggregateException("Failed to activate cheat, abandoning process", e);
-                            }
+                            spp.SetMemoryAtPointer(IntPtr.Add(memoryLocation, offset.Start), [replacementValue]);
+                            successful = true;
+
+                            return memoryLocation;
                         }
-                    } while (!successful && retries > 0);
-                }
+                    }
+                    catch (Exception e)
+                    {
+                        retries--;
+                        if (retries == 0)
+                        {
+                            throw new AggregateException("Failed to activate cheat, abandoning process", e);
+                        }
+                    }
+                } while (!successful && retries > 0);
 
                 return IntPtr.Zero;
             }
@@ -279,7 +275,7 @@ namespace MGS2_CheatTrainer_V2
                             using SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
                             if (memoryLocation != IntPtr.Zero)
                             {
-                                spp.ModifyProcessOffset(IntPtr.Add(memoryLocation, offset.Start), replacementValue, true);
+                                spp.SetMemoryAtPointer(IntPtr.Add(memoryLocation, offset.Start), [replacementValue]);
                                 successful = true;
                             }
                         }
@@ -295,36 +291,33 @@ namespace MGS2_CheatTrainer_V2
                 }
             }
 
-            public static byte[] ReadMemory(string aob, MemoryOffset offset)
+            public static async Task<byte[]> ReadMemory(string aob, MemoryOffset offset)
             {
                 if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
-                lock (Mgs2Monitor.Mgs2Process)
+                bool successful = false;
+                int retries = 5;
+                do
                 {
-                    bool successful = false;
-                    int retries = 5;
-                    do
+                    try
                     {
-                        try
-                        {
-                            using SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
-                            SimplePattern pattern = new SimplePattern(aob);
-                            int memoryLocation = spp.ScanMemoryForUniquePattern(pattern).Offset.ToInt32();
+                        using SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
+                        SimplePattern pattern = new SimplePattern(aob);
+                        IntPtr memoryLocation = (await spp.ScanMemoryForUniquePatternAsync(pattern)).Offset;
 
-                            if(memoryLocation != -1)
-                                return spp.ReadProcessOffset(new IntPtr(memoryLocation + offset.Start), offset.Length);
-                        }
-                        catch (Exception e)
+                        if (memoryLocation != -1)
+                            return spp.GetMemoryFromPointer(IntPtr.Add(memoryLocation, offset.Start), offset.Length);
+                    }
+                    catch (Exception e)
+                    {
+                        retries--;
+                        if (retries == 0)
                         {
-                            retries--;
-                            if (retries == 0)
-                            {
-                                throw new AggregateException("Failed to activate cheat, abandoning process", e);
-                            }
+                            throw new AggregateException("Failed to activate cheat, abandoning process", e);
                         }
-                    } while (!successful && retries > 0);
+                    }
+                } while (!successful && retries > 0);
 
-                    throw new Exception("Failed to read process memory, aborting cheat process");
-                }
+                throw new Exception("Failed to read process memory, aborting cheat process");
             }
 
             public static void RestartLevel()
@@ -361,8 +354,9 @@ namespace MGS2_CheatTrainer_V2
                 {
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.OriginalBytes = ReadMemory(Mgs2AoB.Camera, Mgs2Offset.BlackScreen);
-                        activeGameCheat.CodeLocation = ModifySingleByte(Mgs2AoB.Camera, Mgs2Offset.BlackScreen, 0x00);
+                        activeGameCheat.OriginalBytes = ReadMemory(Mgs2AoB.Camera, Mgs2Offset.BlackScreen).Result;
+                        activeGameCheat.CodeLocation =
+                            ModifySingleByte(Mgs2AoB.Camera, Mgs2Offset.BlackScreen, 0x00).Result;
                         Mgs2Cheat.BlackScreen = activeGameCheat;
                     }
                     else
@@ -381,7 +375,8 @@ namespace MGS2_CheatTrainer_V2
                 {
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithInvalidCode(Mgs2AoB.NoBleedDamage, Mgs2Offset.NoBleedDmg, 7);
+                        activeGameCheat.CodeLocation =
+                            ReplaceWithInvalidCode(Mgs2AoB.NoBleedDamage, Mgs2Offset.NoBleedDmg, 7).Result;
                         Mgs2Cheat.NoBleedDamage = activeGameCheat;
                     }
                     else
@@ -390,7 +385,8 @@ namespace MGS2_CheatTrainer_V2
                     }
                 }
                 else
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.NoBleedDmg, Mgs2AoB.OriginalBleedDamageBytes);
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.NoBleedDmg,
+                        Mgs2AoB.OriginalBleedDamageBytes);
             }
 
             public static void TurnOffBurnDamage(bool activate)
@@ -400,7 +396,8 @@ namespace MGS2_CheatTrainer_V2
                 {
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithInvalidCode(Mgs2AoB.NoBurnDamage, Mgs2Offset.NoBurnDmg, 7);
+                        activeGameCheat.CodeLocation =
+                            ReplaceWithInvalidCode(Mgs2AoB.NoBurnDamage, Mgs2Offset.NoBurnDmg, 7).Result;
                         Mgs2Cheat.NoBurnDamage = activeGameCheat;
                     }
                     else
@@ -409,7 +406,8 @@ namespace MGS2_CheatTrainer_V2
                     }
                 }
                 else
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.NoBleedDmg, Mgs2AoB.OriginalBurnDamageBytes);
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.NoBleedDmg,
+                        Mgs2AoB.OriginalBurnDamageBytes);
             }
 
             internal static void InfiniteAmmo(bool activate)
@@ -419,7 +417,8 @@ namespace MGS2_CheatTrainer_V2
                 {
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithInvalidCode(Mgs2AoB.InfiniteAmmo, Mgs2Offset.InfiniteAmmo, 4);
+                        activeGameCheat.CodeLocation =
+                            ReplaceWithInvalidCode(Mgs2AoB.InfiniteAmmo, Mgs2Offset.InfiniteAmmo, 4).Result;
                         Mgs2Cheat.InfiniteAmmo = activeGameCheat;
                     }
                     else
@@ -428,7 +427,8 @@ namespace MGS2_CheatTrainer_V2
                     }
                 }
                 else
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.InfiniteAmmo, Mgs2AoB.OriginalAmmoBytes);
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.InfiniteAmmo,
+                        Mgs2AoB.OriginalAmmoBytes);
             }
 
             internal static void InfiniteLife(bool activate)
@@ -438,7 +438,8 @@ namespace MGS2_CheatTrainer_V2
                 {
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithInvalidCode(Mgs2AoB.InfiniteLife, Mgs2Offset.InfiniteLife, 4);
+                        activeGameCheat.CodeLocation =
+                            ReplaceWithInvalidCode(Mgs2AoB.InfiniteLife, Mgs2Offset.InfiniteLife, 4).Result;
                         Mgs2Cheat.InfiniteLife = activeGameCheat;
                     }
                     else
@@ -447,7 +448,8 @@ namespace MGS2_CheatTrainer_V2
                     }
                 }
                 else
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.InfiniteLife, Mgs2AoB.OriginalLifeBytes);
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.InfiniteLife,
+                        Mgs2AoB.OriginalLifeBytes);
             }
 
             internal static void InfiniteOxygen(bool activate)
@@ -457,7 +459,8 @@ namespace MGS2_CheatTrainer_V2
                 {
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithInvalidCode(Mgs2AoB.InfiniteO2, Mgs2Offset.InfiniteO2, 4);
+                        activeGameCheat.CodeLocation =
+                            ReplaceWithInvalidCode(Mgs2AoB.InfiniteO2, Mgs2Offset.InfiniteO2, 4).Result;
                         Mgs2Cheat.InfiniteOxygen = activeGameCheat;
                     }
                     else
@@ -466,7 +469,8 @@ namespace MGS2_CheatTrainer_V2
                     }
                 }
                 else
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.InfiniteO2, Mgs2AoB.OriginalO2Bytes);
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.InfiniteO2,
+                        Mgs2AoB.OriginalO2Bytes);
             }
 
             internal static void Letterboxing(bool activate)
@@ -476,7 +480,8 @@ namespace MGS2_CheatTrainer_V2
                 {
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ModifySingleByte(Mgs2AoB.Camera, Mgs2Offset.Letterbox, 0x00);
+                        activeGameCheat.CodeLocation =
+                            ModifySingleByte(Mgs2AoB.Camera, Mgs2Offset.Letterbox, 0x00).Result;
                         Mgs2Cheat.Letterboxing = activeGameCheat;
                     }
                     else
@@ -495,7 +500,8 @@ namespace MGS2_CheatTrainer_V2
                 {
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithInvalidCode(Mgs2AoB.NeverReload, Mgs2Offset.NeverReload, 2);
+                        activeGameCheat.CodeLocation =
+                            ReplaceWithInvalidCode(Mgs2AoB.NeverReload, Mgs2Offset.NeverReload, 2).Result;
                         Mgs2Cheat.NoReload = activeGameCheat;
                     }
                     else
@@ -504,7 +510,8 @@ namespace MGS2_CheatTrainer_V2
                     }
                 }
                 else
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.NeverReload, Mgs2AoB.OriginalReloadBytes);
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.NeverReload,
+                        Mgs2AoB.OriginalReloadBytes);
             }
 
             internal static void GripNeverDepletes(bool activate)
@@ -514,7 +521,8 @@ namespace MGS2_CheatTrainer_V2
                 {
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithInvalidCode(Mgs2AoB.DecrementGripGauge, Mgs2Offset.NoGripDmg, 7);
+                        activeGameCheat.CodeLocation =
+                            ReplaceWithInvalidCode(Mgs2AoB.DecrementGripGauge, Mgs2Offset.NoGripDmg, 7).Result;
                         Mgs2Cheat.NoGripDamage = activeGameCheat;
                     }
                     else
@@ -523,7 +531,8 @@ namespace MGS2_CheatTrainer_V2
                     }
                 }
                 else
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.NoGripDmg, Mgs2AoB.OriginalGripDamageBytes);
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.NoGripDmg,
+                        Mgs2AoB.OriginalGripDamageBytes);
             }
 
             internal static void TurnOffPauseButton(bool activate)
@@ -533,7 +542,8 @@ namespace MGS2_CheatTrainer_V2
                 {
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithInvalidCode(Mgs2AoB.InGamePause, Mgs2Offset.NoPauseBtn, 5);
+                        activeGameCheat.CodeLocation =
+                            ReplaceWithInvalidCode(Mgs2AoB.InGamePause, Mgs2Offset.NoPauseBtn, 5).Result;
                         Mgs2Cheat.DisablePauseButton = activeGameCheat;
                     }
                     else
@@ -542,7 +552,8 @@ namespace MGS2_CheatTrainer_V2
                     }
                 }
                 else
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.NoPauseBtn, Mgs2AoB.OriginalPauseButtonBytes);
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.NoPauseBtn,
+                        Mgs2AoB.OriginalPauseButtonBytes);
             }
 
             internal static void TurnOffItemMenuPause(bool activate)
@@ -552,7 +563,8 @@ namespace MGS2_CheatTrainer_V2
                 {
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithInvalidCode(Mgs2AoB.ItemMenuPause, Mgs2Offset.NoItemPause, 6);
+                        activeGameCheat.CodeLocation =
+                            ReplaceWithInvalidCode(Mgs2AoB.ItemMenuPause, Mgs2Offset.NoItemPause, 6).Result;
                         Mgs2Cheat.DisableItemMenuPause = activeGameCheat;
                     }
                     else
@@ -561,7 +573,8 @@ namespace MGS2_CheatTrainer_V2
                     }
                 }
                 else
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.NoItemPause, Mgs2AoB.OriginalItemMenuPauseBytes);
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.NoItemPause,
+                        Mgs2AoB.OriginalItemMenuPauseBytes);
             }
 
             internal static void TurnOffWeaponMenuPause(bool activate)
@@ -571,7 +584,8 @@ namespace MGS2_CheatTrainer_V2
                 {
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithInvalidCode(Mgs2AoB.WeaponMenuPause, Mgs2Offset.NoWeaponPause, 6);
+                        activeGameCheat.CodeLocation =
+                            ReplaceWithInvalidCode(Mgs2AoB.WeaponMenuPause, Mgs2Offset.NoWeaponPause, 6).Result;
                         Mgs2Cheat.DisableWeaponMenuPause = activeGameCheat;
                     }
                     else
@@ -580,7 +594,8 @@ namespace MGS2_CheatTrainer_V2
                     }
                 }
                 else
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.NoWeaponPause, Mgs2AoB.OriginalWeaponMenuPauseBytes);
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.NoWeaponPause,
+                        Mgs2AoB.OriginalWeaponMenuPauseBytes);
             }
 
             internal static void NoClipNoGravity(bool activate)
@@ -647,7 +662,8 @@ namespace MGS2_CheatTrainer_V2
                         }
 
                         IntPtr pointerLocation = spp.FollowPointer(new IntPtr(Mgs2Pointer.WalkThroughWalls), false);
-                        byte[] memoryContent = spp.GetMemoryFromPointer(new IntPtr(pointerLocation.ToInt64() + Mgs2Offset.NoClip.Start), Mgs2Offset.NoClip.Length);
+                        byte[] memoryContent = spp.GetMemoryFromPointer(
+                            new IntPtr(pointerLocation.ToInt64() + Mgs2Offset.NoClip.Start), Mgs2Offset.NoClip.Length);
 
                         if (!activate)
                         {
@@ -688,7 +704,8 @@ namespace MGS2_CheatTrainer_V2
                             }
                         }
 
-                        spp.SetMemoryAtPointer(new IntPtr(pointerLocation.ToInt64() + Mgs2Offset.NoClip.Start), memoryContent);
+                        spp.SetMemoryAtPointer(new IntPtr(pointerLocation.ToInt64() + Mgs2Offset.NoClip.Start),
+                            memoryContent);
                     }
                 }
                 catch(Exception e)
@@ -709,14 +726,14 @@ namespace MGS2_CheatTrainer_V2
 
             private static void Zoom(bool zoomIn)
             {
-                byte[] currentZoom = ReadMemory(Mgs2AoB.Camera, Mgs2Offset.Zoom);
+                byte[] currentZoom = ReadMemory(Mgs2AoB.Camera, Mgs2Offset.Zoom).Result;
 
                 GameCheat activeGameCheat = zoomIn ? Mgs2Cheat.ZoomIn : Mgs2Cheat.ZoomOut;
                 if (zoomIn)
                 {
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ModifySingleByte(Mgs2AoB.Camera, Mgs2Offset.Zoom, currentZoom[0]++);
+                        activeGameCheat.CodeLocation = ModifySingleByte(Mgs2AoB.Camera, Mgs2Offset.Zoom, currentZoom[0]++).Result;
                         Mgs2Cheat.ZoomIn = activeGameCheat;
                     }
                     else
@@ -728,7 +745,7 @@ namespace MGS2_CheatTrainer_V2
                 {
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ModifySingleByte(Mgs2AoB.Camera, Mgs2Offset.Zoom, currentZoom[0]--);
+                        activeGameCheat.CodeLocation = ModifySingleByte(Mgs2AoB.Camera, Mgs2Offset.Zoom, currentZoom[0]--).Result;
                         Mgs2Cheat.ZoomOut = activeGameCheat;
                     }
                     else
@@ -745,7 +762,8 @@ namespace MGS2_CheatTrainer_V2
                 {
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithInvalidCode(Mgs2AoB.InfiniteItemUse, Mgs2Offset.InfiniteItems, 4);
+                        activeGameCheat.CodeLocation =
+                            ReplaceWithInvalidCode(Mgs2AoB.InfiniteItemUse, Mgs2Offset.InfiniteItems, 4).Result;
                         Mgs2Cheat.InfiniteItems = activeGameCheat;
                     }
                     else
@@ -754,7 +772,8 @@ namespace MGS2_CheatTrainer_V2
                     }
                 }
                 else
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.InfiniteItems, Mgs2AoB.OriginalItemUseBytes);
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.InfiniteItems,
+                        Mgs2AoB.OriginalItemUseBytes);
             }
 
             internal static void MaxStackOnPickup(bool activate)
@@ -764,7 +783,8 @@ namespace MGS2_CheatTrainer_V2
                 {
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithInvalidCode(Mgs2AoB.MaxCountOnPickup, Mgs2Offset.MaxOnPickup, 4);
+                        activeGameCheat.CodeLocation =
+                            ReplaceWithInvalidCode(Mgs2AoB.MaxCountOnPickup, Mgs2Offset.MaxOnPickup, 4).Result;
                         Mgs2Cheat.MaxStackOnPickup = activeGameCheat;
                     }
                     else
@@ -773,7 +793,8 @@ namespace MGS2_CheatTrainer_V2
                     }
                 }
                 else
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.MaxOnPickup, Mgs2AoB.OriginalCountOnPickup);
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.MaxOnPickup,
+                        Mgs2AoB.OriginalCountOnPickup);
             }
 
             internal static void InfiniteKnockout(bool activate)
@@ -783,7 +804,8 @@ namespace MGS2_CheatTrainer_V2
                 {
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithInvalidCode(Mgs2AoB.KnockoutDuration, Mgs2Offset.KnockoutDuration, 8);
+                        activeGameCheat.CodeLocation =
+                            ReplaceWithInvalidCode(Mgs2AoB.KnockoutDuration, Mgs2Offset.KnockoutDuration, 8).Result;
                         Mgs2Cheat.InfiniteKnockout = activeGameCheat;
                     }
                     else
@@ -792,8 +814,9 @@ namespace MGS2_CheatTrainer_V2
                     }
                 }
                 else
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.KnockoutDuration, Mgs2AoB.OriginalKnockoutDuration);
-                
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.KnockoutDuration,
+                        Mgs2AoB.OriginalKnockoutDuration);
+
             }
 
             internal static void RemovePlantFilter(bool activate)
@@ -803,7 +826,8 @@ namespace MGS2_CheatTrainer_V2
                 {
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithInvalidCode(Mgs2AoB.RemovePlantFilter, Mgs2Offset.RemovePlantFilter, 7);
+                        activeGameCheat.CodeLocation =
+                            ReplaceWithInvalidCode(Mgs2AoB.RemovePlantFilter, Mgs2Offset.RemovePlantFilter, 7).Result;
                         Mgs2Cheat.RemovePlantFilter = activeGameCheat;
                     }
                     else
@@ -812,7 +836,8 @@ namespace MGS2_CheatTrainer_V2
                     }
                 }
                 else
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.RemovePlantFilter, Mgs2AoB.OriginalRemovePlantFilterBytes);
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.RemovePlantFilter,
+                        Mgs2AoB.OriginalRemovePlantFilterBytes);
             }
 
             internal static void RemovePlantFog(bool activate)
@@ -822,20 +847,24 @@ namespace MGS2_CheatTrainer_V2
                 GameCheat activeGameCheat = Mgs2Cheat.RemovePlantFog;
                 if (activate)
                 {
-                    if(activeGameCheat.CodeLocation == IntPtr.Zero)
+                    if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        byte[] originalValue = ReadMemory(Mgs2AoB.RemovePlantFog, Mgs2Offset.RemovePlantFog); //this is incorrect
-                        activeGameCheat.CodeLocation = ReplaceWithInvalidCode(Mgs2AoB.RemovePlantFog, Mgs2Offset.RemovePlantFog, 5);
+                        byte[] originalValue =
+                            ReadMemory(Mgs2AoB.RemovePlantFog, Mgs2Offset.RemovePlantFog).Result; //this is incorrect
+                        activeGameCheat.CodeLocation =
+                            ReplaceWithInvalidCode(Mgs2AoB.RemovePlantFog, Mgs2Offset.RemovePlantFog, 5).Result;
                         activeGameCheat.OriginalBytes = originalValue;
                         Mgs2Cheat.RemovePlantFog = activeGameCheat;
                     }
                     else
                     {
-                        ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.RemovePlantFog, Mgs2AoB.OriginalPlantFogBytes);
+                        ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.RemovePlantFog,
+                            Mgs2AoB.OriginalPlantFogBytes);
                     }
                 }
                 else
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.RemovePlantFog, activeGameCheat.OriginalBytes ?? throw new InvalidOperationException());
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.RemovePlantFog,
+                        activeGameCheat.OriginalBytes ?? throw new InvalidOperationException());
             }
 
             internal static void RemoveTankerEffects(bool activate)
@@ -848,7 +877,8 @@ namespace MGS2_CheatTrainer_V2
                 {
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithSpecificCode(Mgs2AoB.RemoveTankerFilter, disableFilter, Mgs2Offset.RemoveTankerFilter);
+                        activeGameCheat.CodeLocation = ReplaceWithSpecificCode(Mgs2AoB.RemoveTankerFilter,
+                            disableFilter, Mgs2Offset.RemoveTankerFilter).Result;
                         Mgs2Cheat.RemoveTankerFilter = activeGameCheat;
                     }
                     else
@@ -870,7 +900,7 @@ namespace MGS2_CheatTrainer_V2
                 {
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithSpecificCode(Mgs2AoB.NightTime, nightTime, Mgs2Offset.NightTime);
+                        activeGameCheat.CodeLocation = ReplaceWithSpecificCode(Mgs2AoB.NightTime, nightTime, Mgs2Offset.NightTime).Result;
                         Mgs2Cheat.NightTime = activeGameCheat;
                     }
                     else
@@ -890,17 +920,20 @@ namespace MGS2_CheatTrainer_V2
                     CustomFilterCancellationTokenSource = new CancellationTokenSource();
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithInvalidCode(Mgs2AoB.EnableCustomFiltering, Mgs2Offset.EnableCustomFilter, Mgs2AoB.OriginalCustomFilteringBytes.Length - 1);
+                        activeGameCheat.CodeLocation = ReplaceWithInvalidCode(Mgs2AoB.EnableCustomFiltering,
+                            Mgs2Offset.EnableCustomFilter, Mgs2AoB.OriginalCustomFilteringBytes.Length - 1).Result;
                         Mgs2Cheat.EnableCustomFilter = activeGameCheat;
                     }
                     else
                     {
-                        ReplaceWithInvalidCode(activeGameCheat.CodeLocation, Mgs2Offset.EnableCustomFilter, Mgs2AoB.OriginalCustomFilteringBytes.Length - 1);
+                        ReplaceWithInvalidCode(activeGameCheat.CodeLocation, Mgs2Offset.EnableCustomFilter,
+                            Mgs2AoB.OriginalCustomFilteringBytes.Length - 1);
                     }
                 }
                 else
                 {
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.EnableCustomFilter, Mgs2AoB.OriginalCustomFilteringBytes);
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.EnableCustomFilter,
+                        Mgs2AoB.OriginalCustomFilteringBytes);
                     CustomFilterCancellationTokenSource?.Cancel();
                 }
             }
@@ -909,19 +942,21 @@ namespace MGS2_CheatTrainer_V2
             {
                 byte[] customColor = [chosenColor.R, chosenColor.G, chosenColor.B];
 
-                ReplaceWithSpecificCode(Mgs2AoB.CustomFilteringAoB, customColor, Mgs2Offset.CustomFiltering);
-                
-                if(CustomFilterCancellationTokenSource != null && !CustomFilterCancellationTokenSource.IsCancellationRequested)
-                    await PeriodicTask.Run(() => ReapplyColorFilter(customColor), TimeSpan.FromMilliseconds(1000), CustomFilterCancellationTokenSource.Token);
+                ReplaceWithSpecificCode(Mgs2AoB.CustomFilteringAoB, customColor, Mgs2Offset.CustomFiltering).Wait();
+
+                if (CustomFilterCancellationTokenSource != null &&
+                    !CustomFilterCancellationTokenSource.IsCancellationRequested)
+                    await PeriodicTask.Run(() => ReapplyColorFilter(customColor), TimeSpan.FromMilliseconds(1000),
+                        CustomFilterCancellationTokenSource.Token);
             }
 
             private static void ReapplyColorFilter(byte[] chosenColor)
             {
-                byte[] currentColor = ReadMemory(Mgs2AoB.CustomFilteringAoB, Mgs2Offset.CustomFiltering);
+                byte[] currentColor = ReadMemory(Mgs2AoB.CustomFilteringAoB, Mgs2Offset.CustomFiltering).Result;
 
                 if (!currentColor.SequenceEqual(chosenColor))
                 {
-                    ReplaceWithSpecificCode(Mgs2AoB.CustomFilteringAoB, chosenColor, Mgs2Offset.CustomFiltering);
+                    ReplaceWithSpecificCode(Mgs2AoB.CustomFilteringAoB, chosenColor, Mgs2Offset.CustomFiltering).Wait();
                 }
             }
 
@@ -933,8 +968,9 @@ namespace MGS2_CheatTrainer_V2
                     CustomFilterCancellationTokenSource = new CancellationTokenSource();
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.OriginalBytes = ReadMemory(Mgs2AoB.PauseVrAoB, Mgs2Offset.PauseVrTimer);
-                        activeGameCheat.CodeLocation = ReplaceWithInvalidCode(Mgs2AoB.PauseVrAoB, Mgs2Offset.PauseVrTimer, 6, 2);
+                        activeGameCheat.OriginalBytes = ReadMemory(Mgs2AoB.PauseVrAoB, Mgs2Offset.PauseVrTimer).Result;
+                        activeGameCheat.CodeLocation =
+                            ReplaceWithInvalidCode(Mgs2AoB.PauseVrAoB, Mgs2Offset.PauseVrTimer, 6, 2).Result;
                         Mgs2Cheat.PauseVrTimer = activeGameCheat;
                     }
                     else
@@ -944,7 +980,8 @@ namespace MGS2_CheatTrainer_V2
                 }
                 else
                 {
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.PauseVrTimer, activeGameCheat.OriginalBytes?? throw new InvalidOperationException());
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.PauseVrTimer,
+                        activeGameCheat.OriginalBytes ?? throw new InvalidOperationException());
                     CustomFilterCancellationTokenSource?.Cancel();
                 }
             }
@@ -957,7 +994,9 @@ namespace MGS2_CheatTrainer_V2
                     CustomFilterCancellationTokenSource = new CancellationTokenSource();
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithInvalidCode(Mgs2AoB.VrObjectiveAoB, Mgs2Offset.VrAutoCompleteObjectives, 6);
+                        activeGameCheat.CodeLocation =
+                            ReplaceWithInvalidCode(Mgs2AoB.VrObjectiveAoB, Mgs2Offset.VrAutoCompleteObjectives, 6)
+                                .Result;
                         Mgs2Cheat.VrObjectiveAutoComplete = activeGameCheat;
                     }
                     else
@@ -967,7 +1006,8 @@ namespace MGS2_CheatTrainer_V2
                 }
                 else
                 {
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.VrAutoCompleteObjectives, activeGameCheat.OriginalBytes ?? throw new InvalidOperationException());
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.VrAutoCompleteObjectives,
+                        activeGameCheat.OriginalBytes ?? throw new InvalidOperationException());
                     CustomFilterCancellationTokenSource?.Cancel();
                 }
             }
@@ -980,7 +1020,8 @@ namespace MGS2_CheatTrainer_V2
                     CustomFilterCancellationTokenSource = new CancellationTokenSource();
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithInvalidCode(Mgs2AoB.VrObjectiveAoB, Mgs2Offset.VrAutoCompleteEnemies, 2);
+                        activeGameCheat.CodeLocation =
+                            ReplaceWithInvalidCode(Mgs2AoB.VrObjectiveAoB, Mgs2Offset.VrAutoCompleteEnemies, 2).Result;
                         Mgs2Cheat.VrEnemiesAutoComplete = activeGameCheat;
                     }
                     else
@@ -990,7 +1031,8 @@ namespace MGS2_CheatTrainer_V2
                 }
                 else
                 {
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.VrAutoCompleteEnemies, activeGameCheat.OriginalBytes?? throw new InvalidOperationException());
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.VrAutoCompleteEnemies,
+                        activeGameCheat.OriginalBytes ?? throw new InvalidOperationException());
                     CustomFilterCancellationTokenSource?.Cancel();
                 }
             }
@@ -1003,7 +1045,8 @@ namespace MGS2_CheatTrainer_V2
                     CustomFilterCancellationTokenSource = new CancellationTokenSource();
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithInvalidCode(Mgs2AoB.VrNoHitDamageAoB, Mgs2Offset.VrNoHitDmg, 4);
+                        activeGameCheat.CodeLocation =
+                            ReplaceWithInvalidCode(Mgs2AoB.VrNoHitDamageAoB, Mgs2Offset.VrNoHitDmg, 4).Result;
                         Mgs2Cheat.VrNoHitDamage = activeGameCheat;
                     }
                     else
@@ -1013,7 +1056,8 @@ namespace MGS2_CheatTrainer_V2
                 }
                 else
                 {
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.VrNoHitDmg, activeGameCheat.OriginalBytes?? throw new InvalidOperationException());
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.VrNoHitDmg,
+                        activeGameCheat.OriginalBytes ?? throw new InvalidOperationException());
                     CustomFilterCancellationTokenSource?.Cancel();
                 }
             }
@@ -1026,7 +1070,8 @@ namespace MGS2_CheatTrainer_V2
                     CustomFilterCancellationTokenSource = new CancellationTokenSource();
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithInvalidCode(Mgs2AoB.VrNoFallDamageAoB, Mgs2Offset.VrNoFallDmg, 7);
+                        activeGameCheat.CodeLocation =
+                            ReplaceWithInvalidCode(Mgs2AoB.VrNoFallDamageAoB, Mgs2Offset.VrNoFallDmg, 7).Result;
                         Mgs2Cheat.VrNoFallDamage = activeGameCheat;
                     }
                     else
@@ -1036,7 +1081,8 @@ namespace MGS2_CheatTrainer_V2
                 }
                 else
                 {
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.VrNoFallDmg, activeGameCheat.OriginalBytes?? throw new InvalidOperationException());
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.VrNoFallDmg,
+                        activeGameCheat.OriginalBytes ?? throw new InvalidOperationException());
                     CustomFilterCancellationTokenSource?.Cancel();
                 }
             }
@@ -1049,7 +1095,8 @@ namespace MGS2_CheatTrainer_V2
                     CustomFilterCancellationTokenSource = new CancellationTokenSource();
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithInvalidCode(Mgs2AoB.VrInfiniteStrAoB, Mgs2Offset.VrInfStr, 7);
+                        activeGameCheat.CodeLocation =
+                            ReplaceWithInvalidCode(Mgs2AoB.VrInfiniteStrAoB, Mgs2Offset.VrInfStr, 7).Result;
                         Mgs2Cheat.VrInfiniteStrength = activeGameCheat;
                     }
                     else
@@ -1059,7 +1106,8 @@ namespace MGS2_CheatTrainer_V2
                 }
                 else
                 {
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.VrInfStr, activeGameCheat.OriginalBytes?? throw new InvalidOperationException());
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.VrInfStr,
+                        activeGameCheat.OriginalBytes ?? throw new InvalidOperationException());
                     CustomFilterCancellationTokenSource?.Cancel();
                 }
             }
@@ -1072,7 +1120,8 @@ namespace MGS2_CheatTrainer_V2
                     CustomFilterCancellationTokenSource = new CancellationTokenSource();
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithInvalidCode(Mgs2AoB.VrGripDamageAoB, Mgs2Offset.VrTakeGripDmg, 7);
+                        activeGameCheat.CodeLocation =
+                            ReplaceWithInvalidCode(Mgs2AoB.VrGripDamageAoB, Mgs2Offset.VrTakeGripDmg, 7).Result;
                         Mgs2Cheat.VrGripDamage = activeGameCheat;
                     }
                     else
@@ -1082,7 +1131,8 @@ namespace MGS2_CheatTrainer_V2
                 }
                 else
                 {
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.VrTakeGripDmg, activeGameCheat.OriginalBytes?? throw new InvalidOperationException());
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.VrTakeGripDmg,
+                        activeGameCheat.OriginalBytes ?? throw new InvalidOperationException());
                     CustomFilterCancellationTokenSource?.Cancel();
                 }
             }
@@ -1095,18 +1145,21 @@ namespace MGS2_CheatTrainer_V2
                     CustomFilterCancellationTokenSource = new CancellationTokenSource();
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithSpecificCode(Mgs2AoB.VrAimStabilityAoB, [0xE9, 0x91, 0x01, 0x00, 0x00, 0x90
-                        ], Mgs2Offset.VrAimStab);
+                        activeGameCheat.CodeLocation = ReplaceWithSpecificCode(Mgs2AoB.VrAimStabilityAoB, [
+                            0xE9, 0x91, 0x01, 0x00, 0x00, 0x90
+                        ], Mgs2Offset.VrAimStab).Result;
                         Mgs2Cheat.VrAimStability = activeGameCheat;
                     }
                     else
                     {
-                        ReplaceWithSpecificCode(activeGameCheat.CodeLocation, [0xE9, 0x91, 0x01, 0x00, 0x00, 0x90], Mgs2Offset.VrAimStab);
+                        ReplaceWithSpecificCode(activeGameCheat.CodeLocation, [0xE9, 0x91, 0x01, 0x00, 0x00, 0x90],
+                            Mgs2Offset.VrAimStab);
                     }
                 }
                 else
                 {
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.VrAimStab, activeGameCheat.OriginalBytes?? throw new InvalidOperationException());
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.VrAimStab,
+                        activeGameCheat.OriginalBytes ?? throw new InvalidOperationException());
                     CustomFilterCancellationTokenSource?.Cancel();
                 }
             }
@@ -1119,7 +1172,8 @@ namespace MGS2_CheatTrainer_V2
                     CustomFilterCancellationTokenSource = new CancellationTokenSource();
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithInvalidCode(Mgs2AoB.VrInfiniteAmmoAoB, Mgs2Offset.VrInfAmmo, 3);
+                        activeGameCheat.CodeLocation =
+                            ReplaceWithInvalidCode(Mgs2AoB.VrInfiniteAmmoAoB, Mgs2Offset.VrInfAmmo, 3).Result;
                         Mgs2Cheat.VrInfiniteAmmo = activeGameCheat;
                     }
                     else
@@ -1129,7 +1183,8 @@ namespace MGS2_CheatTrainer_V2
                 }
                 else
                 {
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.VrInfAmmo, activeGameCheat.OriginalBytes?? throw new InvalidOperationException());
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.VrInfAmmo,
+                        activeGameCheat.OriginalBytes ?? throw new InvalidOperationException());
                     CustomFilterCancellationTokenSource?.Cancel();
                 }
             }
@@ -1142,7 +1197,8 @@ namespace MGS2_CheatTrainer_V2
                     CustomFilterCancellationTokenSource = new CancellationTokenSource();
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithInvalidCode(Mgs2AoB.VrInfiniteItemAoB, Mgs2Offset.VrInfItem, 4);
+                        activeGameCheat.CodeLocation =
+                            ReplaceWithInvalidCode(Mgs2AoB.VrInfiniteItemAoB, Mgs2Offset.VrInfItem, 4).Result;
                         Mgs2Cheat.VrInfiniteItem = activeGameCheat;
                     }
                     else
@@ -1152,7 +1208,8 @@ namespace MGS2_CheatTrainer_V2
                 }
                 else
                 {
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.VrInfItem, activeGameCheat.OriginalBytes?? throw new InvalidOperationException());
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.VrInfItem,
+                        activeGameCheat.OriginalBytes ?? throw new InvalidOperationException());
                     CustomFilterCancellationTokenSource?.Cancel();
                 }
             }
@@ -1165,7 +1222,8 @@ namespace MGS2_CheatTrainer_V2
                     CustomFilterCancellationTokenSource = new CancellationTokenSource();
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithInvalidCode(Mgs2AoB.VrNoReloadAoB, Mgs2Offset.VrNoReload, 2);
+                        activeGameCheat.CodeLocation =
+                            ReplaceWithInvalidCode(Mgs2AoB.VrNoReloadAoB, Mgs2Offset.VrNoReload, 2).Result;
                         Mgs2Cheat.VrNoReload = activeGameCheat;
                     }
                     else
@@ -1175,7 +1233,8 @@ namespace MGS2_CheatTrainer_V2
                 }
                 else
                 {
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.VrNoReload, activeGameCheat.OriginalBytes?? throw new InvalidOperationException());
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.VrNoReload,
+                        activeGameCheat.OriginalBytes ?? throw new InvalidOperationException());
                     CustomFilterCancellationTokenSource?.Cancel();
                 }
             }
@@ -1188,7 +1247,8 @@ namespace MGS2_CheatTrainer_V2
                     CustomFilterCancellationTokenSource = new CancellationTokenSource();
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithInvalidCode(Mgs2AoB.EmmaInfiniteHpAoB, Mgs2Offset.EmmaInfHp, 2);
+                        activeGameCheat.CodeLocation =
+                            ReplaceWithInvalidCode(Mgs2AoB.EmmaInfiniteHpAoB, Mgs2Offset.EmmaInfHp, 2).Result;
                         Mgs2Cheat.EmmaInfiniteHealth = activeGameCheat;
                     }
                     else
@@ -1198,7 +1258,8 @@ namespace MGS2_CheatTrainer_V2
                 }
                 else
                 {
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.EmmaInfHp, activeGameCheat.OriginalBytes?? throw new InvalidOperationException());
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.EmmaInfHp,
+                        activeGameCheat.OriginalBytes ?? throw new InvalidOperationException());
                     CustomFilterCancellationTokenSource?.Cancel();
                 }
             }
@@ -1211,7 +1272,8 @@ namespace MGS2_CheatTrainer_V2
                     CustomFilterCancellationTokenSource = new CancellationTokenSource();
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithInvalidCode(Mgs2AoB.EmmaInfiniteO2AoB, Mgs2Offset.EmmaInfO2, 2);
+                        activeGameCheat.CodeLocation =
+                            ReplaceWithInvalidCode(Mgs2AoB.EmmaInfiniteO2AoB, Mgs2Offset.EmmaInfO2, 2).Result;
                         Mgs2Cheat.EmmaInfiniteO2 = activeGameCheat;
                     }
                     else
@@ -1221,7 +1283,8 @@ namespace MGS2_CheatTrainer_V2
                 }
                 else
                 {
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.EmmaInfO2, activeGameCheat.OriginalBytes?? throw new InvalidOperationException());
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.EmmaInfO2,
+                        activeGameCheat.OriginalBytes ?? throw new InvalidOperationException());
                     CustomFilterCancellationTokenSource?.Cancel();
                 }
             }
@@ -1235,17 +1298,20 @@ namespace MGS2_CheatTrainer_V2
                 {
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithSpecificCode(Mgs2AoB.InvisibleToGuardsAoB, invisibleToGuards, Mgs2Offset.InvisibleToGuards);
+                        activeGameCheat.CodeLocation = ReplaceWithSpecificCode(Mgs2AoB.InvisibleToGuardsAoB,
+                            invisibleToGuards, Mgs2Offset.InvisibleToGuards).Result;
                         Mgs2Cheat.InvisibleToGuards = activeGameCheat;
                     }
                     else
                     {
-                        ReplaceWithSpecificCode(activeGameCheat.CodeLocation, invisibleToGuards, Mgs2Offset.InvisibleToGuards);
+                        ReplaceWithSpecificCode(activeGameCheat.CodeLocation, invisibleToGuards,
+                            Mgs2Offset.InvisibleToGuards);
                     }
                 }
                 else
                 {
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.InvisibleToGuards, activeGameCheat.OriginalBytes?? throw new InvalidOperationException());
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.InvisibleToGuards,
+                        activeGameCheat.OriginalBytes ?? throw new InvalidOperationException());
                 }
             }
 
@@ -1257,17 +1323,20 @@ namespace MGS2_CheatTrainer_V2
                 {
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithSpecificCode(Mgs2AoB.InvisibleToCyphersAoB, invisibleToCyphers, Mgs2Offset.InvisibleToCyphers);
+                        activeGameCheat.CodeLocation = ReplaceWithSpecificCode(Mgs2AoB.InvisibleToCyphersAoB,
+                            invisibleToCyphers, Mgs2Offset.InvisibleToCyphers).Result;
                         Mgs2Cheat.InvisibleToGuards = activeGameCheat;
                     }
                     else
                     {
-                        ReplaceWithSpecificCode(activeGameCheat.CodeLocation, invisibleToCyphers, Mgs2Offset.InvisibleToCyphers);
+                        ReplaceWithSpecificCode(activeGameCheat.CodeLocation, invisibleToCyphers,
+                            Mgs2Offset.InvisibleToCyphers);
                     }
                 }
                 else
                 {
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.InvisibleToCyphers, activeGameCheat.OriginalBytes?? throw new InvalidOperationException());
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.InvisibleToCyphers,
+                        activeGameCheat.OriginalBytes ?? throw new InvalidOperationException());
                 }
             }
 
@@ -1279,17 +1348,19 @@ namespace MGS2_CheatTrainer_V2
                 {
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithInvalidCode(Mgs2AoB.InvisibleToCamerasAoB, Mgs2Offset.InvisibleToCameras, 4);
+                        activeGameCheat.CodeLocation = ReplaceWithInvalidCode(Mgs2AoB.InvisibleToCamerasAoB,
+                            Mgs2Offset.InvisibleToCameras, 4).Result;
                         Mgs2Cheat.InvisibleToGuards = activeGameCheat;
                     }
                     else
                     {
-                        ReplaceWithInvalidCode(Mgs2AoB.InvisibleToCamerasAoB, Mgs2Offset.InvisibleToCameras, 4);
+                        ReplaceWithInvalidCode(Mgs2AoB.InvisibleToCamerasAoB, Mgs2Offset.InvisibleToCameras, 4).Wait();
                     }
                 }
                 else
                 {
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.InvisibleToCameras, activeGameCheat.OriginalBytes?? throw new InvalidOperationException());
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.InvisibleToCameras,
+                        activeGameCheat.OriginalBytes ?? throw new InvalidOperationException());
                 }
             }
 
@@ -1301,17 +1372,20 @@ namespace MGS2_CheatTrainer_V2
                 {
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithSpecificCode(Mgs2AoB.DeafenGuardsToKnocksAoB, deafenedToKnocks, Mgs2Offset.DeafenGuardsToKnocks);
+                        activeGameCheat.CodeLocation = ReplaceWithSpecificCode(Mgs2AoB.DeafenGuardsToKnocksAoB,
+                            deafenedToKnocks, Mgs2Offset.DeafenGuardsToKnocks).Result;
                         Mgs2Cheat.DeafenGuardsToKnocks = activeGameCheat;
                     }
                     else
                     {
-                        ReplaceWithSpecificCode(activeGameCheat.CodeLocation, deafenedToKnocks, Mgs2Offset.DeafenGuardsToKnocks);
+                        ReplaceWithSpecificCode(activeGameCheat.CodeLocation, deafenedToKnocks,
+                            Mgs2Offset.DeafenGuardsToKnocks);
                     }
                 }
                 else
                 {
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.DeafenGuardsToKnocks, activeGameCheat.OriginalBytes?? throw new InvalidOperationException());
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.DeafenGuardsToKnocks,
+                        activeGameCheat.OriginalBytes ?? throw new InvalidOperationException());
                 }
             }
 
@@ -1323,17 +1397,20 @@ namespace MGS2_CheatTrainer_V2
                 {
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithSpecificCode(Mgs2AoB.DeafenGuardsToGunsAoB, deafenedToGuns, Mgs2Offset.DeafenGuardsToGuns);
+                        activeGameCheat.CodeLocation = ReplaceWithSpecificCode(Mgs2AoB.DeafenGuardsToGunsAoB,
+                            deafenedToGuns, Mgs2Offset.DeafenGuardsToGuns).Result;
                         Mgs2Cheat.DeafenGuardsToGuns = activeGameCheat;
                     }
                     else
                     {
-                        ReplaceWithSpecificCode(activeGameCheat.CodeLocation, deafenedToGuns, Mgs2Offset.DeafenGuardsToGuns);
+                        ReplaceWithSpecificCode(activeGameCheat.CodeLocation, deafenedToGuns,
+                            Mgs2Offset.DeafenGuardsToGuns);
                     }
                 }
                 else
                 {
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.DeafenGuardsToGuns, activeGameCheat.OriginalBytes?? throw new InvalidOperationException());
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.DeafenGuardsToGuns,
+                        activeGameCheat.OriginalBytes ?? throw new InvalidOperationException());
                 }
             }
 
@@ -1354,7 +1431,8 @@ namespace MGS2_CheatTrainer_V2
                     CustomFilterCancellationTokenSource = new CancellationTokenSource();
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ReplaceWithInvalidCode(Mgs2AoB.TurnOffMusicAoB, Mgs2Offset.TurnOffMusic, 7);
+                        activeGameCheat.CodeLocation =
+                            ReplaceWithInvalidCode(Mgs2AoB.TurnOffMusicAoB, Mgs2Offset.TurnOffMusic, 7).Result;
                         Mgs2Cheat.TurnOffMusic = activeGameCheat;
                     }
                     else
@@ -1364,7 +1442,8 @@ namespace MGS2_CheatTrainer_V2
                 }
                 else
                 {
-                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.TurnOffMusic, activeGameCheat.OriginalBytes?? throw new InvalidOperationException());
+                    ReplaceWithOriginalCode(activeGameCheat.CodeLocation, Mgs2Offset.TurnOffMusic,
+                        activeGameCheat.OriginalBytes ?? throw new InvalidOperationException());
                     CustomFilterCancellationTokenSource?.Cancel();
                 }
             }

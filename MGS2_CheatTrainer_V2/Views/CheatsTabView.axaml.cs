@@ -55,7 +55,7 @@ public partial class CheatsTabView : UserControl
         ushort playerHp = _memoryManager.GetCurrentHp();
         ushort playerMaxHp = _memoryManager.GetCurrentMaxHp();
         ushort playerGrip = _memoryManager.GetCurrentGripGauge();
-        Constants.PlayableCharacter activeCharacter = _memoryManager.DetermineActiveCharacter();
+        
         Dispatcher.UIThread.Post(() =>
         {
             if (Math.Abs(HpBar.Maximum - playerMaxHp) > 1)
@@ -86,9 +86,9 @@ public partial class CheatsTabView : UserControl
                 $"User clicked on 'Start animation' button with {guardAnimation?.Name} animation selected");
             UpdateStatusBar?.Invoke(null, $"Attempting to set all guards animation to: {guardAnimation?.Name}");
 
-            await Task.Run(() =>
+            await Task.Run(async () =>
             {
-                GameCheat.CheatActions.ReplaceWithSpecificCode(Mgs2AoB.GuardAnimations,
+                await GameCheat.CheatActions.ReplaceWithSpecificCode(Mgs2AoB.GuardAnimations,
                     guardAnimation?.Bytes ?? throw new InvalidOperationException(),
                     Mgs2Offset.GuardAnimations);
             });
@@ -115,7 +115,7 @@ public partial class CheatsTabView : UserControl
             //force undo of wake(if done)
             await Task.Run(() =>
             {
-                byte[] currentWake = GameCheat.CheatActions.ReadMemory(Mgs2AoB.ForceGuardsToWake, Mgs2Offset.ForceWake);
+                byte[] currentWake = GameCheat.CheatActions.ReadMemory(Mgs2AoB.ForceGuardsToWake, Mgs2Offset.ForceWake).Result;
 
                 if (currentWake.SequenceEqual(Mgs2AoB.ForceGuardsToWakeBytes))
                 {
@@ -152,7 +152,7 @@ public partial class CheatsTabView : UserControl
             await Task.Run(() =>
             {
                 byte[] currentSleep =
-                    GameCheat.CheatActions.ReadMemory(Mgs2AoB.ForceGuardsToSleep, Mgs2Offset.ForceSleep);
+                    GameCheat.CheatActions.ReadMemory(Mgs2AoB.ForceGuardsToSleep, Mgs2Offset.ForceSleep).Result;
 
                 if (currentSleep.SequenceEqual(Mgs2AoB.ForceGuardsToSleepBytes))
                 {

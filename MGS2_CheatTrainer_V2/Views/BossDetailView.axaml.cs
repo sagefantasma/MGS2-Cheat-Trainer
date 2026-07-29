@@ -94,7 +94,7 @@ public partial class BossDetailView : UserControl
     {
         try
         {
-            BossVitals vitals = _memoryManager.GetBossVitals(Boss);
+            BossVitals vitals = _memoryManager.GetBossVitals(Boss).Result;
 
             Dispatcher.UIThread.Post(() =>
             {

@@ -108,7 +108,7 @@ public partial class CheatsTabView : UserControl
 
     private async void ForceGuardSleepButton_OnClick(object? sender, RoutedEventArgs e)
     {
-        try
+        try //TODO: broken?
         {
             Logging.Logger?.Information("User clicked on 'force guards to sleep' button");
             UpdateStatusBar?.Invoke(null, "Attempting to force all guards to sleep...");

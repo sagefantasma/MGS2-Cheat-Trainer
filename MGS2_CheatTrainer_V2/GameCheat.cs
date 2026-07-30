@@ -431,7 +431,7 @@ namespace MGS2_CheatTrainer_V2
                         Mgs2AoB.OriginalAmmoBytes);
             }
 
-            internal static void InfiniteLife(bool activate)
+            internal static void InfiniteLife(bool activate) //TODO: broken?
             {
                 GameCheat activeGameCheat = Mgs2Cheat.InfiniteLife;
                 if (activate)
@@ -556,7 +556,7 @@ namespace MGS2_CheatTrainer_V2
                         Mgs2AoB.OriginalPauseButtonBytes);
             }
 
-            internal static void TurnOffItemMenuPause(bool activate)
+            internal static void TurnOffItemMenuPause(bool activate) //TODO: is broken?
             {
                 GameCheat activeGameCheat = Mgs2Cheat.DisableItemMenuPause;
                 if (activate)
@@ -577,7 +577,7 @@ namespace MGS2_CheatTrainer_V2
                         Mgs2AoB.OriginalItemMenuPauseBytes);
             }
 
-            internal static void TurnOffWeaponMenuPause(bool activate)
+            internal static void TurnOffWeaponMenuPause(bool activate) //TODO: is broken?
             {
                 GameCheat activeGameCheat = Mgs2Cheat.DisableWeaponMenuPause;
                 if (activate)

@@ -109,7 +109,9 @@ public partial class SpecialObjectDetailView : UserControl
             SendStatusUpdate($"Updated {_object.Name} {ValueName} to: {CurrentUpDown.Value}");
             if (EnabledCheckBox.IsChecked == false)
             {
+                _active = false;
                 EnabledCheckBox.IsChecked = true;
+                _active = true;
             }
         }
         catch (Exception ex)

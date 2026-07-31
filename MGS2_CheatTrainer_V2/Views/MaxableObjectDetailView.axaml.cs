@@ -86,7 +86,9 @@ namespace MGS2_CheatTrainer_V2.Views
                 _memoryManager.UpdateObjectBaseValue(_object, (ushort)CurrentUpDown.Value!, WeaponsTabView.AllWeaponsModEnabled);
                 if (EnabledCheckBox.IsChecked == false)
                 {
+                    _active = false;
                     EnabledCheckBox.IsChecked = true;
+                    _active = true;
                 }
                 SendStatusUpdate($"Updated {_object.Name} Current Count to: {CurrentUpDown.Value}");
             }

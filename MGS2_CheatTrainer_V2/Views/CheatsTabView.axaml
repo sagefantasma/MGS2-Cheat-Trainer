@@ -57,13 +57,14 @@
                     <views:CheckboxCheatViewModel x:Name="BlackScreenCheckbox" CheatName="&quot;BLACKOUT&quot;" Cheat="BlackScreen" Background="DarkSlateGray" HorizontalAlignment="Stretch"/>
                     <views:CheckboxCheatViewModel x:Name="LetterboxingCheckbox" CheatName="Activate Letterboxing" Cheat="Letterboxing"/>
                     <views:CheckboxCheatViewModel x:Name="TurnOffMusicCheckbox" CheatName="Turn Off Music" Cheat="TurnOffMusic" Background="DarkSlateGray" HorizontalAlignment="Stretch"/>
-                    <views:CheckboxCheatViewModel x:Name="ZoomInCheckbox" CheatName="Zoom In" Cheat="ZoomIn"/> <!--TODO: Turn into a button-->
-                    <views:CheckboxCheatViewModel x:Name="ZoomOutCheckbox" CheatName="Zoom Out" Cheat="ZoomOut" Background="DarkSlateGray" HorizontalAlignment="Stretch"/> <!--TODO: Turn into a button-->
+                    <Separator/>
+                    <views:ButtonCheatViewModel x:Name="ZoomInCheckbox" CheatName="Zoom In" Cheat="ZoomIn" HorizontalAlignment="Center"/> 
+                    <views:ButtonCheatViewModel x:Name="ZoomOutCheckbox" CheatName="Zoom Out" Cheat="ZoomOut" Background="DarkSlateGray" HorizontalAlignment="Center"/> 
                 </StackPanel>
             </ScrollViewer>
         </GroupBox>
         <GroupBox Grid.Row="0" Grid.Column="3" Grid.RowSpan="3" Grid.ColumnSpan="2" Header="Guards">
-            <StackPanel>
+            <StackPanel x:Name="GuardCheats">
                 <GroupBox Header="Idle Animations" Margin="10">
                     <WrapPanel>
                         <ComboBox x:Name="GuardAnimationsListBox" Margin="10">
@@ -71,8 +72,8 @@
                         <Button x:Name="SetAnimationButton" Content="Set Animation" Margin="10" Click="SetAnimationButton_OnClick"/>
                     </WrapPanel>
                 </GroupBox>
-                <Button x:Name="ForceGuardSleepButton" Content="Force All Guards to Sleep" HorizontalAlignment="Center" Margin="10" Click="ForceGuardSleepButton_OnClick"/> <!--TODO: Turn this into checkbox-->
-                <Button x:Name="ForceGuardWakeButton" Content="Force All Guards to Wake" HorizontalAlignment="Center" Margin="10" Click="ForceGuardWakeButton_OnClick"/> <!--TODO: Turn this into checkbox-->
+                <views:CheckboxCheatViewModel x:Name="ForceGuardSleepButton" CheatName="Force All Guards to Sleep" Cheat="ForceGuardSleep" HorizontalAlignment="Center" Margin="10"/>
+                <views:CheckboxCheatViewModel x:Name="ForceGuardWakeButton" CheatName="Force All Guards to Wake" Cheat="ForceGuardWake" HorizontalAlignment="Center" Margin="10" />
             </StackPanel>
         </GroupBox>
         <GroupBox Grid.Row="3" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="5" Header="Health and Grip">

@@ -627,6 +627,54 @@ namespace MGS2_CheatTrainer_V2
                         Mgs2AoB.OriginalItemMenuPauseBytes);
             }
 
+            internal static void ForceGuardSleep(bool activate)
+            {
+                GameCheat activeGameCheat = Mgs2Cheat.ForceGuardSleep;
+                if (activate)
+                {
+                    if (activeGameCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeGameCheat.CodeLocation = ReplaceWithSpecificCode(Mgs2AoB.StandardGuardSleep,
+                            Mgs2AoB.ForceGuardsToSleepBytes, Mgs2Offset.ForceSleep);
+                        Mgs2Cheat.ForceGuardSleep = activeGameCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithSpecificCode(activeGameCheat.CodeLocation, Mgs2AoB.ForceGuardsToSleepBytes,
+                            Mgs2Offset.ForceSleep);
+                    }
+                }
+                else
+                {
+                    ReplaceWithSpecificCode(activeGameCheat.CodeLocation, Mgs2AoB.StandardGuardSleepBytes,
+                        Mgs2Offset.ForceSleep);
+                }
+            }
+
+            internal static void ForceGuardWake(bool activate)
+            {
+                GameCheat activeGameCheat = Mgs2Cheat.ForceGuardWake;
+                if (activate)
+                {
+                    if (activeGameCheat.CodeLocation == IntPtr.Zero)
+                    {
+                        activeGameCheat.CodeLocation = ReplaceWithSpecificCode(Mgs2AoB.StandardGuardWake,
+                            Mgs2AoB.ForceGuardsToWakeBytes, Mgs2Offset.ForceWake);
+                        Mgs2Cheat.ForceGuardWake = activeGameCheat;
+                    }
+                    else
+                    {
+                        ReplaceWithSpecificCode(activeGameCheat.CodeLocation, Mgs2AoB.ForceGuardsToWakeBytes,
+                            Mgs2Offset.ForceWake);
+                    }
+                }
+                else
+                {
+                    ReplaceWithSpecificCode(activeGameCheat.CodeLocation, Mgs2AoB.StandardGuardWakeBytes,
+                        Mgs2Offset.ForceWake);
+                }
+            }
+
             internal static void TurnOffWeaponMenuPause(bool activate)
             {
                 GameCheat activeGameCheat = Mgs2Cheat.DisableWeaponMenuPause;
@@ -1522,6 +1570,8 @@ namespace MGS2_CheatTrainer_V2
         private static GameCheat NoClipNoGravity { get; } = new(GameCheat.CheatActions.NoClipNoGravity, Mgs2AoB.OriginalClippingBytes, Constants.Cheat.NoClipNoGravity);
         public static GameCheat ZoomIn { get; internal set; } = new(GameCheat.CheatActions.ZoomIn, Mgs2AoB.OriginalCameraBytes, Constants.Cheat.ZoomIn);
         public static GameCheat ZoomOut { get; internal set; } = new(GameCheat.CheatActions.ZoomOut, Mgs2AoB.OriginalCameraBytes, Constants.Cheat.ZoomOut);
+        public static GameCheat ForceGuardSleep { get; internal set; } = new(GameCheat.CheatActions.ForceGuardSleep, Mgs2AoB.StandardGuardSleepBytes, Constants.Cheat.ForceGuardSleep);
+        public static GameCheat ForceGuardWake { get; internal set; } = new(GameCheat.CheatActions.ForceGuardWake, Mgs2AoB.StandardGuardWakeBytes, Constants.Cheat.ForceGuardWake);
         public static GameCheat NoGripDamage { get; internal set; } = new(GameCheat.CheatActions.GripNeverDepletes, Mgs2AoB.OriginalGripDamageBytes, Constants.Cheat.NoGripDamage);
         public static GameCheat DisablePauseButton { get; internal set; } = new(GameCheat.CheatActions.TurnOffPauseButton, Mgs2AoB.OriginalPauseButtonBytes, Constants.Cheat.DisablePauseButton);
         public static GameCheat DisableItemMenuPause { get; internal set; } = new(GameCheat.CheatActions.TurnOffItemMenuPause, Mgs2AoB.OriginalItemMenuPauseBytes, Constants.Cheat.DisableItemMenuPause);
@@ -1560,7 +1610,7 @@ namespace MGS2_CheatTrainer_V2
             NoBleedDamage, NoBurnDamage, InfiniteAmmo, InfiniteLife, InfiniteOxygen, NoGripDamage,
             EmmaInfiniteHealth, EmmaInfiniteO2, NoClipWithGravity,
             NoClipNoGravity, //Emma health is crashing the game and i cba to fix it
-            NoReload, ZoomIn, ZoomOut,
+            NoReload, ZoomIn, ZoomOut, ForceGuardSleep, ForceGuardWake,
             DisablePauseButton,
             DisableItemMenuPause, DisableWeaponMenuPause, InfiniteItems, InfiniteKnockout, RemovePlantFilter,
             RemovePlantFog, RemoveTankerFilter, NightTime, MaxStackOnPickup, PauseVrTimer, VrObjectiveAutoComplete,

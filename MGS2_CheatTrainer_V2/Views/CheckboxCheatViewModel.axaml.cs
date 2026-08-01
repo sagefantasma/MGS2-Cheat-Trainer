@@ -47,18 +47,26 @@ public partial class CheckboxCheatViewModel : UserControl
             IsEnabled = false;
 
             //These ifs handle "Radio-button"-like behavior for Force Sleep & Force Wake cheats.
-            /* Change these to be Force Sleep & Force Wake instead.
-            if (Cheat == Constants.Cheat.ZoomIn && CheatCheckBox.IsChecked == true)
-                ((Parent as StackPanel)?.Children.First(x =>
-                        (x as CheckboxCheatViewModel)?.Cheat == Constants.Cheat.ZoomOut) as CheckboxCheatViewModel)?
-                    .CheatCheckBox
-                    .IsChecked = false;
-            if (Cheat == Constants.Cheat.ZoomOut && CheatCheckBox.IsChecked == true)
-                ((Parent as StackPanel)?.Children.First(x =>
-                        (x as CheckboxCheatViewModel)?.Cheat == Constants.Cheat.ZoomIn) as CheckboxCheatViewModel)?
-                    .CheatCheckBox
-                    .IsChecked = false;
-            */
+            try
+            {
+                if (Cheat == Constants.Cheat.ForceGuardSleep && CheatCheckBox.IsChecked == true)
+                    ((Parent as StackPanel)?.Children.First(x =>
+                                (x as CheckboxCheatViewModel)?.Cheat == Constants.Cheat.ForceGuardWake) as
+                            CheckboxCheatViewModel)?
+                        .CheatCheckBox
+                        .IsChecked = false;
+                if (Cheat == Constants.Cheat.ForceGuardWake && CheatCheckBox.IsChecked == true)
+                    ((Parent as StackPanel)?.Children.First(x =>
+                                (x as CheckboxCheatViewModel)?.Cheat == Constants.Cheat.ForceGuardSleep) as
+                            CheckboxCheatViewModel)?
+                        .CheatCheckBox
+                        .IsChecked = false;
+            }
+            catch
+            {
+                //Squelch exception here, it just means the opposite effect isn't toggled
+            }
+
             bool toggleState = (bool)CheatCheckBox.IsChecked!;
             await Task.Run(() => cheat.CheatAction(toggleState));
             IsEnabled = true;

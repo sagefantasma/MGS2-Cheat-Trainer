@@ -18,8 +18,6 @@ public partial class CheatsTabView : UserControl
     private readonly Mgs2MemoryManager _memoryManager;
     public static event EventHandler<string>? UpdateStatusBar;
     private CancellationTokenSource? _cts;
-    private IntPtr? _sleepLocation = null;
-    private IntPtr? _wakeLocation = null;
     
     public CheatsTabView()
     {
@@ -32,7 +30,19 @@ public partial class CheatsTabView : UserControl
         foreach(var control in VrCheats.Children)
             if (control is CheckboxCheatViewModel cheatViewModel)
                 cheatViewModel.CheatToggled += RequestStatusBarUpdate;
-        foreach(var control in UiCheats.Children)
+        foreach (var control in UiCheats.Children)
+        {
+            switch (control)
+            {
+                case CheckboxCheatViewModel cheatViewModel:
+                    cheatViewModel.CheatToggled += RequestStatusBarUpdate;
+                    break;
+                case ButtonCheatViewModel buttonCheatViewModel:
+                    buttonCheatViewModel.CheatActivated += RequestStatusBarUpdate;
+                    break;
+            }
+        }
+        foreach(var control in GuardCheats.Children)
             if (control is CheckboxCheatViewModel cheatViewModel)
                 cheatViewModel.CheatToggled += RequestStatusBarUpdate;
 
@@ -102,107 +112,6 @@ public partial class CheatsTabView : UserControl
             UpdateStatusBar?.Invoke(null, $"Failed to force guard animation!");
             IMsBox<ButtonResult> msgBox = MessageBoxManager.GetMessageBoxStandard(
                 "Failed to force guard animation",
-                ex.Message);
-            msgBox.ShowAsync();
-        }
-    }
-
-    private async void ForceGuardSleepButton_OnClick(object? sender, RoutedEventArgs e)
-    {
-        try
-        {
-            Logging.Logger?.Information("User clicked on 'force guards to sleep' button");
-            UpdateStatusBar?.Invoke(null, "Attempting to force all guards to sleep...");
-            //force undo of wake(if done)
-            await Task.Run(() =>
-            {
-                //Check to see if guards are forced awake, disable it if they are
-                try
-                {
-                    var currentWake = _wakeLocation == null
-                        ? GameCheat.CheatActions.ReadMemory(Mgs2AoB.ForceGuardsToWake, Mgs2Offset.ForceWake)
-                        : GameCheat.CheatActions.ReadMemory((IntPtr)_wakeLocation, Mgs2Offset.ForceWake);
-
-                    if (currentWake.SequenceEqual(Mgs2AoB.ForceGuardsToWakeBytes))
-                    {
-                        Logging.Logger?.Information("Guards are currently forced awake, attempting to disable that");
-                        _wakeLocation = GameCheat.CheatActions.ReplaceWithSpecificCode(Mgs2AoB.ForceGuardsToWake,
-                            Mgs2AoB.StandardGuardWakeBytes, Mgs2Offset.ForceWake);
-                        Logging.Logger?.Information("Guards are no longer forced awake");
-                    }
-                }
-                catch
-                {
-                    //An exception is thrown if guards are NOT forced awake, so squelch this error.
-                }
-
-                if (_sleepLocation == null)
-                    _sleepLocation = GameCheat.CheatActions.ReplaceWithSpecificCode(Mgs2AoB.StandardGuardSleep,
-                        Mgs2AoB.ForceGuardsToSleepBytes, Mgs2Offset.ForceSleep);
-                else
-                    GameCheat.CheatActions.ReplaceWithSpecificCode((IntPtr)_sleepLocation,
-                        Mgs2AoB.ForceGuardsToSleepBytes,
-                        Mgs2Offset.ForceSleep);
-            });
-
-            UpdateStatusBar?.Invoke(null, "All guards suddenly feel asleep!");
-        }
-        catch(Exception ex)
-        {
-            Logging.Logger?.Error($"Failed to force guard sleep: {ex}");
-            UpdateStatusBar?.Invoke(null, $"Failed to force all guards to sleep!");
-            IMsBox<ButtonResult> msgBox = MessageBoxManager.GetMessageBoxStandard(
-                "Failed to force guard sleep",
-                ex.Message);
-            msgBox.ShowAsync();
-        }
-    }
-
-    private async void ForceGuardWakeButton_OnClick(object? sender, RoutedEventArgs e) //TODO: broken
-    {
-        try
-        {
-            Logging.Logger?.Information("User clicked on 'force guards to wake' button");
-            UpdateStatusBar?.Invoke(null, "Attempting to force all guards to wake up...");
-            //force undo of sleep(if done)
-            await Task.Run(() =>
-            {
-                try
-                {
-                    byte[] currentSleep = _sleepLocation == null
-                        ? GameCheat.CheatActions.ReadMemory(Mgs2AoB.ForceGuardsToSleep, Mgs2Offset.ForceSleep)
-                        : GameCheat.CheatActions.ReadMemory((IntPtr)_sleepLocation, Mgs2Offset.ForceSleep);
-
-                    if (currentSleep.SequenceEqual(Mgs2AoB.ForceGuardsToSleepBytes))
-                    {
-                        Logging.Logger?.Information("Guards are currently forced asleep, attempting to disable that");
-                        _sleepLocation = GameCheat.CheatActions.ReplaceWithSpecificCode(Mgs2AoB.ForceGuardsToSleep,
-                            Mgs2AoB.StandardGuardSleepBytes, Mgs2Offset.ForceSleep);
-                        Logging.Logger?.Information("Guards are no longer forced asleep");
-                    }
-                }
-                catch
-                {
-                    //An exception is thrown in guards are NOT forced asleep, so squelch this error.
-                }
-
-                if (_wakeLocation == null)
-                    _wakeLocation = GameCheat.CheatActions.ReplaceWithSpecificCode(Mgs2AoB.StandardGuardWake,
-                        Mgs2AoB.ForceGuardsToWakeBytes, Mgs2Offset.ForceWake);
-                else
-                    GameCheat.CheatActions.ReplaceWithSpecificCode((IntPtr)_wakeLocation,
-                        Mgs2AoB.ForceGuardsToWakeBytes,
-                        Mgs2Offset.ForceWake);
-            });
-
-            UpdateStatusBar?.Invoke(null, "All guards have awoken!");
-        }
-        catch(Exception ex)
-        {
-            Logging.Logger?.Error($"Failed to force guard wake: {ex}");
-            UpdateStatusBar?.Invoke(null, $"Failed to force all guards to wake up!");
-            IMsBox<ButtonResult> msgBox = MessageBoxManager.GetMessageBoxStandard(
-                "Failed to force guard wake",
                 ex.Message);
             msgBox.ShowAsync();
         }

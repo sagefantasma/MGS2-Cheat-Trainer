@@ -40,7 +40,7 @@ namespace MGS2_CheatTrainer_V2.Models
         {
             NoBleedDamage, NoBurnDamage, InfiniteAmmo, InfiniteLife, InfiniteOxygen, NoGripDamage, 
             EmmaInfiniteHealth, EmmaInfiniteO2, NoClipWithGravity, NoClipNoGravity,  //Emma health is crashing the game and i cba to fix it
-            NoReload, ZoomIn, ZoomOut, DisablePauseButton, //zoom in and out aren't working as expected, and i cant be bothered to fix them right now.
+            NoReload, ZoomIn, ZoomOut, DisablePauseButton, ForceGuardSleep, ForceGuardWake,
             DisableItemMenuPause, DisableWeaponMenuPause, InfiniteItems, InfiniteKnockout, RemovePlantFilter,
             RemovePlantFog, RemoveTankerFilter, NightTime, MaxStackOnPickup, PauseVrTimer, VrObjectiveAutoComplete,
             VrEnemiesAutoComplete, VrNoHitDamage, VrNoFallDamage, VrInfiniteStrength, VrGripDamage, VrAimStability, //VR Enemies autocomplete is crashing the game

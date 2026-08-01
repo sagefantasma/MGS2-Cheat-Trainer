@@ -170,7 +170,7 @@ namespace MGS2_CheatTrainer_V2
                 lock (Mgs2Monitor.Mgs2Process)
                 {
                     using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
-                    Logger?.Information($"Inverting boolean value at {combinedOffset}...");
+                    Logger?.Debug($"Inverting boolean value at {combinedOffset}...");
                     proxy.InvertBooleanValue(new IntPtr(combinedOffset), sizeof(short));
                 }
             }
@@ -230,7 +230,7 @@ namespace MGS2_CheatTrainer_V2
                 lock (Mgs2Monitor.Mgs2Process)
                 {
                     using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
-                    Logger?.Information($"setting memory at offset {stringOffset} to {valueToSet}...");
+                    Logger?.Debug($"setting memory at offset {stringOffset} to {valueToSet}...");
                     proxy.SetMemoryAtPointer(stringOffset, Encoding.UTF8.GetBytes(valueToSet));
                 }
             }
@@ -250,7 +250,7 @@ namespace MGS2_CheatTrainer_V2
                 {
                     using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
                     IntPtr ammoOffset = proxy.FollowPointer(new IntPtr(Mgs2Pointer.CurrentAmmo), false);
-                    Logger?.Information($"getting playerOffsetBased value at offset: {ammoOffset}+{objectOffset}...");
+                    Logger?.Debug($"getting playerOffsetBased value at offset: {ammoOffset}+{objectOffset}...");
                     return BitConverter.ToUInt16(proxy.GetMemoryFromPointer(IntPtr.Add(ammoOffset, objectOffset), 2));
                 }
             }
@@ -270,7 +270,7 @@ namespace MGS2_CheatTrainer_V2
                 {
                     using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
                     IntPtr ammoOffset = proxy.FollowPointer(new IntPtr(Mgs2Pointer.CurrentAmmo), false);
-                    Logger?.Information($"setting playerOffsetBased value at offset: {ammoOffset}+{objectOffset} to {BitConverter.ToString(valueToSet)}...");
+                    Logger?.Debug($"setting playerOffsetBased value at offset: {ammoOffset}+{objectOffset} to {BitConverter.ToString(valueToSet)}...");
                     proxy.SetMemoryAtPointer(IntPtr.Add(ammoOffset, objectOffset), valueToSet);
                 }
             }
@@ -290,7 +290,7 @@ namespace MGS2_CheatTrainer_V2
                 {
                     using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
                     IntPtr pointerLocation = proxy.FollowPointer(pointer, false);
-                    Logger?.Information($"setting pointerOffset value at offset: {pointerLocation}+{offset} to {BitConverter.ToString(valueToSet)}...");
+                    Logger?.Debug($"setting pointerOffset value at offset: {pointerLocation}+{offset} to {BitConverter.ToString(valueToSet)}...");
                     proxy.SetMemoryAtPointer(IntPtr.Add(pointerLocation, offset), valueToSet);
                 }
             }
@@ -309,7 +309,7 @@ namespace MGS2_CheatTrainer_V2
                 lock (Mgs2Monitor.Mgs2Process)
                 {
                     using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
-                    Logger?.Information($"Setting known offset value at offset: {offset} to {BitConverter.ToString(valueToSet)}...");
+                    Logger?.Debug($"Setting known offset value at offset: {offset} to {BitConverter.ToString(valueToSet)}...");
                     proxy.ModifyProcessOffset(offset, valueToSet, true);
                 }
             }
@@ -328,7 +328,7 @@ namespace MGS2_CheatTrainer_V2
                 lock (Mgs2Monitor.Mgs2Process)
                 {
                     using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
-                    Logger?.Information($"Setting known offset value at offset: {offset} to {valueToSet}...");
+                    Logger?.Debug($"Setting known offset value at offset: {offset} to {valueToSet}...");
                     proxy.ModifyProcessOffset(offset, valueToSet, true);
                 }
             }
@@ -442,11 +442,11 @@ namespace MGS2_CheatTrainer_V2
                 switch (mgs2Object)
                 {
                     case Constants.MaxableItem maxableItem:
-                        Logger?.Debug($"mgs2Object parsed as MaxableItem, setting base value to: {value}");
+                        Logger?.Verbose($"mgs2Object parsed as MaxableItem, setting base value to: {value}");
                         SetPlayerOffsetBasedByteValueObject(maxableItem.Index + Mgs2Offset.BaseItem.Start, BitConverter.GetBytes(value));
                         break;
                     case Constants.SpecialItem specialItem:
-                        Logger?.Debug($"mgs2Object parsed as SpecialItem, setting base value to: {value}");
+                        Logger?.Verbose($"mgs2Object parsed as SpecialItem, setting base value to: {value}");
                         SetPlayerOffsetBasedByteValueObject(specialItem.Index + Mgs2Offset.BaseItem.Start, BitConverter.GetBytes(value));
                         break;
                     case Constants.MaxableWeapon maxableWeapon:
@@ -459,7 +459,7 @@ namespace MGS2_CheatTrainer_V2
                                         "'All Weapons' mod from Nexus and check off the 'All Weapons Mod Installed?' " +
                                         "checkbox to force this through");
                         }
-                        Logger?.Debug($"mgs2Object parsed as MaxableWeapon, setting base value to: {value}");
+                        Logger?.Verbose($"mgs2Object parsed as MaxableWeapon, setting base value to: {value}");
                         SetPlayerOffsetBasedByteValueObject(maxableWeapon.Index + Mgs2Offset.BaseWeapon.Start, BitConverter.GetBytes(value));
                         break;
                     case Constants.BooleanWeapon booleanWeapon:
@@ -472,11 +472,11 @@ namespace MGS2_CheatTrainer_V2
                                         "'All Weapons' mod and check off the 'All Weapons Mod Installed?' checkbox to " +
                                         "force this through");
                         }
-                        Logger?.Debug($"mgs2Object parsed as BooleanWeapon, setting base value to: {value}");
+                        Logger?.Verbose($"mgs2Object parsed as BooleanWeapon, setting base value to: {value}");
                         SetPlayerOffsetBasedByteValueObject(booleanWeapon.Index + Mgs2Offset.BaseWeapon.Start, BitConverter.GetBytes(value));
                         break;
                     case Constants.BooleanItem booleanItem:
-                        Logger?.Debug($"mgs2Object parsed as BooleanItem, setting base value to: {value}");
+                        Logger?.Verbose($"mgs2Object parsed as BooleanItem, setting base value to: {value}");
                         SetPlayerOffsetBasedByteValueObject(booleanItem.Index + Mgs2Offset.BaseItem.Start, BitConverter.GetBytes(value));
                         break;
                 }
@@ -496,11 +496,11 @@ namespace MGS2_CheatTrainer_V2
                 switch (mgs2Object)
                 {
                     case Constants.MaxableItem maxableItem:
-                        Logger?.Debug($"mgs2Object parsed as MaxableItem, setting max count to: {count}");
+                        Logger?.Verbose($"mgs2Object parsed as MaxableItem, setting max count to: {count}");
                         SetPlayerOffsetBasedByteValueObject(maxableItem.MaxIndex + Mgs2Offset.BaseItem.Start, BitConverter.GetBytes(count));
                         break;
                     case Constants.MaxableWeapon maxableWeapon:
-                        Logger?.Debug($"mgs2Object parsed as maxableWeapon, setting max count to: {count}");
+                        Logger?.Verbose($"mgs2Object parsed as maxableWeapon, setting max count to: {count}");
                         SetPlayerOffsetBasedByteValueObject(maxableWeapon.MaxIndex + Mgs2Offset.BaseWeapon.Start, BitConverter.GetBytes(count));
                         break;
                 }
@@ -519,19 +519,19 @@ namespace MGS2_CheatTrainer_V2
                 switch (mgs2Object)
                 {
                     case Constants.MaxableItem maxableItem:
-                        Logger?.Debug($"mgs2Object parsed as MaxableItem, getting base value...");
+                        Logger?.Verbose($"mgs2Object parsed as MaxableItem, getting base value...");
                         return GetPlayerOffsetBasedByteValueObject(maxableItem.Index + Mgs2Offset.BaseItem.Start);
                     case Constants.SpecialItem specialItem:
-                        Logger?.Debug($"mgs2Object parsed as SpecialItem, getting base value...");
+                        Logger?.Verbose($"mgs2Object parsed as SpecialItem, getting base value...");
                         return GetPlayerOffsetBasedByteValueObject(specialItem.Index + Mgs2Offset.BaseItem.Start);
                     case Constants.MaxableWeapon maxableWeapon:
-                        Logger?.Debug($"mgs2Object parsed as MaxableWeapon, getting base value...");
+                        Logger?.Verbose($"mgs2Object parsed as MaxableWeapon, getting base value...");
                         return GetPlayerOffsetBasedByteValueObject(maxableWeapon.Index + Mgs2Offset.BaseWeapon.Start);
                     case Constants.BooleanWeapon booleanWeapon:
-                        Logger?.Debug($"mgs2Object parsed as BooleanWeapon, getting base value...");
+                        Logger?.Verbose($"mgs2Object parsed as BooleanWeapon, getting base value...");
                         return GetPlayerOffsetBasedByteValueObject(booleanWeapon.Index + Mgs2Offset.BaseWeapon.Start);
                     case Constants.BooleanItem booleanItem:
-                        Logger?.Debug($"mgs2Object parsed as BooleanItem, getting base value...");
+                        Logger?.Verbose($"mgs2Object parsed as BooleanItem, getting base value...");
                         return GetPlayerOffsetBasedByteValueObject(booleanItem.Index + Mgs2Offset.BaseItem.Start);
                     default:
                         Logger?.Error("Unknown mgs2Object type, cannot continue");

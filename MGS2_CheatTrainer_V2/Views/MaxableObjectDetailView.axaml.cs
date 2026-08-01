@@ -12,7 +12,6 @@ namespace MGS2_CheatTrainer_V2.Views
 {
     public partial class MaxableObjectDetailView : UserControl
     {
-        //TODO: is it better to have two separate textboxes for current/max, or just one textbox and two buttons like the MGS3 trainer?
         private Constants.IMgs2Object? _object;
         private readonly Mgs2MemoryManager _memoryManager;
         private bool _active;

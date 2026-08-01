@@ -199,7 +199,7 @@ namespace MGS2_CheatTrainer_V2
                 throw new Exception("Failed to replace code, aborting the process");
             }
 
-            private static void ReplaceWithSpecificCode(IntPtr memoryLocation, byte[] replacementBytes, MemoryOffset offset)
+            public static void ReplaceWithSpecificCode(IntPtr memoryLocation, byte[] replacementBytes, MemoryOffset offset)
             {
                 if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
                 lock (Mgs2Monitor.Mgs2Process)
@@ -324,6 +324,37 @@ namespace MGS2_CheatTrainer_V2
                             if (memoryLocation != -1)
                                 return spp.GetMemoryFromPointer(IntPtr.Add(memoryLocation, offset.Start),
                                     offset.Length);
+                        }
+                        catch (Exception e)
+                        {
+                            retries--;
+                            if (retries == 0)
+                            {
+                                throw new AggregateException("Failed to activate cheat, abandoning process", e);
+                            }
+                        }
+                    } while (!successful && retries > 0);
+                }
+
+                throw new Exception("Failed to read process memory, aborting cheat process");
+            }
+            
+            public static byte[] ReadMemory(IntPtr memoryLocation, MemoryOffset offset)
+            {
+                if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
+                bool successful = false;
+                int retries = 5;
+                if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
+                lock (Mgs2Monitor.Mgs2Process)
+                {
+                    do
+                    {
+                        try
+                        {
+                            using SimpleProcessProxy spp = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
+                            
+                            return spp.GetMemoryFromPointer(IntPtr.Add(memoryLocation, offset.Start),
+                                offset.Length);
                         }
                         catch (Exception e)
                         {
@@ -743,33 +774,42 @@ namespace MGS2_CheatTrainer_V2
                 Zoom(false);
             }
 
-            private static void Zoom(bool zoomIn) //TODO: actually doesn't work
+            private static void Zoom(bool zoomingIn)
             {
-                byte[] currentZoom = ReadMemory(Mgs2AoB.Camera, Mgs2Offset.Zoom);
-
-                GameCheat activeGameCheat = zoomIn ? Mgs2Cheat.ZoomIn : Mgs2Cheat.ZoomOut;
-                if (zoomIn)
+                GameCheat activeGameCheat = zoomingIn ? Mgs2Cheat.ZoomIn : Mgs2Cheat.ZoomOut;
+                
+                byte[] currentZoom = activeGameCheat.CodeLocation == IntPtr.Zero
+                    ? ReadMemory(Mgs2AoB.Camera, Mgs2Offset.Zoom)
+                    : ReadMemory(activeGameCheat.CodeLocation, Mgs2Offset.Zoom);
+                
+                if (zoomingIn)
                 {
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ModifySingleByte(Mgs2AoB.Camera, Mgs2Offset.Zoom, currentZoom[0]++);
+                        activeGameCheat.CodeLocation = ModifySingleByte(Mgs2AoB.Camera, Mgs2Offset.Zoom, (byte)(currentZoom[0]+1));
                         Mgs2Cheat.ZoomIn = activeGameCheat;
+                        GameCheat zoomOut = Mgs2Cheat.ZoomOut;
+                        zoomOut.CodeLocation = activeGameCheat.CodeLocation;
+                        Mgs2Cheat.ZoomOut = zoomOut;
                     }
                     else
                     {
-                        ModifySingleByte(activeGameCheat.CodeLocation, Mgs2Offset.Zoom, currentZoom[0]++);
+                        ModifySingleByte(activeGameCheat.CodeLocation, Mgs2Offset.Zoom, (byte)(currentZoom[0]+1));
                     }
                 }
                 else
                 {
                     if (activeGameCheat.CodeLocation == IntPtr.Zero)
                     {
-                        activeGameCheat.CodeLocation = ModifySingleByte(Mgs2AoB.Camera, Mgs2Offset.Zoom, currentZoom[0]--);
+                        activeGameCheat.CodeLocation = ModifySingleByte(Mgs2AoB.Camera, Mgs2Offset.Zoom, (byte)(currentZoom[0]-1));
                         Mgs2Cheat.ZoomOut = activeGameCheat;
+                        GameCheat zoomIn = Mgs2Cheat.ZoomIn;
+                        zoomIn.CodeLocation = activeGameCheat.CodeLocation;
+                        Mgs2Cheat.ZoomIn = zoomIn;
                     }
                     else
                     {
-                        ModifySingleByte(activeGameCheat.CodeLocation, Mgs2Offset.Zoom, currentZoom[0]--);
+                        ModifySingleByte(activeGameCheat.CodeLocation, Mgs2Offset.Zoom, (byte)(currentZoom[0]-1));
                     }
                 }
             }
@@ -1521,7 +1561,7 @@ namespace MGS2_CheatTrainer_V2
             EmmaInfiniteHealth, EmmaInfiniteO2, NoClipWithGravity,
             NoClipNoGravity, //Emma health is crashing the game and i cba to fix it
             NoReload, ZoomIn, ZoomOut,
-            DisablePauseButton, //zoom in and out aren't working as expected, and i cant be bothered to fix them right now.
+            DisablePauseButton,
             DisableItemMenuPause, DisableWeaponMenuPause, InfiniteItems, InfiniteKnockout, RemovePlantFilter,
             RemovePlantFog, RemoveTankerFilter, NightTime, MaxStackOnPickup, PauseVrTimer, VrObjectiveAutoComplete,
             VrEnemiesAutoComplete, VrNoHitDamage, VrNoFallDamage, VrInfiniteStrength, VrGripDamage,

@@ -57,8 +57,8 @@
                     <views:CheckboxCheatViewModel x:Name="BlackScreenCheckbox" CheatName="&quot;BLACKOUT&quot;" Cheat="BlackScreen" Background="DarkSlateGray" HorizontalAlignment="Stretch"/>
                     <views:CheckboxCheatViewModel x:Name="LetterboxingCheckbox" CheatName="Activate Letterboxing" Cheat="Letterboxing"/>
                     <views:CheckboxCheatViewModel x:Name="TurnOffMusicCheckbox" CheatName="Turn Off Music" Cheat="TurnOffMusic" Background="DarkSlateGray" HorizontalAlignment="Stretch"/>
-                    <views:CheckboxCheatViewModel x:Name="ZoomInCheckbox" CheatName="Zoom In" Cheat="ZoomIn"/>
-                    <views:CheckboxCheatViewModel x:Name="ZoomOutCheckbox" CheatName="Zoom Out" Cheat="ZoomOut" Background="DarkSlateGray" HorizontalAlignment="Stretch"/>
+                    <views:CheckboxCheatViewModel x:Name="ZoomInCheckbox" CheatName="Zoom In" Cheat="ZoomIn"/> <!--TODO: Turn into a button-->
+                    <views:CheckboxCheatViewModel x:Name="ZoomOutCheckbox" CheatName="Zoom Out" Cheat="ZoomOut" Background="DarkSlateGray" HorizontalAlignment="Stretch"/> <!--TODO: Turn into a button-->
                 </StackPanel>
             </ScrollViewer>
         </GroupBox>
@@ -71,8 +71,8 @@
                         <Button x:Name="SetAnimationButton" Content="Set Animation" Margin="10" Click="SetAnimationButton_OnClick"/>
                     </WrapPanel>
                 </GroupBox>
-                <Button x:Name="ForceGuardSleepButton" Content="Force All Guards to Sleep" HorizontalAlignment="Center" Margin="10" Click="ForceGuardSleepButton_OnClick"/>
-                <Button x:Name="ForceGuardWakeButton" Content="Force All Guards to Wake" HorizontalAlignment="Center" Margin="10" Click="ForceGuardWakeButton_OnClick"/>
+                <Button x:Name="ForceGuardSleepButton" Content="Force All Guards to Sleep" HorizontalAlignment="Center" Margin="10" Click="ForceGuardSleepButton_OnClick"/> <!--TODO: Turn this into checkbox-->
+                <Button x:Name="ForceGuardWakeButton" Content="Force All Guards to Wake" HorizontalAlignment="Center" Margin="10" Click="ForceGuardWakeButton_OnClick"/> <!--TODO: Turn this into checkbox-->
             </StackPanel>
         </GroupBox>
         <GroupBox Grid.Row="3" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="5" Header="Health and Grip">

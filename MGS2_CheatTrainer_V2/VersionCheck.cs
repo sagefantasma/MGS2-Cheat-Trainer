@@ -14,20 +14,23 @@ namespace MGS2_CheatTrainer_V2
         private class Tag
         {
             public string Name { get; set; }
-            public int MajorVersion { get; set; }
-            public int MinorVersion { get; set; }
-            public int BuildVersion { get; set; }
-            public int RevisionVersion { get; set; }
+            public int? MajorVersion { get; set; }
+            public int? MinorVersion { get; set; }
+            public int? BuildVersion { get; set; }
+            public int? RevisionVersion { get; set; }
 
             public Tag(string name)
             {
-                Name = name;
-                string number = Name.Split('v')[1];
+                Name = name.ToLower();
+                string number = Name.Contains('v') ? Name.Split('v')[1] : Name;
                 string[] parts = number.Split('.');
-                MajorVersion = int.Parse(parts[0]);
-                MinorVersion = int.Parse(parts[1]);
-                BuildVersion = int.Parse(parts[2]);
-                RevisionVersion = int.Parse(parts[3]);
+                MajorVersion = int.TryParse(parts[0], out int majorVersion) ? majorVersion : null;
+                if(parts.Length >= 2)
+                    MinorVersion = int.TryParse(parts[1], out int minorVersion) ? minorVersion : null;
+                if(parts.Length >= 3)
+                    BuildVersion = int.TryParse(parts[2], out int buildVersion) ? buildVersion : null;
+                if(parts.Length >= 4)
+                    RevisionVersion = int.TryParse(parts[3], out int revisionVersion) ? revisionVersion : null;
             }
         }
 

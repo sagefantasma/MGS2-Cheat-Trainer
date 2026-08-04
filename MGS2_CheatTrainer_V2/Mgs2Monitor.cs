@@ -1,6 +1,7 @@
 ﻿using Serilog;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -101,28 +102,33 @@ namespace MGS2_CheatTrainer_V2
                             {
                                 Mgs2Process = process;
                                 GameHooked(true);
+                                string? fileVersionString;
                                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                                 {
                                     FileVersionInfo fileVersion = FileVersionInfo.GetVersionInfo(
                                         Mgs2Process.MainModule?.FileName!);
-                                    Logger?.Information($"MGS2 found and hooked, version:\n{fileVersion}");
-
-                                    if (string.Compare(fileVersion.ProductVersion, DesiredVersion,
-                                            StringComparison.InvariantCultureIgnoreCase) != 0
-                                        && !_versionWarned)
-                                    {
-                                        //TODO: Is there a way to make this work when using Proton? Because the FileVersionInfo
-                                        //when using Proton is the FileVersionInfo FOR Proton... hmmj
-                                        _versionWarned = true;
-                                        InvalidVersionDetected(
-                                            $"The version of MGS2 we have hooked({fileVersion.ProductVersion}) " +
-                                            $"does not match expected({DesiredVersion})!");
-                                    }
+                                    fileVersionString = fileVersion.ToString();
                                 }
                                 else
                                 {
                                     //Linux path
-                                    Logger?.Information("MGS2 found and hooked");
+                                    string? gameExePath = FindGameExePath(process.Id);
+                                    if (gameExePath != null && File.Exists(gameExePath))
+                                        fileVersionString = GetVersionFromPeFile(gameExePath);
+                                    else
+                                        fileVersionString = "UNKNOWN!";
+                                }
+
+                                Logger?.Information($"MGS2 found and hooked, version: {fileVersionString}");
+
+                                if (string.Compare(fileVersionString, DesiredVersion,
+                                        StringComparison.InvariantCultureIgnoreCase) != 0
+                                    && !_versionWarned)
+                                {
+                                    _versionWarned = true;
+                                    InvalidVersionDetected(
+                                        $"The version of MGS2 we have hooked({fileVersionString}) " +
+                                        $"does not match expected({DesiredVersion})!");
                                 }
                             }
 
@@ -142,6 +148,85 @@ namespace MGS2_CheatTrainer_V2
                     Logger?.Error($"Something went wrong in ScanningThread: {e}");
                 }
             }
+        }
+        
+        private static string? FindGameExePath(int pid)
+        {
+            try
+            {
+                foreach (string line in File.ReadLines($"/proc/{pid}/maps"))
+                {
+                    // Find the path by taking everything from the first '/' onwards
+                    int pathStart = line.IndexOf('/');
+                    if (pathStart < 0) continue;
+
+                    string path = line.Substring(pathStart).Trim();
+
+                    if (!path.EndsWith(".exe", StringComparison.OrdinalIgnoreCase)) continue;
+
+                    // Verify it's a readable mapping by checking the permissions field
+                    var parts = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (parts.Length < 2 || !parts[1].Contains('r')) continue;
+
+                    return path;
+                }
+            }
+            catch
+            {
+                //Squelch errors.
+            }
+            return null;
+        }
+        
+        private static string? GetVersionFromPeFile(string exePath)
+        {
+            try
+            {
+                byte[] fileBytes = File.ReadAllBytes(exePath);
+
+                // Search for the VS_VERSION_INFO signature
+                byte[] signature = Encoding.Unicode.GetBytes("VS_VERSION_INFO");
+                for (int i = 0; i < fileBytes.Length - signature.Length; i++)
+                {
+                    bool match = true;
+                    for (int j = 0; j < signature.Length; j++)
+                    {
+                        if (fileBytes[i + j] != signature[j])
+                        {
+                            match = false;
+                            break;
+                        }
+                    }
+
+                    if (match)
+                    {
+                        // Version numbers are at fixed offsets from VS_VERSION_INFO
+                        // MS-DOS structure: after the wLength(2), wValueLength(2), wType(2), szKey
+                        // then padding to DWORD boundary, then VS_FIXEDFILEINFO
+                        int fixedInfoOffset = i + signature.Length + 2; // skip null terminator + padding
+                        fixedInfoOffset = (fixedInfoOffset + 3) & ~3; // align to DWORD
+
+                        if (fixedInfoOffset + 52 >= fileBytes.Length) continue;
+
+                        // VS_FIXEDFILEINFO starts with dwSignature 0xFEEF04BD
+                        uint sig = BitConverter.ToUInt32(fileBytes, fixedInfoOffset);
+                        if (sig != 0xFEEF04BD) continue;
+
+                        // FileVersion is at offset 8 in VS_FIXEDFILEINFO
+                        ushort major = BitConverter.ToUInt16(fileBytes, fixedInfoOffset + 10);
+                        ushort minor = BitConverter.ToUInt16(fileBytes, fixedInfoOffset + 8);
+                        ushort build = BitConverter.ToUInt16(fileBytes, fixedInfoOffset + 14);
+                        ushort revision = BitConverter.ToUInt16(fileBytes, fixedInfoOffset + 12);
+
+                        return $"{major}.{minor}.{build}.{revision}";
+                    }
+                }
+            }
+            catch
+            {
+                //Squelch error
+            }
+            return null;
         }
         #endregion
         #endregion

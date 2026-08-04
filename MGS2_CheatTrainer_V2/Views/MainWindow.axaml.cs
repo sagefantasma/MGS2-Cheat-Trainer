@@ -2,7 +2,10 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
 using MsBox.Avalonia;
@@ -40,6 +43,7 @@ public partial class MainWindow : Window
                 $"We tried to start a debuglog, but something went wrong. Is {Logging.LogLocation} a valid directory on your PC?");
             msgBox.ShowAsync();
         }
+        
         Mgs2Monitor.EnableMonitor(new CancellationToken());
         Mgs2Monitor.OnGameHooked += OnGameHooked;
         Mgs2Monitor.OnInvalidVersionDetected += OnInvalidVersionDetected;
@@ -50,11 +54,47 @@ public partial class MainWindow : Window
         BossesTabView.UpdateStatusBar += OnUpdateStatusBar;
         CheatsTabView.UpdateStatusBar += OnUpdateStatusBar;
         Closed+=(_,_)=>Mgs2Monitor.OnGameHooked -= OnGameHooked; //TODO: Necessary?
+        Task.Run(CheckForUpdates);
+    }
+    
+    private static Window? GetMainWindow()
+    {
+        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            return desktop.MainWindow;
+        return null;
+    }
+
+    private void CheckForUpdates()
+    {
+        bool newerVersionAvailable = VersionSupport.CheckIfNewUpdateExists(Program.AppVersion);
+        if (newerVersionAvailable)
+        {
+            Logging.Logger?.Debug("Newer version available, notifying user");
+            Dispatcher.UIThread.Post(async void () =>
+            {
+                try
+                {
+                    IMsBox<ButtonResult> msgBox = MessageBoxManager.GetMessageBoxStandard(
+                        "Update available",
+                        "There is an updated version of this trainer available, would you like to view the Releases page?",
+                        ButtonEnum.YesNo, windowStartupLocation: WindowStartupLocation);
+                    if (await msgBox.ShowAsPopupAsync(GetMainWindow()) ==
+                        ButtonResult.Yes) //Not working as intended for some reason :/
+                    {
+                        OpenUrl("https://github.com/sagefantasma/MGS2-Cheat-Trainer/releases");
+                    }
+                }
+                catch (Exception e)
+                {
+                    //Squelch exception
+                }
+            });
+        }
     }
 
     private void OnUpdateStatusBar(object? sender, string msg)
     {
-        Dispatcher.UIThread.Post(async() =>
+        Dispatcher.UIThread.Post(() =>
         {
             StatusLabel.Text = msg;
             //await Task.Delay(2000);
@@ -69,8 +109,8 @@ public partial class MainWindow : Window
         {
             IMsBox<ButtonResult> msgBox = MessageBoxManager.GetMessageBoxStandard(
                 "Incompatible game version detected!",
-                msg);
-            msgBox.ShowAsync();
+                msg, windowStartupLocation: WindowStartupLocation);
+            msgBox.ShowAsPopupAsync(GetMainWindow());
         });
     }
 

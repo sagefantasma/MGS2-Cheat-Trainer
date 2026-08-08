@@ -35,11 +35,11 @@ jobs:
         run: |
           VERSION=${{ steps.get-version.outputs.version }}
           echo "Checking GitHub releases for version: $VERSION"
-          if gh release list | grep -q "$VERSION"; then
-            echo "✅ A release with version $VERSION already exists."
+          if gh release view "v$VERSION" >/dev/null 2>&1; then
+            echo "✅ A release with tag v$VERSION already exists."
             echo "exists=true" >> $GITHUB_OUTPUT
           else
-            echo "❌ No release with version $VERSION found."
+            echo "❌ No release with tag v$VERSION found."
             echo "exists=false" >> $GITHUB_OUTPUT
           fi
       - name: Stop if release already exists

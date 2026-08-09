@@ -107,7 +107,7 @@ namespace MGS2_CheatTrainer_V2
                                 {
                                     FileVersionInfo fileVersion = FileVersionInfo.GetVersionInfo(
                                         Mgs2Process.MainModule?.FileName!);
-                                    fileVersionString = fileVersion.ToString();
+                                    fileVersionString = fileVersion.ProductVersion;
                                 }
                                 else
                                 {

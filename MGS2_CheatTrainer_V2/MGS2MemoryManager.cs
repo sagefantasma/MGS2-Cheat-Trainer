@@ -78,6 +78,8 @@ namespace MGS2_CheatTrainer_V2
             try
             {
                 if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
+                lock (Mgs2Monitor.Mgs2Process)
+                {
                     using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
                     if (LastKnownStageOffsets != null)
                     {
@@ -90,7 +92,7 @@ namespace MGS2_CheatTrainer_V2
 
                     SimplePattern stageOffsetPattern = new SimplePattern(Mgs2AoB.StageInfoString);
                     List<SimpleProcessProxy.SimpleMemory> stageOffsets =
-                        await proxy.ScanMemoryForPatternAsync(stageOffsetPattern);
+                        proxy.ScanMemoryForPatternAsync(stageOffsetPattern).Result;
                     List<IntPtr> stageOffsetPtrs = stageOffsets.Select(sm => sm.Offset).ToList();
 
                     Logger?.Verbose($"We found {stageOffsets.Count} stage offsets in memory");
@@ -101,6 +103,7 @@ namespace MGS2_CheatTrainer_V2
 
                     LastKnownStageOffsets = new List<IntPtr>(stageOffsetPtrs);
                     return LastKnownStageOffsets;
+                }
             }
             catch(Exception e)
             {
@@ -231,7 +234,7 @@ namespace MGS2_CheatTrainer_V2
                 {
                     using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
                     Logger?.Debug($"setting memory at offset {stringOffset} to {valueToSet}...");
-                    proxy.SetMemoryAtPointer(stringOffset, Encoding.UTF8.GetBytes(valueToSet));
+                    proxy.SetMemoryAtPointer(stringOffset, Encoding.UTF8.GetBytes(valueToSet), true);
                 }
             }
             catch(Exception e)
@@ -344,10 +347,13 @@ namespace MGS2_CheatTrainer_V2
             try
             {
                 if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
-                using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
-                IntPtr memoryLocation =
-                    (await proxy.ScanMemoryForUniquePatternAsync(new SimplePattern(byteString))).Offset;
-                return proxy.ReadProcessOffset(IntPtr.Add(memoryLocation, memoryOffset.Start), memoryOffset.Length);
+                lock (Mgs2Monitor.Mgs2Process)
+                {
+                    using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
+                    IntPtr memoryLocation =
+                        proxy.ScanMemoryForUniquePatternAsync(new SimplePattern(byteString)).Result.Offset;
+                    return proxy.ReadProcessOffset(IntPtr.Add(memoryLocation, memoryOffset.Start), memoryOffset.Length);
+                }
             }
             catch(Exception e)
             {
@@ -361,10 +367,13 @@ namespace MGS2_CheatTrainer_V2
             try
             {
                 if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
+                lock (Mgs2Monitor.Mgs2Process)
+                {
                     using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
-                    IntPtr memoryLocation = (await proxy.ScanMemoryForUniquePatternAsync(new SimplePattern(byteString)))
+                    IntPtr memoryLocation = proxy.ScanMemoryForUniquePatternAsync(new SimplePattern(byteString)).Result
                         .Offset;
                     proxy.ModifyProcessOffset(IntPtr.Add(memoryLocation, memoryOffset.Start), valueToSet, true);
+                }
             }
             catch(Exception e)
             {
@@ -379,10 +388,14 @@ namespace MGS2_CheatTrainer_V2
             try
             {
                 Logger?.Debug($"Attempting to set string {gameString.Tag} to {newValue}...");
+                IntPtr offset;
                 if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
-                using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
-                IntPtr offset = (await proxy.ScanMemoryForUniquePatternAsync(new SimplePattern(gameString.FinderAoB)))
-                    .Offset;
+                lock (Mgs2Monitor.Mgs2Process)
+                {
+                    using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
+                    offset = proxy.ScanMemoryForUniquePatternAsync(new SimplePattern(gameString.FinderAoB))
+                        .Result.Offset;
+                }
 
                 SetStringValue(IntPtr.Add(offset, gameString.MemoryOffset.Start), newValue);
             }
@@ -398,14 +411,17 @@ namespace MGS2_CheatTrainer_V2
             try
             {
                 if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
+                lock (Mgs2Monitor.Mgs2Process)
+                {
                     using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
                     IntPtr offset =
-                        (await proxy.ScanMemoryForUniquePatternAsync(new SimplePattern(gameString.FinderAoB))).Offset;
+                        proxy.ScanMemoryForUniquePatternAsync(new SimplePattern(gameString.FinderAoB)).Result.Offset;
 
                     byte[] memoryValue = ReadValueFromMemory(IntPtr.Add(offset, gameString.MemoryOffset.Start),
                         gameString.MemoryOffset.Length);
 
                     return Encoding.UTF8.GetString(memoryValue);
+                }
             }
             catch (Exception e)
             {
@@ -1010,18 +1026,22 @@ namespace MGS2_CheatTrainer_V2
                 }
                 else
                 {
-                    using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
-                    if (_fortuneOffset == IntPtr.Zero)
-                    {
-                        _fortuneOffset =
-                            (await proxy.ScanMemoryForUniquePatternAsync(new SimplePattern(Mgs2AoB.FortuneName)))
-                            .Offset;
-                    }
+                    if (Mgs2Monitor.Mgs2Process != null)
+                        lock (Mgs2Monitor.Mgs2Process)
+                        {
+                            using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
+                            if (_fortuneOffset == IntPtr.Zero)
+                            {
+                                _fortuneOffset =
+                                    proxy.ScanMemoryForUniquePatternAsync(
+                                        new SimplePattern(Mgs2AoB.FortuneName)).Result.Offset;
+                            }
 
-                    proxy.SetMemoryAtPointer(IntPtr.Add(_fortuneOffset, Mgs2Offset.FortuneHpValue.Start),
-                        BitConverter.GetBytes(updatedVitals.Health));
-                    proxy.SetMemoryAtPointer(IntPtr.Add(_fortuneOffset, Mgs2Offset.FortuneStaminaValue.Start),
-                        BitConverter.GetBytes(updatedVitals.Stamina));
+                            proxy.SetMemoryAtPointer(IntPtr.Add(_fortuneOffset, Mgs2Offset.FortuneHpValue.Start),
+                                BitConverter.GetBytes(updatedVitals.Health));
+                            proxy.SetMemoryAtPointer(IntPtr.Add(_fortuneOffset, Mgs2Offset.FortuneStaminaValue.Start),
+                                BitConverter.GetBytes(updatedVitals.Stamina));
+                        }
                 }
             }
             catch(Exception e)
@@ -1055,22 +1075,28 @@ namespace MGS2_CheatTrainer_V2
                 }
                 else
                 {
-                    using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
-                    if (_fortuneOffset == IntPtr.Zero)
-                    {
-                        _fortuneOffset =
-                            (await proxy.ScanMemoryForUniquePatternAsync(new SimplePattern(Mgs2AoB.FortuneName)))
-                            .Offset;
-                    }
-                    
-                    bossVitals.Health =
-                        BitConverter.ToInt16(
-                            proxy.GetMemoryFromPointer(IntPtr.Add(_fortuneOffset, Mgs2Offset.FortuneHpValue.Start),
-                                Mgs2Offset.FortuneHpValue.Length), 0);
-                    bossVitals.Stamina =
-                        BitConverter.ToInt16(
-                            proxy.GetMemoryFromPointer(IntPtr.Add(_fortuneOffset, Mgs2Offset.FortuneStaminaValue.Start),
-                                Mgs2Offset.FortuneStaminaValue.Length), 0);
+                    if (Mgs2Monitor.Mgs2Process != null)
+                        lock (Mgs2Monitor.Mgs2Process)
+                        {
+                            using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
+                            if (_fortuneOffset == IntPtr.Zero)
+                            {
+                                _fortuneOffset =
+                                    proxy.ScanMemoryForUniquePatternAsync(
+                                        new SimplePattern(Mgs2AoB.FortuneName)).Result.Offset;
+                            }
+
+                            bossVitals.Health =
+                                BitConverter.ToInt16(
+                                    proxy.GetMemoryFromPointer(
+                                        IntPtr.Add(_fortuneOffset, Mgs2Offset.FortuneHpValue.Start),
+                                        Mgs2Offset.FortuneHpValue.Length), 0);
+                            bossVitals.Stamina =
+                                BitConverter.ToInt16(
+                                    proxy.GetMemoryFromPointer(
+                                        IntPtr.Add(_fortuneOffset, Mgs2Offset.FortuneStaminaValue.Start),
+                                        Mgs2Offset.FortuneStaminaValue.Length), 0);
+                        }
                 }
 
                 return bossVitals;

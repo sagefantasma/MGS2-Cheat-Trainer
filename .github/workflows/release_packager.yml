@@ -1,13 +1,17 @@
 name: Build and Release on Version Bump
+
 on:
   push:
     branches:
       - main
+
 permissions:
   contents: write  # Needed for creating releases and uploading assets
+
 jobs:
   release:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

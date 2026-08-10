@@ -34,7 +34,7 @@ jobs:
           echo "Version found in csproj: $VERSION"
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-       - name: Check if release exists for this version
+      - name: Check if release exists for this version
         id: check-release
         env:
           GH_TOKEN: ${{ github.token }}

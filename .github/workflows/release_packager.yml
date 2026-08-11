@@ -29,7 +29,7 @@ jobs:
       - name: Get version from csproj
         id: get-version
         run: |
-          PROJECT="MGS2_CheatTrainer_V2/MGS2_CheatTrainer_V2.csproj"
+          PROJECT="MGS2_CheatTrainer_Mk2/MGS2_CheatTrainer_Mk2.csproj"
           VERSION=$(dotnet msbuild "$PROJECT" -getProperty:Version)
           echo "Version found in csproj: $VERSION"
           echo "version=$VERSION" >> $GITHUB_OUTPUT
@@ -58,7 +58,7 @@ jobs:
       - name: Publish self-contained builds
         if: steps.check-release.outputs.exists == 'false'
         run: |
-          PROJECT="MGS2_CheatTrainer_V2/MGS2_CheatTrainer_V2.csproj"
+          PROJECT="MGS2_CheatTrainer_Mk2/MGS2_CheatTrainer_Mk2.csproj"
           for RID in win-x64 linux-x64; do
             dotnet publish "$PROJECT" \
               -c Debug \

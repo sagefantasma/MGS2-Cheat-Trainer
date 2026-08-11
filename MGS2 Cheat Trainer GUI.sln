@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MGS2_CheatTrainer_V2", "MGS2_CheatTrainer_V2\MGS2_CheatTrainer_V2.csproj", "{20900E1B-AD9D-4D99-8E0D-1BD04BDF1F66}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MGS2_CheatTrainer_Mk2", "MGS2_CheatTrainer_Mk2\MGS2_CheatTrainer_Mk2.csproj", "{20900E1B-AD9D-4D99-8E0D-1BD04BDF1F66}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

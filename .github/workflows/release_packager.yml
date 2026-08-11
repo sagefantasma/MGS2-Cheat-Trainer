@@ -79,7 +79,7 @@ jobs:
 
           ARCHIVE_PATHS=""
           for RID in win-x64 linux-x64; do
-            RID_FOLDER="publish/$RID"
+            RID_FOLDER="MGS2_CheatTrainer-$RID"
             ARCHIVE_NAME="MGS2_CheatTrainer_${VERSION}_${RID}.7z"
             7z a "$ARCHIVE_NAME" "$RID_FOLDER"/*
             ARCHIVE_PATHS="$ARCHIVE_PATHS $ARCHIVE_NAME"

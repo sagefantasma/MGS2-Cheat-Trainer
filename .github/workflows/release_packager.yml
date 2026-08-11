@@ -1,0 +1,101 @@
+name: Build and Release on Version Bump
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write  # Needed for creating releases and uploading assets
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Install GitHub CLI
+        run: |
+          sudo apt update
+          sudo apt install -y gh
+
+      - name: Get version from csproj
+        id: get-version
+        run: |
+          PROJECT="MGS2_CheatTrainer_V2/MGS2_CheatTrainer_V2.csproj"
+          VERSION=$(dotnet msbuild "$PROJECT" -getProperty:Version)
+          echo "Version found in csproj: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Check if release exists for this version
+        id: check-release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION=${{ steps.get-version.outputs.version }}
+          echo "Checking GitHub releases for version: $VERSION"
+          if gh release view "v$VERSION" >/dev/null 2>&1; then
+            echo "✅ A release with tag v$VERSION already exists."
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "❌ No release with tag v$VERSION found."
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Stop if release already exists
+        if: steps.check-release.outputs.exists == 'true'
+        run: |
+          echo "Release already exists for version ${{ steps.get-version.outputs.version }}. Stopping workflow."
+          exit 0
+
+      - name: Publish self-contained builds
+        if: steps.check-release.outputs.exists == 'false'
+        run: |
+          PROJECT="MGS2_CheatTrainer_V2/MGS2_CheatTrainer_V2.csproj"
+          for RID in win-x64 linux-x64; do
+            dotnet publish "$PROJECT" \
+              -c Debug \
+              -r "$RID" \
+              --self-contained true \
+              -p:PublishSingleFile=true \
+              -p:IncludeNativeLibrariesForSelfExtract=true \
+              -p:DebugType=embedded \
+              -o "publish/$RID"
+          done
+
+      - name: Create archives per platform
+        if: steps.check-release.outputs.exists == 'false'
+        id: archive
+        run: |
+          VERSION=${{ steps.get-version.outputs.version }}
+          sudo apt-get update && sudo apt-get install -y p7zip-full
+
+          ARCHIVE_PATHS=""
+          for RID in win-x64 linux-x64; do
+            RID_FOLDER="publish/$RID"
+            ARCHIVE_NAME="MGS2_CheatTrainer_${VERSION}_${RID}.7z"
+            7z a "$ARCHIVE_NAME" "$RID_FOLDER"/*
+            ARCHIVE_PATHS="$ARCHIVE_PATHS $ARCHIVE_NAME"
+          done
+
+          echo "archive_paths=$ARCHIVE_PATHS" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release and upload archives
+        if: steps.check-release.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION=${{ steps.get-version.outputs.version }}
+          RELEASE_NAME="MGS2 Cheat Trainer v$VERSION"
+          echo "Creating GitHub release: $RELEASE_NAME"
+          gh release create "v$VERSION" ${{ steps.archive.outputs.archive_paths }} \
+            --title "$RELEASE_NAME" \
+            --notes "Automatic release for version $VERSION."
+

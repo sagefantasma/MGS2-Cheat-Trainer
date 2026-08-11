@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net10.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <ApplicationIcon>Assets\Solid_Smoke-1.ico</ApplicationIcon>
+    </PropertyGroup>
+    
+    <PropertyGroup>
+        <Version>3.0.0.0</Version>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <AvaloniaResource Include="Assets\**"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia" Version="12.0.3"/>
+        <PackageReference Include="Avalonia.Desktop" Version="12.0.3"/>
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="12.0.3"/>
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="12.0.3"/>
+        <PackageReference Include="AvaloniaUI.DiagnosticsSupport" Version="2.2.1">
+            <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
+            <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.1"/>
+        <PackageReference Include="MessageBox.Avalonia" Version="12.0.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="11.0.0-preview.5.26302.115" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.5-beta1" />
+        <PackageReference Include="Octokit" Version="14.0.0" />
+        <PackageReference Include="Serilog" Version="4.3.2-dev-02433" />
+        <PackageReference Include="Serilog.Sinks.File" Version="8.0.0-nblumhardt-02322" />
+        <PackageReference Include="SimplifiedMemoryManager" Version="2.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Views\SpecialObjectDetailView.axaml.cs">
+        <DependentUpon>SpecialObjectDetailView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="LinuxPtrace.sh" />
+    </ItemGroup>
+</Project>

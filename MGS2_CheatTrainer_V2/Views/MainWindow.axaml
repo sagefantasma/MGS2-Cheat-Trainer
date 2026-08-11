@@ -1,0 +1,85 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:views="clr-namespace:MGS2_CheatTrainer_V2.Views"
+        x:Class="MGS2_CheatTrainer_V2.Views.MainWindow"
+        Title="MGS2 Cheat Trainer"
+        MinWidth="1250"
+        MinHeight="925"
+        Width="1250"
+        Height="925"
+        CanResize="True">
+
+    <DockPanel>
+        
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Help">
+                <MenuItem Header="View Logs"              x:Name="ViewLogsMenuItem"    Click="ViewLogsMenuItem_Click"/>
+                <MenuItem Header="Open Install Location"  Click="OpenInstallLocationMenuItem_Click"/>
+                <MenuItem Header="GitHub"                 Click="GithubMenuItem_Click"/>
+                <MenuItem Header="Join our Discord"       Click="JoinDiscordMenuItem_Click"/>
+            </MenuItem>
+        </Menu>
+        
+        <Border DockPanel.Dock="Bottom"
+                BorderThickness="0,1,0,0"
+                BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+                Padding="6,3">
+            <TextBlock x:Name="StatusLabel" Text="Ready" />
+        </Border>
+        
+        <TabControl x:Name="Mgs2TabControl"
+                    SelectionChanged="Mgs2TabControl_SelectionChanged">
+
+            <TabItem x:Name="ItemsTab" Header="Items">
+                <Panel>
+                    <Image Source="/Assets/mini.png" Stretch="UniformToFill"/>
+                    <Rectangle Fill="Black" Opacity="0.9" IsHitTestVisible="False"/>
+                    <views:ItemTabView x:Name="ItemsTabView"/>
+                </Panel>
+            </TabItem>
+
+            <TabItem x:Name="WeaponsTab" Header="Weapons">
+                <Panel>
+                    <Image Source="/Assets/mini.png" Stretch="UniformToFill"/>
+                    <Rectangle Fill="Black" Opacity="0.9" IsHitTestVisible="False"/>
+                    <views:WeaponsTabView x:Name="WeaponsTabView"/>
+                </Panel>
+            </TabItem>
+
+            <TabItem x:Name="BossesTab" Header="Bosses">
+                <Panel>
+                    <Image Source="/Assets/mini.png" Stretch="UniformToFill"/>
+                    <Rectangle Fill="Black" Opacity="0.9" IsHitTestVisible="False"/>
+                    <views:BossesTabView/>
+                </Panel>
+            </TabItem>
+
+            <TabItem x:Name="StatsTab" Header="Stats">
+                <Panel>
+                    <Image Source="/Assets/mini.png" Stretch="UniformToFill"/>
+                    <Rectangle Fill="Black" Opacity="0.9" IsHitTestVisible="False"/>
+                    <views:StatsTabView/>
+                </Panel>
+            </TabItem>
+
+            <TabItem x:Name="StringsTab" Header="Strings">
+                <Panel>
+                    <Image Source="/Assets/mini.png" Stretch="UniformToFill"/>
+                    <Rectangle Fill="Black" Opacity="0.9" IsHitTestVisible="False"/>
+                    <views:StringTabView/>
+                </Panel>
+            </TabItem>
+
+            <TabItem x:Name="CheatsTab" Header="Cheats">
+                <Panel>
+                    <Image Source="/Assets/mini.png" Stretch="UniformToFill"/>
+                    <Rectangle Fill="Black" Opacity="0.9" IsHitTestVisible="False"/>
+                    <views:CheatsTabView/>
+                </Panel>
+            </TabItem>
+
+        </TabControl>
+
+    </DockPanel>
+
+</Window>

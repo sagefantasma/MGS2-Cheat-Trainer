@@ -1,0 +1,19 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="MGS2_CheatTrainer_V2.App"
+             xmlns:local="using:MGS2_CheatTrainer_V2"
+             RequestedThemeVariant="Dark">
+             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
+  
+    <Application.Styles>
+        <FluentTheme />
+        <Style Selector="NumericUpDown /template/ ButtonSpinner /template/ Path">
+            <Setter Property="Width" Value="5"/>
+            <Setter Property="Height" Value="5"/>
+        </Style>
+    </Application.Styles>
+</Application>

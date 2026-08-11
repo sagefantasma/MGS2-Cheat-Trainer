@@ -1,0 +1,64 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="200"
+             x:Class="MGS2_CheatTrainer_V2.Views.MaxableObjectDetailView">
+
+    <GroupBox x:Name="GroupBox">
+    <Grid RowDefinitions="0.3*, 0.7*"
+          ColumnDefinitions="0.5*, 0.5*">
+        <!-- Image placeholder (top-left) -->
+        <Image x:Name="ObjectImage" Source="/Assets/ration_alp_ovl.bmp.bmp" Stretch="Uniform" Grid.Row="0" Grid.Column="0"
+                Margin="2" Grid.RowSpan="2" Grid.ColumnSpan="2"/>
+        <Rectangle Fill="Black" Opacity="0.7" IsHitTestVisible="False"
+                   Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="2"/>
+
+        <!-- Enabled checkbox (top-right) -->
+        <CheckBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"
+                  x:Name="EnabledCheckBox"
+                  Content="Enabled?"
+                  VerticalAlignment="Center"
+                  HorizontalAlignment="Center"
+                  IsCheckedChanged="EnabledCheckBox_IsCheckedChanged"/>
+
+        <!-- Current count (bottom-left) -->
+        <Grid Grid.Row="1" Grid.Column="0"
+              RowDefinitions=".5*,.5*">
+            <TextBlock Grid.Row="0" Text="Current Count" VerticalAlignment="Bottom" Margin="0,0,0,2"/>
+            <Grid Grid.Row="1" ColumnDefinitions="*, Auto">
+                <NumericUpDown Grid.Column="0"
+                               x:Name="CurrentUpDown"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               ShowButtonSpinner="False"
+                               Minimum="0" Maximum="65534" Margin="3"/>
+                <Button Grid.Column="1"
+                        Content="Set"
+                        Padding="5,2"
+                        Click="CurrentBtn_Click"/>
+            </Grid>
+        </Grid>
+
+        <!-- Max count (bottom-right) -->
+        <Grid Grid.Row="1" Grid.Column="1"
+              RowDefinitions=".5*,.5*">
+            <TextBlock Grid.Row="0" Text="Max Count" VerticalAlignment="Bottom" Margin="0,0,0,2"/>
+            <Grid Grid.Row="1" ColumnDefinitions="*, Auto">
+                <NumericUpDown Grid.Column="0"
+                               x:Name="MaxUpDown"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               ShowButtonSpinner="False"
+                               Minimum="0" Maximum="65534" Margin="3"/>
+                <Button Grid.Column="1"
+                        Content="Set"
+                        VerticalContentAlignment="Top"
+                        HorizontalContentAlignment="Center"
+                        Padding="5,2"
+                        Click="MaxBtn_Click"/>
+            </Grid>
+        </Grid>
+
+    </Grid></GroupBox>
+</UserControl>

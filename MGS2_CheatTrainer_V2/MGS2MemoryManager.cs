@@ -11,7 +11,6 @@ using SimplifiedMemoryManager;
 
 namespace MGS2_CheatTrainer_V2
 {
-    //TODO: need to go back to NuGet version of SimplifiedMemoryManager before merging back to main.
     internal class Mgs2MemoryManager : IDisposable
     {
         #region Internals

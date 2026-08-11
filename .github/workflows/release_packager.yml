@@ -67,7 +67,7 @@ jobs:
               -p:PublishSingleFile=true \
               -p:IncludeNativeLibrariesForSelfExtract=true \
               -p:DebugType=embedded \
-              -o "publish/$RID"
+              -o "MGS2_CheatTrainer-$RID"
           done
 
       - name: Create archives per platform

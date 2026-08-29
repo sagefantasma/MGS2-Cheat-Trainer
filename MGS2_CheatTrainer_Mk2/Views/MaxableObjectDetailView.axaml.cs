@@ -41,13 +41,26 @@ namespace MGS2_CheatTrainer_V2.Views
         
         public void UpdateObjectEnabledState()
         {
-            _object ??= Constants.DetermineObject(Name!);
-            ushort value = _memoryManager.GetObjectValue(_object!);
-            if (_object is not Constants.MaxableWeapon)
-                EnabledCheckBox.IsChecked = value > 0;
-            else
-                EnabledCheckBox.IsChecked = value != 0xFFFF;
-            _active = true;
+            try
+            {
+                _object ??= Constants.DetermineObject(Name!);
+                ushort value = _memoryManager.GetObjectValue(_object!);
+                if (_object is not Constants.MaxableWeapon)
+                    EnabledCheckBox.IsChecked = value > 0;
+                else
+                    EnabledCheckBox.IsChecked = value != 0xFFFF;
+                if (EnabledCheckBox.IsChecked == true)
+                {
+                    CurrentUpDown.Value = value;
+                    MaxUpDown.Value = _memoryManager.GetObjectMaxValue(_object!);
+                }
+
+                _active = true;
+            }
+            catch
+            {
+                //Squelch automated action errors
+            }
         }
 
         private void EnabledCheckBox_IsCheckedChanged(object sender, RoutedEventArgs e)

@@ -53,6 +53,8 @@ public partial class BossesTabView : UserControl
     {
         Dispatcher.UIThread.Post(()=>
         {
+            if (Mgs2Monitor.Mgs2Process == null)
+                return;
             try
             {
                 Stage currentStage = _memoryManager.GetStage();
@@ -71,8 +73,9 @@ public partial class BossesTabView : UserControl
                 }
                 else if (currentStage.AreaCode == StageNames.PlantStages.SeaDockFortune.AreaCode)
                 {
-                    BossIsActive(Constants.Boss.Fortune);
-                    //RequestStatusBarUpdate(null, "Fortune fight detected!"); //NOTE: uncomment if Fortune gets fixed
+                    //BossIsActive(Constants.Boss.Fortune); //NOTE: uncomment if Fortune gets fixed
+                    RequestStatusBarUpdate(null,
+                        "Fortune fight detected, but editing her values is disabled due to crashing");
                     OlgaDetailView.IsActive = false;
                     FortuneDetailView.IsActive = false; //NOTE: if the bug with Fortune values gets fixed, set this to true
                     FatmanDetailView.IsActive = false;
@@ -97,8 +100,9 @@ public partial class BossesTabView : UserControl
                 }
                 else if (currentStage.AreaCode == StageNames.PlantStages.ShellsConnectingBridge.AreaCode)
                 {
-                    BossIsActive(Constants.Boss.Harrier);
-                    //RequestStatusBarUpdate(null, "Harrier fight detected!"); //NOTE: Uncomment if Harrier gets fixed
+                    //BossIsActive(Constants.Boss.Harrier); //NOTE: Uncomment if Harrier gets fixed
+                    RequestStatusBarUpdate(null,
+                        "Harrier fight detected, but editing it's values is disabled due to crashing");
                     OlgaDetailView.IsActive = false;
                     FortuneDetailView.IsActive = false;
                     FatmanDetailView.IsActive = false;
@@ -150,8 +154,9 @@ public partial class BossesTabView : UserControl
                 }
                 else if (currentStage.AreaCode == StageNames.PlantStages.FederalHall.AreaCode)
                 {
-                    BossIsActive(Constants.Boss.Solidus);
-                    //RequestStatusBarUpdate(null, "Solidus fight detected!"); //NOTE: uncomment if Solidus fight gets fixed
+                    //BossIsActive(Constants.Boss.Solidus); //NOTE: uncomment if Solidus fight gets fixed
+                    RequestStatusBarUpdate(null,
+                        "Solidus fight detected, but editing hiss values is disabled due to crashing");
                     OlgaDetailView.IsActive = false;
                     FortuneDetailView.IsActive = false;
                     FatmanDetailView.IsActive = false;

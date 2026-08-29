@@ -7,6 +7,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Interactivity;
+using Avalonia.Logging;
 using Avalonia.Threading;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Base;
@@ -96,9 +97,16 @@ public partial class MainWindow : Window
     {
         Dispatcher.UIThread.Post(() =>
         {
-            StatusLabel.Text = msg;
-            //await Task.Delay(2000);
-            //StatusLabel.Text = "Ready";
+            try
+            {
+                StatusLabel.Text = msg;
+                //await Task.Delay(2000);
+                //StatusLabel.Text = "Ready";
+            }
+            catch(Exception e)
+            {
+                Logging.Logger?.Error($"Failed to update status bar: {e}");
+            }
         });
     }
 
@@ -107,10 +115,17 @@ public partial class MainWindow : Window
         Logging.Logger?.Error($"Incompatible game version detected: {msg}");
         Dispatcher.UIThread.Post(() =>
         {
-            IMsBox<ButtonResult> msgBox = MessageBoxManager.GetMessageBoxStandard(
-                "Incompatible game version detected!",
-                msg, windowStartupLocation: WindowStartupLocation);
-            msgBox.ShowAsPopupAsync(GetMainWindow());
+            try
+            {
+                IMsBox<ButtonResult> msgBox = MessageBoxManager.GetMessageBoxStandard(
+                    "Incompatible game version detected!",
+                    msg, windowStartupLocation: WindowStartupLocation);
+                msgBox.ShowAsPopupAsync(GetMainWindow());
+            }
+            catch (Exception e)
+            {
+                Logging.Logger?.Error($"Failed to inform user of invalid version: {e}");
+            }
         });
     }
 
@@ -118,36 +133,43 @@ public partial class MainWindow : Window
     {
         Dispatcher.UIThread.Post(() =>
         {
-            foreach (var item in ItemsTabView.ItemGrid.Children)
+            try
             {
-                switch (item)
+                foreach (var item in ItemsTabView.ItemGrid.Children)
                 {
-                    case BooleanObjectDetailView booleanObjectDetailView:
-                        booleanObjectDetailView.UpdateObjectEnabledState();
-                        break;
-                    case SpecialObjectDetailView specialObjectDetailView:
-                        specialObjectDetailView.UpdateObjectEnabledState();
-                        break;
-                    case MaxableObjectDetailView maxableObjectDetailView:
-                        maxableObjectDetailView.UpdateObjectEnabledState();
-                        break;
+                    switch (item)
+                    {
+                        case BooleanObjectDetailView booleanObjectDetailView:
+                            booleanObjectDetailView.UpdateObjectEnabledState();
+                            break;
+                        case SpecialObjectDetailView specialObjectDetailView:
+                            specialObjectDetailView.UpdateObjectEnabledState();
+                            break;
+                        case MaxableObjectDetailView maxableObjectDetailView:
+                            maxableObjectDetailView.UpdateObjectEnabledState();
+                            break;
+                    }
+                }
+
+                foreach (var weapon in WeaponsTabView.WeaponGrid.Children)
+                {
+                    switch (weapon)
+                    {
+                        case BooleanObjectDetailView booleanObjectDetailView:
+                            booleanObjectDetailView.UpdateObjectEnabledState();
+                            break;
+                        case SpecialObjectDetailView specialObjectDetailView:
+                            specialObjectDetailView.UpdateObjectEnabledState();
+                            break;
+                        case MaxableObjectDetailView maxableObjectDetailView:
+                            maxableObjectDetailView.UpdateObjectEnabledState();
+                            break;
+                    }
                 }
             }
-            
-            foreach (var weapon in WeaponsTabView.WeaponGrid.Children)
+            catch (Exception e)
             {
-                switch (weapon)
-                {
-                    case BooleanObjectDetailView booleanObjectDetailView:
-                        booleanObjectDetailView.UpdateObjectEnabledState();
-                        break;
-                    case SpecialObjectDetailView specialObjectDetailView:
-                        specialObjectDetailView.UpdateObjectEnabledState();
-                        break;
-                    case MaxableObjectDetailView maxableObjectDetailView:
-                        maxableObjectDetailView.UpdateObjectEnabledState();
-                        break;
-                }
+                Logging.Logger?.Error($"Failed to update enable state for all objects: {e}");
             }
         });
     }

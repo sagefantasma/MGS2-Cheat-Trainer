@@ -115,6 +115,8 @@ public partial class StatsTabView : UserControl
     {
         try
         {
+            if (Mgs2Monitor.Mgs2Process == null)
+                return;
             Stage currentStage = _memoryManager.GetStage(); //Always found, or error is thrown.
             if (currentStage.Name != _lastKnownStage?.Name)
             {

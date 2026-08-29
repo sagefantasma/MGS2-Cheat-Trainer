@@ -67,10 +67,21 @@ public partial class SpecialObjectDetailView : UserControl
     
     public void UpdateObjectEnabledState()
     {
-        _object ??= Constants.DetermineObject(Name!);
-        ushort value = _memoryManager.GetObjectValue(_object!);
-        EnabledCheckBox.IsChecked = value > 0;
-        _active = true;
+        try
+        {
+            _object ??= Constants.DetermineObject(Name!);
+            ushort value = _memoryManager.GetObjectValue(_object!);
+            EnabledCheckBox.IsChecked = value > 0;
+            if (EnabledCheckBox.IsChecked == true)
+            {
+                CurrentUpDown.Value = value;
+            }
+            _active = true;
+        }
+        catch
+        {
+            //Squelch automated action errors
+        }
     }
 
     public void Enabled_OnClick(object sender, RoutedEventArgs e)

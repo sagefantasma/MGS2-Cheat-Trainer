@@ -119,7 +119,7 @@ namespace MGS2_CheatTrainer_V2
                                         fileVersionString = "UNKNOWN!";
                                 }
 
-                                Logger?.Information($"MGS2 found and hooked, version: {fileVersionString}");
+                                Logger?.Information($"MGS2 found and hooked, game version: {fileVersionString}");
 
                                 if (string.Compare(fileVersionString, DesiredVersion,
                                         StringComparison.InvariantCultureIgnoreCase) != 0
@@ -235,7 +235,7 @@ namespace MGS2_CheatTrainer_V2
         #region Constructor & Process Encapsulator
         static Mgs2Monitor()
         {
-            Logger?.Information($"MGS2 Monitor for version {Program.AppVersion} initialized...");
+            Logger?.Information($"MGS2 Monitor initialized...");
         }
 
         public static Process? Mgs2Process

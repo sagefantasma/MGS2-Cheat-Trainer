@@ -16,6 +16,8 @@ namespace MGS2_CheatTrainer_V2
         #region Internals
         private static List<IntPtr>? LastKnownStageOffsets { get; set; }
         private static ILogger? Logger => Logging.Logger;
+        private static readonly string NotHookedIntoGameError = "Not hooked into game";
+        private static readonly string InAMenuError = "In a menu, cannot get accurate value";
         #endregion
 
         #region Private methods
@@ -223,6 +225,24 @@ namespace MGS2_CheatTrainer_V2
                 throw new AggregateException($"Could not get stage", e);
             }
         }
+        
+        internal static Stage StaticGetStage()
+        {
+            try
+            {
+                IntPtr stageMemoryOffset = GetCurrentStageOffset();
+                string stringInMemory = Encoding.UTF8.GetString(ReadValueFromMemory(stageMemoryOffset, 4));
+
+                Stage currentStage = Stage.Parse(stringInMemory);
+                Logger?.Verbose($"User is currently in stage: {stringInMemory}. Parsed as {currentStage}");
+                return currentStage;
+            }
+            catch (Exception e)
+            {
+                Logger?.Error($"Failed to get stage: {e}");
+                throw new AggregateException($"Could not get stage", e);
+            }
+        }
 
         private void SetStringValue(IntPtr stringOffset, string valueToSet)
         {
@@ -247,14 +267,24 @@ namespace MGS2_CheatTrainer_V2
         {
             try
             {
-                if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
+                if (Mgs2Monitor.Mgs2Process is null) throw new SquelchableTrainerException(NotHookedIntoGameError);
+                if (StageNames.MenuStages.StageList.Contains(StaticGetStage()))
+                    throw new TrainerException(InAMenuError);
                 lock (Mgs2Monitor.Mgs2Process)
                 {
                     using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
                     IntPtr ammoOffset = proxy.FollowPointer(new IntPtr(Mgs2Pointer.CurrentAmmo), false);
-                    Logger?.Debug($"getting playerOffsetBased value at offset: {ammoOffset}+{objectOffset}...");
+                    Logger?.Verbose($"getting playerOffsetBased value at offset: {ammoOffset}+{objectOffset}...");
                     return BitConverter.ToUInt16(proxy.GetMemoryFromPointer(IntPtr.Add(ammoOffset, objectOffset), 2));
                 }
+            }
+            catch (SquelchableTrainerException)
+            {
+                throw;
+            }
+            catch (TrainerException)
+            {
+                throw;
             }
             catch (Exception e)
             {
@@ -267,7 +297,9 @@ namespace MGS2_CheatTrainer_V2
         {
             try
             {
-                if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
+                if (Mgs2Monitor.Mgs2Process is null) throw new SquelchableTrainerException(NotHookedIntoGameError);
+                if (StageNames.MenuStages.StageList.Contains(StaticGetStage()))
+                    throw new TrainerException(InAMenuError);
                 lock (Mgs2Monitor.Mgs2Process)
                 {
                     using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
@@ -287,7 +319,9 @@ namespace MGS2_CheatTrainer_V2
         {
             try
             {
-                if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
+                if (Mgs2Monitor.Mgs2Process is null) throw new SquelchableTrainerException(NotHookedIntoGameError);
+                if (StageNames.MenuStages.StageList.Contains(StaticGetStage()))
+                    throw new TrainerException(InAMenuError);
                 lock (Mgs2Monitor.Mgs2Process)
                 {
                     using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
@@ -307,7 +341,9 @@ namespace MGS2_CheatTrainer_V2
         {
             try
             {
-                if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
+                if (Mgs2Monitor.Mgs2Process is null) throw new SquelchableTrainerException(NotHookedIntoGameError);
+                if (StageNames.MenuStages.StageList.Contains(StaticGetStage()))
+                    throw new TrainerException(InAMenuError);
                 lock (Mgs2Monitor.Mgs2Process)
                 {
                     using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
@@ -326,7 +362,9 @@ namespace MGS2_CheatTrainer_V2
         {
             try
             {
-                if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
+                if (Mgs2Monitor.Mgs2Process is null) throw new SquelchableTrainerException(NotHookedIntoGameError);
+                if (StageNames.MenuStages.StageList.Contains(StaticGetStage()))
+                    throw new TrainerException(InAMenuError);
                 lock (Mgs2Monitor.Mgs2Process)
                 {
                     using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
@@ -345,7 +383,9 @@ namespace MGS2_CheatTrainer_V2
         {
             try
             {
-                if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
+                if (Mgs2Monitor.Mgs2Process is null) throw new SquelchableTrainerException(NotHookedIntoGameError);
+                if (StageNames.MenuStages.StageList.Contains(StaticGetStage()))
+                    throw new TrainerException(InAMenuError);
                 lock (Mgs2Monitor.Mgs2Process)
                 {
                     using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
@@ -365,7 +405,9 @@ namespace MGS2_CheatTrainer_V2
         {
             try
             {
-                if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
+                if (Mgs2Monitor.Mgs2Process is null) throw new SquelchableTrainerException(NotHookedIntoGameError);
+                if (StageNames.MenuStages.StageList.Contains(StaticGetStage()))
+                    throw new TrainerException(InAMenuError);
                 lock (Mgs2Monitor.Mgs2Process)
                 {
                     using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
@@ -388,7 +430,7 @@ namespace MGS2_CheatTrainer_V2
             {
                 Logger?.Debug($"Attempting to set string {gameString.Tag} to {newValue}...");
                 IntPtr offset;
-                if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
+                if (Mgs2Monitor.Mgs2Process is null) throw new SquelchableTrainerException(NotHookedIntoGameError);
                 lock (Mgs2Monitor.Mgs2Process)
                 {
                     using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
@@ -409,7 +451,7 @@ namespace MGS2_CheatTrainer_V2
         {
             try
             {
-                if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
+                if (Mgs2Monitor.Mgs2Process is null) throw new SquelchableTrainerException(NotHookedIntoGameError);
                 lock (Mgs2Monitor.Mgs2Process)
                 {
                     using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
@@ -433,7 +475,9 @@ namespace MGS2_CheatTrainer_V2
         {
             try
             {
-                if (Mgs2Monitor.Mgs2Process is null) throw new Exception("Not hooked into game");
+                if (Mgs2Monitor.Mgs2Process is null) throw new SquelchableTrainerException(NotHookedIntoGameError);
+                if (StageNames.MenuStages.StageList.Contains(StaticGetStage()))
+                    throw new TrainerException(InAMenuError);
                 lock (Mgs2Monitor.Mgs2Process)
                 {
                     using SimpleProcessProxy proxy = new SimpleProcessProxy(Mgs2Monitor.Mgs2Process);
@@ -552,6 +596,51 @@ namespace MGS2_CheatTrainer_V2
                         Logger?.Error("Unknown mgs2Object type, cannot continue");
                         throw new InvalidDataException("Unknown mgs2Object type");
                 }
+            }
+            catch (SquelchableTrainerException)
+            {
+                throw;
+            }
+            catch (TrainerException e)
+            {
+                throw new AggregateException($"Cannot access {mgs2Object.Name} data while in a menu", e);
+            }
+            catch (Exception e)
+            {
+                Logger?.Error($"Failed to update the base value for {mgs2Object.Name}: {e}");
+                throw new AggregateException($"Could not update base value for {mgs2Object.Name}", e);
+            }
+        }
+        
+        public ushort GetObjectMaxValue(Constants.IMgs2Object mgs2Object)
+        {
+            try
+            {
+                switch (mgs2Object)
+                {
+                    case Constants.MaxableItem maxableItem:
+                        Logger?.Verbose($"mgs2Object parsed as MaxableItem, getting max value...");
+                        return GetPlayerOffsetBasedByteValueObject(maxableItem.MaxIndex + Mgs2Offset.BaseItem.Start);
+                    case Constants.MaxableWeapon maxableWeapon:
+                        Logger?.Verbose($"mgs2Object parsed as MaxableWeapon, getting max value...");
+                        return GetPlayerOffsetBasedByteValueObject(maxableWeapon.MaxIndex + Mgs2Offset.BaseWeapon.Start);
+                    case Constants.SpecialItem specialItem:
+                    case Constants.BooleanWeapon booleanWeapon:
+                    case Constants.BooleanItem booleanItem:
+                        Logger?.Verbose($"Non maxable MGS2 object");
+                        throw new InvalidDataException("Non-maxable MGS2 object, cannot get max");
+                    default:
+                        Logger?.Error("Unknown mgs2Object type, cannot continue");
+                        throw new InvalidDataException("Unknown mgs2Object type");
+                }
+            }
+            catch (SquelchableTrainerException)
+            {
+                throw;
+            }
+            catch (TrainerException e)
+            {
+                throw new AggregateException($"Cannot access {mgs2Object.Name} data while in a menu", e);
             }
             catch (Exception e)
             {

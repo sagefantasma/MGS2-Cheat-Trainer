@@ -46,10 +46,10 @@ namespace MGS2_CheatTrainer_V2.Models
     {
         public static class MenuStages
         {
-            public static readonly Stage DevMenu = new() { Name = "DevMenu", AreaCode = "select" };
-            public static readonly Stage MainMenu = new() { Name = "MainMenu", AreaCode = "n_title" };
-            public static readonly Stage VrMenu = new() { Name = "VRMenu", AreaCode = "mselect" };
-            public static readonly Stage SnakeTalesMenu = new() { Name = "SnakeTalesMenu", AreaCode = "tales" };
+            public static readonly Stage DevMenu = new() { Name = "DevMenu", AreaCode = "sele" }; //is "select"
+            public static readonly Stage MainMenu = new() { Name = "MainMenu", AreaCode = "n_ti" }; //is "n_title"
+            public static readonly Stage VrMenu = new() { Name = "VRMenu", AreaCode = "msel" }; //is "mselect"
+            public static readonly Stage SnakeTalesMenu = new() { Name = "SnakeTalesMenu", AreaCode = "tale" }; //is "tales"
 
             public static readonly List<Stage> StageList = [DevMenu, MainMenu, VrMenu, SnakeTalesMenu];
         }
